@@ -1,0 +1,41 @@
+services:
+  directus:
+    image: directus/directus:11.10.0
+    ports:
+      - 8055:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    environment:
+      SECRET: "${SECRET}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      
+      # PostgreSQL
+      DB_CLIENT: "pg"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_DATABASE: "directus"
+      DB_USER: "directus"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      
+      # Optimisations migration
+      DB_POOL__MIN: 10
+      DB_POOL__MAX: 50
+      RELATIONAL_BATCH_SIZE: 15000
+      
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: directus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

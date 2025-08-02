@@ -1,20 +1,23 @@
 {
-  "lastUpdate": "2025-08-02 16:30:00",
-  "currentPhase": "infrastructure-ready",
+  "lastUpdate": "2025-08-02 19:37:00",
+  "currentPhase": "migration-analysis-complete",
   "environment": "development",
   "systems": {
     "migration": {
       "notionBases": {
         "total": 62,
+        "analyzed": 62,
         "migrated": 0,
-        "current": null,
-        "nextTarget": "DB-CONTACTS-ENTREPRISES"
+        "current": "DB-CONTACTS-ENTREPRISES",
+        "nextTarget": "DB-CONTACTS-ENTREPRISES",
+        "analysisReport": "migration/reports/notion-analysis.json"
       },
       "directusCollections": {
         "total": 48,
-        "created": 0,
-        "configured": 0,
-        "validated": 0
+        "created": 1,
+        "configured": 1,
+        "validated": 0,
+        "companiesCreated": true
       }
     },
     "dashboard": {
@@ -175,12 +178,15 @@
     }
   },
   "metrics": {
-    "totalProgress": 8,
-    "migrationProgress": 0,
+    "totalProgress": 12,
+    "migrationProgress": 25,
+    "analysisProgress": 100,
     "dashboardProgress": 10,
     "infrastructureProgress": 95,
-    "estimatedROI": -5,
+    "estimatedROI": -8,
     "connectionsValidated": 5,
+    "scriptsCreated": 7,
+    "fusionOpportunities": 87,
     "timeSpent": {
       "migration": 0,
       "dashboard": 180,

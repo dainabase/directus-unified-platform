@@ -1,0 +1,57 @@
+{
+  "name": "directus-unified-platform",
+  "version": "1.0.0",
+  "description": "Plateforme unifiée Directus : Migration Notion (62→48 collections) + Dashboard Multi-espaces",
+  "main": "index.js",
+  "scripts": {
+    "// === MIGRATION ===": "",
+    "migrate:test-connections": "node migration/scripts/test-connections.js",
+    "migrate:analyze": "node migration/scripts/analyze-notion-bases.js",
+    "migrate:plan": "node migration/scripts/generate-migration-plan.js",
+    "migrate:transform": "node migration/scripts/transform-data.js",
+    "migrate:execute": "node migration/scripts/execute-migration.js",
+    "migrate:validate": "node migration/scripts/validate-migration.js",
+    "migrate:report": "node migration/scripts/generate-report.js",
+    
+    "// === DASHBOARD ===": "",
+    "dashboard:dev": "concurrently \"npm run dashboard:backend\" \"npm run dashboard:frontend\"",
+    "dashboard:backend": "cd dashboard/backend && npm run dev",
+    "dashboard:frontend": "cd dashboard/frontend && npm run dev",
+    "dashboard:build": "cd dashboard/frontend && npm run build",
+    
+    "// === DIRECTUS ===": "",
+    "directus:setup": "node directus/scripts/setup.js",
+    "directus:create-collections": "node directus/scripts/create-collections.js",
+    "directus:setup-permissions": "node directus/scripts/setup-permissions.js",
+    "directus:import-schema": "npx directus schema apply ./directus/schema/snapshot.yaml",
+    
+    "// === GLOBAL ===": "",
+    "setup": "npm run setup:deps && npm run directus:setup",
+    "setup:deps": "npm install && cd dashboard/frontend && npm install && cd ../backend && npm install",
+    "test": "jest",
+    "test:migration": "jest migration/tests",
+    "test:dashboard": "jest dashboard/tests",
+    "start": "npm run dashboard:dev",
+    "clean": "rm -rf node_modules dashboard/*/node_modules",
+    "verify:all": "node scripts/verify-setup.js"
+  },
+  "keywords": ["directus", "migration", "notion", "dashboard", "cms", "multi-tenant"],
+  "author": "DainaBase",
+  "license": "MIT",
+  "dependencies": {
+    "@directus/sdk": "^17.0.0",
+    "@notionhq/client": "^2.2.13",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "winston": "^3.11.0",
+    "axios": "^1.6.2",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/node": "^20.10.5",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  }
+}

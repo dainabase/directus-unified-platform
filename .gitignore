@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime
+.DS_Store
+*.pid
+*.seed
+*.pid.lock
+
+# Build
+dist/
+build/
+.next/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Cache
+.cache/
+.directus-cache/
+
+# Temporary
+tmp/
+temp/
+migration/logs/*.json
+migration/logs/*.txt
+
+# Sensitive
+config/credentials.json
+directus/schema/backup-*.yaml
+
+# Test
+coverage/
+.nyc_output/

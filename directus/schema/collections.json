@@ -1,0 +1,655 @@
+{
+  "crm_contacts": {
+    "description": "Module CRM & Contacts - 5 bases Notion → 4 collections Directus",
+    "collections": [
+      {
+        "name": "companies",
+        "icon": "business",
+        "description": "Entreprises et organisations",
+        "display_template": "{{name}}",
+        "fields": [
+          {
+            "field": "name",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "domain",
+            "type": "string", 
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "industry",
+            "type": "string",
+            "meta": { 
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Tech", "value": "tech"},
+                  {"text": "Finance", "value": "finance"},
+                  {"text": "E-commerce", "value": "ecommerce"},
+                  {"text": "Santé", "value": "health"},
+                  {"text": "Autre", "value": "other"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "size",
+            "type": "integer",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "revenue",
+            "type": "decimal",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Prospect", "value": "prospect"},
+                  {"text": "Client", "value": "client"},
+                  {"text": "Partenaire", "value": "partner"},
+                  {"text": "Inactif", "value": "inactive"}
+                ]
+              },
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "people",
+        "icon": "person",
+        "description": "Contacts et personnes",
+        "display_template": "{{first_name}} {{last_name}}",
+        "fields": [
+          {
+            "field": "first_name",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "last_name", 
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "email",
+            "type": "string",
+            "meta": { 
+              "interface": "input", 
+              "validation": {"_and": [{"email": {}}]},
+              "width": "half"
+            }
+          },
+          {
+            "field": "phone",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "job_title",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "company",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "companies",
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "providers",
+        "icon": "groups",
+        "description": "Prestataires et fournisseurs",
+        "display_template": "{{name}}",
+        "fields": [
+          {
+            "field": "name",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "type",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Freelance", "value": "freelance"},
+                  {"text": "Agence", "value": "agency"},
+                  {"text": "Consultant", "value": "consultant"},
+                  {"text": "Fournisseur IT", "value": "it_supplier"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "speciality",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "hourly_rate",
+            "type": "decimal",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "rating",
+            "type": "integer",
+            "meta": { 
+              "interface": "slider",
+              "options": {"min": 1, "max": 5},
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "customer_success",
+        "icon": "star",
+        "description": "Suivi de satisfaction client",
+        "display_template": "{{client_name}} - {{satisfaction_score}}",
+        "fields": [
+          {
+            "field": "client_name",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "satisfaction_score",
+            "type": "integer",
+            "meta": { 
+              "interface": "slider",
+              "options": {"min": 1, "max": 10},
+              "width": "half"
+            }
+          },
+          {
+            "field": "feedback",
+            "type": "text",
+            "meta": { "interface": "textarea", "width": "full" }
+          },
+          {
+            "field": "follow_up_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          }
+        ]
+      }
+    ]
+  },
+  "finance": {
+    "description": "Module Finance - 9 bases Notion → 6 collections Directus",
+    "collections": [
+      {
+        "name": "client_invoices",
+        "icon": "receipt",
+        "description": "Factures clients",
+        "display_template": "{{invoice_number}} - {{amount}}€",
+        "fields": [
+          {
+            "field": "invoice_number",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "client",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "companies",
+              "width": "half"
+            }
+          },
+          {
+            "field": "amount",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Brouillon", "value": "draft"},
+                  {"text": "Envoyée", "value": "sent"},
+                  {"text": "Payée", "value": "paid"},
+                  {"text": "En retard", "value": "overdue"},
+                  {"text": "Annulée", "value": "cancelled"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "due_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          }
+        ]
+      },
+      {
+        "name": "supplier_invoices",
+        "icon": "receipt_long",
+        "description": "Factures fournisseurs",
+        "display_template": "{{supplier}} - {{amount}}€",
+        "fields": [
+          {
+            "field": "supplier",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "providers",
+              "width": "half"
+            }
+          },
+          {
+            "field": "reference",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "amount",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Reçue", "value": "received"},
+                  {"text": "Validée", "value": "approved"},
+                  {"text": "Payée", "value": "paid"},
+                  {"text": "Rejetée", "value": "rejected"}
+                ]
+              },
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "expenses",
+        "icon": "credit_card",
+        "description": "Notes de frais",
+        "display_template": "{{description}} - {{amount}}€",
+        "fields": [
+          {
+            "field": "description",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "amount",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "category",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Transport", "value": "transport"},
+                  {"text": "Hébergement", "value": "accommodation"},
+                  {"text": "Repas", "value": "meals"},
+                  {"text": "Matériel", "value": "equipment"},
+                  {"text": "Formation", "value": "training"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "receipt",
+            "type": "uuid",
+            "meta": { 
+              "interface": "file",
+              "special": ["file"],
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "subscriptions",
+        "icon": "subscriptions",
+        "description": "Suivi des abonnements",
+        "display_template": "{{service}} - {{monthly_cost}}€/mois",
+        "fields": [
+          {
+            "field": "service",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "monthly_cost",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "renewal_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Actif", "value": "active"},
+                  {"text": "Suspendu", "value": "suspended"},
+                  {"text": "Annulé", "value": "cancelled"}
+                ]
+              },
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bank_transactions",
+        "icon": "account_balance",
+        "description": "Transactions bancaires",
+        "display_template": "{{description}} - {{amount}}€",
+        "fields": [
+          {
+            "field": "description",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "amount",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "type",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Crédit", "value": "credit"},
+                  {"text": "Débit", "value": "debit"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "transaction_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "account",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          }
+        ]
+      },
+      {
+        "name": "accounting_entries",
+        "icon": "book",
+        "description": "Écritures comptables",
+        "display_template": "{{entry_number}} - {{amount}}€",
+        "fields": [
+          {
+            "field": "entry_number",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "description",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "amount",
+            "type": "decimal",
+            "meta": { "interface": "input", "required": true, "width": "half" }
+          },
+          {
+            "field": "account_code",
+            "type": "string",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "entry_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          }
+        ]
+      }
+    ]
+  },
+  "projects": {
+    "description": "Module Projets - 3 bases Notion → 3 collections Directus",
+    "collections": [
+      {
+        "name": "projects",
+        "icon": "work",
+        "description": "Projets et missions",
+        "display_template": "{{name}} - {{status}}",
+        "fields": [
+          {
+            "field": "name",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "client",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "companies",
+              "width": "half"
+            }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Planifié", "value": "planned"},
+                  {"text": "En cours", "value": "in_progress"},
+                  {"text": "En pause", "value": "paused"},
+                  {"text": "Terminé", "value": "completed"},
+                  {"text": "Annulé", "value": "cancelled"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "start_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "end_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "budget",
+            "type": "decimal",
+            "meta": { "interface": "input", "width": "half" }
+          },
+          {
+            "field": "progress",
+            "type": "integer",
+            "meta": { 
+              "interface": "slider",
+              "options": {"min": 0, "max": 100},
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "deliverables",
+        "icon": "task_alt",
+        "description": "Livrables et tâches",
+        "display_template": "{{title}} - {{project}}",
+        "fields": [
+          {
+            "field": "title",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "project",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "projects",
+              "width": "half"
+            }
+          },
+          {
+            "field": "type",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Document", "value": "document"},
+                  {"text": "Code", "value": "code"},
+                  {"text": "Design", "value": "design"},
+                  {"text": "Formation", "value": "training"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "due_date",
+            "type": "date",
+            "meta": { "interface": "datetime", "width": "half" }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "À faire", "value": "todo"},
+                  {"text": "En cours", "value": "in_progress"},
+                  {"text": "En révision", "value": "review"},
+                  {"text": "Terminé", "value": "done"}
+                ]
+              },
+              "width": "half"
+            }
+          }
+        ]
+      },
+      {
+        "name": "support_tickets",
+        "icon": "support",
+        "description": "Tickets de support",
+        "display_template": "{{title}} - {{priority}}",
+        "fields": [
+          {
+            "field": "title",
+            "type": "string",
+            "meta": { "interface": "input", "required": true, "width": "full" }
+          },
+          {
+            "field": "description",
+            "type": "text",
+            "meta": { "interface": "textarea", "width": "full" }
+          },
+          {
+            "field": "priority",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Faible", "value": "low"},
+                  {"text": "Normale", "value": "normal"},
+                  {"text": "Haute", "value": "high"},
+                  {"text": "Critique", "value": "critical"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "status",
+            "type": "string",
+            "meta": {
+              "interface": "select-dropdown",
+              "options": {
+                "choices": [
+                  {"text": "Ouvert", "value": "open"},
+                  {"text": "En cours", "value": "in_progress"},
+                  {"text": "Résolu", "value": "resolved"},
+                  {"text": "Fermé", "value": "closed"}
+                ]
+              },
+              "width": "half"
+            }
+          },
+          {
+            "field": "client",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "companies",
+              "width": "half"
+            }
+          },
+          {
+            "field": "assigned_to",
+            "type": "uuid",
+            "meta": { 
+              "interface": "select-dropdown-m2o",
+              "special": ["m2o"],
+              "related_collection": "directus_users",
+              "width": "half"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

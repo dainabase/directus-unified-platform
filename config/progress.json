@@ -1,0 +1,215 @@
+{
+  "lastUpdate": "2025-08-02 15:50:00",
+  "currentPhase": "dashboard-adaptation",
+  "environment": "development",
+  "systems": {
+    "migration": {
+      "notionBases": {
+        "total": 62,
+        "migrated": 0,
+        "current": null,
+        "nextTarget": "DB-CONTACTS-ENTREPRISES"
+      },
+      "directusCollections": {
+        "total": 48,
+        "created": 0,
+        "configured": 0,
+        "validated": 0
+      }
+    },
+    "dashboard": {
+      "imported": true,
+      "importDate": "2025-08-02",
+      "filesImported": 5433,
+      "endpoints": {
+        "total": 156,
+        "adapted": 0,
+        "tested": 0,
+        "failing": 0
+      },
+      "portals": {
+        "superadmin": {
+          "status": "imported",
+          "ocr": "functional",
+          "adapted": 0
+        },
+        "client": {
+          "status": "imported",
+          "adapted": 0
+        },
+        "prestataire": {
+          "status": "imported",
+          "adapted": 0
+        },
+        "revendeur": {
+          "status": "imported",
+          "adapted": 0
+        }
+      },
+      "ocr": {
+        "status": "preserved",
+        "servicePresent": true,
+        "dockerfilePresent": true,
+        "lastTested": null
+      }
+    },
+    "infrastructure": {
+      "directus": {
+        "status": "running",
+        "version": "11.10.0",
+        "healthCheck": "unhealthy",
+        "port": 8055
+      },
+      "postgres": {
+        "status": "running",
+        "version": "15-alpine",
+        "healthCheck": "healthy",
+        "port": 5432
+      },
+      "redis": {
+        "status": "running",
+        "version": "7-alpine",
+        "healthCheck": "healthy",
+        "port": 6379
+      },
+      "adminer": {
+        "status": "running",
+        "port": 8080
+      }
+    }
+  },
+  "modules": {
+    "crm-contacts": {
+      "status": "pending",
+      "priority": "HIGH",
+      "notionBases": [
+        "DB-CONTACTS-ENTREPRISES",
+        "DB-CONTACTS-PERSONNES",
+        "DB-CONTACTS-REVENDEURS",
+        "DB-CONTACTS-PRESTATAIRES",
+        "DB-CONTACTS-LEADS"
+      ],
+      "directusCollections": [
+        "companies",
+        "people",
+        "resellers",
+        "providers"
+      ],
+      "recordsExpected": 500,
+      "recordsMigrated": 0,
+      "endpointsToAdapt": [
+        "/api/companies",
+        "/api/people",
+        "/api/contacts/search"
+      ],
+      "startDate": null,
+      "completionDate": null
+    },
+    "finance": {
+      "status": "pending",
+      "priority": "HIGH",
+      "notionBases": [
+        "DB-FACTURES",
+        "DB-DEVIS",
+        "DB-AVOIRS",
+        "DB-PAIEMENTS",
+        "DB-RELANCES",
+        "DB-COMPTABILITE",
+        "DB-BUDGETS",
+        "DB-CHARGES",
+        "DB-TRESORERIE"
+      ],
+      "directusCollections": [
+        "invoices",
+        "quotes",
+        "credit_notes",
+        "payments",
+        "reminders",
+        "accounting"
+      ],
+      "recordsExpected": 2000,
+      "recordsMigrated": 0
+    },
+    "projects": {
+      "status": "pending",
+      "priority": "MEDIUM",
+      "notionBases": [
+        "DB-PROJETS",
+        "DB-TACHES",
+        "DB-JALONS"
+      ],
+      "directusCollections": [
+        "projects",
+        "tasks",
+        "milestones"
+      ],
+      "recordsExpected": 300,
+      "recordsMigrated": 0
+    },
+    "system": {
+      "status": "pending",
+      "priority": "CRITICAL",
+      "notionBases": [
+        "DB-CONFIG",
+        "DB-USERS",
+        "DB-PERMISSIONS",
+        "DB-LOGS",
+        "DB-AUDIT",
+        "DB-BACKUPS",
+        "DB-TEMPLATES",
+        "DB-WORKFLOWS",
+        "DB-INTEGRATIONS"
+      ],
+      "directusCollections": [
+        "config",
+        "users_extended",
+        "permissions_custom",
+        "logs",
+        "audit",
+        "templates",
+        "workflows"
+      ],
+      "recordsExpected": 1000,
+      "recordsMigrated": 0
+    }
+  },
+  "metrics": {
+    "totalProgress": 5,
+    "migrationProgress": 0,
+    "dashboardProgress": 10,
+    "estimatedROI": -5,
+    "timeSpent": {
+      "migration": 0,
+      "dashboard": 180,
+      "configuration": 60,
+      "testing": 0
+    },
+    "errors": {
+      "migration": 0,
+      "dashboard": 0,
+      "directus": 1
+    }
+  },
+  "nextActions": [
+    {
+      "priority": 1,
+      "action": "Fix Directus health check",
+      "module": "infrastructure"
+    },
+    {
+      "priority": 2,
+      "action": "Test MCP connections",
+      "module": "system"
+    },
+    {
+      "priority": 3,
+      "action": "Start CRM migration test",
+      "module": "crm-contacts"
+    },
+    {
+      "priority": 4,
+      "action": "Adapt first dashboard endpoint",
+      "module": "dashboard"
+    }
+  ]
+}

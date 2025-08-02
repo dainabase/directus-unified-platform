@@ -4,7 +4,16 @@
       "Bash(gh repo create:*)",
       "Bash(git init:*)",
       "Bash(mkdir:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Bash(cp:*)",
+      "Bash(rsync:*)",
+      "Bash(mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(true)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

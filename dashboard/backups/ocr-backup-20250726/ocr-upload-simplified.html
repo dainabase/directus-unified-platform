@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Centre OCR - Finance Superadmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Tesseract.js pour OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+    
+    <!-- PDF.js pour conversion PDF → Image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+    <script>
+        // Configuration PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
+    
+    <style>
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .metric-value,
+        .amount-value {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        /* Zone d'upload simplifiée */
+        .upload-zone {
+            border: 2px dashed var(--tblr-border-color);
+            border-radius: var(--tblr-border-radius);
+            background: var(--tblr-bg-surface);
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-bg-surface-tertiary);
+        }
+        
+        .upload-zone.drag-hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-primary-lt);
+        }
+        
+        /* Preview simplifié */
+        .preview-zone {
+            background: var(--tblr-bg-surface-secondary);
+            padding: 1.5rem;
+            border-radius: var(--tblr-border-radius);
+            min-height: 300px;
+        }
+        
+        /* Indicateurs de devise */
+        .currency-badge {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .currency-EUR { background: #003399; color: white; }
+        .currency-USD { background: #0a9e01; color: white; }
+        .currency-CHF { background: #ff0000; color: white; }
+        .currency-GBP { background: #012169; color: white; }
+        .currency-CAD { background: #ff0000; color: white; }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href=".">
+                        <img src="../../assets/img/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar Menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../dashboard.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown active">
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-businessplan"></i>
+                                    </span>
+                                    <span class="nav-link-title">Finance</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item active" href="./ocr-upload.html">
+                                        <i class="ti ti-scan text-warning me-2"></i>
+                                        Centre OCR
+                                    </a>
+                                    <a class="dropdown-item" href="./invoices-in.html">
+                                        <i class="ti ti-file-invoice me-2"></i>
+                                        Factures Fournisseurs
+                                    </a>
+                                    <a class="dropdown-item" href="./invoices-out.html">
+                                        <i class="ti ti-file-dollar me-2"></i>
+                                        Factures Clients
+                                    </a>
+                                    <a class="dropdown-item" href="./expenses.html">
+                                        <i class="ti ti-receipt me-2"></i>
+                                        Notes de Frais
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Finance</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-scan text-warning me-2"></i>
+                                Centre OCR Multi-Devises
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-white">
+                                    <i class="ti ti-history"></i>
+                                    Historique
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Zone d'upload simplifiée -->
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <!-- Zone d'upload -->
+                                        <div class="col-md-6">
+                                            <h3 class="mb-3">Upload de document</h3>
+                                            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('file-input').click()">
+                                                <input type="file" id="file-input" class="d-none" accept="image/*,.pdf" onchange="handleFileSelect(event)">
+                                                <div class="text-center">
+                                                    <i class="ti ti-cloud-upload" style="font-size: 3rem; color: var(--tblr-primary);"></i>
+                                                    <h3 class="mt-3">Glissez votre document ici</h3>
+                                                    <p class="text-muted">ou cliquez pour parcourir</p>
+                                                    <p class="text-muted small">
+                                                        Formats acceptés: PDF, JPG, PNG<br>
+                                                        Multi-devises: CHF, EUR, USD, GBP, CAD
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Progress -->
+                                            <div class="mt-3 d-none" id="progressContainer">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-indeterminate"></div>
+                                                </div>
+                                                <p class="text-center text-muted mt-2" id="progressText">Extraction en cours...</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Zone de prévisualisation -->
+                                        <div class="col-md-6">
+                                            <h3 class="mb-3">Prévisualisation</h3>
+                                            <div class="preview-zone" id="previewZone">
+                                                <div class="text-center text-muted">
+                                                    <i class="ti ti-file-text" style="font-size: 3rem; opacity: 0.3;"></i>
+                                                    <p class="mt-3">Aucun document sélectionné</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Résultats d'extraction (caché par défaut) -->
+                    <div class="row row-cards mt-3 d-none" id="resultsContainer">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Données extraites</h3>
+                                    <div class="card-actions">
+                                        <span class="currency-badge" id="currencyBadge">CHF</span>
+                                        <span class="badge" id="vatStatusBadge">TTC</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <form id="ocrForm">
+                                        <div class="row g-3">
+                                            <!-- Type et Entité -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Type de document</label>
+                                                <select class="form-select" id="documentType">
+                                                    <option value="facture_fournisseur">Facture fournisseur</option>
+                                                    <option value="facture_client">Facture client</option>
+                                                    <option value="ticket_cb">Ticket CB</option>
+                                                    <option value="note_frais">Note de frais</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Entité</label>
+                                                <select class="form-select" id="entity">
+                                                    <option value="hypervisual">🇨🇭 Hypervisual</option>
+                                                    <option value="dainamics">🇫🇷 Dainamics</option>
+                                                    <option value="enki_reality">🇬🇧 Enki Reality</option>
+                                                    <option value="takeout">🇺🇸 Takeout</option>
+                                                    <option value="lexaia">🇨🇦 Lexaia</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <!-- Fournisseur et Numéro -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Fournisseur</label>
+                                                <input type="text" class="form-control" id="supplier" placeholder="Nom du fournisseur">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Numéro de document</label>
+                                                <input type="text" class="form-control" id="documentNumber" placeholder="N° facture">
+                                            </div>
+                                            
+                                            <!-- Dates -->
+                                            <div class="col-md-6">
+                                                <label class="form-label">Date</label>
+                                                <input type="date" class="form-control" id="documentDate">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Date d'échéance</label>
+                                                <input type="date" class="form-control" id="dueDate">
+                                            </div>
+                                            
+                                            <!-- Montants -->
+                                            <div class="col-md-3">
+                                                <label class="form-label">Montant HT</label>
+                                                <input type="number" class="form-control amount-value" id="amountHT" step="0.01">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">TVA</label>
+                                                <input type="number" class="form-control amount-value" id="amountVAT" step="0.01">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Montant TTC</label>
+                                                <input type="number" class="form-control amount-value fw-bold" id="amountTTC" step="0.01">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Taux TVA (%)</label>
+                                                <input type="number" class="form-control" id="vatRate" step="0.1">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Actions -->
+                                        <div class="mt-4 d-flex justify-content-between">
+                                            <button type="button" class="btn btn-ghost-danger" onclick="cancelOCR()">
+                                                <i class="ti ti-x"></i> Annuler
+                                            </button>
+                                            <div>
+                                                <button type="button" class="btn btn-secondary me-2" onclick="resetForm()">
+                                                    <i class="ti ti-refresh"></i> Réinitialiser
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="ti ti-check"></i> Valider et enregistrer
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Libs JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- OCR Processor -->
+    <script src="../../assets/js/Superadmin/ocr-hybrid-processor.js"></script>
+    
+    <!-- Page JS -->
+    <script>
+        let ocrProcessor = null;
+        let currentFile = null;
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialiser le processeur OCR
+            ocrProcessor = new OCRHybridProcessor();
+            await ocrProcessor.init();
+            
+            // Gestion du drag & drop
+            const uploadZone = document.getElementById('uploadZone');
+            
+            uploadZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadZone.classList.add('drag-hover');
+            });
+            
+            uploadZone.addEventListener('dragleave', () => {
+                uploadZone.classList.remove('drag-hover');
+            });
+            
+            uploadZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadZone.classList.remove('drag-hover');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            // Formulaire
+            document.getElementById('ocrForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await saveDocument();
+            });
+        });
+        
+        // Gestion de la sélection de fichier
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+        
+        // Traitement du fichier
+        async function handleFile(file) {
+            currentFile = file;
+            
+            // Afficher la prévisualisation
+            showPreview(file);
+            
+            // Afficher la barre de progression
+            document.getElementById('progressContainer').classList.remove('d-none');
+            document.getElementById('resultsContainer').classList.add('d-none');
+            
+            try {
+                // Traiter avec OCR
+                const result = await ocrProcessor.processDocument(file, {
+                    useOpenAI: true
+                });
+                
+                if (result.success) {
+                    displayResults(result.data);
+                    
+                    // Notification de succès
+                    showNotification('success', 'Document extrait avec succès');
+                } else {
+                    throw new Error(result.error || 'Erreur extraction');
+                }
+                
+            } catch (error) {
+                console.error('Erreur OCR:', error);
+                showNotification('error', 'Erreur lors de l\'extraction: ' + error.message);
+            } finally {
+                // Masquer la progression
+                document.getElementById('progressContainer').classList.add('d-none');
+            }
+        }
+        
+        // Afficher la prévisualisation
+        function showPreview(file) {
+            const previewZone = document.getElementById('previewZone');
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewZone.innerHTML = `
+                        <img src="${e.target.result}" class="img-fluid rounded" alt="Preview">
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf') {
+                previewZone.innerHTML = `
+                    <div class="text-center">
+                        <i class="ti ti-file-type-pdf" style="font-size: 5rem; color: var(--tblr-danger);"></i>
+                        <p class="mt-3 fw-bold">${file.name}</p>
+                        <p class="text-muted">${(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Afficher les résultats
+        function displayResults(data) {
+            // Afficher le conteneur de résultats
+            document.getElementById('resultsContainer').classList.remove('d-none');
+            
+            // Remplir les champs
+            document.getElementById('documentType').value = data.type || 'facture_fournisseur';
+            document.getElementById('entity').value = data.entite || 'hypervisual';
+            document.getElementById('supplier').value = data.fournisseur || '';
+            document.getElementById('documentNumber').value = data.numero || '';
+            document.getElementById('documentDate').value = data.date || '';
+            document.getElementById('dueDate').value = data.date_echeance || '';
+            document.getElementById('amountHT').value = data.montant_ht || '';
+            document.getElementById('amountVAT').value = data.montant_tva || '';
+            document.getElementById('amountTTC').value = data.montant_ttc || '';
+            document.getElementById('vatRate').value = data.taux_tva || '';
+            
+            // Mise à jour des badges
+            updateCurrencyBadge(data.devise || 'CHF');
+            updateVATStatusBadge(data.vat_status || 'ttc');
+            
+            // Scroll vers les résultats
+            document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Mise à jour du badge de devise
+        function updateCurrencyBadge(currency) {
+            const badge = document.getElementById('currencyBadge');
+            badge.textContent = currency;
+            badge.className = `currency-badge currency-${currency}`;
+        }
+        
+        // Mise à jour du badge TVA
+        function updateVATStatusBadge(status) {
+            const badge = document.getElementById('vatStatusBadge');
+            const statusMap = {
+                'hors_tva': { text: 'HORS TVA', class: 'bg-secondary' },
+                'ttc': { text: 'TTC', class: 'bg-success' },
+                'non_applicable': { text: 'N/A', class: 'bg-warning' }
+            };
+            
+            const config = statusMap[status] || statusMap['ttc'];
+            badge.textContent = config.text;
+            badge.className = `badge ${config.class}`;
+        }
+        
+        // Annuler
+        function cancelOCR() {
+            document.getElementById('resultsContainer').classList.add('d-none');
+            document.getElementById('file-input').value = '';
+            document.getElementById('previewZone').innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="ti ti-file-text" style="font-size: 3rem; opacity: 0.3;"></i>
+                    <p class="mt-3">Aucun document sélectionné</p>
+                </div>
+            `;
+            currentFile = null;
+        }
+        
+        // Réinitialiser le formulaire
+        function resetForm() {
+            document.getElementById('ocrForm').reset();
+        }
+        
+        // Sauvegarder le document
+        async function saveDocument() {
+            const formData = {
+                type: document.getElementById('documentType').value,
+                entite: document.getElementById('entity').value,
+                fournisseur: document.getElementById('supplier').value,
+                numero: document.getElementById('documentNumber').value,
+                date: document.getElementById('documentDate').value,
+                date_echeance: document.getElementById('dueDate').value,
+                montant_ht: parseFloat(document.getElementById('amountHT').value) || 0,
+                montant_tva: parseFloat(document.getElementById('amountVAT').value) || 0,
+                montant_ttc: parseFloat(document.getElementById('amountTTC').value) || 0,
+                taux_tva: parseFloat(document.getElementById('vatRate').value) || 0,
+                devise: document.getElementById('currencyBadge').textContent
+            };
+            
+            console.log('Sauvegarde:', formData);
+            showNotification('success', 'Document enregistré avec succès');
+            
+            // Réinitialiser après sauvegarde
+            setTimeout(() => {
+                cancelOCR();
+            }, 1000);
+        }
+        
+        // Notification
+        function showNotification(type, message) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const icon = type === 'success' ? 'check' : 'alert-circle';
+            
+            const alert = document.createElement('div');
+            alert.className = `alert ${alertClass} alert-dismissible position-fixed top-0 end-0 m-3`;
+            alert.style.zIndex = '9999';
+            alert.innerHTML = `
+                <div class="d-flex">
+                    <div>
+                        <i class="ti ti-${icon} me-2"></i>
+                        ${message}
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

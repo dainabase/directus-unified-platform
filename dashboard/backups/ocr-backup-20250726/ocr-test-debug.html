@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Debug Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .debug-console {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 10px;
+            overflow-y: auto;
+            z-index: 9999;
+        }
+        .error { color: #ff0000; }
+        .success { color: #00ff00; }
+        .warning { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container-fluid py-4">
+            <h1>🔧 OCR Debug Test</h1>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h3>Test de chargement des scripts OCR</h3>
+                    
+                    <div class="mb-3">
+                        <button class="btn btn-primary" onclick="testOCRClasses()">
+                            Test Classes OCR
+                        </button>
+                        
+                        <button class="btn btn-success" onclick="testInitialization()">
+                            Test Initialisation
+                        </button>
+                        
+                        <button class="btn btn-warning" onclick="testSettingsModal()">
+                            Test Settings Modal
+                        </button>
+                    </div>
+                    
+                    <div id="testResults" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="debug-console" id="debugConsole">
+        <div>🔧 Console de débogage OCR</div>
+    </div>
+
+    <!-- Scripts dans le bon ordre -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.worker.min.js';
+    </script>
+    
+    <!-- Debug logger -->
+    <script>
+        const debugLog = (message, type = 'info') => {
+            const console = document.getElementById('debugConsole');
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${time}] ${message}`;
+            console.appendChild(div);
+            console.scrollTop = console.scrollHeight;
+        };
+
+        // Override console methods
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = (...args) => {
+            originalLog(...args);
+            debugLog(args.join(' '), 'success');
+        };
+        
+        console.error = (...args) => {
+            originalError(...args);
+            debugLog('ERROR: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = (...args) => {
+            originalWarn(...args);
+            debugLog('WARN: ' + args.join(' '), 'warning');
+        };
+
+        // Error handler
+        window.addEventListener('error', (e) => {
+            debugLog(`ERROR: ${e.message} at ${e.filename}:${e.lineno}:${e.colno}`, 'error');
+        });
+    </script>
+    
+    <!-- OCR Scripts -->
+    <script>
+        debugLog('Chargement ocr-hybrid-processor.js...');
+    </script>
+    <script src="../../assets/js/Superadmin/ocr-hybrid-processor.js"></script>
+    
+    <script>
+        debugLog('Chargement ocr-api-client.js...');
+    </script>
+    <script src="../../assets/js/Superadmin/ocr-api-client.js"></script>
+    
+    <script>
+        debugLog('Chargement ocr-premium-interface.js...');
+    </script>
+    <script src="../../assets/js/Superadmin/ocr-premium-interface.js"></script>
+    
+    <script>
+        debugLog('Chargement ocr-repair-fix.js...');
+    </script>
+    <script src="../../assets/js/Superadmin/ocr-repair-fix.js"></script>
+    
+    <script>
+        // Test functions
+        function testOCRClasses() {
+            debugLog('=== Test Classes OCR ===');
+            
+            // Test OCRHybridProcessor
+            if (typeof OCRHybridProcessor !== 'undefined') {
+                debugLog('✅ OCRHybridProcessor est définie', 'success');
+            } else {
+                debugLog('❌ OCRHybridProcessor n\'est pas définie', 'error');
+            }
+            
+            // Test OCRAPIClient
+            if (typeof OCRAPIClient !== 'undefined') {
+                debugLog('✅ OCRAPIClient est définie', 'success');
+            } else {
+                debugLog('❌ OCRAPIClient n\'est pas définie', 'error');
+            }
+            
+            // Test OCRPremiumInterface
+            if (typeof OCRPremiumInterface !== 'undefined') {
+                debugLog('✅ OCRPremiumInterface est définie', 'success');
+                
+                // Check methods
+                const instance = new OCRPremiumInterface();
+                if (typeof instance.showSettingsModal === 'function') {
+                    debugLog('✅ showSettingsModal est une fonction', 'success');
+                } else {
+                    debugLog('❌ showSettingsModal n\'est pas une fonction', 'error');
+                }
+            } else {
+                debugLog('❌ OCRPremiumInterface n\'est pas définie', 'error');
+            }
+        }
+        
+        function testInitialization() {
+            debugLog('=== Test Initialisation ===');
+            
+            try {
+                window.ocrPremium = new OCRPremiumInterface();
+                debugLog('✅ OCRPremiumInterface initialisée avec succès', 'success');
+            } catch (error) {
+                debugLog(`❌ Erreur initialisation: ${error.message}`, 'error');
+            }
+        }
+        
+        function testSettingsModal() {
+            debugLog('=== Test Settings Modal ===');
+            
+            if (window.ocrPremium && typeof window.ocrPremium.showSettingsModal === 'function') {
+                try {
+                    window.ocrPremium.showSettingsModal();
+                    debugLog('✅ Modal settings ouvert avec succès', 'success');
+                } catch (error) {
+                    debugLog(`❌ Erreur ouverture modal: ${error.message}`, 'error');
+                }
+            } else {
+                debugLog('❌ ocrPremium.showSettingsModal non disponible', 'error');
+            }
+        }
+        
+        // Auto-run tests on load
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('=== Page chargée ===');
+            setTimeout(() => {
+                testOCRClasses();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

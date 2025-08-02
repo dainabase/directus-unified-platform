@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Workflow OCR → Notion</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .test-document {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .workflow-step {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .workflow-step.active {
+            border-color: #206bc4;
+            background: #e6f2ff;
+        }
+        .workflow-step.completed {
+            border-color: #2fb344;
+            background: #e6f7ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container-fluid py-4">
+            <h1 class="mb-4">🧪 Test Workflow OCR → Notion</h1>
+            
+            <div class="row">
+                <!-- Documents de test -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📄 Documents de Test</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h5>🧾 Facture Fournisseur</h5>
+                                <div class="test-document" id="doc1">PROMIDEA SRL
+Via Roma 123
+20121 Milano
+Italy
+P.IVA: IT12345678901
+
+HYPERVISUAL by HMF Corporation SA
+Avenue de Beauregard 1
+1700 Fribourg
+Switzerland
+
+Invoice F-2025-001
+Date: 15.01.2025
+Due Date: 15.02.2025
+
+Description: Digital Marketing Services
+- Social Media Management
+- Content Creation
+- Analytics Reports
+
+Subtotal: CHF 3,264.60
+VAT 8.1%: CHF 264.43
+Total: CHF 3,529.03
+
+Payment Terms: 30 days net
+IBAN: IT60 X054 2811 1010 0000 0123 456</div>
+                                <button class="btn btn-primary mt-2" onclick="testWorkflow('FACTURE_FOURNISSEUR', 'doc1')">
+                                    <i class="ti ti-play"></i> Tester Facture Fournisseur
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5>📋 Contrat</h5>
+                                <div class="test-document" id="doc2">CONTRAT DE PRESTATION DE SERVICES
+
+Entre:
+HYPERVISUAL SA
+Avenue de Beauregard 1
+1700 Fribourg, Suisse
+
+Et:
+TECH SOLUTIONS AG
+Bahnhofstrasse 10
+8001 Zürich, Suisse
+
+Objet: Développement Application Mobile
+Durée: 6 mois
+Date début: 01.02.2025
+Date fin: 31.07.2025
+
+Valeur totale: CHF 85,000
+Paiement: Mensuel
+
+Juridiction: Droit Suisse
+Tribunal compétent: Fribourg
+
+Signatures:
+_________________    _________________
+HYPERVISUAL SA       TECH SOLUTIONS AG</div>
+                                <button class="btn btn-primary mt-2" onclick="testWorkflow('CONTRAT', 'doc2')">
+                                    <i class="ti ti-play"></i> Tester Contrat
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h5>🎫 Note de Frais</h5>
+                                <div class="test-document" id="doc3">RESTAURANT LE BISTROT
+Rue de Lausanne 25
+1700 Fribourg
+
+Date: 18.01.2025
+Heure: 12:45
+
+Table 5 - 4 couverts
+
+Menu du jour x2    CHF 48.00
+Plat du jour x2    CHF 56.00
+Boissons          CHF 24.00
+Café              CHF 12.00
+
+Total: CHF 140.00
+TVA incluse
+
+Merci de votre visite!</div>
+                                <button class="btn btn-primary mt-2" onclick="testWorkflow('NOTE_FRAIS', 'doc3')">
+                                    <i class="ti ti-play"></i> Tester Note de Frais
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Workflow Status -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🔄 Workflow Status</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="workflow-step" id="step1">
+                                <h5>1️⃣ Extraction OCR</h5>
+                                <div class="text-muted">Analyse du document...</div>
+                            </div>
+                            
+                            <div class="workflow-step" id="step2">
+                                <h5>2️⃣ Détection Type</h5>
+                                <div class="text-muted">Identification du type de document...</div>
+                            </div>
+                            
+                            <div class="workflow-step" id="step3">
+                                <h5>3️⃣ Validation Données</h5>
+                                <div class="text-muted">Formulaire de validation...</div>
+                            </div>
+                            
+                            <div class="workflow-step" id="step4">
+                                <h5>4️⃣ Confirmation</h5>
+                                <div class="text-muted">Modal de confirmation...</div>
+                            </div>
+                            
+                            <div class="workflow-step" id="step5">
+                                <h5>5️⃣ Sauvegarde Notion</h5>
+                                <div class="text-muted">Transfert vers la base Notion...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Résultats -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">📊 Résultats</h3>
+                        </div>
+                        <div class="card-body" id="resultsContainer">
+                            <p class="text-muted">Les résultats apparaîtront ici...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-notion-workflow.js"></script>
+    
+    <script>
+        // Simuler le workflow complet
+        async function testWorkflow(documentType, docId) {
+            const docText = document.getElementById(docId).textContent;
+            resetWorkflow();
+            
+            // Step 1: Extraction OCR
+            activateStep('step1');
+            await sleep(1000);
+            
+            const extractedData = simulateOCRExtraction(documentType, docText);
+            updateResults('Extraction OCR', extractedData);
+            completeStep('step1');
+            
+            // Step 2: Détection Type
+            activateStep('step2');
+            await sleep(800);
+            
+            const detectedType = OCRNotionWorkflow.detectDocumentType(docText);
+            updateResults('Type détecté', { type: detectedType, confidence: '92%' });
+            
+            // Afficher le type détecté
+            showDetectedType(detectedType);
+            completeStep('step2');
+            
+            // Step 3: Validation
+            activateStep('step3');
+            await sleep(1000);
+            
+            // Mapper les données
+            const mappedData = OCRNotionWorkflow.mapExtractedDataToFields(detectedType, extractedData);
+            updateResults('Données mappées', mappedData);
+            
+            // Afficher le formulaire
+            showValidationForm(detectedType, mappedData);
+            completeStep('step3');
+            
+            // Step 4: Confirmation
+            activateStep('step4');
+            await sleep(1200);
+            
+            updateResults('Confirmation', 'Modal de confirmation affiché');
+            completeStep('step4');
+            
+            // Step 5: Sauvegarde
+            activateStep('step5');
+            await sleep(1500);
+            
+            updateResults('Sauvegarde Notion', {
+                status: 'Succès (simulation)',
+                notionId: 'demo-' + Date.now(),
+                database: DOCUMENT_TYPES[detectedType].notionDB
+            });
+            completeStep('step5');
+            
+            // Succès final
+            showSuccess(detectedType);
+        }
+        
+        function simulateOCRExtraction(type, text) {
+            const data = {
+                rawText: text,
+                type: type,
+                confidence: 0.92
+            };
+            
+            // Extraction basique selon le type
+            switch(type) {
+                case 'FACTURE_FOURNISSEUR':
+                    data.numero = 'F-2025-001';
+                    data.company = 'PROMIDEA SRL';
+                    data.date = '2025-01-15';
+                    data.montant_ttc = 3529.03;
+                    data.devise = 'CHF';
+                    data.taux_tva = 8.1;
+                    break;
+                    
+                case 'CONTRAT':
+                    data.title = 'Contrat de Prestation de Services';
+                    data.client = 'TECH SOLUTIONS AG';
+                    data.date = '2025-02-01';
+                    data.amount = 85000;
+                    data.devise = 'CHF';
+                    break;
+                    
+                case 'NOTE_FRAIS':
+                    data.description = 'Restaurant Le Bistrot';
+                    data.date = '2025-01-18';
+                    data.amount = 140;
+                    data.devise = 'CHF';
+                    break;
+            }
+            
+            return data;
+        }
+        
+        function activateStep(stepId) {
+            document.getElementById(stepId).classList.add('active');
+        }
+        
+        function completeStep(stepId) {
+            document.getElementById(stepId).classList.remove('active');
+            document.getElementById(stepId).classList.add('completed');
+        }
+        
+        function resetWorkflow() {
+            for (let i = 1; i <= 5; i++) {
+                const step = document.getElementById('step' + i);
+                step.classList.remove('active', 'completed');
+            }
+            document.getElementById('resultsContainer').innerHTML = '<p class="text-muted">Test en cours...</p>';
+        }
+        
+        function updateResults(step, data) {
+            const container = document.getElementById('resultsContainer');
+            const html = `
+                <div class="mb-3">
+                    <h6>${step}</h6>
+                    <pre class="bg-light p-2 rounded">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            container.innerHTML += html;
+        }
+        
+        function showDetectedType(type) {
+            const config = DOCUMENT_TYPES[type];
+            const html = `
+                <div class="alert alert-success mt-3">
+                    <h5>${config.icon} ${config.title} détecté</h5>
+                    <p>Base Notion: <code>${config.notionDB}</code></p>
+                </div>
+            `;
+            document.getElementById('resultsContainer').innerHTML += html;
+        }
+        
+        function showValidationForm(type, data) {
+            const html = `
+                <div class="alert alert-info mt-3">
+                    <h5>📝 Formulaire de validation généré</h5>
+                    <p>${Object.keys(DOCUMENT_TYPES[type].fields).length} champs disponibles</p>
+                </div>
+            `;
+            document.getElementById('resultsContainer').innerHTML += html;
+        }
+        
+        function showSuccess(type) {
+            const config = DOCUMENT_TYPES[type];
+            const html = `
+                <div class="alert alert-success mt-3">
+                    <h4>✅ Workflow complété avec succès!</h4>
+                    <p>${config.icon} ${config.title} prêt pour sauvegarde dans Notion</p>
+                </div>
+            `;
+            document.getElementById('resultsContainer').innerHTML += html;
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>

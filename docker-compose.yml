@@ -1,0 +1,153 @@
+version: '3.8'
+
+services:
+  # === DIRECTUS ===
+  directus:
+    image: directus/directus:11.10.0
+    container_name: directus-unified
+    ports:
+      - 8055:8055
+    volumes:
+      - ./directus/database:/directus/database
+      - ./directus/uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions
+    environment:
+      # Sécurité
+      SECRET: "${DIRECTUS_SECRET:-replace-with-32-char-minimum-secret-key}"
+      ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL:-admin@dainabase.com}"
+      ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD:-ChangeMeImmediately!}"
+      
+      # Base de données PostgreSQL
+      DB_CLIENT: "pg"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_DATABASE: "directus"
+      DB_USER: "directus"
+      DB_PASSWORD: "${DB_PASSWORD:-directus-password}"
+      
+      # Optimisations pour migration (62 bases Notion → 48 collections)
+      DB_POOL__MIN: 10
+      DB_POOL__MAX: 50
+      RELATIONAL_BATCH_SIZE: 15000
+      EXPORT_BATCH_SIZE: 2500
+      MAX_RELATIONAL_DEPTH: 5
+      QUERY_LIMIT_DEFAULT: 50
+      QUERY_LIMIT_MAX: 500
+      
+      # Cache Redis
+      CACHE_ENABLED: "true"
+      CACHE_STORE: "redis"
+      CACHE_TTL: "1h"
+      CACHE_AUTO_PURGE: "true"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      
+      # Rate limiting pour scripts migration
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_POINTS: "200"
+      RATE_LIMITER_DURATION: "60"
+      RATE_LIMITER_STORE: "redis"
+      
+      # Logs et monitoring
+      LOG_LEVEL: "info"
+      LOG_STYLE: "pretty"
+      
+      # CORS pour dashboard
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:3000,http://localhost:3001"
+      
+      # Public URL
+      PUBLIC_URL: "http://localhost:8055"
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - directus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8055/server/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # === POSTGRESQL ===
+  postgres:
+    image: postgres:15-alpine
+    container_name: directus-postgres
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-directus-password}"
+      POSTGRES_DB: directus
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=fr_FR.UTF-8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./directus/init-db:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    networks:
+      - directus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # === REDIS ===
+  redis:
+    image: redis:7-alpine
+    container_name: directus-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - directus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # === ADMINER (Interface DB) ===
+  adminer:
+    image: adminer:latest
+    container_name: directus-adminer
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    networks:
+      - directus-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  # === REDIS COMMANDER (Interface Redis) ===
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: directus-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - 8081:8081
+    networks:
+      - directus-network
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+networks:
+  directus-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

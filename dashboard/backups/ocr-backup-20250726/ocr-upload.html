@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <title>OCR Premium - Extraction IA Multi-devises | SuperAdmin</title>
+  
+  <!-- Tabler Core -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+  
+  <!-- OCR Premium Styles -->
+  <link href="../../assets/css/ocr-premium.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="navbar navbar-expand-md d-print-none">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+          <a href="../dashboard.html">
+            <i class="ti ti-shield-lock text-warning fs-1"></i>
+            <span class="ms-2">SuperAdmin</span>
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+              <span class="avatar avatar-sm" style="background-color: #f76707; color: white; display: flex; align-items: center; justify-content: center;">
+                <i class="ti ti-user"></i>
+              </span>
+              <div class="d-none d-xl-block ps-2">
+                <div>Admin</div>
+                <div class="mt-1 small text-muted">SuperAdmin</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <header class="navbar-expand-md">
+      <div class="collapse navbar-collapse" id="navbar-menu">
+        <div class="navbar">
+          <div class="container-fluid">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="../dashboard.html">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="ti ti-home"></i>
+                  </span>
+                  <span class="nav-link-title">Dashboard</span>
+                </a>
+              </li>
+              <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <i class="ti ti-coins"></i>
+                  </span>
+                  <span class="nav-link-title">Finance</span>
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item active" href="ocr-upload.html">
+                    <i class="ti ti-brain me-2"></i>OCR Documents
+                  </a>
+                  <a class="dropdown-item" href="invoices.html">
+                    <i class="ti ti-file-invoice me-2"></i>Factures
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Page Content -->
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-fluid">
+          
+          <!-- Page Header -->
+          <div class="page-header d-print-none mb-4">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <div class="page-pretitle">Finance / OCR</div>
+                <h2 class="page-title">
+                  <i class="ti ti-brain me-2"></i>
+                  Extraction IA de Documents
+                </h2>
+                <div class="text-muted mt-1">
+                  Analyse intelligente multi-devises avec détection automatique du type de document
+                </div>
+              </div>
+              <div class="col-auto ms-auto">
+                <div class="btn-list">
+                  <button class="btn btn-outline-secondary" onclick="window.ocrPremium.showSettingsModal()">
+                    <i class="ti ti-settings me-2"></i>
+                    Configuration
+                  </button>
+                  <button class="btn btn-outline-primary" id="historyBtn">
+                    <i class="ti ti-history me-2"></i>
+                    Historique
+                  </button>
+                  <button class="btn btn-primary" id="batchBtn">
+                    <i class="ti ti-stack-2 me-2"></i>
+                    Mode Batch
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="row g-4">
+            
+            <!-- Upload Section -->
+            <div class="col-12" id="uploadSection">
+              <div class="card shadow-sm">
+                <div class="card-body p-5">
+                  
+                  <!-- Dropzone Premium -->
+                  <div class="dropzone-premium" id="dropzonePremium">
+                    <!-- État par défaut -->
+                    <div class="dropzone-content" id="dropzoneContent">
+                      
+                      <!-- Icône IA animée -->
+                      <div class="ai-icon-container">
+                        <div class="ai-brain-wrapper">
+                          <i class="ti ti-brain ai-brain-icon" id="aiBrainIcon"></i>
+                          <div class="ai-pulse-rings">
+                            <div class="pulse-ring"></div>
+                            <div class="pulse-ring"></div>
+                            <div class="pulse-ring"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Texte principal -->
+                      <div class="dropzone-text">
+                        <h3 class="dropzone-title" id="dropzoneTitle">
+                          Glissez votre document ici
+                        </h3>
+                        <p class="dropzone-subtitle" id="dropzoneSubtitle">
+                          L'IA va analyser et extraire automatiquement les données
+                        </p>
+                        <div class="dropzone-formats">
+                          <span class="format-badge">PDF</span>
+                          <span class="format-badge">PNG</span>
+                          <span class="format-badge">JPG</span>
+                          <span class="format-badge">HEIC</span>
+                        </div>
+                      </div>
+                      
+                      <!-- Actions -->
+                      <div class="dropzone-actions">
+                        <input type="file" id="fileInput" class="d-none" accept=".pdf,.png,.jpg,.jpeg,.heic" multiple>
+                        <button class="btn btn-primary btn-lg" id="browseBtn">
+                          <i class="ti ti-folder me-2"></i>
+                          Parcourir fichiers
+                        </button>
+                        <div class="dropzone-hint">
+                          ou utilisez <kbd>Ctrl</kbd>+<kbd>V</kbd> pour coller
+                        </div>
+                      </div>
+                      
+                    </div>
+                    
+                    <!-- Overlay états actifs -->
+                    <div class="dropzone-overlay" id="dropzoneOverlay">
+                      <div class="overlay-content">
+                        <div class="overlay-icon">
+                          <i class="ti ti-brain icon-xl"></i>
+                        </div>
+                        <div class="overlay-text">Relâchez pour analyser avec l'IA</div>
+                      </div>
+                    </div>
+                    
+                    <!-- Prévisualisation fichier -->
+                    <div class="file-preview" id="filePreview">
+                      <div class="preview-thumbnail" id="previewThumbnail">
+                        <i class="ti ti-file-text"></i>
+                      </div>
+                      <div class="preview-info">
+                        <div class="preview-name" id="previewName"></div>
+                        <div class="preview-size" id="previewSize"></div>
+                      </div>
+                      <button class="preview-remove" id="previewRemove">
+                        <i class="ti ti-x"></i>
+                      </button>
+                    </div>
+                    
+                  </div>
+                  
+                  <!-- Quick Actions -->
+                  <div class="mt-4 text-center">
+                    <div class="btn-group">
+                      <button class="btn btn-outline-secondary btn-sm" id="pasteBtn">
+                        <i class="ti ti-clipboard me-1"></i>Coller image
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" id="cameraBtn">
+                        <i class="ti ti-camera me-1"></i>Prendre photo
+                      </button>
+                      <button class="btn btn-outline-secondary btn-sm" id="templateBtn">
+                        <i class="ti ti-template me-1"></i>Exemples
+                      </button>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+            <!-- Processing State -->
+            <div class="col-12" id="processingSection" style="display: none;">
+              <div class="processing-state show" id="processingState">
+                <div class="card card-lg">
+                  <div class="card-body text-center p-5">
+                    
+                    <!-- Icône IA animée -->
+                    <div class="ai-processing-icon mb-4">
+                      <i class="ti ti-brain icon-xxl text-info"></i>
+                      <div class="processing-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                      </div>
+                    </div>
+                    
+                    <!-- Progress steps -->
+                    <div class="processing-steps mb-4">
+                      <div class="step active" id="step1">
+                        <div class="step-icon">📄</div>
+                        <div class="step-label">Lecture document</div>
+                      </div>
+                      <div class="step" id="step2">
+                        <div class="step-icon">🧠</div>
+                        <div class="step-label">Analyse IA</div>
+                      </div>
+                      <div class="step" id="step3">
+                        <div class="step-icon">✨</div>
+                        <div class="step-label">Extraction données</div>
+                      </div>
+                      <div class="step" id="step4">
+                        <div class="step-icon">✅</div>
+                        <div class="step-label">Validation</div>
+                      </div>
+                    </div>
+                    
+                    <!-- Progress bar détaillé -->
+                    <div class="progress progress-lg mb-3">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                           id="detailedProgress" style="width: 0%"></div>
+                    </div>
+                    
+                    <!-- Message dynamique -->
+                    <h4 class="text-muted mb-2" id="processingMessage">
+                      Analyse du document en cours...
+                    </h4>
+                    <p class="text-muted" id="processingDetail">
+                      Extraction des données avec l'IA GPT-4
+                    </p>
+                    
+                    <!-- Estimated time -->
+                    <div class="small text-muted">
+                      Temps estimé: <span id="estimatedTime">2-3 secondes</span>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="col-12" id="resultsSection" style="display: none;">
+              <!-- Notification Container -->
+              <div id="notificationContainer" style="display: none;"></div>
+              
+              <!-- Document Type Detection -->
+              <div id="documentTypeContainer" style="display: none;" class="mb-4"></div>
+              
+              <div class="results-premium">
+                <div class="card card-lg shadow-sm">
+                  
+                  <!-- Header avec type document -->
+                  <div class="card-header bg-light">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center">
+                        <h3 class="card-title mb-0">
+                          <i class="ti ti-sparkles me-2"></i>
+                          Extraction IA terminée
+                        </h3>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <!-- Type document -->
+                        <span class="badge badge-lg" id="documentTypeBadge">
+                          <i class="ti ti-file-invoice me-1"></i>
+                          <span id="documentTypeText">Facture Client</span>
+                        </span>
+                        <!-- Confiance globale -->
+                        <span class="badge" id="overallConfidence">97%</span>
+                      </div>
+                    </div>
+                    
+                    <!-- Barre de confiance type -->
+                    <div class="mt-2">
+                      <div class="progress progress-sm">
+                        <div class="progress-bar bg-success" id="typeConfidenceBar" style="width: 95%"></div>
+                      </div>
+                      <div class="small text-muted mt-1">
+                        Confiance type document: <span id="typeConfidenceText">95%</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-body">
+                    
+                    <!-- Validation Form Container -->
+                    <div id="validationFormContainer" style="display: none;"></div>
+                    
+                    <!-- Original extraction results (hidden by default) -->
+                    <div id="originalExtractionResults" style="display: none;">
+                      <!-- Section client (prioritaire) -->
+                      <div class="row g-0 mb-4">
+                        <div class="col">
+                          <div class="client-section p-3 bg-primary-lt rounded">
+                            <label class="form-label fw-bold text-primary mb-2">
+                              <i class="ti ti-building me-1"></i>
+                              Client destinataire
+                            </label>
+                            <input class="form-control form-control-lg border-primary" 
+                                   id="clientField" readonly 
+                                   placeholder="Client détecté automatiquement">
+                            <div class="form-hint mt-1" id="clientDetails">
+                              <i class="ti ti-map-pin icon-sm me-1"></i>
+                              <span id="clientAddress">Adresse détectée</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    
+                    <!-- Grille informations -->
+                    <div class="row g-3 mb-4">
+                      <!-- Colonne gauche -->
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Société émettrice</label>
+                          <div class="input-group">
+                            <span class="input-group-text">
+                              <i class="ti ti-building-store"></i>
+                            </span>
+                            <input class="form-control" id="companyField" readonly>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">N° Document</label>
+                          <div class="input-group">
+                            <span class="input-group-text">
+                              <i class="ti ti-hash"></i>
+                            </span>
+                            <input class="form-control" id="numberField" readonly>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Date</label>
+                          <div class="input-group">
+                            <span class="input-group-text">
+                              <i class="ti ti-calendar"></i>
+                            </span>
+                            <input class="form-control" id="dateField" readonly>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Montant</label>
+                          <div class="input-group">
+                            <span class="input-group-text">
+                              <i class="ti ti-currency-dollar"></i>
+                            </span>
+                            <input class="form-control" id="amountField" readonly>
+                            <span class="input-group-text fw-bold" id="currencyBadge">EUR</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Section TVA -->
+                    <div class="vat-section p-3 bg-light rounded mb-4">
+                      <div class="row g-3 align-items-center">
+                        <div class="col-md-6">
+                          <label class="form-label mb-1">Statut TVA</label>
+                          <div class="d-flex align-items-center gap-2">
+                            <span class="badge badge-lg" id="vatStatusBadge">Hors TVA</span>
+                            <span class="text-muted" id="vatRateText">0%</span>
+                          </div>
+                        </div>
+                        <div class="col-md-6" id="vatAmountSection">
+                          <label class="form-label mb-1">Montant TVA</label>
+                          <div class="fw-bold" id="vatAmountDisplay">0.00 EUR</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Validation warnings si nécessaire -->
+                    <div class="validation-warnings" id="validationWarnings"></div>
+                    
+                    <!-- Actions -->
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <button class="btn btn-outline-secondary" id="editBtn">
+                          <i class="ti ti-edit me-2"></i>
+                          Corriger
+                        </button>
+                        <button class="btn btn-outline-secondary" id="regenerateBtn">
+                          <i class="ti ti-refresh me-2"></i>
+                          Re-analyser
+                        </button>
+                      </div>
+                      
+                      <button class="btn btn-success btn-lg" id="saveBtn">
+                        <i class="ti ti-device-floppy me-2"></i>
+                        Enregistrer en comptabilité
+                      </button>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabler Core -->
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+  
+  <!-- OCR Dependencies -->
+  <script src="https://unpkg.com/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.worker.min.js';
+  </script>
+  
+  <!-- OCR Premium Scripts -->
+  <script src="../../assets/js/Superadmin/ocr-cache-manager.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-error-handler.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-progress-manager.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-memory-manager.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-hybrid-processor.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-api-client.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-premium-interface.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-notion-workflow.js"></script>
+  <script src="../../assets/js/Superadmin/ocr-minor-fixes.js"></script>
+  
+  <script>
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      window.ocrPremium = new OCRPremiumInterface();
+    });
+  </script>
+</body>
+</html>

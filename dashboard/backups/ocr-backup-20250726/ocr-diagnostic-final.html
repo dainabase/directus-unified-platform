@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Final OCR</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .diagnostic-item {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+        }
+        .diagnostic-success { background-color: #d1f2eb; color: #0f5132; }
+        .diagnostic-error { background-color: #f8d7da; color: #842029; }
+        .diagnostic-warning { background-color: #fff3cd; color: #664d03; }
+        .code-fix {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container-fluid py-4">
+            <h1 class="mb-4">🔍 Diagnostic Final du Système OCR</h1>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📋 Vérifications</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="diagnosticResults"></div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="runFullDiagnostic()">
+                                    <i class="ti ti-refresh me-2"></i>
+                                    Relancer le diagnostic
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🛠️ Solutions</h3>
+                        </div>
+                        <div class="card-body" id="solutions">
+                            <p class="text-muted">Les solutions apparaîtront ici après le diagnostic</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">📝 Rapport Complet</h3>
+                </div>
+                <div class="card-body">
+                    <pre id="fullReport" style="max-height: 400px; overflow-y: auto;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de base -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <script>
+        const diagnosticResults = [];
+        const solutions = [];
+        
+        function addDiagnostic(test, result, message) {
+            const item = { test, result, message };
+            diagnosticResults.push(item);
+            
+            const div = document.createElement('div');
+            div.className = `diagnostic-item diagnostic-${result}`;
+            div.innerHTML = `
+                <strong>${test}:</strong> ${message}
+                ${result === 'error' ? '<i class="ti ti-x float-end"></i>' : ''}
+                ${result === 'success' ? '<i class="ti ti-check float-end"></i>' : ''}
+                ${result === 'warning' ? '<i class="ti ti-alert-triangle float-end"></i>' : ''}
+            `;
+            document.getElementById('diagnosticResults').appendChild(div);
+            
+            return result !== 'error';
+        }
+        
+        function addSolution(title, description, code = null) {
+            const div = document.createElement('div');
+            div.className = 'mb-3';
+            div.innerHTML = `
+                <h5>${title}</h5>
+                <p>${description}</p>
+                ${code ? `<div class="code-fix">${code}</div>` : ''}
+            `;
+            document.getElementById('solutions').appendChild(div);
+        }
+        
+        async function runFullDiagnostic() {
+            // Reset
+            diagnosticResults.length = 0;
+            solutions.length = 0;
+            document.getElementById('diagnosticResults').innerHTML = '';
+            document.getElementById('solutions').innerHTML = '';
+            document.getElementById('fullReport').textContent = '';
+            
+            console.log('🔍 Démarrage du diagnostic complet...');
+            
+            // 1. Vérifier les dépendances externes
+            const hasTesseract = addDiagnostic(
+                'Tesseract.js',
+                typeof Tesseract !== 'undefined' ? 'success' : 'error',
+                typeof Tesseract !== 'undefined' ? 'Chargé correctement' : 'Non chargé'
+            );
+            
+            const hasPdfjs = addDiagnostic(
+                'PDF.js',
+                typeof pdfjsLib !== 'undefined' ? 'success' : 'error',
+                typeof pdfjsLib !== 'undefined' ? 'Chargé correctement' : 'Non chargé'
+            );
+            
+            // 2. Charger les scripts OCR
+            let scriptsLoaded = true;
+            
+            try {
+                // Charger OCR Hybrid Processor
+                await loadScript('../../assets/js/Superadmin/ocr-hybrid-processor.js');
+                addDiagnostic('OCRHybridProcessor', 'success', 'Script chargé');
+            } catch (e) {
+                addDiagnostic('OCRHybridProcessor', 'error', 'Erreur de chargement: ' + e.message);
+                scriptsLoaded = false;
+            }
+            
+            try {
+                // Charger OCR API Client
+                await loadScript('../../assets/js/Superadmin/ocr-api-client.js');
+                addDiagnostic('OCRAPIClient', 'success', 'Script chargé');
+            } catch (e) {
+                addDiagnostic('OCRAPIClient', 'error', 'Erreur de chargement: ' + e.message);
+                scriptsLoaded = false;
+            }
+            
+            try {
+                // Charger OCR Premium Interface
+                await loadScript('../../assets/js/Superadmin/ocr-premium-interface.js');
+                addDiagnostic('OCRPremiumInterface', 'success', 'Script chargé');
+            } catch (e) {
+                addDiagnostic('OCRPremiumInterface', 'error', 'Erreur de chargement: ' + e.message);
+                scriptsLoaded = false;
+            }
+            
+            // 3. Vérifier les classes
+            if (scriptsLoaded) {
+                const hasProcessor = typeof OCRHybridProcessor !== 'undefined';
+                const hasAPIClient = typeof OCRAPIClient !== 'undefined';
+                const hasPremiumInterface = typeof OCRPremiumInterface !== 'undefined';
+                
+                addDiagnostic(
+                    'Classe OCRHybridProcessor',
+                    hasProcessor ? 'success' : 'error',
+                    hasProcessor ? 'Définie' : 'Non définie'
+                );
+                
+                addDiagnostic(
+                    'Classe OCRAPIClient',
+                    hasAPIClient ? 'success' : 'error',
+                    hasAPIClient ? 'Définie' : 'Non définie'
+                );
+                
+                addDiagnostic(
+                    'Classe OCRPremiumInterface',
+                    hasPremiumInterface ? 'success' : 'error',
+                    hasPremiumInterface ? 'Définie' : 'Non définie'
+                );
+                
+                // 4. Test d'instanciation
+                if (hasPremiumInterface) {
+                    try {
+                        const testInstance = new OCRPremiumInterface();
+                        addDiagnostic('Instanciation', 'success', 'OCRPremiumInterface peut être instanciée');
+                        
+                        // Vérifier les méthodes
+                        const hasShowSettings = typeof testInstance.showSettingsModal === 'function';
+                        addDiagnostic(
+                            'Méthode showSettingsModal',
+                            hasShowSettings ? 'success' : 'error',
+                            hasShowSettings ? 'Disponible' : 'Manquante'
+                        );
+                        
+                        if (!hasShowSettings) {
+                            addSolution(
+                                '🔧 Corriger showSettingsModal',
+                                'La méthode showSettingsModal est manquante ou mal définie.',
+                                `// Vérifier que la méthode est bien dans la classe:
+class OCRPremiumInterface {
+    // ... autres méthodes ...
+    
+    showSettingsModal() {
+        // Code de la méthode
+    }
+}`
+                            );
+                        }
+                        
+                    } catch (e) {
+                        addDiagnostic('Instanciation', 'error', 'Erreur: ' + e.message);
+                        addSolution(
+                            '🔧 Erreur d\'instanciation',
+                            'La classe ne peut pas être instanciée. Vérifiez les erreurs de syntaxe.',
+                            `// Erreur: ${e.message}\n// Vérifiez la console pour plus de détails`
+                        );
+                    }
+                }
+            }
+            
+            // 5. Générer le rapport
+            generateReport();
+            
+            // 6. Proposer des solutions globales
+            if (!scriptsLoaded) {
+                addSolution(
+                    '📁 Vérifier les chemins des fichiers',
+                    'Certains scripts ne se chargent pas. Vérifiez que les fichiers existent aux bons emplacements.',
+                    `// Structure attendue:
+/assets/js/Superadmin/
+├── ocr-hybrid-processor.js
+├── ocr-api-client.js
+└── ocr-premium-interface.js`
+                );
+            }
+            
+            // Solution pour ocr-upload.html
+            addSolution(
+                '📄 Corriger ocr-upload.html',
+                'Pour corriger la page OCR principale, assurez-vous que les scripts sont chargés dans le bon ordre:',
+                `&lt;!-- OCR Dependencies --&gt;
+&lt;script src="https://unpkg.com/tesseract.js@4/dist/tesseract.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.worker.min.js';
+&lt;/script&gt;
+
+&lt;!-- OCR Scripts --&gt;
+&lt;script src="../../assets/js/Superadmin/ocr-hybrid-processor.js"&gt;&lt;/script&gt;
+&lt;script src="../../assets/js/Superadmin/ocr-api-client.js"&gt;&lt;/script&gt;
+&lt;script src="../../assets/js/Superadmin/ocr-premium-interface.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    document.addEventListener('DOMContentLoaded', () => {
+        window.ocrPremium = new OCRPremiumInterface();
+    });
+&lt;/script&gt;`
+            );
+        }
+        
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error(`Failed to load ${src}`));
+                document.head.appendChild(script);
+            });
+        }
+        
+        function generateReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                diagnostics: diagnosticResults,
+                errors: diagnosticResults.filter(d => d.result === 'error'),
+                warnings: diagnosticResults.filter(d => d.result === 'warning'),
+                success: diagnosticResults.filter(d => d.result === 'success'),
+                summary: {
+                    total: diagnosticResults.length,
+                    errors: diagnosticResults.filter(d => d.result === 'error').length,
+                    warnings: diagnosticResults.filter(d => d.result === 'warning').length,
+                    success: diagnosticResults.filter(d => d.result === 'success').length
+                }
+            };
+            
+            document.getElementById('fullReport').textContent = JSON.stringify(report, null, 2);
+            
+            // Afficher un résumé
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = report.summary.errors === 0 ? 'alert alert-success' : 'alert alert-danger';
+            summaryDiv.innerHTML = `
+                <h5>${report.summary.errors === 0 ? '✅ Système OCR Opérationnel' : '❌ Erreurs Détectées'}</h5>
+                <p>Tests réussis: ${report.summary.success}/${report.summary.total}</p>
+                ${report.summary.errors > 0 ? `<p>Erreurs à corriger: ${report.summary.errors}</p>` : ''}
+            `;
+            document.getElementById('diagnosticResults').insertBefore(summaryDiv, document.getElementById('diagnosticResults').firstChild);
+        }
+        
+        // Auto-run on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Charger d'abord les dépendances de base
+            const tesseractScript = document.createElement('script');
+            tesseractScript.src = 'https://unpkg.com/tesseract.js@4/dist/tesseract.min.js';
+            tesseractScript.onload = () => {
+                const pdfjsScript = document.createElement('script');
+                pdfjsScript.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.min.js';
+                pdfjsScript.onload = () => {
+                    // Configuration PDF.js
+                    const configScript = document.createElement('script');
+                    configScript.textContent = `pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.worker.min.js';`;
+                    document.head.appendChild(configScript);
+                    
+                    // Lancer le diagnostic
+                    setTimeout(runFullDiagnostic, 500);
+                };
+                document.head.appendChild(pdfjsScript);
+            };
+            document.head.appendChild(tesseractScript);
+        });
+    </script>
+</body>
+</html>

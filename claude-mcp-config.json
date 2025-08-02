@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "directus": {
+      "comment": "Serveur MCP officiel Directus pour standardisation",
+      "command": "npx",
+      "args": ["@directus/content-mcp@latest"],
+      "env": {
+        "DIRECTUS_URL": "http://localhost:8055",
+        "DIRECTUS_TOKEN": "remplacer-par-votre-token-api"
+      }
+    },
+    "notion": {
+      "comment": "Serveur MCP Notion pour opérations legacy",
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-notion"],
+      "env": {
+        "NOTION_API_KEY": "remplacer-par-votre-clé-notion"
+      }
+    }
+  }
+}

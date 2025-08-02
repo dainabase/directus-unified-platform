@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test OCR HYPERVISUAL - Debug & Fix</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    
+    <style>
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .test-document {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 4px;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            min-height: 400px;
+            margin: 1rem 0;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .result-section {
+            margin-top: 2rem;
+        }
+        
+        .result-box {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .result-success {
+            border-color: #2fb344;
+            background: #f1f8f4;
+        }
+        
+        .result-error {
+            border-color: #d63939;
+            background: #fef2f2;
+        }
+        
+        .log-console {
+            background: #1a1a1a;
+            color: #0f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            padding: 1rem;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+        
+        .log-line {
+            margin: 2px 0;
+            padding: 2px 4px;
+        }
+        
+        .log-error {
+            color: #f44;
+        }
+        
+        .log-warning {
+            color: #fa0;
+        }
+        
+        .log-success {
+            color: #4f4;
+        }
+        
+        .memory-stats {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 9999;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container-fluid py-4">
+            <h1 class="mb-4">🧪 Test OCR HYPERVISUAL - Debug & Fix</h1>
+            
+            <!-- Memory Stats -->
+            <div class="memory-stats" id="memoryStats">
+                <div>Memory: <span id="memUsage">--</span></div>
+                <div>Cache: <span id="cacheStats">--</span></div>
+                <div>Resources: <span id="resourceStats">--</span></div>
+            </div>
+            
+            <!-- Test Document -->
+            <div class="test-section">
+                <h3>📄 Document Test: Facture HYPERVISUAL → PROMIDEA</h3>
+                <div class="test-document" id="testDocument" contenteditable="true">PROMIDEA SRL
+Via Alessandro Manzoni, 15
+20121 Milano MI
+Italy
+P.IVA: IT12345678901
+
+<span class="highlight">HYPERVISUAL by HMF Corporation SA</span>
+Avenue de Beauregard 1
+1700 Fribourg
+Switzerland
+CHE-317.833.626
+
+Offer AN-00094
+Date: 21.07.2025
+Valid to: 04.08.2025
+Customer number: 000002
+
+Project: Marketing Campaign Q3 2025
+Digital Marketing Services for European Market
+
+Service Description                              Quantity    Unit Price    Amount
+================================================================================
+Social Media Management (3 months)                    3      €840.00    €2,520.00
+- Facebook, Instagram, LinkedIn
+- Daily posts and engagement
+- Monthly analytics reports
+
+Content Creation Package                              1      €500.00      €500.00
+- 20 custom graphics
+- 5 video animations
+- Copywriting included
+
+                                              Subtotal:               €3,020.00
+                                              VAT 8.10%:               €244.62
+                                              ===============================
+                                              <span class="highlight">Total: €3,264.62</span>
+
+Payment Terms: 30 days net
+Bank: UBS Switzerland
+IBAN: CH71 0024 0240 C022 2310 T
+SWIFT: UBSWCHZH80A</div>
+                
+                <div class="test-controls">
+                    <button class="btn btn-primary" onclick="testOCRExtraction()">
+                        <i class="ti ti-brain"></i> Tester Extraction OCR
+                    </button>
+                    <button class="btn btn-secondary" onclick="testCacheSystem()">
+                        <i class="ti ti-database"></i> Tester Cache
+                    </button>
+                    <button class="btn btn-warning" onclick="testMemoryLeaks()">
+                        <i class="ti ti-cpu"></i> Test Memory Leaks
+                    </button>
+                    <button class="btn btn-info" onclick="testWorkflow()">
+                        <i class="ti ti-git-merge"></i> Test Workflow Complet
+                    </button>
+                    <button class="btn btn-danger" onclick="clearAll()">
+                        <i class="ti ti-trash"></i> Nettoyer Tout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Progress Section -->
+            <div id="progressContainer"></div>
+            
+            <!-- Results Section -->
+            <div class="result-section" id="resultsSection" style="display: none;">
+                <h3>📊 Résultats de l'Extraction</h3>
+                <div id="resultsContainer"></div>
+            </div>
+            
+            <!-- Log Console -->
+            <div class="test-section">
+                <h3>🖥️ Console de Debug</h3>
+                <div class="log-console" id="logConsole">
+                    <div class="log-line log-success">OCR Test Console Ready...</div>
+                </div>
+                <button class="btn btn-sm btn-ghost-secondary" onclick="clearLogs()">
+                    Effacer Logs
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <!-- OCR Modules -->
+    <script src="../../assets/js/Superadmin/ocr-cache-manager.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-error-handler.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-progress-manager.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-memory-manager.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-notion-workflow.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-api-client.js"></script>
+    
+    <script>
+        // Initialisation des modules
+        let cacheManager, errorHandler, progressManager, memoryManager, apiClient;
+        
+        // Logs
+        function log(message, type = 'info') {
+            const console = document.getElementById('logConsole');
+            const line = document.createElement('div');
+            line.className = `log-line log-${type}`;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            console.appendChild(line);
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        function clearLogs() {
+            document.getElementById('logConsole').innerHTML = '<div class="log-line log-success">Console cleared...</div>';
+        }
+        
+        // Memory stats update
+        function updateMemoryStats() {
+            if (performance.memory) {
+                const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
+                const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(1);
+                document.getElementById('memUsage').textContent = `${used}MB / ${total}MB`;
+            }
+            
+            if (cacheManager) {
+                const stats = cacheManager.getStats();
+                document.getElementById('cacheStats').textContent = `${stats.size}/${stats.maxSize} (${stats.hitRate})`;
+            }
+            
+            if (memoryManager) {
+                const stats = memoryManager.getStats();
+                document.getElementById('resourceStats').textContent = `${stats.total} objects`;
+            }
+        }
+        
+        // Initialisation
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Initialisation des modules OCR...', 'info');
+            
+            try {
+                // Cache Manager
+                cacheManager = new OCRCacheManager({
+                    maxSize: 10,
+                    debug: true
+                });
+                log('✅ Cache Manager initialisé', 'success');
+                
+                // Error Handler
+                errorHandler = new OCRErrorHandler({
+                    debug: true,
+                    enableRemoteLogging: false
+                });
+                log('✅ Error Handler initialisé', 'success');
+                
+                // Progress Manager
+                progressManager = new OCRProgressManager('progressContainer', {
+                    enableAnimations: true,
+                    enableSound: false
+                });
+                log('✅ Progress Manager initialisé', 'success');
+                
+                // Memory Manager
+                memoryManager = new OCRMemoryManager({
+                    debug: true,
+                    autoCleanup: true
+                });
+                log('✅ Memory Manager initialisé', 'success');
+                
+                // API Client
+                apiClient = new OCRAPIClient('http://localhost:3001/api');
+                log('✅ API Client initialisé', 'success');
+                
+                // Update memory stats
+                setInterval(updateMemoryStats, 1000);
+                
+            } catch (error) {
+                log(`❌ Erreur initialisation: ${error.message}`, 'error');
+            }
+        });
+        
+        // Test extraction OCR
+        async function testOCRExtraction() {
+            log('🔍 Démarrage test extraction OCR...', 'info');
+            
+            const text = document.getElementById('testDocument').innerText;
+            
+            // Vérifier le cache d'abord
+            const mockFile = {
+                name: 'test-hypervisual.txt',
+                size: text.length,
+                lastModified: Date.now()
+            };
+            
+            const cached = cacheManager.get(mockFile);
+            if (cached) {
+                log('📦 Résultat trouvé dans le cache!', 'success');
+                displayResults(cached);
+                return;
+            }
+            
+            try {
+                // Afficher la progression
+                progressManager.show();
+                
+                // Simuler l'extraction (remplacer par vraie extraction)
+                log('📄 Analyse du document...', 'info');
+                progressManager.setStep('analyze');
+                
+                // Détecter le type de document
+                const docType = OCRNotionWorkflow.detectDocumentType(text);
+                log(`📋 Type détecté: ${docType}`, 'success');
+                
+                // Extraire les données
+                const extractedData = {
+                    type: docType,
+                    client: 'PROMIDEA SRL',
+                    numero: 'AN-00094',
+                    date: '21.07.2025',
+                    dateEcheance: '04.08.2025',
+                    montantHT: 3020.00,
+                    tva: 244.62,
+                    montantTTC: 3264.62,
+                    devise: 'EUR',
+                    emetteur: 'HYPERVISUAL',
+                    details: 'Marketing Campaign Q3 2025'
+                };
+                
+                // Mettre en cache
+                cacheManager.set(mockFile, extractedData);
+                log('💾 Résultat mis en cache', 'success');
+                
+                // Afficher les résultats
+                displayResults(extractedData);
+                
+                // Masquer la progression
+                progressManager.complete();
+                
+            } catch (error) {
+                log(`❌ Erreur extraction: ${error.message}`, 'error');
+                progressManager.error(error.message);
+                
+                const errorInfo = errorHandler.handle(error, 'test_extraction');
+                log(`🛡️ Error Handler: ${errorInfo.message}`, 'warning');
+            }
+        }
+        
+        // Afficher les résultats
+        function displayResults(data) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            resultsSection.style.display = 'block';
+            
+            const isCorrect = data.type === 'FACTURE_CLIENT' && data.emetteur === 'HYPERVISUAL';
+            
+            resultsContainer.innerHTML = `
+                <div class="result-box ${isCorrect ? 'result-success' : 'result-error'}">
+                    <h4>${isCorrect ? '✅ Détection Correcte!' : '❌ Détection Incorrecte'}</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <strong>Type détecté:</strong> ${data.type}<br>
+                            <strong>Émetteur:</strong> ${data.emetteur || 'Non détecté'}<br>
+                            <strong>Client:</strong> ${data.client}<br>
+                            <strong>Numéro:</strong> ${data.numero}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Date:</strong> ${data.date}<br>
+                            <strong>Montant HT:</strong> ${data.devise} ${data.montantHT}<br>
+                            <strong>TVA:</strong> ${data.devise} ${data.tva}<br>
+                            <strong>Total TTC:</strong> ${data.devise} ${data.montantTTC}
+                        </div>
+                    </div>
+                    <hr>
+                    <pre class="mb-0">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            log(`📊 Résultats affichés - ${isCorrect ? 'SUCCÈS' : 'ÉCHEC'}`, isCorrect ? 'success' : 'error');
+        }
+        
+        // Test cache system
+        async function testCacheSystem() {
+            log('🗄️ Test du système de cache...', 'info');
+            
+            // Test 1: Ajout au cache
+            const testData = { test: true, timestamp: Date.now() };
+            const testFile = {
+                name: 'cache-test.pdf',
+                size: 1024,
+                lastModified: Date.now()
+            };
+            
+            cacheManager.set(testFile, testData);
+            log('✅ Données ajoutées au cache', 'success');
+            
+            // Test 2: Récupération
+            const retrieved = cacheManager.get(testFile);
+            if (retrieved && retrieved.test === true) {
+                log('✅ Données récupérées du cache', 'success');
+            } else {
+                log('❌ Échec récupération cache', 'error');
+            }
+            
+            // Test 3: Stats
+            const stats = cacheManager.getStats();
+            log(`📊 Stats cache: ${JSON.stringify(stats)}`, 'info');
+            
+            // Test 4: Persistance
+            cacheManager.persist();
+            log('✅ Cache persisté dans localStorage', 'success');
+        }
+        
+        // Test memory leaks
+        async function testMemoryLeaks() {
+            log('💾 Test de fuites mémoire...', 'warning');
+            
+            const initialMemory = performance.memory?.usedJSHeapSize || 0;
+            log(`Mémoire initiale: ${(initialMemory / 1048576).toFixed(1)}MB`, 'info');
+            
+            // Créer des ressources
+            for (let i = 0; i < 5; i++) {
+                log(`Itération ${i + 1}/5...`, 'info');
+                
+                // Créer un canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = 1000;
+                canvas.height = 1000;
+                memoryManager.registerCanvas(canvas);
+                
+                // Créer une image
+                const img = new Image();
+                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+                memoryManager.registerImage(img);
+                
+                // Créer un worker (simulé)
+                const worker = { terminate: async () => {} };
+                memoryManager.registerWorker(worker);
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            const beforeCleanup = performance.memory?.usedJSHeapSize || 0;
+            log(`Mémoire avant nettoyage: ${(beforeCleanup / 1048576).toFixed(1)}MB`, 'warning');
+            
+            // Nettoyer
+            await memoryManager.cleanupAll();
+            
+            const afterCleanup = performance.memory?.usedJSHeapSize || 0;
+            log(`Mémoire après nettoyage: ${(afterCleanup / 1048576).toFixed(1)}MB`, 'success');
+            
+            const leaked = afterCleanup - initialMemory;
+            if (leaked > 5 * 1048576) { // 5MB
+                log(`⚠️ Fuite potentielle détectée: ${(leaked / 1048576).toFixed(1)}MB`, 'error');
+            } else {
+                log('✅ Pas de fuite mémoire significative', 'success');
+            }
+        }
+        
+        // Test workflow complet
+        async function testWorkflow() {
+            log('🔄 Test du workflow complet...', 'info');
+            
+            try {
+                // 1. Extraction
+                await testOCRExtraction();
+                
+                // 2. Validation (simulée)
+                log('✅ Validation des données...', 'success');
+                
+                // 3. Envoi Notion (simulé)
+                log('📤 Envoi vers Notion...', 'info');
+                
+                // Simuler l'appel API
+                const mockData = {
+                    documentType: 'FACTURE_CLIENT',
+                    extractedData: {
+                        numero: 'AN-00094',
+                        client: 'PROMIDEA SRL',
+                        montantTTC: 3264.62
+                    }
+                };
+                
+                // apiClient.saveToNotion(...) 
+                log('✅ Document sauvegardé dans Notion (simulé)', 'success');
+                
+                log('🎉 Workflow complété avec succès!', 'success');
+                
+            } catch (error) {
+                log(`❌ Erreur workflow: ${error.message}`, 'error');
+            }
+        }
+        
+        // Nettoyer tout
+        async function clearAll() {
+            log('🗑️ Nettoyage complet...', 'warning');
+            
+            // Nettoyer cache
+            cacheManager.clear();
+            log('✅ Cache vidé', 'success');
+            
+            // Nettoyer logs erreurs
+            errorHandler.clearLogs();
+            log('✅ Logs erreurs effacés', 'success');
+            
+            // Nettoyer mémoire
+            await memoryManager.cleanupAll();
+            log('✅ Mémoire nettoyée', 'success');
+            
+            // Masquer résultats
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            log('🧹 Nettoyage terminé', 'success');
+        }
+    </script>
+</body>
+</html>

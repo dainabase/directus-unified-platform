@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Test - Version Réparée</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <link href="../../assets/css/ocr-premium.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="container-fluid py-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🔧 Test OCR Réparé</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <button class="btn btn-primary" onclick="window.ocrPremium?.showSettingsModal()">
+                            <i class="ti ti-settings me-2"></i>
+                            Ouvrir Configuration
+                        </button>
+                        
+                        <button class="btn btn-success" onclick="testOCR()">
+                            <i class="ti ti-check me-2"></i>
+                            Tester OCR
+                        </button>
+                    </div>
+                    
+                    <div id="status" class="alert alert-info">
+                        Chargement en cours...
+                    </div>
+                    
+                    <!-- Zone de drop simplifiée pour test -->
+                    <div class="dropzone-premium mt-4" id="dropzonePremium" style="min-height: 200px;">
+                        <div class="dropzone-content">
+                            <i class="ti ti-brain" style="font-size: 3rem;"></i>
+                            <h3>Zone de test OCR</h3>
+                            <p>Glissez un fichier ici pour tester</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3/build/pdf.worker.min.js';
+    </script>
+    
+    <!-- OCR Scripts -->
+    <script src="../../assets/js/Superadmin/ocr-hybrid-processor.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-api-client.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-premium-interface.js"></script>
+    
+    <script>
+        // Gestionnaire d'erreurs global
+        window.addEventListener('error', (e) => {
+            console.error('Erreur globale:', e);
+            updateStatus(`❌ Erreur: ${e.message} (${e.filename}:${e.lineno})`, 'danger');
+        });
+        
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `alert alert-${type}`;
+            status.innerHTML = message;
+        }
+        
+        function testOCR() {
+            const results = [];
+            
+            // Test 1: Classes disponibles
+            if (typeof OCRHybridProcessor !== 'undefined') {
+                results.push('✅ OCRHybridProcessor disponible');
+            } else {
+                results.push('❌ OCRHybridProcessor manquant');
+            }
+            
+            if (typeof OCRAPIClient !== 'undefined') {
+                results.push('✅ OCRAPIClient disponible');
+            } else {
+                results.push('❌ OCRAPIClient manquant');
+            }
+            
+            if (typeof OCRPremiumInterface !== 'undefined') {
+                results.push('✅ OCRPremiumInterface disponible');
+            } else {
+                results.push('❌ OCRPremiumInterface manquant');
+            }
+            
+            // Test 2: Instance globale
+            if (window.ocrPremium) {
+                results.push('✅ window.ocrPremium initialisé');
+                
+                if (typeof window.ocrPremium.showSettingsModal === 'function') {
+                    results.push('✅ showSettingsModal est une fonction');
+                } else {
+                    results.push('❌ showSettingsModal n\'est pas une fonction');
+                }
+            } else {
+                results.push('❌ window.ocrPremium non initialisé');
+            }
+            
+            updateStatus(results.join('<br>'), results.every(r => r.startsWith('✅')) ? 'success' : 'warning');
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initialisation OCR...');
+            
+            try {
+                window.ocrPremium = new OCRPremiumInterface();
+                updateStatus('✅ OCR Premium Interface initialisée avec succès', 'success');
+                
+                setTimeout(testOCR, 500);
+            } catch (error) {
+                console.error('Erreur initialisation:', error);
+                updateStatus(`❌ Erreur initialisation: ${error.message}`, 'danger');
+            }
+        });
+    </script>
+</body>
+</html>

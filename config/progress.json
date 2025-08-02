@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2025-08-02 15:50:00",
-  "currentPhase": "dashboard-adaptation",
+  "lastUpdate": "2025-08-02 16:30:00",
+  "currentPhase": "infrastructure-ready",
   "environment": "development",
   "systems": {
     "migration": {
@@ -57,8 +57,9 @@
       "directus": {
         "status": "running",
         "version": "11.10.0",
-        "healthCheck": "unhealthy",
-        "port": 8055
+        "healthCheck": "healthy",
+        "port": 8055,
+        "apiTested": true
       },
       "postgres": {
         "status": "running",
@@ -174,10 +175,12 @@
     }
   },
   "metrics": {
-    "totalProgress": 5,
+    "totalProgress": 8,
     "migrationProgress": 0,
     "dashboardProgress": 10,
+    "infrastructureProgress": 95,
     "estimatedROI": -5,
+    "connectionsValidated": 5,
     "timeSpent": {
       "migration": 0,
       "dashboard": 180,
@@ -193,13 +196,15 @@
   "nextActions": [
     {
       "priority": 1,
-      "action": "Fix Directus health check",
-      "module": "infrastructure"
+      "action": "Start CRM migration test with DB-CONTACTS-ENTREPRISES",
+      "module": "crm-contacts",
+      "status": "ready"
     },
     {
       "priority": 2,
-      "action": "Test MCP connections",
-      "module": "system"
+      "action": "Create first Directus collection 'companies'",
+      "module": "directus",
+      "status": "pending"
     },
     {
       "priority": 3,

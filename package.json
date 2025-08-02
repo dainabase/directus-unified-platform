@@ -31,9 +31,26 @@
     "test": "jest",
     "test:migration": "jest migration/tests",
     "test:dashboard": "jest dashboard/tests",
+    "test:connections": "node scripts/test-connections.js",
     "start": "npm run dashboard:dev",
     "clean": "rm -rf node_modules dashboard/*/node_modules",
-    "verify:all": "node scripts/verify-setup.js"
+    "verify:all": "node scripts/verify-setup.js",
+    
+    "// === STATUS & MONITORING ===": "",
+    "maj": "node scripts/update-all.js",
+    "status": "node scripts/show-status.js",
+    "report": "node scripts/generate-report.js",
+    "directus:status": "node scripts/directus-status.js",
+    "directus:logs": "docker logs directus-unified -f",
+    "migration:status": "node scripts/migration-status.js",
+    "dashboard:test-ocr": "node scripts/test-ocr.js",
+    "dashboard:verify-endpoints": "node scripts/verify-endpoints.js",
+    
+    "// === MAINTENANCE ===": "",
+    "backup": "node scripts/create-backup.js",
+    "validate:migration": "node scripts/validate-migration.js",
+    "validate:dashboard": "node scripts/validate-dashboard.js",
+    "rollback": "node scripts/rollback-last.js"
   },
   "keywords": ["directus", "migration", "notion", "dashboard", "cms", "multi-tenant"],
   "author": "DainaBase",

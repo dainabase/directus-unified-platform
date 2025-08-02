@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Page non trouvée - Portal Multi-Rôles</title>
+    
+    <!-- CSS files -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="../assets/css/custom.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 300;
+            line-height: 1;
+            color: #206bc4;
+            margin-bottom: 1rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            color: #206bc4;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        
+        .error-description {
+            font-size: 1.125rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .helpful-links {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .helpful-links h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+        
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            text-align: left;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: #334155;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #206bc4;
+            color: #206bc4;
+        }
+        
+        .link-item i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: #206bc4;
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-icon {
+                font-size: 3rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-container">
+            <!-- Icône animée -->
+            <div class="error-icon">
+                <i class="ti ti-mood-puzzled"></i>
+            </div>
+            
+            <!-- Code d'erreur -->
+            <div class="error-code">404</div>
+            
+            <!-- Titre -->
+            <h1 class="error-title">Page non trouvée</h1>
+            
+            <!-- Description -->
+            <p class="error-description">
+                Désolé, la page que vous recherchez n'existe pas ou a été déplacée. 
+                Vérifiez l'URL ou utilisez la recherche ci-dessous pour trouver ce que vous cherchez.
+            </p>
+            
+            <!-- Barre de recherche -->
+            <div class="search-container">
+                <form action="#" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Rechercher..." name="q">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="ti ti-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Actions principales -->
+            <div class="error-actions">
+                <a href="javascript:history.back()" class="btn btn-outline-primary">
+                    <i class="ti ti-arrow-left"></i>
+                    Retour
+                </a>
+                <a href="/" class="btn btn-primary">
+                    <i class="ti ti-home"></i>
+                    Accueil
+                </a>
+                <a href="/support.html" class="btn btn-outline-primary">
+                    <i class="ti ti-help"></i>
+                    Support
+                </a>
+            </div>
+            
+            <!-- Liens utiles -->
+            <div class="helpful-links">
+                <h3>Liens utiles</h3>
+                <div class="link-grid">
+                    <a href="/client/dashboard.html" class="link-item">
+                        <i class="ti ti-dashboard"></i>
+                        <div>
+                            <div class="fw-bold">Espace Client</div>
+                            <div class="small text-muted">Accéder à votre dashboard</div>
+                        </div>
+                    </a>
+                    <a href="/prestataire/dashboard.html" class="link-item">
+                        <i class="ti ti-tools"></i>
+                        <div>
+                            <div class="fw-bold">Espace Prestataire</div>
+                            <div class="small text-muted">Gérer vos missions</div>
+                        </div>
+                    </a>
+                    <a href="/revendeur/dashboard.html" class="link-item">
+                        <i class="ti ti-building-store"></i>
+                        <div>
+                            <div class="fw-bold">Espace Revendeur</div>
+                            <div class="small text-muted">Suivre vos ventes</div>
+                        </div>
+                    </a>
+                    <a href="/docs/" class="link-item">
+                        <i class="ti ti-book"></i>
+                        <div>
+                            <div class="fw-bold">Documentation</div>
+                            <div class="small text-muted">Guides et tutoriels</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Message technique (caché par défaut) -->
+            <details class="mt-4">
+                <summary class="text-muted small" style="cursor: pointer;">Informations techniques</summary>
+                <div class="mt-2 p-3 bg-light rounded text-start">
+                    <code>
+                        Error Code: 404<br>
+                        Timestamp: <span id="timestamp"></span><br>
+                        Request URL: <span id="requestUrl"></span><br>
+                        User Agent: <span id="userAgent"></span>
+                    </code>
+                </div>
+            </details>
+        </div>
+    </div>
+    
+    <script>
+        // Afficher les informations techniques
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+        document.getElementById('requestUrl').textContent = window.location.href;
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        
+        // Redirection automatique basée sur l'URL
+        const path = window.location.pathname;
+        if (path.includes('/client/')) {
+            // Si l'utilisateur était dans l'espace client
+            document.querySelector('a[href="/"]').href = '/client/dashboard.html';
+        } else if (path.includes('/prestataire/')) {
+            // Si l'utilisateur était dans l'espace prestataire
+            document.querySelector('a[href="/"]').href = '/prestataire/dashboard.html';
+        } else if (path.includes('/revendeur/')) {
+            // Si l'utilisateur était dans l'espace revendeur
+            document.querySelector('a[href="/"]').href = '/revendeur/dashboard.html';
+        }
+        
+        // Animation du code 404
+        const errorCode = document.querySelector('.error-code');
+        let opacity = 1;
+        let increasing = false;
+        
+        setInterval(() => {
+            if (increasing) {
+                opacity += 0.01;
+                if (opacity >= 1) {
+                    increasing = false;
+                }
+            } else {
+                opacity -= 0.01;
+                if (opacity <= 0.7) {
+                    increasing = true;
+                }
+            }
+            errorCode.style.opacity = opacity;
+        }, 50);
+        
+        // Recherche avec Enter
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = e.target.q.value;
+            if (query) {
+                // Simuler une recherche - à adapter selon votre système
+                alert(`Recherche de : "${query}"\n\nCette fonctionnalité sera implémentée avec votre système de recherche.`);
+            }
+        });
+    </script>
+    
+    <!-- Tabler Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+</body>
+</html>

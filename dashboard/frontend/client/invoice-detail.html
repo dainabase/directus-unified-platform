@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Facture - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .invoice-number,
+        .amount,
+        .total-amount,
+        .table-invoice td:last-child,
+        .invoice-total {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        @media print {
+            .page-wrapper {
+                margin: 0;
+                background: white;
+            }
+            
+            .navbar,
+            .footer,
+            .d-print-none {
+                display: none !important;
+            }
+            
+            .invoice-header {
+                border-bottom: 2px solid #000;
+            }
+            
+            .table {
+                border: 1px solid #000;
+            }
+        }
+        
+        .invoice-header {
+            border-bottom: 2px solid var(--tblr-border-color);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .invoice-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .invoice-party {
+            padding: 1.5rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+        }
+        
+        .invoice-meta {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .invoice-meta-label {
+            font-weight: 600;
+            color: var(--tblr-secondary);
+        }
+        
+        .table-invoice {
+            margin-bottom: 2rem;
+        }
+        
+        .table-invoice th {
+            background: var(--tblr-bg-surface-secondary);
+            font-weight: 600;
+        }
+        
+        .invoice-totals {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-bottom: 3rem;
+        }
+        
+        .invoice-total-row {
+            display: contents;
+        }
+        
+        .invoice-total-label {
+            text-align: right;
+        }
+        
+        .invoice-total-value {
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .invoice-total-final {
+            padding-top: 1rem;
+            border-top: 2px solid var(--tblr-border-color);
+            font-size: 1.25rem;
+            color: var(--tblr-primary);
+        }
+        
+        .invoice-notes {
+            padding: 1.5rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-info {
+            padding: 1.5rem;
+            background: var(--tblr-primary-lt);
+            border: 1px solid var(--tblr-primary);
+            border-radius: 0.5rem;
+        }
+        
+        .stamp-paid {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%) rotate(-15deg);
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--tblr-green);
+            opacity: 0.3;
+            text-transform: uppercase;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body data-bs-theme="light" class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <div class="nav-item dropdown d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                            <i class="ti ti-bell"></i>
+                            <span class="badge bg-red"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Notifications</h3>
+                                </div>
+                                <div class="list-group list-group-flush list-group-hoverable">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="status-dot status-dot-animated bg-red d-block"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Nouvelle facture</a>
+                                                <div class="d-block text-secondary text-truncate mt-n1">
+                                                    Facture #2024-001 disponible
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div id="user-name">Utilisateur</div>
+                                <div class="mt-1 small text-secondary">Client</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">Mon profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent d-print-none">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="/client/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                                <i class="ti ti-bell"></i>
+                                <span class="badge bg-red"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar-mobile"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-folder"></i>
+                                </span>
+                                <span class="nav-link-title">Projets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="documents.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-text"></i>
+                                </span>
+                                <span class="nav-link-title">Documents</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="finances.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-currency-euro"></i>
+                                </span>
+                                <span class="nav-link-title">Finances</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Finances</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-file-invoice me-2"></i>
+                                Facture #<span class="invoice-number">2024-001</span>
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-ghost-secondary" onclick="window.print()">
+                                    <i class="ti ti-printer"></i>
+                                    Imprimer
+                                </a>
+                                <a href="#" class="btn btn-ghost-secondary" id="downloadPDF">
+                                    <i class="ti ti-file-download"></i>
+                                    Télécharger PDF
+                                </a>
+                                <a href="payment.html" class="btn btn-primary">
+                                    <i class="ti ti-credit-card"></i>
+                                    Payer maintenant
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="card">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-blue">
+                                <i class="ti ti-file-invoice"></i>
+                            </div>
+                        </div>
+                        <div class="card-body position-relative">
+                            <!-- Stamp for paid invoices -->
+                            <div class="stamp-paid d-none">PAYÉE</div>
+                            
+                            <!-- Invoice Header -->
+                            <div class="invoice-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <img src="../assets/img/logo.svg" alt="Logo" height="40">
+                                        <h1 class="mt-3">FACTURE</h1>
+                                    </div>
+                                    <div class="col-auto text-end">
+                                        <h2 class="invoice-number">#2024-001</h2>
+                                        <div class="text-secondary">Date: 15 janvier 2024</div>
+                                        <div class="text-secondary">Échéance: 15 février 2024</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Invoice Info -->
+                            <div class="invoice-info">
+                                <div class="invoice-party">
+                                    <h5 class="text-uppercase text-secondary mb-3">Émetteur</h5>
+                                    <strong>Entreprise SA</strong><br>
+                                    Rue de la Gare 12<br>
+                                    1200 Genève<br>
+                                    Suisse<br>
+                                    <div class="mt-2">
+                                        <strong>IDE:</strong> CHE-123.456.789<br>
+                                        <strong>TVA:</strong> CHE-123.456.789 TVA
+                                    </div>
+                                </div>
+                                <div class="invoice-party">
+                                    <h5 class="text-uppercase text-secondary mb-3">Client</h5>
+                                    <strong>ABC Company SA</strong><br>
+                                    Avenue des Alpes 45<br>
+                                    1006 Lausanne<br>
+                                    Suisse<br>
+                                    <div class="mt-2">
+                                        <strong>Réf. client:</strong> CLI-2024-001
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Invoice Meta -->
+                            <div class="invoice-meta">
+                                <div class="invoice-meta-label">Projet:</div>
+                                <div>Développement site web e-commerce</div>
+                                <div class="invoice-meta-label">Période:</div>
+                                <div>1er janvier 2024 - 31 janvier 2024</div>
+                                <div class="invoice-meta-label">Conditions:</div>
+                                <div>Paiement à 30 jours</div>
+                            </div>
+
+                            <!-- Invoice Items -->
+                            <table class="table table-invoice">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th class="text-center" style="width: 100px">Quantité</th>
+                                        <th class="text-end" style="width: 150px">Prix unitaire</th>
+                                        <th class="text-end" style="width: 150px">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Développement Frontend</strong><br>
+                                            <small class="text-secondary">React, TypeScript, Tailwind CSS</small>
+                                        </td>
+                                        <td class="text-center">80</td>
+                                        <td class="text-end amount">CHF 150.00</td>
+                                        <td class="text-end amount">CHF 12'000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Développement Backend</strong><br>
+                                            <small class="text-secondary">Node.js, PostgreSQL, API REST</small>
+                                        </td>
+                                        <td class="text-center">60</td>
+                                        <td class="text-end amount">CHF 150.00</td>
+                                        <td class="text-end amount">CHF 9'000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Design UI/UX</strong><br>
+                                            <small class="text-secondary">Maquettes, prototypes, design system</small>
+                                        </td>
+                                        <td class="text-center">40</td>
+                                        <td class="text-end amount">CHF 120.00</td>
+                                        <td class="text-end amount">CHF 4'800.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Gestion de projet</strong><br>
+                                            <small class="text-secondary">Coordination, réunions, documentation</small>
+                                        </td>
+                                        <td class="text-center">20</td>
+                                        <td class="text-end amount">CHF 100.00</td>
+                                        <td class="text-end amount">CHF 2'000.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Invoice Totals -->
+                            <div class="invoice-totals">
+                                <div class="invoice-total-row">
+                                    <div class="invoice-total-label">Sous-total HT</div>
+                                    <div class="invoice-total-value amount">CHF 27'800.00</div>
+                                </div>
+                                <div class="invoice-total-row">
+                                    <div class="invoice-total-label">TVA 7.7%</div>
+                                    <div class="invoice-total-value amount">CHF 2'140.60</div>
+                                </div>
+                                <div class="invoice-total-row invoice-total-final">
+                                    <div class="invoice-total-label"><strong>Total TTC</strong></div>
+                                    <div class="invoice-total-value total-amount">CHF 29'940.60</div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Info -->
+                            <div class="payment-info">
+                                <h5 class="mb-3">
+                                    <i class="ti ti-building-bank me-2"></i>
+                                    Informations de paiement
+                                </h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div><strong>Banque:</strong> PostFinance SA</div>
+                                        <div><strong>IBAN:</strong> <span class="font-monospace">CH93 0076 2011 6238 5295 7</span></div>
+                                        <div><strong>BIC/SWIFT:</strong> <span class="font-monospace">POFICHBEXXX</span></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div><strong>Référence:</strong> <span class="font-monospace invoice-number">2024-001</span></div>
+                                        <div><strong>Communication:</strong> Facture #2024-001</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Invoice Notes -->
+                            <div class="invoice-notes mt-4">
+                                <h5 class="mb-2">Notes</h5>
+                                <p class="mb-0">
+                                    Merci pour votre confiance. Pour toute question concernant cette facture, 
+                                    n'hésitez pas à nous contacter à comptabilite@entreprise.ch ou au +41 22 123 45 67.
+                                </p>
+                            </div>
+
+                            <!-- QR Bill (Swiss Standard) -->
+                            <div class="mt-4 d-print-block">
+                                <div class="border p-3 text-center">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SPC%0A0200%0A1%0ACH9300762011623852957%0AS%0AEntreprise%20SA%0ARue%20de%20la%20Gare%0A12%0A1200%0AGenève%0ACH%0A%0A%0A%0A%0A%0A%0A%0A29940.60%0ACHF%0AS%0AABC%20Company%20SA%0AAvenue%20des%20Alpes%0A45%0A1006%0ALausanne%0ACH%0AQRR%0A000000000000000020240001%0AFacture%202024-001%0AEPD" 
+                                         alt="Swiss QR Bill">
+                                    <div class="mt-2 text-secondary">QR-facture pour paiement</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions Card -->
+                    <div class="card mt-3 d-print-none">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="card-title mb-1">Actions</h3>
+                                    <div class="text-secondary">Que souhaitez-vous faire avec cette facture?</div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="btn-list">
+                                        <a href="#" class="btn btn-ghost-secondary">
+                                            <i class="ti ti-mail"></i>
+                                            Envoyer par email
+                                        </a>
+                                        <a href="#" class="btn btn-ghost-secondary">
+                                            <i class="ti ti-message-circle"></i>
+                                            Poser une question
+                                        </a>
+                                        <a href="payment.html" class="btn btn-primary">
+                                            <i class="ti ti-credit-card"></i>
+                                            Payer maintenant
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Documentation</a></li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Portal Pro</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+        // Get invoice ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const invoiceId = urlParams.get('id') || '2024-001';
+        
+        // Update invoice number in all places
+        document.querySelectorAll('.invoice-number').forEach(el => {
+            el.textContent = invoiceId;
+        });
+        
+        // Check if invoice is paid (demo)
+        const isPaid = urlParams.get('status') === 'paid';
+        if (isPaid) {
+            document.querySelector('.stamp-paid').classList.remove('d-none');
+            document.querySelector('.btn-primary').classList.add('d-none');
+        }
+        
+        // Download PDF functionality
+        document.getElementById('downloadPDF')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Génération...';
+            
+            // Use html2canvas and jsPDF to generate PDF
+            const element = document.querySelector('.card-body');
+            html2canvas(element, {
+                scale: 2,
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                pdf.save(`Facture-${invoiceId}.pdf`);
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="ti ti-file-download"></i> Télécharger PDF';
+            });
+        });
+        
+        // Initialize user data
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (userData.name) {
+                document.getElementById('user-name').textContent = userData.name;
+                document.getElementById('user-avatar').style.backgroundImage = `url(${userData.avatar})`;
+                document.getElementById('user-avatar-mobile').style.backgroundImage = `url(${userData.avatar})`;
+            }
+        });
+    </script>
+</body>
+</html>

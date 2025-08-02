@@ -1,0 +1,74 @@
+<div class="container-xl">
+    <!-- Logo à gauche -->
+    <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+        <a href=".">
+            <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+        </a>
+    </h1>
+    
+    <!-- Menu de droite -->
+    <div class="navbar-nav flex-row order-md-last">
+        <!-- Notifications -->
+        <div class="nav-item d-none d-md-flex me-3">
+            <div class="btn-list-item">
+                <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                    <i class="ti ti-bell icon"></i>
+                    <span class="badge bg-red notification-badge" id="notification-count"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Notifications</h3>
+                        </div>
+                        <div class="list-group list-group-flush list-group-hoverable" id="notifications-list">
+                            <!-- Les notifications seront ajoutées dynamiquement ici -->
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto"><span class="status-dot status-dot-animated bg-info d-block"></span></div>
+                                    <div class="col text-truncate">
+                                        <a href="#" class="text-body d-block">Nouveau message</a>
+                                        <div class="d-block text-muted text-truncate mt-n1">
+                                            Vous avez reçu un nouveau message
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="text-muted">5 min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="#" class="text-muted">Voir toutes les notifications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu utilisateur -->
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Ouvrir le menu utilisateur">
+                <span class="avatar avatar-sm user-avatar" id="user-avatar"></span>
+                <div class="d-none d-xl-block ps-2">
+                    <div id="user-name">Utilisateur</div>
+                    <div class="mt-1 small text-muted" id="user-role">Rôle</div>
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="#" class="dropdown-item">
+                    <i class="ti ti-user icon me-2"></i>
+                    Mon profil
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="ti ti-settings icon me-2"></i>
+                    Paramètres
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item logout-btn">
+                    <i class="ti ti-logout icon me-2"></i>
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

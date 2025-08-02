@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test TVA + Notion MCP</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <style>
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .test-success { background: #d1f3d1; color: #0f5132; }
+        .test-error { background: #f8d7da; color: #842029; }
+        .test-info { background: #cff4fc; color: #055160; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container-xl">
+            <h1 class="page-title mt-5">Test Module TVA + Notion MCP</h1>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Tests d'intégration</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" onclick="runAllTests()">Lancer tous les tests</button>
+                    <button class="btn btn-secondary ms-2" onclick="clearResults()">Effacer résultats</button>
+                    
+                    <div id="test-results" class="mt-4"></div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Actions manuelles</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary w-100" onclick="testLoadInvoices()">
+                                Charger factures Q4 2024
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-success w-100" onclick="testSaveDeclaration()">
+                                Sauvegarder déclaration test
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-info w-100" onclick="testLoadHistory()">
+                                Charger historique déclarations
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-warning w-100" onclick="testExportXML()">
+                                Exporter XML AFC
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/vat-calculator.js"></script>
+    <script>
+        // Mock MCP Notion for testing
+        window.mcp_notion = {
+            query_database: async function(params) {
+                addResult('info', `Requête base: ${params.database_id}`, JSON.stringify(params.filter, null, 2));
+                
+                // Simulate response based on database
+                if (params.database_id === "226adb95-3c6f-8011-a9bb-ca31f7da8e6a") {
+                    // DB-FACTURES-CLIENTS
+                    return {
+                        results: [
+                            {
+                                properties: {
+                                    "Montant HT": { number: 50000 },
+                                    "Taux TVA": { select: { name: "8.1%" }},
+                                    "Montant TVA": { number: 4050 },
+                                    "Date": { date: { start: "2024-10-15" }},
+                                    "Client": { title: [{ text: { content: "Tech Solutions SA" }}]}
+                                }
+                            },
+                            {
+                                properties: {
+                                    "Montant HT": { number: 25000 },
+                                    "Taux TVA": { select: { name: "8.1%" }},
+                                    "Montant TVA": { number: 2025 },
+                                    "Date": { date: { start: "2024-11-20" }}
+                                }
+                            },
+                            {
+                                properties: {
+                                    "Montant HT": { number: 10000 },
+                                    "Taux TVA": { select: { name: "2.6%" }},
+                                    "Montant TVA": { number: 260 },
+                                    "Date": { date: { start: "2024-12-05" }}
+                                }
+                            }
+                        ]
+                    };
+                } else if (params.database_id === "237adb95-3c6f-80de-9f92-c795334e5561") {
+                    // DB-FACTURES-FOURNISSEURS
+                    return {
+                        results: [
+                            {
+                                properties: {
+                                    "Montant HT": { number: 15000 },
+                                    "TVA": { number: 1215 },
+                                    "Catégorie AFC": { select: { name: "Services" }},
+                                    "Date Facture": { date: { start: "2024-10-20" }}
+                                }
+                            },
+                            {
+                                properties: {
+                                    "Montant HT": { number: 8000 },
+                                    "TVA": { number: 648 },
+                                    "Catégorie AFC": { select: { name: "Marchandises" }},
+                                    "Date Facture": { date: { start: "2024-11-15" }}
+                                }
+                            }
+                        ]
+                    };
+                } else if (params.database_id === "237adb95-3c6f-804b-a530-e44d07ac9f7b") {
+                    // DB-NOTES-FRAIS
+                    return {
+                        results: [
+                            {
+                                properties: {
+                                    "Montant HT": { number: 2000 },
+                                    "TVA": { number: 162 },
+                                    "Date": { date: { start: "2024-10-25" }}
+                                }
+                            }
+                        ]
+                    };
+                } else if (params.database_id === "237adb95-3c6f-801f-a746-c0f0560f8d67") {
+                    // DB-TVA-DECLARATIONS
+                    return {
+                        results: [
+                            {
+                                id: "test-declaration-1",
+                                properties: {
+                                    "Période": { title: [{ text: { content: "2024 Q3" }}]},
+                                    "Entité": { select: { name: "Hypervisual SA" }},
+                                    "TVA Collectée": { number: 8500 },
+                                    "TVA Déductible": { number: 3200 },
+                                    "TVA à Payer": { number: 5300 },
+                                    "Statut": { select: { name: "Payée" }}
+                                }
+                            }
+                        ]
+                    };
+                }
+                
+                return { results: [] };
+            },
+            
+            create_page: async function(params) {
+                addResult('success', 'Page créée dans Notion', JSON.stringify(params.properties, null, 2));
+                return { id: 'test-' + Date.now() };
+            }
+        };
+
+        const resultsDiv = document.getElementById('test-results');
+
+        function addResult(type, title, detail = '') {
+            const result = document.createElement('div');
+            result.className = `test-result test-${type}`;
+            result.innerHTML = `
+                <strong>${title}</strong>
+                ${detail ? `<pre>${detail}</pre>` : ''}
+            `;
+            resultsDiv.appendChild(result);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        async function runAllTests() {
+            clearResults();
+            addResult('info', 'Début des tests...');
+            
+            try {
+                // Test 1: Initialisation
+                await VATCalculator.init();
+                addResult('success', '✓ Module VAT initialisé');
+                
+                // Test 2: Chargement des factures
+                const invoices = await VATCalculator.loadInvoicesForPeriod('2024-10-01', '2024-12-31');
+                addResult('success', `✓ Factures chargées: ${invoices.clientInvoices.length} clients, ${invoices.supplierInvoices.length} fournisseurs`);
+                
+                // Test 3: Calcul TVA
+                const declaration = VATCalculator.getCurrentDeclaration();
+                if (declaration) {
+                    addResult('success', `✓ Déclaration courante: TVA à payer = CHF ${VATCalculator.formatSwissAmount(declaration.result.vatToPay)}`);
+                }
+                
+                // Test 4: Contrôles de cohérence
+                const controls = VATCalculator.runCoherenceControls();
+                controls.forEach(control => {
+                    addResult(control.status === 'success' ? 'success' : 'error', 
+                        `${control.status === 'success' ? '✓' : '✗'} ${control.name}: ${control.message}`);
+                });
+                
+                addResult('info', 'Tests terminés!');
+                
+            } catch (error) {
+                addResult('error', '✗ Erreur lors des tests', error.toString());
+            }
+        }
+
+        async function testLoadInvoices() {
+            clearResults();
+            try {
+                const invoices = await VATCalculator.loadInvoicesForPeriod('2024-10-01', '2024-12-31');
+                addResult('success', 'Factures Q4 2024 chargées', JSON.stringify({
+                    clientInvoices: invoices.clientInvoices.length,
+                    supplierInvoices: invoices.supplierInvoices.length,
+                    expenses: invoices.expenses.length
+                }, null, 2));
+                
+                // Afficher détails
+                let totalCollected = 0;
+                invoices.clientInvoices.forEach(inv => {
+                    totalCollected += inv.properties["Montant TVA"]?.number || 0;
+                });
+                
+                let totalDeductible = 0;
+                invoices.supplierInvoices.forEach(inv => {
+                    totalDeductible += inv.properties["TVA"]?.number || 0;
+                });
+                invoices.expenses.forEach(inv => {
+                    totalDeductible += inv.properties["TVA"]?.number || 0;
+                });
+                
+                addResult('info', 'Résumé TVA', `TVA Collectée: CHF ${VATCalculator.formatSwissAmount(totalCollected)}\nTVA Déductible: CHF ${VATCalculator.formatSwissAmount(totalDeductible)}\nSolde: CHF ${VATCalculator.formatSwissAmount(totalCollected - totalDeductible)}`);
+                
+            } catch (error) {
+                addResult('error', 'Erreur chargement factures', error.toString());
+            }
+        }
+
+        async function testSaveDeclaration() {
+            clearResults();
+            try {
+                const declaration = VATCalculator.getCurrentDeclaration();
+                if (!declaration) {
+                    addResult('error', 'Aucune déclaration courante');
+                    return;
+                }
+                
+                const notionId = await VATCalculator.saveVATDeclaration(declaration);
+                addResult('success', `Déclaration sauvegardée avec ID: ${notionId}`);
+                
+            } catch (error) {
+                addResult('error', 'Erreur sauvegarde', error.toString());
+            }
+        }
+
+        async function testLoadHistory() {
+            clearResults();
+            try {
+                const history = await VATCalculator.loadVATHistory(2024);
+                addResult('success', `Historique 2024: ${history.length} déclarations trouvées`);
+                
+                history.forEach(decl => {
+                    addResult('info', `${decl.period.year} ${decl.period.code}`, 
+                        `TVA à payer: CHF ${VATCalculator.formatSwissAmount(decl.result.vatToPay)}\nStatut: ${decl.status}`);
+                });
+                
+            } catch (error) {
+                addResult('error', 'Erreur chargement historique', error.toString());
+            }
+        }
+
+        function testExportXML() {
+            clearResults();
+            try {
+                const xml = VATCalculator.generateAFCExport();
+                if (!xml) {
+                    addResult('error', 'Aucune déclaration à exporter');
+                    return;
+                }
+                
+                addResult('success', 'Export XML généré', xml);
+                
+                // Créer lien de téléchargement
+                const blob = new Blob([xml], { type: 'application/xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `TVA-${VATCalculator.getCurrentDeclaration().id}.xml`;
+                a.textContent = 'Télécharger le fichier XML';
+                a.className = 'btn btn-success mt-2';
+                resultsDiv.appendChild(a);
+                
+            } catch (error) {
+                addResult('error', 'Erreur export XML', error.toString());
+            }
+        }
+    </script>
+</body>
+</html>

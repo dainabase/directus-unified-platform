@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Connexion - Portal Multi-Rôles</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .auth-page {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--tblr-primary-lt) 0%, var(--tblr-bg-surface) 100%);
+        }
+        
+        .auth-card {
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+        
+        .demo-accounts {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body data-bs-theme="light" class="d-flex flex-column auth-page">
+    <div class="page page-center">
+        <div class="container container-tight py-4">
+            <!-- Theme toggle -->
+            <div class="position-absolute top-0 end-0 p-3">
+                <div class="d-flex">
+                    <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre">
+                        <i class="ti ti-moon"></i>
+                    </a>
+                    <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair">
+                        <i class="ti ti-sun"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Logo -->
+            <div class="text-center mb-4">
+                <a href="index.html" class="navbar-brand navbar-brand-autodark">
+                    <img src="assets/img/logo.svg" height="36" alt="Portal">
+                </a>
+            </div>
+            
+            <!-- Carte de connexion -->
+            <div class="card card-md auth-card">
+                <div class="card-stamp">
+                    <div class="card-stamp-icon bg-primary">
+                        <i class="ti ti-shield-lock"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2 class="h2 text-center mb-4">
+                        <i class="ti ti-login me-2"></i>
+                        Connexion
+                    </h2>
+                    
+                    <!-- Formulaire de connexion -->
+                    <form id="loginForm" autocomplete="off" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label">Adresse email</label>
+                            <input type="email" 
+                                   id="email"
+                                   name="email"
+                                   class="form-control" 
+                                   placeholder="votre@email.ch" 
+                                   autocomplete="off"
+                                   required>
+                            <div class="invalid-feedback">
+                                Veuillez entrer une adresse email valide.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Mot de passe
+                                <span class="form-label-description">
+                                    <a href="forgot-password.html">Mot de passe oublié ?</a>
+                                </span>
+                            </label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" 
+                                       id="password"
+                                       name="password"
+                                       class="form-control"  
+                                       placeholder="Votre mot de passe"  
+                                       autocomplete="off"
+                                       required>
+                                <span class="input-group-text">
+                                    <a href="#" class="link-secondary toggle-password" title="Afficher le mot de passe" data-bs-toggle="tooltip">
+                                        <i class="ti ti-eye"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback">
+                                Le mot de passe est requis.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <label class="form-check">
+                                <input type="checkbox" id="remember" name="rememberMe" class="form-check-input"/>
+                                <span class="form-check-label">Se souvenir de moi</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="ti ti-login"></i>
+                                Se connecter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Options supplémentaires -->
+                <div class="hr-text">ou</div>
+                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn btn-ghost-secondary w-100">
+                                <i class="ti ti-brand-google text-google"></i>
+                                Connexion avec Google
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="#" class="btn btn-ghost-secondary w-100">
+                                <i class="ti ti-brand-facebook text-facebook"></i>
+                                Connexion avec Facebook
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Comptes de démonstration -->
+            <div class="card mt-3">
+                <div class="card-stamp">
+                    <div class="card-stamp-icon bg-yellow">
+                        <i class="ti ti-info-circle"></i>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="ti ti-test-pipe me-2"></i>
+                        Comptes de démonstration
+                    </h4>
+                    <div class="demo-accounts">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="role-badge bg-blue text-white">CLIENT</span>
+                            <span>client@demo.ch / demo123</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="role-badge bg-green text-white">PRESTATAIRE</span>
+                            <span>prestataire@demo.ch / demo123</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="role-badge bg-orange text-white">REVENDEUR</span>
+                            <span>revendeur@demo.ch / demo123</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="role-badge bg-red text-white">SUPERADMIN</span>
+                            <span>admin@groupe.ch / superadmin123</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lien d'inscription -->
+            <div class="text-center text-secondary mt-3">
+                Pas encore de compte ? <a href="register.html" tabindex="-1">S'inscrire</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer footer-transparent d-print-none mt-auto">
+        <div class="container-xl">
+            <div class="row text-center align-items-center">
+                <div class="col-12">
+                    <ul class="list-inline list-inline-dots mb-0">
+                        <li class="list-inline-item">
+                            Copyright &copy; 2025
+                            <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                            Tous droits réservés.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/auth.js"></script>
+    
+    <script>
+        // Initialisation de la page de connexion
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser le module auth de base
+            if (window.AuthModule) {
+                AuthModule.init();
+            }
+            
+            // Focus sur le champ email
+            document.getElementById('email').focus();
+            
+            // Toggle password visibility
+            document.querySelector('.toggle-password').addEventListener('click', function(e) {
+                e.preventDefault();
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('ti-eye');
+                    icon.classList.add('ti-eye-off');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('ti-eye-off');
+                    icon.classList.add('ti-eye');
+                }
+            });
+            
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

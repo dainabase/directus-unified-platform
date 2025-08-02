@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Relations et Permissions</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <style>
+        .test-result {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .test-pass {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+        .test-fail {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+        .test-info {
+            background-color: #cff4fc;
+            color: #055160;
+            border: 1px solid #b6effb;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="layout-fluid">
+    <div class="page">
+        <div class="page-header">
+            <div class="container-xl">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">Test Relations et Permissions</h2>
+                        <div class="text-muted mt-1">Tests des relations entre bases de données Notion et du système de permissions</div>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <button id="run-tests" class="btn btn-primary">
+                            <i class="ti ti-play"></i>
+                            Lancer les tests
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row">
+                    <!-- Tests Relations -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">D. Tests Relations et Filtres</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="relations-tests">
+                                    <div class="text-muted">Les tests n'ont pas encore été lancés</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tests Permissions -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">E. Tests Permissions</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="permissions-tests">
+                                    <div class="text-muted">Les tests n'ont pas encore été lancés</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Console de sortie -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h3 class="card-title">Console de sortie</h3>
+                                <button id="clear-console" class="btn btn-sm btn-outline-secondary">
+                                    Effacer
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <pre id="console-output" style="max-height: 400px; overflow-y: auto;"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Résumé des résultats -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Résumé des résultats</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="test-summary">
+                                    <div class="text-muted">Aucun test lancé pour le moment</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <!-- Charger les modules nécessaires -->
+    <script src="assets/js/Core/notion-connector.js"></script>
+    <script src="assets/js/Core/permissions-notion.js"></script>
+    <script src="assets/js/Core/auth-notion.js"></script>
+    <script src="tests/test-relations-permissions.js"></script>
+
+    <script>
+        // Interface de test
+        const TestInterface = {
+            console: null,
+            
+            init() {
+                this.console = document.getElementById('console-output');
+                this.setupEventListeners();
+                this.redirectConsole();
+            },
+            
+            setupEventListeners() {
+                document.getElementById('run-tests').addEventListener('click', () => {
+                    this.runTests();
+                });
+                
+                document.getElementById('clear-console').addEventListener('click', () => {
+                    this.clearConsole();
+                });
+            },
+            
+            // Rediriger console.log vers notre interface
+            redirectConsole() {
+                const originalLog = console.log;
+                const originalError = console.error;
+                const originalWarn = console.warn;
+                
+                console.log = (...args) => {
+                    originalLog.apply(console, args);
+                    this.addToConsole(args.join(' '), 'log');
+                };
+                
+                console.error = (...args) => {
+                    originalError.apply(console, args);
+                    this.addToConsole(args.join(' '), 'error');
+                };
+                
+                console.warn = (...args) => {
+                    originalWarn.apply(console, args);
+                    this.addToConsole(args.join(' '), 'warn');
+                };
+            },
+            
+            addToConsole(message, type = 'log') {
+                if (!this.console) return;
+                
+                const timestamp = new Date().toLocaleTimeString();
+                const prefix = `[${timestamp}] `;
+                
+                let color = '#333';
+                switch(type) {
+                    case 'error': color = '#dc3545'; break;
+                    case 'warn': color = '#fd7e14'; break;
+                    case 'log': color = '#333'; break;
+                }
+                
+                this.console.innerHTML += `<div style="color: ${color}; margin-bottom: 2px;">${prefix}${message}</div>`;
+                this.console.scrollTop = this.console.scrollHeight;
+            },
+            
+            clearConsole() {
+                if (this.console) {
+                    this.console.innerHTML = '';
+                }
+            },
+            
+            async runTests() {
+                this.clearConsole();
+                
+                // Simuler un utilisateur connecté pour les tests
+                localStorage.setItem('auth', JSON.stringify({
+                    isAuthenticated: true,
+                    user: {
+                        id: 'test_client_123',
+                        name: 'Test Client',
+                        email: 'test@client.com',
+                        role: 'client'
+                    },
+                    role: 'client'
+                }));
+                
+                console.log('🧪 Démarrage des tests - Interface Web');
+                
+                try {
+                    // Vérifier que les modules sont chargés
+                    if (!window.NotionConnector) {
+                        throw new Error('NotionConnector non chargé');
+                    }
+                    
+                    if (!window.PermissionsNotion) {
+                        throw new Error('PermissionsNotion non chargé');
+                    }
+                    
+                    if (!window.TestRelationsPermissions) {
+                        throw new Error('TestRelationsPermissions non chargé');
+                    }
+                    
+                    // Lancer les tests
+                    await window.TestRelationsPermissions.runAllTests();
+                    
+                    // Mettre à jour l'interface
+                    this.updateTestResults();
+                    
+                } catch (error) {
+                    console.error('Erreur lors des tests:', error);
+                    this.showError(error.message);
+                }
+            },
+            
+            updateTestResults() {
+                const results = window.TestRelationsPermissions.tests.results;
+                
+                // Mettre à jour les sections de test
+                this.updateSection('relations-tests', results.filter(r => 
+                    r.test.includes('Relation') || r.test.includes('filtrage')
+                ));
+                
+                this.updateSection('permissions-tests', results.filter(r => 
+                    r.test.includes('permission') || r.test.includes('Isolation') || r.test.includes('Application')
+                ));
+                
+                // Mettre à jour le résumé
+                this.updateSummary(results);
+            },
+            
+            updateSection(sectionId, tests) {
+                const section = document.getElementById(sectionId);
+                if (!section) return;
+                
+                section.innerHTML = tests.map(test => `
+                    <div class="test-result ${test.status === 'PASS' ? 'test-pass' : 'test-fail'}">
+                        <strong>${test.status === 'PASS' ? '✅' : '❌'} ${test.test}</strong>
+                        ${test.details ? `<div><small>${test.details}</small></div>` : ''}
+                        ${test.error ? `<div style="color: #842029;"><small>Erreur: ${test.error}</small></div>` : ''}
+                    </div>
+                `).join('');
+                
+                if (tests.length === 0) {
+                    section.innerHTML = '<div class="text-muted">Aucun test dans cette catégorie</div>';
+                }
+            },
+            
+            updateSummary(results) {
+                const summary = document.getElementById('test-summary');
+                if (!summary) return;
+                
+                const passed = results.filter(r => r.status === 'PASS').length;
+                const failed = results.filter(r => r.status === 'FAIL').length;
+                const total = results.length;
+                
+                const passRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+                
+                summary.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="test-info">
+                                <strong>Total des tests</strong><br>
+                                <span class="fs-3">${total}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="test-pass">
+                                <strong>Tests réussis</strong><br>
+                                <span class="fs-3">${passed}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="test-fail">
+                                <strong>Tests échoués</strong><br>
+                                <span class="fs-3">${failed}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="test-info">
+                                <strong>Taux de réussite</strong><br>
+                                <span class="fs-3">${passRate}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="progress">
+                            <div class="progress-bar ${passRate >= 80 ? 'bg-success' : passRate >= 60 ? 'bg-warning' : 'bg-danger'}" 
+                                 style="width: ${passRate}%"></div>
+                        </div>
+                        <small class="text-muted mt-1">
+                            ${passRate >= 80 ? '✅ Excellent - Système conforme' : 
+                              passRate >= 60 ? '⚠️ Acceptable - Améliorations nécessaires' : 
+                              '❌ Critique - Corrections urgentes requises'}
+                        </small>
+                    </div>
+                `;
+            },
+            
+            showError(message) {
+                document.getElementById('test-summary').innerHTML = `
+                    <div class="test-fail">
+                        <strong>❌ Erreur lors des tests</strong><br>
+                        ${message}
+                    </div>
+                `;
+            }
+        };
+        
+        // Initialiser l'interface quand la page est chargée
+        document.addEventListener('DOMContentLoaded', () => {
+            TestInterface.init();
+        });
+    </script>
+</body>
+</html>

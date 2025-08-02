@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Drag & Drop Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        #dropzone {
+            width: 400px;
+            height: 200px;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            text-align: center;
+            padding: 50px;
+            margin: 20px auto;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+        
+        #dropzone.drag-over {
+            background: #e0e0ff;
+            border-color: #0000ff;
+        }
+        
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Drag & Drop Simple</h1>
+    
+    <div id="dropzone">
+        <p>Glissez un fichier ici</p>
+        <p>ou cliquez pour sélectionner</p>
+    </div>
+    
+    <input type="file" id="fileInput" style="display: none;">
+    
+    <div id="result"></div>
+    
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const result = document.getElementById('result');
+        
+        // Log function
+        function log(msg) {
+            console.log(msg);
+            result.innerHTML += msg + '<br>';
+        }
+        
+        log('Page chargée');
+        
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Highlight drop area when item is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight(e) {
+            dropzone.classList.add('drag-over');
+            log('Fichier au-dessus de la zone');
+        }
+        
+        function unhighlight(e) {
+            dropzone.classList.remove('drag-over');
+        }
+        
+        // Handle dropped files
+        dropzone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            log('Drop détecté: ' + files.length + ' fichier(s)');
+            
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        }
+        
+        // Handle file selection via click
+        dropzone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            ([...files]).forEach(uploadFile);
+        }
+        
+        function uploadFile(file) {
+            log('Fichier reçu: ' + file.name + ' (' + file.type + ', ' + file.size + ' bytes)');
+        }
+        
+        // Final protection
+        window.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        
+        window.addEventListener('drop', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

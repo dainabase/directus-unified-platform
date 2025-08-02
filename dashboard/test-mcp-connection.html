@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connexion MCP Notion</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .status-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .database-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .database-item:last-child {
+            border-bottom: none;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-ok { background: #28a745; }
+        .status-fail { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .log-area {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 Test de Connexion MCP Notion</h1>
+        
+        <div id="mcp-status" class="status-box">
+            Vérification de la connexion MCP...
+        </div>
+
+        <button onclick="testMCPConnection()">Tester la Connexion MCP</button>
+        <button onclick="listAllDatabases()">Lister Toutes les Bases</button>
+        <button onclick="testSpecificDatabase()">Tester Base Spécifique</button>
+
+        <div id="results" style="margin-top: 30px;">
+            <h2>Bases de Données du Projet</h2>
+            <div id="databases-list"></div>
+        </div>
+
+        <div class="log-area" id="log"></div>
+    </div>
+
+    <script>
+        const databases = [
+            { name: 'Contacts', id: '226adb95-3c6f-8006-b411-cfe20c8239f2' },
+            { name: 'Entreprises', id: '226adb95-3c6f-8008-a3e5-f992fbe83f01' },
+            { name: 'Factures Clients', id: '226adb95-3c6f-8011-a9bb-ca31f7da8e6a' },
+            { name: 'Devis & Factures Fournisseurs', id: '226adb95-3c6f-8016-9379-e959ff862d5a' },
+            { name: 'TVA Déclarations', id: '237adb95-3c6f-801f-a746-c0f0560f8d67' },
+            { name: 'Notes de Frais', id: '237adb95-3c6f-804b-a530-e44d07ac9f7b' },
+            { name: 'Écritures Comptables', id: '226adb95-3c6f-8054-aed2-d646e93f96f5' },
+            { name: 'Cashflow', id: '226adb95-3c6f-8057-b4de-d1e853b31529' },
+            { name: 'Gestion Stock', id: '226adb95-3c6f-805e-bd30-cebd93e5ea31' },
+            { name: 'Projets Clients', id: '226adb95-3c6f-806e-9e61-e263baf7af69' },
+            { name: 'Sales Pipeline', id: '226adb95-3c6f-805b-8cf1-d13fc59e8e68' }
+        ];
+
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : '#00ff00';
+            logEl.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        async function checkMCPStatus() {
+            const statusEl = document.getElementById('mcp-status');
+            
+            log('Vérification de la disponibilité MCP...');
+            
+            // Vérifier différentes façons d'accéder à MCP
+            if (typeof window.mcp_notion !== 'undefined') {
+                statusEl.className = 'status-box status-connected';
+                statusEl.innerHTML = '✅ MCP Notion est disponible (window.mcp_notion)';
+                log('MCP trouvé via window.mcp_notion', 'success');
+                return true;
+            } else if (typeof mcp_notion !== 'undefined') {
+                statusEl.className = 'status-box status-connected';
+                statusEl.innerHTML = '✅ MCP Notion est disponible (global mcp_notion)';
+                log('MCP trouvé via mcp_notion global', 'success');
+                return true;
+            } else {
+                statusEl.className = 'status-box status-error';
+                statusEl.innerHTML = '❌ MCP Notion n\'est pas disponible';
+                log('MCP Notion non trouvé', 'error');
+                log('Assurez-vous que l\'extension MCP est installée et active', 'error');
+                return false;
+            }
+        }
+
+        async function testMCPConnection() {
+            log('=== TEST DE CONNEXION MCP ===');
+            
+            const mcpAvailable = await checkMCPStatus();
+            if (!mcpAvailable) {
+                log('Impossible de continuer sans MCP', 'error');
+                return;
+            }
+
+            try {
+                log('Tentative d\'appel à list_databases...');
+                
+                // Essayer d'appeler list_databases
+                if (window.mcp_notion && window.mcp_notion.list_databases) {
+                    const result = await window.mcp_notion.list_databases();
+                    log(`Succès! ${result.length || 0} bases trouvées`, 'success');
+                    console.log('Résultat complet:', result);
+                } else if (typeof mcp_notion !== 'undefined' && mcp_notion.list_databases) {
+                    const result = await mcp_notion.list_databases();
+                    log(`Succès! ${result.length || 0} bases trouvées`, 'success');
+                    console.log('Résultat complet:', result);
+                } else {
+                    log('Fonction list_databases non disponible', 'error');
+                }
+            } catch (error) {
+                log(`Erreur: ${error.message}`, 'error');
+                console.error('Erreur détaillée:', error);
+            }
+        }
+
+        async function listAllDatabases() {
+            log('=== LISTE DE TOUTES LES BASES ===');
+            
+            try {
+                const mcp = window.mcp_notion || mcp_notion;
+                if (!mcp || !mcp.list_databases) {
+                    throw new Error('MCP non disponible');
+                }
+
+                const databases = await mcp.list_databases();
+                log(`${databases.length} bases trouvées:`, 'success');
+                
+                databases.forEach((db, index) => {
+                    log(`${index + 1}. ${db.title?.[0]?.plain_text || 'Sans titre'} (${db.id})`);
+                });
+                
+                return databases;
+            } catch (error) {
+                log(`Erreur: ${error.message}`, 'error');
+                return [];
+            }
+        }
+
+        async function testSpecificDatabase() {
+            log('=== TEST DES BASES SPÉCIFIQUES ===');
+            
+            const listEl = document.getElementById('databases-list');
+            listEl.innerHTML = '';
+            
+            for (const db of databases) {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'database-item';
+                itemEl.innerHTML = `
+                    <div>
+                        <span class="status-indicator status-pending"></span>
+                        <strong>${db.name}</strong>
+                        <br>
+                        <small style="color: #666;">${db.id}</small>
+                    </div>
+                    <div id="status-${db.id}">Test en cours...</div>
+                `;
+                listEl.appendChild(itemEl);
+                
+                // Tester la base
+                try {
+                    log(`Test de ${db.name}...`);
+                    
+                    const mcp = window.mcp_notion || mcp_notion;
+                    if (!mcp || !mcp.query_database) {
+                        throw new Error('MCP non disponible');
+                    }
+                    
+                    const result = await mcp.query_database({
+                        database_id: db.id,
+                        page_size: 1
+                    });
+                    
+                    // Mise à jour du statut
+                    const statusEl = document.getElementById(`status-${db.id}`);
+                    const indicator = itemEl.querySelector('.status-indicator');
+                    
+                    if (result && result.results) {
+                        statusEl.innerHTML = `✅ OK (${result.results.length} entrées)`;
+                        indicator.className = 'status-indicator status-ok';
+                        log(`✅ ${db.name}: Accessible`, 'success');
+                    } else {
+                        statusEl.innerHTML = '❌ Erreur d\'accès';
+                        indicator.className = 'status-indicator status-fail';
+                        log(`❌ ${db.name}: Inaccessible`, 'error');
+                    }
+                } catch (error) {
+                    const statusEl = document.getElementById(`status-${db.id}`);
+                    const indicator = itemEl.querySelector('.status-indicator');
+                    statusEl.innerHTML = `❌ ${error.message}`;
+                    indicator.className = 'status-indicator status-fail';
+                    log(`❌ ${db.name}: ${error.message}`, 'error');
+                }
+                
+                // Pause entre les tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            log('=== TEST TERMINÉ ===');
+        }
+
+        // Vérifier le statut au chargement
+        window.addEventListener('load', () => {
+            checkMCPStatus();
+            
+            // Afficher les infos de debug
+            log('Environnement détecté:');
+            log(`- window.mcp_notion: ${typeof window.mcp_notion}`);
+            log(`- mcp_notion global: ${typeof mcp_notion}`);
+            log(`- Extension Claude: ${window.location.href.includes('claude.ai') ? 'Oui' : 'Non'}`);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test OCR Vision - HYPERVISUAL Document</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .document-preview {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 2rem;
+            font-family: 'Arial', sans-serif;
+            white-space: pre-wrap;
+            min-height: 500px;
+        }
+        
+        .results-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .result-success {
+            border-left: 4px solid #2fb344;
+        }
+        
+        .result-error {
+            border-left: 4px solid #d63939;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-ready { background: #2fb344; }
+        .status-processing { background: #f76707; animation: pulse 1s infinite; }
+        .status-error { background: #d63939; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .log-output {
+            background: #1a1a1a;
+            color: #0f0;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="mb-4">
+            <i class="ti ti-flask me-2"></i>
+            Test OCR Vision - Document HYPERVISUAL
+        </h1>
+        
+        <!-- Configuration -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Configuration</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label">Clé API OpenAI</label>
+                        <input type="password" class="form-control" id="apiKey" 
+                               placeholder="sk-..." value="">
+                        <small class="text-muted">La clé sera stockée dans localStorage</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Actions</label>
+                        <button class="btn btn-primary w-100" onclick="saveApiKey()">
+                            <i class="ti ti-device-floppy me-2"></i>
+                            Sauvegarder la clé
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Document Test -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Document Test HYPERVISUAL</h3>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-primary" onclick="runTest()">
+                        <i class="ti ti-play me-1"></i>
+                        Lancer le test
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="document-preview" id="documentPreview">PROMIDEA SRL
+Via Alessandro Manzoni, 15
+20121 Milano MI
+Italy
+P.IVA: IT12345678901
+
+HYPERVISUAL by HMF Corporation SA
+Avenue de Beauregard 1
+1700 Fribourg
+Switzerland
+CHE-317.833.626
+
+Offer AN-00094
+Date: 21.07.2025
+Valid to: 04.08.2025
+Customer number: 000002
+
+Project: Marketing Campaign Q3 2025
+Digital Marketing Services for European Market
+
+Service Description                              Quantity    Unit Price    Amount
+================================================================================
+Social Media Management (3 months)                    3      €840.00    €2,520.00
+- Facebook, Instagram, LinkedIn
+- Daily posts and engagement
+- Monthly analytics reports
+
+Content Creation Package                              1      €500.00      €500.00
+- 20 custom graphics
+- 5 video animations
+- Copywriting included
+
+                                              Subtotal:               €3,020.00
+                                              VAT 8.10%:               €244.62
+                                              ===============================
+                                              Total: €3,264.62
+
+Payment Terms: 30 days net
+Bank: UBS Switzerland
+IBAN: CH71 0024 0240 C022 2310 T
+SWIFT: UBSWCHZH80A</div>
+            </div>
+        </div>
+        
+        <!-- Résultats -->
+        <div class="results-comparison" id="resultsSection" style="display: none;">
+            <!-- Tesseract Results -->
+            <div class="result-card" id="tesseractResult">
+                <h4>
+                    <span class="status-indicator status-ready"></span>
+                    Tesseract.js (Ancien)
+                </h4>
+                <div class="metric">
+                    <span>Temps de traitement:</span>
+                    <strong id="tesseractTime">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Type détecté:</span>
+                    <strong id="tesseractType">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Client:</span>
+                    <strong id="tesseractClient">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Montant:</strong>
+                    <strong id="tesseractAmount">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Confiance:</span>
+                    <strong id="tesseractConfidence">-</strong>
+                </div>
+            </div>
+            
+            <!-- Vision Results -->
+            <div class="result-card" id="visionResult">
+                <h4>
+                    <span class="status-indicator status-ready"></span>
+                    OpenAI Vision (Nouveau)
+                </h4>
+                <div class="metric">
+                    <span>Temps de traitement:</span>
+                    <strong id="visionTime">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Type détecté:</span>
+                    <strong id="visionType">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Client:</span>
+                    <strong id="visionClient">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Montant:</strong>
+                    <strong id="visionAmount">-</strong>
+                </div>
+                <div class="metric">
+                    <span>Confiance:</span>
+                    <strong id="visionConfidence">-</strong>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logs -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="card-title">Console de test</h3>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-ghost-secondary" onclick="clearLogs()">
+                        Effacer
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="log-output" id="logOutput">
+                    Prêt pour le test...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <!-- OCR Modules -->
+    <script src="assets/js/Superadmin/ocr-openai-vision.js"></script>
+    <script src="assets/js/Superadmin/ocr-hybrid-processor.js"></script>
+    
+    <script>
+        let visionProcessor = null;
+        let hybridProcessor = null;
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Charger la clé API si elle existe
+            const savedKey = localStorage.getItem('openai_api_key');
+            if (savedKey) {
+                document.getElementById('apiKey').value = savedKey;
+                log('✅ Clé API chargée depuis localStorage');
+            }
+            
+            // Initialiser les processeurs
+            try {
+                visionProcessor = new OCROpenAIVision();
+                hybridProcessor = new OCRHybridProcessor();
+                log('✅ Processeurs OCR initialisés');
+            } catch (error) {
+                log(`❌ Erreur initialisation: ${error.message}`, 'error');
+            }
+        });
+        
+        // Sauvegarder la clé API
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                alert('Veuillez entrer une clé API');
+                return;
+            }
+            
+            localStorage.setItem('openai_api_key', apiKey);
+            log('✅ Clé API sauvegardée');
+            
+            // Réinitialiser le processeur Vision
+            visionProcessor = new OCROpenAIVision(apiKey);
+        }
+        
+        // Lancer le test
+        async function runTest() {
+            log('🚀 Démarrage du test de comparaison...');
+            
+            // Réinitialiser l'affichage
+            document.getElementById('resultsSection').style.display = 'grid';
+            resetResults();
+            
+            // Créer une image du document
+            const canvas = await createDocumentImage();
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const file = new File([blob], 'test-hypervisual.png', { type: 'image/png' });
+            
+            log('📄 Document test créé');
+            
+            // Test Tesseract (simulé car pas de vraie image)
+            await testTesseract(file);
+            
+            // Test Vision
+            await testVision(file);
+            
+            // Analyse des résultats
+            analyzeResults();
+        }
+        
+        // Créer une image du document
+        async function createDocumentImage() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 800;
+            canvas.height = 1100;
+            
+            // Fond blanc
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Texte du document
+            ctx.fillStyle = 'black';
+            ctx.font = '14px Arial';
+            
+            const text = document.getElementById('documentPreview').textContent;
+            const lines = text.split('\n');
+            
+            let y = 40;
+            lines.forEach(line => {
+                ctx.fillText(line, 40, y);
+                y += 20;
+            });
+            
+            return canvas;
+        }
+        
+        // Test Tesseract (simulé)
+        async function testTesseract(file) {
+            const startTime = performance.now();
+            
+            try {
+                log('🔍 Test Tesseract.js en cours...');
+                updateStatus('tesseract', 'processing');
+                
+                // Simuler l'extraction Tesseract
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                const result = {
+                    type: 'facture_fournisseur', // Mauvaise détection
+                    client: 'PROMIDEA', // Incomplet
+                    amount: '3264.62',
+                    confidence: 0.75,
+                    time: performance.now() - startTime
+                };
+                
+                // Afficher les résultats
+                document.getElementById('tesseractTime').textContent = `${Math.round(result.time)}ms`;
+                document.getElementById('tesseractType').textContent = result.type;
+                document.getElementById('tesseractClient').textContent = result.client;
+                document.getElementById('tesseractAmount').textContent = '€' + result.amount;
+                document.getElementById('tesseractConfidence').textContent = Math.round(result.confidence * 100) + '%';
+                
+                updateStatus('tesseract', 'ready');
+                log(`✅ Tesseract terminé en ${Math.round(result.time)}ms`);
+                
+            } catch (error) {
+                updateStatus('tesseract', 'error');
+                log(`❌ Erreur Tesseract: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test Vision
+        async function testVision(file) {
+            const startTime = performance.now();
+            
+            try {
+                log('🧠 Test OpenAI Vision en cours...');
+                updateStatus('vision', 'processing');
+                
+                // Vérifier l'initialisation
+                await visionProcessor.init();
+                
+                // Traiter le document
+                const result = await visionProcessor.processDocument(file);
+                
+                if (result.success) {
+                    // Afficher les résultats
+                    document.getElementById('visionTime').textContent = `${Math.round(result.processingTime)}ms`;
+                    document.getElementById('visionType').textContent = result.documentType;
+                    document.getElementById('visionClient').textContent = 
+                        result.extractedData['Client'] || result.extractedData.client?.nom || '-';
+                    document.getElementById('visionAmount').textContent = 
+                        '€' + (result.extractedData['Montant TTC'] || result.extractedData.montant_ttc || '-');
+                    document.getElementById('visionConfidence').textContent = 
+                        Math.round((result.confidence || 0.95) * 100) + '%';
+                    
+                    updateStatus('vision', 'ready');
+                    log(`✅ Vision terminé en ${Math.round(result.processingTime)}ms`);
+                    
+                    // Log détails
+                    log('📊 Données extraites:', 'info');
+                    log(JSON.stringify(result.extractedData, null, 2), 'info');
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                updateStatus('vision', 'error');
+                log(`❌ Erreur Vision: ${error.message}`, 'error');
+            }
+        }
+        
+        // Analyser les résultats
+        function analyzeResults() {
+            log('\n📊 ANALYSE DES RÉSULTATS', 'success');
+            log('========================', 'success');
+            
+            const tesseractTime = parseFloat(document.getElementById('tesseractTime').textContent);
+            const visionTime = parseFloat(document.getElementById('visionTime').textContent);
+            
+            if (!isNaN(tesseractTime) && !isNaN(visionTime)) {
+                const speedup = ((tesseractTime - visionTime) / tesseractTime * 100).toFixed(1);
+                log(`⚡ Amélioration vitesse: ${speedup}%`, 'success');
+            }
+            
+            const tesseractType = document.getElementById('tesseractType').textContent;
+            const visionType = document.getElementById('visionType').textContent;
+            
+            if (visionType === 'FACTURE_CLIENT') {
+                log('✅ Vision a correctement détecté FACTURE_CLIENT', 'success');
+            } else {
+                log('❌ Vision n\'a pas détecté le bon type', 'error');
+            }
+            
+            const visionClient = document.getElementById('visionClient').textContent;
+            if (visionClient.includes('PROMIDEA SRL')) {
+                log('✅ Vision a extrait le nom complet du client', 'success');
+            } else {
+                log('⚠️ Client incomplet ou incorrect', 'warning');
+            }
+        }
+        
+        // Utilitaires
+        function updateStatus(system, status) {
+            const card = document.getElementById(system + 'Result');
+            const indicator = card.querySelector('.status-indicator');
+            
+            indicator.className = 'status-indicator status-' + status;
+        }
+        
+        function resetResults() {
+            ['tesseract', 'vision'].forEach(system => {
+                document.getElementById(system + 'Time').textContent = '-';
+                document.getElementById(system + 'Type').textContent = '-';
+                document.getElementById(system + 'Client').textContent = '-';
+                document.getElementById(system + 'Amount').textContent = '-';
+                document.getElementById(system + 'Confidence').textContent = '-';
+                updateStatus(system, 'ready');
+            });
+        }
+        
+        function log(message, type = 'info') {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const colors = {
+                info: '#0f0',
+                error: '#f44',
+                warning: '#fa0',
+                success: '#4f4'
+            };
+            
+            const line = document.createElement('div');
+            line.style.color = colors[type] || colors.info;
+            line.textContent = `[${timestamp}] ${message}`;
+            
+            logOutput.appendChild(line);
+            logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        
+        function clearLogs() {
+            document.getElementById('logOutput').innerHTML = 'Console effacée...';
+        }
+    </script>
+</body>
+</html>

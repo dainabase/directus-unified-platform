@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Local - Intégration Notion</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="page">
+        <div class="page-wrapper">
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">🧪 Test Local du Proxy Notion</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info">
+                                        <h4 class="alert-title">Configuration pour test local</h4>
+                                        <p>Cette page utilise le proxy local sur http://localhost:8080</p>
+                                        <p>Assurez-vous d'avoir lancé : <code>./deploy-local-test.sh</code></p>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h4>1. État du serveur local</h4>
+                                        <button class="btn btn-primary" onclick="checkLocalServer()">
+                                            Vérifier le serveur local
+                                        </button>
+                                        <div id="server-status" class="mt-3"></div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h4>2. Test de connexion Notion</h4>
+                                        <button class="btn btn-success" onclick="testNotionConnection()">
+                                            Tester la connexion
+                                        </button>
+                                        <div id="connection-status" class="mt-3"></div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h4>3. Test d'envoi</h4>
+                                        <button class="btn btn-warning" onclick="testSendDocument()">
+                                            Envoyer un document test
+                                        </button>
+                                        <div id="send-status" class="mt-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script>
+        // URL du proxy local
+        const PROXY_URL = 'http://localhost:8080/api/notion-proxy.php';
+        const API_KEY = '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';
+        
+        async function checkLocalServer() {
+            const statusDiv = document.getElementById('server-status');
+            statusDiv.innerHTML = '<div class="spinner-border"></div> Vérification...';
+            
+            try {
+                const response = await fetch(PROXY_URL, {
+                    method: 'OPTIONS'
+                });
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Serveur local actif sur http://localhost:8080
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Serveur non accessible');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ Serveur local non accessible
+                        <p class="mt-2">Lancez d'abord : <code>./deploy-local-test.sh</code></p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testNotionConnection() {
+            const statusDiv = document.getElementById('connection-status');
+            statusDiv.innerHTML = '<div class="spinner-border"></div> Test en cours...';
+            
+            try {
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'get_databases',
+                        api_key: API_KEY
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Connexion Notion réussie !
+                            <p>${data.results?.length || 0} databases trouvées</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Erreur de connexion');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ Erreur : ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        async function testSendDocument() {
+            const statusDiv = document.getElementById('send-status');
+            statusDiv.innerHTML = '<div class="spinner-border"></div> Envoi en cours...';
+            
+            try {
+                const testData = {
+                    parent: { database_id: '226adb95-3c6f-8011-a9bb-ca31f7da8e6a' }, // DB Factures Clients
+                    properties: {
+                        "Numéro": { title: [{ text: { content: "TEST-LOCAL-001" } }] },
+                        "Client": { rich_text: [{ text: { content: "Test Local" } }] },
+                        "Date Émission": { date: { start: new Date().toISOString().split('T')[0] } },
+                        "Montant TTC": { number: 999.99 },
+                        "Statut": { select: { name: "Brouillon" } }
+                    }
+                };
+                
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'create_page',
+                        api_key: API_KEY,
+                        data: testData
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.id) {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Document créé avec succès dans Notion !
+                            ${data.url ? `<p><a href="${data.url}" target="_blank">Ouvrir dans Notion</a></p>` : ''}
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Erreur d\'envoi');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        ❌ Erreur : ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // Vérifier automatiquement au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            checkLocalServer();
+        });
+    </script>
+</body>
+</html>

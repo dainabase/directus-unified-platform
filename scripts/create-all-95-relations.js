@@ -10,7 +10,7 @@ const axios = require('axios');
 
 // Configuration
 const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'd9HE8Gs8A4MWxrOSg2_1gWLaQrXsJW5s';
+const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
 
 // Client Directus
 const directus = axios.create({
@@ -380,9 +380,7 @@ async function main() {
     }
     
     // Pause pour éviter de surcharger l'API
-    if (currentIndex % 10 === 0) {
-      await new Promise(resolve => setTimeout(resolve, 500));
-    }
+    await new Promise(resolve => setTimeout(resolve, 1000)); // 1 seconde entre chaque requête
   }
   
   // RÉSUMÉ FINAL

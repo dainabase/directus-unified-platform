@@ -8,7 +8,7 @@
 const axios = require('axios');
 
 const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'd9HE8Gs8A4MWxrOSg2_1gWLaQrXsJW5s';
+const DIRECTUS_TOKEN = 'DdbRWCe0ID7O-HQfPU_sXJHxASmKUl4E';
 
 const directus = axios.create({
   baseURL: DIRECTUS_URL,

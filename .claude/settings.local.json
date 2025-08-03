@@ -27,7 +27,9 @@
       "Bash(git push:*)",
       "Bash(git pull:*)",
       "Bash(git stash:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(chmod:*)",
+      "Bash(./auto-save.sh:*)"
     ],
     "deny": []
   }

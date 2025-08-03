@@ -30,13 +30,15 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
-    "axios": "^1.7.5",
     "chalk": "^4.1.2",
+    "concurrently": "^8.2.2",
+    "directus-mcp-server": "^1.0.0",
     "dotenv": "^16.4.5",
-    "ora": "^5.4.1",
-    "concurrently": "^8.2.2"
+    "ora": "^5.4.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "axios": "^1.11.0"
+  },
   "author": "",
   "license": "ISC"
 }

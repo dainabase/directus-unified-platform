@@ -11,7 +11,16 @@
       "Bash(npm run migrate:subscriptions:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:github.com)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(git rev-parse:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm search:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

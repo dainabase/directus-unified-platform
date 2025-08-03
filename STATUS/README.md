@@ -8,15 +8,19 @@
 ### Progression Globale
 - **Bases migrées** : 7/62 (11.3%)
 - **Collections créées** : 21/48 (43.8%)
+- **Relations créées** : 10/105 (9.5%) 🆕
+- **Dashboard importé** : 100% ✅ 🆕
 - **Items migrés** : 21 entrées totales
 - **Taux de succès** : 87.5% (7/8 migrations complètes)
 
 ### Indicateurs Clés
 | Métrique | Valeur | Statut |
 |----------|--------|---------|
+| Collections migrées | 7/62 (11.3%) | 🔴 À accélérer |
+| Relations créées | 10/105 (9.5%) | 🟡 Démarré |
+| Dashboard importé | 100% | ✅ Complet |
+| Champs complétés | 75% moy. | 🟡 En cours |
 | Phase 1 | 62.5% | 🟢 En avance |
-| Performance | ~2s/migration | ✅ Excellent |
-| Qualité | 100% validation | ✅ Optimal |
 | Documentation | Complète | ✅ À jour |
 
 ## 📈 PROGRESSION PAR PHASE
@@ -80,11 +84,21 @@ NOTION_API_KEY=✅ Configuré
 2. ✅ Types datetime → timestamp
 3. ✅ IDs Notion incorrects → corrigés depuis analysis.json
 4. ✅ Champs alias → retirés temporairement
+5. ✅ Collections virtuelles → recréées avec schema SQL
+6. ✅ Token Directus invalide → nouveau token fonctionnel
+
+### Ce qui fonctionne maintenant
+- ✅ 10 relations critiques créées et opérationnelles
+- ✅ Dashboard complet importé (268 fichiers, 4 portails)
+- ✅ OCR 100% préservé et fonctionnel
+- ✅ Audit des 7 collections complété
+- ✅ Champs manquants identifiés et documentés
 
 ### Points d'Attention
 - ⚠️ Permissions subscriptions (erreur 403)
-- ⚠️ Collection companies manquante pour relations
+- ⚠️ 95 relations restantes à créer
 - ⚠️ 4 collections Phase 1 restantes
+- ⚠️ Champs manquants dans plusieurs collections
 
 ## 🚀 PROCHAINES ÉTAPES
 

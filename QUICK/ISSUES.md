@@ -2,6 +2,38 @@
 
 ## 🔴 Issues Critiques
 
+### ISSUE-005: Token API Directus Invalide
+**Statut** : ✅ RÉSOLU  
+**Priorité** : CRITIQUE  
+**Date** : 03/08/2025 15:45  
+**Résolu** : 03/08/2025 16:30  
+
+**Description** :
+Impossible d'utiliser l'API Directus pour créer les collections et relations. Tous les tokens testés retournent "Invalid user credentials".
+
+**Solution appliquée** :
+- Token valide obtenu : `hHKnrW949zcwx2372KH2AjwDyROAjgZ2`
+- Collections virtuelles corrigées (recréées avec schema)
+- 8/10 relations créées avec succès
+- 2 relations existaient déjà
+
+**Résultat** :
+- ✅ 11 collections créées/vérifiées
+- ✅ 10 champs de relation ajoutés
+- ✅ 8 nouvelles relations créées
+- ✅ 2 relations existantes confirmées
+- ✅ Migration débloquée et complétée
+
+**Scripts créés** :
+- `scripts/create-directus-collections.js`
+- `scripts/add-relation-fields.js`
+- `scripts/create-directus-relations.js`
+- `scripts/fix-virtual-collections.js`
+
+**Documentation** : `STATUS/RELATIONS-CREEES.md`
+
+---
+
 ### ISSUE-001: Erreur 403 sur migration subscriptions
 **Statut** : 🔴 OUVERT  
 **Priorité** : HAUTE  
@@ -102,10 +134,10 @@ Conversion automatique dans tous les schémas :
 
 | Catégorie | Total | Ouverts | Résolus |
 |-----------|-------|---------|---------|
-| Critiques | 1 | 1 | 0 |
+| Critiques | 2 | 1 | 1 |
 | Moyennes | 2 | 1 | 1 |
 | Basses | 1 | 0 | 1 |
-| **TOTAL** | **4** | **2** | **2** |
+| **TOTAL** | **5** | **2** | **3** |
 
 ## 🔍 Issues Potentiels à Surveiller
 

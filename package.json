@@ -1,0 +1,37 @@
+{
+  "name": "directus-unified-platform",
+  "version": "1.0.0",
+  "description": "Unified platform for Directus migration and dashboard",
+  "main": "index.js",
+  "scripts": {
+    "directus:start": "docker-compose up -d",
+    "directus:stop": "docker-compose down",
+    "directus:logs": "docker-compose logs -f directus",
+    "directus:reset": "docker-compose down -v && docker-compose up -d",
+    "directus:create-collections": "node directus/scripts/create-collections.js",
+    "migrate:test-connections": "node migration/scripts/test-connections.js",
+    "migrate:analyze": "node migration/scripts/analyze-notion-bases.js",
+    "migrate:execute": "node migration/scripts/execute-migration.js",
+    "migrate:content-calendar": "node migration/scripts/migrate-content-calendar.js",
+    "migrate:compliance": "node migration/scripts/migrate-compliance.js",
+    "migrate:talents": "node migration/scripts/migrate-talents.js",
+    "migrate:batch-simple": "node migration/scripts/batch-simple-migrations.js",
+    "migrate:batch-all": "node migration/scripts/batch-simple-migrations.js",
+    "dashboard:dev": "cd dashboard && npm run dev",
+    "dashboard:build": "cd dashboard && npm run build",
+    "dashboard:install": "cd dashboard && npm install",
+    "setup": "npm install && npm run dashboard:install && npm run directus:start",
+    "dev": "concurrently \"npm:directus:start\" \"npm:dashboard:dev\""
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "axios": "^1.7.5",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.4.5",
+    "ora": "^5.4.1",
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
+}

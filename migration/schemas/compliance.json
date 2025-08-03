@@ -1,0 +1,499 @@
+{
+  "collection": "compliance",
+  "meta": {
+    "collection": "compliance",
+    "icon": "gavel",
+    "note": "Compliance and regulatory requirements from DB-COMPLIANCE",
+    "display_template": "{{title}} - {{status}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": null,
+    "archive_field": null,
+    "archive_app_filter": true,
+    "archive_value": null,
+    "unarchive_value": null,
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#FF5722"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "compliance",
+    "comment": "Compliance and regulatory requirements migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Compliance requirement title"
+        },
+        "required": true,
+        "readonly": false,
+        "hidden": false,
+        "field": "title",
+        "display": "formatted-value",
+        "display_options": {
+          "font": "sans-serif",
+          "bold": true
+        },
+        "validation": {
+          "_and": [
+            {
+              "_nnull": true
+            }
+          ]
+        },
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "compliance_type",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "GDPR",
+              "value": "gdpr"
+            },
+            {
+              "text": "Legal",
+              "value": "legal"
+            },
+            {
+              "text": "Tax",
+              "value": "tax"
+            },
+            {
+              "text": "Security",
+              "value": "security"
+            },
+            {
+              "text": "Quality",
+              "value": "quality"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "GDPR",
+              "value": "gdpr",
+              "background": "#3F51B5",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Legal",
+              "value": "legal",
+              "background": "#9C27B0",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Tax",
+              "value": "tax",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Security",
+              "value": "security",
+              "background": "#F44336",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Quality",
+              "value": "quality",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "legal",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Compliant",
+              "value": "compliant"
+            },
+            {
+              "text": "Non-Compliant",
+              "value": "non_compliant"
+            },
+            {
+              "text": "In Progress",
+              "value": "in_progress"
+            },
+            {
+              "text": "Under Review",
+              "value": "review"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Compliant",
+              "value": "compliant",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Non-Compliant",
+              "value": "non_compliant",
+              "background": "#F44336",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "In Progress",
+              "value": "in_progress",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Under Review",
+              "value": "review",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "review",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "due_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "required": false,
+        "note": "Compliance deadline"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "responsible_id",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "required": false,
+        "note": "Person responsible for compliance"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "description",
+      "type": "text",
+      "meta": {
+        "interface": "input-rich-text-html",
+        "options": {
+          "toolbar": [
+            "bold",
+            "italic",
+            "underline",
+            "removeformat",
+            "bullist",
+            "numlist",
+            "blockquote",
+            "link",
+            "unlink",
+            "code",
+            "fullscreen"
+          ]
+        },
+        "width": "full",
+        "required": false,
+        "note": "Detailed description of compliance requirement"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "documents",
+      "type": "alias",
+      "meta": {
+        "interface": "files",
+        "special": ["files"],
+        "width": "full",
+        "required": false,
+        "note": "Related compliance documents"
+      }
+    },
+    {
+      "field": "last_audit_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "required": false,
+        "note": "Date of last compliance audit"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "next_audit_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "required": false,
+        "note": "Date of next scheduled audit"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "risk_level",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Low",
+              "value": "low"
+            },
+            {
+              "text": "Medium",
+              "value": "medium"
+            },
+            {
+              "text": "High",
+              "value": "high"
+            },
+            {
+              "text": "Critical",
+              "value": "critical"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Low",
+              "value": "low",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Medium",
+              "value": "medium",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "High",
+              "value": "high",
+              "background": "#FF5722",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Critical",
+              "value": "critical",
+              "background": "#F44336",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "medium",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "audit_log",
+      "type": "json",
+      "meta": {
+        "interface": "input-code",
+        "options": {
+          "language": "json",
+          "template": "[]"
+        },
+        "display": "raw",
+        "width": "full",
+        "required": false,
+        "note": "Audit trail and compliance history",
+        "hidden": false
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "notion_id",
+        "note": "Original Notion page ID"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true,
+        "field": "sort"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

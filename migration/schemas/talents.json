@@ -1,0 +1,522 @@
+{
+  "collection": "talents",
+  "meta": {
+    "collection": "talents",
+    "icon": "people",
+    "note": "Talents and human resources from DB-TALENTS",
+    "display_template": "{{full_name}} - {{role}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": null,
+    "archive_field": "status",
+    "archive_app_filter": true,
+    "archive_value": "inactive",
+    "unarchive_value": "active",
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#673AB7"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "talents",
+    "comment": "Talents and human resources migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "full_name",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Full name"
+        },
+        "required": true,
+        "readonly": false,
+        "hidden": false,
+        "field": "full_name",
+        "display": "formatted-value",
+        "display_options": {
+          "font": "sans-serif",
+          "bold": true
+        },
+        "validation": {
+          "_and": [
+            {
+              "_nnull": true
+            }
+          ]
+        },
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "role",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Job title or role"
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "skills",
+      "type": "json",
+      "meta": {
+        "interface": "tags",
+        "display": "labels",
+        "width": "full",
+        "required": false,
+        "note": "Skills and competencies"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "level",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Junior",
+              "value": "junior"
+            },
+            {
+              "text": "Mid-Level",
+              "value": "mid"
+            },
+            {
+              "text": "Senior",
+              "value": "senior"
+            },
+            {
+              "text": "Expert",
+              "value": "expert"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Junior",
+              "value": "junior",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Mid-Level",
+              "value": "mid",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Senior",
+              "value": "senior",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Expert",
+              "value": "expert",
+              "background": "#9C27B0",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "mid",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "department",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Technology",
+              "value": "tech"
+            },
+            {
+              "text": "Marketing",
+              "value": "marketing"
+            },
+            {
+              "text": "Sales",
+              "value": "sales"
+            },
+            {
+              "text": "Operations",
+              "value": "operations"
+            },
+            {
+              "text": "Finance",
+              "value": "finance"
+            },
+            {
+              "text": "Human Resources",
+              "value": "hr"
+            },
+            {
+              "text": "Legal",
+              "value": "legal"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "tech",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Active",
+              "value": "active"
+            },
+            {
+              "text": "Inactive",
+              "value": "inactive"
+            },
+            {
+              "text": "Freelance",
+              "value": "freelance"
+            },
+            {
+              "text": "Alumni",
+              "value": "alumni"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Active",
+              "value": "active",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Inactive",
+              "value": "inactive",
+              "background": "#9E9E9E",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Freelance",
+              "value": "freelance",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Alumni",
+              "value": "alumni",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "active",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "start_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "required": false,
+        "note": "Start date with the company"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "manager_id",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "required": false,
+        "note": "Direct manager (self-referencing)"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "talents",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "location",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Office location or remote"
+        },
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "email@example.com"
+        },
+        "validation": {
+          "_and": [
+            {
+              "_regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+            }
+          ]
+        },
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "phone",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "+1234567890"
+        },
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 50
+      }
+    },
+    {
+      "field": "certifications",
+      "type": "json",
+      "meta": {
+        "interface": "list",
+        "options": {
+          "template": "{{name}} - {{date}}"
+        },
+        "display": "raw",
+        "width": "full",
+        "required": false,
+        "note": "Professional certifications"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "performance_rating",
+      "type": "decimal",
+      "meta": {
+        "interface": "slider",
+        "options": {
+          "min": 0,
+          "max": 5,
+          "step": 0.5
+        },
+        "display": "rating",
+        "width": "half",
+        "required": false,
+        "note": "Performance rating (0-5)"
+      },
+      "schema": {
+        "is_nullable": true,
+        "numeric_precision": 2,
+        "numeric_scale": 1
+      }
+    },
+    {
+      "field": "salary_range",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "masked": true
+        },
+        "width": "half",
+        "required": false,
+        "note": "Salary range (confidential)",
+        "hidden": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 100
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "notion_id",
+        "note": "Original Notion page ID"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true,
+        "field": "sort"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

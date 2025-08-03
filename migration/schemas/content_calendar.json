@@ -1,0 +1,458 @@
+{
+  "collection": "content_calendar",
+  "meta": {
+    "collection": "content_calendar",
+    "icon": "calendar_month",
+    "note": "Content publishing calendar from DB-CONTENT-CALENDAR",
+    "display_template": "{{title}} - {{publish_date}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": null,
+    "archive_field": "status",
+    "archive_app_filter": true,
+    "archive_value": "archived",
+    "unarchive_value": "draft",
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#4CAF50"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "content_calendar",
+    "comment": "Content publishing calendar migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Enter content title"
+        },
+        "required": true,
+        "readonly": false,
+        "hidden": false,
+        "field": "title",
+        "display": "formatted-value",
+        "display_options": {
+          "font": "sans-serif",
+          "bold": true
+        },
+        "validation": {
+          "_and": [
+            {
+              "_nnull": true
+            }
+          ]
+        },
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "content_type",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Blog Post",
+              "value": "post"
+            },
+            {
+              "text": "Story",
+              "value": "story"
+            },
+            {
+              "text": "Reel",
+              "value": "reel"
+            },
+            {
+              "text": "Video",
+              "value": "video"
+            },
+            {
+              "text": "Article",
+              "value": "article"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Blog Post",
+              "value": "post",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Story",
+              "value": "story",
+              "background": "#9C27B0",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Reel",
+              "value": "reel",
+              "background": "#E91E63",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Video",
+              "value": "video",
+              "background": "#F44336",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Article",
+              "value": "article",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "post",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Draft",
+              "value": "draft"
+            },
+            {
+              "text": "Scheduled",
+              "value": "scheduled"
+            },
+            {
+              "text": "Published",
+              "value": "published"
+            },
+            {
+              "text": "Archived",
+              "value": "archived"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Draft",
+              "value": "draft",
+              "background": "#9E9E9E",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Scheduled",
+              "value": "scheduled",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Published",
+              "value": "published",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Archived",
+              "value": "archived",
+              "background": "#607D8B",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "draft",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "publish_date",
+      "type": "datetime",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "platform",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Instagram",
+              "value": "instagram"
+            },
+            {
+              "text": "LinkedIn",
+              "value": "linkedin"
+            },
+            {
+              "text": "Twitter/X",
+              "value": "twitter"
+            },
+            {
+              "text": "Blog",
+              "value": "blog"
+            },
+            {
+              "text": "YouTube",
+              "value": "youtube"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 50
+      }
+    },
+    {
+      "field": "content_text",
+      "type": "text",
+      "meta": {
+        "interface": "input-rich-text-html",
+        "options": {
+          "toolbar": [
+            "bold",
+            "italic",
+            "underline",
+            "removeformat",
+            "bullist",
+            "numlist",
+            "blockquote",
+            "link",
+            "customLink",
+            "unlink",
+            "customImage",
+            "customMedia",
+            "table",
+            "code",
+            "fullscreen"
+          ]
+        },
+        "width": "full",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "media_urls",
+      "type": "json",
+      "meta": {
+        "interface": "list",
+        "options": {
+          "template": "{{url}}"
+        },
+        "display": "raw",
+        "width": "full",
+        "required": false,
+        "note": "List of media URLs (images, videos)"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "hashtags",
+      "type": "json",
+      "meta": {
+        "interface": "tags",
+        "display": "labels",
+        "width": "full",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "author_id",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "performance_metrics",
+      "type": "json",
+      "meta": {
+        "interface": "input-code",
+        "options": {
+          "language": "json",
+          "template": "{\n  \"views\": 0,\n  \"likes\": 0,\n  \"shares\": 0,\n  \"comments\": 0,\n  \"engagement_rate\": 0\n}"
+        },
+        "display": "raw",
+        "width": "half",
+        "required": false,
+        "note": "Performance metrics (views, likes, shares, etc.)"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "notion_id",
+        "note": "Original Notion page ID"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true,
+        "field": "sort"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "width": "half",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "options": {
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "display": "user",
+        "readonly": true,
+        "hidden": true,
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # 📊 STATUT MIGRATION : Notion → Directus
 
-**Dernière mise à jour**: 2025-08-03 13:30 UTC  
+**Dernière mise à jour**: 2025-08-03 13:35 UTC  
 **Progression globale**: 3.2% (2/62 bases migrées)
 
 ## 🎯 RÉSUMÉ EXÉCUTIF
@@ -214,6 +214,11 @@
 - **13:30** : Migration réussie de permissions
   - ✅ 3 entrées migrées (100% de succès)
   - ✅ Durée : 1 seconde
+- **13:35** : Nouveaux développements détectés
+  - 🆕 Scripts de migration batch créés
+  - 🆕 Schémas JSON pour 3 collections
+  - 🆕 Package.json avec scripts npm
+  - 🚀 Prêt pour migrations en batch
 
 ### Prochaines étapes
 1. ✅ Migration time_tracking COMPLÉTÉE

@@ -1,14 +1,14 @@
 # 📊 STATUT MIGRATION : Notion → Directus
 
-**Dernière mise à jour**: 2025-08-03 04:00 UTC  
-**Progression globale**: 0% (0/62 bases migrées)
+**Dernière mise à jour**: 2025-08-03 11:58 UTC  
+**Progression globale**: 1.6% (1/62 bases en cours)
 
 ## 🎯 RÉSUMÉ EXÉCUTIF
 
 | Métrique | Statut | Cible |
 |----------|--------|-------|
 | Bases migrées | 0/62 | 100% |
-| Collections créées | 13/48 | 100% |
+| Collections créées | 14/48 | 100% |
 | Relations recréées | 0/105 | 100% |
 | Tests passés | 0/156 | 100% |
 | Performance | N/A | <100ms |
@@ -21,13 +21,13 @@
 - [x] Documentation complète créée
 - [x] Analyse des 62 bases Notion
 - [x] Mapping 62→48 défini
-- [ ] Scripts de migration créés
-- [ ] Environnements configurés
+- [x] Scripts de migration créés (time_tracking)
+- [x] Environnements configurés
 
 ### ⏳ PHASE 1 : BASES SIMPLES (5-9 août)
 | Collection | Base Notion | Props | Statut | Notes |
 |------------|-------------|-------|--------|-------|
-| time_tracking | DB-TIME-TRACKING | 12 | 🔴 À faire | |
+| time_tracking | DB-TIME-TRACKING | 12 | 🟡 En cours | Collection créée, script prêt |
 | permissions | DB-PERMISSIONS-ACCÈS | 11 | 🔴 À faire | |
 | content_calendar | DB-CONTENT-CALENDAR | 11 | 🔴 À faire | |
 | compliance | DB-COMPLIANCE | 11 | 🔴 À faire | |
@@ -185,3 +185,23 @@
 *Document de suivi en temps réel*  
 *Mise à jour : À chaque migration de collection*  
 *Revue : Quotidienne durant les phases actives*
+
+
+## 📝 JOURNAL DES ACTIVITÉS
+
+### 2025-08-03
+- **11:45** : Synchronisation avec GitHub (main branch)
+- **11:50** : Création collection `time_tracking` dans Directus
+  - ✅ 17 champs créés (12 métier + 5 système)
+  - ✅ Script de création : `create-time-tracking-collection.js`
+- **11:55** : Création script de migration `migrate-time-tracking.js`
+  - Extraction Notion
+  - Transformation des données
+  - Chargement dans Directus
+  - Validation incluse
+- **11:58** : Mise à jour documentation STATUS.md
+
+### Prochaines étapes
+1. Tester le script de migration avec données réelles
+2. Valider les données migrées
+3. Passer à la collection suivante (permissions)

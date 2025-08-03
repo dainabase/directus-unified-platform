@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Commercial - Espace Revendeur</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-revendeur">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <!-- Le contenu sera chargé dynamiquement -->
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">
+                                Gestion commerciale
+                            </div>
+                            <h2 class="page-title">
+                                Pipeline Commercial
+                            </h2>
+                            <div class="text-muted mt-1">
+                                Valeur totale du pipeline : <strong>CHF 2'300'000</strong>
+                            </div>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <button class="btn btn-white" onclick="toggleFilters()">
+                                    <i class="ti ti-filter icon"></i>
+                                    Filtres
+                                </button>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-white active" onclick="setView('kanban')">
+                                        <i class="ti ti-layout-kanban icon"></i>
+                                        Kanban
+                                    </button>
+                                    <button type="button" class="btn btn-white" onclick="setView('list')">
+                                        <i class="ti ti-list icon"></i>
+                                        Liste
+                                    </button>
+                                </div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-deal">
+                                    <i class="ti ti-plus icon"></i>
+                                    Nouveau deal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Section Filtres (collapsible) -->
+                    <div class="row" id="filtersSection" style="display: none;">
+                        <div class="col-12">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-2 col-sm-6">
+                                            <label class="form-label">Commercial</label>
+                                            <select class="form-select">
+                                                <option value="all" selected>Tous</option>
+                                                <option value="me">Moi</option>
+                                                <option value="team">Mon équipe</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 col-sm-6">
+                                            <label class="form-label">Période</label>
+                                            <select class="form-select">
+                                                <option value="month" selected>Ce mois</option>
+                                                <option value="quarter">Ce trimestre</option>
+                                                <option value="year">Cette année</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 col-sm-6">
+                                            <label class="form-label">Produit</label>
+                                            <select class="form-select">
+                                                <option value="all" selected>Tous</option>
+                                                <option value="license">Licences</option>
+                                                <option value="service">Services</option>
+                                                <option value="support">Support</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-6">
+                                            <label class="form-label">Montant (CHF)</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" placeholder="Min" value="0">
+                                                <span class="input-group-text">-</span>
+                                                <input type="number" class="form-control" placeholder="Max" value="500000">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12">
+                                            <label class="form-label">Tags</label>
+                                            <div class="form-selectgroup">
+                                                <label class="form-selectgroup-item">
+                                                    <input type="checkbox" name="tags" value="urgent" class="form-selectgroup-input">
+                                                    <span class="form-selectgroup-label">
+                                                        <span class="badge bg-red">Urgent</span>
+                                                    </span>
+                                                </label>
+                                                <label class="form-selectgroup-item">
+                                                    <input type="checkbox" name="tags" value="strategic" class="form-selectgroup-input">
+                                                    <span class="form-selectgroup-label">
+                                                        <span class="badge bg-purple">Stratégique</span>
+                                                    </span>
+                                                </label>
+                                                <label class="form-selectgroup-item">
+                                                    <input type="checkbox" name="tags" value="renewal" class="form-selectgroup-input">
+                                                    <span class="form-selectgroup-label">
+                                                        <span class="badge bg-blue">Renouvellement</span>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-primary" onclick="applyFilters()">
+                                            <i class="ti ti-check icon"></i>
+                                            Appliquer
+                                        </button>
+                                        <button class="btn btn-link" onclick="resetFilters()">
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vue Kanban (défaut) -->
+                    <div id="kanbanView">
+                        <div class="pipeline-board">
+                            <!-- Stage 1: Prospect -->
+                            <div class="pipeline-stage">
+                                <div class="pipeline-stage-header">
+                                    <div>
+                                        <h4 class="mb-1">Prospect</h4>
+                                        <div class="text-muted">
+                                            <strong>45</strong> deals • CHF 890k
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-ghost-dark btn-icon">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="pipeline-stage-content" id="stage-prospect" data-stage="prospect">
+                                    <!-- Deal 1 -->
+                                    <div class="deal-card" data-deal-id="1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1">TechCorp SA</h4>
+                                            <span class="badge bg-orange">CHF 45'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-blue-lt">Licence Enterprise</span>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <i class="ti ti-user icon me-1"></i>
+                                            Marie Dubois • 079 123 45 67
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-blue" style="width: 20%" role="progressbar">
+                                                    <span class="visually-hidden">20% probabilité</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small mt-1">Probabilité: 20%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="tags">
+                                                <span class="badge bg-red-lt">Urgent</span>
+                                                <span class="badge bg-muted">3 jours</span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Deal 2 -->
+                                    <div class="deal-card" data-deal-id="2">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1">StartupFood</h4>
+                                            <span class="badge bg-orange">CHF 28'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-green-lt">Service Pro</span>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <i class="ti ti-user icon me-1"></i>
+                                            Jean Martin • 078 987 65 43
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-blue" style="width: 10%" role="progressbar">
+                                                    <span class="visually-hidden">10% probabilité</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small mt-1">Probabilité: 10%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="tags">
+                                                <span class="badge bg-muted">7 jours</span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stage 2: Qualification -->
+                            <div class="pipeline-stage">
+                                <div class="pipeline-stage-header">
+                                    <div>
+                                        <h4 class="mb-1">Qualification</h4>
+                                        <div class="text-muted">
+                                            <strong>28</strong> deals • CHF 650k
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-ghost-dark btn-icon">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="pipeline-stage-content" id="stage-qualification" data-stage="qualification">
+                                    <!-- Deal 3 -->
+                                    <div class="deal-card" data-deal-id="3">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1">BankingCorp</h4>
+                                            <span class="badge bg-orange">CHF 85'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-blue-lt">Licence Enterprise</span>
+                                            <span class="badge bg-purple-lt">Support 24/7</span>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <i class="ti ti-user icon me-1"></i>
+                                            Sophie Laurent • 076 543 21 09
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-blue" style="width: 40%" role="progressbar">
+                                                    <span class="visually-hidden">40% probabilité</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small mt-1">Probabilité: 40%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="tags">
+                                                <span class="badge bg-green-lt">Décideur OK</span>
+                                                <span class="badge bg-muted">5 jours</span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stage 3: Proposition -->
+                            <div class="pipeline-stage">
+                                <div class="pipeline-stage-header">
+                                    <div>
+                                        <h4 class="mb-1">Proposition</h4>
+                                        <div class="text-muted">
+                                            <strong>15</strong> deals • CHF 480k
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-ghost-dark btn-icon">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="pipeline-stage-content" id="stage-proposition" data-stage="proposition">
+                                    <!-- Deal 4 -->
+                                    <div class="deal-card" data-deal-id="4">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1">MedTech Solutions</h4>
+                                            <span class="badge bg-orange">CHF 120'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-blue-lt">Licence Enterprise</span>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <i class="ti ti-user icon me-1"></i>
+                                            Pierre Leroy • 079 876 54 32
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-blue" style="width: 60%" role="progressbar">
+                                                    <span class="visually-hidden">60% probabilité</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small mt-1">Probabilité: 60%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="tags">
+                                                <span class="badge bg-purple-lt">Stratégique</span>
+                                                <span class="badge bg-yellow-lt">Budget validé</span>
+                                                <span class="badge bg-muted">12 jours</span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stage 4: Négociation -->
+                            <div class="pipeline-stage">
+                                <div class="pipeline-stage-header">
+                                    <div>
+                                        <h4 class="mb-1">Négociation</h4>
+                                        <div class="text-muted">
+                                            <strong>8</strong> deals • CHF 280k
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-ghost-dark btn-icon">
+                                        <i class="ti ti-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="pipeline-stage-content" id="stage-negotiation" data-stage="negotiation">
+                                    <!-- Deal 5 -->
+                                    <div class="deal-card" data-deal-id="5">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1">RetailChain AG</h4>
+                                            <span class="badge bg-orange">CHF 75'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-green-lt">Service Pro</span>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <i class="ti ti-user icon me-1"></i>
+                                            Anna Weber • 078 234 56 78
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-blue" style="width: 80%" role="progressbar">
+                                                    <span class="visually-hidden">80% probabilité</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-muted small mt-1">Probabilité: 80%</div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="tags">
+                                                <span class="badge bg-red-lt">Urgent</span>
+                                                <span class="badge bg-muted">2 jours</span>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                    <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stage 5: Fermé -->
+                            <div class="pipeline-stage">
+                                <div class="pipeline-stage-header">
+                                    <div>
+                                        <h4 class="mb-1">Fermé ce mois</h4>
+                                        <div class="text-muted">
+                                            <span class="text-success"><strong>12</strong> gagnés</span> • 
+                                            <span class="text-danger"><strong>3</strong> perdus</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pipeline-stage-content" id="stage-closed" data-stage="closed">
+                                    <!-- Deal gagné -->
+                                    <div class="deal-card border-success" data-deal-id="6">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1 text-success">
+                                                <i class="ti ti-trophy icon me-1"></i>
+                                                LogisticsPro
+                                            </h4>
+                                            <span class="badge bg-success">CHF 95'000</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="badge bg-blue-lt">Licence Enterprise</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            Fermé le 15 janvier 2024
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Deal perdu -->
+                                    <div class="deal-card border-danger opacity-75" data-deal-id="7">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h4 class="card-title mb-1 text-danger">
+                                                <i class="ti ti-x icon me-1"></i>
+                                                TechStartup
+                                            </h4>
+                                            <span class="badge bg-danger">CHF 25'000</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            Perdu: Budget insuffisant
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vue Liste (alternative) -->
+                    <div id="listView" style="display: none;">
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table table-vcenter card-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Entreprise</th>
+                                            <th>Contact</th>
+                                            <th>Montant</th>
+                                            <th>Étape</th>
+                                            <th>Probabilité</th>
+                                            <th>Créé le</th>
+                                            <th>Prochaine action</th>
+                                            <th>Commercial</th>
+                                            <th class="w-1"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="font-weight-medium">TechCorp SA</div>
+                                                <div class="text-muted small">Technologie</div>
+                                            </td>
+                                            <td>
+                                                <div>Marie Dubois</div>
+                                                <div class="text-muted small">079 123 45 67</div>
+                                            </td>
+                                            <td>
+                                                <strong>CHF 45'000</strong>
+                                            </td>
+                                            <td>
+                                                <select class="form-select form-select-sm">
+                                                    <option selected>Prospect</option>
+                                                    <option>Qualification</option>
+                                                    <option>Proposition</option>
+                                                    <option>Négociation</option>
+                                                    <option>Fermé Gagné</option>
+                                                    <option>Fermé Perdu</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar bg-blue" style="width: 20%" role="progressbar">
+                                                        <span class="visually-hidden">20%</span>
+                                                    </div>
+                                                </div>
+                                                <small>20%</small>
+                                            </td>
+                                            <td>15/01/2024</td>
+                                            <td>
+                                                <span class="badge bg-yellow-lt">Appel découverte</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Jean+Dupont)"></span>
+                                                    Jean D.
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-list flex-nowrap">
+                                                    <a href="#" class="btn btn-white btn-sm">
+                                                        Voir
+                                                    </a>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-white btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                                            Actions
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="#">Éditer</a></li>
+                                                            <li><a class="dropdown-item" href="#">Dupliquer</a></li>
+                                                            <li><a class="dropdown-item" href="#">Historique</a></li>
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- Plus de lignes... -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal nouveau deal -->
+    <div class="modal modal-blur fade" id="modal-new-deal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau deal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label class="form-label required">Entreprise</label>
+                            <input type="text" class="form-control" placeholder="Nom de l'entreprise">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label required">Contact principal</label>
+                            <input type="text" class="form-control" placeholder="Prénom Nom">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" placeholder="email@entreprise.ch">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" placeholder="079 xxx xx xx">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label class="form-label required">Montant estimé (CHF)</label>
+                            <input type="number" class="form-control" placeholder="50000">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Produit/Service</label>
+                            <select class="form-select">
+                                <option>Licence Enterprise</option>
+                                <option>Licence Business</option>
+                                <option>Service Pro</option>
+                                <option>Support 24/7</option>
+                                <option>Formation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Étape initiale</label>
+                        <select class="form-select">
+                            <option selected>Prospect</option>
+                            <option>Qualification</option>
+                            <option>Proposition</option>
+                            <option>Négociation</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" rows="3" placeholder="Informations complémentaires..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        <div class="form-selectgroup">
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="tags" value="urgent" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Urgent</span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="tags" value="strategic" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Stratégique</span>
+                            </label>
+                            <label class="form-selectgroup-item">
+                                <input type="checkbox" name="tags" value="renewal" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label">Renouvellement</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-plus icon"></i>
+                        Créer le deal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Sortable.js pour drag & drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/pipeline-crm.js"></script>
+    <script src="../assets/js/pipeline-notion.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'revendeur') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('pipeline');
+            
+            // Initialiser le pipeline
+            if (typeof PipelineManager !== 'undefined') {
+                window.pipelineManager = new PipelineManager();
+            }
+        });
+        
+        // Toggle filtres
+        function toggleFilters() {
+            const filtersSection = document.getElementById('filtersSection');
+            filtersSection.style.display = filtersSection.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Changer de vue
+        function setView(view) {
+            if (view === 'kanban') {
+                document.getElementById('kanbanView').style.display = 'block';
+                document.getElementById('listView').style.display = 'none';
+            } else {
+                document.getElementById('kanbanView').style.display = 'none';
+                document.getElementById('listView').style.display = 'block';
+            }
+            
+            // Update buttons
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.btn').classList.add('active');
+        }
+    </script>
+</body>
+</html>

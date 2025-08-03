@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre de Ressources - Espace Prestataire</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-prestataire">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Base de connaissances</li>
+                            </ol>
+                            <h2 class="page-title">
+                                Centre de Ressources
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-white">
+                                    <i class="ti ti-star icon"></i>
+                                    Mes favoris
+                                </a>
+                                <a href="#" class="btn btn-primary">
+                                    <i class="ti ti-plus icon"></i>
+                                    Proposer un article
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Barre de recherche -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-search icon"></i>
+                                        </span>
+                                        <input type="text" class="form-control form-control-lg" placeholder="Rechercher dans la base de connaissances..." id="knowledgeSearch">
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="badge bg-muted me-1">Ctrl+K</span>
+                                        <span class="text-muted">pour recherche rapide</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Catégories -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kb-category-card">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl bg-blue-lt">
+                                                <span class="emoji">📘</span>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Documentation Technique</h3>
+                                        <div class="text-muted mb-3">45 articles</div>
+                                        <div class="list-unstyled text-start">
+                                            <div class="mb-1">• Guidelines code</div>
+                                            <div class="mb-1">• API références</div>
+                                            <div class="mb-1">• Best practices</div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showCategory('technical')">
+                                            Explorer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kb-category-card">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl bg-pink-lt">
+                                                <span class="emoji">🎨</span>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Standards Design</h3>
+                                        <div class="text-muted mb-3">23 articles</div>
+                                        <div class="list-unstyled text-start">
+                                            <div class="mb-1">• Charte graphique</div>
+                                            <div class="mb-1">• UI patterns</div>
+                                            <div class="mb-1">• Accessibilité</div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showCategory('design')">
+                                            Explorer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kb-category-card">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl bg-green-lt">
+                                                <span class="emoji">📋</span>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Processus & Templates</h3>
+                                        <div class="text-muted mb-3">31 articles</div>
+                                        <div class="list-unstyled text-start">
+                                            <div class="mb-1">• Templates projets</div>
+                                            <div class="mb-1">• Checklists qualité</div>
+                                            <div class="mb-1">• Workflows</div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showCategory('process')">
+                                            Explorer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kb-category-card">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl bg-purple-lt">
+                                                <span class="emoji">🎓</span>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Formations</h3>
+                                        <div class="text-muted mb-3">12 vidéos</div>
+                                        <div class="list-unstyled text-start">
+                                            <div class="mb-1">• Onboarding</div>
+                                            <div class="mb-1">• Outils internes</div>
+                                            <div class="mb-1">• Certifications</div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showCategory('training')">
+                                            Explorer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section Populaires -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Articles populaires</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-blue">Top 5 ce mois</span>
+                                    </div>
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">1</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="knowledge-article.html?id=1" class="text-reset d-block">
+                                                    <div class="font-weight-medium">Guide complet React Hooks</div>
+                                                    <div class="text-muted small">Documentation Technique • 2.3k vues</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="rating">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <span class="text-muted small">(4.9)</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="badge-list">
+                                                    <span class="badge bg-blue-lt">React</span>
+                                                    <span class="badge bg-blue-lt">JavaScript</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">2</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="knowledge-article.html?id=2" class="text-reset d-block">
+                                                    <div class="font-weight-medium">Optimisation performances Node.js</div>
+                                                    <div class="text-muted small">Documentation Technique • 1.8k vues</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="rating">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-half-filled text-yellow"></i>
+                                                    <span class="text-muted small">(4.7)</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="badge-list">
+                                                    <span class="badge bg-green-lt">Node.js</span>
+                                                    <span class="badge bg-green-lt">Performance</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">3</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="knowledge-article.html?id=3" class="text-reset d-block">
+                                                    <div class="font-weight-medium">Checklist sécurité API</div>
+                                                    <div class="text-muted small">Processus & Templates • 1.5k vues</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="rating">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <span class="text-muted small">(5.0)</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="badge-list">
+                                                    <span class="badge bg-red-lt">Sécurité</span>
+                                                    <span class="badge bg-red-lt">API</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">4</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="knowledge-article.html?id=4" class="text-reset d-block">
+                                                    <div class="font-weight-medium">Guide accessibilité WCAG 2.1</div>
+                                                    <div class="text-muted small">Standards Design • 1.2k vues</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="rating">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star text-yellow"></i>
+                                                    <span class="text-muted small">(4.3)</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="badge-list">
+                                                    <span class="badge bg-purple-lt">Accessibilité</span>
+                                                    <span class="badge bg-purple-lt">UX</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">5</span>
+                                            </div>
+                                            <div class="col">
+                                                <a href="knowledge-article.html?id=5" class="text-reset d-block">
+                                                    <div class="font-weight-medium">Template estimation projet</div>
+                                                    <div class="text-muted small">Processus & Templates • 950 vues</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="rating">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-half-filled text-yellow"></i>
+                                                    <span class="text-muted small">(4.6)</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="badge-list">
+                                                    <span class="badge bg-orange-lt">Gestion</span>
+                                                    <span class="badge bg-orange-lt">Template</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section Récents -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ajouts récents</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-green">5 cette semaine</span>
+                                    </div>
+                                </div>
+                                <div class="row row-cards p-3">
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="card kb-article-card">
+                                            <div class="ribbon ribbon-top ribbon-bookmark bg-green">
+                                                <i class="ti ti-new-section icon"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h3 class="card-title">
+                                                    <a href="knowledge-article.html?id=6" class="text-reset">
+                                                        Introduction à TypeScript 5.0
+                                                    </a>
+                                                </h3>
+                                                <div class="text-muted mb-3">
+                                                    Découvrez les nouvelles fonctionnalités de TypeScript 5.0 et comment migrer vos projets existants.
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Pierre+Martin)"></span>
+                                                    <div>
+                                                        <div class="small">Pierre Martin</div>
+                                                        <div class="text-muted small">Il y a 2 jours</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-blue-lt">TypeScript</span>
+                                                    <span class="badge bg-blue-lt">JavaScript</span>
+                                                    <span class="text-muted small float-end">
+                                                        <i class="ti ti-clock icon"></i> 8 min
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="card kb-article-card">
+                                            <div class="ribbon ribbon-top ribbon-bookmark bg-green">
+                                                <i class="ti ti-new-section icon"></i>
+                                            </div>
+                                            <div class="card-body">
+                                                <h3 class="card-title">
+                                                    <a href="knowledge-article.html?id=7" class="text-reset">
+                                                        Docker best practices 2024
+                                                    </a>
+                                                </h3>
+                                                <div class="text-muted mb-3">
+                                                    Guide complet des meilleures pratiques Docker pour optimiser vos conteneurs en production.
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Sophie+Laurent)"></span>
+                                                    <div>
+                                                        <div class="small">Sophie Laurent</div>
+                                                        <div class="text-muted small">Il y a 3 jours</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-purple-lt">Docker</span>
+                                                    <span class="badge bg-purple-lt">DevOps</span>
+                                                    <span class="text-muted small float-end">
+                                                        <i class="ti ti-clock icon"></i> 12 min
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="card kb-article-card">
+                                            <div class="card-body">
+                                                <h3 class="card-title">
+                                                    <a href="knowledge-article.html?id=8" class="text-reset">
+                                                        Design System Figma
+                                                    </a>
+                                                </h3>
+                                                <div class="text-muted mb-3">
+                                                    Comment créer et maintenir un design system efficace avec Figma et les design tokens.
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)"></span>
+                                                    <div>
+                                                        <div class="small">Marie Dubois</div>
+                                                        <div class="text-muted small">Il y a 5 jours</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <span class="badge bg-pink-lt">Design</span>
+                                                    <span class="badge bg-pink-lt">Figma</span>
+                                                    <span class="text-muted small float-end">
+                                                        <i class="ti ti-clock icon"></i> 15 min
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- MiniSearch pour la recherche -->
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.1.0/dist/umd/index.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/collaboration.js"></script>
+    
+    <script>
+        let miniSearch;
+        
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'prestataire') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('knowledge');
+            
+            // Initialiser la recherche
+            initKnowledgeSearch();
+            
+            // Raccourci clavier Ctrl+K
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('knowledgeSearch').focus();
+                }
+            });
+        });
+        
+        // Initialiser MiniSearch
+        function initKnowledgeSearch() {
+            miniSearch = new MiniSearch({
+                fields: ['title', 'content', 'tags', 'category'],
+                storeFields: ['title', 'category', 'url', 'excerpt'],
+                searchOptions: {
+                    boost: { title: 2 },
+                    fuzzy: 0.2
+                }
+            });
+            
+            // Données d'exemple
+            const articles = [
+                {
+                    id: 1,
+                    title: 'Guide complet React Hooks',
+                    content: 'Les hooks React permettent d\'utiliser l\'état et d\'autres fonctionnalités React sans écrire de classe...',
+                    category: 'Documentation Technique',
+                    tags: ['react', 'javascript', 'hooks'],
+                    url: 'knowledge-article.html?id=1',
+                    excerpt: 'Maîtrisez les React Hooks avec ce guide complet'
+                },
+                {
+                    id: 2,
+                    title: 'Optimisation performances Node.js',
+                    content: 'Découvrez comment optimiser vos applications Node.js pour obtenir des performances maximales...',
+                    category: 'Documentation Technique',
+                    tags: ['nodejs', 'performance', 'backend'],
+                    url: 'knowledge-article.html?id=2',
+                    excerpt: 'Techniques avancées d\'optimisation Node.js'
+                },
+                // Ajouter plus d'articles...
+            ];
+            
+            // Indexer les articles
+            miniSearch.addAll(articles);
+            
+            // Event listener pour la recherche
+            const searchInput = document.getElementById('knowledgeSearch');
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value;
+                
+                if (query.length > 2) {
+                    const results = miniSearch.search(query);
+                    displaySearchResults(results);
+                } else {
+                    hideSearchResults();
+                }
+            });
+        }
+        
+        // Afficher résultats de recherche
+        function displaySearchResults(results) {
+            console.log('Résultats:', results);
+            // Implémenter l'affichage des résultats
+        }
+        
+        // Masquer résultats
+        function hideSearchResults() {
+            // Implémenter
+        }
+        
+        // Afficher une catégorie
+        function showCategory(category) {
+            console.log('Afficher catégorie:', category);
+            // Rediriger vers une vue filtrée ou charger dynamiquement
+        }
+    </script>
+</body>
+</html>

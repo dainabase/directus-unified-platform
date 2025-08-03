@@ -19,7 +19,7 @@ const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 // Notion database ID for DB-CONTENT-CALENDAR
-const NOTION_DATABASE_ID = '22fadb953c6f8021a645c7e7e8e87532'; // From analysis
+const NOTION_DATABASE_ID = '22eadb953c6f8036bf76f7ebaa40aba2'; // From analysis
 
 // Initialize clients
 const notion = new NotionClient({ auth: NOTION_TOKEN });

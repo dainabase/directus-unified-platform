@@ -15,6 +15,7 @@
     "migrate:content-calendar": "node migration/scripts/migrate-content-calendar.js",
     "migrate:compliance": "node migration/scripts/migrate-compliance.js",
     "migrate:talents": "node migration/scripts/migrate-talents.js",
+    "migrate:talents-fixed": "node migration/scripts/migrate-talents-fixed.js",
     "migrate:batch-simple": "node migration/scripts/batch-simple-migrations.js",
     "migrate:batch-all": "node migration/scripts/batch-simple-migrations.js",
     "dashboard:dev": "cd dashboard && npm run dev",

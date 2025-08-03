@@ -289,22 +289,6 @@
       }
     },
     {
-      "field": "manager_id",
-      "type": "uuid",
-      "meta": {
-        "interface": "select-dropdown-m2o",
-        "special": ["m2o"],
-        "width": "half",
-        "required": false,
-        "note": "Direct manager (self-referencing)"
-      },
-      "schema": {
-        "is_nullable": true,
-        "foreign_key_table": "talents",
-        "foreign_key_column": "id"
-      }
-    },
-    {
       "field": "location",
       "type": "string",
       "meta": {

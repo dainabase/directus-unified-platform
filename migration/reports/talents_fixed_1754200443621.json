@@ -1,0 +1,17 @@
+{
+  "collection": "talents",
+  "source": "DB-TALENTS",
+  "timestamp": "2025-08-03T05:54:03.621Z",
+  "stats": {
+    "total": 3,
+    "migrated": 3,
+    "failed": 0,
+    "relations": 0
+  },
+  "validation": {
+    "passed": true,
+    "message": "All items migrated successfully"
+  },
+  "managerRelations": 0,
+  "errors": []
+}

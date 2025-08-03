@@ -19,7 +19,7 @@ const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 // Notion database ID for DB-TALENTS
-const NOTION_DATABASE_ID = '1133db953c6f80cf9703f9bb89e8cfbd'; // From analysis
+const NOTION_DATABASE_ID = '22eadb953c6f809d9845eb6f9ee659ee'; // From analysis
 
 // Initialize clients
 const notion = new NotionClient({ auth: NOTION_TOKEN });
@@ -230,10 +230,11 @@ class TalentsMigration {
 
     // Extract name
     const extractName = () => {
-      return getValue(props['Name']) || 
+      return getValue(props['Nom Complet']) || 
+             getValue(props['Name']) || 
              getValue(props['Full Name']) || 
-             getValue(props['Nom']) || 
-             getValue(props['Nom Complet']) ||
+             getValue(props['Nom']) ||
+             getValue(props['Candidate ID']) ||
              `${getValue(props['First Name']) || ''} ${getValue(props['Last Name']) || ''}`.trim() ||
              'Unknown';
     };
@@ -276,15 +277,15 @@ class TalentsMigration {
     // Transform to Directus format
     const transformed = {
       full_name: extractName(),
-      role: getValue(props['Role']) || getValue(props['Title']) || getValue(props['Poste']) || 'Employee',
+      role: getValue(props['Poste Visé']) || getValue(props['Role']) || getValue(props['Title']) || getValue(props['Poste']) || 'Employee',
       skills: extractSkills(),
       level: mapLevel(getValue(props['Level']) || getValue(props['Seniority']) || getValue(props['Niveau'])),
-      department: mapDepartment(getValue(props['Department']) || getValue(props['Département']) || getValue(props['Team'])),
-      status: mapStatus(getValue(props['Status']) || getValue(props['Statut'])),
-      start_date: getValue(props['Start Date']) || getValue(props['Date Embauche']) || getValue(props['Joined']),
+      department: mapDepartment(getValue(props['Département']) || getValue(props['Department']) || getValue(props['Team'])),
+      status: mapStatus(getValue(props['Statut Pipeline']) || getValue(props['Status']) || getValue(props['Statut'])),
+      start_date: getValue(props['Date Candidature']) || getValue(props['Start Date']) || getValue(props['Date Embauche']) || getValue(props['Joined']),
       location: getValue(props['Location']) || getValue(props['Office']) || getValue(props['Lieu']) || 'Remote',
       email: getValue(props['Email']) || getValue(props['Mail']),
-      phone: getValue(props['Phone']) || getValue(props['Téléphone']) || getValue(props['Mobile']),
+      phone: getValue(props['Téléphone']) || getValue(props['Phone']) || getValue(props['Mobile']),
       certifications: extractCertifications(),
       notion_id: notionItem.id,
       date_created: notionItem.created_time,

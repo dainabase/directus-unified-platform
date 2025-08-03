@@ -1,0 +1,30 @@
+{
+  "collection": "talents",
+  "source": "DB-TALENTS",
+  "timestamp": "2025-08-03T05:45:14.162Z",
+  "stats": {
+    "total": 3,
+    "migrated": 0,
+    "failed": 3,
+    "skipped": 0
+  },
+  "validation": {
+    "passed": false,
+    "message": "3 items failed to migrate"
+  },
+  "managerMappings": 0,
+  "errors": [
+    {
+      "title": "Emma Leclerc",
+      "error": "Maximum call stack size exceeded"
+    },
+    {
+      "title": "Thomas Dubois",
+      "error": "Maximum call stack size exceeded"
+    },
+    {
+      "title": "Sophie Martin",
+      "error": "Maximum call stack size exceeded"
+    }
+  ]
+}

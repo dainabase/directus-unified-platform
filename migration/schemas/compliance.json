@@ -266,17 +266,6 @@
       }
     },
     {
-      "field": "documents",
-      "type": "alias",
-      "meta": {
-        "interface": "files",
-        "special": ["files"],
-        "width": "full",
-        "required": false,
-        "note": "Related compliance documents"
-      }
-    },
-    {
       "field": "last_audit_date",
       "type": "date",
       "meta": {

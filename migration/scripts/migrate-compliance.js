@@ -19,7 +19,7 @@ const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
 
 // Notion database ID for DB-COMPLIANCE
-const NOTION_DATABASE_ID = '1133db953c6f80cfabe2fb2aa0f2c85e'; // From analysis
+const NOTION_DATABASE_ID = '22eadb953c6f80bab600c66795e256cb'; // From analysis
 
 // Initialize clients
 const notion = new NotionClient({ auth: NOTION_TOKEN });
@@ -241,12 +241,12 @@ class ComplianceMigration {
       transformed.responsible_id = null; // Will be handled in a separate user mapping phase
     }
 
-    // Handle document attachments
-    const documents = getValue(props['Documents']) || getValue(props['Attachments']) || getValue(props['Files']);
-    if (documents && documents.length > 0) {
-      // Store document URLs for later processing
-      transformed._document_urls = documents; // Temporary field for document migration
-    }
+    // Handle document attachments (commented out for now - alias fields need special handling)
+    // const documents = getValue(props['Documents']) || getValue(props['Attachments']) || getValue(props['Files']);
+    // if (documents && documents.length > 0) {
+    //   // Store document URLs for later processing
+    //   transformed._document_urls = documents; // Temporary field for document migration
+    // }
 
     // Build audit log from available data
     const auditLog = [];

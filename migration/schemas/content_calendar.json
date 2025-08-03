@@ -206,7 +206,7 @@
     },
     {
       "field": "publish_date",
-      "type": "datetime",
+      "type": "timestamp",
       "meta": {
         "interface": "datetime",
         "display": "datetime",

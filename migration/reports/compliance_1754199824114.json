@@ -1,0 +1,29 @@
+{
+  "collection": "compliance",
+  "source": "DB-COMPLIANCE",
+  "timestamp": "2025-08-03T05:43:44.114Z",
+  "stats": {
+    "total": 3,
+    "migrated": 0,
+    "failed": 3,
+    "skipped": 0
+  },
+  "validation": {
+    "passed": false,
+    "message": "3 items failed to migrate"
+  },
+  "errors": [
+    {
+      "title": "Untitled",
+      "error": "select \"compliance\".\"id\", \"compliance\".\"title\", \"compliance\".\"compliance_type\", \"compliance\".\"status\", \"compliance\".\"due_date\", \"compliance\".\"responsible_id\", \"compliance\".\"description\", \"compliance\".\"last_audit_date\", \"compliance\".\"next_audit_date\", \"compliance\".\"risk_level\", \"compliance\".\"audit_log\", \"compliance\".\"notion_id\", \"compliance\".\"sort\", \"compliance\".\"date_created\", \"compliance\".\"date_updated\", \"compliance\".\"user_created\", \"compliance\".\"user_updated\", \"compliance\".\"documents\" from \"compliance\" where \"compliance\".\"id\" = $1 order by \"compliance\".\"sort\" asc limit $2 - column compliance.documents does not exist"
+    },
+    {
+      "title": "Untitled",
+      "error": "select \"compliance\".\"id\", \"compliance\".\"title\", \"compliance\".\"compliance_type\", \"compliance\".\"status\", \"compliance\".\"due_date\", \"compliance\".\"responsible_id\", \"compliance\".\"description\", \"compliance\".\"last_audit_date\", \"compliance\".\"next_audit_date\", \"compliance\".\"risk_level\", \"compliance\".\"audit_log\", \"compliance\".\"notion_id\", \"compliance\".\"sort\", \"compliance\".\"date_created\", \"compliance\".\"date_updated\", \"compliance\".\"user_created\", \"compliance\".\"user_updated\", \"compliance\".\"documents\" from \"compliance\" where \"compliance\".\"id\" = $1 order by \"compliance\".\"sort\" asc limit $2 - column compliance.documents does not exist"
+    },
+    {
+      "title": "Untitled",
+      "error": "select \"compliance\".\"id\", \"compliance\".\"title\", \"compliance\".\"compliance_type\", \"compliance\".\"status\", \"compliance\".\"due_date\", \"compliance\".\"responsible_id\", \"compliance\".\"description\", \"compliance\".\"last_audit_date\", \"compliance\".\"next_audit_date\", \"compliance\".\"risk_level\", \"compliance\".\"audit_log\", \"compliance\".\"notion_id\", \"compliance\".\"sort\", \"compliance\".\"date_created\", \"compliance\".\"date_updated\", \"compliance\".\"user_created\", \"compliance\".\"user_updated\", \"compliance\".\"documents\" from \"compliance\" where \"compliance\".\"id\" = $1 order by \"compliance\".\"sort\" asc limit $2 - column compliance.documents does not exist"
+    }
+  ]
+}

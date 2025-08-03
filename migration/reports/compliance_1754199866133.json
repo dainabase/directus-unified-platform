@@ -1,0 +1,16 @@
+{
+  "collection": "compliance",
+  "source": "DB-COMPLIANCE",
+  "timestamp": "2025-08-03T05:44:26.133Z",
+  "stats": {
+    "total": 3,
+    "migrated": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "validation": {
+    "passed": true,
+    "message": "All items migrated successfully"
+  },
+  "errors": []
+}

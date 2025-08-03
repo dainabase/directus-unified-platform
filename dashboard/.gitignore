@@ -1,0 +1,182 @@
+# ========================================
+# Environment Variables
+# ========================================
+.env
+.env.local
+.env.production
+.env.*.local
+
+# ========================================
+# Dependencies
+# ========================================
+node_modules/
+bower_components/
+vendor/
+
+# ========================================
+# Logs
+# ========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ========================================
+# Runtime data
+# ========================================
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ========================================
+# Cache & Temporary files
+# ========================================
+.cache/
+.temp/
+.tmp/
+tmp/
+temp/
+*.tmp
+*.temp
+.sass-cache/
+.parcel-cache/
+
+# ========================================
+# Build outputs
+# ========================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+.serverless/
+.fusebox/
+*.min.js
+*.min.css
+
+# ========================================
+# IDE & Editor
+# ========================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.bak
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# ========================================
+# OS Files
+# ========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ========================================
+# Testing
+# ========================================
+coverage/
+.nyc_output/
+.grunt/
+*.lcov
+.coveralls.yml
+
+# ========================================
+# TypeScript
+# ========================================
+*.tsbuildinfo
+.tsc-cache/
+
+# ========================================
+# Database
+# ========================================
+*.sqlite
+*.sqlite3
+*.db
+data/
+
+# ========================================
+# Uploads & User content
+# ========================================
+uploads/
+public/uploads/
+storage/
+
+# ========================================
+# Security
+# ========================================
+*.pem
+*.key
+*.crt
+*.p12
+.env.vault
+secrets/
+private/
+
+# Twenty CRM Configuration
+twenty-mcp-config.json
+
+# ========================================
+# Backups
+# ========================================
+backups/
+*.backup
+*.bak
+*.old
+
+# ========================================
+# Project specific
+# ========================================
+# OCR temporary files
+portal-project/ocr-service/temp/
+portal-project/ocr-service/models/
+
+# Test user data (contains sensitive info)
+portal-project/server/test-users.json
+
+# Temporary modification logs
+portal-project/temp-*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Package lock files (optionnel - décommenter si souhaité)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ========================================
+# Documentation builds
+# ========================================
+docs/_build/
+site/
+
+# ========================================
+# Miscellaneous
+# ========================================
+.history/
+.cache-loader/
+*.orig
+.eslintcache
+.stylelintcache
+
+# Framework Tabler (submodule)
+tabler/

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Conversion PDF → Image pour OCR Vision</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .preview-box {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f8f9fa;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-box img {
+            max-width: 100%;
+            max-height: 600px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stats {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-top: 1rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            animation: spin 1s linear infinite;
+            font-size: 3rem;
+            color: #206bc4;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Test Conversion PDF → Image</h1>
+        <p class="text-muted">
+            Testez la conversion de votre fichier PDF en image pour OpenAI Vision.
+            La première page sera extraite et convertie en JPEG.
+        </p>
+        
+        <!-- Upload Section -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Sélectionner un PDF</h3>
+            </div>
+            <div class="card-body">
+                <input type="file" id="pdfInput" accept=".pdf" class="form-control mb-3">
+                
+                <div class="alert alert-info">
+                    <h4 class="alert-title">ℹ️ Informations importantes</h4>
+                    <ul class="mb-0">
+                        <li>Seule la première page sera convertie</li>
+                        <li>Taille maximale : 20MB</li>
+                        <li>Résolution optimisée pour OpenAI Vision (max 2048px)</li>
+                        <li>Format de sortie : JPEG 85% qualité</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <i class="ti ti-loader spinner"></i>
+            <h3>Conversion en cours...</h3>
+            <p class="text-muted">Extraction de la première page du PDF</p>
+        </div>
+        
+        <!-- Preview Section -->
+        <div class="preview-container" id="previewContainer" style="display: none;">
+            <!-- Original PDF (as canvas) -->
+            <div>
+                <h3>PDF Original (Page 1)</h3>
+                <div class="preview-box" id="pdfPreview">
+                    <span class="text-muted">Chargement...</span>
+                </div>
+                <div class="stats" id="pdfStats"></div>
+            </div>
+            
+            <!-- Converted Image -->
+            <div>
+                <h3>Image Convertie (pour Vision AI)</h3>
+                <div class="preview-box" id="imagePreview">
+                    <span class="text-muted">Chargement...</span>
+                </div>
+                <div class="stats" id="imageStats"></div>
+            </div>
+        </div>
+        
+        <!-- Test OCR Button -->
+        <div class="text-center mt-4" id="testSection" style="display: none;">
+            <button class="btn btn-primary btn-lg" onclick="testOCRVision()">
+                <i class="ti ti-brain me-2"></i>
+                Tester avec OpenAI Vision
+            </button>
+        </div>
+        
+        <!-- Results -->
+        <div class="card mt-4" id="resultsSection" style="display: none;">
+            <div class="card-header">
+                <h3 class="card-title">Résultats OCR Vision</h3>
+            </div>
+            <div class="card-body">
+                <pre id="ocrResults" class="bg-light p-3 rounded"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    
+    <!-- OCR Vision Module -->
+    <script src="assets/js/Superadmin/ocr-openai-vision.js"></script>
+    
+    <script>
+        let currentPDFFile = null;
+        let convertedImageBase64 = null;
+        
+        // Event listener pour l'upload
+        document.getElementById('pdfInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || file.type !== 'application/pdf') {
+                alert('Veuillez sélectionner un fichier PDF');
+                return;
+            }
+            
+            currentPDFFile = file;
+            await convertPDF(file);
+        });
+        
+        // Fonction de conversion PDF
+        async function convertPDF(file) {
+            console.log('📄 Début de la conversion PDF...');
+            
+            // Afficher le loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('previewContainer').style.display = 'none';
+            document.getElementById('testSection').style.display = 'none';
+            
+            try {
+                const startTime = performance.now();
+                
+                // Lire le fichier
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                
+                console.log(`📄 PDF chargé: ${pdf.numPages} pages`);
+                
+                // Obtenir la première page
+                const page = await pdf.getPage(1);
+                
+                // Calculer la taille optimale
+                const viewport = page.getViewport({ scale: 1.0 });
+                const scale = Math.min(2048 / viewport.width, 2048 / viewport.height, 2.0);
+                const scaledViewport = page.getViewport({ scale });
+                
+                console.log(`📐 Dimensions: ${viewport.width}x${viewport.height} → ${scaledViewport.width}x${scaledViewport.height}`);
+                
+                // Créer le canvas pour le rendu
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = scaledViewport.width;
+                canvas.height = scaledViewport.height;
+                
+                // Rendre la page
+                await page.render({
+                    canvasContext: context,
+                    viewport: scaledViewport
+                }).promise;
+                
+                // Afficher le canvas original
+                document.getElementById('pdfPreview').innerHTML = '';
+                const displayCanvas = canvas.cloneNode(true);
+                displayCanvas.getContext('2d').drawImage(canvas, 0, 0);
+                displayCanvas.style.maxWidth = '100%';
+                document.getElementById('pdfPreview').appendChild(displayCanvas);
+                
+                // Convertir en JPEG base64
+                const base64Full = canvas.toDataURL('image/jpeg', 0.85);
+                convertedImageBase64 = base64Full.split(',')[1];
+                
+                // Afficher l'image convertie
+                const img = document.createElement('img');
+                img.src = base64Full;
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('imagePreview').appendChild(img);
+                
+                // Calculer les statistiques
+                const conversionTime = performance.now() - startTime;
+                const imageSizeKB = Math.round(convertedImageBase64.length * 0.75 / 1024); // Base64 to bytes approximation
+                
+                // Afficher les stats
+                document.getElementById('pdfStats').innerHTML = `
+                    <strong>Fichier PDF:</strong> ${file.name}<br>
+                    <strong>Taille originale:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+                    <strong>Pages:</strong> ${pdf.numPages}<br>
+                    <strong>Dimensions originales:</strong> ${Math.round(viewport.width)} × ${Math.round(viewport.height)} px
+                `;
+                
+                document.getElementById('imageStats').innerHTML = `
+                    <strong>Format:</strong> JPEG (85% qualité)<br>
+                    <strong>Taille convertie:</strong> ~${imageSizeKB} KB<br>
+                    <strong>Dimensions finales:</strong> ${scaledViewport.width} × ${scaledViewport.height} px<br>
+                    <strong>Temps conversion:</strong> ${Math.round(conversionTime)} ms
+                `;
+                
+                // Afficher les résultats
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('previewContainer').style.display = 'grid';
+                document.getElementById('testSection').style.display = 'block';
+                
+                console.log('✅ Conversion terminée avec succès!');
+                
+                // Nettoyer la mémoire
+                canvas.width = 0;
+                canvas.height = 0;
+                
+            } catch (error) {
+                console.error('❌ Erreur conversion:', error);
+                alert(`Erreur lors de la conversion: ${error.message}`);
+                document.getElementById('loading').classList.remove('active');
+            }
+        }
+        
+        // Test avec OpenAI Vision
+        async function testOCRVision() {
+            if (!convertedImageBase64) {
+                alert('Aucune image convertie disponible');
+                return;
+            }
+            
+            const apiKey = localStorage.getItem('openai_api_key');
+            if (!apiKey) {
+                const key = prompt('Entrez votre clé API OpenAI:');
+                if (key) {
+                    localStorage.setItem('openai_api_key', key);
+                } else {
+                    return;
+                }
+            }
+            
+            try {
+                console.log('🧠 Test OCR avec Vision AI...');
+                
+                // Créer un blob à partir du base64
+                const byteCharacters = atob(convertedImageBase64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'image/jpeg' });
+                const file = new File([blob], 'converted-pdf.jpg', { type: 'image/jpeg' });
+                
+                // Utiliser le module OCR Vision
+                const ocr = new OCROpenAIVision();
+                await ocr.init();
+                
+                const result = await ocr.processDocument(file);
+                
+                // Afficher les résultats
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('ocrResults').textContent = JSON.stringify(result, null, 2);
+                
+                console.log('✅ OCR terminé:', result);
+                
+            } catch (error) {
+                console.error('❌ Erreur OCR:', error);
+                alert(`Erreur OCR: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

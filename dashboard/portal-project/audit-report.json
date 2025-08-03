@@ -1,0 +1,766 @@
+{
+  "conformFiles": [],
+  "nonConformFiles": [
+    {
+      "file": "./client/dashboard.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/document-preview.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/documents.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/finances.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/index.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/invoice-detail.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/payment.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/profile.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/project-detail.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./client/projects.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./forgot-password.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./index.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./login.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/calendar.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/dashboard.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/index.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/knowledge-article.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/knowledge.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/messages.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/mission-detail.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/missions.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/performance.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/profile.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/rewards.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./prestataire/tasks.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./register.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/client-detail.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/clients.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/commissions.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/dashboard.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/index.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": false
+      },
+      "totalScore": 1,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/leads.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/marketing.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/pipeline.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": true,
+          "flags": true,
+          "payments": true,
+          "vendors": true,
+          "icons": false
+        },
+        "jetbrainsMono": true,
+        "darkModeToggle": false,
+        "cardStamps": true,
+        "doctype": true,
+        "bodyTheme": true,
+        "roleBadge": true
+      },
+      "totalScore": 9,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./revendeur/reports.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    },
+    {
+      "file": "./test-pagination.html",
+      "conformity": {
+        "cdnTabler": {
+          "css": false,
+          "flags": false,
+          "payments": false,
+          "vendors": false,
+          "icons": false
+        },
+        "jetbrainsMono": false,
+        "darkModeToggle": false,
+        "cardStamps": false,
+        "doctype": true,
+        "bodyTheme": false,
+        "roleBadge": true
+      },
+      "totalScore": 2,
+      "maxScore": 11,
+      "isConform": false
+    }
+  ],
+  "summary": {
+    "total": 36,
+    "conform": 0,
+    "nonConform": 36
+  }
+}

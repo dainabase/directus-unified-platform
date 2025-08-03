@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Mes Commissions - Espace Revendeur</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    
+    <!-- ApexCharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .commission-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--tblr-primary);
+        }
+        
+        .sale-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .commission-rate {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+        
+        .projection-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .revendeur-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .revendeur-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .commission-summary {
+            background: linear-gradient(135deg, var(--tblr-orange) 0%, var(--tblr-orange-darken) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .commission-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .commission-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .progress-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/revendeur/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-orange">REVENDEUR</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-orange-lt">RV</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Revendeur Expert</div>
+                                <div class="mt-1 small text-secondary">CRM & Ventes</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="leads.html" class="dropdown-item">
+                                <i class="ti ti-users me-2"></i>
+                                Mes leads
+                            </a>
+                            <a href="pipeline.html" class="dropdown-item">
+                                <i class="ti ti-chart-line me-2"></i>
+                                Pipeline
+                            </a>
+                            <a href="reports.html" class="dropdown-item">
+                                <i class="ti ti-chart-bar me-2"></i>
+                                Rapports
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="leads.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-users"></i>
+                                            </span>
+                                            <span class="nav-link-title">Leads</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pipeline.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-line"></i>
+                                            </span>
+                                            <span class="nav-link-title">Pipeline</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="commissions.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-currency-dollar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Commissions</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="reports.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-bar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Rapports</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Espace Revendeur</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-currency-dollar me-2"></i>
+                                Mes Commissions
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="commission-summary">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="text-white-50 small">Solde actuel</div>
+                                        <div class="h1 mb-0 commission-amount text-white">CHF 28'450</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="text-end">
+                                            <div class="text-white-50 small">Prochain versement</div>
+                                            <div class="h3 mb-0 text-white">15 Mars 2024</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Stats row -->
+                    <div class="row row-deck row-cards mb-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Commissions YTD</div>
+                                        <div class="ms-auto lh-1">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="#">Voir détail</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 commission-amount">CHF 28'450</div>
+                                        <div class="me-auto">
+                                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-trending-up me-1"></i>
+                                                +18%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-secondary mt-1">vs 2023</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-chart-bar"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Ce trimestre</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 commission-amount">CHF 12'300</div>
+                                    </div>
+                                    <div class="text-secondary mt-1">Q1 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-calendar-month"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Ce mois</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 commission-amount">CHF 4'850</div>
+                                    </div>
+                                    <div class="text-secondary mt-1">Février 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-clock"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">En attente validation</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 commission-amount">CHF 2'100</div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        <span class="metric-value">3</span> transactions
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Graphiques -->
+                    <div class="row row-cards mb-3">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-chart-line"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-trending-up me-2"></i>
+                                        Évolution mensuelle
+                                    </h3>
+                                    <div class="card-actions">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-white active">2024</button>
+                                            <button type="button" class="btn btn-sm btn-white">2023</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-commissions-monthly" style="height: 300px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-chart-pie"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-package me-2"></i>
+                                        Répartition par produit
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-commissions-products" style="height: 260px;"></div>
+                                    <div class="mt-3">
+                                        <div class="commission-breakdown">
+                                            <div class="commission-line">
+                                                <span>Licences</span>
+                                                <strong class="commission-amount">CHF 15'420</strong>
+                                            </div>
+                                            <div class="commission-line">
+                                                <span>Services</span>
+                                                <strong class="commission-amount">CHF 8'730</strong>
+                                            </div>
+                                            <div class="commission-line">
+                                                <span>Support</span>
+                                                <strong class="commission-amount">CHF 4'300</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Comparaison vs objectifs -->
+                    <div class="card mb-3">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-yellow">
+                                <i class="ti ti-target"></i>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-target me-2"></i>
+                                Performance vs Objectifs
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Objectif annuel : <span class="commission-amount">CHF 120'000</span></h4>
+                                    <div class="progress progress-lg mb-3">
+                                        <div class="progress-bar bg-green" style="width: 23.7%" role="progressbar">
+                                            <span class="progress-bar-label">23.7%</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted commission-rate">
+                                        CHF 28'450 / 120'000 • Reste CHF 91'550
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Projection fin d'année</h4>
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="projection-value text-red">CHF 85k</div>
+                                            <div class="text-muted small">Pessimiste</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="projection-value text-orange">CHF 115k</div>
+                                            <div class="text-muted small">Réaliste</div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="projection-value text-green">CHF 145k</div>
+                                            <div class="text-muted small">Optimiste</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableau détaillé -->
+                    <div class="card mb-3">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-orange">
+                                <i class="ti ti-table"></i>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-list me-2"></i>
+                                Détail des commissions
+                            </h3>
+                            <div class="card-actions">
+                                <div class="btn-list">
+                                    <div class="dropdown">
+                                        <button class="btn btn-white btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                            <i class="ti ti-filter me-1"></i>
+                                            Filtrer
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-list me-2"></i>Toutes
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-check me-2"></i>Validées
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-clock me-2"></i>En attente
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="ti ti-coin me-2"></i>Payées
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-white btn-sm">
+                                        <i class="ti ti-file-export me-1"></i>
+                                        Exporter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table table-striped" id="commissionsTable">
+                                <thead class="table-active">
+                                    <tr>
+                                        <th><i class="ti ti-calendar me-1"></i>Date vente</th>
+                                        <th><i class="ti ti-building me-1"></i>Client</th>
+                                        <th><i class="ti ti-package me-1"></i>Produit/Service</th>
+                                        <th><i class="ti ti-currency-dollar me-1"></i>Montant vente</th>
+                                        <th><i class="ti ti-percentage me-1"></i>Taux</th>
+                                        <th><i class="ti ti-coin me-1"></i>Commission</th>
+                                        <th><i class="ti ti-flag me-1"></i>Statut</th>
+                                        <th><i class="ti ti-calendar-event me-1"></i>Versement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>15/02/2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Tech+SA)"></span>
+                                                <div>
+                                                    <div>Tech SA</div>
+                                                    <div class="text-muted small">Nouveau client</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Licence Premium</td>
+                                        <td><strong class="sale-amount">CHF 35'000</strong></td>
+                                        <td>
+                                            <span class="badge bg-green-lt commission-rate">10%</span>
+                                        </td>
+                                        <td>
+                                            <strong class="commission-amount text-green">CHF 3'500</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-green">Validée</span>
+                                        </td>
+                                        <td>15/03/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12/02/2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Finance+Pro)"></span>
+                                                <div>
+                                                    <div>Finance Pro</div>
+                                                    <div class="text-muted small">Upsell</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Service Pro + Formation</td>
+                                        <td><strong class="sale-amount">CHF 25'000</strong></td>
+                                        <td>
+                                            <span class="badge bg-blue-lt commission-rate">8%</span>
+                                        </td>
+                                        <td>
+                                            <strong class="commission-amount text-green">CHF 2'000</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-orange">En attente</span>
+                                        </td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>08/02/2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=LogiCorp)"></span>
+                                                <div>
+                                                    <div>LogiCorp</div>
+                                                    <div class="text-muted small">Renouvellement</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Support 24/7</td>
+                                        <td><strong class="sale-amount">CHF 12'000</strong></td>
+                                        <td>
+                                            <span class="badge bg-purple-lt commission-rate">5%</span>
+                                        </td>
+                                        <td>
+                                            <strong class="commission-amount text-green">CHF 600</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-green">Validée</span>
+                                        </td>
+                                        <td>15/03/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>01/02/2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=MegaCorp)"></span>
+                                                <div>
+                                                    <div>MegaCorp</div>
+                                                    <div class="text-muted small">Gros compte</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Licence Enterprise</td>
+                                        <td><strong class="sale-amount">CHF 125'000</strong></td>
+                                        <td>
+                                            <span class="badge bg-yellow-lt commission-rate">12%</span>
+                                            <span class="badge bg-green-lt ms-1 commission-rate">+2% bonus</span>
+                                        </td>
+                                        <td>
+                                            <strong class="commission-amount text-green">CHF 17'500</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-green">Validée</span>
+                                        </td>
+                                        <td>15/02/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>28/01/2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=StartUp+Zen)"></span>
+                                                <div>
+                                                    <div>StartUp Zen</div>
+                                                    <div class="text-muted small">Nouveau</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Licence Starter</td>
+                                        <td><strong class="sale-amount">CHF 8'000</strong></td>
+                                        <td>
+                                            <span class="badge bg-green-lt commission-rate">10%</span>
+                                        </td>
+                                        <td>
+                                            <strong class="commission-amount text-green">CHF 800</strong>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-muted">Payée</span>
+                                        </td>
+                                        <td>15/02/2024</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Règles de commissionnement -->
+                    <div class="row row-cards">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-file-text"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-file-text me-2"></i>
+                                        Règles de commissionnement
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4>Taux de base</h4>
+                                    <div class="table-responsive mb-4">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Produit/Service</th>
+                                                    <th>Taux standard</th>
+                                                    <th>Conditions spéciales</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong>Licences</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-green-lt commission-rate">10%</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-yellow-lt commission-rate">12%</span> si vente > CHF 100'000
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Services</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-blue-lt commission-rate">8%</span>
+                                                    </td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Support</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-purple-lt commission-rate">5%</span>
+                                                    </td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Formation</strong></td>
+                                                    <td>
+                                                        <span class="badge bg-orange-lt commission-rate">15%</span>
+                                                    </td>
+                                                    <td>Si vendue avec licence</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <h4>Bonus et accélérateurs</h4>
+                                    <div class="list-group">
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-green commission-rate">+2%</span>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>Bonus volume</strong>
+                                                    <div class="text-muted">Si objectif trimestriel atteint (<span class="commission-amount">CHF 250'000</span>)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-blue commission-amount">CHF 1'000</span>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>Prime nouveau client</strong>
+                                                    <div class="text-muted">Pour chaque nouveau client Enterprise</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-orange commission-rate">+1%</span>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>Bonus fidélité</strong>
+                                                    <div class="text-muted">Si taux de rétention > <span class="commission-rate">95%</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-calculator"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-calculator me-2"></i>
+                                        Simulateur de commission
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Type de produit</label>
+                                        <select class="form-select" id="calcProductType">
+                                            <option value="license">Licence</option>
+                                            <option value="service">Service</option>
+                                            <option value="support">Support</option>
+                                            <option value="training">Formation</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Montant de la vente (CHF)</label>
+                                        <input type="number" class="form-control" id="calcAmount" placeholder="50000" value="50000">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Options</label>
+                                        <label class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="calcNewClient">
+                                            <span class="form-check-label">Nouveau client</span>
+                                        </label>
+                                        <label class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="calcVolumeBonus">
+                                            <span class="form-check-label">Bonus volume atteint</span>
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="calculateCommission()">
+                                        <i class="ti ti-calculator me-1"></i>
+                                        Calculer commission
+                                    </button>
+                                    
+                                    <div class="mt-4 d-none" id="calcResult">
+                                        <div class="alert alert-success">
+                                            <h4 class="alert-title">Résultat de la simulation</h4>
+                                            <div class="commission-breakdown">
+                                                <div class="commission-line">
+                                                    <span>Commission de base</span>
+                                                    <strong class="commission-amount" id="resultBase">CHF 0</strong>
+                                                </div>
+                                                <div class="commission-line">
+                                                    <span>Bonus</span>
+                                                    <strong class="commission-amount" id="resultBonus">CHF 0</strong>
+                                                </div>
+                                                <div class="commission-line border-top pt-2">
+                                                    <span><strong>Total</strong></span>
+                                                    <strong class="commission-amount text-green h4" id="resultTotal">CHF 0</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-currency-dollar me-1"></i>
+                                    Espace Revendeur - Commissions & Revenus
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <!-- jQuery (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/revendeur-commissions.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Initialize DataTable
+            $('#commissionsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+                },
+                order: [[0, 'desc']], // Trier par date décroissante
+                pageLength: 25
+            });
+            
+            // Graphique évolution mensuelle
+            const monthlyOptions = {
+                series: [{
+                    name: 'Commissions',
+                    data: [3200, 4100, 3800, 5200, 4500, 5800, 6200, 5400, 6800, 7200, 6500, 4850]
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 300,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 6,
+                        columnWidth: '60%',
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                colors: ['#10b981'],
+                xaxis: {
+                    categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (val) {
+                            return PortalApp.formatCurrency(val);
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return PortalApp.formatCurrency(val);
+                        }
+                    }
+                }
+            };
+            
+            new ApexCharts(document.querySelector("#chart-commissions-monthly"), monthlyOptions).render();
+            
+            // Graphique répartition par produit
+            const productsOptions = {
+                series: [15420, 8730, 4300],
+                chart: {
+                    type: 'donut',
+                    height: 260
+                },
+                labels: ['Licences', 'Services', 'Support'],
+                colors: ['#206bc4', '#f59e0b', '#a855f7'],
+                legend: {
+                    show: false
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val, opts) {
+                        return opts.w.config.labels[opts.seriesIndex] + '\n' + val.toFixed(1) + '%';
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return 'CHF ' + val.toLocaleString('fr-CH');
+                        }
+                    }
+                }
+            };
+            
+            new ApexCharts(document.querySelector("#chart-commissions-products"), productsOptions).render();
+            
+            // Initialize revendeur commissions
+            if (typeof RevendeurCommissions !== 'undefined') {
+                RevendeurCommissions.init();
+            }
+        });
+        
+        // Calculateur de commission
+        function calculateCommission() {
+            const type = document.getElementById('calcProductType').value;
+            const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
+            const isNewClient = document.getElementById('calcNewClient').checked;
+            const hasVolumeBonus = document.getElementById('calcVolumeBonus').checked;
+            
+            // Taux de base
+            const rates = {
+                license: 0.10,
+                service: 0.08,
+                support: 0.05,
+                training: 0.15
+            };
+            
+            let rate = rates[type];
+            let base = amount * rate;
+            let bonus = 0;
+            
+            // Bonus licence > 100k
+            if (type === 'license' && amount > 100000) {
+                rate = 0.12;
+                base = amount * rate;
+            }
+            
+            // Bonus volume
+            if (hasVolumeBonus) {
+                bonus += amount * 0.02;
+            }
+            
+            // Prime nouveau client
+            if (isNewClient && type === 'license') {
+                bonus += 1000;
+            }
+            
+            const total = base + bonus;
+            
+            // Afficher résultat
+            document.getElementById('resultBase').textContent = PortalApp.formatCurrency(base);
+            document.getElementById('resultBonus').textContent = PortalApp.formatCurrency(bonus);
+            document.getElementById('resultTotal').textContent = PortalApp.formatCurrency(total);
+            document.getElementById('calcResult').classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>

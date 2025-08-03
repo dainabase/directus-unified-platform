@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Multi-Rôles - Accueil</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="assets/css/custom.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page">
+        <div class="page-wrapper">
+            <!-- Header -->
+            <header class="navbar navbar-expand-md navbar-light d-print-none">
+                <div class="container-xl">
+                    <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                        <img src="assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </h1>
+                    <div class="navbar-nav flex-row order-md-last">
+                        <div class="nav-item">
+                            <a href="login.html" class="btn btn-primary">
+                                <i class="ti ti-login icon"></i>
+                                Se connecter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Contenu principal -->
+            <div class="page-wrapper">
+                <div class="page-body">
+                    <div class="container-xl">
+                        <!-- Titre de la page -->
+                        <div class="page-header d-print-none">
+                            <div class="container-xl">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col">
+                                        <h2 class="page-title">
+                                            Bienvenue sur le Portal Multi-Rôles
+                                        </h2>
+                                        <div class="text-muted mt-1">
+                                            Sélectionnez votre espace pour continuer
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cartes des rôles -->
+                        <div class="row row-cards mt-4">
+                            <!-- Espace Client -->
+                            <div class="col-md-4">
+                                <div class="card card-link card-link-pop role-card" onclick="window.location.href='client/dashboard.html'">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl avatar-rounded" style="background-color: #206bc4;">
+                                                <i class="ti ti-briefcase icon icon-lg text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Espace Client</h3>
+                                        <div class="text-muted">
+                                            Gérez vos projets, consultez vos devis et suivez vos commandes
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-primary">Accéder →</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Espace Prestataire -->
+                            <div class="col-md-4">
+                                <div class="card card-link card-link-pop role-card" onclick="window.location.href='prestataire/dashboard.html'">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl avatar-rounded" style="background-color: #2fb344;">
+                                                <i class="ti ti-tools icon icon-lg text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Espace Prestataire</h3>
+                                        <div class="text-muted">
+                                            Gérez vos missions, vos disponibilités et vos factures
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-success">Accéder →</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Espace Revendeur -->
+                            <div class="col-md-4">
+                                <div class="card card-link card-link-pop role-card" onclick="window.location.href='revendeur/dashboard.html'">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            <span class="avatar avatar-xl avatar-rounded" style="background-color: #f76707;">
+                                                <i class="ti ti-building-store icon icon-lg text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h3 class="card-title mb-1">Espace Revendeur</h3>
+                                        <div class="text-muted">
+                                            Gérez votre catalogue, vos clients et vos commissions
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-warning">Accéder →</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alert info -->
+                        <div class="alert alert-info mt-5" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <i class="ti ti-info-circle icon alert-icon"></i>
+                                </div>
+                                <div>
+                                    <h4 class="alert-title">Mode Développement</h4>
+                                    <div class="text-muted">
+                                        Cette application est en mode développement. Les données affichées sont des exemples 
+                                        et ne représentent pas de vraies informations.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

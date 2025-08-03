@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit MCP Notion - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <style>
+        .database-card {
+            transition: all 0.3s ease;
+        }
+        .database-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .property-tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            margin: 0.1rem;
+        }
+        .console-output {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            padding: 1rem;
+            height: 400px;
+            overflow-y: auto;
+            border-radius: 0.5rem;
+        }
+        .loading-spinner {
+            display: none;
+        }
+        .loading-spinner.active {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">
+                                <i class="ti ti-database me-2"></i>
+                                Audit des Bases de Données Notion via MCP
+                            </h2>
+                            <div class="text-muted mt-1">
+                                Vérification de la connectivité et de l'accès aux bases de données
+                            </div>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <button id="btnRunAudit" class="btn btn-primary">
+                                    <i class="ti ti-play me-2"></i>
+                                    Lancer l'audit
+                                    <span class="loading-spinner ms-2">
+                                        <span class="spinner-border spinner-border-sm"></span>
+                                    </span>
+                                </button>
+                                <button id="btnExportResults" class="btn btn-secondary" disabled>
+                                    <i class="ti ti-download me-2"></i>
+                                    Exporter JSON
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Statut de connexion MCP -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Statut de connexion MCP</h3>
+                                    <div id="mcpStatus" class="d-flex align-items-center">
+                                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                        <span>Vérification en cours...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Résultats résumés -->
+                    <div id="summarySection" class="row mb-4" style="display: none;">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Total bases</div>
+                                    </div>
+                                    <div class="h1 mb-0" id="totalCount">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Accessibles</div>
+                                    </div>
+                                    <div class="h1 mb-0 text-success" id="accessibleCount">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Inaccessibles</div>
+                                    </div>
+                                    <div class="h1 mb-0 text-danger" id="inaccessibleCount">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Taux de succès</div>
+                                    </div>
+                                    <div class="h1 mb-0" id="successRate">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Liste des bases de données -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Bases de données à vérifier</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="databaseList" class="row">
+                                        <!-- Les cartes de bases de données seront ajoutées ici -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Console de sortie -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Console de sortie</h3>
+                                    <div class="card-actions">
+                                        <button id="btnClearConsole" class="btn btn-sm">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="consoleOutput" class="console-output">
+                                        <div>En attente du lancement de l'audit...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <script src="assets/js/mcp-notion-wrapper.js"></script>
+    <script src="audit-notion-databases.js"></script>
+    
+    <script>
+        // Interface pour l'audit
+        const AuditUI = {
+            // Éléments DOM
+            elements: {
+                btnRunAudit: document.getElementById('btnRunAudit'),
+                btnExportResults: document.getElementById('btnExportResults'),
+                btnClearConsole: document.getElementById('btnClearConsole'),
+                mcpStatus: document.getElementById('mcpStatus'),
+                summarySection: document.getElementById('summarySection'),
+                totalCount: document.getElementById('totalCount'),
+                accessibleCount: document.getElementById('accessibleCount'),
+                inaccessibleCount: document.getElementById('inaccessibleCount'),
+                successRate: document.getElementById('successRate'),
+                databaseList: document.getElementById('databaseList'),
+                consoleOutput: document.getElementById('consoleOutput')
+            },
+
+            // Initialisation
+            init() {
+                this.checkMCPStatus();
+                this.initializeDatabaseList();
+                this.attachEventListeners();
+                this.redirectConsole();
+            },
+
+            // Vérifier le statut MCP
+            checkMCPStatus() {
+                const statusEl = this.elements.mcpStatus;
+                
+                if (window.mcp_notion) {
+                    statusEl.innerHTML = `
+                        <i class="ti ti-circle-check text-success me-2"></i>
+                        <span class="text-success">Connexion MCP active</span>
+                    `;
+                } else {
+                    statusEl.innerHTML = `
+                        <i class="ti ti-alert-circle text-danger me-2"></i>
+                        <span class="text-danger">MCP Notion non disponible - Mode simulation</span>
+                    `;
+                }
+            },
+
+            // Initialiser la liste des bases
+            initializeDatabaseList() {
+                const databases = NotionDatabaseAudit.databases;
+                const container = this.elements.databaseList;
+                
+                Object.entries(databases).forEach(([name, id]) => {
+                    const card = this.createDatabaseCard(name, id);
+                    container.appendChild(card);
+                });
+            },
+
+            // Créer une carte de base de données
+            createDatabaseCard(name, id) {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4 mb-3';
+                
+                col.innerHTML = `
+                    <div class="card database-card h-100" data-db-name="${name}">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-fill">
+                                    <h4 class="card-title mb-1">${name}</h4>
+                                    <div class="text-muted small mb-2">${id}</div>
+                                    <div class="status-container">
+                                        <span class="badge bg-secondary status-badge">En attente</span>
+                                    </div>
+                                    <div class="properties-container mt-2" style="display: none;">
+                                        <!-- Les propriétés seront ajoutées ici -->
+                                    </div>
+                                </div>
+                                <div class="ms-2">
+                                    <i class="ti ti-database text-muted" style="font-size: 1.5rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                return col;
+            },
+
+            // Attacher les écouteurs d'événements
+            attachEventListeners() {
+                this.elements.btnRunAudit.addEventListener('click', () => this.runAudit());
+                this.elements.btnExportResults.addEventListener('click', () => this.exportResults());
+                this.elements.btnClearConsole.addEventListener('click', () => this.clearConsole());
+            },
+
+            // Rediriger la console
+            redirectConsole() {
+                const originalLog = console.log;
+                const originalError = console.error;
+                const originalWarn = console.warn;
+                
+                console.log = (...args) => {
+                    this.writeToConsole(args.join(' '), 'log');
+                    originalLog.apply(console, args);
+                };
+                
+                console.error = (...args) => {
+                    this.writeToConsole(args.join(' '), 'error');
+                    originalError.apply(console, args);
+                };
+                
+                console.warn = (...args) => {
+                    this.writeToConsole(args.join(' '), 'warn');
+                    originalWarn.apply(console, args);
+                };
+            },
+
+            // Écrire dans la console
+            writeToConsole(message, type = 'log') {
+                const output = this.elements.consoleOutput;
+                const line = document.createElement('div');
+                
+                const timestamp = new Date().toLocaleTimeString();
+                let color = '#00ff00';
+                if (type === 'error') color = '#ff0000';
+                if (type === 'warn') color = '#ffaa00';
+                
+                line.style.color = color;
+                line.textContent = `[${timestamp}] ${message}`;
+                
+                output.appendChild(line);
+                output.scrollTop = output.scrollHeight;
+            },
+
+            // Effacer la console
+            clearConsole() {
+                this.elements.consoleOutput.innerHTML = '<div>Console effacée</div>';
+            },
+
+            // Lancer l'audit
+            async runAudit() {
+                // Réinitialiser l'interface
+                this.elements.btnRunAudit.disabled = true;
+                this.elements.btnRunAudit.querySelector('.loading-spinner').classList.add('active');
+                this.elements.summarySection.style.display = 'none';
+                this.clearConsole();
+                
+                // Réinitialiser toutes les cartes
+                document.querySelectorAll('.database-card').forEach(card => {
+                    const statusBadge = card.querySelector('.status-badge');
+                    statusBadge.className = 'badge bg-secondary status-badge';
+                    statusBadge.textContent = 'En cours...';
+                    card.querySelector('.properties-container').style.display = 'none';
+                });
+
+                try {
+                    // Lancer l'audit
+                    const results = await NotionDatabaseAudit.runAudit();
+                    
+                    // Mettre à jour l'interface avec les résultats
+                    this.updateResults(results);
+                    
+                    // Activer le bouton d'export
+                    this.elements.btnExportResults.disabled = false;
+                    
+                } catch (error) {
+                    console.error('Erreur lors de l\'audit:', error);
+                } finally {
+                    this.elements.btnRunAudit.disabled = false;
+                    this.elements.btnRunAudit.querySelector('.loading-spinner').classList.remove('active');
+                }
+            },
+
+            // Mettre à jour les résultats
+            updateResults(results) {
+                // Afficher le résumé
+                this.elements.summarySection.style.display = 'flex';
+                this.elements.totalCount.textContent = Object.keys(NotionDatabaseAudit.databases).length;
+                this.elements.accessibleCount.textContent = results.accessible.length;
+                this.elements.inaccessibleCount.textContent = results.inaccessible.length;
+                this.elements.successRate.textContent = results.summary.successRate;
+
+                // Mettre à jour les cartes accessibles
+                results.accessible.forEach(db => {
+                    const card = document.querySelector(`[data-db-name="${db.name}"]`);
+                    if (card) {
+                        const statusBadge = card.querySelector('.status-badge');
+                        statusBadge.className = 'badge bg-success status-badge';
+                        statusBadge.textContent = `✓ ${db.recordCount} enregistrements`;
+
+                        // Afficher les propriétés
+                        if (db.properties.length > 0) {
+                            const propsContainer = card.querySelector('.properties-container');
+                            propsContainer.style.display = 'block';
+                            propsContainer.innerHTML = db.properties.slice(0, 5).map(prop => 
+                                `<span class="badge bg-blue-lt property-tag">${prop}</span>`
+                            ).join('');
+                            
+                            if (db.properties.length > 5) {
+                                propsContainer.innerHTML += `<span class="badge bg-secondary property-tag">+${db.properties.length - 5}</span>`;
+                            }
+                        }
+                    }
+                });
+
+                // Mettre à jour les cartes inaccessibles
+                results.inaccessible.forEach(db => {
+                    const card = document.querySelector(`[data-db-name="${db.name}"]`);
+                    if (card) {
+                        const statusBadge = card.querySelector('.status-badge');
+                        statusBadge.className = 'badge bg-danger status-badge';
+                        statusBadge.textContent = '✗ Inaccessible';
+                        statusBadge.title = db.error;
+                    }
+                });
+            },
+
+            // Exporter les résultats
+            exportResults() {
+                NotionDatabaseAudit.exportResults();
+            }
+        };
+
+        // Initialiser l'interface
+        document.addEventListener('DOMContentLoaded', () => {
+            AuditUI.init();
+        });
+    </script>
+</body>
+</html>

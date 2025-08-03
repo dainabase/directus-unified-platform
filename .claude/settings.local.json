@@ -8,7 +8,10 @@
       "Bash(jq:*)",
       "Bash(npm run migrate:interactions:*)",
       "Bash(npm run migrate:budgets:*)",
-      "Bash(npm run migrate:subscriptions:*)"
+      "Bash(npm run migrate:subscriptions:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm start)"
     ],
     "deny": []
   }

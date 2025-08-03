@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Mon profil - Espace Prestataire</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .profile-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--tblr-green);
+        }
+        
+        .prestataire-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .prestataire-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .profile-stats {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .avatar-xl {
+            width: 8rem;
+            height: 8rem;
+            font-size: 3rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--tblr-body-color);
+        }
+        
+        .form-control:focus {
+            border-color: var(--tblr-green);
+            box-shadow: 0 0 0 0.25rem rgba(47, 179, 68, 0.25);
+        }
+        
+        .profile-section {
+            border-bottom: 1px solid var(--tblr-border-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .security-item {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        
+        .security-item:hover {
+            background: var(--tblr-hover-bg);
+        }
+        
+        .activity-item {
+            border-left: 3px solid var(--tblr-green);
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-prestataire {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.375rem 0.75rem;
+            border-radius: 2rem;
+            background: linear-gradient(45deg, var(--tblr-green), var(--tblr-cyan));
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            border-radius: 1rem;
+            background: var(--tblr-green-lt);
+            color: var(--tblr-green);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .certification-item {
+            padding: 0.75rem;
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+            background: var(--tblr-bg-surface);
+        }
+        
+        .hours-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--tblr-green);
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/prestataire/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-green">PRESTATAIRE</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-green-lt">PR</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Prestataire Expert</div>
+                                <div class="mt-1 small text-secondary">Missions & Performances</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item active">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="missions.html" class="dropdown-item">
+                                <i class="ti ti-briefcase me-2"></i>
+                                Mes missions
+                            </a>
+                            <a href="performance.html" class="dropdown-item">
+                                <i class="ti ti-chart-line me-2"></i>
+                                Performances
+                            </a>
+                            <a href="rewards.html" class="dropdown-item">
+                                <i class="ti ti-award me-2"></i>
+                                Récompenses
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="missions.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-briefcase"></i>
+                                            </span>
+                                            <span class="nav-link-title">Missions</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="calendar.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-calendar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Planning</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="performance.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-line"></i>
+                                            </span>
+                                            <span class="nav-link-title">Performance</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="rewards.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-award"></i>
+                                            </span>
+                                            <span class="nav-link-title">Récompenses</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Espace Prestataire</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#modal-change-password">
+                                    <i class="ti ti-lock"></i>
+                                    Changer mot de passe
+                                </a>
+                                <a href="#" class="btn btn-primary" id="save-profile">
+                                    <i class="ti ti-device-floppy"></i>
+                                    Sauvegarder
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Profile stats row -->
+                    <div class="row row-deck row-cards mb-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card prestataire-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Expérience</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value">5</div>
+                                        <div class="me-auto">
+                                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                                années
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        Depuis janvier 2020
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card prestataire-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-briefcase"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Missions complétées</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value">142</div>
+                                        <div class="me-auto">
+                                            <span class="text-blue d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-check"></i>
+                                                98% succès
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card prestataire-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-clock"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Heures totales</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 hours-value">8'420</div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        Taux horaire: <span class="profile-amount">CHF 185</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card prestataire-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-star"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Évaluation moyenne</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value">4.8</div>
+                                        <div class="me-auto">
+                                            <span class="text-yellow d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-star-filled"></i>
+                                                / 5
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        Basé sur <span class="metric-value">138</span> avis
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile content -->
+                    <div class="row row-cards">
+                        <!-- Profile information -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-user"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-user me-2"></i>
+                                        Informations personnelles
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Basic info section -->
+                                    <div class="profile-section">
+                                        <h4 class="mb-3">Informations générales</h4>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Prénom</label>
+                                                    <input type="text" class="form-control" value="Alexandre" id="first-name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nom</label>
+                                                    <input type="text" class="form-control" value="Martin" id="last-name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="email" class="form-control" value="alexandre.martin@expert.ch" id="email">
+                                                    <div class="form-hint">
+                                                        <i class="ti ti-shield-check text-green me-1"></i>
+                                                        Email vérifié
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Téléphone</label>
+                                                    <input type="tel" class="form-control" value="+41 79 555 0234" id="phone">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Professional info section -->
+                                    <div class="profile-section">
+                                        <h4 class="mb-3">Informations professionnelles</h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Titre professionnel</label>
+                                                    <input type="text" class="form-control" value="Développeur Full Stack Senior" id="job-title">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Domaine d'expertise</label>
+                                                    <select class="form-select" id="expertise">
+                                                        <option selected>Développement Web</option>
+                                                        <option>Développement Mobile</option>
+                                                        <option>DevOps</option>
+                                                        <option>Sécurité</option>
+                                                        <option>Data Science</option>
+                                                        <option>Architecture Cloud</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Niveau d'expertise</label>
+                                                    <select class="form-select" id="level">
+                                                        <option>Junior (0-2 ans)</option>
+                                                        <option>Intermédiaire (2-5 ans)</option>
+                                                        <option selected>Senior (5-10 ans)</option>
+                                                        <option>Expert (10+ ans)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Bio professionnelle</label>
+                                            <textarea class="form-control" rows="4" id="bio">Développeur Full Stack passionné avec plus de 8 ans d'expérience dans la création d'applications web scalables et performantes. Spécialisé en React, Node.js et architecture cloud AWS. Fort background en méthodologies agiles et DevOps.</textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- Skills section -->
+                                    <div class="profile-section">
+                                        <h4 class="mb-3">Compétences</h4>
+                                        <div class="mb-3">
+                                            <label class="form-label">Technologies maîtrisées</label>
+                                            <div class="skills-container">
+                                                <span class="skill-tag">JavaScript</span>
+                                                <span class="skill-tag">TypeScript</span>
+                                                <span class="skill-tag">React</span>
+                                                <span class="skill-tag">Node.js</span>
+                                                <span class="skill-tag">Python</span>
+                                                <span class="skill-tag">AWS</span>
+                                                <span class="skill-tag">Docker</span>
+                                                <span class="skill-tag">Kubernetes</span>
+                                                <span class="skill-tag">PostgreSQL</span>
+                                                <span class="skill-tag">MongoDB</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Langues</label>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="lang-fr" checked>
+                                                        <label class="form-check-label" for="lang-fr">
+                                                            Français (Natif)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="lang-en" checked>
+                                                        <label class="form-check-label" for="lang-en">
+                                                            Anglais (Courant)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="lang-de" checked>
+                                                        <label class="form-check-label" for="lang-de">
+                                                            Allemand (Intermédiaire)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Availability section -->
+                                    <div class="profile-section">
+                                        <h4 class="mb-3">Disponibilité</h4>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Statut actuel</label>
+                                                    <select class="form-select" id="availability">
+                                                        <option selected>Disponible</option>
+                                                        <option>Partiellement disponible</option>
+                                                        <option>En mission</option>
+                                                        <option>Non disponible</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Taux horaire (CHF)</label>
+                                                    <input type="number" class="form-control" value="185" id="hourly-rate">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Disponible à partir de</label>
+                                                    <input type="date" class="form-control" value="2025-02-01" id="available-from">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Type de mission préféré</label>
+                                                    <select class="form-select" id="mission-type">
+                                                        <option>Régie (sur site)</option>
+                                                        <option selected>Remote</option>
+                                                        <option>Hybride</option>
+                                                        <option>Forfait projet</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Preferences section -->
+                                    <div class="profile-section">
+                                        <h4 class="mb-3">Préférences</h4>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="email-notifications" checked>
+                                                <label class="form-check-label" for="email-notifications">
+                                                    Recevoir les notifications par email
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="mission-alerts" checked>
+                                                <label class="form-check-label" for="mission-alerts">
+                                                    Alertes nouvelles missions correspondant à mon profil
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="performance-reports" checked>
+                                                <label class="form-check-label" for="performance-reports">
+                                                    Rapports de performance mensuels
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Profile sidebar -->
+                        <div class="col-lg-4">
+                            <!-- Profile summary -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-id"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="avatar avatar-xl bg-green-lt">
+                                            AM
+                                        </span>
+                                    </div>
+                                    <h3 class="m-0 mb-1">Alexandre Martin</h3>
+                                    <div class="text-secondary mb-3">Développeur Full Stack Senior</div>
+                                    
+                                    <div class="mb-3">
+                                        <span class="badge-prestataire">
+                                            Expert Certifié
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="row text-center">
+                                        <div class="col-4 py-3">
+                                            <div class="mb-1">
+                                                <div class="h4 mb-0 profile-stats">142</div>
+                                                <div class="small text-secondary">Missions</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 py-3">
+                                            <div class="mb-1">
+                                                <div class="h4 mb-0 profile-stats">4.8</div>
+                                                <div class="small text-secondary">Note</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 py-3">
+                                            <div class="mb-1">
+                                                <div class="h4 mb-0 profile-stats">98%</div>
+                                                <div class="small text-secondary">Succès</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Certifications -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-certificate"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-certificate me-2"></i>
+                                        Certifications
+                                    </h3>
+                                    <div class="card-actions">
+                                        <a href="#" class="btn btn-white btn-sm">
+                                            <i class="ti ti-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="certification-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-blue-lt me-3">
+                                                <i class="ti ti-brand-aws"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">AWS Solutions Architect</div>
+                                                <div class="text-secondary small">Professional • 2023</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="certification-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-green-lt me-3">
+                                                <i class="ti ti-brand-docker"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Docker Certified Associate</div>
+                                                <div class="text-secondary small">2022</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="certification-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-purple-lt me-3">
+                                                <i class="ti ti-shield-lock"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Certified Ethical Hacker</div>
+                                                <div class="text-secondary small">CEH v11 • 2021</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Account security -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-red">
+                                        <i class="ti ti-shield-lock"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-shield-lock me-2"></i>
+                                        Sécurité du compte
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="security-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-green-lt me-3">
+                                                <i class="ti ti-check"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Email vérifié</div>
+                                                <div class="text-secondary small">alexandre.martin@expert.ch</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="security-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-green-lt me-3">
+                                                <i class="ti ti-check"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Authentification 2FA</div>
+                                                <div class="text-secondary small">Activée</div>
+                                            </div>
+                                            <div>
+                                                <a href="#" class="btn btn-sm btn-outline-secondary">Gérer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="security-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-sm bg-yellow-lt me-3">
+                                                <i class="ti ti-clock"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Dernière connexion</div>
+                                                <div class="text-secondary small profile-stats">Il y a 30min</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <a href="#" class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#modal-change-password">
+                                            <i class="ti ti-lock me-2"></i>
+                                            Changer le mot de passe
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recent activity -->
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-activity"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-activity me-2"></i>
+                                        Activité récente
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="activity-item">
+                                        <div class="d-flex align-items-start">
+                                            <span class="avatar avatar-sm bg-green-lt me-3">
+                                                <i class="ti ti-briefcase"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Mission terminée</div>
+                                                <div class="text-secondary small">API REST pour TechCorp</div>
+                                                <div class="text-secondary small">Il y a 2 jours</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="activity-item">
+                                        <div class="d-flex align-items-start">
+                                            <span class="avatar avatar-sm bg-blue-lt me-3">
+                                                <i class="ti ti-star"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Nouvelle évaluation</div>
+                                                <div class="text-secondary small metric-value">5.0/5 étoiles</div>
+                                                <div class="text-secondary small">Il y a 3 jours</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="activity-item">
+                                        <div class="d-flex align-items-start">
+                                            <span class="avatar avatar-sm bg-yellow-lt me-3">
+                                                <i class="ti ti-award"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Récompense obtenue</div>
+                                                <div class="text-secondary small profile-amount">CHF 500 bonus</div>
+                                                <div class="text-secondary small">Il y a 1 semaine</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="activity-item">
+                                        <div class="d-flex align-items-start">
+                                            <span class="avatar avatar-sm bg-purple-lt me-3">
+                                                <i class="ti ti-certificate"></i>
+                                            </span>
+                                            <div class="flex-fill">
+                                                <div class="font-weight-medium">Certification ajoutée</div>
+                                                <div class="text-secondary small">AWS Solutions Architect</div>
+                                                <div class="text-secondary small">Il y a 2 semaines</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-briefcase me-1"></i>
+                                    Espace Prestataire - Performance & Missions
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal modal-blur fade" id="modal-change-password" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-title">Changer le mot de passe</div>
+                    <div class="text-secondary">Saisissez votre mot de passe actuel et le nouveau.</div>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe actuel</label>
+                        <input type="password" class="form-control" id="current-password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="new-password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmer le nouveau mot de passe</label>
+                        <input type="password" class="form-control" id="confirm-password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </a>
+                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        <i class="ti ti-device-floppy"></i>
+                        Changer le mot de passe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Profile save functionality
+            document.getElementById('save-profile').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Simulate saving
+                const btn = this;
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="ti ti-loader ti-spin"></i> Sauvegarde...';
+                btn.disabled = true;
+                
+                setTimeout(function() {
+                    btn.innerHTML = '<i class="ti ti-check"></i> Sauvegardé';
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-success');
+                    
+                    setTimeout(function() {
+                        btn.innerHTML = originalText;
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-primary');
+                        btn.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+            
+            // Form validation
+            const forms = document.querySelectorAll('input, select, textarea');
+            forms.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    if (this.checkValidity()) {
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+            });
+            
+            // Password change modal validation
+            const changePasswordBtn = document.querySelector('#modal-change-password .btn-primary');
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const currentPassword = document.getElementById('current-password').value;
+                    const newPassword = document.getElementById('new-password').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+                    
+                    if (!currentPassword || !newPassword || !confirmPassword) {
+                        alert('Tous les champs sont requis.');
+                        return;
+                    }
+                    
+                    if (newPassword !== confirmPassword) {
+                        alert('Les nouveaux mots de passe ne correspondent pas.');
+                        return;
+                    }
+                    
+                    if (newPassword.length < 8) {
+                        alert('Le nouveau mot de passe doit contenir au moins 8 caractères.');
+                        return;
+                    }
+                    
+                    // Simulate password change
+                    const btn = this;
+                    const originalText = btn.innerHTML;
+                    
+                    btn.innerHTML = '<i class="ti ti-loader ti-spin"></i> Modification...';
+                    btn.disabled = true;
+                    
+                    setTimeout(function() {
+                        alert('Mot de passe changé avec succès !');
+                        
+                        // Clear form
+                        document.getElementById('current-password').value = '';
+                        document.getElementById('new-password').value = '';
+                        document.getElementById('confirm-password').value = '';
+                        
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('modal-change-password'));
+                        modal.hide();
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

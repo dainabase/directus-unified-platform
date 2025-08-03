@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./server
+    container_name: hypervisual-api
+    ports:
+      - "8001:8001"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 8001
+      REDIS_URL: redis://redis:6379
+      OCR_SERVICE_URL: http://ocr-service:3001
+      JWT_SECRET: ${JWT_SECRET}
+      NOTION_API_KEY: ${NOTION_API_KEY}
+      DB_UTILISATEURS: ${DB_UTILISATEURS}
+      DB_PROJECTS: ${DB_PROJECTS}
+      DB_FACTURES_CLIENTS: ${DB_FACTURES_CLIENTS}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000}
+    depends_on:
+      - redis
+      - ocr-service
+    networks:
+      - hypervisual-network
+    restart: unless-stopped
+
+  ocr-service:
+    build: ./ocr-service
+    container_name: hypervisual-ocr
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3001
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      TESSERACT_LANG: fra+eng+deu+ita
+      WORKERS: 4
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      ENABLE_PREPROCESSING: "true"
+      ENABLE_CACHE: "true"
+      CACHE_TTL: 3600
+    volumes:
+      - ./ocr-service/temp:/app/temp
+      - ./ocr-service/logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - hypervisual-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: hypervisual-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - hypervisual-network
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    container_name: hypervisual-frontend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./client:/usr/share/nginx/html/client
+      - ./prestataire:/usr/share/nginx/html/prestataire
+      - ./revendeur:/usr/share/nginx/html/revendeur
+      - ./superadmin:/usr/share/nginx/html/superadmin
+      - ./assets:/usr/share/nginx/html/assets
+      - ./shared:/usr/share/nginx/html/shared
+    depends_on:
+      - api
+      - ocr-service
+    networks:
+      - hypervisual-network
+    restart: unless-stopped
+
+networks:
+  hypervisual-network:
+    driver: bridge
+
+volumes:
+  redis-data:

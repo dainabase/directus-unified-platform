@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Portal Multi-Rôles - Accueil</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--tblr-primary) 0%, var(--tblr-primary-lt) 100%);
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .role-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            font-size: 2.5rem;
+        }
+        
+        .stats-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Header -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href=".">
+                        <img src="assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="login.html" class="btn btn-primary">
+                            <i class="ti ti-login"></i>
+                            Se connecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="container-xl text-center">
+                <h1 class="hero-title">Portal Multi-Rôles</h1>
+                <p class="hero-subtitle">Votre plateforme unifiée pour gérer tous vos besoins professionnels</p>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="page-wrapper">
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Cartes des rôles -->
+                    <div class="row row-cards">
+                        <!-- Espace Client -->
+                        <div class="col-md-4">
+                            <div class="card role-card" onclick="window.location.href='client/dashboard.html'">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-briefcase"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="role-icon bg-blue text-white">
+                                        <i class="ti ti-briefcase"></i>
+                                    </div>
+                                    <h3 class="card-title mb-1">Espace Client</h3>
+                                    <p class="text-secondary mb-3">
+                                        Gérez vos projets, consultez vos devis et suivez vos commandes
+                                    </p>
+                                    <div class="mb-3">
+                                        <div class="row g-2 text-center">
+                                            <div class="col-6">
+                                                <div class="metric-value text-blue">23</div>
+                                                <div class="text-secondary small">Projets actifs</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="metric-value text-blue">156</div>
+                                                <div class="text-secondary small">Documents</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="client/dashboard.html" class="btn btn-primary w-100">
+                                        Accéder à l'espace Client
+                                        <i class="ti ti-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Espace Prestataire -->
+                        <div class="col-md-4">
+                            <div class="card role-card" onclick="window.location.href='prestataire/dashboard.html'">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-tools"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="role-icon bg-green text-white">
+                                        <i class="ti ti-tools"></i>
+                                    </div>
+                                    <h3 class="card-title mb-1">Espace Prestataire</h3>
+                                    <p class="text-secondary mb-3">
+                                        Gérez vos missions, vos disponibilités et vos factures
+                                    </p>
+                                    <div class="mb-3">
+                                        <div class="row g-2 text-center">
+                                            <div class="col-6">
+                                                <div class="metric-value text-green">8</div>
+                                                <div class="text-secondary small">Missions actives</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="metric-value text-green">47</div>
+                                                <div class="text-secondary small">Heures ce mois</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="prestataire/dashboard.html" class="btn btn-success w-100">
+                                        Accéder à l'espace Prestataire
+                                        <i class="ti ti-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Espace Revendeur -->
+                        <div class="col-md-4">
+                            <div class="card role-card" onclick="window.location.href='revendeur/dashboard.html'">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-building-store"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="role-icon bg-orange text-white">
+                                        <i class="ti ti-building-store"></i>
+                                    </div>
+                                    <h3 class="card-title mb-1">Espace Revendeur</h3>
+                                    <p class="text-secondary mb-3">
+                                        Gérez votre catalogue, vos clients et vos commissions
+                                    </p>
+                                    <div class="mb-3">
+                                        <div class="row g-2 text-center">
+                                            <div class="col-6">
+                                                <div class="metric-value text-orange">73</div>
+                                                <div class="text-secondary small">Clients</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="metric-value text-orange">12%</div>
+                                                <div class="text-secondary small">Commission</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="revendeur/dashboard.html" class="btn btn-warning w-100">
+                                        Accéder à l'espace Revendeur
+                                        <i class="ti ti-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques globales -->
+                    <div class="card mt-4">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-primary">
+                                <i class="ti ti-chart-bar"></i>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-chart-bar me-2"></i>
+                                Statistiques de la plateforme
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3 text-center">
+                                <div class="col-6 col-md-3">
+                                    <div class="stats-number text-blue">523</div>
+                                    <div class="text-secondary">Clients actifs</div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stats-number text-green">89</div>
+                                    <div class="text-secondary">Prestataires</div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stats-number text-orange">27</div>
+                                    <div class="text-secondary">Revendeurs</div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="stats-number text-purple">1'847</div>
+                                    <div class="text-secondary">Projets réalisés</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alert info -->
+                    <div class="alert alert-info mt-4" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                <i class="ti ti-info-circle alert-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="alert-title">Mode Développement</h4>
+                                <div class="text-secondary">
+                                    Cette application est en mode développement. Les données affichées sont des exemples 
+                                    et ne représentent pas de vraies informations.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none mt-auto">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-shield-check me-1"></i>
+                                    Plateforme sécurisée
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="assets/js/app.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Clients - Espace Revendeur</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-revendeur">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <!-- Le contenu sera chargé dynamiquement -->
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">
+                                Gestion commerciale
+                            </div>
+                            <h2 class="page-title">
+                                Mes Clients
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <div class="d-inline-block me-3">
+                                    <select class="form-select">
+                                        <option>Tous les clients</option>
+                                        <option>Clients actifs</option>
+                                        <option>Premium ⭐</option>
+                                        <option>À risque</option>
+                                    </select>
+                                </div>
+                                <a href="#" class="btn btn-white">
+                                    <i class="ti ti-file-export icon"></i>
+                                    Exporter
+                                </a>
+                                <a href="leads.html" class="btn btn-primary">
+                                    <i class="ti ti-user-plus icon"></i>
+                                    Nouveau client
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- KPIs Cards -->
+                    <div class="row row-cards mb-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Clients actifs</div>
+                                        <div class="ms-auto lh-1">
+                                            <i class="ti ti-building icon text-blue"></i>
+                                        </div>
+                                    </div>
+                                    <div class="h1 mb-0">68</div>
+                                    <div class="text-muted">
+                                        <span class="text-green">+5</span> ce trimestre
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Valeur totale (ARR)</div>
+                                        <div class="ms-auto lh-1">
+                                            <i class="ti ti-cash icon text-green"></i>
+                                        </div>
+                                    </div>
+                                    <div class="h1 mb-0">CHF 420k</div>
+                                    <div class="text-muted">Récurrent annuel</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Taux rétention</div>
+                                        <div class="ms-auto lh-1">
+                                            <i class="ti ti-user-check icon text-purple"></i>
+                                        </div>
+                                    </div>
+                                    <div class="h1 mb-0">94%</div>
+                                    <div class="text-muted">Vs 92% l'an dernier</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">NPS Score</div>
+                                        <div class="ms-auto lh-1">
+                                            <i class="ti ti-mood-smile icon text-yellow"></i>
+                                        </div>
+                                    </div>
+                                    <div class="h1 mb-0">72</div>
+                                    <div class="text-muted">Excellent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Métriques additionnelles -->
+                    <div class="row row-cards mb-3">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="mb-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="subheader">Valeur moyenne client</div>
+                                                </div>
+                                                <div class="h3 mb-0">CHF 6'176</div>
+                                                <div class="progress progress-sm mt-2">
+                                                    <div class="progress-bar bg-primary" style="width: 75%" role="progressbar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="mb-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="subheader">Croissance YoY</div>
+                                                </div>
+                                                <div class="h3 mb-0 text-green">+18%</div>
+                                                <div class="chart-sparkline" id="sparkline-growth"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="mb-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="subheader">Clients Premium</div>
+                                                </div>
+                                                <div class="h3 mb-0">12 <span class="text-yellow">⭐</span></div>
+                                                <div class="text-muted small">18% du portefeuille</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="mb-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="subheader">Upsell potentiel</div>
+                                                </div>
+                                                <div class="h3 mb-0 text-orange">CHF 85k</div>
+                                                <a href="#" class="btn btn-sm btn-white mt-2">
+                                                    Voir opportunités
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtres et recherche -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-auto">
+                                    <div class="form-selectgroup">
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="client-health" value="all" class="form-selectgroup-input" checked>
+                                            <span class="form-selectgroup-label">
+                                                Tous <span class="badge bg-muted ms-1">68</span>
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="client-health" value="excellent" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                🟢 Excellent <span class="badge bg-success ms-1">45</span>
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="client-health" value="warning" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                🟡 À surveiller <span class="badge bg-warning ms-1">18</span>
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" name="client-health" value="risk" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                🔴 À risque <span class="badge bg-danger ms-1">5</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-auto ms-auto">
+                                    <div class="input-icon">
+                                        <input type="text" class="form-control" placeholder="Rechercher un client...">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-search icon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des clients -->
+                    <div class="row row-cards">
+                        <!-- Client 1 - Premium -->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card client-card">
+                                <div class="ribbon ribbon-top ribbon-bookmark bg-yellow">
+                                    <i class="ti ti-star icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md me-3" style="background-image: url(https://ui-avatars.com/api/?name=TechCorp+SA&background=206bc4&color=fff)">
+                                            <span class="badge bg-success"></span>
+                                        </span>
+                                        <div>
+                                            <h3 class="card-title mb-0">TechCorp SA</h3>
+                                            <div class="text-muted">Technologie</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="text-muted small mb-1">Contact principal</div>
+                                        <div>Marie Dubois - CEO</div>
+                                        <div class="text-muted small">
+                                            <i class="ti ti-phone icon me-1"></i>079 123 45 67
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="text-muted small mb-1">CA annuel</div>
+                                            <div class="h4 mb-0">CHF 95'000</div>
+                                            <div class="text-green small">
+                                                <i class="ti ti-trending-up icon"></i> +12%
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="client-health text-center">
+                                                <div class="h1 mb-0">🟢</div>
+                                                <div class="text-muted small">Excellent</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="badge-list">
+                                            <span class="badge bg-azure-lt">Licence Enterprise</span>
+                                            <span class="badge bg-green-lt">Support 24/7</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="text-muted small">
+                                            <i class="ti ti-calendar icon me-1"></i>
+                                            Renouvellement: Mars 2024
+                                        </div>
+                                        <div class="text-muted small">
+                                            Client depuis 3 ans
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="client-detail.html?id=1" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir fiche
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="tel:0791234567" class="btn btn-sm btn-ghost-dark btn-icon" title="Appeler">
+                                                    <i class="ti ti-phone icon"></i>
+                                                </a>
+                                                <a href="mailto:marie.dubois@techcorp.ch" class="btn btn-sm btn-ghost-dark btn-icon" title="Email">
+                                                    <i class="ti ti-mail icon"></i>
+                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical icon"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="#">Planifier réunion</a></li>
+                                                        <li><a class="dropdown-item" href="#">Créer opportunité</a></li>
+                                                        <li><a class="dropdown-item" href="#">Voir historique</a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item" href="#">Éditer infos</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Client 2 - À surveiller -->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card client-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md me-3" style="background-image: url(https://ui-avatars.com/api/?name=FinanceXpert&background=206bc4&color=fff)">
+                                            <span class="badge bg-warning"></span>
+                                        </span>
+                                        <div>
+                                            <h3 class="card-title mb-0">FinanceXpert</h3>
+                                            <div class="text-muted">Finance</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="text-muted small mb-1">Contact principal</div>
+                                        <div>Jean Martin - CFO</div>
+                                        <div class="text-muted small">
+                                            <i class="ti ti-phone icon me-1"></i>078 987 65 43
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="text-muted small mb-1">CA annuel</div>
+                                            <div class="h4 mb-0">CHF 45'000</div>
+                                            <div class="text-muted small">
+                                                <i class="ti ti-minus icon"></i> Stable
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="client-health text-center">
+                                                <div class="h1 mb-0">🟡</div>
+                                                <div class="text-muted small">À surveiller</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="badge-list">
+                                            <span class="badge bg-azure-lt">Licence Business</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mb-2">
+                                        <div class="d-flex">
+                                            <div>
+                                                <i class="ti ti-alert-triangle icon alert-icon"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-muted">Utilisation en baisse (-25%)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="text-muted small">
+                                            <i class="ti ti-calendar icon me-1"></i>
+                                            Renouvellement: Mai 2024
+                                        </div>
+                                        <div class="text-muted small">
+                                            Client depuis 2 ans
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="client-detail.html?id=2" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir fiche
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="tel:0789876543" class="btn btn-sm btn-ghost-dark btn-icon" title="Appeler">
+                                                    <i class="ti ti-phone icon"></i>
+                                                </a>
+                                                <a href="mailto:jean.martin@financexpert.ch" class="btn btn-sm btn-ghost-dark btn-icon" title="Email">
+                                                    <i class="ti ti-mail icon"></i>
+                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical icon"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="#">Planifier réunion</a></li>
+                                                        <li><a class="dropdown-item" href="#">Créer opportunité</a></li>
+                                                        <li><a class="dropdown-item" href="#">Voir historique</a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item" href="#">Éditer infos</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Client 3 - Excellent -->
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card client-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-md me-3" style="background-image: url(https://ui-avatars.com/api/?name=LogisticsPro&background=206bc4&color=fff)">
+                                            <span class="badge bg-success"></span>
+                                        </span>
+                                        <div>
+                                            <h3 class="card-title mb-0">LogisticsPro</h3>
+                                            <div class="text-muted">Logistique</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="text-muted small mb-1">Contact principal</div>
+                                        <div>Sophie Laurent - Directrice</div>
+                                        <div class="text-muted small">
+                                            <i class="ti ti-phone icon me-1"></i>076 543 21 09
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="text-muted small mb-1">CA annuel</div>
+                                            <div class="h4 mb-0">CHF 68'000</div>
+                                            <div class="text-green small">
+                                                <i class="ti ti-trending-up icon"></i> +25%
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="client-health text-center">
+                                                <div class="h1 mb-0">🟢</div>
+                                                <div class="text-muted small">Excellent</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="badge-list">
+                                            <span class="badge bg-azure-lt">Licence Business</span>
+                                            <span class="badge bg-purple-lt">Formation</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-success mb-2">
+                                        <div class="d-flex">
+                                            <div>
+                                                <i class="ti ti-trending-up icon alert-icon"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-muted">Opportunité upsell: +CHF 20k</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="text-muted small">
+                                            <i class="ti ti-calendar icon me-1"></i>
+                                            Renouvellement: Juin 2024
+                                        </div>
+                                        <div class="text-muted small">
+                                            Client depuis 4 ans
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="client-detail.html?id=3" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir fiche
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="tel:0765432109" class="btn btn-sm btn-ghost-dark btn-icon" title="Appeler">
+                                                    <i class="ti ti-phone icon"></i>
+                                                </a>
+                                                <a href="mailto:sophie.laurent@logisticspro.ch" class="btn btn-sm btn-ghost-dark btn-icon" title="Email">
+                                                    <i class="ti ti-mail icon"></i>
+                                                </a>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical icon"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="#">Planifier réunion</a></li>
+                                                        <li><a class="dropdown-item" href="#">Créer opportunité</a></li>
+                                                        <li><a class="dropdown-item" href="#">Voir historique</a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item" href="#">Éditer infos</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Plus de clients... -->
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">
+                                    <i class="ti ti-chevron-left icon"></i>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">
+                                    <i class="ti ti-chevron-right icon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- ApexCharts pour sparklines -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/pipeline-crm.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'revendeur') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('clients');
+            
+            // Sparkline croissance
+            const sparklineOptions = {
+                series: [{
+                    data: [12, 14, 18, 22, 25, 28, 32, 35, 38, 42, 45, 48]
+                }],
+                chart: {
+                    type: 'line',
+                    height: 40,
+                    sparkline: {
+                        enabled: true
+                    }
+                },
+                stroke: {
+                    width: 2,
+                    curve: 'smooth'
+                },
+                colors: ['#2fb344'],
+                tooltip: {
+                    enabled: false
+                }
+            };
+            
+            new ApexCharts(document.querySelector("#sparkline-growth"), sparklineOptions).render();
+            
+            // Filtres santé client
+            document.querySelectorAll('input[name="client-health"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    filterClientsByHealth(this.value);
+                });
+            });
+        });
+        
+        // Filtrer clients par santé
+        function filterClientsByHealth(health) {
+            console.log('Filtrer par santé:', health);
+            // Implémenter le filtrage
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CRM Notion Integration</title>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="page">
+        <div class="page-wrapper">
+            <div class="page-body">
+                <div class="container-xl">
+                    <h1 class="page-title mb-4">
+                        <i class="ti ti-test-pipe me-2"></i>
+                        Test CRM Notion Integration
+                    </h1>
+
+                    <!-- Test Controls -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Test des modules CRM</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="btn-list">
+                                        <button class="btn btn-primary" onclick="testContactsManager()">
+                                            <i class="ti ti-users me-1"></i>
+                                            Test Contacts Manager
+                                        </button>
+                                        <button class="btn btn-primary" onclick="testCompaniesManager()">
+                                            <i class="ti ti-building me-1"></i>
+                                            Test Companies Manager
+                                        </button>
+                                        <button class="btn btn-success" onclick="testCreateContact()">
+                                            <i class="ti ti-user-plus me-1"></i>
+                                            Créer Contact Test
+                                        </button>
+                                        <button class="btn btn-success" onclick="testCreateCompany()">
+                                            <i class="ti ti-building-plus me-1"></i>
+                                            Créer Entreprise Test
+                                        </button>
+                                        <button class="btn btn-info" onclick="testIDEValidation()">
+                                            <i class="ti ti-check me-1"></i>
+                                            Test Validation IDE
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Résultats des tests</h3>
+                                </div>
+                                <div class="card-body">
+                                    <pre id="test-output" style="max-height: 600px; overflow-y: auto;"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mock MCP Notion if not available -->
+    <script>
+        // Mock implementation for testing
+        if (typeof window.mcp_notion === 'undefined') {
+            window.mcp_notion = {
+                query_database: async function(params) {
+                    log('🔍 Mock query_database called:', params);
+                    return {
+                        results: [
+                            {
+                                id: 'test-1',
+                                properties: {
+                                    'Nom': { title: [{ plain_text: 'Jean Dupont' }] },
+                                    'Prénom': { rich_text: [{ plain_text: 'Jean' }] },
+                                    'Email': { email: 'jean.dupont@example.com' },
+                                    'Entreprise': { rich_text: [{ plain_text: 'Rolex SA' }] }
+                                },
+                                created_time: '2024-01-01T10:00:00Z',
+                                last_edited_time: '2024-01-15T14:30:00Z'
+                            }
+                        ],
+                        has_more: false
+                    };
+                },
+                create_page: async function(params) {
+                    log('✅ Mock create_page called:', params);
+                    return {
+                        id: 'new-test-' + Date.now(),
+                        properties: params.properties || {},
+                        created_time: new Date().toISOString()
+                    };
+                },
+                update_page: async function(params) {
+                    log('📝 Mock update_page called:', params);
+                    return {
+                        id: params.page_id,
+                        properties: params.properties || {},
+                        last_edited_time: new Date().toISOString()
+                    };
+                }
+            };
+        }
+    </script>
+
+    <!-- Load CRM modules -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="assets/js/Superadmin/contacts-manager-superadmin.js"></script>
+    <script src="assets/js/Superadmin/companies-manager-superadmin.js"></script>
+
+    <script>
+        // Test functions
+        const output = document.getElementById('test-output');
+        
+        function log(...args) {
+            const timestamp = new Date().toLocaleTimeString('fr-CH');
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+            ).join(' ');
+            output.textContent += `[${timestamp}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+            console.log(...args);
+        }
+
+        async function testContactsManager() {
+            log('🧪 Testing Contacts Manager...');
+            try {
+                if (typeof ContactsManagerSuperadmin === 'undefined') {
+                    throw new Error('ContactsManagerSuperadmin not loaded');
+                }
+                
+                // Test loading contacts
+                log('Loading contacts from Notion...');
+                const contacts = await ContactsManagerSuperadmin.loadContactsFromNotion();
+                log(`✅ Loaded ${contacts?.length || 0} contacts`);
+                
+                // Test search
+                log('Testing search functionality...');
+                const searchResults = ContactsManagerSuperadmin.searchContacts('Jean');
+                log(`✅ Found ${searchResults?.length || 0} contacts matching "Jean"`);
+                
+                log('✅ Contacts Manager test completed successfully!');
+                
+            } catch (error) {
+                log('❌ Error testing Contacts Manager:', error.message);
+            }
+        }
+
+        async function testCompaniesManager() {
+            log('🧪 Testing Companies Manager...');
+            try {
+                if (typeof CompaniesManagerSuperadmin === 'undefined') {
+                    throw new Error('CompaniesManagerSuperadmin not loaded');
+                }
+                
+                // Test IDE validation
+                log('Testing IDE validation...');
+                const ideTests = [
+                    'CHE-100.123.456',
+                    'CHE-999.999.999',
+                    'INVALID-IDE',
+                    'CHE123456789'
+                ];
+                
+                ideTests.forEach(ide => {
+                    const result = CompaniesManagerSuperadmin.validateIDE(ide);
+                    log(`IDE ${ide}: ${result.valid ? '✅' : '❌'} ${result.message}`);
+                });
+                
+                log('✅ Companies Manager test completed successfully!');
+                
+            } catch (error) {
+                log('❌ Error testing Companies Manager:', error.message);
+            }
+        }
+
+        async function testCreateContact() {
+            log('🧪 Creating test contact...');
+            try {
+                const testContact = {
+                    firstName: 'Test',
+                    lastName: 'Contact ' + Date.now(),
+                    email: `test.contact.${Date.now()}@example.com`,
+                    company: 'Test Company SA',
+                    position: 'Test Manager',
+                    phone: '+41 79 123 45 67',
+                    status: 'prospect',
+                    entity: ['Hypervisual', 'Lexaia'],
+                    tags: ['test', 'crm', 'notion'],
+                    notes: 'Contact créé automatiquement pour test'
+                };
+                
+                log('Creating contact:', testContact);
+                
+                if (typeof window.mcp_notion !== 'undefined') {
+                    const result = await window.mcp_notion.create_page({
+                        parent_id: '22cadb95-3c6f-80f1-8e05-ffe0eef29f52', // DB-CONTACTS-PERSONNES
+                        parent_type: 'database',
+                        title: `${testContact.firstName} ${testContact.lastName}`,
+                        properties: {
+                            'Nom': { title: [{ text: { content: testContact.lastName } }] },
+                            'Prénom': { rich_text: [{ text: { content: testContact.firstName } }] },
+                            'Email': { email: testContact.email },
+                            'Téléphone': { phone_number: testContact.phone },
+                            'Entreprise': { rich_text: [{ text: { content: testContact.company } }] },
+                            'Fonction': { rich_text: [{ text: { content: testContact.position } }] },
+                            'Statut': { select: { name: 'Prospect' } },
+                            'Tags': { multi_select: testContact.tags.map(tag => ({ name: tag })) },
+                            'Notes': { rich_text: [{ text: { content: testContact.notes } }] }
+                        }
+                    });
+                    
+                    log('✅ Contact created successfully:', result);
+                } else {
+                    log('⚠️ MCP Notion not available, skipping actual creation');
+                }
+                
+            } catch (error) {
+                log('❌ Error creating contact:', error.message);
+            }
+        }
+
+        async function testCreateCompany() {
+            log('🧪 Creating test company...');
+            try {
+                const testCompany = {
+                    name: 'Test Company ' + Date.now() + ' SA',
+                    ide: 'CHE-' + Math.floor(Math.random() * 900 + 100) + '.' + 
+                         Math.floor(Math.random() * 900 + 100) + '.' + 
+                         Math.floor(Math.random() * 900 + 100),
+                    sector: 'Tech & Innovation',
+                    revenue: Math.floor(Math.random() * 10000000) + 1000000,
+                    address: {
+                        street: 'Rue du Test 123',
+                        npa: '1200',
+                        city: 'Genève',
+                        canton: 'GE'
+                    },
+                    contact: {
+                        phone: '+41 22 123 45 67',
+                        email: 'contact@testcompany.ch',
+                        website: 'https://www.testcompany.ch'
+                    },
+                    notes: 'Entreprise créée automatiquement pour test CRM'
+                };
+                
+                log('Creating company:', testCompany);
+                
+                if (typeof window.mcp_notion !== 'undefined') {
+                    const result = await window.mcp_notion.create_page({
+                        parent_id: '223adb95-3c6f-80e7-aa2b-cfd9888f2af3', // DB-CONTACTS-ENTREPRISES
+                        parent_type: 'database',
+                        title: testCompany.name,
+                        properties: {
+                            'Nom': { title: [{ text: { content: testCompany.name } }] },
+                            'IDE': { rich_text: [{ text: { content: testCompany.ide } }] },
+                            'Secteur': { select: { name: testCompany.sector } },
+                            'CA Estimé': { number: testCompany.revenue },
+                            'Adresse': { rich_text: [{ text: { content: testCompany.address.street } }] },
+                            'NPA': { number: parseInt(testCompany.address.npa) },
+                            'Ville': { rich_text: [{ text: { content: testCompany.address.city } }] },
+                            'Canton': { select: { name: testCompany.address.canton } },
+                            'Téléphone': { phone_number: testCompany.contact.phone },
+                            'Email': { email: testCompany.contact.email },
+                            'Site Web': { url: testCompany.contact.website },
+                            'Notes': { rich_text: [{ text: { content: testCompany.notes } }] }
+                        }
+                    });
+                    
+                    log('✅ Company created successfully:', result);
+                } else {
+                    log('⚠️ MCP Notion not available, skipping actual creation');
+                }
+                
+            } catch (error) {
+                log('❌ Error creating company:', error.message);
+            }
+        }
+
+        async function testIDEValidation() {
+            log('🧪 Testing Swiss IDE validation...');
+            
+            const testCases = [
+                { ide: 'CHE-107.979.376', expected: true, name: 'Valid Rolex IDE' },
+                { ide: 'CHE-105.815.355', expected: true, name: 'Valid Nestlé IDE' },
+                { ide: 'CHE-106.222.884', expected: true, name: 'Valid UBS IDE' },
+                { ide: 'CHE-123.456.789', expected: false, name: 'Invalid checksum' },
+                { ide: 'CH-123.456.789', expected: false, name: 'Missing E' },
+                { ide: 'CHE123456789', expected: false, name: 'Missing dots' },
+                { ide: 'CHE-12.345.678', expected: false, name: 'Wrong length' },
+                { ide: '', expected: false, name: 'Empty string' }
+            ];
+            
+            testCases.forEach(test => {
+                const result = CompaniesManagerSuperadmin.validateIDE(test.ide);
+                const passed = result.valid === test.expected;
+                log(`${passed ? '✅' : '❌'} ${test.name}: "${test.ide}" - ${result.message}`);
+            });
+            
+            log('✅ IDE validation tests completed!');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 CRM Notion Test Page Ready');
+            log('Available modules:', {
+                ContactsManagerSuperadmin: typeof ContactsManagerSuperadmin !== 'undefined',
+                CompaniesManagerSuperadmin: typeof CompaniesManagerSuperadmin !== 'undefined',
+                mcp_notion: typeof window.mcp_notion !== 'undefined'
+            });
+        });
+    </script>
+</body>
+</html>

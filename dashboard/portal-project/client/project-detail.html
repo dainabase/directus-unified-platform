@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Détail du Projet - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .percentage,
+        .hours-count,
+        .budget-amount,
+        .task-count {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .milestone-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .milestone-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--tblr-border-color);
+        }
+        
+        .milestone-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+        
+        .milestone-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--tblr-bg-surface);
+            border: 2px solid var(--tblr-border-color);
+        }
+        
+        .milestone-item.completed::before {
+            background: var(--tblr-green);
+            border-color: var(--tblr-green);
+        }
+        
+        .milestone-item.active::before {
+            background: var(--tblr-blue);
+            border-color: var(--tblr-blue);
+        }
+        
+        .task-item {
+            padding: 1rem;
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .task-item:hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-bg-surface-secondary);
+        }
+        
+        .task-priority {
+            width: 4px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+        
+        .priority-high { background: var(--tblr-red); }
+        .priority-medium { background: var(--tblr-yellow); }
+        .priority-low { background: var(--tblr-green); }
+        
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .team-member:hover {
+            background: var(--tblr-bg-surface-secondary);
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .file-item:hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-bg-surface-secondary);
+        }
+        
+        .activity-timeline {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--tblr-border-color);
+        }
+        
+        .activity-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: var(--tblr-border-color);
+        }
+    </style>
+</head>
+<body data-bs-theme="light" class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <div class="nav-item dropdown d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                            <i class="ti ti-bell"></i>
+                            <span class="badge bg-red"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Notifications</h3>
+                                </div>
+                                <div class="list-group list-group-flush list-group-hoverable">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="status-dot status-dot-animated bg-red d-block"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Nouvelle mise à jour</a>
+                                                <div class="d-block text-secondary text-truncate mt-n1">
+                                                    Le projet a été mis à jour
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div id="user-name">Utilisateur</div>
+                                <div class="mt-1 small text-secondary">Client</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">Mon profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="/client/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                                <i class="ti ti-bell"></i>
+                                <span class="badge bg-red"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar-mobile"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-folder"></i>
+                                </span>
+                                <span class="nav-link-title">Projets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="documents.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-text"></i>
+                                </span>
+                                <span class="nav-link-title">Documents</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finances.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-currency-euro"></i>
+                                </span>
+                                <span class="nav-link-title">Finances</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Projets</div>
+                            <h2 class="page-title">
+                                Site E-commerce Premium
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="projects.html" class="btn btn-ghost-secondary">
+                                    <i class="ti ti-arrow-left"></i>
+                                    Retour
+                                </a>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">
+                                    <i class="ti ti-message-circle"></i>
+                                    Contacter l'équipe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Project Status Alert -->
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                <i class="ti ti-info-circle alert-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="alert-title">Projet en cours</h4>
+                                <div class="text-secondary">Ce projet est actuellement en phase de développement. La prochaine livraison est prévue le 30 janvier 2024.</div>
+                            </div>
+                        </div>
+                        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                    </div>
+
+                    <!-- Overview Row -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-folder"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Vue d'ensemble du projet</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Description</label>
+                                                <p class="text-body">
+                                                    Développement d'une plateforme e-commerce complète avec système de gestion de contenu, 
+                                                    intégration de paiements multiples et tableau de bord analytique avancé. 
+                                                    Le projet inclut une application mobile native pour iOS et Android.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Statut</label>
+                                                <div>
+                                                    <span class="status status-blue">
+                                                        <span class="status-dot status-dot-animated"></span>
+                                                        En développement
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Priorité</label>
+                                                <div>
+                                                    <span class="badge badge-outline text-red">
+                                                        <i class="ti ti-flag"></i>
+                                                        Haute
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Date de début</label>
+                                                <div class="text-body">1er janvier 2024</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Date de fin prévue</label>
+                                                <div class="text-body">31 mars 2024</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Budget</label>
+                                                <div class="text-body budget-amount">CHF 75'000</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label text-secondary">Dépensé</label>
+                                                <div class="text-body budget-amount">CHF 45'000</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <!-- Progress Card -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-chart-pie"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="card-title">Progression globale</h3>
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <div id="chart-progress" class="chart-sm"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="display-5 percentage">65%</div>
+                                            <div class="text-secondary">Complété</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stats Card -->
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-list-check"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="card-title">Statistiques</h3>
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col">Tâches totales</div>
+                                                <div class="col-auto task-count">48</div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col">Complétées</div>
+                                                <div class="col-auto task-count text-green">31</div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col">En cours</div>
+                                                <div class="col-auto task-count text-blue">12</div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col">En attente</div>
+                                                <div class="col-auto task-count text-secondary">5</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-milestones" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab">
+                                        <i class="ti ti-flag me-2"></i>
+                                        Jalons
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-tasks" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab">
+                                        <i class="ti ti-list-check me-2"></i>
+                                        Tâches
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-team" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab">
+                                        <i class="ti ti-users me-2"></i>
+                                        Équipe
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-files" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab">
+                                        <i class="ti ti-paperclip me-2"></i>
+                                        Fichiers
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-activity" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab">
+                                        <i class="ti ti-activity me-2"></i>
+                                        Activité
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Milestones Tab -->
+                                <div class="tab-pane active show" id="tabs-milestones" role="tabpanel">
+                                    <h3 class="mb-3">Jalons du projet</h3>
+                                    <div class="milestone-timeline">
+                                        <div class="milestone-item completed">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h4 class="mb-1">Phase 1: Conception et Architecture</h4>
+                                                    <p class="text-secondary mb-2">Design UI/UX, architecture technique et base de données</p>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <span class="badge bg-green">Complété</span>
+                                                        <small class="text-secondary">15 janvier 2024</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="percentage text-green">100%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="milestone-item active">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h4 class="mb-1">Phase 2: Développement Core</h4>
+                                                    <p class="text-secondary mb-2">Fonctionnalités principales, API et intégrations</p>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <span class="badge bg-blue">En cours</span>
+                                                        <small class="text-secondary">Échéance: 15 février 2024</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="percentage text-blue">65%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="milestone-item">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h4 class="mb-1">Phase 3: Tests et Optimisation</h4>
+                                                    <p class="text-secondary mb-2">Tests unitaires, intégration et performance</p>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <span class="badge bg-secondary">À venir</span>
+                                                        <small class="text-secondary">Échéance: 15 mars 2024</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="percentage text-secondary">0%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="milestone-item">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h4 class="mb-1">Phase 4: Déploiement</h4>
+                                                    <p class="text-secondary mb-2">Mise en production et formation</p>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <span class="badge bg-secondary">À venir</span>
+                                                        <small class="text-secondary">Échéance: 31 mars 2024</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="percentage text-secondary">0%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tasks Tab -->
+                                <div class="tab-pane" id="tabs-tasks" role="tabpanel">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h3>Tâches en cours</h3>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm active">Toutes</button>
+                                            <button type="button" class="btn btn-sm">En cours</button>
+                                            <button type="button" class="btn btn-sm">Complétées</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tasks-list">
+                                        <div class="task-item position-relative">
+                                            <div class="task-priority priority-high"></div>
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <label class="form-check">
+                                                        <input class="form-check-input" type="checkbox">
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <h4 class="mb-1">Intégration API de paiement Stripe</h4>
+                                                    <div class="text-secondary">Intégrer l'API Stripe pour les paiements par carte</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge bg-red">Urgent</span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="avatar-list avatar-list-stacked">
+                                                        <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Sophie+Martin)"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="task-item position-relative">
+                                            <div class="task-priority priority-medium"></div>
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <label class="form-check">
+                                                        <input class="form-check-input" type="checkbox">
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <h4 class="mb-1">Optimisation des performances mobile</h4>
+                                                    <div class="text-secondary">Améliorer le temps de chargement sur mobile</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge bg-yellow">Moyen</span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="avatar-list avatar-list-stacked">
+                                                        <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Thomas+Dubois)"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="task-item position-relative">
+                                            <div class="task-priority priority-low"></div>
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <label class="form-check">
+                                                        <input class="form-check-input" type="checkbox" checked>
+                                                    </label>
+                                                </div>
+                                                <div class="col">
+                                                    <h4 class="mb-1 text-decoration-line-through">Création des maquettes produits</h4>
+                                                    <div class="text-secondary">Design des pages produits et catégories</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <span class="badge bg-green">Complété</span>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="avatar-list avatar-list-stacked">
+                                                        <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Emma+Blanc)"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Team Tab -->
+                                <div class="tab-pane" id="tabs-team" role="tabpanel">
+                                    <h3 class="mb-3">Équipe projet</h3>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="team-member">
+                                                <span class="avatar" style="background-image: url(https://eu.ui-avatars.com/api/?name=Pierre+Lefebvre)"></span>
+                                                <div class="flex-fill">
+                                                    <div class="fw-medium">Pierre Lefebvre</div>
+                                                    <div class="text-secondary small">Chef de projet</div>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <span class="badge bg-green-lt">Actif</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="team-member">
+                                                <span class="avatar" style="background-image: url(https://eu.ui-avatars.com/api/?name=Sophie+Martin)"></span>
+                                                <div class="flex-fill">
+                                                    <div class="fw-medium">Sophie Martin</div>
+                                                    <div class="text-secondary small">Développeur Frontend</div>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <span class="badge bg-green-lt">Actif</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="team-member">
+                                                <span class="avatar" style="background-image: url(https://eu.ui-avatars.com/api/?name=Thomas+Dubois)"></span>
+                                                <div class="flex-fill">
+                                                    <div class="fw-medium">Thomas Dubois</div>
+                                                    <div class="text-secondary small">Développeur Backend</div>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <span class="badge bg-green-lt">Actif</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="team-member">
+                                                <span class="avatar" style="background-image: url(https://eu.ui-avatars.com/api/?name=Emma+Blanc)"></span>
+                                                <div class="flex-fill">
+                                                    <div class="fw-medium">Emma Blanc</div>
+                                                    <div class="text-secondary small">Designer UI/UX</div>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <span class="badge bg-green-lt">Actif</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Files Tab -->
+                                <div class="tab-pane" id="tabs-files" role="tabpanel">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h3>Documents du projet</h3>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="ti ti-upload"></i>
+                                            Ajouter un fichier
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="files-list">
+                                        <div class="file-item">
+                                            <div class="avatar bg-blue-lt">
+                                                <i class="ti ti-file-text"></i>
+                                            </div>
+                                            <div class="flex-fill">
+                                                <div class="fw-medium">Cahier des charges v2.pdf</div>
+                                                <div class="text-secondary small">2.4 MB • Mis à jour le 15 jan 2024</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-ghost-secondary btn-sm">
+                                                    <i class="ti ti-download"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="file-item">
+                                            <div class="avatar bg-green-lt">
+                                                <i class="ti ti-file-spreadsheet"></i>
+                                            </div>
+                                            <div class="flex-fill">
+                                                <div class="fw-medium">Budget_projet.xlsx</div>
+                                                <div class="text-secondary small">856 KB • Mis à jour le 10 jan 2024</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-ghost-secondary btn-sm">
+                                                    <i class="ti ti-download"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="file-item">
+                                            <div class="avatar bg-purple-lt">
+                                                <i class="ti ti-photo"></i>
+                                            </div>
+                                            <div class="flex-fill">
+                                                <div class="fw-medium">Maquettes_UI.zip</div>
+                                                <div class="text-secondary small">45.2 MB • Mis à jour le 8 jan 2024</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-ghost-secondary btn-sm">
+                                                    <i class="ti ti-download"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Tab -->
+                                <div class="tab-pane" id="tabs-activity" role="tabpanel">
+                                    <h3 class="mb-3">Activité récente</h3>
+                                    <div class="activity-timeline">
+                                        <div class="activity-item">
+                                            <div class="text-secondary small">Il y a 2 heures</div>
+                                            <div class="fw-medium">Sophie Martin a complété la tâche "Intégration formulaire de contact"</div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="text-secondary small">Il y a 5 heures</div>
+                                            <div class="fw-medium">Thomas Dubois a ajouté un commentaire sur "API REST documentation"</div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="text-secondary small">Hier</div>
+                                            <div class="fw-medium">Pierre Lefebvre a mis à jour le statut du projet</div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="text-secondary small">Il y a 2 jours</div>
+                                            <div class="fw-medium">Emma Blanc a ajouté 3 nouveaux fichiers</div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="text-secondary small">Il y a 3 jours</div>
+                                            <div class="fw-medium">Nouvelle milestone "Phase 2" démarrée</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Documentation</a></li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Portal Pro</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal modal-blur fade" id="contactModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Contacter l'équipe projet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Destinataire</label>
+                        <select class="form-select">
+                            <option>Toute l'équipe</option>
+                            <option>Pierre Lefebvre - Chef de projet</option>
+                            <option>Sophie Martin - Développeur Frontend</option>
+                            <option>Thomas Dubois - Développeur Backend</option>
+                            <option>Emma Blanc - Designer UI/UX</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sujet</label>
+                        <input type="text" class="form-control" placeholder="Objet de votre message">
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="5" placeholder="Votre message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-send"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+        // Initialize progress chart
+        document.addEventListener('DOMContentLoaded', function() {
+            // Progress radial chart
+            const progressChart = new ApexCharts(document.querySelector("#chart-progress"), {
+                chart: {
+                    type: 'radialBar',
+                    height: 120,
+                    sparkline: {
+                        enabled: true
+                    }
+                },
+                series: [65],
+                colors: ['#206bc4'],
+                plotOptions: {
+                    radialBar: {
+                        hollow: {
+                            size: '60%'
+                        },
+                        dataLabels: {
+                            show: false
+                        }
+                    }
+                }
+            });
+            progressChart.render();
+            
+            // Initialize user data
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (userData.name) {
+                document.getElementById('user-name').textContent = userData.name;
+                document.getElementById('user-avatar').style.backgroundImage = `url(${userData.avatar})`;
+                document.getElementById('user-avatar-mobile').style.backgroundImage = `url(${userData.avatar})`;
+            }
+            
+            // Task checkboxes
+            document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItem = this.closest('.task-item');
+                    const taskTitle = taskItem.querySelector('h4');
+                    
+                    if (this.checked) {
+                        taskTitle.classList.add('text-decoration-line-through');
+                        taskItem.querySelector('.badge').textContent = 'Complété';
+                        taskItem.querySelector('.badge').className = 'badge bg-green';
+                    } else {
+                        taskTitle.classList.remove('text-decoration-line-through');
+                        // Restore original badge based on priority
+                        const priority = taskItem.querySelector('.task-priority');
+                        if (priority.classList.contains('priority-high')) {
+                            taskItem.querySelector('.badge').textContent = 'Urgent';
+                            taskItem.querySelector('.badge').className = 'badge bg-red';
+                        } else if (priority.classList.contains('priority-medium')) {
+                            taskItem.querySelector('.badge').textContent = 'Moyen';
+                            taskItem.querySelector('.badge').className = 'badge bg-yellow';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

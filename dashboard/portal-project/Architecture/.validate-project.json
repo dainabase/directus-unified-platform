@@ -1,0 +1,111 @@
+{
+  "name": "dashboard-client-presta",
+  "version": "2.2.0",
+  "description": "Configuration de validation automatique du projet",
+  "validation": {
+    "stableModules": {
+      "files": [
+        "assets/js/Core/auth-notion-v2.js",
+        "assets/js/Core/notion-api-client.js",
+        "assets/js/Core/permissions-notion.js",
+        "assets/js/Core/entities-config.js",
+        "assets/js/Optimizations/advanced-cache.js",
+        "assets/js/Optimizations/lazy-loader.js",
+        "assets/js/Optimizations/virtual-scroll.js",
+        "assets/js/Optimizations/pagination-system.js",
+        "assets/js/Optimizations/optimization-activator.js",
+        "sw.js"
+      ],
+      "checksums": {
+        "enabled": true,
+        "algorithm": "sha256"
+      }
+    },
+    "requiredFiles": [
+      "CLAUDE.md",
+      "Architecture/STABLE_MODULES.md",
+      "Architecture/ENV_RULES.md",
+      "Architecture/.protected-files",
+      "Architecture/api_implementation_status.md",
+      "Architecture/TODO-DEVELOPPEMENT.md",
+      "Architecture/CONTEXTE-CLAUDE.md"
+    ],
+    "environmentVariables": {
+      "required": [
+        "NODE_ENV",
+        "NOTION_API_KEY",
+        "JWT_SECRET",
+        "PORT"
+      ],
+      "optional": [
+        "OPENAI_API_KEY",
+        "SENTRY_DSN",
+        "CORS_ORIGINS",
+        "RATE_LIMIT_WINDOW",
+        "RATE_LIMIT_MAX",
+        "CACHE_TTL",
+        "LOG_LEVEL"
+      ]
+    },
+    "codeQuality": {
+      "eslint": true,
+      "prettier": true,
+      "minCoverage": {
+        "statements": 80,
+        "branches": 80,
+        "functions": 80,
+        "lines": 80
+      }
+    },
+    "security": {
+      "noSecretsInCode": true,
+      "httpsOnly": true,
+      "csrfProtection": true,
+      "rateLimiting": true,
+      "contentSecurityPolicy": true
+    },
+    "performance": {
+      "maxBundleSize": "300KB",
+      "maxLoadTime": "3s",
+      "lighthouseScore": {
+        "performance": 90,
+        "accessibility": 95,
+        "bestPractices": 90,
+        "seo": 90
+      }
+    },
+    "compatibility": {
+      "browsers": [
+        "Chrome >= 90",
+        "Firefox >= 88",
+        "Safari >= 14",
+        "Edge >= 90"
+      ],
+      "mobile": {
+        "ios": "14+",
+        "android": "10+"
+      }
+    }
+  },
+  "scripts": {
+    "verify:stable": "node scripts/verify-stable-modules.js",
+    "verify:env": "node scripts/verify-environment.js",
+    "verify:security": "node scripts/verify-security.js",
+    "verify:all": "npm run verify:stable && npm run verify:env && npm run verify:security",
+    "audit:dependencies": "npm audit",
+    "audit:code": "eslint . && prettier --check .",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "cypress run",
+    "build:check": "webpack --mode production --analyze"
+  },
+  "hooks": {
+    "pre-commit": [
+      "verify:stable",
+      "audit:code"
+    ],
+    "pre-push": [
+      "verify:all",
+      "test:coverage"
+    ]
+  }
+}

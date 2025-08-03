@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Mes Projets - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .budget-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--tblr-primary);
+        }
+        
+        .client-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .project-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .status-active { background: var(--tblr-green-lt); color: var(--tblr-green); }
+        .status-pending { background: var(--tblr-yellow-lt); color: var(--tblr-yellow); }
+        .status-completed { background: var(--tblr-blue-lt); color: var(--tblr-blue); }
+        .status-cancelled { background: var(--tblr-red-lt); color: var(--tblr-red); }
+        
+        .progress-percentage {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .priority-high { background: var(--tblr-red-lt); color: var(--tblr-red); }
+        .priority-medium { background: var(--tblr-yellow-lt); color: var(--tblr-yellow); }
+        .priority-normal { background: var(--tblr-green-lt); color: var(--tblr-green); }
+        
+        .project-row {
+            transition: all 0.2s ease;
+        }
+        
+        .project-row:hover {
+            background: var(--tblr-hover-bg);
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/client/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-blue">CLIENT</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-blue-lt">CL</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Client Premium</div>
+                                <div class="mt-1 small text-secondary">Espace projets</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="projects.html" class="dropdown-item">
+                                <i class="ti ti-folder me-2"></i>
+                                Mes projets
+                            </a>
+                            <a href="documents.html" class="dropdown-item">
+                                <i class="ti ti-files me-2"></i>
+                                Documents
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="projects.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-folder"></i>
+                                            </span>
+                                            <span class="nav-link-title">Mes projets</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="documents.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-files"></i>
+                                            </span>
+                                            <span class="nav-link-title">Documents</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="finances.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-currency-dollar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Finances</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Projets</li>
+                            </ol>
+                            <h2 class="page-title">
+                                <i class="ti ti-folder me-2"></i>
+                                Mes Projets
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn btn-white" onclick="toggleFilters()">
+                                    <i class="ti ti-filter"></i>
+                                    Filtrer
+                                </button>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-project">
+                                    <i class="ti ti-plus"></i>
+                                    Nouveau projet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Stats row -->
+                    <div class="row row-deck row-cards mb-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card client-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-folder"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Total Projets</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value">8</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card client-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-progress"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">En cours</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value text-green">3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card client-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-clock"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">En attente</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value text-orange">2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card client-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-check"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Terminés</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value text-blue">3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="card mb-4 collapse" id="filters-card">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-purple">
+                                <i class="ti ti-filter"></i>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">Tous</option>
+                                        <option value="En cours">En cours</option>
+                                        <option value="En attente">En attente</option>
+                                        <option value="Terminé">Terminé</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Responsable</label>
+                                    <select class="form-select" id="filter-manager">
+                                        <option value="">Tous</option>
+                                        <option value="Marie D.">Marie D.</option>
+                                        <option value="Jean P.">Jean P.</option>
+                                        <option value="Pierre L.">Pierre L.</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Période</label>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" id="filter-date-from">
+                                        <span class="input-group-text">au</span>
+                                        <input type="date" class="form-control" id="filter-date-to">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                        <i class="ti ti-search"></i>
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Projects table -->
+                    <div class="card">
+                        <div class="card-stamp">
+                            <div class="card-stamp-icon bg-blue">
+                                <i class="ti ti-table"></i>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="ti ti-list me-2"></i>
+                                Liste des projets
+                            </h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table table-striped" id="projectsTable">
+                                <thead class="table-active">
+                                    <tr>
+                                        <th><i class="ti ti-folder me-1"></i>Nom</th>
+                                        <th><i class="ti ti-building me-1"></i>Département</th>
+                                        <th><i class="ti ti-flag me-1"></i>Statut</th>
+                                        <th><i class="ti ti-progress me-1"></i>Progression</th>
+                                        <th><i class="ti ti-currency-dollar me-1"></i>Budget</th>
+                                        <th><i class="ti ti-calendar me-1"></i>Échéance</th>
+                                        <th><i class="ti ti-user me-1"></i>Responsable</th>
+                                        <th class="w-1">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="project-row">
+                                        <td>
+                                            <div>
+                                                <a href="project-detail.html?id=1" class="text-reset font-weight-medium">
+                                                    Refonte Site Web Corporate
+                                                </a>
+                                                <div class="mt-1">
+                                                    <span class="badge priority-high">Priorité haute</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-secondary">Direction Marketing</td>
+                                        <td>
+                                            <span class="project-status status-active">En cours</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2 progress-percentage">65%</span>
+                                                <div class="progress flex-fill">
+                                                    <div class="progress-bar bg-green" style="width: 65%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="budget-amount">CHF 45'200</div>
+                                            <small class="text-secondary">/ CHF 80'000</small>
+                                        </td>
+                                        <td>30.03.2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2 bg-blue-lt">MD</span>
+                                                <span>Marie D.</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="project-detail.html?id=1">
+                                                        <i class="ti ti-eye me-2"></i>
+                                                        Voir détails
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ti ti-edit me-2"></i>
+                                                        Modifier
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#">
+                                                        <i class="ti ti-archive me-2"></i>
+                                                        Archiver
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="project-row">
+                                        <td>
+                                            <div>
+                                                <a href="project-detail.html?id=2" class="text-reset font-weight-medium">
+                                                    Application Mobile v2.0
+                                                </a>
+                                                <div class="mt-1">
+                                                    <span class="badge priority-medium">Priorité moyenne</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-secondary">IT Department</td>
+                                        <td>
+                                            <span class="project-status status-pending">En attente</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2 progress-percentage">15%</span>
+                                                <div class="progress flex-fill">
+                                                    <div class="progress-bar bg-yellow" style="width: 15%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="budget-amount">CHF 12'500</div>
+                                            <small class="text-secondary">/ CHF 120'000</small>
+                                        </td>
+                                        <td>15.05.2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2 bg-green-lt">JP</span>
+                                                <span>Jean P.</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="project-detail.html?id=2">
+                                                        <i class="ti ti-eye me-2"></i>
+                                                        Voir détails
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ti ti-edit me-2"></i>
+                                                        Modifier
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#">
+                                                        <i class="ti ti-archive me-2"></i>
+                                                        Archiver
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="project-row">
+                                        <td>
+                                            <div>
+                                                <a href="project-detail.html?id=3" class="text-reset font-weight-medium">
+                                                    Migration CRM Cloud
+                                                </a>
+                                                <div class="mt-1">
+                                                    <span class="badge priority-normal">Priorité normale</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-secondary">Direction Commerciale</td>
+                                        <td>
+                                            <span class="project-status status-active">En cours</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2 progress-percentage">45%</span>
+                                                <div class="progress flex-fill">
+                                                    <div class="progress-bar bg-green" style="width: 45%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="budget-amount">CHF 28'000</div>
+                                            <small class="text-secondary">/ CHF 60'000</small>
+                                        </td>
+                                        <td>10.04.2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2 bg-purple-lt">PL</span>
+                                                <span>Pierre L.</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="project-detail.html?id=3">
+                                                        <i class="ti ti-eye me-2"></i>
+                                                        Voir détails
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ti ti-edit me-2"></i>
+                                                        Modifier
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#">
+                                                        <i class="ti ti-archive me-2"></i>
+                                                        Archiver
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="project-row">
+                                        <td>
+                                            <div>
+                                                <a href="project-detail.html?id=4" class="text-reset font-weight-medium">
+                                                    Plateforme E-learning
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="text-secondary">Ressources Humaines</td>
+                                        <td>
+                                            <span class="project-status status-completed">Terminé</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-2 progress-percentage">100%</span>
+                                                <div class="progress flex-fill">
+                                                    <div class="progress-bar bg-blue" style="width: 100%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="budget-amount">CHF 35'000</div>
+                                            <small class="text-secondary">/ CHF 35'000</small>
+                                        </td>
+                                        <td>15.02.2024</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm me-2 bg-blue-lt">MD</span>
+                                                <span>Marie D.</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="project-detail.html?id=4">
+                                                        <i class="ti ti-eye me-2"></i>
+                                                        Voir détails
+                                                    </a>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ti ti-edit me-2"></i>
+                                                        Modifier
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#">
+                                                        <i class="ti ti-archive me-2"></i>
+                                                        Archiver
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-folder me-1"></i>
+                                    Espace Client - Gestion des projets
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal Nouveau Projet -->
+    <div class="modal modal-blur fade" id="modal-new-project" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau projet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="newProjectForm" onsubmit="createProject(event)">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label required">Nom du projet</label>
+                                    <input type="text" class="form-control" name="projectName" 
+                                           placeholder="Ex: Refonte site web" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label required">Statut</label>
+                                    <select class="form-select" name="status" required>
+                                        <option value="">Choisir un statut</option>
+                                        <option value="Planifié">Planifié</option>
+                                        <option value="En cours">En cours</option>
+                                        <option value="En pause">En pause</option>
+                                        <option value="En attente">En attente</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label required">Budget (CHF)</label>
+                                    <input type="number" class="form-control metric-value" name="budget" 
+                                           placeholder="25000" min="0" step="100" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">% Avancement</label>
+                                    <input type="number" class="form-control metric-value" name="progress" 
+                                           placeholder="0" min="0" max="100" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date de début</label>
+                                    <input type="date" class="form-control" name="startDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date de fin prévue</label>
+                                    <input type="date" class="form-control" name="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Description du projet</label>
+                            <textarea class="form-control" name="description" rows="3" 
+                                      placeholder="Décrivez brièvement le projet..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Type de projet</label>
+                            <select class="form-select" name="projectType">
+                                <option value="">Choisir un type</option>
+                                <option value="Site Web">Site Web</option>
+                                <option value="Application Mobile">Application Mobile</option>
+                                <option value="E-commerce">E-commerce</option>
+                                <option value="API/Backend">API/Backend</option>
+                                <option value="Design">Design</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Audit">Audit</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <a href="#" class="btn me-auto" data-bs-dismiss="modal">Annuler</a>
+                        <button type="submit" class="btn btn-primary" id="submitProjectBtn">
+                            <i class="ti ti-plus me-1"></i>
+                            Créer le projet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Initialize DataTable
+            $('#projectsTable').DataTable({
+                responsive: true,
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json'
+                }
+            });
+            
+            // Initialize projects module
+            if (typeof Projects !== 'undefined') {
+                Projects.init();
+            }
+        });
+        
+        // Toggle filters
+        function toggleFilters() {
+            const filtersCard = document.getElementById('filters-card');
+            filtersCard.classList.toggle('show');
+        }
+        
+        // Apply filters
+        function applyFilters() {
+            // Implementation for filtering
+            console.log('Applying filters...');
+        }
+        
+        // Créer un nouveau projet
+        async function createProject(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitProjectBtn');
+            const currentUser = window.AuthNotionModule?.getCurrentUser();
+            
+            if (!currentUser) {
+                alert('Utilisateur non connecté');
+                return;
+            }
+            
+            // Désactiver le bouton pendant la création
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Création...';
+            
+            try {
+                // Préparer les données du projet
+                const projectData = {
+                    'Nom du Projet': {
+                        title: [{
+                            text: { content: formData.get('projectName') }
+                        }]
+                    },
+                    'Client': {
+                        relation: [{ id: currentUser.id }]
+                    },
+                    'Statut Projet': {
+                        select: { name: formData.get('status') }
+                    },
+                    'Budget': {
+                        number: parseFloat(formData.get('budget')) || 0
+                    },
+                    '% Avancement': {
+                        number: parseFloat(formData.get('progress')) || 0
+                    }
+                };
+                
+                // Ajouter les dates si remplies
+                if (formData.get('startDate')) {
+                    projectData['Date Début'] = {
+                        date: { start: formData.get('startDate') }
+                    };
+                }
+                
+                if (formData.get('endDate')) {
+                    projectData['Date Fin Prévue'] = {
+                        date: { start: formData.get('endDate') }
+                    };
+                }
+                
+                // Ajouter la description si remplie
+                if (formData.get('description')) {
+                    projectData['Description'] = {
+                        rich_text: [{
+                            text: { content: formData.get('description') }
+                        }]
+                    };
+                }
+                
+                // Créer le projet dans Notion
+                const result = await window.mcp_notion?.pages.create({
+                    parent: { database_id: '226adb95-3c6f-806e-9e61-e263baf7af69' }, // DB_PROJETS_CLIENTS
+                    properties: projectData
+                });
+                
+                if (result) {
+                    // Succès
+                    if (window.showNotification) {
+                        window.showNotification('Projet créé avec succès !', 'success');
+                    } else {
+                        alert('Projet créé avec succès !');
+                    }
+                    
+                    // Fermer le modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modal-new-project'));
+                    modal.hide();
+                    
+                    // Reset le formulaire
+                    form.reset();
+                    
+                    // Recharger la page pour voir le nouveau projet
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                    
+                } else {
+                    throw new Error('Pas de réponse de Notion');
+                }
+                
+            } catch (error) {
+                console.error('Erreur création projet:', error);
+                
+                if (window.showNotification) {
+                    window.showNotification('Erreur lors de la création du projet', 'error');
+                } else {
+                    alert('Erreur lors de la création du projet: ' + error.message);
+                }
+            } finally {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="ti ti-plus me-1"></i>Créer le projet';
+            }
+        }
+    </script>
+</body>
+</html>

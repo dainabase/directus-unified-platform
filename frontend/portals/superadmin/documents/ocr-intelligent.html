@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>OCR Intelligent - Documents & OCR</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../../assets/css/custom.css" rel="stylesheet"/>
+    <link href="../../assets/css/superadmin-custom.css" rel="stylesheet"/>
+    
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+        
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* Animations modernes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes progressPulse {
+            0% { box-shadow: 0 0 0 0 rgba(32, 107, 196, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(32, 107, 196, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(32, 107, 196, 0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        /* Steps Progress Design */
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: var(--tblr-border-color);
+            z-index: 0;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--tblr-bg-surface);
+            border: 2px solid var(--tblr-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step.active .step-circle {
+            background: var(--tblr-primary);
+            border-color: var(--tblr-primary);
+            color: white;
+            animation: progressPulse 2s infinite;
+        }
+        
+        .step.completed .step-circle {
+            background: var(--tblr-success);
+            border-color: var(--tblr-success);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.875rem;
+            color: var(--tblr-text-muted);
+            text-align: center;
+            max-width: 120px;
+        }
+        
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: var(--tblr-body-color);
+            font-weight: 500;
+        }
+        
+        /* Dropzone Premium Design */
+        .dropzone-wrapper {
+            position: relative;
+            border: 3px dashed var(--tblr-border-color);
+            border-radius: var(--tblr-border-radius-lg);
+            background: var(--tblr-bg-surface);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .dropzone-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 48%, var(--tblr-primary) 50%, transparent 52%);
+            background-size: 20px 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .dropzone-wrapper:hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-bg-surface-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .dropzone-wrapper.drag-over {
+            border-color: var(--tblr-primary);
+            background: rgba(var(--tblr-primary-rgb), 0.05);
+            transform: scale(1.02);
+        }
+        
+        .dropzone-wrapper.drag-over::before {
+            opacity: 0.1;
+        }
+        
+        .dropzone-content {
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .dropzone-icon {
+            font-size: 5rem;
+            color: var(--tblr-primary);
+            opacity: 0.2;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .dropzone-wrapper:hover .dropzone-icon {
+            opacity: 0.4;
+            transform: translateY(-5px) rotate(5deg);
+        }
+        
+        .dropzone-wrapper.drag-over .dropzone-icon {
+            opacity: 1;
+            animation: pulse 1s infinite;
+        }
+        
+        /* PDF Preview Sidebar */
+        .pdf-preview-panel {
+            position: sticky;
+            top: 1rem;
+            height: calc(100vh - 8rem);
+            background: var(--tblr-bg-surface);
+            border-radius: var(--tblr-border-radius-lg);
+            box-shadow: var(--tblr-box-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pdf-preview-header {
+            padding: 1rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-bottom: 1px solid var(--tblr-border-color);
+        }
+        
+        .pdf-preview-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .pdf-page {
+            margin-bottom: 1rem;
+            border-radius: var(--tblr-border-radius);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* AI Model Selector */
+        .model-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .model-card {
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            border-radius: var(--tblr-border-radius-lg);
+            background: var(--tblr-bg-surface);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .model-card:hover {
+            border-color: var(--tblr-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .model-card.selected {
+            border-color: var(--tblr-primary);
+            background: rgba(var(--tblr-primary-rgb), 0.05);
+        }
+        
+        .model-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--tblr-primary);
+        }
+        
+        .model-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .model-description {
+            font-size: 0.875rem;
+            color: var(--tblr-text-muted);
+        }
+        
+        /* Statistics Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--tblr-bg-surface);
+            border-radius: var(--tblr-border-radius-lg);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, transparent, rgba(var(--tblr-primary-rgb), 0.1));
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            color: var(--tblr-text-muted);
+            font-size: 0.875rem;
+        }
+        
+        .stat-trend {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .stat-trend.up {
+            color: var(--tblr-success);
+        }
+        
+        .stat-trend.down {
+            color: var(--tblr-danger);
+        }
+        
+        /* Extraction Results */
+        .extraction-results {
+            background: var(--tblr-bg-surface);
+            border-radius: var(--tblr-border-radius-lg);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .result-field {
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-label {
+            font-size: 0.875rem;
+            color: var(--tblr-text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .result-value {
+            padding: 0.75rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: var(--tblr-border-radius);
+            border: 1px solid var(--tblr-border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .result-value:focus-within {
+            border-color: var(--tblr-primary);
+            box-shadow: 0 0 0 0.25rem rgba(var(--tblr-primary-rgb), 0.25);
+        }
+        
+        /* Progress Animation */
+        .progress-animated {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-animated::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+        
+        @keyframes progressShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Toast Notifications */
+        .toast-custom {
+            min-width: 300px;
+        }
+        
+        .toast-custom .toast-header {
+            background: var(--tblr-primary);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .steps::before {
+                display: none;
+            }
+            
+            .step {
+                margin-bottom: 1rem;
+            }
+            
+            .model-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .dropzone-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="../dashboard.html">
+                        <img src="../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- Navigation sera chargée dynamiquement -->
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="../system/2fa-setup.html" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Page pre-title -->
+                            <div class="page-pretitle">
+                                Documents & OCR
+                            </div>
+                            <h2 class="page-title">
+                                <span class="text-orange me-2">
+                                    <i class="ti ti-scan"></i>
+                                </span>
+                                OCR Intelligent
+                            </h2>
+                            <div class="text-muted">
+                                Extraction automatique avec IA - GPT-4 Vision & Claude 3
+                            </div>
+                        </div>
+                        <!-- Page title actions -->
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn" id="ocr-history">
+                                    <i class="ti ti-history"></i>
+                                    Historique
+                                </button>
+                                <button class="btn" id="ocr-templates">
+                                    <i class="ti ti-template"></i>
+                                    Templates
+                                </button>
+                                <button class="btn btn-primary" id="batch-upload">
+                                    <i class="ti ti-files"></i>
+                                    Traitement par lot
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Progress Steps -->
+                    <div class="steps mb-4">
+                        <div class="step active" id="step-upload">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Upload document</div>
+                        </div>
+                        <div class="step" id="step-model">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Sélection modèle IA</div>
+                        </div>
+                        <div class="step" id="step-extract">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Extraction données</div>
+                        </div>
+                        <div class="step" id="step-validate">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">Validation</div>
+                        </div>
+                        <div class="step" id="step-export">
+                            <div class="step-circle">5</div>
+                            <div class="step-label">Export Notion</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics Dashboard -->
+                    <div class="stats-grid mb-4">
+                        <div class="stat-card fade-in">
+                            <div class="stat-value text-primary" id="docs-today">0</div>
+                            <div class="stat-label">Documents aujourd'hui</div>
+                            <div class="stat-trend up">+12%</div>
+                        </div>
+                        <div class="stat-card fade-in" style="animation-delay: 0.1s">
+                            <div class="stat-value text-success" id="success-rate">98%</div>
+                            <div class="stat-label">Taux de réussite</div>
+                            <div class="stat-trend up">+2%</div>
+                        </div>
+                        <div class="stat-card fade-in" style="animation-delay: 0.2s">
+                            <div class="stat-value text-orange" id="avg-time">3.2s</div>
+                            <div class="stat-label">Temps moyen</div>
+                            <div class="stat-trend down">-0.5s</div>
+                        </div>
+                        <div class="stat-card fade-in" style="animation-delay: 0.3s">
+                            <div class="stat-value text-info" id="total-saved">CHF 4,250</div>
+                            <div class="stat-label">Économies ce mois</div>
+                            <div class="stat-trend up">+18%</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content Grid -->
+                    <div class="row row-cards">
+                        <!-- Left Column: Upload & Processing -->
+                        <div class="col-lg-8">
+                            <!-- Upload Zone -->
+                            <div class="card mb-4 slide-up" id="upload-section">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4">
+                                        <i class="ti ti-cloud-upload text-primary me-2"></i>
+                                        Upload de documents
+                                    </h3>
+                                    
+                                    <div class="dropzone-wrapper" id="dropzone">
+                                        <div class="dropzone-content">
+                                            <i class="ti ti-file-upload dropzone-icon"></i>
+                                            <h3 class="mb-3">Glissez vos documents ici</h3>
+                                            <p class="text-muted mb-4">ou cliquez pour sélectionner des fichiers</p>
+                                            <div class="mb-3">
+                                                <span class="badge bg-secondary me-2">PDF</span>
+                                                <span class="badge bg-secondary me-2">JPG</span>
+                                                <span class="badge bg-secondary me-2">PNG</span>
+                                                <span class="badge bg-secondary">TIFF</span>
+                                            </div>
+                                            <p class="text-muted small mb-0">Max. 10MB par fichier • Jusqu'à 20 fichiers</p>
+                                        </div>
+                                        <input type="file" id="fileInput" style="display: none;" accept=".pdf,.jpg,.jpeg,.png,.tiff" multiple>
+                                    </div>
+                                    
+                                    <!-- Progress Bar -->
+                                    <div class="progress-wrapper" id="progress-wrapper" style="display: none;">
+                                        <div class="progress-details">
+                                            <span id="progress-label">Téléchargement...</span>
+                                            <span id="progress-percentage">0%</span>
+                                        </div>
+                                        <div class="progress progress-animated">
+                                            <div class="progress-bar bg-primary" id="progress-bar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Model Selection (hidden initially) -->
+                            <div class="card mb-4" id="model-section" style="display: none;">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4">
+                                        <i class="ti ti-robot text-purple me-2"></i>
+                                        Sélection du modèle IA
+                                    </h3>
+                                    
+                                    <div class="model-selector">
+                                        <div class="model-card selected" data-model="auto">
+                                            <i class="ti ti-wand model-icon"></i>
+                                            <div class="model-name">Auto-sélection</div>
+                                            <div class="model-description">Choisit le meilleur modèle automatiquement</div>
+                                        </div>
+                                        <div class="model-card" data-model="gpt4-vision">
+                                            <i class="ti ti-eye model-icon"></i>
+                                            <div class="model-name">GPT-4 Vision</div>
+                                            <div class="model-description">Excellent pour les factures complexes</div>
+                                        </div>
+                                        <div class="model-card" data-model="claude3">
+                                            <i class="ti ti-brain model-icon"></i>
+                                            <div class="model-name">Claude 3 Opus</div>
+                                            <div class="model-description">Précision maximale pour les tableaux</div>
+                                        </div>
+                                        <div class="model-card" data-model="hybrid">
+                                            <i class="ti ti-arrows-join model-icon"></i>
+                                            <div class="model-name">Mode Hybride</div>
+                                            <div class="model-description">Combine plusieurs modèles</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mt-4">
+                                        <button class="btn btn-primary btn-lg" id="start-extraction">
+                                            <i class="ti ti-sparkles me-2"></i>
+                                            Lancer l'extraction
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Extraction Results (hidden initially) -->
+                            <div class="card" id="results-section" style="display: none;">
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4">
+                                        <i class="ti ti-database text-success me-2"></i>
+                                        Données extraites
+                                    </h3>
+                                    
+                                    <div id="extraction-results" class="extraction-results">
+                                        <!-- Results will be dynamically inserted here -->
+                                    </div>
+                                    
+                                    <div class="text-end mt-4">
+                                        <button class="btn me-2" id="retry-extraction">
+                                            <i class="ti ti-refresh"></i>
+                                            Réessayer
+                                        </button>
+                                        <button class="btn btn-success" id="validate-data">
+                                            <i class="ti ti-check"></i>
+                                            Valider & Exporter
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column: PDF Preview -->
+                        <div class="col-lg-4">
+                            <div class="pdf-preview-panel" id="pdf-preview-panel" style="display: none;">
+                                <div class="pdf-preview-header">
+                                    <h4 class="mb-0">
+                                        <i class="ti ti-file-text me-2"></i>
+                                        Aperçu document
+                                    </h4>
+                                </div>
+                                <div class="pdf-preview-content" id="pdf-preview-content">
+                                    <!-- PDF pages will be rendered here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="card" id="quick-actions" style="display: none;">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-3">Actions rapides</h4>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary">
+                                            <i class="ti ti-template me-2"></i>
+                                            Sauver comme template
+                                        </button>
+                                        <button class="btn btn-outline-secondary">
+                                            <i class="ti ti-download me-2"></i>
+                                            Télécharger JSON
+                                        </button>
+                                        <button class="btn btn-outline-info">
+                                            <i class="ti ti-send me-2"></i>
+                                            Envoyer par email
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <a href="../system/audit-logs.html" class="link-secondary">Logs d'audit</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="../system/settings.html" class="link-secondary">Configuration</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="../dashboard.html" class="link-secondary">Dashboard Groupe</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+    
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <!-- PDF.js for preview -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    
+    <!-- OCR Scripts - TOUS LES SCRIPTS EXISTANTS SONT CONSERVÉS -->
+    <script src="../../assets/js/Superadmin/ocr-templates-final.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-vision-final.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-notion-smart-resolver.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-interface-final.js"></script>
+    
+    <script>
+        // Navigation dynamique
+        async function loadNavigation() {
+            const sidebar = document.querySelector('#sidebar-menu .navbar-nav');
+            if (!sidebar) return;
+            
+            const navHTML = `
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard.html">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-home"></i>
+                        </span>
+                        <span class="nav-link-title">Dashboard Consolidé</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-finance" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-businessplan"></i>
+                        </span>
+                        <span class="nav-link-title">Finance & Comptabilité</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="../finance/invoices-in.html">Factures Fournisseurs</a>
+                                <a class="dropdown-item" href="../finance/invoices-out.html">Factures Clients</a>
+                                <a class="dropdown-item" href="../finance/expenses.html">Notes de Frais</a>
+                                <a class="dropdown-item" href="../finance/banking.html">Banking Revolut</a>
+                                <a class="dropdown-item" href="../finance/accounting.html">Comptabilité</a>
+                                <a class="dropdown-item" href="../finance/vat-reports.html">Déclarations TVA</a>
+                                <a class="dropdown-item" href="../finance/monthly-reports.html">Bilans Mensuels</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#navbar-documents" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-file-analytics"></i>
+                        </span>
+                        <span class="nav-link-title">Documents & OCR</span>
+                    </a>
+                    <div class="dropdown-menu show">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item active" href="./ocr-intelligent.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-orange">
+                                        <i class="ti ti-scan"></i>
+                                    </span>
+                                    OCR Intelligent
+                                </a>
+                                <a class="dropdown-item" href="./templates.html">Templates Documents</a>
+                                <a class="dropdown-item" href="./archives.html">Archives</a>
+                                <a class="dropdown-item" href="./workflow.html">Workflow Validation</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-crm" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-users"></i>
+                        </span>
+                        <span class="nav-link-title">CRM Unifié</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../crm/contacts.html">Contacts</a>
+                        <a class="dropdown-item" href="../crm/companies.html">Entreprises</a>
+                        <a class="dropdown-item" href="../crm/opportunities.html">Opportunités</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-projects" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-clipboard-check"></i>
+                        </span>
+                        <span class="nav-link-title">Projets Globaux</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../projects/projects-admin.html">Gestion Projets</a>
+                        <a class="dropdown-item" href="../projects/resources.html">Ressources</a>
+                        <a class="dropdown-item" href="../projects/templates.html">Templates</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-users" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-user-search"></i>
+                        </span>
+                        <span class="nav-link-title">Utilisateurs</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../users/users-list.html">Liste Utilisateurs</a>
+                        <a class="dropdown-item" href="../users/roles.html">Rôles</a>
+                        <a class="dropdown-item" href="../users/permissions.html">Permissions</a>
+                        <a class="dropdown-item" href="../users/onboarding.html">Onboarding</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-entities" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-building"></i>
+                        </span>
+                        <span class="nav-link-title">Entités Groupe</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../entities/entities-config.html">Configuration</a>
+                        <a class="dropdown-item" href="../entities/inter-company.html">Inter-sociétés</a>
+                        <a class="dropdown-item" href="../entities/consolidation.html">Consolidation</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-automation" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-robot"></i>
+                        </span>
+                        <span class="nav-link-title">Automatisations</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../automation/workflows.html">Workflows n8n</a>
+                        <a class="dropdown-item" href="../automation/email-templates.html">Templates Email</a>
+                        <a class="dropdown-item" href="../automation/notifications.html">Notifications</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-system" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-settings"></i>
+                        </span>
+                        <span class="nav-link-title">Système</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../system/settings.html">Configuration</a>
+                        <a class="dropdown-item" href="../system/integrations.html">Intégrations</a>
+                        <a class="dropdown-item" href="../system/audit-logs.html">Logs d'Audit</a>
+                        <a class="dropdown-item" href="../system/backups.html">Sauvegardes</a>
+                    </div>
+                </li>
+            `;
+            
+            sidebar.innerHTML = navHTML;
+        }
+        
+        // Model selection
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation();
+            
+            // Update statistics with animation
+            const animateValue = (element, start, end, duration) => {
+                const startTimestamp = Date.now();
+                const step = (timestamp) => {
+                    const progress = Math.min((Date.now() - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    element.textContent = value;
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            };
+            
+            // Animate stats on load
+            setTimeout(() => {
+                animateValue(document.getElementById('docs-today'), 0, 47, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

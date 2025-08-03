@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages & Communication - Espace Prestataire</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-prestataire">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Messages</li>
+                            </ol>
+                            <h2 class="page-title">
+                                Messages & Communication
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-conversation">
+                                    <i class="ti ti-plus icon"></i>
+                                    Nouvelle conversation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row g-0">
+                        <!-- Colonne gauche - Liste des conversations -->
+                        <div class="col-lg-4 border-end">
+                            <div class="chat-sidebar">
+                                <!-- Recherche -->
+                                <div class="p-3 border-bottom">
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-search icon"></i>
+                                        </span>
+                                        <input type="text" class="form-control" placeholder="Rechercher une conversation..." id="searchConversations">
+                                    </div>
+                                </div>
+                                
+                                <!-- Tabs -->
+                                <div class="nav nav-tabs px-3" role="tablist">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#tab-all" role="tab">
+                                        Tous <span class="badge bg-muted ms-1">12</span>
+                                    </a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab-projects" role="tab">
+                                        Projets <span class="badge bg-muted ms-1">8</span>
+                                    </a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab-support" role="tab">
+                                        Support <span class="badge bg-muted ms-1">3</span>
+                                    </a>
+                                    <a class="nav-link" data-bs-toggle="tab" href="#tab-archives" role="tab">
+                                        Archives <span class="badge bg-muted ms-1">1</span>
+                                    </a>
+                                </div>
+                                
+                                <!-- Liste conversations -->
+                                <div class="tab-content chat-list">
+                                    <div class="tab-pane active show" id="tab-all">
+                                        <!-- Conversation 1 - Active -->
+                                        <div class="chat-item active p-3 border-bottom" onclick="loadConversation(1)">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="avatar" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)">
+                                                        <span class="avatar-status bg-success"></span>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="font-weight-medium">Marie D. - Projet API</div>
+                                                            <div class="text-muted text-truncate">J'ai validé les endpoints, tu peux...</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="text-muted small">Il y a 5 min</div>
+                                                            <span class="badge bg-red badge-pill">2</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Conversation 2 -->
+                                        <div class="chat-item p-3 border-bottom" onclick="loadConversation(2)">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="avatar bg-blue-lt">
+                                                        <i class="ti ti-headset icon"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="font-weight-medium">Support Technique</div>
+                                                            <div class="text-muted text-truncate">Votre ticket #1234 a été résolu</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="text-muted small">Il y a 2h</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Conversation 3 -->
+                                        <div class="chat-item p-3 border-bottom" onclick="loadConversation(3)">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-list avatar-list-stacked">
+                                                        <span class="avatar avatar-sm" style="background-image: url(https://ui-avatars.com/api/?name=Jean+Martin)"></span>
+                                                        <span class="avatar avatar-sm" style="background-image: url(https://ui-avatars.com/api/?name=Sophie+Laurent)"></span>
+                                                        <span class="avatar avatar-sm">+2</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="font-weight-medium">Équipe Mobile App</div>
+                                                            <div class="text-muted text-truncate">Meeting demain à 14h pour...</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="text-muted small">Hier</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Conversation 4 -->
+                                        <div class="chat-item p-3 border-bottom" onclick="loadConversation(4)">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="avatar" style="background-image: url(https://ui-avatars.com/api/?name=Pierre+Leroy)">
+                                                        <span class="avatar-status bg-success"></span>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="font-weight-medium">Pierre L. - Design System</div>
+                                                            <div class="text-muted text-truncate">Les nouvelles maquettes sont prêtes</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="text-muted small">Il y a 3h</div>
+                                                            <span class="badge bg-red badge-pill">1</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Plus de conversations... -->
+                                        <div class="chat-item p-3 border-bottom" onclick="loadConversation(5)">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="avatar" style="background-image: url(https://ui-avatars.com/api/?name=Anna+Weber)"></span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <div class="font-weight-medium">Anna W. - Migration Cloud</div>
+                                                            <div class="text-muted text-truncate">Merci pour le rapport détaillé</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="text-muted small">2 jours</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tab-pane" id="tab-projects">
+                                        <!-- Conversations projets -->
+                                    </div>
+                                    
+                                    <div class="tab-pane" id="tab-support">
+                                        <!-- Conversations support -->
+                                    </div>
+                                    
+                                    <div class="tab-pane" id="tab-archives">
+                                        <!-- Conversations archivées -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Colonne droite - Chat actif -->
+                        <div class="col-lg-8">
+                            <div class="chat-container d-flex flex-column h-100">
+                                <!-- Header chat -->
+                                <div class="chat-header border-bottom p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar me-3" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)">
+                                                    <span class="avatar-status bg-success"></span>
+                                                </span>
+                                                <div>
+                                                    <div class="font-weight-medium">Marie Dubois</div>
+                                                    <div class="text-muted small">Projet API REST - En cours</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="btn-list">
+                                                <button class="btn btn-ghost-dark btn-icon" title="Appel vidéo">
+                                                    <i class="ti ti-video icon"></i>
+                                                </button>
+                                                <button class="btn btn-ghost-dark btn-icon" title="Informations">
+                                                    <i class="ti ti-info-circle icon"></i>
+                                                </button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-dark btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical icon"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li><a class="dropdown-item" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>Archiver
+                                                        </a></li>
+                                                        <li><a class="dropdown-item" href="#">
+                                                            <i class="ti ti-mail icon me-2"></i>Marquer non lu
+                                                        </a></li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-ban icon me-2"></i>Bloquer
+                                                        </a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Zone messages -->
+                                <div class="chat-messages flex-grow-1 p-3" id="chatMessages">
+                                    <!-- Groupe de messages par jour -->
+                                    <div class="chat-date-divider text-center my-3">
+                                        <span class="badge bg-muted-lt">Aujourd'hui</span>
+                                    </div>
+                                    
+                                    <!-- Message reçu -->
+                                    <div class="chat-message mb-3">
+                                        <div class="d-flex">
+                                            <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)"></span>
+                                            <div class="chat-bubble">
+                                                <div class="chat-bubble-content">
+                                                    Salut ! J'ai revu ton code pour les endpoints API.
+                                                </div>
+                                                <div class="chat-bubble-meta">
+                                                    <span class="text-muted small">14:32</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Message envoyé -->
+                                    <div class="chat-message mb-3">
+                                        <div class="d-flex justify-content-end">
+                                            <div class="chat-bubble me">
+                                                <div class="chat-bubble-content">
+                                                    Super ! Qu'est-ce que tu en penses ?
+                                                </div>
+                                                <div class="chat-bubble-meta text-end">
+                                                    <span class="text-muted small">14:35</span>
+                                                    <i class="ti ti-checks icon text-success ms-1"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Message avec fichier -->
+                                    <div class="chat-message mb-3">
+                                        <div class="d-flex">
+                                            <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)"></span>
+                                            <div class="chat-bubble">
+                                                <div class="chat-bubble-content">
+                                                    J'ai validé les endpoints, tu peux continuer l'implémentation. Voici mes notes :
+                                                </div>
+                                                <div class="chat-attachment mt-2">
+                                                    <div class="card">
+                                                        <div class="card-body p-2">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-auto">
+                                                                    <span class="avatar avatar-sm bg-blue-lt">
+                                                                        <i class="ti ti-file-text icon"></i>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="font-weight-medium">review-api.pdf</div>
+                                                                    <div class="text-muted small">245 KB</div>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <a href="#" class="btn btn-sm btn-white">
+                                                                        <i class="ti ti-download icon"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="chat-bubble-meta">
+                                                    <span class="text-muted small">14:38</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Plus de messages... -->
+                                    <div class="chat-message mb-3">
+                                        <div class="d-flex justify-content-end">
+                                            <div class="chat-bubble me">
+                                                <div class="chat-bubble-content">
+                                                    Parfait, je regarde ça tout de suite ! Je pense pouvoir terminer d'ici demain.
+                                                </div>
+                                                <div class="chat-bubble-meta text-end">
+                                                    <span class="text-muted small">14:40</span>
+                                                    <i class="ti ti-check icon text-muted ms-1"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Indicateur de frappe -->
+                                    <div class="typing-indicator" id="typingIndicator">
+                                        <span class="avatar avatar-sm me-2" style="background-image: url(https://ui-avatars.com/api/?name=Marie+Dubois)"></span>
+                                        <span class="text-muted small">Marie est en train d'écrire...</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Zone de saisie -->
+                                <div class="chat-input border-top p-3">
+                                    <form id="chatForm" onsubmit="sendMessage(event)">
+                                        <div class="row g-2 align-items-end">
+                                            <div class="col">
+                                                <textarea class="form-control" id="messageInput" rows="1" placeholder="Écrivez votre message..." onkeypress="handleKeyPress(event)"></textarea>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="btn-list">
+                                                    <button type="button" class="btn btn-ghost-dark btn-icon" title="Emoji">
+                                                        <i class="ti ti-mood-smile icon"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-ghost-dark btn-icon" onclick="document.getElementById('fileInput').click()" title="Joindre fichier">
+                                                        <i class="ti ti-paperclip icon"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-ghost-dark btn-icon" title="Code snippet">
+                                                        <i class="ti ti-code icon"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary btn-icon" title="Envoyer">
+                                                        <i class="ti ti-send icon"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <input type="file" id="fileInput" class="d-none" onchange="handleFileSelect(event)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal nouvelle conversation -->
+    <div class="modal modal-blur fade" id="modal-new-conversation" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouvelle conversation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Destinataire(s)</label>
+                        <select class="form-select" multiple>
+                            <option value="1">Marie Dubois - Client API</option>
+                            <option value="2">Jean Martin - Client E-commerce</option>
+                            <option value="3">Support Technique</option>
+                            <option value="4">Pierre Leroy - Designer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sujet</label>
+                        <input type="text" class="form-control" placeholder="Ex: Question sur le projet...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="3" placeholder="Écrivez votre message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-send icon"></i>
+                        Démarrer conversation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/collaboration.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'prestataire') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('messages');
+            
+            // Initialiser le système de chat
+            if (typeof ChatSystem !== 'undefined') {
+                window.chatSystem = new ChatSystem();
+                window.chatSystem.init();
+            }
+            
+            // Auto-resize textarea
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput) {
+                messageInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                });
+            }
+        });
+        
+        // Gestion envoi message
+        function sendMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message && window.chatSystem) {
+                window.chatSystem.sendMessage(message);
+                input.value = '';
+                input.style.height = 'auto';
+            }
+        }
+        
+        // Gestion Enter pour envoyer
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(event);
+            }
+        }
+        
+        // Charger une conversation
+        function loadConversation(id) {
+            console.log('Chargement conversation', id);
+            // Retirer active de toutes les conversations
+            document.querySelectorAll('.chat-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            // Ajouter active à la conversation sélectionnée
+            event.currentTarget.classList.add('active');
+            
+            // Charger les messages (simulation)
+            if (window.chatSystem) {
+                window.chatSystem.loadConversation(id);
+            }
+        }
+        
+        // Gestion sélection fichier
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file && window.chatSystem) {
+                window.chatSystem.handleFileUpload(file);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils Marketing - Espace Revendeur</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-revendeur">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <!-- Le contenu sera chargé dynamiquement -->
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">
+                                Ressources commerciales
+                            </div>
+                            <h2 class="page-title">
+                                Outils Marketing
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="input-icon me-3">
+                                <input type="text" class="form-control" placeholder="Rechercher dans les ressources..." id="searchResources">
+                                <span class="input-icon-addon">
+                                    <i class="ti ti-search icon"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-white">
+                                    <i class="ti ti-headset icon"></i>
+                                    Demander support
+                                </a>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-suggest-content">
+                                    <i class="ti ti-bulb icon"></i>
+                                    Suggérer contenu
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Filtres rapides -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-auto">
+                                    <span class="text-muted">Filtrer par :</span>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select" id="categoryFilter">
+                                        <option value="all">Toutes catégories</option>
+                                        <option value="presentations">📊 Présentations</option>
+                                        <option value="brochures">📄 Brochures & Flyers</option>
+                                        <option value="media">🎬 Médias</option>
+                                        <option value="templates">📝 Templates</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-select" id="formatFilter">
+                                        <option value="all">Tous formats</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="pptx">PowerPoint</option>
+                                        <option value="xlsx">Excel</option>
+                                        <option value="video">Vidéo</option>
+                                        <option value="zip">Archive</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-check">
+                                        <input type="checkbox" class="form-check-input" value="new">
+                                        <span class="form-check-label">Nouveautés</span>
+                                    </label>
+                                </div>
+                                <div class="col-auto">
+                                    <label class="form-check">
+                                        <input type="checkbox" class="form-check-input" value="popular">
+                                        <span class="form-check-label">Populaires</span>
+                                    </label>
+                                </div>
+                                <div class="col-auto ms-auto">
+                                    <span class="text-muted">53 ressources trouvées</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bibliothèque de ressources -->
+                    <div class="mb-4">
+                        <h3 class="mb-3">📊 Présentations <span class="badge bg-muted ms-2">12</span></h3>
+                        <div class="resource-grid">
+                            <!-- Présentation 1 -->
+                            <div class="card resource-card">
+                                <div class="resource-thumbnail">
+                                    <i class="ti ti-presentation-analytics icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                        <h4 class="card-title mb-0">Présentation Corporate 2024</h4>
+                                        <span class="badge bg-green-lt">Nouveau</span>
+                                    </div>
+                                    <p class="text-muted mb-2">Présentation officielle de l'entreprise incluant vision, produits et success stories</p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-azure-lt">Corporate</span>
+                                        <span class="badge bg-purple-lt">2024</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i class="ti ti-file icon me-1"></i>PPTX • 18.5 MB</span>
+                                            <span><i class="ti ti-calendar icon me-1"></i>Mis à jour il y a 3 jours</span>
+                                        </div>
+                                    </div>
+                                    <div class="resource-stats">
+                                        <span><i class="ti ti-download icon me-1"></i>245 téléchargements</span>
+                                        <span>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-half-filled icon text-yellow"></i>
+                                            4.5/5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="#" class="btn btn-white btn-sm" onclick="previewResource(1)">
+                                                <i class="ti ti-eye icon"></i>
+                                                Prévisualiser
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="#" class="btn btn-primary btn-sm" onclick="downloadResource(1)">
+                                                    <i class="ti ti-download icon"></i>
+                                                    Télécharger
+                                                </a>
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" onclick="shareResource(1)">
+                                                    <i class="ti ti-share icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Présentation 2 -->
+                            <div class="card resource-card">
+                                <div class="resource-thumbnail">
+                                    <i class="ti ti-chart-pie icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                        <h4 class="card-title mb-0">Pitch Deck Produits</h4>
+                                        <span class="badge bg-yellow-lt">Populaire</span>
+                                    </div>
+                                    <p class="text-muted mb-2">Présentation complète de notre gamme de produits avec démonstrations</p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-azure-lt">Produits</span>
+                                        <span class="badge bg-green-lt">Démo</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i class="ti ti-file icon me-1"></i>PPTX • 24.3 MB</span>
+                                            <span><i class="ti ti-calendar icon me-1"></i>Mis à jour il y a 1 semaine</span>
+                                        </div>
+                                    </div>
+                                    <div class="resource-stats">
+                                        <span><i class="ti ti-download icon me-1"></i>389 téléchargements</span>
+                                        <span>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            5.0/5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="#" class="btn btn-white btn-sm" onclick="previewResource(2)">
+                                                <i class="ti ti-eye icon"></i>
+                                                Prévisualiser
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="#" class="btn btn-primary btn-sm" onclick="downloadResource(2)">
+                                                    <i class="ti ti-download icon"></i>
+                                                    Télécharger
+                                                </a>
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" onclick="shareResource(2)">
+                                                    <i class="ti ti-share icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Plus de présentations... -->
+                        </div>
+                    </div>
+                    
+                    <!-- Brochures & Flyers -->
+                    <div class="mb-4">
+                        <h3 class="mb-3">📄 Brochures & Flyers <span class="badge bg-muted ms-2">18</span></h3>
+                        <div class="resource-grid">
+                            <!-- Brochure 1 -->
+                            <div class="card resource-card">
+                                <div class="resource-thumbnail">
+                                    <i class="ti ti-file-text icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                        <h4 class="card-title mb-0">Brochure Générale FR</h4>
+                                        <span class="badge bg-blue-lt">Mis à jour</span>
+                                    </div>
+                                    <p class="text-muted mb-2">Brochure commerciale complète en français avec tous nos services</p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-azure-lt">Général</span>
+                                        <span class="badge bg-red-lt">Français</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i class="ti ti-file icon me-1"></i>PDF • 5.2 MB</span>
+                                            <span><i class="ti ti-calendar icon me-1"></i>Mis à jour il y a 2 jours</span>
+                                        </div>
+                                    </div>
+                                    <div class="resource-stats">
+                                        <span><i class="ti ti-download icon me-1"></i>512 téléchargements</span>
+                                        <span>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star icon text-yellow"></i>
+                                            4.2/5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="#" class="btn btn-white btn-sm" onclick="previewResource(3)">
+                                                <i class="ti ti-eye icon"></i>
+                                                Prévisualiser
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="#" class="btn btn-primary btn-sm" onclick="downloadResource(3)">
+                                                    <i class="ti ti-download icon"></i>
+                                                    Télécharger
+                                                </a>
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" onclick="shareResource(3)">
+                                                    <i class="ti ti-share icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Plus de brochures... -->
+                        </div>
+                    </div>
+                    
+                    <!-- Médias -->
+                    <div class="mb-4">
+                        <h3 class="mb-3">🎬 Médias <span class="badge bg-muted ms-2">8</span></h3>
+                        <div class="resource-grid">
+                            <!-- Média 1 -->
+                            <div class="card resource-card">
+                                <div class="resource-thumbnail">
+                                    <i class="ti ti-movie icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                        <h4 class="card-title mb-0">Video Demo Produit</h4>
+                                        <span class="badge bg-green-lt">Nouveau</span>
+                                    </div>
+                                    <p class="text-muted mb-2">Démonstration vidéo complète de notre solution (5 min)</p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-azure-lt">Démo</span>
+                                        <span class="badge bg-purple-lt">HD</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i class="ti ti-file icon me-1"></i>MP4 • 125 MB</span>
+                                            <span><i class="ti ti-clock icon me-1"></i>5:23</span>
+                                        </div>
+                                    </div>
+                                    <div class="resource-stats">
+                                        <span><i class="ti ti-download icon me-1"></i>156 téléchargements</span>
+                                        <span>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-half-filled icon text-yellow"></i>
+                                            4.8/5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="#" class="btn btn-white btn-sm" onclick="previewResource(4)">
+                                                <i class="ti ti-player-play icon"></i>
+                                                Visionner
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="#" class="btn btn-primary btn-sm" onclick="downloadResource(4)">
+                                                    <i class="ti ti-download icon"></i>
+                                                    Télécharger
+                                                </a>
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" onclick="shareResource(4)">
+                                                    <i class="ti ti-share icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Plus de médias... -->
+                        </div>
+                    </div>
+                    
+                    <!-- Templates -->
+                    <div class="mb-4">
+                        <h3 class="mb-3">📝 Templates <span class="badge bg-muted ms-2">15</span></h3>
+                        <div class="resource-grid">
+                            <!-- Template 1 -->
+                            <div class="card resource-card">
+                                <div class="resource-thumbnail">
+                                    <i class="ti ti-mail icon"></i>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start justify-content-between mb-2">
+                                        <h4 class="card-title mb-0">Template Email Prospection</h4>
+                                        <span class="badge bg-yellow-lt">Populaire</span>
+                                    </div>
+                                    <p class="text-muted mb-2">Modèle d'email de prospection avec variantes selon secteur</p>
+                                    <div class="d-flex gap-2 mb-3">
+                                        <span class="badge bg-azure-lt">Email</span>
+                                        <span class="badge bg-green-lt">Prospection</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span><i class="ti ti-file icon me-1"></i>HTML • 45 KB</span>
+                                            <span><i class="ti ti-calendar icon me-1"></i>Mis à jour il y a 5 jours</span>
+                                        </div>
+                                    </div>
+                                    <div class="resource-stats">
+                                        <span><i class="ti ti-download icon me-1"></i>723 téléchargements</span>
+                                        <span>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            <i class="ti ti-star-filled icon text-yellow"></i>
+                                            4.9/5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <a href="#" class="btn btn-white btn-sm" onclick="previewResource(5)">
+                                                <i class="ti ti-eye icon"></i>
+                                                Prévisualiser
+                                            </a>
+                                        </div>
+                                        <div class="col-auto ms-auto">
+                                            <div class="btn-list">
+                                                <a href="#" class="btn btn-orange btn-sm" onclick="personalizeTemplate(5)">
+                                                    <i class="ti ti-wand icon"></i>
+                                                    Personnaliser
+                                                </a>
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" onclick="shareResource(5)">
+                                                    <i class="ti ti-share icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Plus de templates... -->
+                        </div>
+                    </div>
+                    
+                    <!-- Section Campagnes -->
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">🎯 Campagnes en cours</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <!-- Campagne 1 -->
+                                        <div class="col-lg-4">
+                                            <div class="card bg-orange-lt">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <span class="avatar bg-orange text-white me-3">
+                                                            <i class="ti ti-percentage icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <h4 class="mb-0">Promo Q1 2024</h4>
+                                                            <div class="text-muted">-20% sur les licences</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="progress progress-sm">
+                                                            <div class="progress-bar bg-orange" style="width: 65%" role="progressbar">
+                                                                <span class="visually-hidden">65% du temps écoulé</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-muted small mt-1">Se termine dans 15 jours</div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <a href="#" class="btn btn-sm btn-orange">
+                                                            <i class="ti ti-download icon"></i>
+                                                            Kit campagne
+                                                        </a>
+                                                        <button class="btn btn-sm btn-white" onclick="getTrackingLink('promo-q1')">
+                                                            <i class="ti ti-link icon"></i>
+                                                            Lien tracking
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Campagne 2 -->
+                                        <div class="col-lg-4">
+                                            <div class="card bg-blue-lt">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <span class="avatar bg-blue text-white me-3">
+                                                            <i class="ti ti-video icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <h4 class="mb-0">Webinar mensuel</h4>
+                                                            <div class="text-muted">Nouveautés produits</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="d-flex justify-content-between text-muted small">
+                                                            <span>28 Mars 2024 • 14h00</span>
+                                                            <span>48 inscrits</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <a href="#" class="btn btn-sm btn-blue">
+                                                            <i class="ti ti-download icon"></i>
+                                                            Kit promo
+                                                        </a>
+                                                        <button class="btn btn-sm btn-white" onclick="getRegistrationLink('webinar-mars')">
+                                                            <i class="ti ti-user-plus icon"></i>
+                                                            Lien inscription
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Campagne 3 -->
+                                        <div class="col-lg-4">
+                                            <div class="card bg-purple-lt">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <span class="avatar bg-purple text-white me-3">
+                                                            <i class="ti ti-building icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <h4 class="mb-0">Salon Tech Lausanne</h4>
+                                                            <div class="text-muted">Stand B-42</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="text-muted small">
+                                                            <i class="ti ti-calendar icon me-1"></i>
+                                                            15-17 Mars 2024
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <a href="#" class="btn btn-sm btn-purple">
+                                                            <i class="ti ti-download icon"></i>
+                                                            Matériel salon
+                                                        </a>
+                                                        <button class="btn btn-sm btn-white" onclick="getEventKit('tech-lausanne')">
+                                                            <i class="ti ti-package icon"></i>
+                                                            Kit visiteur
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal suggérer contenu -->
+    <div class="modal modal-blur fade" id="modal-suggest-content" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Suggérer du contenu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Type de contenu</label>
+                        <select class="form-select">
+                            <option>Présentation</option>
+                            <option>Brochure</option>
+                            <option>Vidéo</option>
+                            <option>Template</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="3" placeholder="Décrivez le contenu souhaité..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contexte d'utilisation</label>
+                        <textarea class="form-control" rows="2" placeholder="Dans quel contexte ce contenu serait utile ?"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="submitContentSuggestion()">
+                        <i class="ti ti-send icon"></i>
+                        Envoyer suggestion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/marketing-tools.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'revendeur') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('marketing');
+            
+            // Initialiser la bibliothèque marketing
+            if (typeof MarketingLibrary !== 'undefined') {
+                window.marketingLib = new MarketingLibrary();
+            }
+        });
+        
+        // Fonctions d'action
+        function previewResource(id) {
+            console.log('Prévisualisation ressource', id);
+            // Ouvrir modal ou nouvelle fenêtre
+        }
+        
+        function downloadResource(id) {
+            if (window.marketingLib) {
+                const trackingUrl = window.marketingLib.trackDownload(id);
+                console.log('Téléchargement avec tracking:', trackingUrl);
+                PortalApp.showToast('Téléchargement en cours...', 'info');
+            }
+        }
+        
+        function shareResource(id) {
+            console.log('Partager ressource', id);
+            // Copier lien de partage
+            PortalApp.showToast('Lien de partage copié!', 'success');
+        }
+        
+        function personalizeTemplate(id) {
+            console.log('Personnaliser template', id);
+            // Ouvrir éditeur de personnalisation
+        }
+        
+        function getTrackingLink(campaign) {
+            const link = `https://portal.company.ch/promo/${campaign}?ref=${PortalApp.currentUser.username}`;
+            navigator.clipboard.writeText(link);
+            PortalApp.showToast('Lien tracking copié!', 'success');
+        }
+        
+        function getRegistrationLink(event) {
+            const link = `https://portal.company.ch/webinar/${event}?ref=${PortalApp.currentUser.username}`;
+            navigator.clipboard.writeText(link);
+            PortalApp.showToast('Lien inscription copié!', 'success');
+        }
+        
+        function getEventKit(event) {
+            console.log('Télécharger kit événement', event);
+            PortalApp.showToast('Préparation du kit...', 'info');
+        }
+        
+        function submitContentSuggestion() {
+            console.log('Suggestion envoyée');
+            PortalApp.showToast('Merci pour votre suggestion!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modal-suggest-content')).hide();
+        }
+    </script>
+</body>
+</html>

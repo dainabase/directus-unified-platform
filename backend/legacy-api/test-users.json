@@ -1,0 +1,22 @@
+[
+  {
+    "email": "client@hypervisual.ch",
+    "role": "client",
+    "hashedPassword": {}
+  },
+  {
+    "email": "presta@hypervisual.ch",
+    "role": "prestataire",
+    "hashedPassword": {}
+  },
+  {
+    "email": "revend@hypervisual.ch",
+    "role": "revendeur",
+    "hashedPassword": {}
+  },
+  {
+    "email": "admin@hypervisual.ch",
+    "role": "superadmin",
+    "hashedPassword": {}
+  }
+]

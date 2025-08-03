@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Projets - Espace Client</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Projets</li>
+                            </ol>
+                            <h2 class="page-title">
+                                Mes Projets
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <button class="btn btn-default" onclick="toggleFilters()">
+                                    <i class="ti ti-filter icon"></i>
+                                    Filtrer
+                                </button>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-project">
+                                    <i class="ti ti-plus icon"></i>
+                                    Nouveau projet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Cards résumé -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-blue-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-muted">Total Projets</div>
+                                            <div class="h2 mb-0">8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-green-lt">
+                                            <i class="ti ti-progress icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-muted">En cours</div>
+                                            <div class="h2 mb-0 text-green">3</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-orange-lt">
+                                            <i class="ti ti-clock icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-muted">En attente</div>
+                                            <div class="h2 mb-0 text-orange">2</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-blue-lt">
+                                            <i class="ti ti-check icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="text-muted">Terminés</div>
+                                            <div class="h2 mb-0 text-blue">3</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtres (collapsible) -->
+                    <div class="card mb-4 collapse" id="filters-card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">Tous</option>
+                                        <option value="En cours">En cours</option>
+                                        <option value="En attente">En attente</option>
+                                        <option value="Terminé">Terminé</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Responsable</label>
+                                    <select class="form-select" id="filter-manager">
+                                        <option value="">Tous</option>
+                                        <option value="Marie D.">Marie D.</option>
+                                        <option value="Jean P.">Jean P.</option>
+                                        <option value="Pierre L.">Pierre L.</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Période</label>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" id="filter-date-from">
+                                        <span class="input-group-text">au</span>
+                                        <input type="date" class="form-control" id="filter-date-to">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                        <i class="ti ti-search icon"></i>
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Table des projets -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="projectsTable" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Client/Département</th>
+                                            <th>Statut</th>
+                                            <th>Progression</th>
+                                            <th>Budget</th>
+                                            <th>Échéance</th>
+                                            <th>Responsable</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Projet 1 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=1" class="text-reset">
+                                                        Refonte Site Web Corporate
+                                                    </a>
+                                                    <span class="badge bg-red-lt ms-2">Priorité haute</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">Direction Marketing</td>
+                                            <td>
+                                                <span class="badge bg-green">En cours</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">65%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-green" style="width: 65%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 45'200</div>
+                                                <small class="text-muted">/ 80'000</small>
+                                            </td>
+                                            <td>30.03.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">MD</span>
+                                                    <span>Marie D.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=1">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 2 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=2" class="text-reset">
+                                                        Application Mobile v2.0
+                                                    </a>
+                                                    <span class="badge bg-yellow-lt ms-2">Priorité moyenne</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">IT Department</td>
+                                            <td>
+                                                <span class="badge bg-azure">En attente</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">15%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-azure" style="width: 15%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 12'500</div>
+                                                <small class="text-muted">/ 120'000</small>
+                                            </td>
+                                            <td>15.05.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">JP</span>
+                                                    <span>Jean P.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=2">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 3 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=3" class="text-reset">
+                                                        Migration CRM Cloud
+                                                    </a>
+                                                    <span class="badge bg-green-lt ms-2">Priorité normale</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">Direction Commerciale</td>
+                                            <td>
+                                                <span class="badge bg-green">En cours</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">45%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-green" style="width: 45%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 28'000</div>
+                                                <small class="text-muted">/ 60'000</small>
+                                            </td>
+                                            <td>10.04.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">PL</span>
+                                                    <span>Pierre L.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=3">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 4 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=4" class="text-reset">
+                                                        Plateforme E-learning
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">Ressources Humaines</td>
+                                            <td>
+                                                <span class="badge bg-gray">Terminé</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">100%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-gray" style="width: 100%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 35'000</div>
+                                                <small class="text-muted">/ 35'000</small>
+                                            </td>
+                                            <td>15.02.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">MD</span>
+                                                    <span>Marie D.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=4">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 5 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=5" class="text-reset">
+                                                        Audit Sécurité IT
+                                                    </a>
+                                                    <span class="badge bg-red-lt ms-2">Priorité haute</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">IT Security</td>
+                                            <td>
+                                                <span class="badge bg-green">En cours</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">80%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-green" style="width: 80%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 18'000</div>
+                                                <small class="text-muted">/ 25'000</small>
+                                            </td>
+                                            <td>25.03.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">JP</span>
+                                                    <span>Jean P.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=5">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 6 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=6" class="text-reset">
+                                                        Refonte Intranet RH
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">Ressources Humaines</td>
+                                            <td>
+                                                <span class="badge bg-azure">En attente</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">0%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-azure" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 0</div>
+                                                <small class="text-muted">/ 45'000</small>
+                                            </td>
+                                            <td>01.06.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">PL</span>
+                                                    <span>Pierre L.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=6">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 7 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=7" class="text-reset">
+                                                        Campagne Marketing Digital
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">Marketing</td>
+                                            <td>
+                                                <span class="badge bg-gray">Terminé</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">100%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-gray" style="width: 100%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 22'000</div>
+                                                <small class="text-muted">/ 25'000</small>
+                                            </td>
+                                            <td>01.03.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">MD</span>
+                                                    <span>Marie D.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=7">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                        <!-- Projet 8 -->
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <a href="project-detail.html?id=8" class="text-reset">
+                                                        API Integration Partner
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted">IT Development</td>
+                                            <td>
+                                                <span class="badge bg-gray">Terminé</span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="me-2">100%</span>
+                                                    <div class="progress progress-sm flex-fill">
+                                                        <div class="progress-bar bg-gray" style="width: 100%"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>CHF 15'000</div>
+                                                <small class="text-muted">/ 15'000</small>
+                                            </td>
+                                            <td>20.01.2024</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-sm me-2">JP</span>
+                                                    <span>Jean P.</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="dropdown">
+                                                        <i class="ti ti-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="project-detail.html?id=8">
+                                                            <i class="ti ti-eye icon me-2"></i>
+                                                            Voir détails
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ti ti-edit icon me-2"></i>
+                                                            Modifier
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item text-danger" href="#">
+                                                            <i class="ti ti-archive icon me-2"></i>
+                                                            Archiver
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- jQuery (requis pour DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/projects.js"></script>
+    <script src="../assets/js/projects-notion.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'client') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('projects');
+        });
+        
+        // Fonction pour basculer l'affichage des filtres
+        function toggleFilters() {
+            const filtersCard = document.getElementById('filters-card');
+            filtersCard.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

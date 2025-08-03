@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Espace Client</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- ApexCharts -->
+    <link href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none dashboard-header">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">
+                                Vue d'ensemble
+                            </div>
+                            <h2 class="page-title">
+                                Tableau de bord
+                            </h2>
+                            <div class="text-muted mt-1">
+                                <i class="ti ti-calendar icon"></i>
+                                <span id="current-date"></span>
+                            </div>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-primary d-none d-sm-inline-block">
+                                    <i class="ti ti-plus icon"></i>
+                                    Nouveau projet
+                                </a>
+                                <a href="#" class="btn btn-primary d-sm-none btn-icon">
+                                    <i class="ti ti-plus icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Row 1: Cards Statistiques -->
+                    <div class="row row-deck row-cards">
+                        <!-- Card Projets Actifs -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card stat-card animate-fade-in">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-sm me-2 bg-blue-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Projets Actifs</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2" id="projects-count">0</div>
+                                        <span class="text-success small">
+                                            <i class="ti ti-trending-up icon"></i>
+                                            +2 ce mois
+                                        </span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <div id="sparkline-projects" class="chart-sparkline"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Tâches en cours -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card stat-card animate-fade-in">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-sm me-2 bg-green-lt">
+                                            <i class="ti ti-list-check icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Tâches en cours</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2" id="tasks-count">0</div>
+                                    </div>
+                                    <div class="text-muted small mb-1">8/12 complétées</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-green" style="width: 66.67%" role="progressbar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Budget Utilisé -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card stat-card animate-fade-in">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-sm me-2 bg-yellow-lt">
+                                            <i class="ti ti-credit-card icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Budget Utilisé</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2" id="budget-amount">CHF 0</div>
+                                    </div>
+                                    <div class="text-muted small mb-1">Sur CHF 80'000 (56%)</div>
+                                    <div class="mt-3">
+                                        <div id="sparkline-budget" class="chart-sparkline-donut"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Messages -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card stat-card animate-fade-in">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-sm me-2 bg-red-lt">
+                                            <i class="ti ti-message icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Messages</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2" id="messages-count">0</div>
+                                        <span class="text-muted small">non lus</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="badge bg-red">Urgent: 1</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="#" class="text-reset small">Voir tous →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Row 2: Graphiques -->
+                    <div class="row row-cards mt-4">
+                        <!-- Graphique Progression des Projets -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Progression des Projets</h3>
+                                    <div class="card-actions">
+                                        <a href="#" class="btn btn-ghost-primary btn-sm">Détails</a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-projects-progress" class="chart-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Graphique Répartition Budget -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Répartition Budget</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-budget-distribution" class="chart-container"></div>
+                                    <div class="mt-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-blue me-2"></span>
+                                            <span class="flex-fill">Développement</span>
+                                            <strong>CHF 35'000</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-green me-2"></span>
+                                            <span class="flex-fill">Design</span>
+                                            <strong>CHF 25'000</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-yellow me-2"></span>
+                                            <span class="flex-fill">Marketing</span>
+                                            <strong>CHF 20'000</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Row 3: Timeline & Activité -->
+                    <div class="row row-cards mt-4">
+                        <!-- Activité Récente -->
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Activité Récente</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="timeline timeline-dashboard">
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-primary">
+                                                <i class="ti ti-file-text icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-time text-muted">Il y a 2 heures</div>
+                                                <div class="timeline-title">Nouveau livrable reçu</div>
+                                                <div class="text-muted small">Maquettes finales pour le projet "Refonte Site Web"</div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-success">
+                                                <i class="ti ti-check icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-time text-muted">Hier à 14h30</div>
+                                                <div class="timeline-title">Facture payée</div>
+                                                <div class="text-muted small">Facture #2024-001 - CHF 15'000</div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-info">
+                                                <i class="ti ti-message-2 icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-time text-muted">Il y a 3 jours</div>
+                                                <div class="timeline-title">Nouveau message</div>
+                                                <div class="text-muted small">Marie D. a répondu concernant les modifications</div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-warning">
+                                                <i class="ti ti-clock icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-time text-muted">Il y a 5 jours</div>
+                                                <div class="timeline-title">Échéance reportée</div>
+                                                <div class="text-muted small">Projet "App Mobile" reporté au 15/05/2024</div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-badge bg-purple">
+                                                <i class="ti ti-rocket icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-time text-muted">Il y a 1 semaine</div>
+                                                <div class="timeline-title">Projet démarré</div>
+                                                <div class="text-muted small">Lancement du projet "Migration CRM"</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Prochaines Échéances -->
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Prochaines Échéances</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter card-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Tâche</th>
+                                                <th>Projet</th>
+                                                <th>Date</th>
+                                                <th>Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Validation maquettes</td>
+                                                <td class="text-muted">Refonte Site Web</td>
+                                                <td>25.03.2024</td>
+                                                <td><span class="badge bg-red">Urgent</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Réunion de suivi</td>
+                                                <td class="text-muted">App Mobile</td>
+                                                <td>28.03.2024</td>
+                                                <td><span class="badge bg-orange">Important</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tests utilisateurs</td>
+                                                <td class="text-muted">Refonte Site Web</td>
+                                                <td>02.04.2024</td>
+                                                <td><span class="badge bg-yellow">À venir</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cahier des charges</td>
+                                                <td class="text-muted">Migration CRM</td>
+                                                <td>05.04.2024</td>
+                                                <td><span class="badge bg-blue">Planifié</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Présentation finale</td>
+                                                <td class="text-muted">App Mobile</td>
+                                                <td>15.04.2024</td>
+                                                <td><span class="badge bg-blue">Planifié</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Row 4: Projets Récents -->
+                    <div class="row row-cards mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Mes Projets</h3>
+                                    <div class="card-actions">
+                                        <a href="projects.html" class="btn btn-ghost-primary btn-sm">Voir tous les projets</a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter card-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Statut</th>
+                                                <th>Progression</th>
+                                                <th>Responsable</th>
+                                                <th>Échéance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar avatar-sm me-2 bg-blue-lt">
+                                                            <i class="ti ti-world icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Refonte Site Web</div>
+                                                            <div class="text-muted small">E-commerce moderne</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-green">En cours</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-2">65%</span>
+                                                        <div class="progress progress-sm flex-fill">
+                                                            <div class="progress-bar bg-green" style="width: 65%" role="progressbar"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>Marie D.</td>
+                                                <td>30.03.2024</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar avatar-sm me-2 bg-azure-lt">
+                                                            <i class="ti ti-device-mobile icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <div class="font-weight-medium">App Mobile</div>
+                                                            <div class="text-muted small">iOS & Android</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-azure">Planification</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-2">15%</span>
+                                                        <div class="progress progress-sm flex-fill">
+                                                            <div class="progress-bar bg-azure" style="width: 15%" role="progressbar"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>Jean P.</td>
+                                                <td>15.05.2024</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar avatar-sm me-2 bg-orange-lt">
+                                                            <i class="ti ti-database icon"></i>
+                                                        </span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Migration CRM</div>
+                                                            <div class="text-muted small">Salesforce vers HubSpot</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-orange">En attente</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-2">0%</span>
+                                                        <div class="progress progress-sm flex-fill">
+                                                            <div class="progress-bar bg-orange" style="width: 0%" role="progressbar"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>Pierre L.</td>
+                                                <td>01.06.2024</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container">
+        <!-- Les toasts seront ajoutés dynamiquement ici -->
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/dashboard-client.js"></script>
+    <script src="../assets/js/dashboard-client-notion.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'client') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Charger les données du dashboard
+            if (typeof PortalApp.loadDashboardData === 'function') {
+                PortalApp.loadDashboardData();
+            }
+            
+            // Afficher un message de bienvenue
+            if (PortalApp.currentUser && PortalApp.currentUser.createdAt) {
+                const createdDate = new Date(PortalApp.currentUser.createdAt);
+                const now = new Date();
+                const diffTime = Math.abs(now - createdDate);
+                const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+                
+                if (diffMinutes < 5) {
+                    PortalApp.showToast(`Bienvenue ${PortalApp.currentUser.name} ! Votre compte a été créé avec succès.`, 'success');
+                }
+            }
+            
+            // Afficher la date du jour
+            const currentDate = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = currentDate.toLocaleDateString('fr-CH', options);
+        });
+    </script>
+</body>
+</html>

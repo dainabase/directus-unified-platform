@@ -1,0 +1,1368 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Bilans Mensuels - Finance Superadmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .variance-positive { color: var(--tblr-green); }
+        .variance-negative { color: var(--tblr-red); }
+        .variance-neutral { color: var(--tblr-yellow); }
+        
+        .entity-card {
+            transition: transform 0.2s;
+        }
+        
+        .entity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .trend-arrow {
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+        }
+        
+        .kpi-gauge {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .performance-bar {
+            height: 4px;
+            background: var(--tblr-gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .performance-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .report-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        
+        .financial-table {
+            font-size: 0.875rem;
+        }
+        
+        .financial-table td {
+            vertical-align: middle;
+        }
+        
+        .sparkline {
+            display: inline-block;
+            height: 20px;
+            width: 60px;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href=".">
+                        <img src="../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar Menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar navbar-light">
+                    <div class="container-xl">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../dashboard.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown active">
+                                <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-businessplan"></i>
+                                    </span>
+                                    <span class="nav-link-title">Finance</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="./ocr-upload.html">
+                                        <i class="ti ti-scan text-warning me-2"></i>
+                                        Centre OCR
+                                    </a>
+                                    <a class="dropdown-item" href="./invoices-in.html">
+                                        <i class="ti ti-file-invoice me-2"></i>
+                                        Factures Fournisseurs
+                                    </a>
+                                    <a class="dropdown-item" href="./invoices-out.html">
+                                        <i class="ti ti-file-dollar me-2"></i>
+                                        Factures Clients
+                                    </a>
+                                    <a class="dropdown-item" href="./expenses.html">
+                                        <i class="ti ti-receipt me-2"></i>
+                                        Notes de Frais
+                                    </a>
+                                    <a class="dropdown-item" href="./banking.html">
+                                        <i class="ti ti-building-bank me-2"></i>
+                                        Banking Revolut
+                                    </a>
+                                    <a class="dropdown-item" href="./accounting.html">
+                                        <i class="ti ti-calculator text-success me-2"></i>
+                                        Comptabilité Générale
+                                    </a>
+                                    <a class="dropdown-item" href="./vat-reports.html">
+                                        <i class="ti ti-report text-blue me-2"></i>
+                                        Déclarations TVA
+                                    </a>
+                                    <a class="dropdown-item active" href="./monthly-reports.html">
+                                        <i class="ti ti-report-analytics text-purple me-2"></i>
+                                        Bilans Mensuels
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Page pre-title -->
+                            <div class="page-pretitle">Finance</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-report-analytics text-purple me-2"></i>
+                                Bilans Mensuels
+                            </h2>
+                        </div>
+                        <!-- Page title actions -->
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="form-select" id="view-selector" style="width: auto;">
+                                    <option value="consolidated">Vue Consolidée</option>
+                                    <option value="hypervisual">Hypervisual</option>
+                                    <option value="dainamics">Dainamics</option>
+                                    <option value="enkiro">Enki Robotics</option>
+                                    <option value="takeout">Takeout Shops</option>
+                                    <option value="lexaia">Lexaia</option>
+                                </select>
+                                
+                                <select class="form-select" id="period-selector" style="width: auto;">
+                                    <option value="2025-01">Janvier 2025</option>
+                                    <option value="2024-12">Décembre 2024</option>
+                                    <option value="2024-11">Novembre 2024</option>
+                                    <option value="2024-10">Octobre 2024</option>
+                                </select>
+                                
+                                <div class="btn-list">
+                                    <a href="#" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#modal-export">
+                                        <i class="ti ti-download"></i>
+                                        Export
+                                    </a>
+                                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-share">
+                                        <i class="ti ti-send"></i>
+                                        Partager
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Performance Summary -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Performance Groupe - Janvier 2025</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-green">Final</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="p-3 border rounded">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="subheader">Chiffre d'affaires</div>
+                                                    <div class="ms-auto">
+                                                        <span class="sparkline" id="revenue-spark"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="h2 mb-0 metric-value">CHF 485'000</div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="variance-positive">+12%</span>
+                                                    <span class="text-secondary mx-2">vs N-1</span>
+                                                    <span class="variance-positive">+8%</span>
+                                                    <span class="text-secondary mx-2">vs Budget</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="p-3 border rounded">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="subheader">Marge brute</div>
+                                                    <div class="ms-auto">
+                                                        <span class="badge bg-green-lt">59.2%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="h2 mb-0 metric-value">CHF 287'000</div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="variance-positive">+15%</span>
+                                                    <span class="text-secondary mx-2">vs N-1</span>
+                                                    <span class="variance-positive">+10%</span>
+                                                    <span class="text-secondary mx-2">vs Budget</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="p-3 border rounded">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="subheader">EBITDA</div>
+                                                    <div class="ms-auto">
+                                                        <span class="badge bg-blue-lt">20.2%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="h2 mb-0 metric-value">CHF 98'000</div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="variance-positive">+22%</span>
+                                                    <span class="text-secondary mx-2">vs N-1</span>
+                                                    <span class="variance-positive">+15%</span>
+                                                    <span class="text-secondary mx-2">vs Budget</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="p-3 border rounded">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="subheader">Résultat net</div>
+                                                    <div class="ms-auto">
+                                                        <span class="badge bg-purple-lt">13.8%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="h2 mb-0 metric-value">CHF 67'000</div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="variance-positive">+18%</span>
+                                                    <span class="text-secondary mx-2">vs N-1</span>
+                                                    <span class="variance-positive">+12%</span>
+                                                    <span class="text-secondary mx-2">vs Budget</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content Tabs -->
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                                        <li class="nav-item">
+                                            <a href="#tab-entities" class="nav-link active" data-bs-toggle="tab">
+                                                <i class="ti ti-building me-2"></i>
+                                                Par Entité
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-financial" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-report-money me-2"></i>
+                                                États Financiers
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-kpis" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-chart-dots me-2"></i>
+                                                KPIs & Ratios
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-cashflow" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-cash me-2"></i>
+                                                Cash Flow
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-trends" class="nav-link" data-bs-toggle="tab">
+                                                <i class="ti ti-trending-up me-2"></i>
+                                                Tendances
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <!-- Entities Tab -->
+                                        <div class="tab-pane active show" id="tab-entities">
+                                            <div class="mb-4">
+                                                <h3>Performance par Entité</h3>
+                                                <p class="text-secondary">Comparaison des performances mensuelles par société du groupe</p>
+                                            </div>
+                                            
+                                            <div class="row g-3">
+                                                <!-- Hypervisual -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card entity-card">
+                                                        <div class="card-stamp">
+                                                            <div class="card-stamp-icon bg-blue">
+                                                                <i class="ti ti-eye"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Hypervisual</h3>
+                                                            <div class="row g-2 mb-3">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">CA</div>
+                                                                    <div class="h3 mb-0 metric-value">185k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Marge</div>
+                                                                    <div class="h3 mb-0">42%</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">EBITDA</div>
+                                                                    <div class="h4 mb-0 metric-value">45k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Trend</div>
+                                                                    <div class="h4 mb-0">
+                                                                        <span class="variance-positive">+15%</span>
+                                                                        <span class="trend-arrow text-green">—</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="performance-bar mt-3">
+                                                                <div class="performance-bar-fill bg-blue" style="width: 85%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Dainamics -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card entity-card">
+                                                        <div class="card-stamp">
+                                                            <div class="card-stamp-icon bg-green">
+                                                                <i class="ti ti-rocket"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Dainamics</h3>
+                                                            <div class="row g-2 mb-3">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">CA</div>
+                                                                    <div class="h3 mb-0 metric-value">142k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Marge</div>
+                                                                    <div class="h3 mb-0">38%</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">EBITDA</div>
+                                                                    <div class="h4 mb-0 metric-value">28k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Trend</div>
+                                                                    <div class="h4 mb-0">
+                                                                        <span class="variance-positive">+12%</span>
+                                                                        <span class="trend-arrow text-green">—</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="performance-bar mt-3">
+                                                                <div class="performance-bar-fill bg-green" style="width: 78%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Enki Robotics -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card entity-card">
+                                                        <div class="card-stamp">
+                                                            <div class="card-stamp-icon bg-orange">
+                                                                <i class="ti ti-robot"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Enki Robotics</h3>
+                                                            <div class="row g-2 mb-3">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">CA</div>
+                                                                    <div class="h3 mb-0 metric-value">98k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Marge</div>
+                                                                    <div class="h3 mb-0">35%</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">EBITDA</div>
+                                                                    <div class="h4 mb-0 metric-value">15k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Trend</div>
+                                                                    <div class="h4 mb-0">
+                                                                        <span class="variance-neutral">0%</span>
+                                                                        <span class="trend-arrow text-yellow">’</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="performance-bar mt-3">
+                                                                <div class="performance-bar-fill bg-orange" style="width: 65%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Takeout Shops -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card entity-card">
+                                                        <div class="card-stamp">
+                                                            <div class="card-stamp-icon bg-red">
+                                                                <i class="ti ti-shopping-cart"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Takeout Shops</h3>
+                                                            <div class="row g-2 mb-3">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">CA</div>
+                                                                    <div class="h3 mb-0 metric-value">45k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Marge</div>
+                                                                    <div class="h3 mb-0">28%</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">EBITDA</div>
+                                                                    <div class="h4 mb-0 metric-value">8k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Trend</div>
+                                                                    <div class="h4 mb-0">
+                                                                        <span class="variance-negative">-5%</span>
+                                                                        <span class="trend-arrow text-red">˜</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="performance-bar mt-3">
+                                                                <div class="performance-bar-fill bg-red" style="width: 45%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Lexaia -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card entity-card">
+                                                        <div class="card-stamp">
+                                                            <div class="card-stamp-icon bg-purple">
+                                                                <i class="ti ti-brain"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Lexaia</h3>
+                                                            <div class="row g-2 mb-3">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">CA</div>
+                                                                    <div class="h3 mb-0 metric-value">15k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Marge</div>
+                                                                    <div class="h3 mb-0">45%</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row g-2">
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">EBITDA</div>
+                                                                    <div class="h4 mb-0 metric-value">2k</div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="text-secondary">Trend</div>
+                                                                    <div class="h4 mb-0">
+                                                                        <span class="variance-positive">+28%</span>
+                                                                        <span class="trend-arrow text-green">—</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="performance-bar mt-3">
+                                                                <div class="performance-bar-fill bg-purple" style="width: 92%"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Summary -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Synthèse</h3>
+                                                            <div class="mb-3">
+                                                                <div class="text-secondary mb-1">Top Performer</div>
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="ti ti-trophy text-yellow me-2"></i>
+                                                                    <strong>Hypervisual</strong>
+                                                                    <span class="ms-auto badge bg-green">+15%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <div class="text-secondary mb-1">Attention requise</div>
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="ti ti-alert-triangle text-orange me-2"></i>
+                                                                    <strong>Takeout Shops</strong>
+                                                                    <span class="ms-auto badge bg-red">-5%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-secondary mb-1">Croissance forte</div>
+                                                                <div class="d-flex align-items-center">
+                                                                    <i class="ti ti-rocket text-green me-2"></i>
+                                                                    <strong>Lexaia</strong>
+                                                                    <span class="ms-auto badge bg-purple">+28%</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Financial Statements Tab -->
+                                        <div class="tab-pane" id="tab-financial">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <h3>Compte de Résultat Consolidé</h3>
+                                                    <div class="card">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm financial-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Poste</th>
+                                                                        <th class="text-end">Jan 2025</th>
+                                                                        <th class="text-end">Jan 2024</th>
+                                                                        <th class="text-end">Var %</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr class="table-active">
+                                                                        <td><strong>Chiffre d'affaires</strong></td>
+                                                                        <td class="text-end metric-value"><strong>485'000</strong></td>
+                                                                        <td class="text-end">433'035</td>
+                                                                        <td class="text-end variance-positive">+12.0%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Coût des ventes</td>
+                                                                        <td class="text-end metric-value">(198'000)</td>
+                                                                        <td class="text-end">(183'600)</td>
+                                                                        <td class="text-end variance-negative">+7.8%</td>
+                                                                    </tr>
+                                                                    <tr class="table-active">
+                                                                        <td><strong>Marge brute</strong></td>
+                                                                        <td class="text-end metric-value"><strong>287'000</strong></td>
+                                                                        <td class="text-end">249'435</td>
+                                                                        <td class="text-end variance-positive">+15.1%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">% Marge brute</td>
+                                                                        <td class="text-end">59.2%</td>
+                                                                        <td class="text-end">57.6%</td>
+                                                                        <td class="text-end variance-positive">+1.6pts</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Charges de personnel</td>
+                                                                        <td class="text-end metric-value">(145'000)</td>
+                                                                        <td class="text-end">(132'000)</td>
+                                                                        <td class="text-end variance-negative">+9.8%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Charges d'exploitation</td>
+                                                                        <td class="text-end metric-value">(44'000)</td>
+                                                                        <td class="text-end">(37'107)</td>
+                                                                        <td class="text-end variance-negative">+18.6%</td>
+                                                                    </tr>
+                                                                    <tr class="table-active">
+                                                                        <td><strong>EBITDA</strong></td>
+                                                                        <td class="text-end metric-value"><strong>98'000</strong></td>
+                                                                        <td class="text-end">80'328</td>
+                                                                        <td class="text-end variance-positive">+22.0%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">% EBITDA</td>
+                                                                        <td class="text-end">20.2%</td>
+                                                                        <td class="text-end">18.5%</td>
+                                                                        <td class="text-end variance-positive">+1.7pts</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Amortissements</td>
+                                                                        <td class="text-end metric-value">(18'000)</td>
+                                                                        <td class="text-end">(15'000)</td>
+                                                                        <td class="text-end variance-negative">+20.0%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Charges financières</td>
+                                                                        <td class="text-end metric-value">(5'000)</td>
+                                                                        <td class="text-end">(4'628)</td>
+                                                                        <td class="text-end variance-negative">+8.0%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Impôts</td>
+                                                                        <td class="text-end metric-value">(8'000)</td>
+                                                                        <td class="text-end">(4'000)</td>
+                                                                        <td class="text-end variance-negative">+100.0%</td>
+                                                                    </tr>
+                                                                    <tr class="table-success">
+                                                                        <td><strong>Résultat net</strong></td>
+                                                                        <td class="text-end metric-value"><strong>67'000</strong></td>
+                                                                        <td class="text-end">56'700</td>
+                                                                        <td class="text-end variance-positive">+18.2%</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">% Résultat net</td>
+                                                                        <td class="text-end">13.8%</td>
+                                                                        <td class="text-end">13.1%</td>
+                                                                        <td class="text-end variance-positive">+0.7pts</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-6">
+                                                    <h3>Analyse des Écarts</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="waterfall-chart" style="height: 350px;"></div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <h3 class="mt-4">Points Clés</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="alert alert-success">
+                                                                <h4 class="alert-title">
+                                                                    <i class="ti ti-circle-check me-2"></i>
+                                                                    Performance exceptionnelle
+                                                                </h4>
+                                                                <div class="text-secondary">
+                                                                    Le groupe dépasse tous ses objectifs avec une croissance à deux chiffres du CA (+12%) 
+                                                                    et une amélioration significative de la rentabilité (EBITDA +22%).
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="alert alert-info">
+                                                                <h4 class="alert-title">
+                                                                    <i class="ti ti-bulb me-2"></i>
+                                                                    Amélioration de la marge
+                                                                </h4>
+                                                                <div class="text-secondary">
+                                                                    La marge brute progresse de 1.6 points grâce à un mix produit favorable 
+                                                                    et une meilleure efficacité opérationnelle.
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="alert alert-warning">
+                                                                <h4 class="alert-title">
+                                                                    <i class="ti ti-alert-triangle me-2"></i>
+                                                                    Attention aux charges
+                                                                </h4>
+                                                                <div class="text-secondary">
+                                                                    Les charges d'exploitation augmentent plus vite que le CA (+18.6% vs +12%). 
+                                                                    Une vigilance est nécessaire pour maintenir la rentabilité.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- KPIs Tab -->
+                                        <div class="tab-pane" id="tab-kpis">
+                                            <div class="row g-3">
+                                                <div class="col-lg-4">
+                                                    <h3>Ratios de Liquidité</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>Current Ratio</span>
+                                                                    <strong class="metric-value">2.4</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-green" style="width: 80%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 2.0</small>
+                                                            </div>
+                                                            
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>Quick Ratio</span>
+                                                                    <strong class="metric-value">2.1</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-green" style="width: 84%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 1.5</small>
+                                                            </div>
+                                                            
+                                                            <div>
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>Cash Ratio</span>
+                                                                    <strong class="metric-value">1.8</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-blue" style="width: 72%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 1.0</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-4">
+                                                    <h3>Ratios de Rentabilité</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>ROE</span>
+                                                                    <strong class="metric-value">18.5%</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-purple" style="width: 74%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 15%</small>
+                                                            </div>
+                                                            
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>ROA</span>
+                                                                    <strong class="metric-value">12.3%</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-blue" style="width: 62%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 10%</small>
+                                                            </div>
+                                                            
+                                                            <div>
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>ROCE</span>
+                                                                    <strong class="metric-value">22.1%</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-green" style="width: 88%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 20%</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-4">
+                                                    <h3>Ratios d'Efficacité</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>Rotation des actifs</span>
+                                                                    <strong class="metric-value">1.2x</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-orange" style="width: 60%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: > 1.5x</small>
+                                                            </div>
+                                                            
+                                                            <div class="mb-4">
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>DSO (jours)</span>
+                                                                    <strong class="metric-value">45</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-yellow" style="width: 75%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Objectif: < 40 jours</small>
+                                                            </div>
+                                                            
+                                                            <div>
+                                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                                    <span>DPO (jours)</span>
+                                                                    <strong class="metric-value">38</strong>
+                                                                </div>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-green" style="width: 63%"></div>
+                                                                </div>
+                                                                <small class="text-secondary">Optimal: 30-45 jours</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Cash Flow Tab -->
+                                        <div class="tab-pane" id="tab-cashflow">
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <h3>Tableau des Flux de Trésorerie</h3>
+                                                    <div class="card">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm financial-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Flux de trésorerie</th>
+                                                                        <th class="text-end">Jan 2025</th>
+                                                                        <th class="text-end">Jan 2024</th>
+                                                                        <th class="text-end">Var CHF</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td><strong>Solde d'ouverture</strong></td>
+                                                                        <td class="text-end metric-value"><strong>892'000</strong></td>
+                                                                        <td class="text-end">723'000</td>
+                                                                        <td class="text-end variance-positive">+169'000</td>
+                                                                    </tr>
+                                                                    <tr class="table-active">
+                                                                        <td colspan="4"><strong>Activités opérationnelles</strong></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">Résultat net</td>
+                                                                        <td class="text-end metric-value">67'000</td>
+                                                                        <td class="text-end">56'700</td>
+                                                                        <td class="text-end variance-positive">+10'300</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">Amortissements</td>
+                                                                        <td class="text-end metric-value">18'000</td>
+                                                                        <td class="text-end">15'000</td>
+                                                                        <td class="text-end">+3'000</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">Variation BFR</td>
+                                                                        <td class="text-end metric-value">(7'000)</td>
+                                                                        <td class="text-end">(12'000)</td>
+                                                                        <td class="text-end variance-positive">+5'000</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><strong>Cash flow opérationnel</strong></td>
+                                                                        <td class="text-end metric-value"><strong>78'000</strong></td>
+                                                                        <td class="text-end">59'700</td>
+                                                                        <td class="text-end variance-positive">+18'300</td>
+                                                                    </tr>
+                                                                    <tr class="table-active">
+                                                                        <td colspan="4"><strong>Activités d'investissement</strong></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">Acquisition immobilisations</td>
+                                                                        <td class="text-end metric-value">(25'000)</td>
+                                                                        <td class="text-end">(15'000)</td>
+                                                                        <td class="text-end variance-negative">-10'000</td>
+                                                                    </tr>
+                                                                    <tr class="table-active">
+                                                                        <td colspan="4"><strong>Activités de financement</strong></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="ps-3">Remboursement emprunts</td>
+                                                                        <td class="text-end metric-value">(15'000)</td>
+                                                                        <td class="text-end">(15'000)</td>
+                                                                        <td class="text-end">0</td>
+                                                                    </tr>
+                                                                    <tr class="table-success">
+                                                                        <td><strong>Solde de clôture</strong></td>
+                                                                        <td class="text-end metric-value"><strong>930'000</strong></td>
+                                                                        <td class="text-end">752'700</td>
+                                                                        <td class="text-end variance-positive">+177'300</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-4">
+                                                    <h3>Analyse du BFR</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="mb-3">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span>Créances clients</span>
+                                                                    <span class="metric-value">285'000</span>
+                                                                </div>
+                                                                <div class="progress progress-sm mt-2">
+                                                                    <div class="progress-bar bg-blue" style="width: 65%"></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="mb-3">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span>Stocks</span>
+                                                                    <span class="metric-value">68'000</span>
+                                                                </div>
+                                                                <div class="progress progress-sm mt-2">
+                                                                    <div class="progress-bar bg-orange" style="width: 25%"></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="mb-3">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span>Dettes fournisseurs</span>
+                                                                    <span class="metric-value">(125'000)</span>
+                                                                </div>
+                                                                <div class="progress progress-sm mt-2">
+                                                                    <div class="progress-bar bg-green" style="width: 40%"></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <hr>
+                                                            
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <strong>BFR Total</strong>
+                                                                <strong class="metric-value text-yellow">228'000</strong>
+                                                            </div>
+                                                            
+                                                            <div class="alert alert-info mt-3">
+                                                                <i class="ti ti-info-circle me-2"></i>
+                                                                Le BFR représente 47% du CA mensuel, dans la norme du secteur.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Trends Tab -->
+                                        <div class="tab-pane" id="tab-trends">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h3>Évolution sur 12 mois</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="trends-chart" style="height: 400px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row mt-4">
+                                                <div class="col-lg-6">
+                                                    <h3>Heatmap Performance Entités</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="heatmap-chart" style="height: 350px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-6">
+                                                    <h3>Projections 3 mois</h3>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table class="table table-sm">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Indicateur</th>
+                                                                        <th class="text-end">Fév 2025</th>
+                                                                        <th class="text-end">Mar 2025</th>
+                                                                        <th class="text-end">Avr 2025</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>CA prévisionnel</td>
+                                                                        <td class="text-end metric-value">495k</td>
+                                                                        <td class="text-end metric-value">510k</td>
+                                                                        <td class="text-end metric-value">525k</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>EBITDA prévu</td>
+                                                                        <td class="text-end metric-value">102k</td>
+                                                                        <td class="text-end metric-value">108k</td>
+                                                                        <td class="text-end metric-value">112k</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Cash prévisionnel</td>
+                                                                        <td class="text-end metric-value">968k</td>
+                                                                        <td class="text-end metric-value">1'015k</td>
+                                                                        <td class="text-end metric-value">1'068k</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Probabilité</td>
+                                                                        <td class="text-end">
+                                                                            <span class="badge bg-green">85%</span>
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <span class="badge bg-yellow">75%</span>
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <span class="badge bg-orange">65%</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="../docs/" class="link-secondary">Documentation</a></li>
+                                <li class="list-inline-item"><a href="../support.html" class="link-secondary">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Groupe</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal Export -->
+    <div class="modal modal-blur fade" id="modal-export" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Export du rapport</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-red text-white avatar">
+                                                <i class="ti ti-file-type-pdf"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">PDF Exécutif</div>
+                                            <div class="text-secondary">Synthèse 5 pages</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-green text-white avatar">
+                                                <i class="ti ti-file-type-xls"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">Excel Détaillé</div>
+                                            <div class="text-secondary">Données complètes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-purple text-white avatar">
+                                                <i class="ti ti-presentation"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">PowerPoint</div>
+                                            <div class="text-secondary">Présentation board</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <label class="form-label">Sections à inclure</label>
+                        <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+                            <label class="form-selectgroup-item flex-fill">
+                                <input type="checkbox" name="sections" value="summary" class="form-selectgroup-input" checked>
+                                <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div>
+                                        <strong>Synthèse exécutive</strong>
+                                        <div class="text-secondary">KPIs et performance globale</div>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="form-selectgroup-item flex-fill">
+                                <input type="checkbox" name="sections" value="entities" class="form-selectgroup-input" checked>
+                                <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div>
+                                        <strong>Détail par entité</strong>
+                                        <div class="text-secondary">Performance individuelle des sociétés</div>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="form-selectgroup-item flex-fill">
+                                <input type="checkbox" name="sections" value="financial" class="form-selectgroup-input" checked>
+                                <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <div class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </div>
+                                    <div>
+                                        <strong>États financiers</strong>
+                                        <div class="text-secondary">P&L, bilan et cash flow</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </a>
+                    <a href="#" class="btn btn-primary ms-auto">
+                        <i class="ti ti-download"></i>
+                        Télécharger
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Share -->
+    <div class="modal modal-blur fade" id="modal-share" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Partager le rapport</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Destinataires</label>
+                        <select class="form-select" multiple>
+                            <option value="ceo" selected>CEO - Direction Générale</option>
+                            <option value="cfo" selected>CFO - Direction Financière</option>
+                            <option value="board">Conseil d'Administration</option>
+                            <option value="managers">Managers d'Entités</option>
+                            <option value="investors">Investisseurs</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="4">Bonjour,
+
+Veuillez trouver ci-joint le rapport mensuel de janvier 2025.
+
+Points clés:
+- CA groupe: +12% vs N-1
+- EBITDA: 20.2% (objectif dépassé)
+- Trésorerie solide: 930k CHF
+
+Cordialement,
+Paul Martin</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Options</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="schedule-send">
+                            <label class="form-check-label" for="schedule-send">
+                                Programmer l'envoi (J+5 chaque mois)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="require-read">
+                            <label class="form-check-label" for="require-read">
+                                Demander accusé de lecture
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </a>
+                    <a href="#" class="btn btn-primary ms-auto">
+                        <i class="ti ti-send"></i>
+                        Envoyer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabler Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- jQuery (required for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- Financial Reports Module -->
+    <script src="../../assets/js/financial-reports.js"></script>
+    
+    <script>
+        // Initialize Financial Reports module
+        document.addEventListener('DOMContentLoaded', function() {
+            FinancialReports.init();
+            
+            // Initialize sparklines
+            const sparklineOptions = {
+                chart: {
+                    type: 'line',
+                    height: 20,
+                    width: 60,
+                    sparkline: {
+                        enabled: true
+                    }
+                },
+                stroke: {
+                    width: 2
+                },
+                colors: [tabler.getColor('primary')],
+                tooltip: {
+                    enabled: false
+                }
+            };
+            
+            new ApexCharts(document.querySelector('#revenue-spark'), {
+                ...sparklineOptions,
+                series: [{
+                    data: [380, 410, 425, 445, 460, 485]
+                }]
+            }).render();
+        });
+    </script>
+</body>
+</html>

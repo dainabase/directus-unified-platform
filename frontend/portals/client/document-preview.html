@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Aperçu Document - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .page-number,
+        .file-size {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .document-viewer {
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        #pdfViewer {
+            width: 100%;
+            height: 800px;
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            overflow: auto;
+            background: var(--tblr-bg-surface);
+        }
+        
+        .pdf-page {
+            margin: 0 auto 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .document-toolbar {
+            background: var(--tblr-bg-surface);
+            border: 1px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0 0.5rem;
+            border-right: 1px solid var(--tblr-border-color);
+        }
+        
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0.5rem;
+        }
+        
+        .image-viewer {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .image-viewer img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .text-viewer {
+            padding: 2rem;
+            background: var(--tblr-bg-surface);
+            border-radius: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 800px;
+            overflow: auto;
+        }
+        
+        .document-info {
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        .document-meta {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+        }
+        
+        .document-meta-label {
+            font-weight: 600;
+            color: var(--tblr-secondary);
+        }
+        
+        .version-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .version-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--tblr-border-color);
+            transition: background 0.2s;
+        }
+        
+        .version-item:hover {
+            background: var(--tblr-bg-surface-secondary);
+        }
+        
+        .version-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            color: var(--tblr-secondary);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body data-bs-theme="light" class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <div class="nav-item dropdown d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                            <i class="ti ti-bell"></i>
+                            <span class="badge bg-red"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Notifications</h3>
+                                </div>
+                                <div class="list-group list-group-flush list-group-hoverable">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="status-dot status-dot-animated bg-red d-block"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Nouveau document</a>
+                                                <div class="d-block text-secondary text-truncate mt-n1">
+                                                    Un nouveau document a été ajouté
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div id="user-name">Utilisateur</div>
+                                <div class="mt-1 small text-secondary">Client</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">Mon profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="/client/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                                <i class="ti ti-bell"></i>
+                                <span class="badge bg-red"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar-mobile"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-folder"></i>
+                                </span>
+                                <span class="nav-link-title">Projets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="documents.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-text"></i>
+                                </span>
+                                <span class="nav-link-title">Documents</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="finances.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-currency-euro"></i>
+                                </span>
+                                <span class="nav-link-title">Finances</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Documents</div>
+                            <h2 class="page-title" id="document-title">
+                                <i class="ti ti-file-text me-2"></i>
+                                Chargement...
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="documents.html" class="btn btn-ghost-secondary">
+                                    <i class="ti ti-arrow-left"></i>
+                                    Retour
+                                </a>
+                                <a href="#" class="btn btn-ghost-secondary" id="downloadBtn">
+                                    <i class="ti ti-download"></i>
+                                    Télécharger
+                                </a>
+                                <a href="#" class="btn btn-ghost-secondary" onclick="window.print()">
+                                    <i class="ti ti-printer"></i>
+                                    Imprimer
+                                </a>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                    <i class="ti ti-share"></i>
+                                    Partager
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row g-4">
+                        <!-- Document Viewer -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-file-text"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <!-- PDF Toolbar -->
+                                    <div class="document-toolbar" id="pdfToolbar" style="display: none;">
+                                        <div class="zoom-controls">
+                                            <button class="btn btn-sm btn-ghost-secondary" onclick="zoomOut()">
+                                                <i class="ti ti-zoom-out"></i>
+                                            </button>
+                                            <span class="page-number mx-2" id="zoomLevel">100%</span>
+                                            <button class="btn btn-sm btn-ghost-secondary" onclick="zoomIn()">
+                                                <i class="ti ti-zoom-in"></i>
+                                            </button>
+                                        </div>
+                                        <div class="page-controls">
+                                            <button class="btn btn-sm btn-ghost-secondary" onclick="previousPage()">
+                                                <i class="ti ti-chevron-left"></i>
+                                            </button>
+                                            <span class="mx-2">
+                                                Page <span class="page-number" id="currentPage">1</span> sur <span class="page-number" id="totalPages">1</span>
+                                            </span>
+                                            <button class="btn btn-sm btn-ghost-secondary" onclick="nextPage()">
+                                                <i class="ti ti-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <button class="btn btn-sm btn-ghost-secondary" onclick="toggleFullscreen()">
+                                                <i class="ti ti-maximize"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Document Content -->
+                                    <div class="document-viewer">
+                                        <!-- Loading State -->
+                                        <div id="loadingState" class="loading-spinner">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Chargement...</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- PDF Viewer -->
+                                        <div id="pdfViewer" style="display: none;"></div>
+                                        
+                                        <!-- Image Viewer -->
+                                        <div id="imageViewer" class="image-viewer" style="display: none;">
+                                            <img id="imageContent" src="" alt="Document">
+                                        </div>
+                                        
+                                        <!-- Text Viewer -->
+                                        <div id="textViewer" class="text-viewer" style="display: none;"></div>
+                                        
+                                        <!-- Error State -->
+                                        <div id="errorState" class="error-message" style="display: none;">
+                                            <div class="error-icon">
+                                                <i class="ti ti-file-x"></i>
+                                            </div>
+                                            <h3>Impossible de charger le document</h3>
+                                            <p class="text-secondary">Le format de ce fichier n'est pas pris en charge ou le fichier est corrompu.</p>
+                                            <a href="#" class="btn btn-primary mt-3" onclick="location.reload()">
+                                                <i class="ti ti-refresh"></i>
+                                                Réessayer
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Document Info -->
+                        <div class="col-lg-4">
+                            <!-- Document Details -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-info-circle"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Informations du document</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="document-info">
+                                        <div class="document-meta">
+                                            <div class="document-meta-label">Type:</div>
+                                            <div id="fileType">-</div>
+                                            <div class="document-meta-label">Taille:</div>
+                                            <div class="file-size" id="fileSize">-</div>
+                                            <div class="document-meta-label">Modifié le:</div>
+                                            <div id="modifiedDate">-</div>
+                                            <div class="document-meta-label">Créé par:</div>
+                                            <div id="createdBy">-</div>
+                                            <div class="document-meta-label">Projet:</div>
+                                            <div id="projectName">-</div>
+                                            <div class="document-meta-label">Statut:</div>
+                                            <div id="documentStatus">
+                                                <span class="badge bg-green">Validé</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Version History -->
+                            <div class="card mb-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-history"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Historique des versions</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="version-history">
+                                        <div class="version-item">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="fw-medium">Version 2.0</div>
+                                                    <div class="text-secondary small">Par Sophie Martin</div>
+                                                    <div class="text-secondary small">15 jan 2024 à 14:30</div>
+                                                </div>
+                                                <span class="badge bg-blue">Actuelle</span>
+                                            </div>
+                                        </div>
+                                        <div class="version-item">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="fw-medium">Version 1.5</div>
+                                                    <div class="text-secondary small">Par Pierre Dupont</div>
+                                                    <div class="text-secondary small">10 jan 2024 à 10:15</div>
+                                                </div>
+                                                <a href="#" class="btn btn-ghost-secondary btn-sm">Voir</a>
+                                            </div>
+                                        </div>
+                                        <div class="version-item">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="fw-medium">Version 1.0</div>
+                                                    <div class="text-secondary small">Par Marie Lambert</div>
+                                                    <div class="text-secondary small">5 jan 2024 à 09:00</div>
+                                                </div>
+                                                <a href="#" class="btn btn-ghost-secondary btn-sm">Voir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Related Documents -->
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-files"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Documents liés</h3>
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar bg-blue-lt">
+                                                    <i class="ti ti-file-text"></i>
+                                                </span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Spécifications techniques</a>
+                                                <div class="text-secondary small text-truncate">PDF • 1.2 MB</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar bg-green-lt">
+                                                    <i class="ti ti-file-spreadsheet"></i>
+                                                </span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Budget prévisionnel</a>
+                                                <div class="text-secondary small text-truncate">XLSX • 456 KB</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar bg-purple-lt">
+                                                    <i class="ti ti-photo"></i>
+                                                </span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Maquettes UI</a>
+                                                <div class="text-secondary small text-truncate">ZIP • 12.3 MB</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Documentation</a></li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Portal Pro</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal modal-blur fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Partager le document</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Adresse email</label>
+                        <input type="email" class="form-control" placeholder="exemple@email.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message (optionnel)</label>
+                        <textarea class="form-control" rows="3" placeholder="Ajouter un message..."></textarea>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Permissions</label>
+                        <select class="form-select">
+                            <option>Lecture seule</option>
+                            <option>Modification</option>
+                            <option>Téléchargement autorisé</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-send"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+        // PDF.js configuration
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        let scale = 1.0;
+        
+        // Get document info from URL or mock data
+        const urlParams = new URLSearchParams(window.location.search);
+        const documentId = urlParams.get('id') || '1';
+        const documentType = urlParams.get('type') || 'pdf';
+        
+        // Mock document data
+        const documents = {
+            '1': {
+                name: 'Cahier des charges v2.pdf',
+                type: 'application/pdf',
+                size: '2.4 MB',
+                modified: '15 janvier 2024',
+                createdBy: 'Sophie Martin',
+                project: 'Site E-commerce Premium',
+                url: '../assets/documents/sample.pdf'
+            },
+            '2': {
+                name: 'Maquette Homepage.png',
+                type: 'image/png',
+                size: '856 KB',
+                modified: '10 janvier 2024',
+                createdBy: 'Emma Blanc',
+                project: 'Site E-commerce Premium',
+                url: '../assets/images/sample-mockup.png'
+            },
+            '3': {
+                name: 'Notes de réunion.txt',
+                type: 'text/plain',
+                size: '12 KB',
+                modified: '8 janvier 2024',
+                createdBy: 'Pierre Lefebvre',
+                project: 'Site E-commerce Premium',
+                content: 'Notes de réunion du 8 janvier 2024\n\nParticipants:\n- Pierre Lefebvre (Chef de projet)\n- Sophie Martin (Développeur)\n- Emma Blanc (Designer)\n\nPoints abordés:\n1. Validation des maquettes\n2. Planning de développement\n3. Budget et ressources\n\nProchaines étapes:\n- Finaliser les spécifications techniques\n- Commencer le développement du MVP\n- Planifier les tests utilisateurs'
+            }
+        };
+        
+        // Load document
+        function loadDocument() {
+            const doc = documents[documentId];
+            if (!doc) {
+                showError();
+                return;
+            }
+            
+            // Update page info
+            document.getElementById('document-title').innerHTML = `<i class="ti ti-file-text me-2"></i>${doc.name}`;
+            document.getElementById('fileType').textContent = doc.type;
+            document.getElementById('fileSize').textContent = doc.size;
+            document.getElementById('modifiedDate').textContent = doc.modified;
+            document.getElementById('createdBy').textContent = doc.createdBy;
+            document.getElementById('projectName').textContent = doc.project;
+            
+            // Load content based on type
+            if (doc.type.includes('pdf')) {
+                loadPDF(doc.url || '../assets/documents/sample.pdf');
+            } else if (doc.type.includes('image')) {
+                loadImage(doc.url || '../assets/images/sample-mockup.png');
+            } else if (doc.type.includes('text')) {
+                loadText(doc.content || 'Contenu du document...');
+            } else {
+                showError();
+            }
+        }
+        
+        // PDF Functions
+        function loadPDF(url) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('pdfToolbar').style.display = 'flex';
+            document.getElementById('pdfViewer').style.display = 'block';
+            
+            // For demo, create a simple PDF preview
+            const viewer = document.getElementById('pdfViewer');
+            viewer.innerHTML = `
+                <div style="padding: 2rem; text-align: center;">
+                    <div style="background: white; padding: 3rem; max-width: 800px; margin: 0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <h1>Cahier des charges</h1>
+                        <p style="margin: 2rem 0;">Site E-commerce Premium</p>
+                        <p style="text-align: left; line-height: 1.8;">
+                            Ce document présente les spécifications fonctionnelles et techniques pour le développement
+                            de la plateforme e-commerce. Le projet inclut la création d'un site web responsive,
+                            d'applications mobiles natives, et d'un système de gestion de contenu complet.
+                        </p>
+                        <p style="text-align: left; line-height: 1.8;">
+                            Les principales fonctionnalités incluent : catalogue produits, panier d'achat,
+                            système de paiement sécurisé, gestion des commandes, tableau de bord analytique,
+                            et intégration avec les systèmes logistiques.
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Update page info
+            document.getElementById('totalPages').textContent = '15';
+        }
+        
+        function loadImage(url) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('imageViewer').style.display = 'block';
+            document.getElementById('imageContent').src = 'https://via.placeholder.com/800x600/0054a6/ffffff?text=Maquette+Homepage';
+        }
+        
+        function loadText(content) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('textViewer').style.display = 'block';
+            document.getElementById('textViewer').textContent = content;
+        }
+        
+        function showError() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        }
+        
+        // Zoom functions
+        function zoomIn() {
+            scale = Math.min(scale + 0.25, 3.0);
+            document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+        }
+        
+        function zoomOut() {
+            scale = Math.max(scale - 0.25, 0.5);
+            document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+        }
+        
+        // Page navigation
+        function nextPage() {
+            const totalPages = parseInt(document.getElementById('totalPages').textContent);
+            if (pageNum < totalPages) {
+                pageNum++;
+                document.getElementById('currentPage').textContent = pageNum;
+            }
+        }
+        
+        function previousPage() {
+            if (pageNum > 1) {
+                pageNum--;
+                document.getElementById('currentPage').textContent = pageNum;
+            }
+        }
+        
+        // Fullscreen
+        function toggleFullscreen() {
+            const viewer = document.querySelector('.document-viewer');
+            if (!document.fullscreenElement) {
+                viewer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // Download
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const doc = documents[documentId];
+            alert(`Téléchargement de: ${doc.name}`);
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load user data
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (userData.name) {
+                document.getElementById('user-name').textContent = userData.name;
+                document.getElementById('user-avatar').style.backgroundImage = `url(${userData.avatar})`;
+                document.getElementById('user-avatar-mobile').style.backgroundImage = `url(${userData.avatar})`;
+            }
+            
+            // Load document
+            loadDocument();
+        });
+    </script>
+</body>
+</html>

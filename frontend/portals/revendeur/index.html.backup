@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0;url=dashboard.html">
+    <title>Redirection - Espace Revendeur</title>
+    <script>
+        // Redirection JavaScript au cas où la meta refresh ne fonctionne pas
+        window.location.href = 'dashboard.html';
+    </script>
+</head>
+<body>
+    <p>Redirection en cours vers l'espace revendeur...</p>
+    <p>Si vous n'êtes pas redirigé automatiquement, <a href="dashboard.html">cliquez ici</a>.</p>
+</body>
+</html>

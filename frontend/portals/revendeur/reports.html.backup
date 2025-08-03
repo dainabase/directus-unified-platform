@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapports & Analytics - Espace Revendeur</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-revendeur">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <!-- Le contenu sera chargé dynamiquement -->
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">
+                                Centre d'analyse
+                            </div>
+                            <h2 class="page-title">
+                                Rapports & Analytics
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-white" onclick="viewScheduledReports()">
+                                    <i class="ti ti-calendar-event icon"></i>
+                                    Rapports programmés
+                                    <span class="badge bg-red ms-2">3</span>
+                                </a>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-custom-report">
+                                    <i class="ti ti-report-analytics icon"></i>
+                                    Rapport personnalisé
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Rapports prédéfinis -->
+                    <h3 class="mb-3">Rapports prédéfinis</h3>
+                    <div class="row row-cards mb-4">
+                        <!-- Rapport Mensuel Ventes -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card report-preview">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="avatar avatar-xl bg-green-lt">
+                                            <i class="ti ti-chart-line icon"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="card-title">📈 Rapport Mensuel Ventes</h4>
+                                    <p class="text-muted mb-3">Performance détaillée vs objectifs, top clients et produits, analyse pipeline</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-green-lt">PDF</span>
+                                        <span class="badge bg-blue-lt">Excel</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        Dernière génération : Il y a 3 jours
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="generateReport('monthly-sales')">
+                                        <i class="ti ti-file-download icon"></i>
+                                        Générer rapport
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Analyse Trimestrielle -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card report-preview">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="avatar avatar-xl bg-blue-lt">
+                                            <i class="ti ti-chart-pie icon"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="card-title">📊 Analyse Trimestrielle</h4>
+                                    <p class="text-muted mb-3">Tendances marché, comparaison N-1, prévisions et recommandations</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-purple-lt">PowerPoint</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        Dernière génération : Il y a 1 semaine
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="generateReport('quarterly-analysis')">
+                                        <i class="ti ti-file-download icon"></i>
+                                        Générer rapport
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Book Commercial -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card report-preview">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="avatar avatar-xl bg-orange-lt">
+                                            <i class="ti ti-briefcase icon"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="card-title">💼 Book Commercial</h4>
+                                    <p class="text-muted mb-3">Portfolio clients complet, success stories et références</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-red-lt">PDF interactif</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        Dernière génération : Il y a 2 semaines
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="generateReport('commercial-book')">
+                                        <i class="ti ti-file-download icon"></i>
+                                        Générer rapport
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rapport Géographique -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card report-preview">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="avatar avatar-xl bg-purple-lt">
+                                            <i class="ti ti-map-pin icon"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="card-title">📍 Rapport Géographique</h4>
+                                    <p class="text-muted mb-3">Performance par zone, potentiel marché et analyse concurrence</p>
+                                    <div class="mb-3">
+                                        <span class="badge bg-green-lt">PDF</span>
+                                        <span class="badge bg-yellow-lt">Maps</span>
+                                    </div>
+                                    <div class="text-muted small mb-3">
+                                        Dernière génération : Il y a 5 jours
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="generateReport('geographic')">
+                                        <i class="ti ti-file-download icon"></i>
+                                        Générer rapport
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Rapports récents -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3 class="card-title">📁 Rapports récents</h3>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar bg-green-lt">
+                                            <i class="ti ti-file-text icon"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">Rapport_Ventes_Fevrier_2024.pdf</div>
+                                        <div class="text-muted">Généré le 01/03/2024 • 2.4 MB</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="btn-list">
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir
+                                            </a>
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-download icon"></i>
+                                                Télécharger
+                                            </a>
+                                            <button class="btn btn-white btn-sm">
+                                                <i class="ti ti-share icon"></i>
+                                                Partager
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar bg-blue-lt">
+                                            <i class="ti ti-file-spreadsheet icon"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">Analyse_Pipeline_Q1_2024.xlsx</div>
+                                        <div class="text-muted">Généré le 28/02/2024 • 1.8 MB</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="btn-list">
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir
+                                            </a>
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-download icon"></i>
+                                                Télécharger
+                                            </a>
+                                            <button class="btn btn-white btn-sm">
+                                                <i class="ti ti-share icon"></i>
+                                                Partager
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar bg-purple-lt">
+                                            <i class="ti ti-presentation icon"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">Performance_Commerciale_2023.pptx</div>
+                                        <div class="text-muted">Généré le 15/01/2024 • 12.5 MB</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="btn-list">
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-eye icon"></i>
+                                                Voir
+                                            </a>
+                                            <a href="#" class="btn btn-white btn-sm">
+                                                <i class="ti ti-download icon"></i>
+                                                Télécharger
+                                            </a>
+                                            <button class="btn btn-white btn-sm">
+                                                <i class="ti ti-share icon"></i>
+                                                Partager
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-link">Voir tous les rapports archivés</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Rapports programmés -->
+                    <div class="row row-cards">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">📅 Rapports programmés actifs</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="report-schedule mb-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h4 class="mb-1">Dashboard hebdomadaire</h4>
+                                                <div class="text-muted mb-2">Synthèse performance commerciale</div>
+                                                <div class="d-flex gap-2">
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-calendar icon"></i>
+                                                        Chaque lundi 8h00
+                                                    </span>
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-mail icon"></i>
+                                                        Email
+                                                    </span>
+                                                    <span class="badge bg-green">Actif</span>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical icon"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Modifier</a></li>
+                                                    <li><a class="dropdown-item" href="#">Désactiver</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="report-schedule mb-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h4 class="mb-1">Bilan mensuel clients</h4>
+                                                <div class="text-muted mb-2">Analyse complète du portefeuille</div>
+                                                <div class="d-flex gap-2">
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-calendar icon"></i>
+                                                        1er du mois
+                                                    </span>
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-download icon"></i>
+                                                        PDF
+                                                    </span>
+                                                    <span class="badge bg-green">Actif</span>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical icon"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Modifier</a></li>
+                                                    <li><a class="dropdown-item" href="#">Désactiver</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="report-schedule">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h4 class="mb-1">Suivi commissions</h4>
+                                                <div class="text-muted mb-2">Détail des commissions du mois</div>
+                                                <div class="d-flex gap-2">
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-calendar icon"></i>
+                                                        Fin de mois
+                                                    </span>
+                                                    <span class="report-schedule-badge">
+                                                        <i class="ti ti-file-spreadsheet icon"></i>
+                                                        Excel
+                                                    </span>
+                                                    <span class="badge bg-green">Actif</span>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-dark btn-sm btn-icon" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical icon"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#">Modifier</a></li>
+                                                    <li><a class="dropdown-item" href="#">Désactiver</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="#">Supprimer</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">📊 Statistiques d'utilisation</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <div class="subheader">Rapports générés ce mois</div>
+                                                <div class="h2 mb-0">47</div>
+                                                <div class="text-muted">
+                                                    <span class="text-green">+12%</span> vs mois dernier
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <div class="subheader">Format le plus utilisé</div>
+                                                <div class="h2 mb-0">PDF</div>
+                                                <div class="text-muted">68% des exports</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <h4>Top 5 rapports</h4>
+                                    <div class="progress-list">
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Rapport mensuel ventes</span>
+                                                <span class="text-muted">18 fois</span>
+                                            </div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" style="width: 90%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Analyse pipeline</span>
+                                                <span class="text-muted">12 fois</span>
+                                            </div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" style="width: 60%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Book commercial</span>
+                                                <span class="text-muted">8 fois</span>
+                                            </div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" style="width: 40%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Suivi commissions</span>
+                                                <span class="text-muted">6 fois</span>
+                                            </div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" style="width: 30%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span>Rapport géographique</span>
+                                                <span class="text-muted">3 fois</span>
+                                            </div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" style="width: 15%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal rapport personnalisé -->
+    <div class="modal modal-blur fade" id="modal-custom-report" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Créer un rapport personnalisé</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label class="form-label">Nom du rapport</label>
+                            <input type="text" class="form-control" placeholder="Ex: Analyse performance Q1">
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label">Période</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" value="2024-01-01">
+                                <span class="input-group-text">à</span>
+                                <input type="date" class="form-control" value="2024-02-29">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Métriques à inclure</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <span class="form-check-label">Chiffre d'affaires</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <span class="form-check-label">Nombre de ventes</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <span class="form-check-label">Pipeline actuel</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input">
+                                    <span class="form-check-label">Taux de conversion</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" checked>
+                                    <span class="form-check-label">Nouveaux clients</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input">
+                                    <span class="form-check-label">Commissions</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input">
+                                    <span class="form-check-label">Performance produits</span>
+                                </label>
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input">
+                                    <span class="form-check-label">Analyse géographique</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <label class="form-label">Groupement</label>
+                            <select class="form-select">
+                                <option>Par client</option>
+                                <option>Par produit</option>
+                                <option>Par zone</option>
+                                <option>Par mois</option>
+                                <option>Par commercial</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="form-label">Format d'export</label>
+                            <select class="form-select">
+                                <option>PDF</option>
+                                <option>Excel</option>
+                                <option>PowerPoint</option>
+                                <option>CSV</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="form-label">Planification</label>
+                            <select class="form-select">
+                                <option>Une seule fois</option>
+                                <option>Hebdomadaire</option>
+                                <option>Mensuel</option>
+                                <option>Trimestriel</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Options supplémentaires</label>
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input">
+                            <span class="form-check-label">Inclure graphiques et visualisations</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input">
+                            <span class="form-check-label">Ajouter comparaison période précédente</span>
+                        </label>
+                        <label class="form-check">
+                            <input type="checkbox" class="form-check-input">
+                            <span class="form-check-label">Envoyer par email après génération</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-white" onclick="saveReportTemplate()">
+                        <i class="ti ti-device-floppy icon"></i>
+                        Sauvegarder modèle
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="generateCustomReport()">
+                        <i class="ti ti-file-analytics icon"></i>
+                        Générer rapport
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/marketing-tools.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'revendeur') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('reports');
+            
+            // Initialiser le générateur de rapports
+            if (typeof ReportGenerator !== 'undefined') {
+                window.reportGen = new ReportGenerator();
+            }
+        });
+        
+        // Générer rapport prédéfini
+        async function generateReport(type) {
+            PortalApp.showToast('Génération du rapport en cours...', 'info');
+            
+            // Simuler génération
+            setTimeout(() => {
+                PortalApp.showToast('Rapport généré avec succès!', 'success');
+                // Télécharger automatiquement
+                const link = document.createElement('a');
+                link.href = '#';
+                link.download = `rapport_${type}_${new Date().toISOString().split('T')[0]}.pdf`;
+                link.click();
+            }, 2000);
+        }
+        
+        // Générer rapport personnalisé
+        function generateCustomReport() {
+            console.log('Génération rapport personnalisé...');
+            if (window.reportGen) {
+                const params = {
+                    period: '2024-Q1',
+                    format: 'pdf',
+                    metrics: ['revenue', 'sales', 'pipeline']
+                };
+                window.reportGen.generateReport('custom', params);
+            }
+            bootstrap.Modal.getInstance(document.getElementById('modal-custom-report')).hide();
+        }
+        
+        // Sauvegarder modèle de rapport
+        function saveReportTemplate() {
+            console.log('Sauvegarde du modèle...');
+            PortalApp.showToast('Modèle sauvegardé', 'success');
+        }
+        
+        // Voir rapports programmés
+        function viewScheduledReports() {
+            console.log('Affichage rapports programmés');
+            // Faire défiler jusqu'à la section
+            document.querySelector('.report-schedule').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

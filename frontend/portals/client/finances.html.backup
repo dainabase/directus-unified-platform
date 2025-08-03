@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finances - Espace Client</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- ApexCharts -->
+    <link href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Finances</li>
+                            </ol>
+                            <h2 class="page-title">
+                                Finances
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-default" onclick="downloadFinancialReport()">
+                                    <i class="ti ti-file-download icon"></i>
+                                    Télécharger rapport
+                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="ti ti-file-export icon"></i>
+                                        Exporter
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#" onclick="exportData('csv')">
+                                            <i class="ti ti-file-spreadsheet icon me-2"></i>
+                                            Format CSV
+                                        </a>
+                                        <a class="dropdown-item" href="#" onclick="exportData('excel')">
+                                            <i class="ti ti-file-spreadsheet icon me-2"></i>
+                                            Format Excel
+                                        </a>
+                                        <a class="dropdown-item" href="#" onclick="exportData('pdf')">
+                                            <i class="ti ti-file-text icon me-2"></i>
+                                            Format PDF
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Cards résumé financier -->
+                    <div class="row row-deck row-cards">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-primary-lt">
+                                            <i class="ti ti-wallet icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Budget Total</div>
+                                            <div class="h1 mb-0">CHF 250'000</div>
+                                            <div class="text-muted small">Année 2024</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-danger-lt">
+                                            <i class="ti ti-shopping-cart icon"></i>
+                                        </span>
+                                        <div class="flex-fill">
+                                            <div class="subheader">Dépenses</div>
+                                            <div class="h1 mb-0">CHF 142'350</div>
+                                            <div class="text-muted small mb-1">57% du budget</div>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-danger" style="width: 57%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-warning-lt">
+                                            <i class="ti ti-clock icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Factures en attente</div>
+                                            <div class="h1 mb-0">CHF 28'500</div>
+                                            <div class="text-muted small">3 factures</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar me-3 bg-success-lt">
+                                            <i class="ti ti-trending-down icon"></i>
+                                        </span>
+                                        <div>
+                                            <div class="subheader">Économies réalisées</div>
+                                            <div class="h1 mb-0">CHF 12'150</div>
+                                            <div class="text-muted small">-4.9% vs budget initial</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Graphiques analyse -->
+                    <div class="row row-cards mt-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Évolution des dépenses</h3>
+                                    <div class="card-actions">
+                                        <div class="dropdown">
+                                            <a href="#" class="btn-action" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="#" onclick="changePeriod('year')">Vue année</a>
+                                                <a class="dropdown-item" href="#" onclick="changePeriod('quarter')">Vue trimestre</a>
+                                                <a class="dropdown-item" href="#" onclick="changePeriod('month')">Vue mois</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-spending-evolution" class="chart-finance"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Répartition par catégorie</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chart-category-distribution" class="chart-finance"></div>
+                                    <div class="mt-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-blue me-2"></span>
+                                            <span class="flex-fill">Développement</span>
+                                            <strong>45%</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-green me-2"></span>
+                                            <span class="flex-fill">Design</span>
+                                            <strong>25%</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-yellow me-2"></span>
+                                            <span class="flex-fill">Marketing</span>
+                                            <strong>20%</strong>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-purple me-2"></span>
+                                            <span class="flex-fill">Autres</span>
+                                            <strong>10%</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs données financières -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                                <li class="nav-item">
+                                    <a href="#tab-invoices" class="nav-link active" data-bs-toggle="tab">
+                                        <i class="ti ti-file-invoice icon me-2"></i>
+                                        Factures
+                                        <span class="badge bg-red ms-2">3</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab-quotes" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-file-description icon me-2"></i>
+                                        Devis
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab-payments" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-credit-card icon me-2"></i>
+                                        Paiements
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab-budget" class="nav-link" data-bs-toggle="tab">
+                                        <i class="ti ti-chart-bar icon me-2"></i>
+                                        Budget prévisionnel
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Tab Factures -->
+                                <div class="tab-pane active" id="tab-invoices">
+                                    <div class="mb-3">
+                                        <div class="row g-2">
+                                            <div class="col-auto flex-fill">
+                                                <input type="text" class="form-control" placeholder="Rechercher une facture..." id="search-invoices">
+                                            </div>
+                                            <div class="col-auto">
+                                                <select class="form-select" id="filter-status">
+                                                    <option value="">Tous les statuts</option>
+                                                    <option value="paid">Payées</option>
+                                                    <option value="pending">En attente</option>
+                                                    <option value="overdue">En retard</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button class="btn btn-primary" onclick="showInvoiceForm()">
+                                                    <i class="ti ti-plus icon"></i>
+                                                    Nouvelle facture
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>N° Facture</th>
+                                                    <th>Date</th>
+                                                    <th>Description</th>
+                                                    <th>Projet</th>
+                                                    <th>Montant CHF</th>
+                                                    <th>Statut</th>
+                                                    <th>Échéance</th>
+                                                    <th class="w-1"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><a href="invoice-detail.html?id=FAC-2024-0125" class="text-reset">FAC-2024-0125</a></td>
+                                                    <td>15.01.2024</td>
+                                                    <td>Développement phase 1</td>
+                                                    <td><a href="project-detail.html?id=1">Refonte Site Web</a></td>
+                                                    <td class="text-end"><strong>15'000.00</strong></td>
+                                                    <td><span class="badge bg-success">Payée</span></td>
+                                                    <td>15.02.2024</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="invoice-detail.html?id=FAC-2024-0125">
+                                                                    <i class="ti ti-eye icon me-2"></i>
+                                                                    Voir PDF
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" onclick="downloadInvoice('FAC-2024-0125')">
+                                                                    <i class="ti ti-download icon me-2"></i>
+                                                                    Télécharger
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" onclick="duplicateInvoice('FAC-2024-0125')">
+                                                                    <i class="ti ti-copy icon me-2"></i>
+                                                                    Dupliquer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><a href="invoice-detail.html?id=FAC-2024-0124" class="text-reset">FAC-2024-0124</a></td>
+                                                    <td>10.01.2024</td>
+                                                    <td>Design maquettes</td>
+                                                    <td><a href="project-detail.html?id=1">Refonte Site Web</a></td>
+                                                    <td class="text-end"><strong>8'500.00</strong></td>
+                                                    <td><span class="badge bg-warning">En attente</span></td>
+                                                    <td>10.02.2024</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="invoice-detail.html?id=FAC-2024-0124">
+                                                                    <i class="ti ti-eye icon me-2"></i>
+                                                                    Voir PDF
+                                                                </a>
+                                                                <a class="dropdown-item" href="payment.html?invoice=FAC-2024-0124">
+                                                                    <i class="ti ti-credit-card icon me-2"></i>
+                                                                    Payer
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" onclick="sendReminder('FAC-2024-0124')">
+                                                                    <i class="ti ti-mail icon me-2"></i>
+                                                                    Envoyer rappel
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><a href="invoice-detail.html?id=FAC-2024-0123" class="text-reset">FAC-2024-0123</a></td>
+                                                    <td>05.01.2024</td>
+                                                    <td>Analyse et cahier des charges</td>
+                                                    <td><a href="project-detail.html?id=2">App Mobile</a></td>
+                                                    <td class="text-end"><strong>12'000.00</strong></td>
+                                                    <td><span class="badge bg-danger">En retard</span></td>
+                                                    <td class="text-danger">05.01.2024</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="invoice-detail.html?id=FAC-2024-0123">
+                                                                    <i class="ti ti-eye icon me-2"></i>
+                                                                    Voir PDF
+                                                                </a>
+                                                                <a class="dropdown-item text-danger" href="payment.html?invoice=FAC-2024-0123">
+                                                                    <i class="ti ti-alert-triangle icon me-2"></i>
+                                                                    Payer maintenant
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" onclick="contactSupport('FAC-2024-0123')">
+                                                                    <i class="ti ti-phone icon me-2"></i>
+                                                                    Contacter support
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><a href="invoice-detail.html?id=FAC-2024-0122" class="text-reset">FAC-2024-0122</a></td>
+                                                    <td>28.12.2023</td>
+                                                    <td>Maintenance mensuelle</td>
+                                                    <td>Support technique</td>
+                                                    <td class="text-end"><strong>2'500.00</strong></td>
+                                                    <td><span class="badge bg-success">Payée</span></td>
+                                                    <td>28.01.2024</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="invoice-detail.html?id=FAC-2024-0122">
+                                                                    <i class="ti ti-eye icon me-2"></i>
+                                                                    Voir PDF
+                                                                </a>
+                                                                <a class="dropdown-item" href="#" onclick="downloadInvoice('FAC-2024-0122')">
+                                                                    <i class="ti ti-download icon me-2"></i>
+                                                                    Télécharger
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><a href="invoice-detail.html?id=FAC-2024-0121" class="text-reset">FAC-2024-0121</a></td>
+                                                    <td>20.12.2023</td>
+                                                    <td>Formation équipe</td>
+                                                    <td>Services annexes</td>
+                                                    <td class="text-end"><strong>5'000.00</strong></td>
+                                                    <td><span class="badge bg-warning">En attente</span></td>
+                                                    <td>20.01.2024</td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                                <i class="ti ti-dots-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="invoice-detail.html?id=FAC-2024-0121">
+                                                                    <i class="ti ti-eye icon me-2"></i>
+                                                                    Voir PDF
+                                                                </a>
+                                                                <a class="dropdown-item" href="payment.html?invoice=FAC-2024-0121">
+                                                                    <i class="ti ti-credit-card icon me-2"></i>
+                                                                    Payer
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                                    <td class="text-end"><strong>CHF 43'000.00</strong></td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end text-muted">Payées</td>
+                                                    <td class="text-end text-success">CHF 17'500.00</td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end text-muted">En attente</td>
+                                                    <td class="text-end text-warning">CHF 13'500.00</td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" class="text-end text-muted">En retard</td>
+                                                    <td class="text-end text-danger">CHF 12'000.00</td>
+                                                    <td colspan="3"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Devis -->
+                                <div class="tab-pane" id="tab-quotes">
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>N° Devis</th>
+                                                    <th>Date</th>
+                                                    <th>Description</th>
+                                                    <th>Montant CHF</th>
+                                                    <th>Validité</th>
+                                                    <th>Statut</th>
+                                                    <th class="w-1"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>DEV-2024-0015</td>
+                                                    <td>12.01.2024</td>
+                                                    <td>Nouvelle fonctionnalité e-commerce</td>
+                                                    <td class="text-end"><strong>25'000.00</strong></td>
+                                                    <td>12.02.2024</td>
+                                                    <td><span class="badge bg-blue">En cours</span></td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-sm btn-primary">Accepter</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DEV-2024-0014</td>
+                                                    <td>08.01.2024</td>
+                                                    <td>Maintenance annuelle</td>
+                                                    <td class="text-end"><strong>30'000.00</strong></td>
+                                                    <td>08.02.2024</td>
+                                                    <td><span class="badge bg-green">Accepté</span></td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-sm btn-ghost-secondary">Voir</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DEV-2024-0013</td>
+                                                    <td>03.01.2024</td>
+                                                    <td>Module CRM supplémentaire</td>
+                                                    <td class="text-end"><strong>18'000.00</strong></td>
+                                                    <td>03.02.2024</td>
+                                                    <td><span class="badge bg-blue">En cours</span></td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-sm btn-primary">Accepter</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Paiements -->
+                                <div class="tab-pane" id="tab-payments">
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter card-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Référence</th>
+                                                    <th>Facture</th>
+                                                    <th>Méthode</th>
+                                                    <th>Montant CHF</th>
+                                                    <th>Statut</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>15.01.2024</td>
+                                                    <td>PAY-2024-0125</td>
+                                                    <td>FAC-2024-0125</td>
+                                                    <td><i class="ti ti-credit-card icon me-1"></i> Carte</td>
+                                                    <td class="text-end"><strong>15'000.00</strong></td>
+                                                    <td><span class="badge bg-success">Complété</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>28.12.2023</td>
+                                                    <td>PAY-2024-0122</td>
+                                                    <td>FAC-2024-0122</td>
+                                                    <td><i class="ti ti-building-bank icon me-1"></i> Virement</td>
+                                                    <td class="text-end"><strong>2'500.00</strong></td>
+                                                    <td><span class="badge bg-success">Complété</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>15.12.2023</td>
+                                                    <td>PAY-2023-0458</td>
+                                                    <td>FAC-2023-0458</td>
+                                                    <td><i class="ti ti-qrcode icon me-1"></i> TWINT</td>
+                                                    <td class="text-end"><strong>8'750.00</strong></td>
+                                                    <td><span class="badge bg-success">Complété</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Budget prévisionnel -->
+                                <div class="tab-pane" id="tab-budget">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <h4>Budget par projet</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Projet</th>
+                                                            <th>Budget</th>
+                                                            <th>Utilisé</th>
+                                                            <th>Restant</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Refonte Site Web</td>
+                                                            <td>CHF 80'000</td>
+                                                            <td class="text-danger">CHF 45'200</td>
+                                                            <td class="text-success">CHF 34'800</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>App Mobile</td>
+                                                            <td>CHF 120'000</td>
+                                                            <td class="text-danger">CHF 12'500</td>
+                                                            <td class="text-success">CHF 107'500</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Migration CRM</td>
+                                                            <td>CHF 50'000</td>
+                                                            <td class="text-danger">CHF 28'000</td>
+                                                            <td class="text-success">CHF 22'000</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <h4>Prévisions Q1 2024</h4>
+                                            <div id="chart-budget-forecast" style="height: 250px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/finances.js"></script>
+    <script src="../assets/js/finances-notion.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'client') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('finances');
+            
+            // Initialiser les graphiques
+            if (typeof initFinanceCharts === 'function') {
+                initFinanceCharts();
+            }
+            
+            // Alerte si factures en retard
+            const overdueCount = document.querySelectorAll('.badge.bg-danger').length;
+            if (overdueCount > 0) {
+                PortalApp.showToast(`Attention: ${overdueCount} facture(s) en retard`, 'warning');
+            }
+        });
+    </script>
+</body>
+</html>

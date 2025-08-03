@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents - Espace Client</title>
+    
+    <!-- Tabler CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <!-- Dropzone CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css">
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+</head>
+<body class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar Top -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <!-- Mobile Header -->
+                <h1 class="navbar-brand navbar-brand-autodark d-lg-none">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                
+                <!-- Mobile User Menu -->
+                <div class="navbar-nav flex-row order-md-last d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="btn btn-ghost-dark position-relative" data-bs-toggle="dropdown">
+                                <i class="ti ti-bell icon"></i>
+                                <span class="badge bg-red notification-badge"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm user-avatar"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Sidebar Content -->
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <!-- Le contenu sera chargé dynamiquement -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Documents</li>
+                            </ol>
+                            <h2 class="page-title">
+                                Documents
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <a href="#" class="btn btn-primary" onclick="toggleUploadZone()">
+                                    <i class="ti ti-upload icon"></i>
+                                    Uploader
+                                </a>
+                                <a href="#" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modal-new-folder">
+                                    <i class="ti ti-folder-plus icon"></i>
+                                    Nouveau dossier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Barre d'outils -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="ti ti-search icon"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="search-documents" placeholder="Rechercher dans les documents...">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="d-flex gap-2 justify-content-md-end">
+                                        <!-- Boutons vue -->
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-icon btn-primary" onclick="setView('grid')" title="Vue grille">
+                                                <i class="ti ti-grid-dots icon"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-ghost-primary" onclick="setView('list')" title="Vue liste">
+                                                <i class="ti ti-list icon"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Filtre type -->
+                                        <select class="form-select w-auto" id="filter-type">
+                                            <option value="">Tous les types</option>
+                                            <option value="document">Documents</option>
+                                            <option value="image">Images</option>
+                                            <option value="contract">Contrats</option>
+                                            <option value="invoice">Factures</option>
+                                        </select>
+                                        
+                                        <!-- Tri -->
+                                        <select class="form-select w-auto" id="sort-documents">
+                                            <option value="name">Nom</option>
+                                            <option value="date">Date</option>
+                                            <option value="size">Taille</option>
+                                            <option value="type">Type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Compteur sélection -->
+                            <div class="mt-2 text-muted small" id="selection-counter" style="display: none;">
+                                <span id="selected-count">0</span> fichier(s) sélectionné(s)
+                                <a href="#" class="ms-2" onclick="clearSelection()">Tout désélectionner</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Zone d'upload (collapsible) -->
+                    <div class="card mb-4 collapse" id="upload-zone">
+                        <div class="card-header">
+                            <h3 class="card-title">Zone d'upload rapide</h3>
+                            <div class="card-actions">
+                                <a href="#" class="btn-action" onclick="toggleUploadZone()">
+                                    <i class="ti ti-x icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="/upload" class="dropzone" id="documents-dropzone">
+                                <div class="dz-message">
+                                    <i class="ti ti-cloud-upload icon icon-lg text-muted mb-3 d-block cloud-upload-animation"></i>
+                                    <h3 class="text-muted">Glissez vos fichiers ici ou cliquez pour parcourir</h3>
+                                    <span class="text-muted small">Formats : PDF, DOC, XLS, JPG, PNG • Max : 50 MB</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation dossiers -->
+                    <div class="mb-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-arrows" id="folder-breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" onclick="navigateToFolder('')"><i class="ti ti-home icon"></i> Racine</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                    
+                    <!-- Vue Grille (default) -->
+                    <div id="grid-view" class="row row-cards">
+                        <!-- Dossiers -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card folder-card" onclick="navigateToFolder('contracts')">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-lg bg-blue-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="font-weight-medium">Contrats</div>
+                                            <div class="text-muted small">3 fichiers</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small">Modifié il y a 2 jours</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card folder-card" onclick="navigateToFolder('livrables')">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-lg bg-green-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="font-weight-medium">Livrables</div>
+                                            <div class="text-muted small">12 fichiers</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small">Modifié aujourd'hui</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card folder-card" onclick="navigateToFolder('factures')">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-lg bg-yellow-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="font-weight-medium">Factures</div>
+                                            <div class="text-muted small">8 fichiers</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small">Modifié il y a 5 jours</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card folder-card" onclick="navigateToFolder('resources')">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-lg bg-purple-lt">
+                                            <i class="ti ti-folder icon"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="font-weight-medium">Resources</div>
+                                            <div class="text-muted small">5 fichiers</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small">Modifié il y a 1 semaine</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Fichiers -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card" data-file-id="1">
+                                <div class="card-body">
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#" onclick="downloadFile(1)">
+                                                <i class="ti ti-download icon me-2"></i>
+                                                Télécharger
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="renameFile(1)">
+                                                <i class="ti ti-edit icon me-2"></i>
+                                                Renommer
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="shareFile(1)">
+                                                <i class="ti ti-share icon me-2"></i>
+                                                Partager
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" onclick="deleteFile(1)">
+                                                <i class="ti ti-trash icon me-2"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mb-3">
+                                        <span class="avatar avatar-xl file-type-icon bg-red-lt">
+                                            <i class="ti ti-file-text icon"></i>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="document-preview.html?id=1" class="text-reset text-decoration-none">
+                                            <div class="font-weight-medium text-truncate" title="Contrat_Principal_2024.pdf">
+                                                Contrat_Principal_2024.pdf
+                                            </div>
+                                        </a>
+                                        <div class="text-muted small">2.4 MB • 15/01/2024</div>
+                                        <span class="badge bg-green-lt badge-new">Nouveau</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card" data-file-id="2">
+                                <div class="card-body">
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#" onclick="downloadFile(2)">
+                                                <i class="ti ti-download icon me-2"></i>
+                                                Télécharger
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="renameFile(2)">
+                                                <i class="ti ti-edit icon me-2"></i>
+                                                Renommer
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="shareFile(2)">
+                                                <i class="ti ti-share icon me-2"></i>
+                                                Partager
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" onclick="deleteFile(2)">
+                                                <i class="ti ti-trash icon me-2"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mb-3">
+                                        <span class="avatar avatar-xl file-type-icon bg-green-lt">
+                                            <i class="ti ti-file-spreadsheet icon"></i>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="document-preview.html?id=2" class="text-reset text-decoration-none">
+                                            <div class="font-weight-medium text-truncate" title="Budget_Projet_2024.xlsx">
+                                                Budget_Projet_2024.xlsx
+                                            </div>
+                                        </a>
+                                        <div class="text-muted small">856 KB • 10/01/2024</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card" data-file-id="3">
+                                <div class="card-body">
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#" onclick="downloadFile(3)">
+                                                <i class="ti ti-download icon me-2"></i>
+                                                Télécharger
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="renameFile(3)">
+                                                <i class="ti ti-edit icon me-2"></i>
+                                                Renommer
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="shareFile(3)">
+                                                <i class="ti ti-share icon me-2"></i>
+                                                Partager
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" onclick="deleteFile(3)">
+                                                <i class="ti ti-trash icon me-2"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mb-3">
+                                        <span class="avatar avatar-xl file-type-icon bg-blue-lt">
+                                            <i class="ti ti-photo icon"></i>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="document-preview.html?id=3" class="text-reset text-decoration-none">
+                                            <div class="font-weight-medium text-truncate" title="Maquette_Homepage_v2.jpg">
+                                                Maquette_Homepage_v2.jpg
+                                            </div>
+                                        </a>
+                                        <div class="text-muted small">3.2 MB • 12/01/2024</div>
+                                        <span class="badge bg-green-lt badge-new">Nouveau</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card" data-file-id="4">
+                                <div class="card-body">
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#" onclick="downloadFile(4)">
+                                                <i class="ti ti-download icon me-2"></i>
+                                                Télécharger
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="renameFile(4)">
+                                                <i class="ti ti-edit icon me-2"></i>
+                                                Renommer
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="shareFile(4)">
+                                                <i class="ti ti-share icon me-2"></i>
+                                                Partager
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" onclick="deleteFile(4)">
+                                                <i class="ti ti-trash icon me-2"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mb-3">
+                                        <span class="avatar avatar-xl file-type-icon bg-azure-lt">
+                                            <i class="ti ti-file-text icon"></i>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="document-preview.html?id=4" class="text-reset text-decoration-none">
+                                            <div class="font-weight-medium text-truncate" title="Cahier_des_charges_v3.docx">
+                                                Cahier_des_charges_v3.docx
+                                            </div>
+                                        </a>
+                                        <div class="text-muted small">1.8 MB • 08/01/2024</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Plus de fichiers... -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card file-card" data-file-id="5">
+                                <div class="card-body">
+                                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                                        <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#" onclick="downloadFile(5)">
+                                                <i class="ti ti-download icon me-2"></i>
+                                                Télécharger
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="renameFile(5)">
+                                                <i class="ti ti-edit icon me-2"></i>
+                                                Renommer
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="shareFile(5)">
+                                                <i class="ti ti-share icon me-2"></i>
+                                                Partager
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#" onclick="deleteFile(5)">
+                                                <i class="ti ti-trash icon me-2"></i>
+                                                Supprimer
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center mb-3">
+                                        <span class="avatar avatar-xl file-type-icon bg-yellow-lt">
+                                            <i class="ti ti-file-invoice icon"></i>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <a href="document-preview.html?id=5" class="text-reset text-decoration-none">
+                                            <div class="font-weight-medium text-truncate" title="Facture_2024_001.pdf">
+                                                Facture_2024_001.pdf
+                                            </div>
+                                        </a>
+                                        <div class="text-muted small">425 KB • 05/01/2024</div>
+                                        <span class="badge bg-blue-lt">Validé</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vue Liste (hidden par défaut) -->
+                    <div id="list-view" class="card" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="w-1">
+                                            <input type="checkbox" class="form-check-input" id="select-all">
+                                        </th>
+                                        <th>Nom</th>
+                                        <th>Projet associé</th>
+                                        <th>Taille</th>
+                                        <th>Modifié par</th>
+                                        <th>Date</th>
+                                        <th>Statut</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-file-id="1">
+                                        <td>
+                                            <input type="checkbox" class="form-check-input file-checkbox">
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="avatar avatar-sm file-type-icon bg-red-lt me-2">
+                                                    <i class="ti ti-file-text icon"></i>
+                                                </span>
+                                                <div>
+                                                    <a href="document-preview.html?id=1" class="text-reset">Contrat_Principal_2024.pdf</a>
+                                                    <div class="text-muted small">Type: Contrat</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="project-detail.html?id=1">Refonte Site Web</a>
+                                        </td>
+                                        <td>2.4 MB</td>
+                                        <td>Marie D.</td>
+                                        <td>15/01/2024</td>
+                                        <td>
+                                            <span class="badge bg-green">Validé</span>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="#" onclick="downloadFile(1)">
+                                                        <i class="ti ti-download icon me-2"></i>
+                                                        Télécharger
+                                                    </a>
+                                                    <a class="dropdown-item" href="#" onclick="shareFile(1)">
+                                                        <i class="ti ti-share icon me-2"></i>
+                                                        Partager
+                                                    </a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item text-danger" href="#" onclick="deleteFile(1)">
+                                                        <i class="ti ti-trash icon me-2"></i>
+                                                        Supprimer
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- Plus de lignes... -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal nouveau dossier -->
+    <div class="modal modal-blur fade" id="modal-new-folder" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau dossier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nom du dossier</label>
+                        <input type="text" class="form-control" id="new-folder-name" placeholder="Mon nouveau dossier">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="createFolder()">
+                        <i class="ti ti-folder-plus icon"></i>
+                        Créer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay d-lg-none" onclick="PortalApp.toggleMobileSidebar()"></div>
+
+    <!-- Tabler JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    <!-- Dropzone JS -->
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/documents.js"></script>
+    <script src="../assets/js/documents-notion.js"></script>
+    
+    <script>
+        // Vérification de l'authentification au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier l'authentification
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Vérifier que l'utilisateur a le bon rôle
+            if (PortalApp.currentRole !== 'client') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialiser le layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Marquer le menu comme actif
+            PortalApp.setActiveMenuItem('documents');
+            
+            // Charger la vue préférée
+            const preferredView = localStorage.getItem('documents_view') || 'grid';
+            setView(preferredView);
+        });
+    </script>
+</body>
+</html>

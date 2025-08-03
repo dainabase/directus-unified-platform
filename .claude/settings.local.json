@@ -22,7 +22,9 @@
       "Bash(npm search:*)",
       "Bash(pkill:*)",
       "Bash(chmod:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(echo:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

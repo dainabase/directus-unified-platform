@@ -30,7 +30,8 @@
       "Bash(git log:*)",
       "Bash(chmod:*)",
       "Bash(./auto-save.sh:*)",
-      "Bash(./check-sync.sh:*)"
+      "Bash(./check-sync.sh:*)",
+      "Bash(./auto-save.sh:*)"
     ],
     "deny": []
   }

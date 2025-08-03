@@ -3,7 +3,7 @@
 const axios = require('axios');
 
 const DIRECTUS_URL = 'http://localhost:8055';
-const NEW_TOKEN = 'jcmVznim7U5Rq2FIXrlgbSJ3U8ZlVcIw';
+const NEW_TOKEN = 'd9HE8Gs8A4MWxrOSg2_1gWLaQrXsJW5s';
 const OLD_TOKEN = 'hHKnrW949zcwx2372KH2AjwDyROAjgZ2';
 
 async function testToken(token, name) {

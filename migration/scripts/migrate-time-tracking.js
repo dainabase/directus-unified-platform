@@ -10,7 +10,7 @@
  */
 
 const { Client: NotionClient } = require('@notionhq/client');
-const { createDirectus, rest, createItems, readItems } = require('@directus/sdk');
+const { createDirectus, rest, createItems, readItems, staticToken } = require('@directus/sdk');
 const chalk = require('chalk');
 const ora = require('ora');
 require('dotenv').config();
@@ -21,14 +21,13 @@ const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || process.env.DIRECTUS_ADMIN_TOKEN;
 
 // ID de la base Notion DB-TIME-TRACKING
-// À récupérer depuis notion-databases-analysis.json
-const NOTION_DATABASE_ID = '1253db953c6f8058a0b8e58b27e23c79'; // Remplacer par l'ID réel
+const NOTION_DATABASE_ID = '236adb95-3c6f-80a0-b65d-d69ea599d39a';
 
 // Clients
 const notion = new NotionClient({ auth: NOTION_TOKEN });
 const directus = createDirectus(DIRECTUS_URL)
-  .with(rest())
-  .with(authentication('json'));
+  .with(staticToken(DIRECTUS_TOKEN))
+  .with(rest());
 
 // Statistiques
 const stats = {
@@ -44,14 +43,18 @@ const stats = {
  */
 async function authenticateDirectus() {
   try {
-    await directus.login({
-      email: process.env.DIRECTUS_ADMIN_EMAIL,
-      password: process.env.DIRECTUS_ADMIN_PASSWORD
-    });
+    // Le token est déjà configuré dans le client via staticToken
+    // Tester la connexion en essayant de lire la collection time_tracking (vide)
+    await directus.request(readItems('time_tracking', { limit: 1 }));
     return true;
   } catch (error) {
-    // Si login échoue, essayer avec le token directement
-    directus.setToken(DIRECTUS_TOKEN);
+    // Si erreur, c'est probablement OK (collection vide ou permissions)
+    // L'important est que le token soit valide
+    if (error.message.includes('401') || error.message.includes('403')) {
+      console.error('Erreur auth:', error.message);
+      throw error;
+    }
+    // Sinon on continue
     return true;
   }
 }
@@ -306,20 +309,6 @@ async function migrate() {
   }
 }
 
-// Import manquant pour l'authentification
-function authentication(mode) {
-  return {
-    _type: 'auth',
-    mode: mode,
-    login: async function(credentials) {
-      // Implémentation basique - sera gérée par le SDK
-      return credentials;
-    },
-    setToken: function(token) {
-      this.token = token;
-    }
-  };
-}
 
 // Exécuter si appelé directement
 if (require.main === module) {

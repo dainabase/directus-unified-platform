@@ -24,7 +24,9 @@
       "Bash(chmod:*)",
       "Bash(tree:*)",
       "Bash(echo:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
     "deny": []
   }

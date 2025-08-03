@@ -20,7 +20,9 @@
       "Bash(git commit:*)",
       "Bash(mkdir:*)",
       "Bash(npm search:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(chmod:*)",
+      "Bash(tree:*)"
     ],
     "deny": []
   }

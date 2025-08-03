@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Article - Centre de Ressources</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .view-count,
+        .rating-value,
+        .vote-count,
+        .article-count,
+        .read-time,
+        .comment-count {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .prestataire-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .prestataire-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .toc-sidebar {
+            position: sticky;
+            top: 1rem;
+        }
+        
+        .toc a {
+            display: block;
+            padding: 0.25rem 0;
+            transition: all 0.2s ease;
+        }
+        
+        .toc a:hover {
+            color: var(--tblr-green);
+            padding-left: 0.5rem;
+        }
+        
+        .toc a.text-primary {
+            color: var(--tblr-green) !important;
+            font-weight: 600;
+        }
+        
+        .article-content h2,
+        .article-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .article-content code {
+            background-color: var(--tblr-gray-100);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        
+        .vote-controls {
+            min-width: 40px;
+        }
+        
+        .qa-item {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--tblr-border-color);
+        }
+        
+        .qa-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/prestataire/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-green">PRESTATAIRE</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-green-lt">PR</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Prestataire Pro</div>
+                                <div class="mt-1 small text-secondary">Base de connaissances</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="dashboard.html" class="dropdown-item">
+                                <i class="ti ti-dashboard me-2"></i>
+                                Tableau de bord
+                            </a>
+                            <a href="knowledge.html" class="dropdown-item">
+                                <i class="ti ti-book me-2"></i>
+                                Base de connaissances
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="missions.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-briefcase"></i>
+                                            </span>
+                                            <span class="nav-link-title">Missions</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="calendar.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-calendar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Calendrier</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="knowledge.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-book"></i>
+                                            </span>
+                                            <span class="nav-link-title">Ressources</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="performance.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-line"></i>
+                                            </span>
+                                            <span class="nav-link-title">Performance</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <ol class="breadcrumb" aria-label="breadcrumbs">
+                                <li class="breadcrumb-item"><a href="dashboard.html">Accueil</a></li>
+                                <li class="breadcrumb-item"><a href="knowledge.html">Base de connaissances</a></li>
+                                <li class="breadcrumb-item"><a href="knowledge.html?category=technical">Documentation Technique</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Guide complet React Hooks</li>
+                            </ol>
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <div class="btn-list">
+                                <button class="btn btn-white" onclick="addToFavorites()">
+                                    <i class="ti ti-star"></i>
+                                    Ajouter aux favoris
+                                </button>
+                                <button class="btn btn-white" onclick="window.print()">
+                                    <i class="ti ti-printer"></i>
+                                    Imprimer
+                                </button>
+                                <button class="btn btn-white" onclick="exportPDF()">
+                                    <i class="ti ti-file-text"></i>
+                                    PDF
+                                </button>
+                                <button class="btn btn-primary" onclick="shareArticle()">
+                                    <i class="ti ti-share"></i>
+                                    Partager
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row">
+                        <!-- Contenu principal -->
+                        <div class="col-lg-9">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-book"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- En-tête article -->
+                                    <div class="article-header mb-4">
+                                        <h1 class="article-title mb-3">Guide complet React Hooks</h1>
+                                        <div class="article-meta d-flex flex-wrap align-items-center text-muted">
+                                            <div class="me-3">
+                                                <i class="ti ti-user"></i>
+                                                <a href="#" class="text-reset">Pierre Martin</a>
+                                            </div>
+                                            <div class="me-3">
+                                                <i class="ti ti-calendar"></i>
+                                                15 janvier 2024
+                                            </div>
+                                            <div class="me-3">
+                                                <i class="ti ti-clock"></i>
+                                                <span class="read-time">15</span> min de lecture
+                                            </div>
+                                            <div class="me-3">
+                                                <i class="ti ti-eye"></i>
+                                                <span class="view-count">2.3k</span> vues
+                                            </div>
+                                            <div>
+                                                <div class="rating rating-sm">
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <i class="ti ti-star-filled text-yellow"></i>
+                                                    <span class="ms-1">(<span class="rating-value">4.9</span>)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Contenu article -->
+                                    <div class="article-content">
+                                        <div class="alert alert-info mb-4">
+                                            <div class="d-flex">
+                                                <div>
+                                                    <i class="ti ti-info-circle alert-icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="alert-title">À propos de ce guide</h4>
+                                                    <div class="text-muted">Ce guide couvre l'utilisation complète des React Hooks, de useState aux hooks personnalisés. Prérequis : connaissance de base de React et JavaScript ES6.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h2 id="introduction">Introduction</h2>
+                                        <p>Les Hooks sont une addition à React 16.8. Ils permettent d'utiliser l'état et d'autres fonctionnalités React sans écrire de classe. Les Hooks sont des fonctions qui permettent de "se brancher" sur des fonctionnalités React comme l'état local d'un composant et le cycle de vie depuis des composants fonctionnels.</p>
+                                        
+                                        <h2 id="hooks-de-base">Hooks de base</h2>
+                                        
+                                        <h3 id="usestate">useState</h3>
+                                        <p>Le Hook <code>useState</code> permet d'ajouter l'état local React à des composants fonctionnels.</p>
+                                        
+                                        <pre><code class="language-javascript">import React, { useState } from 'react';
+
+function Example() {
+  // Déclare une nouvelle variable d'état, qu'on va appeler « count »
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Vous avez cliqué {count} fois&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;
+        Cliquez ici
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                                        
+                                        <div class="alert alert-warning my-4">
+                                            <div class="d-flex">
+                                                <div>
+                                                    <i class="ti ti-alert-triangle alert-icon"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="alert-title">Important</h4>
+                                                    <div class="text-muted">N'appelez pas les Hooks dans des boucles, des conditions ou des fonctions imbriquées. Utilisez toujours les Hooks au niveau supérieur de votre fonction React.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h3 id="useeffect">useEffect</h3>
+                                        <p>Le Hook d'effet vous permet d'effectuer des effets de bord dans les composants fonctionnels.</p>
+                                        
+                                        <pre><code class="language-javascript">import React, { useState, useEffect } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // Similaire à componentDidMount et componentDidUpdate :
+  useEffect(() => {
+    // Met à jour le titre du document via l'API du navigateur
+    document.title = `Vous avez cliqué ${count} fois`;
+    
+    // Cleanup function (optionnel)
+    return () => {
+      console.log('Cleanup');
+    };
+  }, [count]); // Ne s'exécute que si count change
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Vous avez cliqué {count} fois&lt;/p&gt;
+      &lt;button onClick={() => setCount(count + 1)}&gt;
+        Cliquez ici
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                                        
+                                        <h2 id="hooks-avances">Hooks avancés</h2>
+                                        
+                                        <h3 id="usecontext">useContext</h3>
+                                        <p>Accepte un objet contexte et renvoie la valeur de contexte actuelle.</p>
+                                        
+                                        <h3 id="usereducer">useReducer</h3>
+                                        <p>Une alternative à <code>useState</code>. Accepte un réducteur de type <code>(state, action) => newState</code>.</p>
+                                        
+                                        <h3 id="usememo">useMemo</h3>
+                                        <p>Renvoie une valeur mémoïsée. Ne recalcule la valeur que lorsque l'une des dépendances change.</p>
+                                        
+                                        <div class="card bg-green-lt my-4">
+                                            <div class="card-stamp">
+                                                <div class="card-stamp-icon bg-green">
+                                                    <i class="ti ti-bulb"></i>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <h4 class="card-title"><i class="ti ti-bulb me-2"></i>Astuce Pro</h4>
+                                                <p class="mb-0">Utilisez <code>useMemo</code> pour optimiser des calculs coûteux, mais ne l'utilisez pas partout. La mémorisation a aussi un coût !</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <h2 id="hooks-personnalises">Hooks personnalisés</h2>
+                                        <p>Créer vos propres Hooks vous permet de réutiliser la logique d'état entre différents composants.</p>
+                                        
+                                        <pre><code class="language-javascript">// useCounter.js
+import { useState } from 'react';
+
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+  
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+  const reset = () => setCount(initialValue);
+  
+  return { count, increment, decrement, reset };
+}
+
+// Component.js
+function Counter() {
+  const { count, increment, decrement, reset } = useCounter(0);
+  
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={increment}&gt;+&lt;/button&gt;
+      &lt;button onClick={decrement}&gt;-&lt;/button&gt;
+      &lt;button onClick={reset}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                                        
+                                        <h2 id="conclusion">Conclusion</h2>
+                                        <p>Les Hooks React offrent une façon plus directe d'utiliser les fonctionnalités React dans les composants fonctionnels. Ils rendent le code plus lisible et plus facile à tester.</p>
+                                        
+                                        <div class="card bg-green-lt my-4">
+                                            <div class="card-stamp">
+                                                <div class="card-stamp-icon bg-green">
+                                                    <i class="ti ti-check"></i>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <h4 class="card-title"><i class="ti ti-check me-2"></i>Points clés à retenir</h4>
+                                                <ul class="mb-0">
+                                                    <li>Les Hooks permettent d'utiliser l'état sans classes</li>
+                                                    <li>Appelez toujours les Hooks au niveau supérieur</li>
+                                                    <li>Utilisez les règles ESLint pour les Hooks</li>
+                                                    <li>Créez des Hooks personnalisés pour réutiliser la logique</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Footer article -->
+                                    <div class="article-footer mt-5 pt-5 border-top">
+                                        <!-- Rating -->
+                                        <div class="card mb-4">
+                                            <div class="card-stamp">
+                                                <div class="card-stamp-icon bg-yellow">
+                                                    <i class="ti ti-star"></i>
+                                                </div>
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <h4 class="mb-3">Cet article vous a-t-il été utile ?</h4>
+                                                <div class="rating rating-lg mb-3" id="articleRating">
+                                                    <i class="ti ti-star" onclick="rateArticle(1)"></i>
+                                                    <i class="ti ti-star" onclick="rateArticle(2)"></i>
+                                                    <i class="ti ti-star" onclick="rateArticle(3)"></i>
+                                                    <i class="ti ti-star" onclick="rateArticle(4)"></i>
+                                                    <i class="ti ti-star" onclick="rateArticle(5)"></i>
+                                                </div>
+                                                <div class="text-muted"><span class="comment-count">156</span> personnes ont trouvé cet article utile</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Tags -->
+                                        <div class="mb-4">
+                                            <h4 class="mb-3">Tags</h4>
+                                            <div class="badge-list">
+                                                <a href="#" class="badge bg-green-lt">React</a>
+                                                <a href="#" class="badge bg-green-lt">JavaScript</a>
+                                                <a href="#" class="badge bg-green-lt">Hooks</a>
+                                                <a href="#" class="badge bg-green-lt">Frontend</a>
+                                                <a href="#" class="badge bg-green-lt">Tutorial</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Articles similaires -->
+                                        <div class="mb-4">
+                                            <h4 class="mb-3">Articles similaires</h4>
+                                            <div class="list-group">
+                                                <a href="knowledge-article.html?id=10" class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col">
+                                                            <div class="font-weight-medium">React Context API : Guide complet</div>
+                                                            <div class="text-muted small">Gérez l'état global de votre application React</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="ti ti-chevron-right"></i>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="knowledge-article.html?id=11" class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col">
+                                                            <div class="font-weight-medium">Performance React : Optimisation avancée</div>
+                                                            <div class="text-muted small">Techniques pour améliorer les performances</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="ti ti-chevron-right"></i>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a href="knowledge-article.html?id=12" class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col">
+                                                            <div class="font-weight-medium">Testing React avec Jest et RTL</div>
+                                                            <div class="text-muted small">Tests unitaires et d'intégration</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="ti ti-chevron-right"></i>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Section commentaires / Q&A -->
+                                    <div class="card">
+                                        <div class="card-stamp">
+                                            <div class="card-stamp-icon bg-green">
+                                                <i class="ti ti-message-circle"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-header">
+                                            <h3 class="card-title">Questions & Réponses</h3>
+                                            <div class="card-actions">
+                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ask-question">
+                                                    <i class="ti ti-plus"></i>
+                                                    Poser une question
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <!-- Question 1 -->
+                                            <div class="qa-item mb-4">
+                                                <div class="d-flex">
+                                                    <div class="vote-controls text-center me-3">
+                                                        <button class="btn btn-sm btn-ghost-secondary" onclick="voteUp(1)">
+                                                            <i class="ti ti-chevron-up"></i>
+                                                        </button>
+                                                        <div class="font-weight-medium vote-count">5</div>
+                                                        <button class="btn btn-sm btn-ghost-secondary" onclick="voteDown(1)">
+                                                            <i class="ti ti-chevron-down"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="mb-2">
+                                                            <span class="badge bg-green me-2">
+                                                                <i class="ti ti-check"></i>
+                                                                Solution
+                                                            </span>
+                                                            <strong>Comment gérer plusieurs états avec useState ?</strong>
+                                                        </div>
+                                                        <div class="text-muted mb-2">
+                                                            Posté par <a href="#">Sophie L.</a> il y a 2 jours
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <p>Je me demande quelle est la meilleure pratique pour gérer plusieurs états dans un composant. Vaut-il mieux utiliser plusieurs useState ou un seul avec un objet ?</p>
+                                                        </div>
+                                                        <div class="ps-4 border-start border-3">
+                                                            <div class="mb-2">
+                                                                <strong>Réponse de Pierre Martin (Auteur)</strong>
+                                                            </div>
+                                                            <p>Excellente question ! La règle générale est d'utiliser plusieurs <code>useState</code> pour des valeurs qui changent indépendamment. Si les états sont liés, vous pouvez utiliser un objet ou passer à <code>useReducer</code>.</p>
+                                                            <pre><code class="language-javascript">// ✅ Bon : états indépendants
+const [name, setName] = useState('');
+const [age, setAge] = useState(0);
+
+// ✅ Bon : états liés
+const [user, setUser] = useState({ name: '', age: 0 });</code></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Question 2 -->
+                                            <div class="qa-item">
+                                                <div class="d-flex">
+                                                    <div class="vote-controls text-center me-3">
+                                                        <button class="btn btn-sm btn-ghost-secondary" onclick="voteUp(2)">
+                                                            <i class="ti ti-chevron-up"></i>
+                                                        </button>
+                                                        <div class="font-weight-medium vote-count">3</div>
+                                                        <button class="btn btn-sm btn-ghost-secondary" onclick="voteDown(2)">
+                                                            <i class="ti ti-chevron-down"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="mb-2">
+                                                            <strong>Différence entre useEffect et useLayoutEffect ?</strong>
+                                                        </div>
+                                                        <div class="text-muted mb-2">
+                                                            Posté par <a href="#">Marc D.</a> il y a 1 semaine
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <p>Quand faut-il utiliser useLayoutEffect au lieu de useEffect ?</p>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-ghost-secondary">
+                                                            <i class="ti ti-message"></i>
+                                                            Répondre
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sidebar droite - Table des matières -->
+                        <div class="col-lg-3">
+                            <div class="card toc-sidebar">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-list"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Table des matières</h3>
+                                </div>
+                                <div class="card-body">
+                                    <nav class="toc">
+                                        <ul class="list-unstyled">
+                                            <li><a href="#introduction" class="text-reset">Introduction</a></li>
+                                            <li>
+                                                <a href="#hooks-de-base" class="text-reset">Hooks de base</a>
+                                                <ul class="list-unstyled ps-3 mt-1">
+                                                    <li><a href="#usestate" class="text-muted small">useState</a></li>
+                                                    <li><a href="#useeffect" class="text-muted small">useEffect</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#hooks-avances" class="text-reset">Hooks avancés</a>
+                                                <ul class="list-unstyled ps-3 mt-1">
+                                                    <li><a href="#usecontext" class="text-muted small">useContext</a></li>
+                                                    <li><a href="#usereducer" class="text-muted small">useReducer</a></li>
+                                                    <li><a href="#usememo" class="text-muted small">useMemo</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="#hooks-personnalises" class="text-reset">Hooks personnalisés</a></li>
+                                            <li><a href="#conclusion" class="text-reset">Conclusion</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            
+                            <!-- Infos auteur -->
+                            <div class="card mt-3">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-user"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body text-center">
+                                    <span class="avatar avatar-xl mb-3" style="background-image: url(https://ui-avatars.com/api/?name=Pierre+Martin)"></span>
+                                    <h3 class="card-title mb-1">Pierre Martin</h3>
+                                    <div class="text-muted">Senior Frontend Developer</div>
+                                    <div class="mt-3">
+                                        <span class="badge bg-green-lt"><span class="article-count">15</span> articles</span>
+                                        <span class="badge bg-green-lt">Expert React</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-book me-1"></i>
+                                    Espace Prestataire - Base de connaissances
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal poser une question -->
+    <div class="modal modal-blur fade" id="modal-ask-question" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Poser une question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Votre question</label>
+                        <input type="text" class="form-control" placeholder="Soyez précis et concis">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Détails (optionnel)</label>
+                        <textarea class="form-control" rows="4" placeholder="Ajoutez du contexte ou des exemples de code..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        <select class="form-select" multiple>
+                            <option value="react" selected>React</option>
+                            <option value="hooks">Hooks</option>
+                            <option value="javascript">JavaScript</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="ti ti-send"></i>
+                        Publier la question
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <!-- Prism.js -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Highlight code
+            Prism.highlightAll();
+            
+            // Smooth scroll pour table des matières
+            document.querySelectorAll('.toc a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            // Observer pour highlight actif dans TOC
+            const observerOptions = {
+                rootMargin: '-20% 0px -70% 0px'
+            };
+            
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    const id = entry.target.getAttribute('id');
+                    const tocLink = document.querySelector(`.toc a[href="#${id}"]`);
+                    
+                    if (entry.isIntersecting) {
+                        document.querySelectorAll('.toc a').forEach(link => {
+                            link.classList.remove('text-primary', 'font-weight-medium');
+                        });
+                        if (tocLink) {
+                            tocLink.classList.add('text-primary', 'font-weight-medium');
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            // Observer tous les headings
+            document.querySelectorAll('h2[id], h3[id]').forEach(heading => {
+                observer.observe(heading);
+            });
+        });
+        
+        // Noter l'article
+        function rateArticle(rating) {
+            const stars = document.querySelectorAll('#articleRating i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('ti-star');
+                    star.classList.add('ti-star-filled', 'text-yellow');
+                } else {
+                    star.classList.remove('ti-star-filled', 'text-yellow');
+                    star.classList.add('ti-star');
+                }
+            });
+            
+            if (typeof PortalApp !== 'undefined' && PortalApp.showToast) {
+                PortalApp.showToast(`Merci pour votre évaluation (${rating}/5)`, 'success');
+            }
+        }
+        
+        // Voter pour une question
+        function voteUp(questionId) {
+            console.log('Vote up:', questionId);
+        }
+        
+        function voteDown(questionId) {
+            console.log('Vote down:', questionId);
+        }
+        
+        // Actions article
+        function addToFavorites() {
+            if (typeof PortalApp !== 'undefined' && PortalApp.showToast) {
+                PortalApp.showToast('Article ajouté aux favoris', 'success');
+            }
+        }
+        
+        function exportPDF() {
+            if (typeof PortalApp !== 'undefined' && PortalApp.showToast) {
+                PortalApp.showToast('Export PDF en cours...', 'info');
+            }
+        }
+        
+        function shareArticle() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Guide complet React Hooks',
+                    text: 'Découvrez ce guide complet sur les React Hooks',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback - copier le lien
+                navigator.clipboard.writeText(window.location.href);
+                if (typeof PortalApp !== 'undefined' && PortalApp.showToast) {
+                    PortalApp.showToast('Lien copié dans le presse-papier', 'success');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

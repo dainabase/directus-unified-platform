@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Vision AI - Documents & IA</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../../assets/css/custom.css" rel="stylesheet"/>
+    <link href="../../assets/css/superadmin-custom.css" rel="stylesheet"/>
+    
+    <style>
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .metric-value,
+        .h1,
+        .stats-number {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        /* Utiliser les variables Tabler */
+        .dropzone-custom {
+            min-height: 300px;
+            background-color: var(--tblr-bg-surface-secondary);
+            border: 2px dashed var(--tblr-border-color);
+            border-radius: var(--tblr-border-radius-lg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .dropzone-custom:hover {
+            border-color: var(--tblr-primary);
+            background-color: var(--tblr-bg-surface-tertiary);
+        }
+        
+        .dropzone-custom.dragover {
+            border-color: var(--tblr-primary);
+            background-color: rgba(var(--tblr-primary-rgb), 0.05);
+            transform: scale(1.01);
+        }
+        
+        /* Animation Tabler */
+        @keyframes pulse-tabler {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        
+        .ai-processing {
+            animation: pulse-tabler 2s ease-in-out infinite;
+        }
+        
+        /* Steps custom */
+        .steps-counter .step-item {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .steps-counter .step-item.completed {
+            opacity: 0.7;
+        }
+        
+        .steps-counter .step-item.completed .step-item-icon {
+            background: var(--tblr-success);
+            color: white;
+        }
+        
+        /* Preview container */
+        #document-preview canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="../dashboard.html">
+                        <img src="../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <!-- Mobile user menu -->
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- Navigation dynamique -->
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu avec badge SUPERADMIN -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="../system/2fa-setup.html" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page content -->
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Documents & IA</div>
+                            <h2 class="page-title">
+                                Vision AI - Traitement intelligent de documents
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <!-- Dropdown pour la période des stats -->
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="ti ti-calendar me-2"></i>
+                                        Aujourd'hui
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item active" href="#" data-period="today">
+                                            Aujourd'hui
+                                        </a>
+                                        <a class="dropdown-item" href="#" data-period="week">
+                                            Cette semaine
+                                        </a>
+                                        <a class="dropdown-item" href="#" data-period="month">
+                                            Ce mois
+                                        </a>
+                                        <a class="dropdown-item" href="#" data-period="year">
+                                            Cette année
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Progress Steps Tabler -->
+                    <div class="steps steps-counter steps-primary mb-4">
+                        <a href="#" class="step-item active" data-step="upload">
+                            Upload
+                        </a>
+                        <a href="#" class="step-item" data-step="extract">
+                            Extraction IA
+                        </a>
+                        <a href="#" class="step-item" data-step="validate">
+                            Validation
+                        </a>
+                        <a href="#" class="step-item" data-step="export">
+                            Export base de données
+                        </a>
+                    </div>
+                    
+                    <div class="row row-cards">
+                        <!-- Zone principale -->
+                        <div class="col-lg-8">
+                            <!-- Card Upload -->
+                            <div class="card" id="upload-card">
+                                <div class="card-body">
+                                    <div class="dropzone-custom d-flex align-items-center justify-content-center" id="dropzone">
+                                        <div class="text-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-lg text-muted mb-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
+                                                <path d="M12 11v6"/>
+                                                <path d="M9.5 13.5l2.5 -2.5l2.5 2.5"/>
+                                            </svg>
+                                            <h3>Glissez votre document ici</h3>
+                                            <p class="text-secondary">ou cliquez pour parcourir</p>
+                                            <div class="mt-3">
+                                                <span class="badge bg-secondary me-1">PDF</span>
+                                                <span class="badge bg-secondary me-1">JPG</span>
+                                                <span class="badge bg-secondary">PNG</span>
+                                                <span class="badge bg-secondary-lt ms-2">Max 10MB</span>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="fileInput" class="d-none" accept=".pdf,.jpg,.jpeg,.png" multiple />
+                                    </div>
+                                    
+                                    <!-- Progress Bar (hidden) -->
+                                    <div class="mt-3 d-none" id="upload-progress">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="text-secondary">Téléchargement...</span>
+                                            <span class="text-secondary" id="progress-percentage">0%</span>
+                                        </div>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Processing (caché) -->
+                            <div class="card d-none" id="processing-card">
+                                <div class="card-body">
+                                    <div class="text-center py-5">
+                                        <div class="avatar avatar-xl bg-primary-lt mb-3 ai-processing">
+                                            <i class="ti ti-brain"></i>
+                                        </div>
+                                        <h3>Analyse en cours...</h3>
+                                        <p class="text-secondary">Notre IA extrait les données de votre document</p>
+                                        <div class="progress progress-sm mt-3">
+                                            <div class="progress-bar progress-bar-indeterminate"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Validation (caché) -->
+                            <div class="card d-none" id="validation-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Validation des données extraites</h3>
+                                </div>
+                                <div class="card-body" id="extraction-results">
+                                    <!-- Formulaire injecté par OCR -->
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex">
+                                        <a href="#" class="btn btn-link" onclick="resetProcess(); return false;">
+                                            Nouveau document
+                                        </a>
+                                        <button class="btn btn-primary ms-auto" id="validate-data">
+                                            <i class="ti ti-send me-2"></i>
+                                            Envoyer vers base de données
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Success (caché) -->
+                            <div class="card d-none" id="success-card">
+                                <div class="card-body">
+                                    <div class="text-center py-5">
+                                        <div class="avatar avatar-xl bg-success-lt mb-3">
+                                            <i class="ti ti-check"></i>
+                                        </div>
+                                        <h3>Document traité avec succès</h3>
+                                        <p class="text-secondary">Les données ont été enregistrées dans la base de données</p>
+                                        <div class="mt-4">
+                                            <button class="btn btn-primary" onclick="resetProcess()">
+                                                <i class="ti ti-plus me-2"></i>
+                                                Traiter un nouveau document
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sidebar Stats -->
+                        <div class="col-lg-4">
+                            <!-- Stats Cards -->
+                            <div class="row row-cards">
+                                <div class="col-12">
+                                    <div class="card card-sm">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="bg-primary text-white avatar">
+                                                        <i class="ti ti-files"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="font-weight-medium">
+                                                        <span id="docs-count" class="metric-value">0</span> documents
+                                                    </div>
+                                                    <div class="text-secondary">
+                                                        Traités <span id="period-text">aujourd'hui</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="card card-sm">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="bg-green text-white avatar">
+                                                        <i class="ti ti-percentage"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="font-weight-medium metric-value">
+                                                        98.5%
+                                                    </div>
+                                                    <div class="text-secondary">
+                                                        Taux de réussite
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="card card-sm">
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="bg-azure text-white avatar">
+                                                        <i class="ti ti-clock"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="font-weight-medium metric-value">
+                                                        2.8s
+                                                    </div>
+                                                    <div class="text-secondary">
+                                                        Temps moyen
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preview Document (caché) -->
+                            <div class="card mt-3 d-none" id="preview-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Aperçu du document</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div id="document-preview" style="max-height: 600px; overflow-y: auto;">
+                                        <!-- Canvas pour PDF.js ou image -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <a href="../system/audit-logs.html" class="link-secondary">Logs d'audit</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="../system/settings.html" class="link-secondary">Configuration</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="../dashboard.html" class="link-secondary">Dashboard Groupe</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+    
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+    
+    <!-- PDF.js pour preview -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    
+    <!-- Scripts OCR existants -->
+    <script src="../../assets/js/Superadmin/ocr-templates-final.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-vision-final.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-notion-smart-resolver.js"></script>
+    <script src="../../assets/js/Superadmin/ocr-interface-final.js"></script>
+    
+    <!-- Script UX améliorée -->
+    <script>
+        // Navigation dynamique
+        async function loadNavigation() {
+            const sidebar = document.querySelector('#sidebar-menu .navbar-nav');
+            if (!sidebar) return;
+            
+            const navHTML = `
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard.html">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-home"></i>
+                        </span>
+                        <span class="nav-link-title">Dashboard Consolidé</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#navbar-documents" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-file-analytics"></i>
+                        </span>
+                        <span class="nav-link-title">Documents & IA</span>
+                    </a>
+                    <div class="dropdown-menu show">
+                        <a class="dropdown-item active" href="./vision-ai.html">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block text-primary">
+                                <i class="ti ti-brain"></i>
+                            </span>
+                            Vision AI
+                        </a>
+                        <a class="dropdown-item" href="./library.html">
+                            Bibliothèque
+                        </a>
+                        <a class="dropdown-item" href="./analytics.html">
+                            Analytics
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-finance" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-businessplan"></i>
+                        </span>
+                        <span class="nav-link-title">Finance & Comptabilité</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="../finance/invoices-in.html">Factures Fournisseurs</a>
+                                <a class="dropdown-item" href="../finance/invoices-out.html">Factures Clients</a>
+                                <a class="dropdown-item" href="../finance/expenses.html">Notes de Frais</a>
+                                <a class="dropdown-item" href="../finance/banking.html">Banking Revolut</a>
+                                <a class="dropdown-item" href="../finance/accounting.html">Comptabilité</a>
+                                <a class="dropdown-item" href="../finance/vat-reports.html">Déclarations TVA</a>
+                                <a class="dropdown-item" href="../finance/monthly-reports.html">Bilans Mensuels</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-crm" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-users"></i>
+                        </span>
+                        <span class="nav-link-title">CRM Unifié</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../crm/contacts.html">Contacts</a>
+                        <a class="dropdown-item" href="../crm/companies.html">Entreprises</a>
+                        <a class="dropdown-item" href="../crm/opportunities.html">Opportunités</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-projects" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-clipboard-check"></i>
+                        </span>
+                        <span class="nav-link-title">Projets Globaux</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../projects/projects-admin.html">Gestion Projets</a>
+                        <a class="dropdown-item" href="../projects/resources.html">Ressources</a>
+                        <a class="dropdown-item" href="../projects/templates.html">Templates</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-users" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-user-search"></i>
+                        </span>
+                        <span class="nav-link-title">Utilisateurs</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../users/users-list.html">Liste Utilisateurs</a>
+                        <a class="dropdown-item" href="../users/roles.html">Rôles</a>
+                        <a class="dropdown-item" href="../users/permissions.html">Permissions</a>
+                        <a class="dropdown-item" href="../users/onboarding.html">Onboarding</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-entities" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-building"></i>
+                        </span>
+                        <span class="nav-link-title">Entités Groupe</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../entities/entities-config.html">Configuration</a>
+                        <a class="dropdown-item" href="../entities/inter-company.html">Inter-sociétés</a>
+                        <a class="dropdown-item" href="../entities/consolidation.html">Consolidation</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-automation" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-robot"></i>
+                        </span>
+                        <span class="nav-link-title">Automatisations</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../automation/workflows.html">Workflows n8n</a>
+                        <a class="dropdown-item" href="../automation/email-templates.html">Templates Email</a>
+                        <a class="dropdown-item" href="../automation/notifications.html">Notifications</a>
+                    </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#navbar-system" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <i class="ti ti-settings"></i>
+                        </span>
+                        <span class="nav-link-title">Système</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="../system/settings.html">Configuration</a>
+                        <a class="dropdown-item" href="../system/integrations.html">Intégrations</a>
+                        <a class="dropdown-item" href="../system/audit-logs.html">Logs d'Audit</a>
+                        <a class="dropdown-item" href="../system/backups.html">Sauvegardes</a>
+                    </div>
+                </li>
+            `;
+            
+            sidebar.innerHTML = navHTML;
+        }
+        
+        // Gestion des étapes
+        function updateSteps(activeStep) {
+            const steps = document.querySelectorAll('.step-item');
+            const stepNames = ['upload', 'extract', 'validate', 'export'];
+            const activeIndex = stepNames.indexOf(activeStep);
+            
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index < activeIndex) {
+                    step.classList.add('completed');
+                } else if (index === activeIndex) {
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        // Gestion drag & drop
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => {
+                dropzone.classList.add('dragover');
+            });
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => {
+                dropzone.classList.remove('dragover');
+            });
+        });
+        
+        dropzone.addEventListener('drop', handleDrop);
+        dropzone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                processFile(e.target.files[0]);
+            }
+        });
+        
+        function handleDrop(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                processFile(files[0]);
+            }
+        }
+        
+        // Process file
+        function processFile(file) {
+            // Validation du fichier
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                showToast('Format de fichier non supporté', 'error');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('Le fichier est trop volumineux (max 10MB)', 'error');
+                return;
+            }
+            
+            // Mise à jour UI
+            updateSteps('extract');
+            document.getElementById('upload-card').classList.add('d-none');
+            document.getElementById('processing-card').classList.remove('d-none');
+            
+            // Afficher preview si PDF
+            if (file.type === 'application/pdf') {
+                showPDFPreview(file);
+            } else {
+                showImagePreview(file);
+            }
+            
+            // Simulation du traitement OCR
+            setTimeout(() => {
+                updateSteps('validate');
+                document.getElementById('processing-card').classList.add('d-none');
+                document.getElementById('validation-card').classList.remove('d-none');
+                
+                // Simulation de résultats extraits
+                showExtractedData();
+            }, 3000);
+        }
+        
+        // Preview PDF avec PDF.js
+        function showPDFPreview(file) {
+            const previewCard = document.getElementById('preview-card');
+            const previewContainer = document.getElementById('document-preview');
+            
+            previewCard.classList.remove('d-none');
+            
+            const fileReader = new FileReader();
+            fileReader.onload = function() {
+                const typedarray = new Uint8Array(this.result);
+                
+                pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+                    pdf.getPage(1).then(page => {
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        const viewport = page.getViewport({ scale: 1.0 });
+                        
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        
+                        page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        });
+                        
+                        previewContainer.innerHTML = '';
+                        previewContainer.appendChild(canvas);
+                    });
+                });
+            };
+            fileReader.readAsArrayBuffer(file);
+        }
+        
+        // Preview Image
+        function showImagePreview(file) {
+            const previewCard = document.getElementById('preview-card');
+            const previewContainer = document.getElementById('document-preview');
+            
+            previewCard.classList.remove('d-none');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'img-fluid';
+                
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Afficher les données extraites (simulation)
+        function showExtractedData() {
+            const resultsContainer = document.getElementById('extraction-results');
+            
+            resultsContainer.innerHTML = `
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Numéro de facture</label>
+                        <input type="text" class="form-control" value="INV-2025-001" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" value="2025-01-29" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fournisseur</label>
+                        <input type="text" class="form-control" value="Exemple SA" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Montant TTC</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="1,250.00" />
+                            <span class="input-group-text">CHF</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="2">Services de développement - Janvier 2025</textarea>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Validation et envoi
+        document.getElementById('validate-data').addEventListener('click', function() {
+            updateSteps('export');
+            
+            // Simulation envoi
+            setTimeout(() => {
+                document.getElementById('validation-card').classList.add('d-none');
+                document.getElementById('success-card').classList.remove('d-none');
+                
+                // Mettre à jour les stats
+                const currentCount = parseInt(document.getElementById('docs-count').textContent);
+                document.getElementById('docs-count').textContent = currentCount + 1;
+                
+                showToast('Document envoyé avec succès', 'success');
+            }, 1500);
+        });
+        
+        // Reset process
+        function resetProcess() {
+            updateSteps('upload');
+            document.getElementById('upload-card').classList.remove('d-none');
+            document.getElementById('processing-card').classList.add('d-none');
+            document.getElementById('validation-card').classList.add('d-none');
+            document.getElementById('success-card').classList.add('d-none');
+            document.getElementById('preview-card').classList.add('d-none');
+            document.getElementById('fileInput').value = '';
+        }
+        
+        // Gestion période stats
+        document.querySelectorAll('[data-period]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const period = e.target.dataset.period;
+                
+                // Mettre à jour le bouton
+                const dropdown = e.target.closest('.dropdown');
+                dropdown.querySelector('.dropdown-toggle').innerHTML = `<i class="ti ti-calendar me-2"></i>${e.target.textContent}`;
+                
+                document.querySelectorAll('[data-period]').forEach(i => i.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                // Mettre à jour les stats
+                updateStats(period);
+            });
+        });
+        
+        function updateStats(period) {
+            const counts = {
+                today: 12,
+                week: 84,
+                month: 356,
+                year: 4521
+            };
+            
+            const periodTexts = {
+                today: "aujourd'hui",
+                week: "cette semaine",
+                month: "ce mois",
+                year: "cette année"
+            };
+            
+            document.getElementById('docs-count').textContent = counts[period];
+            document.getElementById('period-text').textContent = periodTexts[period];
+        }
+        
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toastId = 'toast-' + Date.now();
+            
+            const toastHTML = `
+                <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <span class="avatar avatar-xs me-2 bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'primary'}">
+                            <i class="ti ti-${type === 'success' ? 'check' : type === 'error' ? 'x' : 'info-circle'}"></i>
+                        </span>
+                        <strong class="me-auto">Vision AI</strong>
+                        <button type="button" class="ms-2 btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+            
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            // Auto remove after hide
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNavigation();
+        });
+    </script>
+</body>
+</html>

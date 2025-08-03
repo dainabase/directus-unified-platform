@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Paiement sécurisé - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .amount,
+        .total-amount,
+        .card-number,
+        .cvv-input,
+        .order-amount {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-method {
+            padding: 1rem;
+            border: 2px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            background: var(--tblr-bg-surface);
+        }
+        
+        .payment-method:hover {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-primary-lt);
+        }
+        
+        .payment-method.active {
+            border-color: var(--tblr-primary);
+            background: var(--tblr-primary-lt);
+        }
+        
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-input-wrapper {
+            position: relative;
+        }
+        
+        .card-type-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+        
+        .security-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .order-summary {
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--tblr-border-color);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--tblr-border-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body data-bs-theme="light" class="layout-fluid role-client">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <div class="nav-item dropdown d-none d-md-flex me-3">
+                        <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                            <i class="ti ti-bell"></i>
+                            <span class="badge bg-red"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Notifications</h3>
+                                </div>
+                                <div class="list-group list-group-flush list-group-hoverable">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="status-dot status-dot-animated bg-red d-block"></span>
+                                            </div>
+                                            <div class="col text-truncate">
+                                                <a href="#" class="text-body d-block">Nouvelle facture</a>
+                                                <div class="d-block text-secondary text-truncate mt-n1">
+                                                    Facture #2024-001 disponible
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div id="user-name">Utilisateur</div>
+                                <div class="mt-1 small text-secondary">Client</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">Mon profil</a>
+                            <a href="#" class="dropdown-item">Paramètres</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="/client/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                                <i class="ti ti-bell"></i>
+                                <span class="badge bg-red"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" id="user-avatar-mobile"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-folder"></i>
+                                </span>
+                                <span class="nav-link-title">Projets</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="documents.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-text"></i>
+                                </span>
+                                <span class="nav-link-title">Documents</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="finances.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-currency-euro"></i>
+                                </span>
+                                <span class="nav-link-title">Finances</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Finances</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-credit-card me-2"></i>
+                                Paiement sécurisé
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <a href="finances.html" class="btn btn-ghost-secondary">
+                                <i class="ti ti-arrow-left"></i>
+                                Retour
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row g-4">
+                        <!-- Payment Form -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-shield-lock"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-lock me-2"></i>
+                                        Informations de paiement
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Payment Methods -->
+                                    <div class="mb-4">
+                                        <label class="form-label">Mode de paiement</label>
+                                        <div class="payment-methods">
+                                            <div class="payment-method active" data-method="card">
+                                                <div class="payment-icon text-blue">
+                                                    <i class="ti ti-credit-card"></i>
+                                                </div>
+                                                <div>Carte bancaire</div>
+                                            </div>
+                                            <div class="payment-method" data-method="paypal">
+                                                <div class="payment-icon text-blue">
+                                                    <i class="ti ti-brand-paypal"></i>
+                                                </div>
+                                                <div>PayPal</div>
+                                            </div>
+                                            <div class="payment-method" data-method="transfer">
+                                                <div class="payment-icon text-green">
+                                                    <i class="ti ti-building-bank"></i>
+                                                </div>
+                                                <div>Virement</div>
+                                            </div>
+                                            <div class="payment-method" data-method="twint">
+                                                <div class="payment-icon text-purple">
+                                                    <i class="ti ti-device-mobile"></i>
+                                                </div>
+                                                <div>TWINT</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Payment Form -->
+                                    <form id="cardPaymentForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Numéro de carte</label>
+                                            <div class="card-input-wrapper">
+                                                <input type="text" class="form-control card-number" 
+                                                       placeholder="1234 5678 9012 3456" 
+                                                       maxlength="19"
+                                                       autocomplete="cc-number">
+                                                <div class="card-type-icon">
+                                                    <i class="ti ti-credit-card text-secondary"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-6">
+                                                <label class="form-label">Date d'expiration</label>
+                                                <input type="text" class="form-control" 
+                                                       placeholder="MM/AA" 
+                                                       maxlength="5"
+                                                       autocomplete="cc-exp">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">CVV</label>
+                                                <input type="text" class="form-control cvv-input" 
+                                                       placeholder="123" 
+                                                       maxlength="4"
+                                                       autocomplete="cc-csc">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Nom du titulaire</label>
+                                            <input type="text" class="form-control" 
+                                                   placeholder="Jean Dupont"
+                                                   autocomplete="cc-name">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Adresse de facturation</label>
+                                            <input type="text" class="form-control mb-2" 
+                                                   placeholder="Rue de la Gare 12"
+                                                   autocomplete="street-address">
+                                            <div class="row g-2">
+                                                <div class="col-4">
+                                                    <input type="text" class="form-control" 
+                                                           placeholder="1200"
+                                                           autocomplete="postal-code">
+                                                </div>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control" 
+                                                           placeholder="Genève"
+                                                           autocomplete="address-level2">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-check">
+                                                <input type="checkbox" class="form-check-input" checked>
+                                                <span class="form-check-label">
+                                                    Sauvegarder cette carte pour les prochains paiements
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </form>
+
+                                    <!-- PayPal Form (hidden by default) -->
+                                    <div id="paypalPaymentForm" style="display: none;">
+                                        <div class="text-center py-4">
+                                            <p class="text-secondary mb-4">
+                                                Vous serez redirigé vers PayPal pour finaliser votre paiement
+                                            </p>
+                                            <i class="ti ti-brand-paypal" style="font-size: 4rem; color: #003087;"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bank Transfer Info (hidden by default) -->
+                                    <div id="transferPaymentInfo" style="display: none;">
+                                        <div class="alert alert-info">
+                                            <h4 class="alert-title">Informations pour le virement</h4>
+                                            <div class="mt-3">
+                                                <div class="mb-2">
+                                                    <strong>Bénéficiaire:</strong> Entreprise SA
+                                                </div>
+                                                <div class="mb-2">
+                                                    <strong>IBAN:</strong> <span class="font-monospace">CH93 0076 2011 6238 5295 7</span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <strong>BIC/SWIFT:</strong> <span class="font-monospace">POFICHBEXXX</span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <strong>Référence:</strong> <span class="font-monospace">INV-2024-001</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- TWINT QR (hidden by default) -->
+                                    <div id="twintPaymentQR" style="display: none;">
+                                        <div class="text-center py-4">
+                                            <p class="text-secondary mb-4">
+                                                Scannez ce QR code avec votre app TWINT
+                                            </p>
+                                            <div class="d-inline-block p-3 bg-white border rounded">
+                                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=twint://pay?amount=250.00&recipient=Entreprise%20SA" 
+                                                     alt="TWINT QR Code">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Security Badges -->
+                                    <div class="security-badges">
+                                        <div class="security-badge">
+                                            <i class="ti ti-shield-check text-green"></i>
+                                            <span>Paiement sécurisé SSL</span>
+                                        </div>
+                                        <div class="security-badge">
+                                            <i class="ti ti-lock text-blue"></i>
+                                            <span>Données cryptées</span>
+                                        </div>
+                                        <div class="security-badge">
+                                            <i class="ti ti-certificate text-yellow"></i>
+                                            <span>PCI DSS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-receipt"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Récapitulatif</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="order-summary">
+                                        <div class="order-item">
+                                            <div>
+                                                <div class="fw-medium">Facture #2024-001</div>
+                                                <div class="text-secondary small">Développement site web</div>
+                                            </div>
+                                            <div class="order-amount">CHF 2'500.00</div>
+                                        </div>
+                                        <div class="order-item">
+                                            <div>TVA (7.7%)</div>
+                                            <div class="order-amount">CHF 192.50</div>
+                                        </div>
+                                        <div class="order-item">
+                                            <div>Frais de traitement</div>
+                                            <div class="order-amount">CHF 0.00</div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="h3 mb-0">Total à payer</div>
+                                            <div class="h3 mb-0 total-amount text-blue">CHF 2'692.50</div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-primary w-100 mt-4" id="confirmPayment">
+                                        <i class="ti ti-shield-check me-2"></i>
+                                        Confirmer le paiement
+                                    </button>
+
+                                    <div class="mt-3 text-center">
+                                        <small class="text-secondary">
+                                            En confirmant, vous acceptez nos 
+                                            <a href="#">conditions générales</a>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Saved Cards -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3 class="card-title">Cartes enregistrées</h3>
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="payment-payment payment-provider-visa payment-xs"></span>
+                                            </div>
+                                            <div class="col">
+                                                <div>•••• •••• •••• 4242</div>
+                                                <div class="text-secondary small">Expire 12/24</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-check form-check-single form-switch">
+                                                    <input class="form-check-input" type="radio" name="saved-card" checked>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="payment-payment payment-provider-mastercard payment-xs"></span>
+                                            </div>
+                                            <div class="col">
+                                                <div>•••• •••• •••• 5555</div>
+                                                <div class="text-secondary small">Expire 08/25</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <label class="form-check form-check-single form-switch">
+                                                    <input class="form-check-input" type="radio" name="saved-card">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Documentation</a></li>
+                                <li class="list-inline-item"><a href="#" class="link-secondary">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Portal Pro</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+        // Payment method switching
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                // Remove active class from all
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+                // Add active to clicked
+                this.classList.add('active');
+                
+                // Hide all payment forms
+                document.getElementById('cardPaymentForm').style.display = 'none';
+                document.getElementById('paypalPaymentForm').style.display = 'none';
+                document.getElementById('transferPaymentInfo').style.display = 'none';
+                document.getElementById('twintPaymentQR').style.display = 'none';
+                
+                // Show appropriate form
+                const methodType = this.dataset.method;
+                switch(methodType) {
+                    case 'card':
+                        document.getElementById('cardPaymentForm').style.display = 'block';
+                        break;
+                    case 'paypal':
+                        document.getElementById('paypalPaymentForm').style.display = 'block';
+                        break;
+                    case 'transfer':
+                        document.getElementById('transferPaymentInfo').style.display = 'block';
+                        break;
+                    case 'twint':
+                        document.getElementById('twintPaymentQR').style.display = 'block';
+                        break;
+                }
+            });
+        });
+
+        // Card number formatting
+        const cardNumberInput = document.querySelector('.card-number');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+                
+                // Detect card type
+                const cardTypeIcon = document.querySelector('.card-type-icon i');
+                if (value.startsWith('4')) {
+                    cardTypeIcon.className = 'payment-payment payment-provider-visa';
+                } else if (value.startsWith('5')) {
+                    cardTypeIcon.className = 'payment-payment payment-provider-mastercard';
+                } else if (value.startsWith('3')) {
+                    cardTypeIcon.className = 'payment-payment payment-provider-amex';
+                } else {
+                    cardTypeIcon.className = 'ti ti-credit-card text-secondary';
+                }
+            });
+        }
+
+        // Expiry date formatting
+        document.querySelector('input[placeholder="MM/AA"]')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Confirm payment
+        document.getElementById('confirmPayment')?.addEventListener('click', function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Traitement...';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                window.location.href = 'finances.html?payment=success';
+            }, 2000);
+        });
+
+        // Initialize user data
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (userData.name) {
+                document.getElementById('user-name').textContent = userData.name;
+                document.getElementById('user-avatar').style.backgroundImage = `url(${userData.avatar})`;
+                document.getElementById('user-avatar-mobile').style.backgroundImage = `url(${userData.avatar})`;
+            }
+        });
+    </script>
+</body>
+</html>

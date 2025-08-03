@@ -1,0 +1,569 @@
+/* superadmin-custom.css - Styles spécifiques pour l'espace SUPERADMIN */
+
+/* ========================================
+   THÈME SOMBRE SUPERADMIN
+   ======================================== */
+
+/* Badge SUPERADMIN distinctif */
+.badge-superadmin {
+    background: linear-gradient(135deg, #ff6b6b 0%, #c92a2a 100%);
+    color: white;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(201, 42, 42, 0.3);
+    padding: 0.35em 0.65em;
+    font-size: 0.75rem;
+}
+
+/* Navbar superadmin */
+.navbar-vertical.navbar-superadmin {
+    background: #1a1a1a;
+    border-right: 1px solid #2a2a2a;
+}
+
+.navbar-superadmin .navbar-brand-image {
+    filter: brightness(0) invert(1);
+}
+
+.navbar-superadmin .nav-link {
+    color: #cccccc;
+}
+
+.navbar-superadmin .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.navbar-superadmin .nav-link.active {
+    color: #ffffff;
+    background-color: rgba(201, 42, 42, 0.1);
+    border-left: 3px solid #c92a2a;
+}
+
+/* Cards dashboard avec bordure distinctive */
+.superadmin-card {
+    border-top: 3px solid #c92a2a;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.superadmin-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* KPI Cards spécifiques */
+.kpi-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(201, 42, 42, 0.1);
+    border-radius: 50%;
+    transform: translate(30px, -30px);
+}
+
+.kpi-card .card-title {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+}
+
+.kpi-card .display-6 {
+    font-weight: 600;
+    color: #c92a2a;
+}
+
+/* Tables financières */
+.table-financial {
+    font-size: 0.875rem;
+}
+
+.table-financial th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.table-financial .amount-positive {
+    color: #2fb344;
+    font-weight: 600;
+}
+
+.table-financial .amount-negative {
+    color: #d63939;
+    font-weight: 600;
+}
+
+.table-financial .amount-total {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+/* Graphiques et charts */
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+
+.chart-legend {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+/* Alertes spécifiques */
+.alert-superadmin {
+    background-color: rgba(201, 42, 42, 0.1);
+    border-color: #c92a2a;
+    color: #c92a2a;
+}
+
+.alert-superadmin .alert-icon {
+    color: #c92a2a;
+}
+
+/* Boutons superadmin */
+.btn-superadmin {
+    background-color: #c92a2a;
+    border-color: #c92a2a;
+    color: white;
+}
+
+.btn-superadmin:hover {
+    background-color: #a61e1e;
+    border-color: #a61e1e;
+    color: white;
+}
+
+/* Entity selector */
+.entity-selector {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.entity-selector .form-select {
+    border: none;
+    background-color: transparent;
+    font-weight: 600;
+}
+
+/* Timeline / Activity feed */
+.timeline-superadmin {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-superadmin::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -21px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #c92a2a;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #e9ecef;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar-superadmin .navbar-brand-image {
+        height: 24px;
+    }
+    
+    .kpi-card .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .table-financial {
+        font-size: 0.75rem;
+    }
+    
+    .entity-selector {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Dark mode override pour superadmin */
+@media (prefers-color-scheme: dark) {
+    .navbar-superadmin {
+        background: #0a0a0a;
+    }
+    
+    .superadmin-card {
+        background-color: #1a1a1a;
+        border-color: #2a2a2a;
+    }
+    
+    .table-financial th {
+        background-color: #2a2a2a;
+        color: #cccccc;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar-superadmin,
+    .btn,
+    .entity-selector {
+        display: none !important;
+    }
+    
+    .superadmin-card {
+        border: 1px solid #dee2e6;
+        page-break-inside: avoid;
+    }
+    
+    .badge-superadmin {
+        background: none;
+        color: #000;
+        border: 1px solid #000;
+    }
+}
+
+/* Animations */
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(201, 42, 42, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(201, 42, 42, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(201, 42, 42, 0);
+    }
+}
+
+.pulse-notification {
+    animation: pulse-red 2s infinite;
+}
+
+/* Widgets spécifiques dashboard */
+.revenue-widget {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.expense-widget {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.profit-widget {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+/* Consolidation styles */
+.consolidation-header {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.consolidation-entity {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.consolidation-entity.active {
+    background-color: #c92a2a;
+    color: white;
+    border-color: #c92a2a;
+}
+
+/* Status indicators */
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.status-indicator.online {
+    background-color: #2fb344;
+}
+
+.status-indicator.offline {
+    background-color: #d63939;
+}
+
+.status-indicator.warning {
+    background-color: #f76707;
+}
+
+/* OCR Upload Zone */
+.ocr-dropzone {
+    border: 2px dashed #c92a2a;
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+    background-color: rgba(201, 42, 42, 0.05);
+    transition: all 0.3s ease;
+}
+
+.ocr-dropzone:hover {
+    background-color: rgba(201, 42, 42, 0.1);
+    border-color: #a61e1e;
+}
+
+.ocr-dropzone.dragover {
+    background-color: rgba(201, 42, 42, 0.2);
+    transform: scale(1.02);
+}
+
+/* ========================================
+   DASHBOARD WIDGETS & CHARTS
+   ======================================== */
+
+/* Timeline styles */
+.timeline {
+    position: relative;
+    padding-left: 40px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e6e7e9;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+}
+
+.timeline-item-animated {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-badge {
+    position: absolute;
+    left: -25px;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #e6e7e9;
+}
+
+.timeline-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+    position: relative;
+}
+
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #f8f9fa;
+}
+
+/* KPI Card animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+}
+
+/* Chart containers */
+.card-chart-bg {
+    height: 40px;
+    margin: -1rem -1.25rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Entity table styles */
+#entities-table .avatar {
+    width: 32px;
+    height: 32px;
+}
+
+#entities-table .amount {
+    font-family: 'Monaco', 'Consolas', monospace;
+    white-space: nowrap;
+}
+
+#entities-table tbody tr:hover {
+    background: rgba(0,0,0,0.02);
+    cursor: pointer;
+}
+
+#entities-table tbody tr.bg-light {
+    font-weight: bold;
+}
+
+/* Performance badges */
+.badge.bg-purple {
+    background-color: #ae3ec9;
+    color: white;
+}
+
+.badge.bg-purple-lt {
+    background-color: #f0d9ff;
+    color: #ae3ec9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .timeline {
+        padding-left: 30px;
+    }
+    
+    .timeline-badge {
+        left: -15px;
+        width: 24px;
+        height: 24px;
+    }
+    
+    .timeline::before {
+        left: 12px;
+    }
+    
+    #entities-table {
+        font-size: 0.875rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .timeline::before {
+        background: #2d3748;
+    }
+    
+    .timeline-content {
+        background: #1a202c;
+        color: #e2e8f0;
+    }
+    
+    .timeline-content::before {
+        border-right-color: #1a202c;
+    }
+    
+    .timeline-badge {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+}
+
+/* Loading animation */
+#loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background: rgba(255,255,255,0.9);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Export button styles */
+.btn-export {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-export::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-export:active::after {
+    width: 300px;
+    height: 300px;
+}

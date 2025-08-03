@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Configuration 2FA - Superadmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .secret-key,
+        .code-input,
+        .recovery-codes code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .setup-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 25px;
+            margin: 0 0.25rem;
+            font-weight: 500;
+            color: var(--tblr-secondary);
+            transition: all 0.3s;
+        }
+        
+        .step.active {
+            background: var(--tblr-red);
+            color: white;
+        }
+        
+        .step.completed {
+            background: var(--tblr-green);
+            color: white;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: white;
+            color: var(--tblr-secondary);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            font-size: 14px;
+        }
+        
+        .step.active .step-number,
+        .step.completed .step-number {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
+        
+        .qr-container {
+            background: var(--tblr-bg-surface);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .qr-code {
+            display: inline-block;
+            padding: 1rem;
+            background: white;
+            border: 2px solid var(--tblr-border-color);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .secret-key {
+            font-size: 18px;
+            letter-spacing: 2px;
+            background: var(--tblr-bg-surface-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+        
+        .app-suggestions {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .app-card {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .app-card:hover {
+            background: var(--tblr-bg-surface-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .code-inputs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .code-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid var(--tblr-border-color);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .code-input:focus {
+            border-color: var(--tblr-red);
+            outline: none;
+            transform: scale(1.05);
+        }
+        
+        .code-input.filled {
+            background: var(--tblr-bg-surface-secondary);
+        }
+        
+        .recovery-codes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .recovery-codes code {
+            padding: 0.5rem;
+            background: var(--tblr-bg-surface-secondary);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar superadmin -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="../dashboard.html">
+                        <img src="../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#navbar-system" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-settings"></i>
+                                </span>
+                                <span class="nav-link-title">Système</span>
+                            </a>
+                            <div class="dropdown-menu show">
+                                <a class="dropdown-item" href="./settings.html">Configuration</a>
+                                <a class="dropdown-item active" href="./2fa-setup.html">2FA Setup</a>
+                                <a class="dropdown-item" href="./integrations.html">Intégrations</a>
+                                <a class="dropdown-item" href="./audit-logs.html">Logs d'Audit</a>
+                                <a class="dropdown-item" href="./backups.html">Sauvegardes</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Configuration système</div>
+                            <h2 class="page-title">
+                                Authentification à deux facteurs
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Progress Steps -->
+                    <div class="setup-steps">
+                        <div class="step active" id="step1">
+                            <span class="step-number">1</span>
+                            Installation App
+                        </div>
+                        <div class="step" id="step2">
+                            <span class="step-number">2</span>
+                            Scanner QR Code
+                        </div>
+                        <div class="step" id="step3">
+                            <span class="step-number">3</span>
+                            Vérification
+                        </div>
+                    </div>
+                    
+                    <!-- Step 1: App Installation -->
+                    <div id="step1Content" class="step-content">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-stamp">
+                                        <div class="card-stamp-icon bg-red">
+                                            <i class="ti ti-device-mobile"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <h3 class="card-title text-center">
+                                            Étape 1 : Installer une application d'authentification
+                                        </h3>
+                                        <p class="text-center text-secondary mb-4">
+                                            Téléchargez l'une de ces applications sur votre smartphone
+                                        </p>
+                                        
+                                        <div class="app-suggestions">
+                                            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank" class="app-card">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Google_Authenticator_icon.svg/512px-Google_Authenticator_icon.svg.png" alt="Google Authenticator" class="app-icon">
+                                                <div class="app-name">Google Authenticator</div>
+                                            </a>
+                                            
+                                            <a href="https://www.microsoft.com/en-us/security/mobile-authenticator-app" target="_blank" class="app-card">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Microsoft_Authenticator_app_icon.png/240px-Microsoft_Authenticator_app_icon.png" alt="Microsoft Authenticator" class="app-icon">
+                                                <div class="app-name">Microsoft Authenticator</div>
+                                            </a>
+                                            
+                                            <a href="https://authy.com/" target="_blank" class="app-card">
+                                                <img src="https://upload.wikimedia.org/wikipedia/en/8/8a/Authy_logo.svg" alt="Authy" class="app-icon">
+                                                <div class="app-name">Authy</div>
+                                            </a>
+                                        </div>
+                                        
+                                        <div class="text-center mt-4">
+                                            <button class="btn btn-primary" onclick="showStep(2)">
+                                                J'ai installé l'application
+                                                <i class="ti ti-chevron-right ms-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: QR Code -->
+                    <div id="step2Content" class="step-content" style="display: none;">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-stamp">
+                                        <div class="card-stamp-icon bg-red">
+                                            <i class="ti ti-qrcode"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <h3 class="card-title text-center">
+                                            Étape 2 : Scanner le QR Code
+                                        </h3>
+                                        
+                                        <div class="qr-container">
+                                            <p class="text-secondary">
+                                                Ouvrez votre application d'authentification et scannez ce QR code
+                                            </p>
+                                            
+                                            <div class="qr-code">
+                                                <div id="qrcode"></div>
+                                            </div>
+                                            
+                                            <div class="mt-4">
+                                                <p class="text-secondary mb-2">
+                                                    Impossible de scanner ? Entrez manuellement cette clé :
+                                                </p>
+                                                <div class="secret-key" id="secretKey">
+                                                    ABCD EFGH IJKL MNOP
+                                                </div>
+                                                <button class="btn btn-ghost-secondary btn-sm" onclick="copySecret()">
+                                                    <i class="ti ti-copy"></i>
+                                                    Copier
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-center gap-2 mt-4">
+                                            <button class="btn btn-ghost-secondary" onclick="showStep(1)">
+                                                <i class="ti ti-chevron-left me-1"></i>
+                                                Retour
+                                            </button>
+                                            <button class="btn btn-primary" onclick="showStep(3)">
+                                                J'ai scanné le code
+                                                <i class="ti ti-chevron-right ms-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Verification -->
+                    <div id="step3Content" class="step-content" style="display: none;">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-stamp">
+                                        <div class="card-stamp-icon bg-red">
+                                            <i class="ti ti-shield-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <h3 class="card-title text-center">
+                                            Étape 3 : Vérification
+                                        </h3>
+                                        <p class="text-center text-secondary mb-4">
+                                            Entrez le code à 6 chiffres affiché dans votre application
+                                        </p>
+                                        
+                                        <form id="verifyForm">
+                                            <div class="mb-3">
+                                                <div class="code-inputs justify-content-center">
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                    <input type="text" class="code-input" maxlength="1" pattern="[0-9]" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="verifyError" class="alert alert-danger d-none">
+                                                Code incorrect. Veuillez réessayer.
+                                            </div>
+                                            
+                                            <div id="verifySuccess" class="alert alert-success d-none">
+                                                <div class="d-flex">
+                                                    <div>
+                                                        <i class="ti ti-check alert-icon"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="alert-title">2FA activé avec succès !</div>
+                                                        <div class="text-secondary">
+                                                            Votre compte est maintenant protégé.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <button type="button" class="btn btn-ghost-secondary" onclick="showStep(2)">
+                                                    <i class="ti ti-chevron-left me-1"></i>
+                                                    Retour
+                                                </button>
+                                                <button type="submit" class="btn btn-primary" id="completeButton">
+                                                    Terminer la configuration
+                                                </button>
+                                            </div>
+                                        </form>
+                                        
+                                        <!-- Recovery Codes -->
+                                        <div id="recoveryCodes" class="mt-4" style="display: none;">
+                                            <hr>
+                                            <h4 class="text-center">Codes de récupération</h4>
+                                            <p class="text-secondary text-center">
+                                                Conservez ces codes en lieu sûr. Ils peuvent être utilisés si vous perdez accès à votre application.
+                                            </p>
+                                            <div class="recovery-codes text-center">
+                                                <code>XXXX-XXXX</code>
+                                                <code>YYYY-YYYY</code>
+                                                <code>ZZZZ-ZZZZ</code>
+                                                <code>AAAA-AAAA</code>
+                                                <code>BBBB-BBBB</code>
+                                                <code>CCCC-CCCC</code>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button class="btn btn-success" onclick="downloadRecoveryCodes()">
+                                                    <i class="ti ti-download"></i>
+                                                    Télécharger les codes
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="../system/audit-logs.html" class="link-secondary">Logs d'audit</a></li>
+                                <li class="list-inline-item"><a href="../system/settings.html" class="link-secondary">Configuration</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Groupe</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="../../assets/js/auth-superadmin.js"></script>
+    <script src="../../assets/js/permissions-superadmin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        let currentStep = 1;
+        let setupData = null;
+        
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                stepEl.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                }
+            });
+            
+            // Show current step
+            document.getElementById(`step${step}Content`).style.display = 'block';
+            currentStep = step;
+            
+            // Generate QR if step 2
+            if (step === 2 && !setupData) {
+                generateQRCode();
+            }
+        }
+        
+        async function generateQRCode() {
+            try {
+                // Get setup data from API
+                setupData = await window.AuthSuperadmin.setupTwoFactor();
+                
+                // Display secret
+                document.getElementById('secretKey').textContent = setupData.manualEntryKey;
+                
+                // Generate QR code
+                new QRCode(document.getElementById("qrcode"), {
+                    text: setupData.qrCodeUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (error) {
+                console.error('Erreur génération QR:', error);
+            }
+        }
+        
+        function copySecret() {
+            const secret = document.getElementById('secretKey').textContent;
+            navigator.clipboard.writeText(secret.replace(/\s/g, ''));
+            
+            // Feedback
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="ti ti-check text-success"></i> Copié !';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        }
+        
+        // Code input handling (same as 2fa-verify.html)
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.code-input');
+            const form = document.getElementById('verifyForm');
+            
+            if (form) {
+                // Navigation entre inputs
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', function(e) {
+                        if (this.value.length === 1) {
+                            this.classList.add('filled');
+                            if (index < inputs.length - 1) {
+                                inputs[index + 1].focus();
+                            }
+                        } else {
+                            this.classList.remove('filled');
+                        }
+                    });
+                    
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    });
+                    
+                    // Permettre paste
+                    input.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        const paste = e.clipboardData.getData('text');
+                        if (/^\d{6}$/.test(paste)) {
+                            paste.split('').forEach((char, i) => {
+                                if (inputs[i]) {
+                                    inputs[i].value = char;
+                                    inputs[i].classList.add('filled');
+                                }
+                            });
+                            inputs[5].focus();
+                        }
+                    });
+                });
+                
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const code = Array.from(inputs).map(input => input.value).join('');
+                    
+                    try {
+                        // Verify code
+                        const result = await window.AuthSuperadmin.verifyTwoFactor(code);
+                        
+                        if (result.success) {
+                            document.getElementById('verifyError').classList.add('d-none');
+                            document.getElementById('verifySuccess').classList.remove('d-none');
+                            document.getElementById('recoveryCodes').style.display = 'block';
+                            document.getElementById('completeButton').disabled = true;
+                        }
+                    } catch (error) {
+                        document.getElementById('verifyError').classList.remove('d-none');
+                        inputs.forEach(input => {
+                            input.value = '';
+                            input.classList.remove('filled');
+                        });
+                        inputs[0].focus();
+                    }
+                });
+            }
+        });
+        
+        function downloadRecoveryCodes() {
+            // Generate text file with recovery codes
+            const codes = ['XXXX-XXXX', 'YYYY-YYYY', 'ZZZZ-ZZZZ', 'AAAA-AAAA', 'BBBB-BBBB', 'CCCC-CCCC']; // En prod, générer vraies codes
+            const content = `CODES DE RÉCUPÉRATION 2FA - SUPERADMIN
+=====================================
+${window.AuthSuperadmin.getCurrentUser().email}
+Généré le : ${new Date().toLocaleString('fr-CH')}
+
+CODES :
+${codes.map((code, i) => `${i + 1}. ${code}`).join('\n')}
+
+IMPORTANT :
+- Chaque code ne peut être utilisé qu'une seule fois
+- Conservez ces codes en lieu sûr
+- Ne les partagez avec personne
+`;
+            
+            // Download
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '2fa-recovery-codes.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

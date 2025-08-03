@@ -1,0 +1,370 @@
+{
+  "date": "2025-08-03T16:05:47.846Z",
+  "operation": "create_95_relations",
+  "collections": {
+    "created": 0,
+    "existing": 12
+  },
+  "relations": {
+    "created": 0,
+    "existing": 22,
+    "failed": 88
+  },
+  "details": {
+    "created": [],
+    "failed": [
+      {
+        "relation": "companies.parent_company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "companies.account_manager_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "companies.primary_contact_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "contracts.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "proposals.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "quotes.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "orders.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "payments.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "departments.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "teams.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "events.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "activities.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "notes.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "files.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "kpis.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "people.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "people.manager_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "people.department_id → departments",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "people.team_id → teams",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "people.role_id → roles",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "activities.assigned_to → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "activities.created_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "notes.author_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "comments.author_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "approvals.approver_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "approvals.requester_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "evaluations.employee_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "evaluations.evaluator_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "goals.assigned_to → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "trainings.trainer_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "skills.person_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "notifications.user_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "audit_logs.user_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "workflows.owner_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "files.uploaded_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "deliverables.assigned_to → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "deliverables.reviewed_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "deliverables.parent_task_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "comments.deliverable_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "files.deliverable_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "activities.deliverable_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "approvals.deliverable_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "time_tracking.deliverable_id → deliverables",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "client_invoices.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "client_invoices.contact_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "supplier_invoices.provider_id → providers",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "supplier_invoices.approved_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "payments.invoice_id → client_invoices",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "payments.bank_transaction_id → bank_transactions",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "expenses.employee_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "expenses.approved_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "expenses.category_id → tags",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "bank_transactions.account_id → settings",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "accounting_entries.transaction_id → bank_transactions",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "reconciliations.bank_transaction_id → bank_transactions",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "reconciliations.invoice_id → client_invoices",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "credits.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "debits.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "support_tickets.requester_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "support_tickets.assigned_to → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "support_tickets.company_id → companies",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "support_tickets.priority_id → tags",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "support_tickets.category_id → tags",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "comments.ticket_id → support_tickets",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "activities.ticket_id → support_tickets",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "files.ticket_id → support_tickets",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "contracts.project_id → projects",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "contracts.sales_person_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "contracts.approved_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "proposals.project_id → projects",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "proposals.created_by → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "quotes.project_id → projects",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "quotes.sales_person_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "orders.project_id → projects",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "orders.contact_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "deliveries.order_id → orders",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "returns.order_id → orders",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "refunds.order_id → orders",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "departments.manager_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "departments.parent_department_id → departments",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "teams.team_lead_id → people",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "teams.department_id → departments",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "roles.department_id → departments",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "trainings.department_id → departments",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "evaluations.period_id → settings",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "goals.period_id → settings",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "goals.team_id → teams",
+        "error": "You don't have permission to access this."
+      },
+      {
+        "relation": "skills.category_id → tags",
+        "error": "You don't have permission to access this."
+      }
+    ]
+  }
+}

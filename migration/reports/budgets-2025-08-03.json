@@ -1,0 +1,16 @@
+{
+  "migration": "budgets",
+  "timestamp": "2025-08-03T06:15:15.145Z",
+  "database_id": "22eadb95-3c6f-809e-b4d8-f937b3bc8bd9",
+  "stats": {
+    "total": 3,
+    "migrated": 3,
+    "failed": 0,
+    "overBudget": 0,
+    "warnings": []
+  },
+  "errors": [],
+  "validation": {
+    "directus_count": "3"
+  }
+}

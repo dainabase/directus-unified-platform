@@ -1,0 +1,28 @@
+{
+  "migration": "subscriptions",
+  "timestamp": "2025-08-03T06:16:12.700Z",
+  "database_id": "231adb95-3c6f-80ba-9608-c9e5fdd4baf9",
+  "stats": {
+    "total": 1,
+    "migrated": 0,
+    "failed": 1,
+    "expiring": 0,
+    "alerts": []
+  },
+  "errors": [
+    {
+      "batch": "0-1",
+      "error": [
+        {
+          "message": "You don't have permission to access this.",
+          "extensions": {
+            "code": "FORBIDDEN"
+          }
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "directus_count": "Failed"
+  }
+}

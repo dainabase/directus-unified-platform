@@ -1,14 +1,14 @@
 # 📊 STATUT MIGRATION : Notion → Directus
 
-**Dernière mise à jour**: 2025-08-03 05:54 UTC  
-**Progression globale**: 8.1% (5/62 bases migrées)
+**Dernière mise à jour**: 2025-08-03 06:20 UTC  
+**Progression globale**: 11.3% (7/62 bases migrées)
 
 ## 🎯 RÉSUMÉ EXÉCUTIF
 
 | Métrique | Statut | Cible |
 |----------|--------|-------|
-| Bases migrées | 5/62 | 100% |
-| Collections créées | 18/48 | 100% |
+| Bases migrées | 7/62 | 100% |
+| Collections créées | 21/48 | 100% |
 | Relations recréées | 0/105 | 100% |
 | Tests passés | 0/156 | 100% |
 | Performance | N/A | <100ms |
@@ -32,15 +32,15 @@
 | content_calendar | DB-CONTENT-CALENDAR | 11 | ✅ Complété | 3 entrées migrées avec succès (100%) - 03/08 |
 | compliance | DB-COMPLIANCE | 11 | ✅ Complété | 3 entrées migrées avec succès (100%) - 03/08 |
 | talents | DB-TALENTS | 11 | ✅ Complété | 3 entrées migrées avec succès (100%) - Fix appliqué 03/08 |
-| interactions | DB-INTERACTIONS CLIENTS | 10 | 🔴 À faire | |
-| budgets | DB-BUDGET-PLANNING | 12 | 🔴 À faire | |
-| subscriptions | DB-SUIVI D'ABONNEMENTS | 14 | 🔴 À faire | |
+| interactions | DB-INTERACTIONS CLIENTS | 10 | ✅ Complété | 3 entrées migrées avec succès (100%) - 03/08 |
+| budgets | DB-BUDGET-PLANNING | 12 | ✅ Complété | 3 entrées migrées avec succès (100%) - 03/08 |
+| subscriptions | DB-SUIVI D'ABONNEMENTS | 14 | ⚠️ Partiel | Collection créée, migration en erreur 403 - 03/08 |
 | alerts | DB-ALERTS-CENTER | 14 | 🔴 À faire | |
 | templates | DB-TEMPLATE-MANAGER | 15 | 🔴 À faire | |
 | products | DB-PRODUITS-HYPERVISUAL | 16 | 🔴 À faire | |
 | resources | DB-ÉQUIPE-RESSOURCES | 17 | 🔴 À faire | |
 
-**Progression Phase 1**: 5/12 (41.7%)
+**Progression Phase 1**: 7.5/12 (62.5%)
 
 ### ⏸️ PHASE 2 : BASES MOYENNES (12-16 août)
 | Module | Collections | Statut |

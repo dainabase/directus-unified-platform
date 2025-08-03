@@ -1,0 +1,15 @@
+{
+  "migration": "interactions",
+  "timestamp": "2025-08-03T06:14:01.769Z",
+  "database_id": "226adb95-3c6f-805f-9095-d4c6278a5f5b",
+  "stats": {
+    "total": 3,
+    "migrated": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "errors": [],
+  "validation": {
+    "directus_count": "3"
+  }
+}

@@ -140,15 +140,24 @@ class InteractionsMigration {
         clientId = this.companiesMap.get(props.Client.relation[0].id) || null;
       }
 
+      // Get title with fallback
+      const title = this.getPropertyValue(props.Title || props.Name || props.Titre, 'title') || 
+                    this.getPropertyValue(props.Description, 'rich_text') ||
+                    'Interaction sans titre';
+
+      // Get date with fallback to today
+      const interactionDate = this.getPropertyValue(props.Date || props['Interaction Date'] || props['Date création'], 'date') || 
+                              new Date().toISOString().split('T')[0];
+
       return {
-        title: this.getPropertyValue(props.Title || props.Name, 'title'),
+        title: title,
         interaction_type: this.getPropertyValue(props['Type'] || props['Interaction Type'], 'select') || 'call',
         client_id: clientId,
-        contact_person: this.getPropertyValue(props['Contact Person'] || props.Contact, 'text'),
-        interaction_date: this.getPropertyValue(props.Date || props['Interaction Date'], 'date'),
-        duration_minutes: this.getPropertyValue(props.Duration || props['Duration (min)'], 'number'),
-        notes: this.getPropertyValue(props.Notes || props.Description, 'rich_text'),
-        status: this.mapStatus(this.getPropertyValue(props.Status, 'select')),
+        contact_person: this.getPropertyValue(props['Contact Person'] || props.Contact || props.Personne, 'text'),
+        interaction_date: interactionDate,
+        duration_minutes: this.getPropertyValue(props.Duration || props['Duration (min)'] || props.Durée, 'number'),
+        notes: this.getPropertyValue(props.Notes || props.Description || props.Remarques, 'rich_text'),
+        status: this.mapStatus(this.getPropertyValue(props.Status || props.Statut, 'select')),
         notion_id: notionItem.id
       };
     } catch (error) {

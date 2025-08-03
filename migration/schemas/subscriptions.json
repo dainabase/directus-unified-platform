@@ -1,0 +1,464 @@
+{
+  "collection": "subscriptions",
+  "meta": {
+    "collection": "subscriptions",
+    "icon": "autorenew",
+    "note": "Service subscriptions and recurring payments",
+    "display_template": "{{service_name}} - {{provider}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": [
+      {
+        "language": "fr-FR",
+        "translation": "Abonnements",
+        "singular": "Abonnement",
+        "plural": "Abonnements"
+      }
+    ],
+    "archive_field": "status",
+    "archive_app_filter": true,
+    "archive_value": "cancelled",
+    "unarchive_value": "active",
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#9C27B0"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "subscriptions",
+    "comment": "Service subscriptions migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "service_name",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Service name"
+        },
+        "required": true,
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "provider",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Provider company"
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "subscription_type",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "SaaS",
+              "value": "saas"
+            },
+            {
+              "text": "License",
+              "value": "license"
+            },
+            {
+              "text": "Support",
+              "value": "support"
+            },
+            {
+              "text": "Hosting",
+              "value": "hosting"
+            },
+            {
+              "text": "Other",
+              "value": "other"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "saas",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "monthly_cost",
+      "type": "decimal",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "0.00",
+          "min": 0
+        },
+        "display": "formatted-value",
+        "display_options": {
+          "format": true,
+          "prefix": "€"
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "numeric_precision": 10,
+        "numeric_scale": 2,
+        "default_value": "0.00"
+      }
+    },
+    {
+      "field": "annual_cost",
+      "type": "decimal",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "0.00"
+        },
+        "display": "formatted-value",
+        "display_options": {
+          "format": true,
+          "prefix": "€"
+        },
+        "readonly": true,
+        "width": "half",
+        "note": "Calculated from monthly cost and billing cycle"
+      },
+      "schema": {
+        "is_nullable": true,
+        "numeric_precision": 10,
+        "numeric_scale": 2
+      }
+    },
+    {
+      "field": "billing_cycle",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Monthly",
+              "value": "monthly"
+            },
+            {
+              "text": "Quarterly",
+              "value": "quarterly"
+            },
+            {
+              "text": "Annual",
+              "value": "annual"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "monthly",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "start_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "renewal_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "width": "half",
+        "note": "Next renewal date"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Active",
+              "value": "active"
+            },
+            {
+              "text": "Cancelled",
+              "value": "cancelled"
+            },
+            {
+              "text": "Trial",
+              "value": "trial"
+            },
+            {
+              "text": "Expiring",
+              "value": "expiring"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Active",
+              "value": "active",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Cancelled",
+              "value": "cancelled",
+              "background": "#9E9E9E",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Trial",
+              "value": "trial",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Expiring",
+              "value": "expiring",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "active",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "category",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Tool",
+              "value": "tool"
+            },
+            {
+              "text": "Service",
+              "value": "service"
+            },
+            {
+              "text": "Infrastructure",
+              "value": "infrastructure"
+            },
+            {
+              "text": "Marketing",
+              "value": "marketing"
+            },
+            {
+              "text": "Other",
+              "value": "other"
+            }
+          ]
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 50
+      }
+    },
+    {
+      "field": "user_count",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Number of users",
+          "min": 0
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "service_url",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "https://service.com"
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 500
+      }
+    },
+    {
+      "field": "responsible_person",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "note": "Person responsible for this subscription"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "alert_renewal",
+      "type": "boolean",
+      "meta": {
+        "interface": "boolean",
+        "special": ["cast-boolean"],
+        "width": "half",
+        "note": "Alert when renewal is approaching"
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": false
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

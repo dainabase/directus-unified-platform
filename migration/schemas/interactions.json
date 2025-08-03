@@ -1,0 +1,335 @@
+{
+  "collection": "interactions",
+  "meta": {
+    "collection": "interactions",
+    "icon": "phone_in_talk",
+    "note": "Client interactions and communication history",
+    "display_template": "{{interaction_type}} - {{interaction_date}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": [
+      {
+        "language": "fr-FR",
+        "translation": "Interactions",
+        "singular": "Interaction",
+        "plural": "Interactions"
+      }
+    ],
+    "archive_field": "status",
+    "archive_app_filter": true,
+    "archive_value": "cancelled",
+    "unarchive_value": "completed",
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#2196F3"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "interactions",
+    "comment": "Client interactions migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Interaction title"
+        },
+        "required": true,
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "interaction_type",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Call",
+              "value": "call"
+            },
+            {
+              "text": "Email",
+              "value": "email"
+            },
+            {
+              "text": "Meeting",
+              "value": "meeting"
+            },
+            {
+              "text": "Chat",
+              "value": "chat"
+            },
+            {
+              "text": "Other",
+              "value": "other"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "call",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "client_id",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "required": false,
+        "note": "Related client company"
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "companies",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "contact_person",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Contact person name"
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "interaction_date",
+      "type": "date",
+      "meta": {
+        "interface": "datetime",
+        "display": "datetime",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false
+      }
+    },
+    {
+      "field": "duration_minutes",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Duration in minutes"
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "notes",
+      "type": "text",
+      "meta": {
+        "interface": "input-rich-text-html",
+        "options": {
+          "toolbar": [
+            "bold",
+            "italic",
+            "underline",
+            "removeformat",
+            "bullist",
+            "numlist",
+            "blockquote",
+            "link",
+            "unlink"
+          ]
+        },
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Completed",
+              "value": "completed"
+            },
+            {
+              "text": "Scheduled",
+              "value": "scheduled"
+            },
+            {
+              "text": "Cancelled",
+              "value": "cancelled"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Completed",
+              "value": "completed",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Scheduled",
+              "value": "scheduled",
+              "background": "#FF9800",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Cancelled",
+              "value": "cancelled",
+              "background": "#9E9E9E",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "scheduled",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "assigned_to",
+      "type": "uuid",
+      "meta": {
+        "interface": "select-dropdown-m2o",
+        "special": ["m2o"],
+        "width": "half",
+        "required": false
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

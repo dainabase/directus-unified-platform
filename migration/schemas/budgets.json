@@ -1,0 +1,441 @@
+{
+  "collection": "budgets",
+  "meta": {
+    "collection": "budgets",
+    "icon": "account_balance_wallet",
+    "note": "Budget planning and financial tracking",
+    "display_template": "{{title}} - {{category}} ({{year}})",
+    "hidden": false,
+    "singleton": false,
+    "translations": [
+      {
+        "language": "fr-FR",
+        "translation": "Budgets",
+        "singular": "Budget",
+        "plural": "Budgets"
+      }
+    ],
+    "archive_field": "status",
+    "archive_app_filter": true,
+    "archive_value": "closed",
+    "unarchive_value": "active",
+    "sort_field": "sort",
+    "accountability": "all",
+    "color": "#4CAF50"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "budgets",
+    "comment": "Budget planning migrated from Notion"
+  },
+  "fields": [
+    {
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true,
+        "field": "id",
+        "special": ["uuid"]
+      },
+      "schema": {
+        "is_primary_key": true,
+        "has_auto_increment": false
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "Budget title"
+        },
+        "required": true,
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": false,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "category",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Marketing",
+              "value": "marketing"
+            },
+            {
+              "text": "IT",
+              "value": "it"
+            },
+            {
+              "text": "Operations",
+              "value": "operations"
+            },
+            {
+              "text": "HR",
+              "value": "hr"
+            },
+            {
+              "text": "R&D",
+              "value": "rd"
+            },
+            {
+              "text": "Sales",
+              "value": "sales"
+            },
+            {
+              "text": "Other",
+              "value": "other"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "operations",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "budget_type",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Annual",
+              "value": "annual"
+            },
+            {
+              "text": "Quarterly",
+              "value": "quarterly"
+            },
+            {
+              "text": "Monthly",
+              "value": "monthly"
+            },
+            {
+              "text": "Project",
+              "value": "project"
+            }
+          ]
+        },
+        "display": "labels",
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "annual",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "amount",
+      "type": "decimal",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "0.00",
+          "min": 0
+        },
+        "display": "formatted-value",
+        "display_options": {
+          "format": true,
+          "prefix": "€",
+          "suffix": ""
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "numeric_precision": 10,
+        "numeric_scale": 2,
+        "default_value": "0.00"
+      }
+    },
+    {
+      "field": "spent_amount",
+      "type": "decimal",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "0.00",
+          "min": 0
+        },
+        "display": "formatted-value",
+        "display_options": {
+          "format": true,
+          "prefix": "€"
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": false,
+        "numeric_precision": 10,
+        "numeric_scale": 2,
+        "default_value": "0.00"
+      }
+    },
+    {
+      "field": "remaining_amount",
+      "type": "decimal",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "0.00"
+        },
+        "display": "formatted-value",
+        "display_options": {
+          "format": true,
+          "prefix": "€",
+          "color": "auto"
+        },
+        "readonly": true,
+        "width": "half",
+        "note": "Calculated: amount - spent_amount"
+      },
+      "schema": {
+        "is_nullable": true,
+        "numeric_precision": 10,
+        "numeric_scale": 2
+      }
+    },
+    {
+      "field": "period",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Q1",
+              "value": "q1"
+            },
+            {
+              "text": "Q2",
+              "value": "q2"
+            },
+            {
+              "text": "Q3",
+              "value": "q3"
+            },
+            {
+              "text": "Q4",
+              "value": "q4"
+            },
+            {
+              "text": "Full Year",
+              "value": "year"
+            }
+          ]
+        },
+        "width": "half"
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 50
+      }
+    },
+    {
+      "field": "year",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "options": {
+          "placeholder": "2025",
+          "min": 2020,
+          "max": 2030
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": 2025
+      }
+    },
+    {
+      "field": "department",
+      "type": "json",
+      "meta": {
+        "interface": "tags",
+        "display": "labels",
+        "width": "full",
+        "note": "Departments involved"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Draft",
+              "value": "draft"
+            },
+            {
+              "text": "Approved",
+              "value": "approved"
+            },
+            {
+              "text": "Active",
+              "value": "active"
+            },
+            {
+              "text": "Closed",
+              "value": "closed"
+            }
+          ]
+        },
+        "display": "labels",
+        "display_options": {
+          "choices": [
+            {
+              "text": "Draft",
+              "value": "draft",
+              "background": "#9E9E9E",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Approved",
+              "value": "approved",
+              "background": "#2196F3",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Active",
+              "value": "active",
+              "background": "#4CAF50",
+              "foreground": "#FFFFFF"
+            },
+            {
+              "text": "Closed",
+              "value": "closed",
+              "background": "#607D8B",
+              "foreground": "#FFFFFF"
+            }
+          ]
+        },
+        "width": "half",
+        "required": true
+      },
+      "schema": {
+        "is_nullable": false,
+        "default_value": "draft",
+        "max_length": 50
+      }
+    },
+    {
+      "field": "notes",
+      "type": "text",
+      "meta": {
+        "interface": "input-rich-text-html",
+        "width": "full"
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "notion_id",
+      "type": "string",
+      "meta": {
+        "interface": "input",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "max_length": 255
+      }
+    },
+    {
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "interface": "input",
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-created"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "interface": "datetime",
+        "readonly": true,
+        "width": "half",
+        "display": "datetime",
+        "special": ["date-updated"]
+      },
+      "schema": {
+        "is_nullable": true
+      }
+    },
+    {
+      "field": "user_created",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-created"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "field": "user_updated",
+      "type": "uuid",
+      "meta": {
+        "special": ["user-updated"],
+        "interface": "select-dropdown-m2o",
+        "readonly": true,
+        "hidden": true
+      },
+      "schema": {
+        "is_nullable": true,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    }
+  ]
+}

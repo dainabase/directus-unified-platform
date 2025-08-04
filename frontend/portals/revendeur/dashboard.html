@@ -108,6 +108,10 @@
                     <div class="nav-item d-none d-md-flex me-3">
                         <div class="btn-list">
                             <span class="badge bg-orange">REVENDEUR</span>
+                            <button onclick="testAPIRevendeur()" class="btn btn-success btn-sm ms-2">
+                                <i class="ti ti-refresh"></i> Test Directus
+                            </button>
+                            <span id="api-result" class="ms-2"></span>
                         </div>
                     </div>
                     <div class="d-none d-md-flex">
@@ -625,6 +629,156 @@
     <script src="../assets/js/revendeur-dashboard.js"></script>
     
     <script>
+        // Fonction pour charger le dashboard revendeur
+        async function loadRevendeurDashboard() {
+            try {
+                // Charger les leads (companies type=lead ou sans type)
+                const companiesResponse = await fetch('/api/directus/items/companies');
+                const companiesData = await companiesResponse.json();
+                
+                // Séparer leads et clients
+                const leads = companiesData.data.filter(c => !c.type || c.type === 'lead' || c.type === 'provider' || c.type === 'partner');
+                const clients = companiesData.data.filter(c => c.type === 'client');
+                
+                // Charger le pipeline (projets pour les ventes)
+                const projectsResponse = await fetch('/api/directus/items/projects');
+                const projectsData = await projectsResponse.json();
+                
+                // Charger les factures pour calculer les commissions
+                const invoicesResponse = await fetch('/api/directus/items/client_invoices?filter[status][_eq]=paid');
+                const invoicesData = await invoicesResponse.json();
+                
+                // Calculer les commissions (10% des factures payées)
+                const totalRevenue = invoicesData.data.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                const commissions = totalRevenue * 0.10;
+                
+                // Afficher les leads
+                const leadsContainer = document.querySelector('.row.row-cards');
+                if (leadsContainer && leads.length > 0) {
+                    const leadsHTML = `
+                        <div class="col-12">
+                            <h2 class="mb-3">Leads & Prospects (${leads.length})</h2>
+                        </div>
+                        ${leads.slice(0, 6).map(lead => `
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card revendeur-card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">${lead.name}</h3>
+                                        <span class="sales-status status-pending">PROSPECT</span>
+                                        <p class="mt-2">${lead.industry || 'Secteur non défini'}</p>
+                                        <p>${lead.email || 'Pas d\'email'}</p>
+                                        ${lead.phone ? `<p><i class="ti ti-phone"></i> ${lead.phone}</p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                    
+                    const newSection = document.createElement('div');
+                    newSection.className = 'row row-cards mt-4';
+                    newSection.innerHTML = leadsHTML;
+                    leadsContainer.parentNode.insertBefore(newSection, leadsContainer.nextSibling);
+                }
+                
+                // Créer le graphique pipeline
+                const pipelineData = {
+                    'Actif': projectsData.data.filter(p => p.status === 'active').length,
+                    'En attente': projectsData.data.filter(p => p.status === 'pending').length,
+                    'Terminé': projectsData.data.filter(p => p.status === 'completed').length
+                };
+                
+                const pipelineHTML = `
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Pipeline des Ventes</h3>
+                                <div id="pipeline-chart" class="mt-3"></div>
+                                <div class="row mt-3">
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-success">${pipelineData['Actif']}</div>
+                                        <small>Projets Actifs</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-warning">${pipelineData['En attente']}</div>
+                                        <small>En Attente</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-info">${pipelineData['Terminé']}</div>
+                                        <small>Terminés</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Afficher les commissions
+                const commissionsHTML = `
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Commissions du Mois</h3>
+                                <div class="commission-amount" style="font-size: 2rem;">
+                                    ${commissions.toLocaleString('fr-CH')} CHF
+                                </div>
+                                <p class="text-muted">Basé sur ${invoicesData.data.length} factures payées</p>
+                                <p>Total des ventes: ${totalRevenue.toLocaleString('fr-CH')} CHF</p>
+                                <div class="progress mt-3">
+                                    <div class="progress-bar bg-orange" style="width: ${Math.min(commissions/5000*100, 100)}%"></div>
+                                </div>
+                                <small>Objectif: 5,000 CHF</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Ajouter pipeline et commissions
+                const container = document.querySelector('.container-xl .row.row-deck');
+                if (container) {
+                    container.insertAdjacentHTML('beforeend', pipelineHTML + commissionsHTML);
+                    
+                    // Créer le graphique simple
+                    setTimeout(() => {
+                        const chartEl = document.getElementById('pipeline-chart');
+                        if (chartEl && typeof ApexCharts !== 'undefined') {
+                            const options = {
+                                series: [pipelineData['Actif'], pipelineData['En attente'], pipelineData['Terminé']],
+                                chart: { type: 'donut', height: 250 },
+                                labels: ['Actifs', 'En attente', 'Terminés'],
+                                colors: ['#10b981', '#f59e0b', '#3b82f6'],
+                                legend: { position: 'bottom' }
+                            };
+                            new ApexCharts(chartEl, options).render();
+                        }
+                    }, 100);
+                }
+                
+                return { 
+                    leads: leads.length, 
+                    clients: clients.length,
+                    pipeline: projectsData.data.length,
+                    commissions: Math.round(commissions)
+                };
+            } catch (error) {
+                console.error('Erreur chargement dashboard:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Test API Revendeur
+        function testAPIRevendeur() {
+            loadRevendeurDashboard().then(result => {
+                if (result.error) {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-danger mt-2">❌ Erreur: ' + result.error + '</div>';
+                } else {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-success mt-2">✅ ' + result.leads + ' leads, ' + 
+                        result.pipeline + ' projets, ' + result.commissions + ' CHF commissions</div>';
+                }
+            });
+        }
+        
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips
@@ -637,6 +791,9 @@
             if (typeof RevendeurDashboard !== 'undefined') {
                 RevendeurDashboard.init();
             }
+            
+            // Charger automatiquement les données
+            loadRevendeurDashboard();
         });
     </script>
 </body>

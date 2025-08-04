@@ -160,10 +160,16 @@ app.use('/revendeur', express.static(path.join(__dirname, 'frontend/portals/reve
 }));
 
 // 5. Assets partagés (Tabler.io, etc)
-app.use('/assets', express.static(path.join(__dirname, 'frontend/shared/assets')));
+app.use('/assets', express.static(path.join(__dirname, 'frontend/assets')));
+app.use('/shared', express.static(path.join(__dirname, 'frontend/shared')));
 app.use('/tabler', express.static(path.join(__dirname, 'frontend/shared/tabler')));
 app.use('/dist', express.static(path.join(__dirname, 'frontend/shared/dist')));
 app.use('/static', express.static(path.join(__dirname, 'frontend/shared/static')));
+
+// 5b. Fichiers statiques à la racine (login.html, etc)
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/login.html'));
+});
 
 // 6. Proxy vers Directus pour l'admin et l'API
 app.use('/admin', createProxyMiddleware({

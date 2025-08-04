@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>[TITRE] - [PORTAIL]</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <link href="../../../assets/css/custom.css" rel="stylesheet">
+    
+    <!-- Preload fonts for better performance -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" as="style">
+</head>
+<body data-bs-theme="light">
+    <!-- Loading overlay -->
+    <div id="page-loader" class="page-loader">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+    
+    <div class="page">
+        <!-- [COPIER NAVBAR/SIDEBAR ICI SELON LE PORTAIL] -->
+        
+        <div class="page-wrapper">
+            <!-- Page header avec breadcrumb -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Breadcrumb -->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb breadcrumb-arrows">
+                                    <li class="breadcrumb-item"><a href="../dashboard.html">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">[PAGE]</li>
+                                </ol>
+                            </nav>
+                            <h2 class="page-title">
+                                <i class="ti ti-[ICON] me-2"></i>
+                                [TITRE PAGE]
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <!-- Actions buttons -->
+                                <button class="btn" onclick="exportData()">
+                                    <i class="ti ti-download"></i> Exporter
+                                </button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-modal">
+                                    <i class="ti ti-plus"></i> Nouveau
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- KPI Cards Row with animations -->
+                    <div class="row row-deck row-cards mb-4 fade-in">
+                        <!-- KPI 1: Total -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kpi-card hover-shadow">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-primary-lt">
+                                        <i class="ti ti-database"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="subheader">Total [ENTITÉ]</div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 count-up" data-target="0">0</div>
+                                        <div class="ms-auto">
+                                            <span class="text-green text-sm">
+                                                <i class="ti ti-trending-up"></i> +12%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="sparkline" id="sparkline-total"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- KPI 2: Active -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kpi-card hover-shadow">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="bg-success text-white avatar">
+                                            <i class="ti ti-check"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="subheader">Actifs</div>
+                                            <div class="h2 mb-0 count-up" data-target="0">0</div>
+                                            <div class="text-success small">
+                                                <span id="active-percent">0%</span> du total
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- KPI 3: Revenue -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kpi-card hover-shadow">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="bg-info text-white avatar">
+                                            <i class="ti ti-currency-dollar"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="subheader">Revenus</div>
+                                            <div class="h2 mb-0" id="revenue-amount">CHF 0</div>
+                                            <div class="text-muted small">Ce mois</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- KPI 4: Alerts -->
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card kpi-card hover-shadow">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="bg-warning text-white avatar status-dot-animated">
+                                            <i class="ti ti-alert-circle"></i>
+                                        </span>
+                                        <div class="ms-3">
+                                            <div class="subheader">Alertes</div>
+                                            <div class="h2 mb-0 text-warning" id="alerts-count">0</div>
+                                            <div class="text-warning small">À traiter</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filters section -->
+                    <div class="card mb-4 hover-shadow">
+                        <div class="card-body py-3">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-auto flex-fill">
+                                    <div class="input-icon">
+                                        <span class="input-icon-addon">
+                                            <i class="ti ti-search"></i>
+                                        </span>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               placeholder="Rechercher..."
+                                               id="filter-search"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="status-filter" id="filter-all" value="" checked>
+                                        <label class="btn btn-sm" for="filter-all">Tous</label>
+                                        
+                                        <input type="radio" class="btn-check" name="status-filter" id="filter-active" value="active">
+                                        <label class="btn btn-sm" for="filter-active">Actifs</label>
+                                        
+                                        <input type="radio" class="btn-check" name="status-filter" id="filter-inactive" value="inactive">
+                                        <label class="btn btn-sm" for="filter-inactive">Inactifs</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-primary btn-sm" onclick="applyFilters()">
+                                        <i class="ti ti-filter"></i> Filtrer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main content area -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter table-hover card-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="sortable" data-sort="name">
+                                                    Nom
+                                                </th>
+                                                <th class="sortable" data-sort="date">
+                                                    Date
+                                                </th>
+                                                <th class="sortable" data-sort="amount">
+                                                    Montant
+                                                </th>
+                                                <th>Statut</th>
+                                                <th class="w-1">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data-table">
+                                            <!-- Data will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <p class="m-0 text-muted">
+                                        Affichage de <span id="showing-count">0</span> résultat(s)
+                                    </p>
+                                    <ul class="pagination m-0 ms-auto" id="pagination">
+                                        <!-- Pagination will be generated here -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center">
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    &copy; 2025 <a href="." class="link-secondary">Dainamics</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    v1.0.0
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Mobile bottom navigation -->
+    <nav class="navbar navbar-light navbar-expand fixed-bottom d-md-none bg-white border-top">
+        <ul class="navbar-nav nav-justified w-100">
+            <li class="nav-item">
+                <a href="../dashboard.html" class="nav-link text-center">
+                    <i class="ti ti-home"></i>
+                    <span class="d-block small">Accueil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-center active">
+                    <i class="ti ti-[ICON]"></i>
+                    <span class="d-block small">[PAGE]</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-center" data-bs-toggle="modal" data-bs-target="#create-modal">
+                    <i class="ti ti-plus"></i>
+                    <span class="d-block small">Ajouter</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="../profile.html" class="nav-link text-center">
+                    <i class="ti ti-user"></i>
+                    <span class="d-block small">Profil</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Create/Edit Modal -->
+    <div class="modal modal-blur fade" id="create-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau [ENTITÉ]</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form fields here -->
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="item-name" placeholder="Entrez le nom">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="item-description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="saveItem()">
+                        <i class="ti ti-check"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast container -->
+    <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+        <!-- Dynamic toasts will appear here -->
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    <script src="../../../assets/js/app.js"></script>
+    <script src="../../../assets/js/auth-directus.js"></script>
+    
+    <script>
+        // Page-specific data
+        let allData = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        
+        // Load data on page load
+        async function loadData() {
+            try {
+                // Show skeleton loader
+                window.App.components.showSkeleton('#data-table', 5);
+                
+                // Fetch data from API
+                const response = await window.App.api.get('/items/[COLLECTION]');
+                allData = response.data || [];
+                
+                // Update KPIs
+                updateKPIs(allData);
+                
+                // Display data
+                displayData(allData);
+                
+                // Initialize sparklines
+                initSparklines();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                window.App.components.showToast('Erreur de chargement des données', 'error');
+                window.App.components.showEmptyState('#data-table', 'Erreur de chargement', 'alert-circle');
+            }
+        }
+        
+        // Update KPI cards
+        function updateKPIs(data) {
+            // Total count
+            document.querySelector('.count-up[data-target]').dataset.target = data.length;
+            
+            // Active count
+            const activeCount = data.filter(item => item.status === 'active').length;
+            document.querySelectorAll('.count-up')[1].dataset.target = activeCount;
+            document.getElementById('active-percent').textContent = Math.round((activeCount / data.length) * 100) + '%';
+            
+            // Revenue (example calculation)
+            const totalRevenue = data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+            document.getElementById('revenue-amount').textContent = window.App.utils.formatCurrency(totalRevenue);
+            
+            // Alerts (example)
+            const alertsCount = data.filter(item => item.requires_attention).length || 0;
+            document.getElementById('alerts-count').textContent = alertsCount;
+            
+            // Trigger count animations
+            document.querySelectorAll('.count-up').forEach(el => {
+                window.App.components.countUp(el);
+            });
+        }
+        
+        // Display data in table
+        function displayData(data) {
+            const tbody = document.getElementById('data-table');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = data.slice(start, end);
+            
+            if (pageData.length === 0) {
+                window.App.components.showEmptyState(tbody, 'Aucune donnée trouvée');
+                return;
+            }
+            
+            tbody.innerHTML = pageData.map(item => `
+                <tr class="fade-in">
+                    <td data-name="${item.name}">
+                        <div class="d-flex py-1 align-items-center">
+                            <span class="avatar me-2">${item.name?.charAt(0) || '?'}</span>
+                            <div class="flex-fill">
+                                <div class="font-weight-medium">${item.name || 'Sans nom'}</div>
+                                <div class="text-muted small truncate">${item.description || ''}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-date="${item.created_at}">
+                        ${new Date(item.created_at).toLocaleDateString('fr-CH')}
+                    </td>
+                    <td data-amount="${item.amount || 0}">
+                        <span class="metric-value">${window.App.utils.formatCurrency(item.amount || 0)}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-${getStatusColor(item.status)}">
+                            ${getStatusLabel(item.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-list flex-nowrap">
+                            <button class="btn btn-sm" onclick="viewItem(${item.id})">
+                                <i class="ti ti-eye"></i>
+                            </button>
+                            <button class="btn btn-sm" onclick="editItem(${item.id})">
+                                <i class="ti ti-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Update count
+            document.getElementById('showing-count').textContent = pageData.length;
+            
+            // Generate pagination
+            generatePagination(data.length);
+        }
+        
+        // Initialize sparklines
+        function initSparklines() {
+            if (window.App.components && typeof ApexCharts !== 'undefined') {
+                const sparklineData = [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5];
+                const sparklineElement = document.getElementById('sparkline-total');
+                if (sparklineElement) {
+                    window.App.components.createSparkline(sparklineElement, sparklineData, '#206bc4');
+                }
+            }
+        }
+        
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('filter-search').value.toLowerCase();
+            const statusFilter = document.querySelector('input[name="status-filter"]:checked').value;
+            
+            let filtered = allData;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(item => 
+                    item.name?.toLowerCase().includes(searchTerm) ||
+                    item.description?.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter) {
+                filtered = filtered.filter(item => item.status === statusFilter);
+            }
+            
+            currentPage = 1;
+            displayData(filtered);
+        }
+        
+        // Pagination
+        function generatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            let html = '';
+            for (let i = 1; i <= totalPages; i++) {
+                html += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                    </li>
+                `;
+            }
+            
+            pagination.innerHTML = html;
+        }
+        
+        function goToPage(page) {
+            currentPage = page;
+            displayData(allData);
+        }
+        
+        // Helper functions
+        function getStatusColor(status) {
+            const colors = {
+                'active': 'success',
+                'inactive': 'secondary',
+                'pending': 'warning',
+                'error': 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+        
+        function getStatusLabel(status) {
+            const labels = {
+                'active': 'Actif',
+                'inactive': 'Inactif',
+                'pending': 'En attente',
+                'error': 'Erreur'
+            };
+            return labels[status] || status;
+        }
+        
+        // CRUD operations
+        async function saveItem() {
+            const name = document.getElementById('item-name').value;
+            const description = document.getElementById('item-description').value;
+            
+            if (!name) {
+                window.App.components.showToast('Veuillez entrer un nom', 'warning');
+                return;
+            }
+            
+            try {
+                // API call would go here
+                window.App.components.showToast('Élément enregistré avec succès', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('create-modal')).hide();
+                loadData();
+            } catch (error) {
+                window.App.components.showToast('Erreur lors de l\'enregistrement', 'error');
+            }
+        }
+        
+        function viewItem(id) {
+            window.App.components.showToast('Affichage de l\'élément ' + id, 'info');
+        }
+        
+        function editItem(id) {
+            window.App.components.showToast('Édition de l\'élément ' + id, 'info');
+        }
+        
+        function deleteItem(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+                window.App.components.showToast('Élément supprimé', 'success');
+                loadData();
+            }
+        }
+        
+        function exportData() {
+            window.App.components.showToast('Export en cours...', 'info');
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            
+            // Search on keyup
+            document.getElementById('filter-search').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter' || this.value.length === 0 || this.value.length > 2) {
+                    applyFilters();
+                }
+            });
+            
+            // Filter on radio change
+            document.querySelectorAll('input[name="status-filter"]').forEach(radio => {
+                radio.addEventListener('change', applyFilters);
+            });
+        });
+    </script>
+</body>
+</html>

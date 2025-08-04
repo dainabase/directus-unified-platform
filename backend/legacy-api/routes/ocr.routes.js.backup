@@ -10,8 +10,7 @@ const { v4: uuidv4 } = require('uuid');
 const { body, validationResult } = require('express-validator');
 const logger = require('../utils/logger');
 const ocrService = require('../services/ocr.service');
-const DirectusAdapter = require('../adapters/directus-adapter');
-const notionService = new DirectusAdapter();
+const notionService = require('../services/notion.service');
 
 const router = express.Router();
 
@@ -153,7 +152,7 @@ router.post('/save-to-notion', [
 
         // Check for duplicate
         if (extractedData.numero) {
-            const existing = await notionService.getItems(documentType, extractedData.numero);
+            const existing = await notionService.searchDocument(documentType, extractedData.numero);
             if (existing) {
                 return res.status(409).json({
                     error: 'Document already exists',

@@ -107,7 +107,7 @@ router.post('/query', async (req, res) => {
 // GET /api/notion/page/:id - Récupérer une page spécifique
 router.get('/page/:id', async (req, res) => {
   try {
-    const page = await notionService.getItems(req.params.id);
+    const page = await notionService.getPage(req.params.id);
     
     // Vérifier que l'utilisateur a accès à cette page
     if (!this.userCanAccessPage(page, req.user)) {
@@ -136,7 +136,7 @@ router.post('/page', async (req, res) => {
     properties.createdBy = req.user.id;
     properties.createdAt = new Date();
     
-    const page = await notionService.createItem(database_id, properties, children);
+    const page = await notionService.createPage(database_id, properties, children);
     res.status(201).json(page);
     
   } catch (error) {
@@ -155,7 +155,7 @@ router.patch('/page/:id', async (req, res) => {
     }
     
     // Vérifier que l'utilisateur peut modifier cette page
-    const page = await notionService.getItems(req.params.id);
+    const page = await notionService.getPage(req.params.id);
     if (!this.userCanEditPage(page, req.user)) {
       return res.status(403).json({ error: 'Modification non autorisée' });
     }
@@ -164,7 +164,7 @@ router.patch('/page/:id', async (req, res) => {
     properties.lastEditedBy = req.user.id;
     properties.lastEditedAt = new Date();
     
-    const updatedPage = await notionService.updateItem(req.params.id, properties);
+    const updatedPage = await notionService.updatePage(req.params.id, properties);
     res.json(updatedPage);
     
   } catch (error) {

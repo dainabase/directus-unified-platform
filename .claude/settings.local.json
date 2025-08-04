@@ -31,7 +31,10 @@
       "Bash(chmod:*)",
       "Bash(./auto-save.sh:*)",
       "Bash(./check-sync.sh:*)",
-      "Bash(./auto-save.sh:*)"
+      "Bash(./auto-save.sh:*)",
+      "Bash(sed:*)",
+      "Bash(cat:*)",
+      "Bash(docker stop:*)"
     ],
     "deny": []
   }

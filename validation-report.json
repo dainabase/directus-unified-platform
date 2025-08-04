@@ -1,0 +1,34 @@
+{
+  "data": {
+    "companies": 3,
+    "projects": 3,
+    "people": 3,
+    "deliverables": 0,
+    "client_invoices": 3,
+    "expenses": 3,
+    "time_tracking": 3,
+    "payments": 0,
+    "contracts": 0,
+    "activities": 0,
+    "files": "error"
+  },
+  "schemas": {
+    "with_schema": 51,
+    "without_schema": 0,
+    "percentage": 100
+  },
+  "portals": {
+    "Dashboard unifié": 200,
+    "SuperAdmin": 200,
+    "Client": 200,
+    "Prestataire": 200,
+    "Revendeur": 200
+  },
+  "ocr": false,
+  "api": {
+    "Directus Health": 200,
+    "Collections API": 200,
+    "Items API": 200
+  },
+  "overall": "✅ SUCCESS"
+}

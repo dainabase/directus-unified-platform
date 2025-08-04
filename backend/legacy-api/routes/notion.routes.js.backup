@@ -6,8 +6,7 @@
 const express = require('express');
 const { body, param, validationResult } = require('express-validator');
 const logger = require('../utils/logger');
-const DirectusAdapter = require('../adapters/directus-adapter');
-const notionService = new DirectusAdapter();
+const notionService = require('../services/notion.service');
 
 const router = express.Router();
 
@@ -53,7 +52,7 @@ router.post('/search', [
 
         const { documentType, query } = req.body;
         
-        const result = await notionService.getItems(documentType, query);
+        const result = await notionService.searchDocument(documentType, query);
 
         res.json({
             success: true,

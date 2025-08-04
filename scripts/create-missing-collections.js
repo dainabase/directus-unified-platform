@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * Script pour créer toutes les collections manquantes nécessaires
- * pour les 95 relations
+ * Script pour créer les collections manquantes nécessaires aux relations
  */
 
 const axios = require('axios');
 
+// Configuration
 const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'DdbRWCe0ID7O-HQfPU_sXJHxASmKUl4E';
+const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
 
+// Client Directus
 const directus = axios.create({
   baseURL: DIRECTUS_URL,
   headers: {
@@ -18,159 +19,128 @@ const directus = axios.create({
   }
 });
 
-// Collections nécessaires pour les 95 relations
-const collectionsNeeded = [
-  'companies', 'people', 'departments', 'teams', 'roles',
-  'contracts', 'proposals', 'quotes', 'orders', 'payments',
-  'events', 'activities', 'notes', 'files', 'kpis',
-  'comments', 'approvals', 'evaluations', 'goals', 'trainings',
-  'skills', 'notifications', 'audit_logs', 'workflows',
-  'deliveries', 'returns', 'refunds', 'credits', 'debits',
-  'bank_transactions', 'accounting_entries', 'reconciliations',
-  'support_tickets', 'tags', 'settings', 'expenses'
+// Collections à créer
+const collectionsToCreate = [
+  'tags',
+  'settings'
 ];
 
+// Fonction pour créer une collection
 async function createCollection(name) {
   try {
-    // Vérifier si existe
-    await directus.get(`/collections/${name}`);
-    return { name, status: 'exists' };
-  } catch (error) {
-    if (error.response?.status === 404) {
-      // Créer la collection
-      try {
-        await directus.post('/collections', {
-          collection: name,
-          meta: {
-            icon: 'folder',
-            display_template: '{{id}}'
-          },
+    console.log(`📦 Création de la collection: ${name}`);
+    
+    const result = await directus.post('/collections', {
+      collection: name,
+      meta: {
+        icon: name === 'tags' ? 'label' : 'settings',
+        hidden: false,
+        singleton: name === 'settings',
+        translations: null,
+        archive_field: null,
+        archive_app_filter: true,
+        archive_value: null,
+        unarchive_value: null,
+        sort_field: null,
+        accountability: 'all',
+        color: null,
+        item_duplication_fields: null,
+        sort: null,
+        group: null,
+        collapse: 'open'
+      },
+      schema: name === 'settings' ? {} : null,
+      fields: name === 'settings' ? [] : [
+        {
+          field: 'id',
+          type: 'uuid',
           schema: {
-            name: name,
-            comment: `Table for ${name}`
+            is_primary_key: true,
+            has_auto_increment: false,
+            is_nullable: false,
+            is_unique: true
           },
-          fields: [
-            {
-              field: 'id',
-              type: 'uuid',
-              schema: {
-                is_primary_key: true
-              },
-              meta: {
-                hidden: true,
-                readonly: true,
-                interface: 'input',
-                special: ['uuid']
-              }
-            },
-            {
-              field: 'name',
-              type: 'string',
-              meta: {
-                interface: 'input',
-                width: 'full'
-              }
-            },
-            {
-              field: 'date_created',
-              type: 'timestamp',
-              meta: {
-                interface: 'datetime',
-                readonly: true,
-                hidden: true,
-                special: ['date-created']
-              }
-            },
-            {
-              field: 'date_updated',
-              type: 'timestamp',
-              meta: {
-                interface: 'datetime',
-                readonly: true,
-                hidden: true,
-                special: ['date-updated']
-              }
-            }
-          ]
-        });
-        return { name, status: 'created' };
-      } catch (createError) {
-        return { 
-          name, 
-          status: 'error', 
-          error: createError.response?.data?.errors?.[0]?.message || createError.message 
-        };
-      }
+          meta: {
+            hidden: true,
+            readonly: true,
+            interface: 'input',
+            display: null,
+            display_options: null,
+            special: ['uuid']
+          }
+        },
+        {
+          field: 'name',
+          type: 'string',
+          schema: {
+            is_nullable: false,
+            max_length: 255
+          },
+          meta: {
+            interface: 'input',
+            special: null,
+            required: true
+          }
+        }
+      ]
+    });
+    
+    console.log(`✅ Collection ${name} créée avec succès`);
+    return { status: 'created', name };
+  } catch (error) {
+    if (error.response?.data?.errors?.[0]?.message?.includes('already exists')) {
+      console.log(`⚠️ Collection ${name} existe déjà`);
+      return { status: 'exists', name };
     }
-    return { 
-      name, 
-      status: 'error', 
-      error: error.response?.data?.errors?.[0]?.message || error.message 
-    };
+    console.error(`❌ Erreur pour ${name}:`, error.response?.data?.errors?.[0]?.message || error.message);
+    return { status: 'error', name, error: error.response?.data?.errors?.[0]?.message || error.message };
   }
 }
 
+// Fonction principale
 async function main() {
-  console.log('🚀 CRÉATION DES COLLECTIONS MANQUANTES');
-  console.log('=' .repeat(60));
-  
-  // Vérifier la connexion
-  try {
-    await directus.get('/server/ping');
-    console.log('✅ Connexion à Directus établie\n');
-  } catch (error) {
-    console.error('❌ Impossible de se connecter à Directus');
-    process.exit(1);
-  }
+  console.log('🚀 Création des collections manquantes\n');
   
   const results = {
     created: [],
-    existing: [],
+    exists: [],
     errors: []
   };
   
-  console.log('📦 Création des collections...\n');
-  
-  for (const collection of collectionsNeeded) {
-    process.stdout.write(`  ${collection}...`);
+  for (const collection of collectionsToCreate) {
     const result = await createCollection(collection);
     
     if (result.status === 'created') {
-      console.log(' ✅ Créée');
-      results.created.push(collection);
+      results.created.push(result.name);
     } else if (result.status === 'exists') {
-      console.log(' ⏭️  Existe déjà');
-      results.existing.push(collection);
+      results.exists.push(result.name);
     } else {
-      console.log(` ❌ Erreur: ${result.error}`);
-      results.errors.push({ collection, error: result.error });
+      results.errors.push(result);
     }
     
-    // Pause pour éviter de surcharger l'API
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Pause entre les créations
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
   
-  // Résumé
-  console.log('\n' + '='.repeat(60));
-  console.log('📊 RÉSUMÉ');
-  console.log('='.repeat(60));
-  
-  console.log(`\n✅ Collections créées : ${results.created.length}`);
+  // Rapport final
+  console.log('\n📊 RAPPORT FINAL:');
+  console.log(`✅ Créées: ${results.created.length}`);
   if (results.created.length > 0) {
-    results.created.forEach(c => console.log(`   - ${c}`));
+    results.created.forEach(name => console.log(`   - ${name}`));
   }
   
-  console.log(`\n⏭️  Collections existantes : ${results.existing.length}`);
+  console.log(`⚠️ Existantes: ${results.exists.length}`);
+  if (results.exists.length > 0) {
+    results.exists.forEach(name => console.log(`   - ${name}`));
+  }
   
   if (results.errors.length > 0) {
-    console.log(`\n❌ Erreurs : ${results.errors.length}`);
-    results.errors.forEach(e => console.log(`   - ${e.collection}: ${e.error}`));
+    console.log(`❌ Erreurs: ${results.errors.length}`);
+    results.errors.forEach(err => console.log(`   - ${err.name}: ${err.error}`));
   }
   
-  console.log('\n✨ Terminé !');
+  console.log('\n✨ Script terminé \!');
 }
 
-main().catch(error => {
-  console.error('❌ Erreur fatale:', error);
-  process.exit(1);
-});
+// Exécution
+main().catch(console.error);

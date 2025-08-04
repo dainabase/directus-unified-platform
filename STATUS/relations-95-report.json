@@ -1,5 +1,5 @@
 {
-  "date": "2025-08-03T19:19:09.236Z",
+  "date": "2025-08-03T20:08:36.268Z",
   "operation": "create_95_relations",
   "collections": {
     "created": 0,
@@ -7,24 +7,12 @@
   },
   "relations": {
     "created": 0,
-    "existing": 22,
-    "failed": 88
+    "existing": 41,
+    "failed": 69
   },
   "details": {
     "created": [],
     "failed": [
-      {
-        "relation": "companies.parent_company_id → companies",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "companies.account_manager_id → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "companies.primary_contact_id → people",
-        "error": "You don't have permission to access this."
-      },
       {
         "relation": "contracts.company_id → companies",
         "error": "You don't have permission to access this."
@@ -74,24 +62,16 @@
         "error": "You don't have permission to access this."
       },
       {
-        "relation": "people.company_id → companies",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "people.manager_id → people",
-        "error": "You don't have permission to access this."
-      },
-      {
         "relation": "people.department_id → departments",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"departments\" doesn't exist."
       },
       {
         "relation": "people.team_id → teams",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"teams\" doesn't exist."
       },
       {
         "relation": "people.role_id → roles",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"roles\" doesn't exist."
       },
       {
         "relation": "activities.assigned_to → people",
@@ -154,18 +134,6 @@
         "error": "You don't have permission to access this."
       },
       {
-        "relation": "deliverables.assigned_to → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "deliverables.reviewed_by → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "deliverables.parent_task_id → deliverables",
-        "error": "You don't have permission to access this."
-      },
-      {
         "relation": "comments.deliverable_id → deliverables",
         "error": "You don't have permission to access this."
       },
@@ -182,26 +150,6 @@
         "error": "You don't have permission to access this."
       },
       {
-        "relation": "time_tracking.deliverable_id → deliverables",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "client_invoices.company_id → companies",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "client_invoices.contact_id → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "supplier_invoices.provider_id → providers",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "supplier_invoices.approved_by → people",
-        "error": "You don't have permission to access this."
-      },
-      {
         "relation": "payments.invoice_id → client_invoices",
         "error": "You don't have permission to access this."
       },
@@ -210,24 +158,12 @@
         "error": "You don't have permission to access this."
       },
       {
-        "relation": "expenses.employee_id → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "expenses.approved_by → people",
-        "error": "You don't have permission to access this."
-      },
-      {
         "relation": "expenses.category_id → tags",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"tags\" doesn't exist."
       },
       {
         "relation": "bank_transactions.account_id → settings",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "accounting_entries.transaction_id → bank_transactions",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"settings\" doesn't exist."
       },
       {
         "relation": "reconciliations.bank_transaction_id → bank_transactions",
@@ -246,24 +182,12 @@
         "error": "You don't have permission to access this."
       },
       {
-        "relation": "support_tickets.requester_id → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "support_tickets.assigned_to → people",
-        "error": "You don't have permission to access this."
-      },
-      {
-        "relation": "support_tickets.company_id → companies",
-        "error": "You don't have permission to access this."
-      },
-      {
         "relation": "support_tickets.priority_id → tags",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"tags\" doesn't exist."
       },
       {
         "relation": "support_tickets.category_id → tags",
-        "error": "You don't have permission to access this."
+        "error": "Invalid payload. Collection \"tags\" doesn't exist."
       },
       {
         "relation": "comments.ticket_id → support_tickets",
@@ -343,27 +267,27 @@
       },
       {
         "relation": "roles.department_id → departments",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       },
       {
         "relation": "trainings.department_id → departments",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       },
       {
         "relation": "evaluations.period_id → settings",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       },
       {
         "relation": "goals.period_id → settings",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       },
       {
         "relation": "goals.team_id → teams",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       },
       {
         "relation": "skills.category_id → tags",
-        "error": "You don't have permission to access this."
+        "error": "Too many requests, retry after 11s."
       }
     ]
   }

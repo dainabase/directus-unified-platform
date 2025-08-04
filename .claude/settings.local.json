@@ -34,7 +34,15 @@
       "Bash(./auto-save.sh:*)",
       "Bash(sed:*)",
       "Bash(cat:*)",
-      "Bash(docker stop:*)"
+      "Bash(docker stop:*)",
+      "Bash(git submodule:*)",
+      "Bash(git tag:*)",
+      "Bash(if [ -n \"$(git status --porcelain)\" ])",
+      "Bash(then git add STATUS/proof-server-running.txt)",
+      "Bash(fi)",
+      "Bash(open http://localhost:3000/client/dashboard.html)",
+      "Bash(open http://localhost:3000/prestataire/dashboard.html)",
+      "Bash(open http://localhost:3000/revendeur/dashboard.html)"
     ],
     "deny": []
   }

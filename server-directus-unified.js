@@ -41,6 +41,97 @@ app.get('/api/directus/items/:collection', async (req, res) => {
   }
 });
 
+// Endpoint OCR pour scanner les factures
+app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, res) => {
+  try {
+    const { image } = req.body; // Base64 image
+    
+    if (!image) {
+      return res.status(400).json({ error: 'Image requise' });
+    }
+    
+    // Appeler OpenAI Vision pour analyser l'image
+    const openaiResponse = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: process.env.OPENAI_MODEL || 'gpt-4-vision-preview',
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: 'Analyse cette facture et extrais: 1) Le montant total en CHF, 2) La date de la facture, 3) Le nom du client ou fournisseur, 4) Le numéro de facture. Retourne uniquement un JSON avec les clés: amount, date, company, invoice_number'
+            },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:image/jpeg;base64,${image}`
+              }
+            }
+          ]
+        }],
+        max_tokens: 500
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    // Parser la réponse
+    const content = openaiResponse.data.choices[0].message.content;
+    let extractedData;
+    try {
+      // Extraire le JSON de la réponse
+      const jsonMatch = content.match(/\{.*\}/s);
+      extractedData = JSON.parse(jsonMatch ? jsonMatch[0] : '{}');
+    } catch (e) {
+      extractedData = {
+        amount: 0,
+        date: new Date().toISOString().split('T')[0],
+        company: 'Non identifié',
+        invoice_number: 'SCAN-' + Date.now()
+      };
+    }
+    
+    // Créer une facture draft dans Directus
+    const invoiceData = {
+      invoice_number: extractedData.invoice_number || 'SCAN-' + Date.now(),
+      amount: parseFloat(extractedData.amount) || 0,
+      currency: 'CHF',
+      status: 'draft',
+      issue_date: extractedData.date || new Date().toISOString().split('T')[0],
+      description: `Facture scannée - ${extractedData.company || 'Client non identifié'}`,
+      ocr_extracted: true,
+      ocr_data: JSON.stringify(extractedData)
+    };
+    
+    // Sauvegarder dans Directus
+    const directusResponse = await axios.post(
+      `${DIRECTUS_URL}/items/client_invoices`,
+      invoiceData,
+      {
+        headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` }
+      }
+    );
+    
+    res.json({
+      success: true,
+      extracted: extractedData,
+      invoice: directusResponse.data.data
+    });
+    
+  } catch (error) {
+    console.error('Erreur OCR:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Erreur lors du scan',
+      details: error.response?.data?.error?.message || error.message 
+    });
+  }
+});
+
 // IMPORTANT : Servir les fichiers statiques EN PREMIER
 // pour éviter les conflits avec Twenty ou autres apps
 

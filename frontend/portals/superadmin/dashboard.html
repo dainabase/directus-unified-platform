@@ -733,10 +733,35 @@
                                             <h3 class="card-title">🤖 OCR Vision AI</h3>
                                         </div>
                                         <div class="card-body">
-                                            <p>Service OCR configuré avec OpenAI Vision (gpt-4o-mini)</p>
-                                            <button class="btn btn-primary" onclick="window.location.href='./documents/vision-ai.html'">
-                                                <i class="ti ti-brain"></i> Accéder à Vision AI
-                                            </button>
+                                            <p>Service OCR configuré avec OpenAI Vision (gpt-4-vision-preview)</p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-primary" onclick="window.location.href='./documents/vision-ai.html'">
+                                                        <i class="ti ti-brain"></i> Accéder à Vision AI
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-success" onclick="openInvoiceScanner()">
+                                                        <i class="ti ti-scan"></i> Scanner une Facture
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Zone de scan OCR -->
+                                            <div id="ocr-scanner" style="display: none;" class="mt-4">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4>Scanner une Facture</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <input type="file" id="invoice-file" accept="image/*" class="form-control mb-3">
+                                                        <button onclick="scanInvoice()" class="btn btn-primary">
+                                                            <i class="ti ti-upload"></i> Analyser la Facture
+                                                        </button>
+                                                        <div id="scan-result" class="mt-3"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -805,6 +830,73 @@
                         result.users + ' utilisateurs</div>';
                 }
             });
+        }
+        
+        // Fonctions OCR Scanner
+        function openInvoiceScanner() {
+            document.getElementById('ocr-scanner').style.display = 'block';
+        }
+        
+        async function scanInvoice() {
+            const fileInput = document.getElementById('invoice-file');
+            const resultDiv = document.getElementById('scan-result');
+            
+            if (!fileInput.files[0]) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Veuillez sélectionner une image</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="alert alert-info">🔄 Analyse en cours...</div>';
+            
+            // Convertir l'image en base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64 = e.target.result.split(',')[1];
+                
+                try {
+                    // Appeler l'endpoint OCR
+                    const response = await fetch('/api/ocr/scan-invoice', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image: base64 })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        resultDiv.innerHTML = `
+                            <div class="alert alert-success">
+                                <h5>✅ Facture scannée avec succès !</h5>
+                                <hr>
+                                <p><strong>Numéro:</strong> ${data.extracted.invoice_number || 'Non trouvé'}</p>
+                                <p><strong>Montant:</strong> ${data.extracted.amount || 0} CHF</p>
+                                <p><strong>Date:</strong> ${data.extracted.date || 'Non trouvée'}</p>
+                                <p><strong>Client/Fournisseur:</strong> ${data.extracted.company || 'Non identifié'}</p>
+                                <hr>
+                                <p class="text-muted">Facture créée dans Directus avec l'ID: ${data.invoice.id}</p>
+                                <button class="btn btn-sm btn-primary" onclick="window.location.reload()">
+                                    Rafraîchir le Dashboard
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="alert alert-danger">
+                                ❌ Erreur: ${data.error}<br>
+                                ${data.details || ''}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            ❌ Erreur de connexion: ${error.message}
+                        </div>
+                    `;
+                }
+            };
+            
+            reader.readAsDataURL(fileInput.files[0]);
         }
         
         document.addEventListener('DOMContentLoaded', async function() {

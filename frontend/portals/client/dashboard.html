@@ -90,6 +90,10 @@
                     <div class="nav-item d-none d-md-flex me-3">
                         <div class="btn-list">
                             <span class="badge bg-blue">CLIENT</span>
+                            <button onclick="testAPI()" class="btn btn-success btn-sm ms-2">
+                                <i class="ti ti-refresh"></i> Test Directus
+                            </button>
+                            <span id="api-result" class="ms-2"></span>
                         </div>
                     </div>
                     <div class="d-none d-md-flex">
@@ -552,6 +556,53 @@
     <script src="../assets/js/client-dashboard.js"></script>
     
     <script>
+        // Test API Directus
+        function testAPI() {
+            fetch('/api/directus/items/companies')
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-success mt-2">✅ ' + d.data.length + ' entreprises trouvées</div>';
+                    
+                    // Afficher les entreprises dans la page
+                    const container = document.getElementById('clients-list') || 
+                                   document.querySelector('.row.row-cards');
+                    
+                    if (container && d.data) {
+                        const companiesHTML = d.data.map(company => `
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card client-card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">${company.name}</h3>
+                                        <p class="text-muted">${company.email || 'Pas d\'email'}</p>
+                                        ${company.phone ? `<p><i class="ti ti-phone"></i> ${company.phone}</p>` : ''}
+                                        ${company.website ? `<p><i class="ti ti-world"></i> <a href="${company.website}" target="_blank">Site web</a></p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        // Injecter après les métriques
+                        const metricsRow = document.querySelector('.row.row-deck.row-cards');
+                        if (metricsRow) {
+                            const newSection = document.createElement('div');
+                            newSection.className = 'row row-cards mt-4';
+                            newSection.innerHTML = `
+                                <div class="col-12">
+                                    <h2 class="mb-3">Entreprises depuis Directus</h2>
+                                </div>
+                                ${companiesHTML}
+                            `;
+                            metricsRow.parentNode.insertBefore(newSection, metricsRow.nextSibling);
+                        }
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-danger mt-2">❌ Erreur: ' + err.message + '</div>';
+                });
+        }
+        
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips
@@ -564,6 +615,9 @@
             if (typeof ClientDashboard !== 'undefined') {
                 ClientDashboard.init();
             }
+            
+            // Auto-test API au chargement
+            testAPI();
         });
     </script>
 </body>

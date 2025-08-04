@@ -104,6 +104,10 @@
                     <div class="nav-item d-none d-md-flex me-3">
                         <div class="btn-list">
                             <span class="badge bg-green">PRESTATAIRE</span>
+                            <button onclick="testAPIPrestataire()" class="btn btn-success btn-sm ms-2">
+                                <i class="ti ti-refresh"></i> Test Directus
+                            </button>
+                            <span id="api-result" class="ms-2"></span>
                         </div>
                     </div>
                     <div class="d-none d-md-flex">
@@ -637,6 +641,94 @@
     <script src="../assets/js/prestataire-dashboard.js"></script>
     
     <script>
+        // Fonction pour charger le dashboard prestataire
+        async function loadPrestataireDashboard() {
+            try {
+                // Charger les missions (projets actifs)
+                const missionsResponse = await fetch('/api/directus/items/projects?filter[status][_eq]=active');
+                const missionsData = await missionsResponse.json();
+                
+                // Charger les factures dues (envoyées)
+                const invoicesResponse = await fetch('/api/directus/items/client_invoices?filter[status][_eq]=sent');
+                const invoicesData = await invoicesResponse.json();
+                
+                // Afficher les missions
+                const missionsContainer = document.querySelector('.row.row-cards');
+                if (missionsContainer && missionsData.data) {
+                    const missionsHTML = `
+                        <div class="col-12">
+                            <h2 class="mb-3">Missions Actives (${missionsData.data.length})</h2>
+                        </div>
+                        ${missionsData.data.map(mission => `
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card prestataire-card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">${mission.name}</h3>
+                                        <div class="mission-status status-active">ACTIVE</div>
+                                        <p class="mt-2">Budget: ${(mission.budget || 0).toLocaleString('fr-CH')} CHF</p>
+                                        <p>Début: ${mission.start_date || 'Non défini'}</p>
+                                        <p>Fin: ${mission.end_date || 'Non défini'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                    
+                    const newSection = document.createElement('div');
+                    newSection.className = 'row row-cards mt-4';
+                    newSection.innerHTML = missionsHTML;
+                    missionsContainer.parentNode.insertBefore(newSection, missionsContainer.nextSibling);
+                }
+                
+                // Afficher les paiements dus
+                if (invoicesData.data && invoicesData.data.length > 0) {
+                    const totalDue = invoicesData.data.reduce((sum, inv) => sum + (inv.amount || 0), 0);
+                    const paymentsHTML = `
+                        <div class="col-12 mt-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>Paiements en attente</h3>
+                                    <div class="metric-value text-warning">${totalDue.toLocaleString('fr-CH')} CHF</div>
+                                    <p>${invoicesData.data.length} factures envoyées</p>
+                                    <div class="mt-3">
+                                        ${invoicesData.data.slice(0, 5).map(inv => `
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>${inv.invoice_number}</span>
+                                                <span class="reward-amount">${(inv.amount || 0).toLocaleString('fr-CH')} CHF</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const container = document.querySelector('.container-xl .row.row-deck');
+                    if (container) {
+                        container.insertAdjacentHTML('beforeend', paymentsHTML);
+                    }
+                }
+                
+                return { missions: missionsData.data.length, invoices: invoicesData.data.length };
+            } catch (error) {
+                console.error('Erreur chargement dashboard:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Test API Prestataire
+        function testAPIPrestataire() {
+            loadPrestataireDashboard().then(result => {
+                if (result.error) {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-danger mt-2">❌ Erreur: ' + result.error + '</div>';
+                } else {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-success mt-2">✅ ' + result.missions + ' missions, ' + result.invoices + ' factures</div>';
+                }
+            });
+        }
+        
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips
@@ -649,6 +741,9 @@
             if (typeof PrestataireDashboard !== 'undefined') {
                 PrestataireDashboard.init();
             }
+            
+            // Charger automatiquement les données
+            loadPrestataireDashboard();
         });
     </script>
 </body>

@@ -6,11 +6,16 @@
 
 const express = require('express');
 const path = require('path');
+const axios = require('axios');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.UNIFIED_PORT || 3000;
+
+// Configuration Directus
+const DIRECTUS_URL = 'http://localhost:8055';
+const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
 
 console.log('🚀 Démarrage du serveur Directus Unifié...');
 
@@ -18,6 +23,22 @@ console.log('🚀 Démarrage du serveur Directus Unifié...');
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
+});
+
+// Proxy simple vers Directus
+app.get('/api/directus/items/:collection', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${DIRECTUS_URL}/items/${req.params.collection}`,
+      { 
+        headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` },
+        params: req.query
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // IMPORTANT : Servir les fichiers statiques EN PREMIER

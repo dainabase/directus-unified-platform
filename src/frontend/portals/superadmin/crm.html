@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>CRM Multi-Entreprises - SuperAdmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* Glassmorphism style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        [data-bs-theme="light"] .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        /* Score badges */
+        .score-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .score-high { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .score-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .score-low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- MENU SUPERADMIN -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard Consolidé</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION CRM -->
+                        <li class="nav-item dropdown active">
+                            <a class="nav-link dropdown-toggle" href="#navbar-crm" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-users"></i>
+                                </span>
+                                <span class="nav-link-title">CRM Unifié</span>
+                            </a>
+                            <div class="dropdown-menu show" data-permission="superadmin.crm.view">
+                                <a class="dropdown-item active" href="./crm.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-primary">
+                                        <i class="ti ti-address-book"></i>
+                                    </span>
+                                    CRM Multi-Entreprises
+                                </a>
+                                <a class="dropdown-item" href="./crm/contacts.html">Contacts</a>
+                                <a class="dropdown-item" href="./crm/companies.html">Entreprises</a>
+                                <a class="dropdown-item" href="./crm/opportunities.html">Opportunités</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION DEVIS & FACTURES -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./invoicing.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-invoice"></i>
+                                </span>
+                                <span class="nav-link-title">Devis & Factures</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">CRM Unifié</div>
+                            <h2 class="page-title">
+                                CRM Multi-Entreprises
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-contact">
+                                    <i class="ti ti-plus"></i>
+                                    Nouveau Contact
+                                </button>
+                                <button class="btn btn-white">
+                                    <i class="ti ti-file-import"></i>
+                                    Importer
+                                </button>
+                                <button class="btn btn-white">
+                                    <i class="ti ti-file-export"></i>
+                                    Exporter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Stats Cards -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-primary text-white avatar">
+                                                <i class="ti ti-users"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Total Contacts</div>
+                                            <div class="h2 mb-0">1,352</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-green text-white avatar">
+                                                <i class="ti ti-building"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Entreprises</div>
+                                            <div class="h2 mb-0">248</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-yellow text-white avatar">
+                                                <i class="ti ti-target"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Opportunités</div>
+                                            <div class="h2 mb-0">€850K</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-azure text-white avatar">
+                                                <i class="ti ti-trending-up"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Taux Conversion</div>
+                                            <div class="h2 mb-0">23.5%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtres -->
+                    <div class="card glass-card mb-3">
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Entreprise</label>
+                                    <select class="form-select" id="filter-company">
+                                        <option value="">Toutes les entreprises</option>
+                                        <option value="hypervisual">HyperVisual</option>
+                                        <option value="dynamics">Dynamics</option>
+                                        <option value="lexia">Lexia</option>
+                                        <option value="nkreality">NKReality</option>
+                                        <option value="etekout">Etekout</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-select" id="filter-type">
+                                        <option value="">Tous les types</option>
+                                        <option value="client">Client</option>
+                                        <option value="prospect">Prospect</option>
+                                        <option value="fournisseur">Fournisseur</option>
+                                        <option value="partenaire">Partenaire</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">Tous les statuts</option>
+                                        <option value="active">Actif</option>
+                                        <option value="inactive">Inactif</option>
+                                        <option value="pending">En attente</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Rechercher</label>
+                                    <input type="text" class="form-control" placeholder="Nom, email, téléphone..." id="search-input">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button class="btn btn-primary w-100" onclick="filterContacts()">
+                                        <i class="ti ti-filter"></i> Filtrer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des contacts -->
+                    <div class="card glass-card">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>Contact</th>
+                                        <th>Entreprise</th>
+                                        <th>Type</th>
+                                        <th>Email</th>
+                                        <th>Téléphone</th>
+                                        <th>Dernière interaction</th>
+                                        <th>Score</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contacts-table">
+                                    <!-- Sera rempli par JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <p class="m-0 text-muted">Affichage de <span id="showing-count">1</span> à <span id="showing-to">10</span> sur <span id="total-count">1,352</span> contacts</p>
+                            <ul class="pagination m-0 ms-auto">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                        <i class="ti ti-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="ti ti-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Nouveau Contact -->
+    <div class="modal modal-blur fade" id="modal-contact" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau Contact</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contact-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Prénom</label>
+                                    <input type="text" class="form-control" name="firstname" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nom</label>
+                                    <input type="text" class="form-control" name="lastname" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="tel" class="form-control" name="phone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Entreprise</label>
+                                    <select class="form-select" name="company" required>
+                                        <option value="">Sélectionner une entreprise</option>
+                                        <option value="hypervisual">HyperVisual</option>
+                                        <option value="dynamics">Dynamics</option>
+                                        <option value="lexia">Lexia</option>
+                                        <option value="nkreality">NKReality</option>
+                                        <option value="etekout">Etekout</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-select" name="type" required>
+                                        <option value="">Sélectionner un type</option>
+                                        <option value="client">Client</option>
+                                        <option value="prospect">Prospect</option>
+                                        <option value="fournisseur">Fournisseur</option>
+                                        <option value="partenaire">Partenaire</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fonction</label>
+                            <input type="text" class="form-control" name="position">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" name="notes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary ms-auto" form="contact-form">
+                        <i class="ti ti-plus"></i>
+                        Créer le contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <script>
+        // Données simulées pour les contacts
+        const contactsData = [
+            {
+                id: 1,
+                firstname: 'Marie',
+                lastname: 'Dupont',
+                email: 'marie.dupont@techcorp.com',
+                phone: '+33 6 12 34 56 78',
+                company: 'HyperVisual',
+                type: 'client',
+                position: 'Directrice Marketing',
+                lastInteraction: '2024-01-15',
+                score: 85
+            },
+            {
+                id: 2,
+                firstname: 'Jean',
+                lastname: 'Martin',
+                email: 'jean.martin@innovate.fr',
+                phone: '+33 6 98 76 54 32',
+                company: 'Dynamics',
+                type: 'prospect',
+                position: 'CEO',
+                lastInteraction: '2024-01-10',
+                score: 72
+            },
+            {
+                id: 3,
+                firstname: 'Sophie',
+                lastname: 'Bernard',
+                email: 'sophie.bernard@design.ch',
+                phone: '+41 79 123 45 67',
+                company: 'Lexia',
+                type: 'client',
+                position: 'Responsable Achats',
+                lastInteraction: '2024-01-08',
+                score: 90
+            },
+            {
+                id: 4,
+                firstname: 'Pierre',
+                lastname: 'Rousseau',
+                email: 'p.rousseau@agency.com',
+                phone: '+33 6 45 67 89 01',
+                company: 'NKReality',
+                type: 'partenaire',
+                position: 'Directeur Commercial',
+                lastInteraction: '2024-01-05',
+                score: 65
+            },
+            {
+                id: 5,
+                firstname: 'Amélie',
+                lastname: 'Lefebvre',
+                email: 'amelie.l@supplier.fr',
+                phone: '+33 6 78 90 12 34',
+                company: 'Etekout',
+                type: 'fournisseur',
+                position: 'Account Manager',
+                lastInteraction: '2024-01-03',
+                score: 78
+            }
+        ];
+        
+        // Afficher les contacts
+        function displayContacts(contacts = contactsData) {
+            const tbody = document.getElementById('contacts-table');
+            
+            tbody.innerHTML = contacts.map(contact => {
+                const scoreClass = contact.score >= 80 ? 'score-high' : contact.score >= 60 ? 'score-medium' : 'score-low';
+                const typeClass = {
+                    'client': 'bg-green',
+                    'prospect': 'bg-azure',
+                    'fournisseur': 'bg-orange',
+                    'partenaire': 'bg-purple'
+                }[contact.type] || 'bg-secondary';
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="d-flex py-1 align-items-center">
+                                <span class="avatar me-2" style="background-image: url(https://eu.ui-avatars.com/api/?name=${contact.firstname}+${contact.lastname}&background=random)"></span>
+                                <div class="flex-fill">
+                                    <div class="font-weight-medium">${contact.firstname} ${contact.lastname}</div>
+                                    <div class="text-muted">${contact.position}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-primary-lt">${contact.company}</span>
+                        </td>
+                        <td>
+                            <span class="badge ${typeClass}">${contact.type}</span>
+                        </td>
+                        <td class="text-muted">
+                            <a href="mailto:${contact.email}" class="text-reset">${contact.email}</a>
+                        </td>
+                        <td class="text-muted">${contact.phone}</td>
+                        <td class="text-muted">
+                            ${new Date(contact.lastInteraction).toLocaleDateString('fr-FR')}
+                        </td>
+                        <td>
+                            <div class="score-badge ${scoreClass}">${contact.score}</div>
+                        </td>
+                        <td>
+                            <div class="btn-list flex-nowrap">
+                                <a href="#" class="btn btn-white btn-sm">
+                                    Voir
+                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-white btn-sm dropdown-toggle align-text-top" data-bs-toggle="dropdown">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="ti ti-edit me-2"></i>Modifier
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="ti ti-mail me-2"></i>Envoyer un email
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="ti ti-calendar me-2"></i>Planifier un RDV
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="#">
+                                            <i class="ti ti-trash me-2"></i>Supprimer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Filtrer les contacts
+        function filterContacts() {
+            const company = document.getElementById('filter-company').value;
+            const type = document.getElementById('filter-type').value;
+            const status = document.getElementById('filter-status').value;
+            const search = document.getElementById('search-input').value.toLowerCase();
+            
+            let filtered = contactsData;
+            
+            if (company) {
+                filtered = filtered.filter(c => c.company.toLowerCase() === company);
+            }
+            
+            if (type) {
+                filtered = filtered.filter(c => c.type === type);
+            }
+            
+            if (search) {
+                filtered = filtered.filter(c => 
+                    c.firstname.toLowerCase().includes(search) ||
+                    c.lastname.toLowerCase().includes(search) ||
+                    c.email.toLowerCase().includes(search) ||
+                    c.phone.includes(search)
+                );
+            }
+            
+            displayContacts(filtered);
+            
+            // Mettre à jour les compteurs
+            document.getElementById('showing-count').textContent = '1';
+            document.getElementById('showing-to').textContent = Math.min(10, filtered.length);
+            document.getElementById('total-count').textContent = filtered.length;
+        }
+        
+        // Gérer le formulaire de nouveau contact
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupérer les données du formulaire
+            const formData = new FormData(this);
+            const newContact = {
+                id: contactsData.length + 1,
+                firstname: formData.get('firstname'),
+                lastname: formData.get('lastname'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                company: formData.get('company'),
+                type: formData.get('type'),
+                position: formData.get('position'),
+                notes: formData.get('notes'),
+                lastInteraction: new Date().toISOString().split('T')[0],
+                score: Math.floor(Math.random() * 40) + 60
+            };
+            
+            // Ajouter le contact
+            contactsData.unshift(newContact);
+            displayContacts();
+            
+            // Fermer le modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modal-contact'));
+            modal.hide();
+            
+            // Réinitialiser le formulaire
+            this.reset();
+            
+            // Afficher un message de succès
+            console.log('Contact créé:', newContact);
+        });
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            displayContacts();
+        });
+    </script>
+</body>
+</html>

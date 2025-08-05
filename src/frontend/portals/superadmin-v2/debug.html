@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Dashboard SuperAdmin</title>
+    
+    <!-- CSS avec contenu inline pour debug -->
+    <style>
+        /* Variables CSS */
+        :root {
+            /* Couleurs */
+            --color-primary: #6366F1;
+            --color-primary-hover: #4F46E5;
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-danger: #EF4444;
+            --color-info: #3B82F6;
+            
+            /* Backgrounds */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: #F3F4F6;
+            
+            /* Textes */
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+            
+            /* Bordures */
+            --border-color: #E5E7EB;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            
+            /* Ombres */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            /* Espacements */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Typographie */
+            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 300ms ease;
+        }
+
+        /* Reset et base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            line-height: 1.6;
+        }
+
+        /* Layout principal */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .dashboard-header {
+            grid-column: 1 / -1;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .dashboard-title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Sidebar */
+        .dashboard-sidebar {
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+
+        /* Main content */
+        .dashboard-main {
+            padding: var(--spacing-xl);
+            overflow-y: auto;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .kpi-card {
+            background: var(--bg-primary);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-primary {
+            border-top: 4px solid var(--color-primary);
+        }
+
+        .kpi-success {
+            border-top: 4px solid var(--color-success);
+        }
+
+        .kpi-warning {
+            border-top: 4px solid var(--color-warning);
+        }
+
+        .kpi-info {
+            border-top: 4px solid var(--color-info);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .kpi-label {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin: var(--spacing-sm) 0;
+        }
+
+        .kpi-change {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            color: var(--color-success);
+        }
+
+        .test-info {
+            background: #e7f5ff;
+            border: 1px solid #74c0fc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #1971c2;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Dashboard SuperAdmin - Debug</h1>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <h3>Navigation</h3>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+                <li style="margin-bottom: 10px;">Dashboard</li>
+                <li style="margin-bottom: 10px;">Factures</li>
+                <li style="margin-bottom: 10px;">Banking</li>
+                <li style="margin-bottom: 10px;">ERP</li>
+                <li style="margin-bottom: 10px;">Marketing</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="test-info">
+                <h2>✅ Page de débogage chargée correctement</h2>
+                <p>Cette page utilise le CSS inline pour éviter les problèmes de chargement.</p>
+                <p>Si cette page s'affiche correctement, le problème vient du chargement des fichiers CSS externes.</p>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card kpi-primary">
+                    <div class="kpi-header">
+                        <span class="kpi-label">CA TOTAL</span>
+                    </div>
+                    <div class="kpi-value">€2.45M</div>
+                    <div class="kpi-change">
+                        <span>+€245K vs mois dernier</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card kpi-success">
+                    <div class="kpi-header">
+                        <span class="kpi-label">CROISSANCE</span>
+                    </div>
+                    <div class="kpi-value">+23.5%</div>
+                </div>
+
+                <div class="kpi-card kpi-warning">
+                    <div class="kpi-header">
+                        <span class="kpi-label">TRÉSORERIE</span>
+                    </div>
+                    <div class="kpi-value">€892K</div>
+                </div>
+
+                <div class="kpi-card kpi-info">
+                    <div class="kpi-header">
+                        <span class="kpi-label">OBJECTIF ANNUEL</span>
+                    </div>
+                    <div class="kpi-value">87%</div>
+                </div>
+            </div>
+
+            <h3>Test des liens vers les fichiers</h3>
+            <ul>
+                <li><a href="index.html">index.html (version complète)</a></li>
+                <li><a href="css/variables.css">variables.css</a></li>
+                <li><a href="css/main.css">main.css</a></li>
+                <li><a href="css/responsive.css">responsive.css</a></li>
+                <li><a href="js/app-combined.js">app-combined.js</a></li>
+            </ul>
+        </main>
+    </div>
+</body>
+</html>

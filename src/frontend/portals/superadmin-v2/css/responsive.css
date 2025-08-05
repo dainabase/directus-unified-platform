@@ -1,0 +1,109 @@
+/* Tablet */
+@media (max-width: 1024px) {
+    .dashboard-container {
+        grid-template-columns: 200px 1fr;
+    }
+    
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .header-center {
+        display: none;
+    }
+    
+    .dashboard-title {
+        font-size: var(--font-size-lg);
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-sidebar {
+        position: fixed;
+        left: -260px;
+        top: 70px;
+        bottom: 0;
+        width: 260px;
+        transition: left var(--transition-base);
+        z-index: 99;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dashboard-sidebar.open {
+        left: 0;
+    }
+    
+    /* Overlay mobile */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 98;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+    
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-right .user-name {
+        display: none;
+    }
+    
+    .dashboard-main {
+        padding: var(--spacing-md);
+    }
+    
+    .company-performance,
+    .alerts-section {
+        padding: var(--spacing-md);
+    }
+    
+    .performance-item {
+        flex-wrap: wrap;
+    }
+    
+    .company-metrics {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: var(--spacing-sm);
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .dashboard-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .kpi-value {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .alert-item {
+        flex-wrap: wrap;
+    }
+    
+    .btn-action {
+        width: 100%;
+        margin-top: var(--spacing-xs);
+        margin-left: 0;
+    }
+}

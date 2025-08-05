@@ -61,7 +61,11 @@
       "Bash(touch:*)",
       "Bash(git clone:*)",
       "Bash(docker network:*)",
-      "Bash(docker pull:*)"
+      "Bash(docker pull:*)",
+      "Bash(npx http-server:*)",
+      "Bash(open http://localhost:3000/src/frontend/portals/superadmin-v2/index.html)",
+      "Bash(python3:*)",
+      "Bash(open:*)"
     ],
     "deny": []
   }

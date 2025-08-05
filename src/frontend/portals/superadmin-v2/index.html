@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperAdmin - Executive Dashboard</title>
+    
+    <!-- Font moderne -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/lucide@latest/font/lucide.min.css">
+    
+    <!-- Nos CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Container principal -->
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <h1 class="dashboard-title">Executive Dashboard</h1>
+            </div>
+            
+            <div class="header-center">
+                <!-- Sélecteur d'entreprise -->
+                <div class="company-selector">
+                    <select id="companySelect" class="select-primary">
+                        <option value="all">🏢 Toutes les entreprises</option>
+                        <option value="hypervisual">📹 HyperVisual</option>
+                        <option value="dynamics">💡 Dynamics</option>
+                        <option value="lexia">🗣️ Lexia</option>
+                        <option value="nkreality">🏠 NKReality</option>
+                        <option value="etekout">🛒 Etekout</option>
+                    </select>
+                </div>
+                
+                <!-- Sélecteur de période -->
+                <div class="period-selector">
+                    <select id="periodSelect" class="select-primary">
+                        <option value="30">30 derniers jours</option>
+                        <option value="90">3 derniers mois</option>
+                        <option value="365">12 derniers mois</option>
+                        <option value="custom">Période personnalisée</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <!-- Alertes -->
+                <button class="header-btn alerts-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="badge badge-danger">3</span>
+                </button>
+                
+                <!-- Messages -->
+                <button class="header-btn messages-btn">
+                    <i data-lucide="message-square"></i>
+                    <span class="badge">5</span>
+                </button>
+                
+                <!-- Profil -->
+                <div class="user-profile">
+                    <span class="user-name">Jean-Marie D.</span>
+                    <div class="user-avatar">JM</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <!-- Executive -->
+                <div class="nav-section">
+                    <h3 class="nav-section-title">EXECUTIVE</h3>
+                    <a href="#" class="nav-item active">
+                        <i data-lucide="home"></i>
+                        <span>Vue Consolidée</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>Tableau de Bord</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="zap"></i>
+                        <span>Centre d'Alertes</span>
+                    </a>
+                </div>
+                
+                <!-- Finances -->
+                <div class="nav-section">
+                    <h3 class="nav-section-title">FINANCES</h3>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="wallet"></i>
+                        <span>Trésorerie</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="trending-up"></i>
+                        <span>P&L Consolidé</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="credit-card"></i>
+                        <span>Banking</span>
+                    </a>
+                </div>
+                
+                <!-- Opérations -->
+                <div class="nav-section">
+                    <h3 class="nav-section-title">OPÉRATIONS</h3>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="file-text"></i>
+                        <span>Factures</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="package"></i>
+                        <span>ERP</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i data-lucide="mail"></i>
+                        <span>Marketing</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- KPIs principaux -->
+            <section class="kpi-grid">
+                <div class="kpi-card kpi-primary">
+                    <div class="kpi-header">
+                        <span class="kpi-label">CA TOTAL</span>
+                        <i data-lucide="euro"></i>
+                    </div>
+                    <div class="kpi-value">€2.45M</div>
+                    <div class="kpi-change positive">
+                        <i data-lucide="trending-up"></i>
+                        <span>+€245K vs mois dernier</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-label">CROISSANCE</span>
+                        <i data-lucide="chart-line"></i>
+                    </div>
+                    <div class="kpi-value">+23.5%</div>
+                    <div class="kpi-change positive">
+                        <span>vs même période 2024</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-label">TRÉSORERIE</span>
+                        <i data-lucide="banknote"></i>
+                    </div>
+                    <div class="kpi-value">€892K</div>
+                    <div class="kpi-change neutral">
+                        <span>3.2 mois de BFR</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-label">OBJECTIF</span>
+                        <i data-lucide="target"></i>
+                    </div>
+                    <div class="kpi-value">87%</div>
+                    <div class="kpi-progress">
+                        <div class="progress-bar" style="width: 87%"></div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Performance par entreprise -->
+            <section class="company-performance">
+                <h2 class="section-title">Performance des 5 entreprises</h2>
+                <div class="performance-list">
+                    <div class="performance-item">
+                        <div class="company-icon">📹</div>
+                        <div class="company-info">
+                            <h4>HyperVisual</h4>
+                            <div class="performance-bar">
+                                <div class="bar-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="company-metrics">
+                            <span class="metric-value">€458K</span>
+                            <span class="metric-change positive">▲+18%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-item">
+                        <div class="company-icon">💡</div>
+                        <div class="company-info">
+                            <h4>Dynamics</h4>
+                            <div class="performance-bar">
+                                <div class="bar-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="company-metrics">
+                            <span class="metric-value">€623K</span>
+                            <span class="metric-change positive">▲+32%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-item">
+                        <div class="company-icon">🗣️</div>
+                        <div class="company-info">
+                            <h4>Lexia</h4>
+                            <div class="performance-bar">
+                                <div class="bar-fill" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <div class="company-metrics">
+                            <span class="metric-value">€384K</span>
+                            <span class="metric-change positive">▲+12%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-item">
+                        <div class="company-icon">🏠</div>
+                        <div class="company-info">
+                            <h4>NKReality</h4>
+                            <div class="performance-bar">
+                                <div class="bar-fill" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="company-metrics">
+                            <span class="metric-value">€789K</span>
+                            <span class="metric-change positive">▲+45%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-item">
+                        <div class="company-icon">🛒</div>
+                        <div class="company-info">
+                            <h4>Etekout</h4>
+                            <div class="performance-bar">
+                                <div class="bar-fill" style="width: 68%"></div>
+                            </div>
+                        </div>
+                        <div class="company-metrics">
+                            <span class="metric-value">€196K</span>
+                            <span class="metric-change negative">▼-3%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Alertes critiques -->
+            <section class="alerts-section">
+                <h2 class="section-title">
+                    <i data-lucide="alert-triangle"></i>
+                    Actions Requises
+                </h2>
+                <div class="alerts-list">
+                    <div class="alert-item alert-warning">
+                        <i data-lucide="trending-down"></i>
+                        <span>Etekout: Baisse CA -3% - Analyser urgence</span>
+                        <button class="btn-action">Voir détails</button>
+                    </div>
+                    <div class="alert-item alert-danger">
+                        <i data-lucide="dollar-sign"></i>
+                        <span>3 factures impayées > 60 jours (€127K total)</span>
+                        <button class="btn-action">Relancer</button>
+                    </div>
+                    <div class="alert-item alert-warning">
+                        <i data-lucide="users"></i>
+                        <span>5 congés en attente de validation</span>
+                        <button class="btn-action">Valider</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/app-combined.js"></script>
+</body>
+</html>

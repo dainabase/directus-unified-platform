@@ -428,3 +428,75 @@
     transform: translateX(24px);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+
+/* ===== Banking Module Styles ===== */
+.glass-effect-strong {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Animations nombre */
+.number-change {
+  animation: numberPulse 0.5s ease-in-out;
+}
+
+@keyframes numberPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: var(--tblr-primary); }
+  100% { transform: scale(1); }
+}
+
+/* Modal fullscreen amélioré */
+.modal-fullscreen .modal-content {
+  border: none;
+  border-radius: 0;
+}
+
+.modal-fullscreen .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+
+/* Tabs custom */
+.nav-tabs-lg .nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+}
+
+.nav-tabs-lg .nav-link.active {
+  background: rgba(32, 107, 196, 0.1);
+  border-bottom-color: var(--tblr-primary);
+}
+
+/* Cards banking */
+.card.glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Status badges */
+.badge-outline {
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-fullscreen .modal-header {
+    flex-wrap: wrap;
+  }
+  
+  #companySelector {
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+}

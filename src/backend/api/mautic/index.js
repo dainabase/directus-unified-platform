@@ -1,0 +1,222 @@
+const axios = require('axios');
+const qs = require('querystring');
+
+class MauticAPI {
+  constructor(config) {
+    this.baseURL = config.baseURL || 'http://localhost:8084';
+    this.username = config.username;
+    this.password = config.password;
+    
+    this.api = axios.create({
+      baseURL: `${this.baseURL}/api`,
+      auth: {
+        username: this.username,
+        password: this.password
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  // Créer/Mettre à jour un contact
+  async upsertContact(contact) {
+    try {
+      // Chercher si le contact existe
+      const search = await this.api.get('/contacts', {
+        params: { search: `email:${contact.email}` }
+      });
+
+      let mauticContact = {
+        firstname: contact.first_name,
+        lastname: contact.last_name,
+        email: contact.email,
+        phone: contact.phone,
+        company: contact.company,
+        tags: contact.tags || ['directus-import'],
+        customFields: {
+          directus_id: contact.id,
+          company_id: contact.company_id
+        }
+      };
+
+      if (search.data.total > 0) {
+        // Mettre à jour
+        const existingId = Object.keys(search.data.contacts)[0];
+        const response = await this.api.patch(`/contacts/${existingId}`, mauticContact);
+        return response.data.contact;
+      } else {
+        // Créer
+        const response = await this.api.post('/contacts/new', mauticContact);
+        return response.data.contact;
+      }
+    } catch (error) {
+      console.error('Erreur upsert contact:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Ajouter à un segment
+  async addToSegment(contactId, segmentId) {
+    try {
+      return await this.api.post(`/segments/${segmentId}/contact/${contactId}/add`);
+    } catch (error) {
+      console.error('Erreur ajout segment:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Ajouter à une campagne
+  async addToCampaign(contactId, campaignId) {
+    try {
+      return await this.api.post(`/campaigns/${campaignId}/contact/${contactId}/add`);
+    } catch (error) {
+      console.error('Erreur ajout campagne:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Créer une campagne
+  async createCampaign(campaign) {
+    try {
+      const mauticCampaign = {
+        name: campaign.name,
+        description: campaign.description,
+        isPublished: true,
+        events: campaign.events || [],
+        lists: campaign.segments || []
+      };
+      
+      const response = await this.api.post('/campaigns/new', mauticCampaign);
+      return response.data.campaign;
+    } catch (error) {
+      console.error('Erreur création campagne:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Créer un segment
+  async createSegment(segment) {
+    try {
+      const mauticSegment = {
+        name: segment.name,
+        alias: segment.alias,
+        isPublished: true,
+        filters: segment.filters || []
+      };
+      
+      const response = await this.api.post('/segments/new', mauticSegment);
+      return response.data.list;
+    } catch (error) {
+      console.error('Erreur création segment:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Créer un email
+  async createEmail(email) {
+    try {
+      const mauticEmail = {
+        name: email.name,
+        subject: email.subject,
+        customHtml: email.content,
+        isPublished: true,
+        emailType: 'template'
+      };
+      
+      const response = await this.api.post('/emails/new', mauticEmail);
+      return response.data.email;
+    } catch (error) {
+      console.error('Erreur création email:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Tracking des événements
+  async trackEvent(contactId, event) {
+    try {
+      return await this.api.post('/events/new', {
+        contact_id: contactId,
+        event: event.name,
+        event_properties: event.properties
+      });
+    } catch (error) {
+      console.error('Erreur tracking événement:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Récupérer les statistiques
+  async getStats() {
+    try {
+      const [contacts, campaigns, emails] = await Promise.all([
+        this.api.get('/contacts?limit=1'),
+        this.api.get('/campaigns?limit=1'),
+        this.api.get('/emails?limit=1')
+      ]);
+
+      // Récupérer les stats d'envoi d'email
+      const emailStats = await this.api.get('/emails/1/stats');
+      
+      return {
+        contacts: contacts.data.total || 0,
+        campaigns: campaigns.data.total || 0,
+        emails: emails.data.total || 0,
+        emails_sent: emailStats.data?.sent || 0,
+        open_rate: emailStats.data?.openRate || 0
+      };
+    } catch (error) {
+      console.error('Erreur récupération stats:', error.response?.data || error.message);
+      return {
+        contacts: 0,
+        campaigns: 0,
+        emails: 0,
+        emails_sent: 0,
+        open_rate: 0
+      };
+    }
+  }
+
+  // Récupérer les campagnes actives
+  async getActiveCampaigns() {
+    try {
+      const response = await this.api.get('/campaigns', {
+        params: {
+          isPublished: 1,
+          limit: 10
+        }
+      });
+      
+      return response.data.campaigns || [];
+    } catch (error) {
+      console.error('Erreur récupération campagnes:', error.response?.data || error.message);
+      return [];
+    }
+  }
+
+  // Import en masse depuis Directus
+  async bulkImportContacts(contacts) {
+    let imported = 0;
+    let errors = [];
+    
+    for (const contact of contacts) {
+      try {
+        await this.upsertContact(contact);
+        imported++;
+      } catch (error) {
+        errors.push({
+          contact: contact.email,
+          error: error.message
+        });
+      }
+    }
+    
+    return {
+      imported,
+      total: contacts.length,
+      errors
+    };
+  }
+}
+
+module.exports = MauticAPI;

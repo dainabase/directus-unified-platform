@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  mautic:
+    image: mautic/mautic:5-apache
+    container_name: mautic-app
+    environment:
+      - MAUTIC_DB_HOST=mautic-db
+      - MAUTIC_DB_USER=mautic
+      - MAUTIC_DB_PASSWORD=mautic_secure_2025
+      - MAUTIC_DB_NAME=mautic
+      - MAUTIC_TRUSTED_PROXIES=["0.0.0.0/0"]
+      - MAUTIC_CORS_VALID_DOMAINS=["http://localhost:3000"]
+      - PHP_MEMORY_LIMIT=512M
+      - PHP_MAX_EXECUTION_TIME=300
+    volumes:
+      - mautic-data:/var/www/html
+      - ./config/local.php:/var/www/html/app/config/local.php
+    ports:
+      - "8084:80"
+    depends_on:
+      - mautic-db
+    networks:
+      - mautic-network
+      - directus-network
+
+  mautic-db:
+    image: mariadb:10.6
+    container_name: mautic-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_mautic_2025
+      - MYSQL_DATABASE=mautic
+      - MYSQL_USER=mautic
+      - MYSQL_PASSWORD=mautic_secure_2025
+    volumes:
+      - mautic-db-data:/var/lib/mysql
+    networks:
+      - mautic-network
+
+  mautic-cron:
+    image: mautic/mautic:5-apache
+    container_name: mautic-cron
+    environment:
+      - MAUTIC_DB_HOST=mautic-db
+      - MAUTIC_DB_USER=mautic
+      - MAUTIC_DB_PASSWORD=mautic_secure_2025
+      - MAUTIC_DB_NAME=mautic
+    volumes:
+      - mautic-data:/var/www/html
+    depends_on:
+      - mautic
+    networks:
+      - mautic-network
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        while true; do
+          php /var/www/html/bin/console mautic:segments:update
+          php /var/www/html/bin/console mautic:campaigns:update
+          php /var/www/html/bin/console mautic:campaigns:trigger
+          php /var/www/html/bin/console mautic:emails:send
+          php /var/www/html/bin/console mautic:webhooks:process
+          sleep 300
+        done
+
+volumes:
+  mautic-data:
+  mautic-db-data:
+
+networks:
+  mautic-network:
+  directus-network:
+    external: true

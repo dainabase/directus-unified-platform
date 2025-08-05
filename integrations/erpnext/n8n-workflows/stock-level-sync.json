@@ -1,0 +1,114 @@
+{
+  "name": "Stock Level Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 15,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1",
+      "name": "Schedule",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env[\"ERPNEXT_URL\"]}}/api/method/erpnext.stock.dashboard.item_dashboard.get_data",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "token {{$env[\"ERPNEXT_API_KEY\"]}}:{{$env[\"ERPNEXT_API_SECRET\"]}}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "item_code",
+              "value": "={{$json[\"item_code\"]}}"
+            }
+          ]
+        }
+      },
+      "id": "b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2",
+      "name": "Get ERPNext Stock",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "item",
+        "operation": "update",
+        "collectionName": "products",
+        "updateKey": "erpnext_item_code",
+        "updateKeyValue": "={{$json[\"item_code\"]}}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "stock_quantity",
+              "fieldValue": "={{$json[\"total_stock\"]}}"
+            },
+            {
+              "fieldName": "last_stock_sync",
+              "fieldValue": "={{new Date().toISOString()}}"
+            }
+          ]
+        }
+      },
+      "id": "c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3",
+      "name": "Update Directus",
+      "type": "n8n-nodes-base.directus",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "directusApi": {
+          "id": "1",
+          "name": "Directus Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule": {
+      "main": [
+        [
+          {
+            "node": "Get ERPNext Stock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ERPNext Stock": {
+      "main": [
+        [
+          {
+            "node": "Update Directus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "998"
+}

@@ -1,0 +1,130 @@
+<!-- Modal Nouveau Virement -->
+<div class="modal modal-blur fade" id="paymentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content glass-effect">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="ti ti-send me-2"></i>
+          Nouveau virement
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="paymentForm" onsubmit="submitPayment(event)">
+        <div class="modal-body">
+          <!-- Étape 1: Sélection compte source -->
+          <div class="mb-3">
+            <label class="form-label">Entreprise et compte source</label>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <select class="form-select" id="paymentCompany" required onchange="loadCompanyAccounts()">
+                  <option value="">Sélectionner entreprise...</option>
+                  <option value="hypervisual">HyperVisual</option>
+                  <option value="dynamics">Dynamics</option>
+                  <option value="lexia">Lexia</option>
+                  <option value="nkreality">NKReality</option>
+                  <option value="etekout">Etekout</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <select class="form-select" id="paymentAccount" required disabled>
+                  <option value="">Sélectionner compte...</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-hint mt-1">
+              Solde disponible : <span id="availableBalance" class="fw-bold">-</span>
+            </div>
+          </div>
+          
+          <!-- Étape 2: Bénéficiaire -->
+          <div class="mb-3">
+            <label class="form-label">Bénéficiaire</label>
+            <div class="input-group mb-2">
+              <span class="input-group-text">
+                <i class="ti ti-user"></i>
+              </span>
+              <input type="text" class="form-control" id="beneficiaryName" 
+                     placeholder="Nom du bénéficiaire" required>
+            </div>
+            <div class="input-group mb-2">
+              <span class="input-group-text">IBAN</span>
+              <input type="text" class="form-control" id="beneficiaryIban" 
+                     placeholder="CH93 0076 2011 6238 5295 7" required
+                     pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]+" maxlength="34">
+            </div>
+            <div class="input-group">
+              <span class="input-group-text">BIC</span>
+              <input type="text" class="form-control" id="beneficiaryBic" 
+                     placeholder="UBSWCHZH80A (optionnel)">
+            </div>
+          </div>
+          
+          <!-- Étape 3: Montant et devise -->
+          <div class="mb-3">
+            <label class="form-label">Montant</label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="paymentAmount" 
+                     placeholder="0.00" step="0.01" min="0.01" required>
+              <select class="form-select" id="paymentCurrency" style="max-width: 100px;">
+                <option value="CHF">CHF</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Étape 4: Référence -->
+          <div class="mb-3">
+            <label class="form-label">Référence</label>
+            <input type="text" class="form-control" id="paymentReference" 
+                   placeholder="Ex: Facture INV-2025-001" required>
+            <div class="form-hint">Cette référence apparaîtra sur le relevé bancaire</div>
+          </div>
+          
+          <!-- Options avancées -->
+          <div class="accordion" id="advancedOptions">
+            <div class="accordion-item glass-effect">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" 
+                        data-bs-toggle="collapse" data-bs-target="#advancedCollapse">
+                  <i class="ti ti-settings me-2"></i>
+                  Options avancées
+                </button>
+              </h2>
+              <div id="advancedCollapse" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                  <div class="mb-3">
+                    <label class="form-label">Type de paiement</label>
+                    <select class="form-select" id="paymentType">
+                      <option value="SEPA">SEPA (Europe)</option>
+                      <option value="SWIFT">SWIFT (International)</option>
+                      <option value="LOCAL">Local</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Frais supportés par</label>
+                    <select class="form-select" id="chargeBearer">
+                      <option value="shared">Partagés (SHA)</option>
+                      <option value="debtor">Émetteur (OUR)</option>
+                      <option value="creditor">Bénéficiaire (BEN)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">
+            Annuler
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="ti ti-send me-2"></i>
+            Envoyer le virement
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

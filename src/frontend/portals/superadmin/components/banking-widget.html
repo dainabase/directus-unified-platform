@@ -1,0 +1,57 @@
+<!-- Widget Bancaire pour Dashboard Principal -->
+<div class="col-lg-6">
+  <div class="card glass-card hover-scale">
+    <div class="card-header">
+      <h3 class="card-title">
+        <i class="ti ti-building-bank me-2"></i>
+        Comptes Bancaires
+      </h3>
+      <div class="card-actions">
+        <a href="#" class="btn btn-primary btn-sm glass-button" onclick="openBankingModule()">
+          <i class="ti ti-external-link"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <!-- Résumé Multi-entreprises -->
+      <div id="bankingSummary" class="mb-3">
+        <div class="row g-2">
+          <div class="col-4">
+            <div class="text-center">
+              <div class="font-weight-medium text-muted">CHF</div>
+              <div class="h3 mb-0 treasury-amount" id="totalCHF">0.00</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="text-center">
+              <div class="font-weight-medium text-muted">EUR</div>
+              <div class="h3 mb-0 treasury-amount" id="totalEUR">0.00</div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="text-center">
+              <div class="font-weight-medium text-muted">USD</div>
+              <div class="h3 mb-0 treasury-amount" id="totalUSD">0.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mini graphique trésorerie -->
+      <div id="cashflowMiniChart" style="height: 120px;"></div>
+      
+      <!-- Actions rapides -->
+      <div class="mt-3">
+        <button class="btn btn-sm btn-outline-primary glass-button w-100" onclick="quickSync()">
+          <i class="ti ti-refresh"></i> Sync maintenant
+        </button>
+      </div>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">
+        <i class="ti ti-clock"></i> 
+        Dernière sync : <span id="lastSyncTime">-</span>
+      </small>
+    </div>
+  </div>
+</div>

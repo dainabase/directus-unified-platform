@@ -210,7 +210,19 @@ app.use('/graphql', createProxyMiddleware({
   changeOrigin: true
 }));
 
-// 7. API spéciale OCR
+// 7. API Revolut
+const revolutRouter = require('./api/revolut');
+app.use('/api/revolut', revolutRouter);
+
+// 8. API ERPNext
+const erpnextRouter = require('./api/erpnext');
+app.use('/api/erpnext', erpnextRouter);
+
+// 9. API Mautic
+const mauticRouter = require('./api/mautic/router');
+app.use('/api/mautic', mauticRouter);
+
+// 10. API spéciale OCR
 app.post('/api/ocr/scan', async (req, res) => {
   // Vérifier la config
   if (!process.env.OPENAI_API_KEY) {
@@ -227,7 +239,7 @@ app.post('/api/ocr/scan', async (req, res) => {
   });
 });
 
-// 8. Page d'accueil moderne avec tous les portails
+// 11. Page d'accueil moderne avec tous les portails
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/all-portals.html'));
 });
@@ -341,7 +353,7 @@ app.get('/old-home', (req, res) => {
   `);
 });
 
-// 9. Gestion des erreurs 404
+// 12. Gestion des erreurs 404
 app.use((req, res) => {
   console.log(`⚠️ 404: ${req.url}`);
   res.status(404).send(`

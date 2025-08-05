@@ -1,0 +1,157 @@
+{
+  "name": "ERPNext Contact Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "item",
+        "operation": "getAll",
+        "collectionName": "contacts",
+        "returnAll": true,
+        "options": {
+          "filter": {
+            "status": {
+              "_eq": "active"
+            }
+          }
+        }
+      },
+      "id": "5e8e5e1b-e6a5-4e0f-8c8a-8b1234567890",
+      "name": "Directus Contact Change",
+      "type": "n8n-nodes-base.directus",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "credentials": {
+        "directusApi": {
+          "id": "1",
+          "name": "Directus Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"erpnext_customer_id\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "6f9f6f2c-f7b6-5f1f-9d9b-9c2345678901",
+      "name": "Check ERPNext ID",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{$env[\"ERPNEXT_URL\"]}}/api/resource/Customer/{{$json[\"erpnext_customer_id\"]}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "token {{$env[\"ERPNEXT_API_KEY\"]}}:{{$env[\"ERPNEXT_API_SECRET\"]}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "customer_name",
+              "value": "={{$json[\"first_name\"]}} {{$json[\"last_name\"]}}"
+            },
+            {
+              "name": "customer_primary_contact",
+              "value": "={{JSON.stringify({email_id: $json[\"email\"], phone: $json[\"phone\"]})}}"
+            }
+          ]
+        }
+      },
+      "id": "7a0a7a3d-a8c7-6a2a-0e0c-0d3456789012",
+      "name": "Update ERPNext",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env[\"ERPNEXT_URL\"]}}/api/resource/Customer",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "token {{$env[\"ERPNEXT_API_KEY\"]}}:{{$env[\"ERPNEXT_API_SECRET\"]}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "customer_name",
+              "value": "={{$json[\"first_name\"]}} {{$json[\"last_name\"]}}"
+            },
+            {
+              "name": "customer_type",
+              "value": "Company"
+            },
+            {
+              "name": "company",
+              "value": "={{$json[\"company_id\"]}}"
+            }
+          ]
+        }
+      },
+      "id": "8b1b8b4e-b9d8-7b3b-1f1d-1e4567890123",
+      "name": "Create in ERPNext",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 400]
+    }
+  ],
+  "connections": {
+    "Directus Contact Change": {
+      "main": [
+        [
+          {
+            "node": "Check ERPNext ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check ERPNext ID": {
+      "main": [
+        [
+          {
+            "node": "Update ERPNext",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create in ERPNext",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "999"
+}

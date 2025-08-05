@@ -1,0 +1,296 @@
+<!-- Modal Bancaire Plein Écran -->
+<div class="modal modal-blur fade" id="bankingModal" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content glass-effect-strong">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="ti ti-building-bank me-2"></i>
+          Gestion Bancaire Revolut
+        </h5>
+        <div class="ms-auto d-flex gap-2">
+          <!-- Sélecteur d'entreprise -->
+          <select class="form-select" id="companySelector" style="width: 200px;">
+            <option value="all">Toutes les entreprises</option>
+            <option value="hypervisual">HyperVisual</option>
+            <option value="dynamics">Dynamics</option>
+            <option value="lexia">Lexia</option>
+            <option value="nkreality">NKReality</option>
+            <option value="etekout">Etekout</option>
+          </select>
+          
+          <!-- Actions globales -->
+          <button class="btn btn-primary glass-button" onclick="syncAllAccounts()">
+            <i class="ti ti-refresh"></i> Synchroniser
+          </button>
+          <button class="btn btn-success glass-button" onclick="showNewPayment()">
+            <i class="ti ti-send"></i> Nouveau virement
+          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+      
+      <div class="modal-body p-0">
+        <div class="container-fluid p-4">
+          <!-- Tabs Navigation -->
+          <ul class="nav nav-tabs nav-tabs-lg" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#tab-overview">
+                <i class="ti ti-dashboard me-2"></i>Vue d'ensemble
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-transactions">
+                <i class="ti ti-list me-2"></i>Transactions
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-reconciliation">
+                <i class="ti ti-git-merge me-2"></i>Rapprochement
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-analytics">
+                <i class="ti ti-chart-line me-2"></i>Analyses
+              </a>
+            </li>
+          </ul>
+          
+          <!-- Tab Content -->
+          <div class="tab-content mt-4">
+            <!-- Tab Vue d'ensemble -->
+            <div class="tab-pane active" id="tab-overview">
+              <!-- Cartes des comptes -->
+              <div class="row g-3 mb-4" id="accountsGrid">
+                <!-- Généré dynamiquement -->
+              </div>
+              
+              <!-- Graphiques -->
+              <div class="row g-3">
+                <div class="col-lg-8">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Évolution Trésorerie (30j)</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="cashflowChart" style="height: 300px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Répartition par devise</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="currencyPieChart" style="height: 300px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tab Transactions -->
+            <div class="tab-pane" id="tab-transactions">
+              <!-- Filtres -->
+              <div class="card glass-card mb-3">
+                <div class="card-body">
+                  <div class="row g-2">
+                    <div class="col-md-3">
+                      <select class="form-select" id="accountFilter">
+                        <option value="">Tous les comptes</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <input type="date" class="form-control" id="dateFrom">
+                    </div>
+                    <div class="col-md-2">
+                      <input type="date" class="form-control" id="dateTo">
+                    </div>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" placeholder="Rechercher..." id="searchTx">
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-primary w-100" onclick="filterTransactions()">
+                        <i class="ti ti-filter"></i> Filtrer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Table des transactions -->
+              <div class="card glass-card">
+                <div class="table-responsive">
+                  <table class="table table-vcenter table-hover">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Entreprise</th>
+                        <th>Description</th>
+                        <th>Contrepartie</th>
+                        <th>Référence</th>
+                        <th class="text-end">Montant</th>
+                        <th>Statut</th>
+                        <th class="w-1"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="transactionsTable">
+                      <!-- Généré dynamiquement -->
+                    </tbody>
+                  </table>
+                </div>
+                <!-- Pagination -->
+                <div class="card-footer d-flex align-items-center">
+                  <p class="m-0 text-muted">
+                    Affichage <span id="txStart">1</span> à <span id="txEnd">10</span> 
+                    sur <span id="txTotal">0</span> transactions
+                  </p>
+                  <ul class="pagination m-0 ms-auto" id="txPagination">
+                    <!-- Généré dynamiquement -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tab Rapprochement -->
+            <div class="tab-pane" id="tab-reconciliation">
+              <div class="row g-3">
+                <!-- Transactions non rapprochées -->
+                <div class="col-lg-6">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">
+                        Transactions bancaires
+                        <span class="badge bg-warning ms-2" id="unreconciledCount">0</span>
+                      </h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="list-group list-group-flush" id="unreconciledList">
+                        <!-- Généré dynamiquement -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Suggestions de rapprochement -->
+                <div class="col-lg-6">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">
+                        Suggestions de rapprochement
+                        <i class="ti ti-sparkles ms-2 text-warning"></i>
+                      </h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="reconciliationSuggestions">
+                        <!-- Généré dynamiquement -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tab Analytics -->
+            <div class="tab-pane" id="tab-analytics">
+              <div class="row g-3">
+                <!-- KPIs -->
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card glass-card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <div class="subheader">Entrées (30j)</div>
+                      </div>
+                      <div class="h1 mb-3" id="totalInflow">0</div>
+                      <div class="d-flex mb-2">
+                        <div>Variation</div>
+                        <div class="ms-auto">
+                          <span class="text-green" id="inflowChange">+0%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card glass-card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <div class="subheader">Sorties (30j)</div>
+                      </div>
+                      <div class="h1 mb-3" id="totalOutflow">0</div>
+                      <div class="d-flex mb-2">
+                        <div>Variation</div>
+                        <div class="ms-auto">
+                          <span class="text-red" id="outflowChange">+0%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card glass-card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <div class="subheader">Solde Net</div>
+                      </div>
+                      <div class="h1 mb-3" id="netBalance">0</div>
+                      <div class="d-flex mb-2">
+                        <div>Prévision 30j</div>
+                        <div class="ms-auto">
+                          <span id="forecast30">0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                  <div class="card glass-card">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <div class="subheader">Frais bancaires</div>
+                      </div>
+                      <div class="h1 mb-3" id="totalFees">0</div>
+                      <div class="d-flex mb-2">
+                        <div>Ce mois</div>
+                        <div class="ms-auto">
+                          <span class="text-muted" id="monthlyFees">0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Graphiques détaillés -->
+              <div class="row g-3 mt-3">
+                <div class="col-lg-6">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Flux par catégorie</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="categoryFlowChart" style="height: 300px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card glass-card">
+                    <div class="card-header">
+                      <h3 class="card-title">Tendance mensuelle</h3>
+                    </div>
+                    <div class="card-body">
+                      <div id="monthlyTrendChart" style="height: 300px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

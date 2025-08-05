@@ -57,7 +57,11 @@
       "Bash(open http://localhost:8082/setup)",
       "Bash(true)",
       "Bash(docker exec:*)",
-      "Bash(open http://localhost:8082)"
+      "Bash(open http://localhost:8082)",
+      "Bash(touch:*)",
+      "Bash(git clone:*)",
+      "Bash(docker network:*)",
+      "Bash(docker pull:*)"
     ],
     "deny": []
   }

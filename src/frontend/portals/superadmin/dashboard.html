@@ -176,6 +176,10 @@
                                         <a class="dropdown-item" href="./finance/banking.html">
                                             Banking Revolut
                                         </a>
+                                        <a class="dropdown-item" href="./erp-dashboard.html">
+                                            <i class="ti ti-building-factory-2 me-1"></i>
+                                            Dashboard ERP
+                                        </a>
                                         <a class="dropdown-item" href="./finance/accounting.html">
                                             Comptabilité
                                         </a>
@@ -209,6 +213,16 @@
                                 <a class="dropdown-item" href="./crm/companies.html">Entreprises</a>
                                 <a class="dropdown-item" href="./crm/opportunities.html">Opportunités</a>
                             </div>
+                        </li>
+                        
+                        <!-- SECTION MARKETING -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./marketing.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-mail"></i>
+                                </span>
+                                <span class="nav-link-title">Marketing Automation</span>
+                            </a>
                         </li>
                         
                         <!-- SECTION DEVIS & FACTURES -->
@@ -814,9 +828,14 @@
                                 </div>
                             </div>
                             
-                            <!-- Section OCR existante -->
+                            <!-- Widget Bancaire -->
                             <div class="row mt-4">
-                                <div class="col-12">
+                                <div id="bankingWidgetPlaceholder" class="col-lg-6">
+                                    <!-- Le widget bancaire sera chargé ici -->
+                                </div>
+                                
+                                <!-- Section OCR existante -->
+                                <div class="col-lg-6">
                                     <div class="card">
                                         <div class="card-header">
                                             <h3 class="card-title">🤖 OCR Vision AI</h3>
@@ -1002,11 +1021,31 @@
             // Charger le dashboard consolidé
             loadSuperAdminDashboard();
             
+            // Charger le widget bancaire
+            fetch('components/banking-widget.html')
+                .then(r => r.text())
+                .then(html => {
+                    const placeholder = document.getElementById('bankingWidgetPlaceholder');
+                    if (placeholder) {
+                        placeholder.innerHTML = html;
+                    }
+                })
+                .catch(err => console.error('Erreur chargement widget bancaire:', err));
+            
             // Initialiser le dashboard legacy si disponible
             if (typeof window.DashboardSuperadmin !== 'undefined') {
                 // await window.DashboardSuperadmin.init();
             }
         });
     </script>
+    
+    <!-- ApexCharts (nécessaire pour les graphiques) -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- Module Bancaire -->
+    <script src="js/banking-module.js"></script>
+    
+    <!-- Placeholder pour modals -->
+    <div id="bankingModalsPlaceholder"></div>
 </body>
 </html>

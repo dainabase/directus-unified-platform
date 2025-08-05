@@ -1,0 +1,170 @@
+{
+  "name": "Import Contacts to Mautic",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 30,
+              "unit": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Every 30 minutes",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "item",
+        "operation": "getAll",
+        "collectionName": "contacts",
+        "returnAll": true,
+        "options": {
+          "filter": {
+            "mautic_id": {
+              "_null": true
+            },
+            "status": {
+              "_eq": "active"
+            }
+          }
+        }
+      },
+      "id": "get-new-contacts",
+      "name": "Get New Contacts",
+      "type": "n8n-nodes-base.directus",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "directusApi": {
+          "id": "1",
+          "name": "Directus Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/mautic/sync-contact",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "none",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "first_name",
+              "value": "={{$json[\"first_name\"]}}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{$json[\"last_name\"]}}"
+            },
+            {
+              "name": "email",
+              "value": "={{$json[\"email\"]}}"
+            },
+            {
+              "name": "phone",
+              "value": "={{$json[\"phone\"]}}"
+            },
+            {
+              "name": "company",
+              "value": "={{$json[\"company_name\"]}}"
+            },
+            {
+              "name": "id",
+              "value": "={{$json[\"id\"]}}"
+            },
+            {
+              "name": "company_id",
+              "value": "={{$json[\"company_id\"]}}"
+            }
+          ]
+        }
+      },
+      "id": "sync-to-mautic",
+      "name": "Sync to Mautic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "item",
+        "operation": "update",
+        "collectionName": "contacts",
+        "updateKey": "id",
+        "updateKeyValue": "={{$node[\"Get New Contacts\"].json[\"id\"]}}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "mautic_id",
+              "fieldValue": "={{$node[\"Sync to Mautic\"].json[\"mautic_id\"]}}"
+            },
+            {
+              "fieldName": "mautic_sync_date",
+              "fieldValue": "={{new Date().toISOString()}}"
+            }
+          ]
+        }
+      },
+      "id": "update-contact",
+      "name": "Update Contact",
+      "type": "n8n-nodes-base.directus",
+      "typeVersion": 1,
+      "position": [850, 300],
+      "credentials": {
+        "directusApi": {
+          "id": "1",
+          "name": "Directus Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 30 minutes": {
+      "main": [
+        [
+          {
+            "node": "Get New Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get New Contacts": {
+      "main": [
+        [
+          {
+            "node": "Sync to Mautic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync to Mautic": {
+      "main": [
+        [
+          {
+            "node": "Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "mautic-import-contacts"
+}

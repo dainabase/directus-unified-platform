@@ -272,7 +272,16 @@ try {
   console.log('⚠️ API Invoice Ninja non disponible:', error.message);
 }
 
-// 8. Page d'accueil moderne avec tous les portails
+// 9. API Revolut Business Integration
+try {
+  const revolutRouter = require('./src/backend/api/revolut');
+  app.use('/api/revolut', revolutRouter);
+  console.log('✅ API Revolut Business configurée');
+} catch (error) {
+  console.log('⚠️ API Revolut non disponible:', error.message);
+}
+
+// 10. Page d'accueil moderne avec tous les portails
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/all-portals.html'));
 });

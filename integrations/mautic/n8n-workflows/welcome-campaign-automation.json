@@ -1,0 +1,161 @@
+{
+  "name": "Welcome Campaign Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "directus-webhook-new-customer",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "New Customer Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "e4d8c7b6-9a2f-4e3d-8c1b-5a9e8d7f6c5a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"type\"]}}",
+              "operation": "equal",
+              "value2": "client"
+            }
+          ]
+        }
+      },
+      "id": "check-customer",
+      "name": "Is Customer?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/mautic/sync-contact",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "first_name",
+              "value": "={{$json[\"first_name\"]}}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{$json[\"last_name\"]}}"
+            },
+            {
+              "name": "email",
+              "value": "={{$json[\"email\"]}}"
+            },
+            {
+              "name": "phone",
+              "value": "={{$json[\"phone\"]}}"
+            },
+            {
+              "name": "company",
+              "value": "={{$json[\"company_name\"]}}"
+            },
+            {
+              "name": "tags",
+              "value": "=[\"new-customer\", \"welcome-campaign\"]"
+            }
+          ]
+        }
+      },
+      "id": "create-mautic-contact",
+      "name": "Create in Mautic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 250]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Attendre 1 minute pour que Mautic traite le contact\nreturn new Promise((resolve) => {\n  setTimeout(() => {\n    resolve([{json: items[0].json}]);\n  }, 60000);\n});"
+      },
+      "id": "wait-1-minute",
+      "name": "Wait 1 minute",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [850, 250]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/mautic/add-to-campaign",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "contact_id",
+              "value": "={{$node[\"Create in Mautic\"].json[\"mautic_id\"]}}"
+            },
+            {
+              "name": "campaign_id",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "id": "add-to-campaign",
+      "name": "Add to Welcome Campaign",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1050, 250]
+    }
+  ],
+  "connections": {
+    "New Customer Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is Customer?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Customer?": {
+      "main": [
+        [
+          {
+            "node": "Create in Mautic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create in Mautic": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 minute",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 minute": {
+      "main": [
+        [
+          {
+            "node": "Add to Welcome Campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "welcome-campaign-automation"
+}

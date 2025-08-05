@@ -5,88 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuperAdmin Dashboard CEO</title>
     
-    <!-- Tabler CSS -->
+    <!-- OBLIGATOIRE : Tabler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
     
-    <!-- Tabler Icons -->
+    <!-- OBLIGATOIRE : Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     
-    <!-- ApexCharts -->
+    <!-- OBLIGATOIRE : ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
     
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom styles minimaux */
+        /* Styles minimaux pour sparklines uniquement */
         .metric-sparkline { height: 35px; margin-top: 10px; }
-        .navbar-brand-image { height: 2rem; }
     </style>
 </head>
 <body>
     <div class="page">
-        <!-- Sidebar avec Tabler navbar-vertical -->
+        <!-- Sidebar Menu Validé -->
         <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
             <div class="container-fluid">
-                <h1 class="navbar-brand text-white">
-                    🚀 SuperAdmin CEO
+                <button class="navbar-toggler" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="#" class="text-white text-decoration-none">
+                        🚀 SuperAdmin CEO
+                    </a>
                 </h1>
-                
                 <div class="navbar-collapse">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- SECTION CRÉER -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#navbar-create" data-bs-toggle="dropdown" role="button">
-                                <span class="nav-link-icon">➕</span>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                                </span>
                                 <span class="nav-link-title">CRÉER</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Nouvelle Entreprise</a>
+                                <a class="dropdown-item" href="#">Nouvelle Entreprise/Lead</a>
                                 <a class="dropdown-item" href="#">Nouveau Contact</a>
                                 <a class="dropdown-item" href="#">Nouveau Projet</a>
-                                <a class="dropdown-item" href="#">Nouvelle Facture</a>
+                                <a class="dropdown-item" href="#">Nouvelle Facture/Devis</a>
+                                <a class="dropdown-item" href="#">Nouveau Paiement</a>
                             </div>
                         </li>
                         
+                        <!-- SECTION GÉRER -->
                         <li class="nav-item active">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">📊</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">📊</span>
                                 <span class="nav-link-title">Dashboard</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">🏢</span>
-                                <span class="nav-link-title">Entreprises</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">🏢</span>
+                                <span class="nav-link-title">Entreprises & Contacts</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">📁</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">📁</span>
                                 <span class="nav-link-title">Projets & Tâches</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">💰</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">💰</span>
                                 <span class="nav-link-title">Finances</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">👥</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">👥</span>
                                 <span class="nav-link-title">Prestataires</span>
                             </a>
                         </li>
                         
                         <hr class="navbar-divider my-3">
                         
+                        <!-- SECTION OUTILS -->
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">📄</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">📄</span>
                                 <span class="nav-link-title">OCR Scanner</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon">🤖</span>
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">📧</span>
+                                <span class="nav-link-title">Communications</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">🤖</span>
                                 <span class="nav-link-title">Automatisations</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">📈</span>
+                                <span class="nav-link-title">Rapports</span>
+                            </a>
+                        </li>
+                        
+                        <hr class="navbar-divider my-3">
+                        
+                        <!-- SECTION CONFIG -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">⚙️</span>
+                                <span class="nav-link-title">Paramètres</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">👤</span>
+                                <span class="nav-link-title">Mon Profil</span>
                             </a>
                         </li>
                     </ul>
@@ -94,9 +134,9 @@
             </div>
         </aside>
         
-        <!-- Main content -->
+        <!-- Main Content Area -->
         <div class="page-wrapper">
-            <!-- Page header -->
+            <!-- Page Header avec Sélecteur Entreprise -->
             <div class="page-header d-print-none">
                 <div class="container-xl">
                     <div class="row g-2 align-items-center">
@@ -104,49 +144,49 @@
                             <h2 class="page-title">CEO Operations Dashboard</h2>
                         </div>
                         <div class="col-auto">
-                            <select class="form-select">
-                                <option>📊 Vue Consolidée</option>
-                                <option>HYPERVISUAL</option>
-                                <option>DAINAMICS</option>
-                                <option>LEXAIA</option>
-                                <option>ENKY REALTY</option>
-                                <option>TAKEOUT</option>
+                            <select class="form-select" id="companyFilter">
+                                <option value="all">📊 Vue Consolidée</option>
+                                <option value="hypervisual">HYPERVISUAL</option>
+                                <option value="dainamics">DAINAMICS</option>
+                                <option value="lexaia">LEXAIA</option>
+                                <option value="enki">ENKI REALTY</option>
+                                <option value="takeout">TAKEOUT</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Page body -->
+            <!-- Page Body avec Métriques et Blocs -->
             <div class="page-body">
                 <div class="container-xl">
-                    <!-- 5 CEO METRICS -->
+                    <!-- LIGNE 1 : 5 MÉTRIQUES CEO -->
                     <div class="row row-cards mb-3">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <!-- Metric 1: Cash Runway -->
+                                <div class="card-body p-3">
+                                    <div class="row g-3">
+                                        <!-- Métrique 1: Cash Runway -->
                                         <div class="col">
                                             <div class="text-center">
                                                 <div class="text-uppercase text-muted small">Cash Runway</div>
                                                 <div class="display-6 fw-bold text-success">7.3 mois</div>
-                                                <div class="text-muted small">+1.2 mois</div>
+                                                <div class="text-muted small">↑ +1.2 mois</div>
                                                 <div id="sparkline1" class="metric-sparkline"></div>
                                             </div>
                                         </div>
                                         
-                                        <!-- Metric 2: ARR/MRR -->
+                                        <!-- Métrique 2: ARR/MRR -->
                                         <div class="col">
                                             <div class="text-center">
                                                 <div class="text-uppercase text-muted small">ARR / MRR</div>
                                                 <div class="display-6 fw-bold">€2.4M</div>
-                                                <div class="text-muted small">€198K/mois</div>
+                                                <div class="text-muted small">€198K/mois • +23% YoY</div>
                                                 <div id="sparkline2" class="metric-sparkline"></div>
                                             </div>
                                         </div>
                                         
-                                        <!-- Metric 3: EBITDA -->
+                                        <!-- Métrique 3: EBITDA -->
                                         <div class="col">
                                             <div class="text-center">
                                                 <div class="text-uppercase text-muted small">EBITDA Margin</div>
@@ -156,22 +196,22 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Metric 4: LTV:CAC -->
+                                        <!-- Métrique 4: LTV:CAC -->
                                         <div class="col">
                                             <div class="text-center">
                                                 <div class="text-uppercase text-muted small">LTV:CAC Ratio</div>
                                                 <div class="display-6 fw-bold text-success">4.2:1</div>
-                                                <div class="text-muted small">Healthy</div>
+                                                <div class="text-muted small">Healthy > 3:1</div>
                                                 <div id="sparkline4" class="metric-sparkline"></div>
                                             </div>
                                         </div>
                                         
-                                        <!-- Metric 5: NPS -->
+                                        <!-- Métrique 5: NPS -->
                                         <div class="col">
                                             <div class="text-center">
                                                 <div class="text-uppercase text-muted small">NPS Global</div>
                                                 <div class="display-6 fw-bold text-success">72</div>
-                                                <div class="text-muted small">Excellent</div>
+                                                <div class="text-muted small">Excellent • +5</div>
                                                 <div id="sparkline5" class="metric-sparkline"></div>
                                             </div>
                                         </div>
@@ -181,96 +221,137 @@
                         </div>
                     </div>
                     
-                    <!-- 6 OPERATIONAL BLOCKS -->
-                    <div class="row row-cards">
-                        <!-- Block 1: Finance -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                    <!-- LIGNE 2 : 6 BLOCS OPÉRATIONNELS (3x2) -->
+                    <div class="row row-cards g-3">
+                        <!-- Bloc 1: Finance & Trésorerie -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">💰 Finance & Trésorerie</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <div class="row align-items-center">
-                                            <div class="col">Cash Disponible</div>
-                                            <div class="col-auto fs-3 fw-bold">€847K</div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">Factures Impayées</div>
+                                            <div class="col">
+                                                <div class="text-muted">Cash Disponible</div>
+                                            </div>
                                             <div class="col-auto">
-                                                <span class="badge bg-red">12</span> €45K
+                                                <div class="h2 mb-0">€847K</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="row align-items-center">
-                                            <div class="col">En Attente</div>
-                                            <div class="col-auto">€127K</div>
+                                            <div class="col">
+                                                <div class="text-muted">Factures Impayées</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-red">12</span>
+                                                <span class="text-red ms-2">€45K</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: 90%">CA: 90%</div>
+                                    <div class="mb-3">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <div class="text-muted">Paiements en Attente</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">8</span>
+                                                <span class="ms-2">€127K</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-muted mb-2">CA du Mois</div>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 90%" role="progressbar">
+                                                €198K / €220K
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Block 2: Tâches -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                        <!-- Bloc 2: Tâches & Opérationnel -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">📋 Tâches & Opérationnel</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="mb-2">
-                                        <span class="badge bg-blue">14 tâches aujourd'hui</span>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="badge bg-blue me-2">14</span>
+                                        <span>Tâches Aujourd'hui</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="badge bg-red me-2">3</span>
+                                        <span>Tâches en Retard</span>
+                                        <span class="badge bg-orange ms-auto">1 critique</span>
                                     </div>
                                     <div class="mb-3">
-                                        <span class="badge bg-red">3 en retard</span>
-                                        <span class="badge bg-orange">1 critique</span>
+                                        <div class="h2 mb-1">8 Projets Actifs</div>
+                                        <div class="text-muted small">3 deadlines cette semaine</div>
                                     </div>
-                                    <div class="h2 mb-3">8 projets actifs</div>
                                     <div class="list-group list-group-flush">
-                                        <div class="list-group-item px-0">→ Valider devis BNP</div>
-                                        <div class="list-group-item px-0">→ Call client X</div>
+                                        <div class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col">→ Valider devis BNP</div>
+                                                <div class="col-auto">
+                                                    <span class="badge bg-red-lt">Urgent</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item px-0">→ Call client X à 14h</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Block 3: Commercial -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                        <!-- Bloc 3: Commercial & Ventes -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">🎯 Commercial & Ventes</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="h2 mb-1">€1.2M</div>
-                                    <div class="text-muted mb-3">24 opportunités</div>
-                                    
                                     <div class="mb-3">
-                                        <div class="row">
-                                            <div class="col">Devis actifs</div>
-                                            <div class="col-auto fw-bold">€340K</div>
+                                        <div class="h2 mb-1">€1.2M</div>
+                                        <div class="text-muted">Pipeline Total • 24 opportunités</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <div class="text-muted">Devis Actifs</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-blue">7</span>
+                                                <span class="ms-2 fw-bold">€340K</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    
                                     <div class="mb-3">
-                                        <span class="badge bg-success">Conversion: 32%</span>
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <div class="text-muted">Taux Conversion</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge bg-success">32% ↑</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted small">vs 28% mois dernier</div>
                                     </div>
-                                    
-                                    <div class="alert alert-info">
-                                        5 RDV cette semaine
+                                    <div class="alert alert-info mb-0">
+                                        <div class="alert-title">5 RDV cette semaine</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Block 4: Marketing -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                        <!-- Bloc 4: Marketing & Trafic -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">📊 Marketing & Trafic</h3>
                                 </div>
@@ -278,61 +359,81 @@
                                     <div class="row text-center mb-3">
                                         <div class="col">
                                             <div class="h1 mb-0">1,847</div>
-                                            <div class="text-muted small">Visiteurs</div>
+                                            <div class="text-muted small">Visiteurs Aujourd'hui</div>
                                         </div>
                                         <div class="col">
                                             <div class="h1 mb-0">124</div>
-                                            <div class="text-muted small">Leads</div>
+                                            <div class="text-muted small">Leads Semaine</div>
                                         </div>
                                     </div>
-                                    <div class="h3">Conversion: 6.7%</div>
-                                    <div class="text-muted small">
-                                        Google 45% • Direct 30% • Social 25%
+                                    <div class="mb-3">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <div class="text-muted">Conversion Web</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="h3 mb-0">6.7%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-muted small mb-2">Top Sources</div>
+                                        <div class="row g-2">
+                                            <div class="col-auto">
+                                                <span class="badge">Google 45%</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge">Direct 30%</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="badge">Social 25%</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Block 5: Performance Entreprises -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                        <!-- Bloc 5: Performance Entreprises -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">🏢 Performance Entreprises</h3>
                                 </div>
                                 <div class="card-body p-0">
                                     <div class="table-responsive">
-                                        <table class="table table-sm">
+                                        <table class="table table-vcenter">
                                             <tbody>
                                                 <tr>
-                                                    <td>HYPERVISUAL</td>
+                                                    <td class="fw-bold">HYPERVISUAL</td>
                                                     <td class="text-end">€67K</td>
                                                     <td class="text-end">
                                                         <span class="badge bg-green">22%</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>DAINAMICS</td>
+                                                    <td class="fw-bold">DAINAMICS</td>
                                                     <td class="text-end">€89K</td>
                                                     <td class="text-end">
                                                         <span class="badge bg-green">31%</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>LEXAIA</td>
+                                                    <td class="fw-bold">LEXAIA</td>
                                                     <td class="text-end">€12K</td>
                                                     <td class="text-end">
                                                         <span class="badge bg-orange">8%</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>ENKY REALTY</td>
+                                                    <td class="fw-bold">ENKI REALTY</td>
                                                     <td class="text-end">€24K</td>
                                                     <td class="text-end">
                                                         <span class="badge bg-green">15%</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>TAKEOUT</td>
+                                                    <td class="fw-bold">TAKEOUT</td>
                                                     <td class="text-end">€6K</td>
                                                     <td class="text-end">
                                                         <span class="badge bg-red">-12%</span>
@@ -345,24 +446,49 @@
                             </div>
                         </div>
                         
-                        <!-- Block 6: Alertes -->
-                        <div class="col-lg-4">
-                            <div class="card">
+                        <!-- Bloc 6: Alertes & Actions -->
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card h-100">
                                 <div class="card-header">
                                     <h3 class="card-title">⚡ Alertes & Actions</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="alert alert-danger">
-                                        <strong>3 factures</strong> > 60 jours
-                                        <a href="#" class="btn btn-sm btn-danger float-end">Voir</a>
+                                    <div class="alert alert-danger mb-2">
+                                        <div class="d-flex">
+                                            <div>
+                                                <h4 class="alert-title">3 factures impayées</h4>
+                                                <div class="text-muted">Plus de 60 jours</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-danger btn-sm">Voir</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="alert alert-warning">
-                                        <strong>Cash < 6 mois</strong> TAKEOUT
-                                        <a href="#" class="btn btn-sm btn-warning float-end">Analyser</a>
+                                    <div class="alert alert-warning mb-2">
+                                        <div class="d-flex">
+                                            <div>
+                                                <h4 class="alert-title">Cash runway < 6 mois</h4>
+                                                <div class="text-muted">TAKEOUT en danger</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-warning btn-sm">Analyser</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="alert alert-info">
-                                        <strong>5 devis</strong> expirent
-                                        <a href="#" class="btn btn-sm btn-info float-end">Relancer</a>
+                                    <div class="alert alert-info mb-3">
+                                        <div class="d-flex">
+                                            <div>
+                                                <h4 class="alert-title">5 devis expirent</h4>
+                                                <div class="text-muted">Cette semaine</div>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="#" class="btn btn-info btn-sm">Relancer</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group w-100" role="group">
+                                        <a href="#" class="btn btn-primary">Nouvelle facture</a>
+                                        <a href="#" class="btn btn-primary">Nouveau projet</a>
                                     </div>
                                 </div>
                             </div>
@@ -373,59 +499,75 @@
         </div>
     </div>
     
-    <!-- Tabler Core JS -->
+    <!-- Scripts Tabler et ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
     
-    <!-- ApexCharts Sparklines -->
     <script>
-        // Options communes pour les sparklines
-        const sparklineOptions = {
-            chart: {
-                type: 'line',
-                height: 35,
-                sparkline: { enabled: true },
-                animations: { enabled: false }
-            },
-            stroke: { width: 2, curve: 'smooth' },
-            tooltip: { enabled: false }
-        };
-        
-        // Sparkline 1 - Cash Runway
-        new ApexCharts(document.querySelector("#sparkline1"), {
-            ...sparklineOptions,
-            series: [{ data: [6.1, 5.8, 6.2, 6.8, 7.1, 7.3] }],
-            colors: ['#2fb344']
-        }).render();
-        
-        // Sparkline 2 - ARR
-        new ApexCharts(document.querySelector("#sparkline2"), {
-            ...sparklineOptions,
-            series: [{ data: [1.8, 1.9, 2.0, 2.1, 2.3, 2.4] }],
-            colors: ['#206bc4']
-        }).render();
-        
-        // Sparkline 3 - EBITDA
-        new ApexCharts(document.querySelector("#sparkline3"), {
-            ...sparklineOptions,
-            series: [{ data: [15.2, 16.1, 17.3, 17.8, 18.1, 18.5] }],
-            colors: ['#5eba00']
-        }).render();
-        
-        // Sparkline 4 - LTV:CAC
-        new ApexCharts(document.querySelector("#sparkline4"), {
-            ...sparklineOptions,
-            series: [{ data: [3.1, 3.4, 3.8, 4.0, 4.1, 4.2] }],
-            colors: ['#206bc4']
-        }).render();
-        
-        // Sparkline 5 - NPS
-        new ApexCharts(document.querySelector("#sparkline5"), {
-            ...sparklineOptions,
-            series: [{ data: [65, 67, 69, 70, 71, 72] }],
-            colors: ['#fab005']
-        }).render();
-        
-        console.log('✅ Dashboard CEO avec Tabler.io + ApexCharts FONCTIONNEL');
+        // Configuration des sparklines ApexCharts
+        document.addEventListener('DOMContentLoaded', function() {
+            const sparklineOptions = {
+                chart: {
+                    type: 'line',
+                    height: 35,
+                    sparkline: { enabled: true },
+                    animations: { enabled: false }
+                },
+                stroke: { width: 2, curve: 'smooth' },
+                tooltip: { enabled: false },
+                xaxis: { crosshairs: { width: 0 } }
+            };
+            
+            // Sparkline 1 - Cash Runway (vert si > 3 mois)
+            new ApexCharts(document.querySelector("#sparkline1"), {
+                ...sparklineOptions,
+                series: [{ data: [6.1, 5.8, 6.2, 6.5, 6.8, 7.1, 7.3] }],
+                colors: ['#2fb344']
+            }).render();
+            
+            // Sparkline 2 - ARR/MRR (bleu)
+            new ApexCharts(document.querySelector("#sparkline2"), {
+                ...sparklineOptions,
+                series: [{ data: [1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4] }],
+                colors: ['#206bc4']
+            }).render();
+            
+            // Sparkline 3 - EBITDA (violet)
+            new ApexCharts(document.querySelector("#sparkline3"), {
+                ...sparklineOptions,
+                series: [{ data: [15.2, 16.1, 16.8, 17.3, 17.8, 18.1, 18.5] }],
+                colors: ['#5eba00']
+            }).render();
+            
+            // Sparkline 4 - LTV:CAC (cyan)
+            new ApexCharts(document.querySelector("#sparkline4"), {
+                ...sparklineOptions,
+                series: [{ data: [3.1, 3.4, 3.6, 3.8, 4.0, 4.1, 4.2] }],
+                colors: ['#4299e1']
+            }).render();
+            
+            // Sparkline 5 - NPS (orange)
+            new ApexCharts(document.querySelector("#sparkline5"), {
+                ...sparklineOptions,
+                series: [{ data: [65, 67, 68, 69, 70, 71, 72] }],
+                colors: ['#fab005']
+            }).render();
+            
+            // Company Filter Handler
+            document.getElementById('companyFilter').addEventListener('change', function(e) {
+                const selectedCompany = e.target.value;
+                console.log('Filtrage par entreprise:', selectedCompany);
+                // Ici on pourrait filtrer les données par entreprise
+                // Pour l'instant, on log juste la sélection
+            });
+            
+            // Auto-refresh toutes les 30 secondes
+            setInterval(function() {
+                console.log('📊 Dashboard actualisé:', new Date().toLocaleTimeString());
+                // Ici on pourrait recharger les données depuis l'API
+            }, 30000);
+            
+            console.log('✅ Dashboard CEO Tabler.io + ApexCharts chargé avec succès');
+        });
     </script>
 </body>
 </html>

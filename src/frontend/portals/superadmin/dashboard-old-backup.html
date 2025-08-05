@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1b26">
+    <title>SuperAdmin - Dashboard Exécutif 2025</title>
+    
+    <!-- 1. Tabler Core (OBLIGATOIRE) -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- 2. Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- 3. Nos CSS dans l'ordre -->
+    <link rel="stylesheet" href="assets/css/dark-theme.css">
+    <link rel="stylesheet" href="assets/css/glassmorphism.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/ceo-metrics.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Background fix */
+        body {
+            background: #0a0a0b;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Structure de base OBLIGATOIRE */
+        .main-content {
+            margin-left: 280px; /* Largeur de la sidebar */
+            padding-top: 70px; /* Hauteur de la navbar */
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Quand la sidebar est collapsed */
+        .sidebar-collapsed ~ .main-content {
+            margin-left: 80px;
+        }
+
+        /* Mobile */
+        @media (max-width: 991px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Container padding */
+        .container-fluid {
+            padding: 1.5rem;
+        }
+
+        /* Fix navbar position */
+        .navbar {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+
+        /* Fix sidebar */
+        .sidebar-glass {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1040;
+            overflow-y: auto;
+        }
+        
+        /* Fix buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+        
+        /* Search results dropdown */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 0.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .result-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .result-icon.page { background: rgba(99, 102, 241, 0.2); color: #6366F1; }
+        .result-icon.action { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .result-icon.client { background: rgba(236, 72, 153, 0.2); color: #EC4899; }
+        .result-icon.setting { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        
+        .search-empty {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .search-empty i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1035;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+        
+        /* Tooltip */
+        .nav-tooltip {
+            position: fixed;
+            background: rgba(10, 10, 11, 0.95);
+            color: #fff;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1060;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-tooltip.show {
+            opacity: 1;
+        }
+        
+        /* Company dropdown active state */
+        .company-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .company-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366F1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar-glass">
+        <!-- Header avec logo -->
+        <div class="sidebar-header">
+            <div class="logo-wrapper">
+                <i class="ti ti-sparkles" style="font-size: 2rem; color: #6366F1;"></i>
+                <span class="logo-text">SuperAdmin</span>
+            </div>
+            <button class="sidebar-toggle btn-glass" id="sidebarToggle">
+                <i class="ti ti-menu-2"></i>
+            </button>
+        </div>
+
+        <!-- Company Selector -->
+        <div class="company-selector glass-card">
+            <div class="selected-company">
+                <div class="company-avatar">
+                    <i class="ti ti-building"></i>
+                </div>
+                <div class="company-info">
+                    <span class="company-name">Toutes les entreprises</span>
+                    <span class="company-count">5 actives</span>
+                </div>
+                <i class="ti ti-chevron-down ms-auto"></i>
+            </div>
+            
+            <!-- Dropdown companies -->
+            <div class="company-dropdown glass-card">
+                <div class="company-item hover-lift">
+                    <span class="company-icon">🏢</span>
+                    <span>Vue consolidée</span>
+                </div>
+                <div class="divider"></div>
+                <div class="company-item hover-lift">
+                    <span class="company-icon">📹</span>
+                    <span>HyperVisual</span>
+                </div>
+                <div class="company-item hover-lift">
+                    <span class="company-icon">💡</span>
+                    <span>Dynamics</span>
+                </div>
+                <div class="company-item hover-lift">
+                    <span class="company-icon">🗣️</span>
+                    <span>Lexia</span>
+                </div>
+                <div class="company-item hover-lift">
+                    <span class="company-icon">🏠</span>
+                    <span>NKReality</span>
+                </div>
+                <div class="company-item hover-lift">
+                    <span class="company-icon">🛒</span>
+                    <span>Etekout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation principale -->
+        <nav class="sidebar-nav">
+            <!-- Executive -->
+            <div class="nav-section">
+                <div class="nav-section-title">EXECUTIVE</div>
+                <a href="dashboard.html" class="nav-item active hover-lift">
+                    <i class="ti ti-home nav-icon"></i>
+                    <span class="nav-text">Vue Consolidée</span>
+                    <span class="nav-badge badge-gradient">Live</span>
+                </a>
+                <a href="reports.html" class="nav-item hover-lift">
+                    <i class="ti ti-chart-bar nav-icon"></i>
+                    <span class="nav-text">Rapports CEO</span>
+                </a>
+                <a href="alerts.html" class="nav-item hover-lift">
+                    <i class="ti ti-alert-triangle nav-icon"></i>
+                    <span class="nav-text">Centre d'Alertes</span>
+                    <span class="nav-counter alert">3</span>
+                </a>
+            </div>
+
+            <!-- Finances -->
+            <div class="nav-section">
+                <div class="nav-section-title">FINANCES</div>
+                <a href="treasury.html" class="nav-item hover-lift">
+                    <i class="ti ti-wallet nav-icon"></i>
+                    <span class="nav-text">Trésorerie</span>
+                    <span class="status-dot warning"></span>
+                </a>
+                <a href="pnl.html" class="nav-item hover-lift">
+                    <i class="ti ti-trending-up nav-icon"></i>
+                    <span class="nav-text">P&L Consolidé</span>
+                </a>
+                <a href="banking.html" class="nav-item hover-lift">
+                    <i class="ti ti-building-bank nav-icon"></i>
+                    <span class="nav-text">Banking</span>
+                    <span class="status-dot online"></span>
+                </a>
+                <a href="forecasting.html" class="nav-item hover-lift">
+                    <i class="ti ti-crystal-ball nav-icon"></i>
+                    <span class="nav-text">Prévisions</span>
+                </a>
+            </div>
+
+            <!-- Commercial -->
+            <div class="nav-section">
+                <div class="nav-section-title">COMMERCIAL</div>
+                <a href="pipeline.html" class="nav-item hover-lift">
+                    <i class="ti ti-funnel nav-icon"></i>
+                    <span class="nav-text">Pipeline Global</span>
+                    <span class="nav-counter">89</span>
+                </a>
+                <a href="invoices.html" class="nav-item hover-lift">
+                    <i class="ti ti-file-invoice nav-icon"></i>
+                    <span class="nav-text">Factures</span>
+                    <span class="nav-counter">127</span>
+                </a>
+                <a href="clients.html" class="nav-item hover-lift">
+                    <i class="ti ti-users nav-icon"></i>
+                    <span class="nav-text">Clients</span>
+                </a>
+            </div>
+
+            <!-- Operations -->
+            <div class="nav-section">
+                <div class="nav-section-title">OPÉRATIONS</div>
+                <a href="erp.html" class="nav-item hover-lift">
+                    <i class="ti ti-packages nav-icon"></i>
+                    <span class="nav-text">ERP</span>
+                </a>
+                <a href="projects.html" class="nav-item hover-lift">
+                    <i class="ti ti-clipboard-list nav-icon"></i>
+                    <span class="nav-text">Projets</span>
+                </a>
+                <a href="tasks.html" class="nav-item hover-lift">
+                    <i class="ti ti-checklist nav-icon"></i>
+                    <span class="nav-text">Tâches</span>
+                    <span class="nav-counter">47</span>
+                </a>
+            </div>
+
+            <!-- Marketing -->
+            <div class="nav-section">
+                <div class="nav-section-title">MARKETING</div>
+                <a href="campaigns.html" class="nav-item hover-lift">
+                    <i class="ti ti-speakerphone nav-icon"></i>
+                    <span class="nav-text">Campagnes</span>
+                    <span class="status-dot pulse-glow"></span>
+                </a>
+                <a href="leads.html" class="nav-item hover-lift">
+                    <i class="ti ti-target nav-icon"></i>
+                    <span class="nav-text">Leads</span>
+                    <span class="nav-counter">234</span>
+                </a>
+            </div>
+
+            <!-- Analytics -->
+            <div class="nav-section">
+                <div class="nav-section-title">ANALYTICS</div>
+                <a href="performance.html" class="nav-item hover-lift">
+                    <i class="ti ti-chart-line nav-icon"></i>
+                    <span class="nav-text">Performance</span>
+                </a>
+                <a href="predictions.html" class="nav-item hover-lift">
+                    <i class="ti ti-brain nav-icon"></i>
+                    <span class="nav-text">IA Prédictive</span>
+                    <span class="nav-badge badge-gradient">Beta</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- User section (bottom) -->
+        <div class="sidebar-footer">
+            <div class="user-card glass-card hover-lift">
+                <div class="user-avatar" style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold;">
+                    JM
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Jean-Marie</span>
+                    <span class="user-role">Super Admin</span>
+                </div>
+                <div class="dropdown">
+                    <i class="ti ti-dots-vertical"></i>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar navbar-glass sticky-top">
+        <div class="container-fluid">
+            <!-- Mobile menu toggle -->
+            <button class="navbar-toggler d-lg-none btn-glass" id="mobileMenuToggle">
+                <i class="ti ti-menu-2"></i>
+            </button>
+
+            <!-- Search bar -->
+            <div class="navbar-search">
+                <div class="search-wrapper glass-card">
+                    <i class="ti ti-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Rechercher... (Ctrl+K)">
+                    <kbd class="search-shortcut">⌘K</kbd>
+                </div>
+            </div>
+
+            <!-- Right section -->
+            <div class="navbar-actions">
+                <!-- Notifications -->
+                <div class="action-item hover-lift">
+                    <button class="btn-glass btn-icon">
+                        <i class="ti ti-bell"></i>
+                        <span class="notification-dot pulse-glow"></span>
+                    </button>
+                </div>
+
+                <!-- Messages -->
+                <div class="action-item hover-lift">
+                    <button class="btn-glass btn-icon">
+                        <i class="ti ti-message"></i>
+                        <span class="badge-count">3</span>
+                    </button>
+                </div>
+
+                <!-- Apps mega menu -->
+                <div class="action-item mega-menu-wrapper">
+                    <button class="btn-glass btn-icon" data-toggle="mega-menu">
+                        <i class="ti ti-apps"></i>
+                    </button>
+                    
+                    <!-- Mega Menu Panel -->
+                    <div class="mega-menu glass-card">
+                        <div class="mega-menu-header">
+                            <h5 class="mega-menu-title">Applications & Intégrations</h5>
+                            <button class="btn-close">
+                                <i class="ti ti-x"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mega-menu-content">
+                            <!-- Column 1: Core Apps -->
+                            <div class="mega-menu-column">
+                                <h6 class="column-title">Applications Core</h6>
+                                <a href="invoices.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-1">
+                                        <i class="ti ti-file-invoice"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">Invoice Ninja</div>
+                                        <div class="item-desc">Facturation avancée</div>
+                                    </div>
+                                </a>
+                                <a href="banking.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-2">
+                                        <i class="ti ti-building-bank"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">Revolut Business</div>
+                                        <div class="item-desc">Banking moderne</div>
+                                    </div>
+                                </a>
+                                <a href="erp.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-3">
+                                        <i class="ti ti-packages"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">ERPNext V15</div>
+                                        <div class="item-desc">Gestion complète</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Column 2: Marketing -->
+                            <div class="mega-menu-column">
+                                <h6 class="column-title">Marketing & CRM</h6>
+                                <a href="marketing.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-4">
+                                        <i class="ti ti-mail"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">Mautic 5X</div>
+                                        <div class="item-desc">Marketing automation</div>
+                                    </div>
+                                </a>
+                                <a href="crm.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-5">
+                                        <i class="ti ti-users"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">CRM Unifié</div>
+                                        <div class="item-desc">Gestion clients</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Column 3: Tools -->
+                            <div class="mega-menu-column">
+                                <h6 class="column-title">Outils & Analytics</h6>
+                                <a href="ocr.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-6">
+                                        <i class="ti ti-scan"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">OCR Vision</div>
+                                        <div class="item-desc">Scan intelligent</div>
+                                    </div>
+                                </a>
+                                <a href="analytics.html" class="mega-menu-item hover-lift">
+                                    <div class="item-icon gradient-bg-7">
+                                        <i class="ti ti-chart-line"></i>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-title">Analytics</div>
+                                        <div class="item-desc">Insights temps réel</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="mega-menu-footer">
+                            <a href="integrations.html" class="btn btn-glass">
+                                Voir toutes les intégrations
+                                <i class="ti ti-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme toggle -->
+                <div class="action-item hover-lift">
+                    <button class="btn-glass btn-icon" id="themeToggle">
+                        <i class="ti ti-moon hide-theme-dark"></i>
+                        <i class="ti ti-sun hide-theme-light"></i>
+                    </button>
+                </div>
+
+                <!-- User menu -->
+                <div class="action-item">
+                    <button class="user-menu-toggle hover-lift">
+                        <div class="avatar" style="width: 32px; height: 32px; background: linear-gradient(135deg, #6366F1, #8B5CF6); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 0.875rem;">
+                            JM
+                        </div>
+                        <i class="ti ti-chevron-down ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-wrapper glass-card animate-in">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html" class="hover-lift">
+                            <i class="ti ti-home"></i>
+                            <span>Accueil</span>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+                
+                <!-- Quick actions -->
+                <div class="breadcrumb-actions">
+                    <button class="btn btn-glass btn-sm">
+                        <i class="ti ti-download me-1"></i>
+                        Export
+                    </button>
+                    <button class="btn btn-glass btn-primary btn-sm">
+                        <i class="ti ti-plus me-1"></i>
+                        Nouvelle action
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Page Header -->
+            <div class="page-header mb-4">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="page-title gradient-text animate-in delay-1">Dashboard Exécutif</h1>
+                        <p class="page-subtitle animate-in delay-2">Vue consolidée de vos 5 entreprises</p>
+                    </div>
+                    <div class="col-auto">
+                        <div class="page-actions animate-in delay-3">
+                            <button class="btn btn-glass">
+                                <i class="ti ti-calendar me-2"></i>
+                                Derniers 30 jours
+                                <i class="ti ti-chevron-down ms-2"></i>
+                            </button>
+                            <button class="btn btn-glass btn-primary">
+                                <i class="ti ti-download me-2"></i>
+                                Export rapport
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CEO METRICS ROW - 5 KPIs Critiques -->
+            <div class="row g-4 mb-4">
+                <!-- Cash Runway -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card critical glass-card animate-in delay-4 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon alert">
+                                <i class="ti ti-clock"></i>
+                            </div>
+                            <div class="metric-alert danger pulse-glow">
+                                <i class="ti ti-alert-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Cash Runway</div>
+                            <div class="metric-value danger">4.2 mois</div>
+                            <div class="metric-subtitle">Burn: €245K/mois</div>
+                        </div>
+                        <div class="metric-chart">
+                            <div id="cash-sparkline"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ARR Consolidé -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-5 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-trending-up"></i>
+                            </div>
+                            <div class="metric-badge success">
+                                <span>+47% YoY</span>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">ARR Consolidé</div>
+                            <div class="metric-value gradient-text">€7.2M</div>
+                            <div class="metric-subtitle">Target: €8.5M</div>
+                        </div>
+                        <div class="metric-chart">
+                            <div id="arr-sparkline"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- EBITDA Margin -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-6 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-percentage"></i>
+                            </div>
+                            <div class="metric-gauge">
+                                <div id="ebitda-gauge"></div>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Marge EBITDA</div>
+                            <div class="metric-value gradient-text">18.7%</div>
+                            <div class="metric-subtitle">Objectif: 25%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- LTV:CAC Ratio -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card warning glass-card animate-in delay-7 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-target"></i>
+                            </div>
+                            <div class="metric-alert warning">
+                                <i class="ti ti-zap"></i>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">LTV:CAC Ratio</div>
+                            <div class="metric-value warning">2.8:1</div>
+                            <div class="metric-subtitle">Sous le seuil 3:1</div>
+                        </div>
+                        <div class="metric-breakdown">
+                            <span>LTV: €4,200</span>
+                            <span>CAC: €1,500</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NPS Global -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-8 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-heart"></i>
+                            </div>
+                            <div class="metric-indicator">
+                                <div id="nps-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">NPS Global</div>
+                            <div class="metric-value success">52</div>
+                            <div class="metric-subtitle">Promoteurs: 67%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6 BLOCS OPÉRATIONNELS -->
+            <div class="operational-grid mb-4">
+                <!-- Finance -->
+                <div class="operational-block animate-in delay-9">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">
+                                <i class="ti ti-wallet"></i>
+                            </div>
+                            Finance
+                        </div>
+                        <a href="banking.html" class="block-action">Détails</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Trésorerie totale</div>
+                                <div class="metric-detail">5 comptes bancaires</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€892K</div>
+                                <div class="metric-change positive">+€12K</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Créances clients</div>
+                                <div class="metric-detail">23 factures impayées</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€458K</div>
+                                <div class="metric-change neutral">45j DSO</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Dettes fournisseurs</div>
+                                <div class="metric-detail">À payer sous 30j</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€234K</div>
+                                <div class="metric-change positive">-€18K</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tâches -->
+                <div class="operational-block animate-in delay-10">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(99, 102, 241, 0.2); color: #6366F1;">
+                                <i class="ti ti-clipboard-list"></i>
+                            </div>
+                            Tâches
+                        </div>
+                        <a href="tasks.html" class="block-action">Voir tout</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">En cours</div>
+                                <div class="metric-detail">Priorité haute: 12</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">47</div>
+                                <div class="metric-change positive">-5</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">En retard</div>
+                                <div class="metric-detail">Assignées à moi: 3</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">8</div>
+                                <div class="metric-change negative">+2</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Terminées (7j)</div>
+                                <div class="metric-detail">Équipe complète</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">156</div>
+                                <div class="metric-change positive">+23</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commercial -->
+                <div class="operational-block animate-in delay-11">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(139, 92, 246, 0.2); color: #8B5CF6;">
+                                <i class="ti ti-shopping-cart"></i>
+                            </div>
+                            Commercial
+                        </div>
+                        <a href="sales.html" class="block-action">Pipeline</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Pipeline actuel</div>
+                                <div class="metric-detail">89 opportunités</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€1.2M</div>
+                                <div class="metric-change positive">+€180K</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Taux de conversion</div>
+                                <div class="metric-detail">Ce mois</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">32%</div>
+                                <div class="metric-change positive">+4%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Cycle de vente</div>
+                                <div class="metric-detail">Moyenne mobile</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">45j</div>
+                                <div class="metric-change positive">-3j</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketing -->
+                <div class="operational-block animate-in delay-12">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(236, 72, 153, 0.2); color: #EC4899;">
+                                <i class="ti ti-speakerphone"></i>
+                            </div>
+                            Marketing
+                        </div>
+                        <a href="marketing.html" class="block-action">Campagnes</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Leads générés</div>
+                                <div class="metric-detail">Ce mois</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">234</div>
+                                <div class="metric-change positive">+18%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Coût par lead</div>
+                                <div class="metric-detail">Moyenne pondérée</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€47</div>
+                                <div class="metric-change positive">-€8</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">ROI campagnes</div>
+                                <div class="metric-detail">30 derniers jours</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">340%</div>
+                                <div class="metric-change positive">+45%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance -->
+                <div class="operational-block animate-in delay-13">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">
+                                <i class="ti ti-chart-line"></i>
+                            </div>
+                            Performance
+                        </div>
+                        <a href="analytics.html" class="block-action">Analytics</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Productivité équipe</div>
+                                <div class="metric-detail">Score global</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">87%</div>
+                                <div class="metric-change positive">+3%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Tickets support</div>
+                                <div class="metric-detail">Temps résolution</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">2.3h</div>
+                                <div class="metric-change positive">-0.5h</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Satisfaction client</div>
+                                <div class="metric-detail">Score CSAT</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">4.6/5</div>
+                                <div class="metric-change positive">+0.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertes -->
+                <div class="operational-block animate-in delay-14">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(239, 68, 68, 0.2); color: #EF4444;">
+                                <i class="ti ti-alert-triangle"></i>
+                            </div>
+                            Alertes
+                        </div>
+                        <a href="alerts.html" class="block-action">Toutes</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Critiques</div>
+                                <div class="metric-detail">Action immédiate</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">3</div>
+                                <div class="metric-change negative">+1</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Avertissements</div>
+                                <div class="metric-detail">À surveiller</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">7</div>
+                                <div class="metric-change neutral">±0</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Système</div>
+                                <div class="metric-detail">Intégrations</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">1</div>
+                                <div class="metric-change positive">-2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Feed & Performance -->
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="glass-card animate-in delay-10">
+                        <div class="card-header">
+                            <h3 class="card-title gradient-text">Activité récente</h3>
+                            <span class="badge badge-glass pulse-glow">En temps réel</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-feed">
+                                <div class="activity-item hover-lift">
+                                    <div class="activity-icon gradient-bg-1">
+                                        <i class="ti ti-file-invoice"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Nouvelle facture créée</div>
+                                        <div class="activity-desc">
+                                            Invoice #INV-2025-0847 pour Client ABC
+                                        </div>
+                                        <div class="activity-time">Il y a 5 min</div>
+                                    </div>
+                                    <div class="activity-amount positive">
+                                        +€12,500
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item hover-lift">
+                                    <div class="activity-icon gradient-bg-2">
+                                        <i class="ti ti-credit-card"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Paiement reçu</div>
+                                        <div class="activity-desc">
+                                            Virement Revolut de Client XYZ
+                                        </div>
+                                        <div class="activity-time">Il y a 12 min</div>
+                                    </div>
+                                    <div class="activity-amount positive">
+                                        +€8,750
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item hover-lift">
+                                    <div class="activity-icon gradient-bg-4">
+                                        <i class="ti ti-mail"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Campagne lancée</div>
+                                        <div class="activity-desc">
+                                            "Summer Sale 2025" - 3,450 contacts
+                                        </div>
+                                        <div class="activity-time">Il y a 1h</div>
+                                    </div>
+                                    <div class="activity-badge">
+                                        <span class="badge badge-glass">89% ouverture</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item hover-lift">
+                                    <div class="activity-icon gradient-bg-3">
+                                        <i class="ti ti-package"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-title">Commande expédiée</div>
+                                        <div class="activity-desc">
+                                            Order #ORD-2025-1234 - Etekout
+                                        </div>
+                                        <div class="activity-time">Il y a 2h</div>
+                                    </div>
+                                    <div class="activity-status">
+                                        <i class="ti ti-truck"></i> En transit
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-glass w-100 mt-3">
+                                Voir toute l'activité
+                                <i class="ti ti-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="glass-card animate-in delay-11">
+                        <div class="card-header">
+                            <h3 class="card-title gradient-text">Performance par entreprise</h3>
+                            <button class="btn btn-glass btn-sm">
+                                <i class="ti ti-dots"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="company-performance">
+                                <div class="performance-item hover-lift">
+                                    <div class="company-logo">
+                                        <span class="company-icon">📹</span>
+                                    </div>
+                                    <div class="company-details">
+                                        <div class="company-name">HyperVisual</div>
+                                        <div class="company-desc">Production vidéo</div>
+                                        <div class="progress glass-progress mt-2">
+                                            <div class="progress-fill gradient-bg-1" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="company-metrics">
+                                        <div class="metric-value">€458K</div>
+                                        <div class="metric-change positive">+18%</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="performance-item hover-lift">
+                                    <div class="company-logo">
+                                        <span class="company-icon">💡</span>
+                                    </div>
+                                    <div class="company-details">
+                                        <div class="company-name">Dynamics</div>
+                                        <div class="company-desc">Conseil & Innovation</div>
+                                        <div class="progress glass-progress mt-2">
+                                            <div class="progress-fill gradient-bg-2" style="width: 72%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="company-metrics">
+                                        <div class="metric-value">€342K</div>
+                                        <div class="metric-change positive">+12%</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="performance-item hover-lift">
+                                    <div class="company-logo">
+                                        <span class="company-icon">🗣️</span>
+                                    </div>
+                                    <div class="company-details">
+                                        <div class="company-name">Lexia</div>
+                                        <div class="company-desc">Services linguistiques</div>
+                                        <div class="progress glass-progress mt-2">
+                                            <div class="progress-fill gradient-bg-3" style="width: 68%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="company-metrics">
+                                        <div class="metric-value">€298K</div>
+                                        <div class="metric-change positive">+8%</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="performance-item hover-lift">
+                                    <div class="company-logo">
+                                        <span class="company-icon">🏠</span>
+                                    </div>
+                                    <div class="company-details">
+                                        <div class="company-name">NKReality</div>
+                                        <div class="company-desc">Immobilier</div>
+                                        <div class="progress glass-progress mt-2">
+                                            <div class="progress-fill gradient-bg-4" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="company-metrics">
+                                        <div class="metric-value">€276K</div>
+                                        <div class="metric-change positive">+15%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    <script src="assets/js/navigation.js"></script>
+    <script src="assets/js/directus-api.js"></script>
+    <script src="assets/js/ceo-dashboard.js"></script>
+    <script>
+        // Chart configurations
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(10, 10, 11, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: 'rgba(255, 255, 255, 0.8)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        borderColor: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        borderColor: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        font: {
+                            size: 11
+                        },
+                        callback: function(value) {
+                            return '€' + (value / 1000) + 'K';
+                        }
+                    }
+                }
+            }
+        };
+        
+        // Sparkline options
+        const sparklineOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            },
+            elements: {
+                point: { radius: 0 },
+                line: { borderWidth: 2 }
+            }
+        };
+        
+        // Initialize sparklines
+        const sparklineData = () => ({
+            labels: ['', '', '', '', '', '', ''],
+            datasets: [{
+                data: Array.from({length: 7}, () => Math.random() * 100 + 50),
+                borderColor: '#6366F1',
+                backgroundColor: 'transparent',
+                tension: 0.4
+            }]
+        });
+        
+        // Create sparklines
+        ['revenueSparkline', 'customersSparkline', 'invoicesSparkline', 'cashSparkline'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                new Chart(el.getContext('2d'), {
+                    type: 'line',
+                    data: sparklineData(),
+                    options: sparklineOptions
+                });
+            }
+        });
+        
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart');
+        if (revenueCtx) {
+            const gradient = revenueCtx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
+            gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+            
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+                    datasets: [
+                        {
+                            label: 'HyperVisual',
+                            data: [280000, 290000, 310000, 340000, 380000, 420000, 458000],
+                            borderColor: '#6366F1',
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Dynamics',
+                            data: [220000, 240000, 260000, 280000, 300000, 320000, 342000],
+                            borderColor: '#8B5CF6',
+                            borderWidth: 2,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Lexia',
+                            data: [180000, 200000, 220000, 240000, 260000, 280000, 298000],
+                            borderColor: '#EC4899',
+                            borderWidth: 2,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    ...chartOptions,
+                    plugins: {
+                        ...chartOptions.plugins,
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Sector Chart (Doughnut)
+        const sectorCtx = document.getElementById('sectorChart');
+        if (sectorCtx) {
+            new Chart(sectorCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['HyperVisual', 'Dynamics', 'Lexia', 'NKReality', 'Etekout'],
+                    datasets: [{
+                        data: [458000, 342000, 298000, 276000, 189000],
+                        backgroundColor: [
+                            '#6366F1',
+                            '#8B5CF6',
+                            '#EC4899',
+                            '#10B981',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0,
+                        spacing: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(10, 10, 11, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: 'rgba(255, 255, 255, 0.8)',
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return context.label + ': €' + (value / 1000).toFixed(0) + 'K (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+        
+        // Company performance progress bars animation
+        document.querySelectorAll('.progress-fill').forEach((bar, index) => {
+            setTimeout(() => {
+                bar.style.transition = 'width 1s ease-out';
+            }, index * 100);
+        });
+        
+        // Activity feed real-time simulation
+        const activityFeed = document.querySelector('.activity-feed');
+        if (activityFeed) {
+            // Simulate new activity every 30 seconds
+            setInterval(() => {
+                const activities = [
+                    { icon: 'ti-file-invoice', title: 'Nouvelle facture', desc: 'Invoice #INV-2025-' + Math.floor(Math.random() * 1000), amount: '+€' + (Math.random() * 10000).toFixed(0) },
+                    { icon: 'ti-credit-card', title: 'Paiement reçu', desc: 'Virement client', amount: '+€' + (Math.random() * 5000).toFixed(0) },
+                    { icon: 'ti-mail', title: 'Email envoyé', desc: 'Campaign newsletter', badge: Math.floor(Math.random() * 100) + '% ouverture' }
+                ];
+                
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                // Add new activity with animation
+                // (Implementation depends on your needs)
+            }, 30000);
+        }
+        
+        // Initialize animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all animatable elements
+        document.querySelectorAll('.glass-card, .kpi-card, .activity-item, .performance-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

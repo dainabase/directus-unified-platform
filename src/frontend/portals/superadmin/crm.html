@@ -52,6 +52,38 @@
         .score-high { background: rgba(16, 185, 129, 0.2); color: #10b981; }
         .score-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
         .score-low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        
+        /* Pipeline styles */
+        .pipeline-stage {
+            min-height: 300px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pipeline-items {
+            min-height: 200px;
+        }
+        
+        .deal-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: grab;
+            transition: all 0.2s;
+        }
+        
+        .deal-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .deal-card.dragging {
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body data-bs-theme="light">
@@ -107,6 +139,16 @@
                                     <i class="ti ti-file-invoice"></i>
                                 </span>
                                 <span class="nav-link-title">Devis & Factures</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION PROJETS -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-clipboard-check"></i>
+                                </span>
+                                <span class="nav-link-title">Gestion Projets</span>
                             </a>
                         </li>
                     </ul>
@@ -346,6 +388,87 @@
                             </ul>
                         </div>
                     </div>
+                    
+                    <!-- Pipeline de vente -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="mb-0">Pipeline de Vente</h3>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-deal">
+                                    <i class="ti ti-plus"></i>
+                                    Nouvelle Opportunité
+                                </button>
+                            </div>
+                            <div class="card glass-card">
+                                <div class="card-body">
+                                    <div class="pipeline-container">
+                                        <div class="row g-3">
+                                            <div class="col-lg col-md-6">
+                                                <div class="pipeline-stage">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 class="mb-0">Prospect</h4>
+                                                        <span class="badge bg-secondary" id="prospect-count">8</span>
+                                                    </div>
+                                                    <div class="pipeline-amount text-primary h3" id="prospect-amount">€125K</div>
+                                                    <div class="pipeline-items" id="stage-prospect">
+                                                        <!-- Cartes deals -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg col-md-6">
+                                                <div class="pipeline-stage">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 class="mb-0">Qualification</h4>
+                                                        <span class="badge bg-blue" id="qualification-count">5</span>
+                                                    </div>
+                                                    <div class="pipeline-amount text-blue h3" id="qualification-amount">€89K</div>
+                                                    <div class="pipeline-items" id="stage-qualification">
+                                                        <!-- Cartes deals -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg col-md-6">
+                                                <div class="pipeline-stage">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 class="mb-0">Proposition</h4>
+                                                        <span class="badge bg-yellow" id="proposition-count">3</span>
+                                                    </div>
+                                                    <div class="pipeline-amount text-yellow h3" id="proposition-amount">€67K</div>
+                                                    <div class="pipeline-items" id="stage-proposition">
+                                                        <!-- Cartes deals -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg col-md-6">
+                                                <div class="pipeline-stage">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 class="mb-0">Négociation</h4>
+                                                        <span class="badge bg-orange" id="negotiation-count">2</span>
+                                                    </div>
+                                                    <div class="pipeline-amount text-orange h3" id="negotiation-amount">€45K</div>
+                                                    <div class="pipeline-items" id="stage-negotiation">
+                                                        <!-- Cartes deals -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg col-md-6">
+                                                <div class="pipeline-stage">
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <h4 class="mb-0">Gagné</h4>
+                                                        <span class="badge bg-green" id="won-count">4</span>
+                                                    </div>
+                                                    <div class="pipeline-amount text-green h3" id="won-amount">€156K</div>
+                                                    <div class="pipeline-items" id="stage-won">
+                                                        <!-- Cartes deals -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -439,8 +562,121 @@
         </div>
     </div>
     
+    <!-- Modal Nouvelle Opportunité -->
+    <div class="modal modal-blur fade" id="modal-deal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouvelle Opportunité</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="deal-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nom de l'opportunité</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Montant (€)</label>
+                                    <input type="number" class="form-control" name="amount" step="100" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Entreprise</label>
+                                    <select class="form-select" name="company" required>
+                                        <option value="">Sélectionner une entreprise</option>
+                                        <option value="hypervisual">HyperVisual</option>
+                                        <option value="dynamics">Dynamics</option>
+                                        <option value="lexia">Lexia</option>
+                                        <option value="nkreality">NKReality</option>
+                                        <option value="etekout">Etekout</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Contact</label>
+                                    <select class="form-select" name="contact" required>
+                                        <option value="">Sélectionner un contact</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Étape</label>
+                                    <select class="form-select" name="stage" required>
+                                        <option value="prospect">Prospect</option>
+                                        <option value="qualification">Qualification</option>
+                                        <option value="proposition">Proposition</option>
+                                        <option value="negotiation">Négociation</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Date de clôture prévue</label>
+                                    <input type="date" class="form-control" name="close_date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Probabilité (%)</label>
+                                    <select class="form-select" name="probability">
+                                        <option value="10">10% - Prospect</option>
+                                        <option value="25">25% - Qualification</option>
+                                        <option value="50">50% - Proposition</option>
+                                        <option value="75">75% - Négociation</option>
+                                        <option value="90">90% - Signature proche</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Responsable</label>
+                                    <select class="form-select" name="owner">
+                                        <option value="paul-martin">Paul Martin</option>
+                                        <option value="marie-dupont">Marie Dupont</option>
+                                        <option value="jean-rousseau">Jean Rousseau</option>
+                                        <option value="sophie-bernard">Sophie Bernard</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-primary ms-auto" form="deal-form">
+                        <i class="ti ti-plus"></i>
+                        Créer l'opportunité
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- JS Tabler -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- Pour le drag & drop (Pipeline) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     
     <script>
         // Données simulées pour les contacts
@@ -506,6 +742,101 @@
                 score: 78
             }
         ];
+        
+        // Données simulées pour les opportunités
+        const dealsData = [
+            {
+                id: 1,
+                name: 'Site E-commerce TechCorp',
+                amount: 25000,
+                company: 'HyperVisual',
+                contact: 'Marie Dupont',
+                stage: 'proposition',
+                probability: 50,
+                close_date: '2024-03-15',
+                owner: 'Paul Martin',
+                created_date: '2024-01-10'
+            },
+            {
+                id: 2,
+                name: 'App Mobile InnovateLab',
+                amount: 35000,
+                company: 'Dynamics',
+                contact: 'Jean Martin',
+                stage: 'qualification',
+                probability: 25,
+                close_date: '2024-04-20',
+                owner: 'Marie Dupont',
+                created_date: '2024-01-15'
+            },
+            {
+                id: 3,
+                name: 'Refonte UX DesignStudio',
+                amount: 15000,
+                company: 'Lexia',
+                contact: 'Sophie Bernard',
+                stage: 'negotiation',
+                probability: 75,
+                close_date: '2024-02-28',
+                owner: 'Sophie Bernard',
+                created_date: '2024-01-05'
+            },
+            {
+                id: 4,
+                name: 'Consulting Digital BigCorp',
+                amount: 45000,
+                company: 'Etekout',
+                contact: 'Pierre Rousseau',
+                stage: 'prospect',
+                probability: 10,
+                close_date: '2024-05-30',
+                owner: 'Jean Rousseau',
+                created_date: '2024-01-20'
+            },
+            {
+                id: 5,
+                name: 'Maintenance WebServices',
+                amount: 12000,
+                company: 'NKReality',
+                contact: 'Amélie Lefebvre',
+                stage: 'won',
+                probability: 100,
+                close_date: '2024-01-31',
+                owner: 'Paul Martin',
+                created_date: '2023-12-15'
+            }
+        ];
+        
+        // Calculer le score automatique d'un contact
+        function calculateContactScore(contact) {
+            let score = 0;
+            
+            // Base score
+            score += 20;
+            
+            // Email présent
+            if (contact.email) score += 15;
+            
+            // Téléphone présent
+            if (contact.phone) score += 10;
+            
+            // Interaction récente (simulée)
+            const daysSinceLastInteraction = Math.floor((new Date() - new Date(contact.lastInteraction)) / (1000 * 60 * 60 * 24));
+            if (daysSinceLastInteraction < 7) score += 25;
+            else if (daysSinceLastInteraction < 30) score += 15;
+            else if (daysSinceLastInteraction < 90) score += 5;
+            
+            // Type de contact
+            if (contact.type === 'client') score += 20;
+            else if (contact.type === 'prospect') score += 15;
+            else if (contact.type === 'partenaire') score += 10;
+            
+            // Engagement (simulé basé sur l'ID pour demo)
+            const engagementBonus = (contact.id % 3) * 10;
+            score += engagementBonus;
+            
+            return Math.min(Math.max(score, 0), 100);
+        }
         
         // Afficher les contacts
         function displayContacts(contacts = contactsData) {
@@ -648,9 +979,200 @@
             console.log('Contact créé:', newContact);
         });
         
+        // Afficher le pipeline de vente
+        function displayPipeline() {
+            const stages = {
+                prospect: [],
+                qualification: [],
+                proposition: [],
+                negotiation: [],
+                won: []
+            };
+            
+            // Grouper les deals par étape
+            dealsData.forEach(deal => {
+                if (stages[deal.stage]) {
+                    stages[deal.stage].push(deal);
+                }
+            });
+            
+            // Mettre à jour chaque étape
+            Object.keys(stages).forEach(stage => {
+                const deals = stages[stage];
+                const totalAmount = deals.reduce((sum, deal) => sum + deal.amount, 0);
+                
+                // Mettre à jour les compteurs et montants
+                document.getElementById(`${stage}-count`).textContent = deals.length;
+                document.getElementById(`${stage}-amount`).textContent = `€${(totalAmount/1000).toFixed(0)}K`;
+                
+                // Créer les cartes deals
+                const container = document.getElementById(`stage-${stage}`);
+                container.innerHTML = deals.map(deal => createDealCard(deal)).join('');
+            });
+            
+            // Initialiser le drag & drop
+            initPipelineDragDrop();
+        }
+        
+        // Créer une carte deal
+        function createDealCard(deal) {
+            const probabilityColor = deal.probability >= 75 ? '#10b981' : 
+                                   deal.probability >= 50 ? '#f59e0b' : 
+                                   deal.probability >= 25 ? '#3b82f6' : '#6b7280';
+            
+            return `
+                <div class="deal-card" draggable="true" data-deal-id="${deal.id}">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-0">${deal.name}</h6>
+                        <div class="dropdown">
+                            <button class="btn btn-ghost-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="ti ti-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="editDeal(${deal.id})">
+                                    <i class="ti ti-edit me-2"></i>Modifier
+                                </a>
+                                <a class="dropdown-item" href="#" onclick="viewDeal(${deal.id})">
+                                    <i class="ti ti-eye me-2"></i>Voir détails
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="#" onclick="deleteDeal(${deal.id})">
+                                    <i class="ti ti-trash me-2"></i>Supprimer
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-muted small mb-2">
+                        <span class="badge bg-primary-lt">${deal.company}</span>
+                    </div>
+                    <div class="text-muted small mb-2">
+                        <i class="ti ti-user me-1"></i>${deal.contact}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-primary">€${deal.amount.toLocaleString('fr-FR')}</strong>
+                        <span class="badge" style="background-color: ${probabilityColor}20; color: ${probabilityColor}">
+                            ${deal.probability}%
+                        </span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                        <i class="ti ti-calendar me-1"></i>
+                        ${new Date(deal.close_date).toLocaleDateString('fr-FR')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initialiser le drag & drop pour le pipeline
+        function initPipelineDragDrop() {
+            const stages = ['prospect', 'qualification', 'proposition', 'negotiation', 'won'];
+            
+            stages.forEach(stage => {
+                const container = document.getElementById(`stage-${stage}`);
+                if (container) {
+                    new Sortable(container, {
+                        group: 'pipeline',
+                        animation: 150,
+                        ghostClass: 'deal-card-ghost',
+                        onEnd: function(evt) {
+                            const dealId = parseInt(evt.item.dataset.dealId);
+                            const newStage = evt.to.id.replace('stage-', '');
+                            
+                            // Mettre à jour le deal
+                            updateDealStage(dealId, newStage);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Mettre à jour l'étape d'un deal
+        function updateDealStage(dealId, newStage) {
+            const deal = dealsData.find(d => d.id === dealId);
+            if (deal) {
+                deal.stage = newStage;
+                
+                // Mettre à jour la probabilité selon l'étape
+                const probabilities = {
+                    prospect: 10,
+                    qualification: 25,
+                    proposition: 50,
+                    negotiation: 75,
+                    won: 100
+                };
+                deal.probability = probabilities[newStage] || deal.probability;
+                
+                console.log(`Deal "${deal.name}" déplacé vers ${newStage} (${deal.probability}%)`);
+                
+                // Recharger le pipeline
+                displayPipeline();
+            }
+        }
+        
+        // Actions sur les deals
+        function editDeal(id) {
+            console.log('Modifier deal:', id);
+        }
+        
+        function viewDeal(id) {
+            console.log('Voir deal:', id);
+        }
+        
+        function deleteDeal(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette opportunité ?')) {
+                const index = dealsData.findIndex(d => d.id === id);
+                if (index > -1) {
+                    dealsData.splice(index, 1);
+                    displayPipeline();
+                }
+            }
+        }
+        
+        // Gestion du formulaire d'opportunité
+        document.getElementById('deal-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newDeal = {
+                id: Math.max(...dealsData.map(d => d.id)) + 1,
+                name: formData.get('name'),
+                amount: parseInt(formData.get('amount')),
+                company: formData.get('company'),
+                contact: formData.get('contact'),
+                stage: formData.get('stage'),
+                probability: parseInt(formData.get('probability')),
+                close_date: formData.get('close_date'),
+                owner: formData.get('owner'),
+                description: formData.get('description'),
+                created_date: new Date().toISOString().split('T')[0]
+            };
+            
+            // Ajouter le deal
+            dealsData.push(newDeal);
+            
+            // Fermer le modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modal-deal'));
+            modal.hide();
+            
+            // Réinitialiser le formulaire
+            this.reset();
+            
+            // Recharger le pipeline
+            displayPipeline();
+            
+            console.log('Nouvelle opportunité créée:', newDeal);
+        });
+        
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            // Recalculer les scores automatiquement
+            contactsData.forEach(contact => {
+                contact.score = calculateContactScore(contact);
+            });
+            
             displayContacts();
+            displayPipeline();
+            
+            console.log('CRM enrichi initialisé');
         });
     </script>
 </body>

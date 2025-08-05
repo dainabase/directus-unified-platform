@@ -98,6 +98,16 @@
                                 <span class="nav-link-title">Devis & Factures</span>
                             </a>
                         </li>
+                        
+                        <!-- SECTION PROJETS -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./projects.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-clipboard-check"></i>
+                                </span>
+                                <span class="nav-link-title">Gestion Projets</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -529,13 +539,128 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Template</label>
-                        <select class="form-select">
+                        <select class="form-select" id="quote-template">
                             <option value="">Aucun template</option>
                             <option value="web">Développement Web</option>
                             <option value="mobile">Application Mobile</option>
                             <option value="consulting">Consulting</option>
                             <option value="maintenance">Maintenance</option>
                         </select>
+                    </div>
+                    
+                    <!-- Générateur de devis avancé -->
+                    <div class="devis-generator mt-4" id="devis-generator" style="display: none;">
+                        <hr>
+                        <h4>Générateur de Devis</h4>
+                        
+                        <!-- En-tête du devis -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5>Informations client</h5>
+                                <select class="form-select mb-2" id="devis-client" onchange="loadClientInfo()">
+                                    <option>Sélectionner un client...</option>
+                                    <option value="techcorp">TechCorp SA</option>
+                                    <option value="innovatelab">InnovateLab</option>
+                                    <option value="designstudio">DesignStudio</option>
+                                    <option value="bigcorp">BigCorp</option>
+                                </select>
+                                <div id="client-info" class="text-muted small">
+                                    <!-- Infos client chargées dynamiquement -->
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5>Détails du devis</h5>
+                                <input type="text" class="form-control mb-2" placeholder="N° Devis" id="devis-number" value="DEV-2025-001" readonly>
+                                <input type="date" class="form-control mb-2" id="devis-date">
+                                <input type="date" class="form-control" id="devis-validity" placeholder="Validité jusqu'au">
+                            </div>
+                        </div>
+                        
+                        <!-- Lignes du devis -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="devis-lines">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th style="width: 40%">Description</th>
+                                        <th style="width: 10%">Quantité</th>
+                                        <th style="width: 15%">Prix unitaire</th>
+                                        <th style="width: 10%">TVA %</th>
+                                        <th style="width: 15%">Total HT</th>
+                                        <th style="width: 10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="devis-line">
+                                        <td>
+                                            <input type="text" class="form-control" placeholder="Description du produit/service">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" value="1" onchange="calculateLine(this)">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" placeholder="0.00" step="0.01" onchange="calculateLine(this)">
+                                        </td>
+                                        <td>
+                                            <select class="form-select" onchange="calculateLine(this)">
+                                                <option value="20">20%</option>
+                                                <option value="10">10%</option>
+                                                <option value="5.5">5.5%</option>
+                                                <option value="0">0%</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" readonly value="0.00">
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="removeLine(this)" type="button">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6">
+                                            <button class="btn btn-sm btn-primary" onclick="addDevisLine()" type="button">
+                                                <i class="ti ti-plus"></i> Ajouter une ligne
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-light">
+                                        <td colspan="4" class="text-end"><strong>Total HT</strong></td>
+                                        <td colspan="2"><strong id="total-ht">0.00 €</strong></td>
+                                    </tr>
+                                    <tr class="table-light">
+                                        <td colspan="4" class="text-end"><strong>TVA</strong></td>
+                                        <td colspan="2"><strong id="total-tva">0.00 €</strong></td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <td colspan="4" class="text-end"><h4>Total TTC</h4></td>
+                                        <td colspan="2"><h4 id="total-ttc">0.00 €</h4></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <button class="btn btn-secondary" onclick="previewDevis()" type="button">
+                                    <i class="ti ti-eye"></i> Aperçu
+                                </button>
+                                <button class="btn btn-success" onclick="saveDevis()" type="button">
+                                    <i class="ti ti-device-floppy"></i> Enregistrer
+                                </button>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <button class="btn btn-primary" onclick="sendDevis()" type="button">
+                                    <i class="ti ti-send"></i> Envoyer au client
+                                </button>
+                                <button class="btn btn-info" onclick="openSignature()" type="button">
+                                    <i class="ti ti-signature"></i> Signature
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -633,13 +758,469 @@
         </div>
     </div>
     
+    <!-- Modal Signature électronique -->
+    <div class="modal modal-blur fade" id="modal-signature" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Signature électronique</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="border rounded p-3 mb-3" style="background: #f8f9fa;">
+                                <canvas id="signature-pad" class="signature-pad" width="600" height="200" style="border: 1px dashed #dee2e6; background: white; border-radius: 4px;"></canvas>
+                            </div>
+                            <div class="text-muted small">
+                                <i class="ti ti-info-circle me-1"></i>
+                                Utilisez votre souris ou votre doigt pour signer dans la zone ci-dessus
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-secondary" onclick="clearSignature()">
+                                    <i class="ti ti-eraser"></i> Effacer
+                                </button>
+                                <button class="btn btn-primary" onclick="saveSignature()">
+                                    <i class="ti ti-check"></i> Valider signature
+                                </button>
+                            </div>
+                            <hr>
+                            <div class="text-muted small">
+                                <h6>Informations légales</h6>
+                                <p>En signant ce document, vous acceptez les conditions générales de vente.</p>
+                                <p><strong>Date:</strong> <span id="signature-date"></span></p>
+                                <p><strong>IP:</strong> <span id="signature-ip">192.168.1.100</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Aperçu Devis -->
+    <div class="modal modal-blur fade" id="modal-preview" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Aperçu du Devis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="invoice-preview p-4" id="invoice-preview">
+                        <!-- Sera rempli par JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadPDF()">
+                        <i class="ti ti-download"></i> Télécharger PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- JS Tabler -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
     
+    <!-- Pour la signature électronique -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    
     <script>
+        let signaturePad;
+        let currentQuote = null;
+        
+        // Clients simulés
+        const clientsData = {
+            techcorp: {
+                name: 'TechCorp SA',
+                address: '123 Rue de la Tech\n75001 Paris, France',
+                email: 'contact@techcorp.com',
+                phone: '+33 1 23 45 67 89',
+                siret: '12345678901234'
+            },
+            innovatelab: {
+                name: 'InnovateLab',
+                address: '456 Avenue Innovation\n69000 Lyon, France',
+                email: 'hello@innovatelab.fr',
+                phone: '+33 4 78 90 12 34',
+                siret: '98765432109876'
+            },
+            designstudio: {
+                name: 'DesignStudio',
+                address: '789 Boulevard Créatif\n13000 Marseille, France',
+                email: 'info@designstudio.fr',
+                phone: '+33 4 91 23 45 67',
+                siret: '11223344556677'
+            },
+            bigcorp: {
+                name: 'BigCorp International',
+                address: '321 Corporate Plaza\n92000 Nanterre, France',
+                email: 'procurement@bigcorp.com',
+                phone: '+33 1 55 66 77 88',
+                siret: '99887766554433'
+            }
+        };
+        
+        // Charger les informations client
+        function loadClientInfo() {
+            const clientId = document.getElementById('devis-client').value;
+            const clientInfo = document.getElementById('client-info');
+            
+            if (clientId && clientsData[clientId]) {
+                const client = clientsData[clientId];
+                clientInfo.innerHTML = `
+                    <strong>${client.name}</strong><br>
+                    ${client.address.replace(/\n/g, '<br>')}<br>
+                    <i class="ti ti-mail me-1"></i>${client.email}<br>
+                    <i class="ti ti-phone me-1"></i>${client.phone}<br>
+                    <i class="ti ti-building me-1"></i>SIRET: ${client.siret}
+                `;
+            } else {
+                clientInfo.innerHTML = '<em>Sélectionnez un client pour voir ses informations</em>';
+            }
+        }
+        
+        // Afficher le générateur de devis
+        function showDevisGenerator() {
+            document.getElementById('devis-generator').style.display = 'block';
+            
+            // Définir les dates par défaut
+            const today = new Date();
+            document.getElementById('devis-date').value = today.toISOString().split('T')[0];
+            
+            const validityDate = new Date(today);
+            validityDate.setDate(validityDate.getDate() + 30);
+            document.getElementById('devis-validity').value = validityDate.toISOString().split('T')[0];
+        }
+        
+        // Ajouter une ligne de devis
+        function addDevisLine() {
+            const tbody = document.querySelector('#devis-lines tbody');
+            const newRow = tbody.querySelector('tr').cloneNode(true);
+            
+            // Réinitialiser les valeurs
+            newRow.querySelectorAll('input').forEach(input => {
+                if (input.type === 'number') {
+                    input.value = input.getAttribute('value') || (input.placeholder === '0.00' ? '' : '1');
+                } else if (input.type === 'text' && !input.readOnly) {
+                    input.value = '';
+                } else if (input.readOnly) {
+                    input.value = '0.00';
+                }
+            });
+            
+            newRow.querySelector('select').selectedIndex = 0;
+            
+            tbody.appendChild(newRow);
+        }
+        
+        // Supprimer une ligne
+        function removeLine(button) {
+            const row = button.closest('tr');
+            const tbody = row.parentElement;
+            
+            if (tbody.children.length > 1) {
+                row.remove();
+                calculateTotals();
+            } else {
+                alert('Vous devez conserver au moins une ligne');
+            }
+        }
+        
+        // Calculer une ligne
+        function calculateLine(element) {
+            const row = element.closest('tr');
+            const quantity = parseFloat(row.cells[1].querySelector('input').value) || 0;
+            const price = parseFloat(row.cells[2].querySelector('input').value) || 0;
+            
+            const totalHT = quantity * price;
+            row.cells[4].querySelector('input').value = totalHT.toFixed(2);
+            
+            calculateTotals();
+        }
+        
+        // Calculer les totaux
+        function calculateTotals() {
+            let totalHT = 0;
+            let totalTVA = 0;
+            
+            document.querySelectorAll('#devis-lines tbody tr.devis-line').forEach(row => {
+                const ht = parseFloat(row.cells[4].querySelector('input').value) || 0;
+                const tvaRate = parseFloat(row.cells[3].querySelector('select').value) || 0;
+                
+                totalHT += ht;
+                totalTVA += ht * (tvaRate / 100);
+            });
+            
+            document.getElementById('total-ht').textContent = totalHT.toFixed(2) + ' €';
+            document.getElementById('total-tva').textContent = totalTVA.toFixed(2) + ' €';
+            document.getElementById('total-ttc').textContent = (totalHT + totalTVA).toFixed(2) + ' €';
+        }
+        
+        // Aperçu du devis
+        function previewDevis() {
+            const clientId = document.getElementById('devis-client').value;
+            const client = clientsData[clientId];
+            const devisNumber = document.getElementById('devis-number').value;
+            const devisDate = document.getElementById('devis-date').value;
+            const validityDate = document.getElementById('devis-validity').value;
+            
+            if (!client) {
+                alert('Veuillez sélectionner un client');
+                return;
+            }
+            
+            // Récupérer les lignes
+            const lines = [];
+            document.querySelectorAll('#devis-lines tbody tr.devis-line').forEach(row => {
+                const description = row.cells[0].querySelector('input').value;
+                const quantity = row.cells[1].querySelector('input').value;
+                const price = row.cells[2].querySelector('input').value;
+                const tva = row.cells[3].querySelector('select').value;
+                const total = row.cells[4].querySelector('input').value;
+                
+                if (description && quantity && price) {
+                    lines.push({ description, quantity, price, tva, total });
+                }
+            });
+            
+            // Générer l'HTML de l'aperçu
+            const previewHTML = `
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h2>HyperVisual</h2>
+                        <p>123 Rue de l'Innovation<br>
+                        75001 Paris, France<br>
+                        contact@hypervisual.fr</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <h1 class="text-primary">DEVIS</h1>
+                        <p><strong>N° ${devisNumber}</strong><br>
+                        Date : ${new Date(devisDate).toLocaleDateString('fr-FR')}<br>
+                        Validité : ${new Date(validityDate).toLocaleDateString('fr-FR')}</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h4>Client :</h4>
+                        <p><strong>${client.name}</strong><br>
+                        ${client.address.replace(/\n/g, '<br>')}<br>
+                        ${client.email}<br>
+                        ${client.phone}</p>
+                    </div>
+                </div>
+                
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-center">Qté</th>
+                            <th class="text-end">Prix unitaire</th>
+                            <th class="text-center">TVA</th>
+                            <th class="text-end">Total HT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${lines.map(line => `
+                            <tr>
+                                <td>${line.description}</td>
+                                <td class="text-center">${line.quantity}</td>
+                                <td class="text-end">${parseFloat(line.price).toFixed(2)} €</td>
+                                <td class="text-center">${line.tva}%</td>
+                                <td class="text-end">${parseFloat(line.total).toFixed(2)} €</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>Total HT</strong></td>
+                            <td class="text-end"><strong>${document.getElementById('total-ht').textContent}</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-end"><strong>TVA</strong></td>
+                            <td class="text-end"><strong>${document.getElementById('total-tva').textContent}</strong></td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td colspan="4" class="text-end"><h4>Total TTC</h4></td>
+                            <td class="text-end"><h4>${document.getElementById('total-ttc').textContent}</h4></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <div class="mt-4">
+                    <h5>Conditions :</h5>
+                    <ul>
+                        <li>Devis valable ${Math.ceil((new Date(validityDate) - new Date(devisDate)) / (1000 * 60 * 60 * 24))} jours</li>
+                        <li>Paiement à 30 jours</li>
+                        <li>TVA non applicable, art. 293 B du CGI</li>
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('invoice-preview').innerHTML = previewHTML;
+            new bootstrap.Modal(document.getElementById('modal-preview')).show();
+        }
+        
+        // Enregistrer le devis
+        function saveDevis() {
+            console.log('Sauvegarde du devis...');
+            alert('Devis sauvegardé avec succès !');
+        }
+        
+        // Envoyer le devis
+        function sendDevis() {
+            console.log('Envoi du devis par email...');
+            alert('Devis envoyé au client !');
+        }
+        
+        // Ouvrir la signature
+        function openSignature() {
+            // Initialiser la date
+            document.getElementById('signature-date').textContent = new Date().toLocaleDateString('fr-FR');
+            
+            new bootstrap.Modal(document.getElementById('modal-signature')).show();
+            
+            // Initialiser le pad de signature après l'ouverture du modal
+            setTimeout(() => {
+                initSignaturePad();
+            }, 300);
+        }
+        
+        // Initialiser le pad de signature
+        function initSignaturePad() {
+            const canvas = document.getElementById('signature-pad');
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)',
+                minWidth: 2,
+                maxWidth: 4
+            });
+            
+            // Redimensionner le canvas
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext('2d').scale(ratio, ratio);
+                signaturePad.clear();
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        }
+        
+        // Effacer la signature
+        function clearSignature() {
+            if (signaturePad) {
+                signaturePad.clear();
+            }
+        }
+        
+        // Sauvegarder la signature
+        function saveSignature() {
+            if (!signaturePad) {
+                alert('Erreur: pad de signature non initialisé');
+                return;
+            }
+            
+            if (signaturePad.isEmpty()) {
+                alert('Veuillez signer avant de valider');
+                return;
+            }
+            
+            const signatureData = signaturePad.toDataURL();
+            console.log('Signature sauvegardée:', signatureData.substring(0, 50) + '...');
+            
+            // Fermer le modal
+            bootstrap.Modal.getInstance(document.getElementById('modal-signature')).hide();
+            
+            alert('Signature enregistrée avec succès !');
+        }
+        
+        // Télécharger en PDF
+        function downloadPDF() {
+            console.log('Génération du PDF...');
+            alert('PDF généré ! (fonctionnalité à implémenter avec jsPDF)');
+        }
+        
+        // Gestion du changement de template
+        document.getElementById('quote-template').addEventListener('change', function() {
+            if (this.value) {
+                showDevisGenerator();
+                
+                // Pré-remplir selon le template
+                const templates = {
+                    web: [
+                        { desc: 'Analyse et conception', qty: 1, price: 2500 },
+                        { desc: 'Développement frontend', qty: 1, price: 8000 },
+                        { desc: 'Développement backend', qty: 1, price: 6000 },
+                        { desc: 'Tests et déploiement', qty: 1, price: 1500 }
+                    ],
+                    mobile: [
+                        { desc: 'Conception UX/UI', qty: 1, price: 3000 },
+                        { desc: 'Développement iOS', qty: 1, price: 12000 },
+                        { desc: 'Développement Android', qty: 1, price: 12000 },
+                        { desc: 'Publication stores', qty: 1, price: 1000 }
+                    ],
+                    consulting: [
+                        { desc: 'Audit existant', qty: 1, price: 2000 },
+                        { desc: 'Recommandations stratégiques', qty: 1, price: 3000 },
+                        { desc: 'Plan d\'action', qty: 1, price: 2500 }
+                    ],
+                    maintenance: [
+                        { desc: 'Maintenance préventive', qty: 12, price: 500 },
+                        { desc: 'Support technique', qty: 1, price: 1200 },
+                        { desc: 'Mises à jour sécurité', qty: 1, price: 800 }
+                    ]
+                };
+                
+                if (templates[this.value]) {
+                    setTimeout(() => {
+                        fillTemplate(templates[this.value]);
+                    }, 100);
+                }
+            } else {
+                document.getElementById('devis-generator').style.display = 'none';
+            }
+        });
+        
+        // Remplir un template
+        function fillTemplate(items) {
+            const tbody = document.querySelector('#devis-lines tbody');
+            tbody.innerHTML = '';
+            
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'devis-line';
+                row.innerHTML = `
+                    <td><input type="text" class="form-control" value="${item.desc}"></td>
+                    <td><input type="number" class="form-control" value="${item.qty}" onchange="calculateLine(this)"></td>
+                    <td><input type="number" class="form-control" value="${item.price}" step="0.01" onchange="calculateLine(this)"></td>
+                    <td><select class="form-select" onchange="calculateLine(this)">
+                        <option value="20">20%</option>
+                        <option value="10">10%</option>
+                        <option value="5.5">5.5%</option>
+                        <option value="0">0%</option>
+                    </select></td>
+                    <td><input type="text" class="form-control" readonly value="${(item.qty * item.price).toFixed(2)}"></td>
+                    <td><button class="btn btn-outline-danger btn-sm" onclick="removeLine(this)" type="button">
+                        <i class="ti ti-trash"></i>
+                    </button></td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            calculateTotals();
+        }
+        
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Module Devis/Factures chargé');
+            console.log('Module Devis/Factures enrichi chargé');
         });
     </script>
 </body>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Devis & Factures - SuperAdmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <style>
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* Glassmorphism style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        [data-bs-theme="light"] .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        /* Invoice preview */
+        .invoice-preview {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            color: #1e293b;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Status badges */
+        .status-draft { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+        .status-sent { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .status-paid { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .status-overdue { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .status-cancelled { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- MENU SUPERADMIN -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard Consolidé</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION CRM -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./crm.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-users"></i>
+                                </span>
+                                <span class="nav-link-title">CRM Multi-Entreprises</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION DEVIS & FACTURES -->
+                        <li class="nav-item active">
+                            <a class="nav-link" href="./invoicing.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-invoice"></i>
+                                </span>
+                                <span class="nav-link-title">Devis & Factures</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Gestion commerciale</div>
+                            <h2 class="page-title">
+                                Devis & Factures
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn btn-white" data-bs-toggle="modal" data-bs-target="#modal-quote">
+                                    <i class="ti ti-file-description"></i>
+                                    Nouveau Devis
+                                </button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-invoice">
+                                    <i class="ti ti-file-invoice"></i>
+                                    Nouvelle Facture
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Stats Cards -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-blue text-white avatar">
+                                                <i class="ti ti-file-description"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Devis en cours</div>
+                                            <div class="h2 mb-0">€156K</div>
+                                            <div class="text-muted">12 devis</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-green text-white avatar">
+                                                <i class="ti ti-file-check"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">Factures payées</div>
+                                            <div class="h2 mb-0">€485K</div>
+                                            <div class="text-muted">Ce mois</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-orange text-white avatar">
+                                                <i class="ti ti-clock"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">En attente</div>
+                                            <div class="h2 mb-0">€78K</div>
+                                            <div class="text-muted">23 factures</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm glass-card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-red text-white avatar">
+                                                <i class="ti ti-alert-triangle"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-muted small font-weight-medium">En retard</div>
+                                            <div class="h2 mb-0">€32K</div>
+                                            <div class="text-muted">5 factures</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-quotes" class="nav-link active" data-bs-toggle="tab" role="tab">
+                                        <i class="ti ti-file-description me-2"></i>
+                                        Devis
+                                        <span class="badge bg-blue ms-2">12</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a href="#tabs-invoices" class="nav-link" data-bs-toggle="tab" role="tab">
+                                        <i class="ti ti-file-invoice me-2"></i>
+                                        Factures
+                                        <span class="badge bg-green ms-2">156</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ms-auto" role="presentation">
+                                    <a href="#" class="nav-link">
+                                        <i class="ti ti-settings"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Tab Devis -->
+                                <div class="tab-pane active show" id="tabs-quotes" role="tabpanel">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-auto">
+                                            <select class="form-select">
+                                                <option>Toutes les entreprises</option>
+                                                <option>HyperVisual</option>
+                                                <option>Dynamics</option>
+                                                <option>Lexia</option>
+                                                <option>NKReality</option>
+                                                <option>Etekout</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <select class="form-select">
+                                                <option>Tous les statuts</option>
+                                                <option>Brouillon</option>
+                                                <option>Envoyé</option>
+                                                <option>Accepté</option>
+                                                <option>Refusé</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Rechercher...">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter">
+                                            <thead>
+                                                <tr>
+                                                    <th>N° Devis</th>
+                                                    <th>Client</th>
+                                                    <th>Entreprise</th>
+                                                    <th>Date</th>
+                                                    <th>Montant</th>
+                                                    <th>Statut</th>
+                                                    <th class="w-1"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="font-weight-medium">#DEV-2024-001</div>
+                                                    </td>
+                                                    <td>TechCorp SA</td>
+                                                    <td>
+                                                        <span class="badge bg-primary-lt">HyperVisual</span>
+                                                    </td>
+                                                    <td class="text-muted">15/01/2024</td>
+                                                    <td class="text-end">
+                                                        <strong>€25,000</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge status-sent">Envoyé</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-list flex-nowrap">
+                                                            <a href="#" class="btn btn-white btn-sm">Voir</a>
+                                                            <button class="btn btn-primary btn-sm">
+                                                                <i class="ti ti-arrow-right"></i>
+                                                                Convertir
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="font-weight-medium">#DEV-2024-002</div>
+                                                    </td>
+                                                    <td>Innovation Labs</td>
+                                                    <td>
+                                                        <span class="badge bg-purple-lt">Dynamics</span>
+                                                    </td>
+                                                    <td class="text-muted">12/01/2024</td>
+                                                    <td class="text-end">
+                                                        <strong>€18,500</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge status-draft">Brouillon</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-list flex-nowrap">
+                                                            <a href="#" class="btn btn-white btn-sm">Modifier</a>
+                                                            <button class="btn btn-azure btn-sm">
+                                                                <i class="ti ti-send"></i>
+                                                                Envoyer
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tab Factures -->
+                                <div class="tab-pane" id="tabs-invoices" role="tabpanel">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-auto">
+                                            <select class="form-select">
+                                                <option>Toutes les entreprises</option>
+                                                <option>HyperVisual</option>
+                                                <option>Dynamics</option>
+                                                <option>Lexia</option>
+                                                <option>NKReality</option>
+                                                <option>Etekout</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <select class="form-select">
+                                                <option>Tous les statuts</option>
+                                                <option>Brouillon</option>
+                                                <option>Envoyée</option>
+                                                <option>Payée</option>
+                                                <option>En retard</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Rechercher...">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-vcenter">
+                                            <thead>
+                                                <tr>
+                                                    <th>N° Facture</th>
+                                                    <th>Client</th>
+                                                    <th>Entreprise</th>
+                                                    <th>Date</th>
+                                                    <th>Échéance</th>
+                                                    <th>Montant</th>
+                                                    <th>Statut</th>
+                                                    <th class="w-1"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="font-weight-medium">#FAC-2024-089</div>
+                                                    </td>
+                                                    <td>Digital Agency</td>
+                                                    <td>
+                                                        <span class="badge bg-primary-lt">HyperVisual</span>
+                                                    </td>
+                                                    <td class="text-muted">10/01/2024</td>
+                                                    <td class="text-muted">10/02/2024</td>
+                                                    <td class="text-end">
+                                                        <strong>€15,000</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge status-paid">Payée</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-list flex-nowrap">
+                                                            <a href="#" class="btn btn-white btn-sm">Voir</a>
+                                                            <a href="#" class="btn btn-white btn-sm">
+                                                                <i class="ti ti-download"></i>
+                                                                PDF
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="font-weight-medium">#FAC-2024-090</div>
+                                                    </td>
+                                                    <td>StartUp Inc</td>
+                                                    <td>
+                                                        <span class="badge bg-green-lt">Lexia</span>
+                                                    </td>
+                                                    <td class="text-muted">05/01/2024</td>
+                                                    <td class="text-warning">05/02/2024</td>
+                                                    <td class="text-end">
+                                                        <strong>€8,500</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge status-overdue">En retard</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-list flex-nowrap">
+                                                            <a href="#" class="btn btn-white btn-sm">Voir</a>
+                                                            <button class="btn btn-orange btn-sm">
+                                                                <i class="ti ti-bell"></i>
+                                                                Relancer
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Nouveau Devis -->
+    <div class="modal modal-blur fade" id="modal-quote" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau Devis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Entreprise</label>
+                                <select class="form-select" required>
+                                    <option value="">Sélectionner une entreprise</option>
+                                    <option value="hypervisual">HyperVisual</option>
+                                    <option value="dynamics">Dynamics</option>
+                                    <option value="lexia">Lexia</option>
+                                    <option value="nkreality">NKReality</option>
+                                    <option value="etekout">Etekout</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Client</label>
+                                <select class="form-select" required>
+                                    <option value="">Sélectionner un client</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date du devis</label>
+                                <input type="date" class="form-control" value="${new Date().toISOString().split('T')[0]}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Validité (jours)</label>
+                                <input type="number" class="form-control" value="30" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Objet du devis</label>
+                        <input type="text" class="form-control" placeholder="Ex: Développement site web e-commerce" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Template</label>
+                        <select class="form-select">
+                            <option value="">Aucun template</option>
+                            <option value="web">Développement Web</option>
+                            <option value="mobile">Application Mobile</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary ms-auto">
+                        <i class="ti ti-plus"></i>
+                        Créer le devis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Nouvelle Facture -->
+    <div class="modal modal-blur fade" id="modal-invoice" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouvelle Facture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div>
+                                <i class="ti ti-info-circle icon alert-icon"></i>
+                            </div>
+                            <div>
+                                <h4 class="alert-title">Créer depuis un devis ?</h4>
+                                <div class="text-secondary">
+                                    Vous pouvez convertir un devis existant en facture ou créer une nouvelle facture.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Entreprise</label>
+                                <select class="form-select" required>
+                                    <option value="">Sélectionner une entreprise</option>
+                                    <option value="hypervisual">HyperVisual</option>
+                                    <option value="dynamics">Dynamics</option>
+                                    <option value="lexia">Lexia</option>
+                                    <option value="nkreality">NKReality</option>
+                                    <option value="etekout">Etekout</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Client</label>
+                                <select class="form-select" required>
+                                    <option value="">Sélectionner un client</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date de facturation</label>
+                                <input type="date" class="form-control" value="${new Date().toISOString().split('T')[0]}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Échéance</label>
+                                <select class="form-select" required>
+                                    <option value="0">À réception</option>
+                                    <option value="30" selected>30 jours</option>
+                                    <option value="45">45 jours</option>
+                                    <option value="60">60 jours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Objet de la facture</label>
+                        <input type="text" class="form-control" placeholder="Ex: Prestation de développement - Janvier 2024" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary ms-auto">
+                        <i class="ti ti-plus"></i>
+                        Créer la facture
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <script>
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Module Devis/Factures chargé');
+        });
+    </script>
+</body>
+</html>

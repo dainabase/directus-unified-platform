@@ -4,6 +4,16 @@
 [![Directus](https://img.shields.io/badge/directus-v10-purple.svg)]()
 [![Tabler](https://img.shields.io/badge/tabler-v1.0.0--beta20-blue.svg)]()
 
+## 🎯 SuperAdmin - Cockpit Central Multi-Entreprises
+
+**🔥 NOUVEAU : [Audit Complet SuperAdmin](./docs/superadmin/AUDIT-COMPLET-SUPERADMIN.md)**
+
+Le SuperAdmin est le cœur du système, permettant de gérer 5+ entreprises depuis une interface unique :
+- HyperVisual, Dynamics, Lexia, NKReality, Etekout
+- Dashboard exécutif consolidé
+- CRM unifié multi-entreprises
+- Gestion commerciale, projets, finance, RH, stocks, etc.
+
 ## 📊 État du Projet (Réorganisé)
 
 ### Migration Notion → Directus
@@ -60,10 +70,16 @@ tests/            # Tests automatisés
 
 ## 📚 Documentation
 
+### Documentation Générale
 - [Architecture](./docs/architecture/overview.md)
 - [API Reference](./docs/api/reference.md)
 - [Guide de développement](./docs/development/setup.md)
 - [Déploiement](./docs/deployment/production.md)
+
+### Documentation SuperAdmin
+- **[🎯 AUDIT COMPLET SUPERADMIN](./docs/superadmin/AUDIT-COMPLET-SUPERADMIN.md)** - Toutes les fonctionnalités détaillées
+- [Roadmap développement](./docs/superadmin/roadmap.md)
+- [Guide d'utilisation](./docs/superadmin/user-guide.md)
 
 ## 🔧 Scripts Disponibles
 

@@ -1,0 +1,613 @@
+{
+  "date": "2025-08-03T20:24:44.588Z",
+  "total_relations": 93,
+  "relations_by_collection": {
+    "directus_permissions": [
+      {
+        "field": "policy",
+        "related": "directus_policies",
+        "type": "O2M"
+      }
+    ],
+    "directus_files": [
+      {
+        "field": "folder",
+        "related": "directus_folders",
+        "type": "M2O"
+      },
+      {
+        "field": "modified_by",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "uploaded_by",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ],
+    "directus_collections": [
+      {
+        "field": "group",
+        "related": "directus_collections",
+        "type": "M2O"
+      }
+    ],
+    "directus_folders": [
+      {
+        "field": "parent",
+        "related": "directus_folders",
+        "type": "M2O"
+      }
+    ],
+    "directus_users": [
+      {
+        "field": "role",
+        "related": "directus_roles",
+        "type": "O2M"
+      },
+      {
+        "field": "avatar",
+        "related": "directus_files",
+        "type": "M2O"
+      }
+    ],
+    "directus_roles": [
+      {
+        "field": "parent",
+        "related": "directus_roles",
+        "type": "O2M"
+      }
+    ],
+    "directus_presets": [
+      {
+        "field": "role",
+        "related": "directus_roles",
+        "type": "M2O"
+      },
+      {
+        "field": "user",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ],
+    "directus_sessions": [
+      {
+        "field": "share",
+        "related": "directus_shares",
+        "type": "M2O"
+      },
+      {
+        "field": "user",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ],
+    "directus_revisions": [
+      {
+        "field": "version",
+        "related": "directus_versions",
+        "type": "M2O"
+      },
+      {
+        "field": "activity",
+        "related": "directus_activity",
+        "type": "O2M"
+      },
+      {
+        "field": "parent",
+        "related": "directus_revisions",
+        "type": "M2O"
+      }
+    ],
+    "directus_panels": [
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "dashboard",
+        "related": "directus_dashboards",
+        "type": "O2M"
+      }
+    ],
+    "directus_notifications": [
+      {
+        "field": "sender",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "recipient",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ],
+    "directus_shares": [
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "role",
+        "related": "directus_roles",
+        "type": "M2O"
+      },
+      {
+        "field": "collection",
+        "related": "directus_collections",
+        "type": "M2O"
+      }
+    ],
+    "directus_flows": [
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "operation",
+        "related": "directus_operations",
+        "type": "M2O"
+      }
+    ],
+    "directus_dashboards": [
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ],
+    "directus_operations": [
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "flow",
+        "related": "directus_flows",
+        "type": "O2M"
+      },
+      {
+        "field": "reject",
+        "related": "directus_operations",
+        "type": "M2O"
+      },
+      {
+        "field": "resolve",
+        "related": "directus_operations",
+        "type": "M2O"
+      }
+    ],
+    "directus_settings": [
+      {
+        "field": "public_registration_role",
+        "related": "directus_roles",
+        "type": "M2O"
+      },
+      {
+        "field": "public_favicon",
+        "related": "directus_files",
+        "type": "M2O"
+      },
+      {
+        "field": "storage_default_folder",
+        "related": "directus_folders",
+        "type": "M2O"
+      },
+      {
+        "field": "public_background",
+        "related": "directus_files",
+        "type": "M2O"
+      },
+      {
+        "field": "public_foreground",
+        "related": "directus_files",
+        "type": "M2O"
+      },
+      {
+        "field": "project_logo",
+        "related": "directus_files",
+        "type": "M2O"
+      }
+    ],
+    "directus_webhooks": [
+      {
+        "field": "migrated_flow",
+        "related": "directus_flows",
+        "type": "M2O"
+      }
+    ],
+    "directus_access": [
+      {
+        "field": "policy",
+        "related": "directus_policies",
+        "type": "O2M"
+      },
+      {
+        "field": "user",
+        "related": "directus_users",
+        "type": "O2M"
+      },
+      {
+        "field": "role",
+        "related": "directus_roles",
+        "type": "O2M"
+      },
+      {
+        "field": "policy",
+        "related": "directus_policies",
+        "type": "O2M"
+      }
+    ],
+    "directus_versions": [
+      {
+        "field": "user_updated",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "collection",
+        "related": "directus_collections",
+        "type": "M2O"
+      }
+    ],
+    "directus_comments": [
+      {
+        "field": "user_updated",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "user_created",
+        "related": "directus_users",
+        "type": "M2O"
+      },
+      {
+        "field": "collection",
+        "related": "directus_collections",
+        "type": "M2O"
+      }
+    ],
+    "talents": [
+      {
+        "field": "company_id",
+        "related": "companies",
+        "type": "O2M"
+      }
+    ],
+    "time_tracking": [
+      {
+        "field": "deliverable_id",
+        "related": "deliverables",
+        "type": "M2O"
+      },
+      {
+        "field": "task_id",
+        "related": "deliverables",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "M2O"
+      }
+    ],
+    "permissions": [
+      {
+        "field": "role_id",
+        "related": "directus_roles",
+        "type": "O2M"
+      },
+      {
+        "field": "user_id",
+        "related": "directus_users",
+        "type": "O2M"
+      }
+    ],
+    "compliance": [
+      {
+        "field": "company_id",
+        "related": "companies",
+        "type": "O2M"
+      }
+    ],
+    "interactions": [
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "M2O"
+      },
+      {
+        "field": "contact_id",
+        "related": "people",
+        "type": "O2M"
+      }
+    ],
+    "content_calendar": [
+      {
+        "field": "campaign_id",
+        "related": "companies",
+        "type": "M2O"
+      }
+    ],
+    "client_invoices": [
+      {
+        "field": "contact_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "company_id",
+        "related": "companies",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "bank_transactions": [
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "companies": [
+      {
+        "field": "primary_contact_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "account_manager_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "parent_company_id",
+        "related": "companies",
+        "type": "M2O"
+      }
+    ],
+    "deliverables": [
+      {
+        "field": "parent_task_id",
+        "related": "deliverables",
+        "type": "M2O"
+      },
+      {
+        "field": "reviewed_by",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "assigned_to",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "budgets": [
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "projects": [
+      {
+        "field": "main_provider_id",
+        "related": "providers",
+        "type": "O2M"
+      },
+      {
+        "field": "sales_person_id",
+        "related": "people",
+        "type": "O2M"
+      },
+      {
+        "field": "project_manager_id",
+        "related": "people",
+        "type": "O2M"
+      },
+      {
+        "field": "client_id",
+        "related": "companies",
+        "type": "O2M"
+      }
+    ],
+    "expenses": [
+      {
+        "field": "approved_by",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "employee_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "projects_team": [
+      {
+        "field": "people_id",
+        "related": "people",
+        "type": "O2M"
+      },
+      {
+        "field": "projects_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "people": [
+      {
+        "field": "manager_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "company_id",
+        "related": "companies",
+        "type": "M2O"
+      }
+    ],
+    "supplier_invoices": [
+      {
+        "field": "approved_by",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "provider_id",
+        "related": "providers",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "subscriptions": [
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "accounting_entries": [
+      {
+        "field": "transaction_id",
+        "related": "bank_transactions",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "support_tickets": [
+      {
+        "field": "company_id",
+        "related": "companies",
+        "type": "M2O"
+      },
+      {
+        "field": "assigned_to",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "requester_id",
+        "related": "people",
+        "type": "M2O"
+      },
+      {
+        "field": "project_id",
+        "related": "projects",
+        "type": "O2M"
+      }
+    ],
+    "directus_fields": [
+      {
+        "field": "collection",
+        "related": "directus_collections",
+        "type": "O2M"
+      },
+      {
+        "field": "group",
+        "related": "directus_fields",
+        "type": "M2O"
+      }
+    ],
+    "directus_activity": [
+      {
+        "field": "user",
+        "related": "directus_users",
+        "type": "M2O"
+      }
+    ]
+  },
+  "missing_critical": [
+    {
+      "collection": "projects",
+      "field": "company_id",
+      "related": "companies"
+    },
+    {
+      "collection": "bank_transactions",
+      "field": "invoice_id",
+      "related": "client_invoices"
+    },
+    {
+      "collection": "time_tracking",
+      "field": "person_id",
+      "related": "people"
+    }
+  ],
+  "collections_with_relations": [
+    "directus_permissions",
+    "directus_files",
+    "directus_collections",
+    "directus_folders",
+    "directus_users",
+    "directus_roles",
+    "directus_presets",
+    "directus_sessions",
+    "directus_revisions",
+    "directus_panels",
+    "directus_notifications",
+    "directus_shares",
+    "directus_flows",
+    "directus_dashboards",
+    "directus_operations",
+    "directus_settings",
+    "directus_webhooks",
+    "directus_access",
+    "directus_versions",
+    "directus_comments",
+    "talents",
+    "time_tracking",
+    "permissions",
+    "compliance",
+    "interactions",
+    "content_calendar",
+    "client_invoices",
+    "bank_transactions",
+    "companies",
+    "deliverables",
+    "budgets",
+    "projects",
+    "expenses",
+    "projects_team",
+    "people",
+    "supplier_invoices",
+    "subscriptions",
+    "accounting_entries",
+    "support_tickets",
+    "directus_fields",
+    "directus_activity"
+  ]
+}

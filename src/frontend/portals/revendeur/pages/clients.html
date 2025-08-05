@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Gestion Clients - Espace Revendeur</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <link href="../../../assets/css/custom.css" rel="stylesheet">
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar from revendeur dashboard -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="../dashboard.html">
+                        <img src="../../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                        Espace Revendeur
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-purple">REVENDEUR</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-purple-lt">RV</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Sophie Martin</div>
+                                <div class="mt-1 small text-secondary">Partner Gold</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="../profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="./clients.html" class="dropdown-item">
+                                <i class="ti ti-users me-2"></i>
+                                Mes clients
+                            </a>
+                            <a href="../commissions.html" class="dropdown-item">
+                                <i class="ti ti-currency-dollar me-2"></i>
+                                Commissions
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-danger" onclick="logout()">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Horizontal menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../dashboard.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="./clients.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-users"></i>
+                                    </span>
+                                    <span class="nav-link-title">Clients</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../leads.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-target"></i>
+                                    </span>
+                                    <span class="nav-link-title">Leads</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../pipeline.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-chart-line"></i>
+                                    </span>
+                                    <span class="nav-link-title">Pipeline</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../commissions.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-currency-dollar"></i>
+                                    </span>
+                                    <span class="nav-link-title">Commissions</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../marketing.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-speakerphone"></i>
+                                    </span>
+                                    <span class="nav-link-title">Marketing</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">Gestion des Clients</h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn" onclick="exportClients()">
+                                    <i class="ti ti-download"></i> Exporter
+                                </button>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new-client-modal">
+                                    <i class="ti ti-plus"></i> Nouveau client
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- KPIs -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-primary text-white avatar">
+                                                <i class="ti ti-users"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">Total clients</div>
+                                            <div class="text-muted">
+                                                <span class="h3 mb-0">47</span>
+                                                <span class="text-green small">+12%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-success text-white avatar">
+                                                <i class="ti ti-user-check"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">Clients actifs</div>
+                                            <div class="text-muted">
+                                                <span class="h3 mb-0">38</span>
+                                                <span class="small">81%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-info text-white avatar">
+                                                <i class="ti ti-currency-dollar"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">CA total</div>
+                                            <div class="text-muted">
+                                                <span class="h3 mb-0">CHF 485k</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-yellow text-white avatar">
+                                                <i class="ti ti-star"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="font-weight-medium">Panier moyen</div>
+                                            <div class="text-muted">
+                                                <span class="h3 mb-0">CHF 12.8k</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtres et recherche -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Segment</label>
+                                    <select class="form-select" id="filter-segment">
+                                        <option value="">Tous</option>
+                                        <option value="enterprise">Enterprise</option>
+                                        <option value="pme">PME</option>
+                                        <option value="startup">Startup</option>
+                                        <option value="independant">Indépendant</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">Tous</option>
+                                        <option value="active">Actif</option>
+                                        <option value="inactive">Inactif</option>
+                                        <option value="prospect">Prospect</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Rechercher</label>
+                                    <input type="text" class="form-control" id="filter-search" placeholder="Nom, email, entreprise...">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                        <i class="ti ti-filter"></i> Filtrer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des clients -->
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Entreprise</th>
+                                        <th>Segment</th>
+                                        <th>CA total</th>
+                                        <th>Dernière activité</th>
+                                        <th>Statut</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clients-table">
+                                    <!-- Sera rempli par JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <p class="m-0 text-muted">
+                                Affichage de <span id="showing-count">0</span> client(s)
+                            </p>
+                            <ul class="pagination m-0 ms-auto" id="pagination">
+                                <!-- Pagination -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal nouveau client -->
+    <div class="modal modal-blur fade" id="new-client-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nouveau client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Prénom</label>
+                            <input type="text" class="form-control" id="client-firstname" placeholder="Jean">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="client-lastname" placeholder="Dupont">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="client-email" placeholder="jean.dupont@entreprise.ch">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Entreprise</label>
+                        <input type="text" class="form-control" id="client-company" placeholder="Entreprise SA">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Téléphone</label>
+                            <input type="tel" class="form-control" id="client-phone" placeholder="+41 21 123 45 67">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Segment</label>
+                            <select class="form-select" id="client-segment">
+                                <option value="pme">PME</option>
+                                <option value="enterprise">Enterprise</option>
+                                <option value="startup">Startup</option>
+                                <option value="independant">Indépendant</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-control" id="client-notes" rows="3" placeholder="Informations supplémentaires..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="createClient()">
+                        <i class="ti ti-check"></i> Créer le client
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="../../../assets/js/app.js"></script>
+    <script src="../../../assets/js/auth-directus.js"></script>
+    
+    <script>
+        let allClients = [];
+        
+        async function loadClients() {
+            try {
+                const response = await window.App.api.get('/items/clients');
+                allClients = response.data || [];
+                
+                // Données de test si pas de clients
+                if (allClients.length === 0) {
+                    allClients = [
+                        {
+                            id: 1,
+                            firstname: 'Jean',
+                            lastname: 'Dupont',
+                            email: 'jean.dupont@techcorp.ch',
+                            company: 'TechCorp SA',
+                            segment: 'enterprise',
+                            phone: '+41 21 123 45 67',
+                            total_revenue: 125000,
+                            last_activity: '2025-01-28',
+                            status: 'active',
+                            projects_count: 5,
+                            since: '2023-03-15'
+                        },
+                        {
+                            id: 2,
+                            firstname: 'Marie',
+                            lastname: 'Durand',
+                            email: 'marie@startup.ch',
+                            company: 'InnoStart',
+                            segment: 'startup',
+                            phone: '+41 22 987 65 43',
+                            total_revenue: 35000,
+                            last_activity: '2025-01-25',
+                            status: 'active',
+                            projects_count: 2,
+                            since: '2024-01-10'
+                        },
+                        {
+                            id: 3,
+                            firstname: 'Pierre',
+                            lastname: 'Martin',
+                            email: 'p.martin@pme.ch',
+                            company: 'PME Solutions',
+                            segment: 'pme',
+                            phone: '+41 24 456 78 90',
+                            total_revenue: 67500,
+                            last_activity: '2025-01-20',
+                            status: 'active',
+                            projects_count: 3,
+                            since: '2023-09-01'
+                        },
+                        {
+                            id: 4,
+                            firstname: 'Sophie',
+                            lastname: 'Blanc',
+                            email: 'sophie@independent.ch',
+                            company: 'Sophie Consulting',
+                            segment: 'independant',
+                            phone: '+41 79 123 45 67',
+                            total_revenue: 18000,
+                            last_activity: '2025-01-15',
+                            status: 'inactive',
+                            projects_count: 1,
+                            since: '2024-06-15'
+                        },
+                        {
+                            id: 5,
+                            firstname: 'Thomas',
+                            lastname: 'Favre',
+                            email: 'thomas.favre@bank.ch',
+                            company: 'SwissBank AG',
+                            segment: 'enterprise',
+                            phone: '+41 44 234 56 78',
+                            total_revenue: 285000,
+                            last_activity: '2025-01-30',
+                            status: 'active',
+                            projects_count: 8,
+                            since: '2022-11-01'
+                        }
+                    ];
+                }
+                
+                displayClients(allClients);
+                updateStats();
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.App.utils.showAlert('Erreur de chargement des clients', 'danger');
+            }
+        }
+        
+        function displayClients(clients) {
+            const tbody = document.getElementById('clients-table');
+            document.getElementById('showing-count').textContent = clients.length;
+            
+            if (clients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Aucun client trouvé</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = clients.map(client => `
+                <tr>
+                    <td>
+                        <div class="d-flex py-1 align-items-center">
+                            <span class="avatar me-2 bg-${getSegmentColor(client.segment)}-lt">
+                                ${client.firstname[0]}${client.lastname[0]}
+                            </span>
+                            <div class="flex-fill">
+                                <div class="font-weight-medium">${client.firstname} ${client.lastname}</div>
+                                <div class="text-muted small">${client.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>${client.company}</div>
+                        <div class="text-muted small">Depuis ${new Date(client.since).toLocaleDateString('fr-CH')}</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-${getSegmentColor(client.segment)}-lt text-${getSegmentColor(client.segment)}">
+                            ${getSegmentLabel(client.segment)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="font-weight-medium">${window.App.utils.formatCurrency(client.total_revenue)}</div>
+                        <div class="text-muted small">${client.projects_count} projet(s)</div>
+                    </td>
+                    <td>
+                        <div>${getRelativeTime(client.last_activity)}</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-${client.status === 'active' ? 'success' : 'secondary'}">
+                            ${client.status === 'active' ? 'Actif' : 'Inactif'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-list flex-nowrap">
+                            <a href="./client-detail.html?id=${client.id}" class="btn btn-sm">
+                                <i class="ti ti-eye"></i>
+                            </a>
+                            <button class="btn btn-sm" onclick="editClient(${client.id})">
+                                <i class="ti ti-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="contactClient(${client.id})">
+                                <i class="ti ti-mail"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function getSegmentColor(segment) {
+            const colors = {
+                'enterprise': 'purple',
+                'pme': 'blue',
+                'startup': 'green',
+                'independant': 'yellow'
+            };
+            return colors[segment] || 'secondary';
+        }
+        
+        function getSegmentLabel(segment) {
+            const labels = {
+                'enterprise': 'Enterprise',
+                'pme': 'PME',
+                'startup': 'Startup',
+                'independant': 'Indépendant'
+            };
+            return labels[segment] || segment;
+        }
+        
+        function getRelativeTime(date) {
+            const now = new Date();
+            const past = new Date(date);
+            const diffInDays = Math.floor((now - past) / (1000 * 60 * 60 * 24));
+            
+            if (diffInDays === 0) return "Aujourd'hui";
+            if (diffInDays === 1) return "Hier";
+            if (diffInDays < 7) return `Il y a ${diffInDays} jours`;
+            if (diffInDays < 30) return `Il y a ${Math.floor(diffInDays / 7)} semaines`;
+            return past.toLocaleDateString('fr-CH');
+        }
+        
+        function updateStats() {
+            // Mise à jour des KPIs avec les vraies données
+            const activeClients = allClients.filter(c => c.status === 'active').length;
+            const totalRevenue = allClients.reduce((sum, c) => sum + (c.total_revenue || 0), 0);
+            const avgBasket = totalRevenue / allClients.length || 0;
+            
+            // Ici on pourrait mettre à jour les cartes KPI si besoin
+        }
+        
+        function applyFilters() {
+            const segment = document.getElementById('filter-segment').value;
+            const status = document.getElementById('filter-status').value;
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            
+            let filtered = allClients;
+            
+            if (segment) {
+                filtered = filtered.filter(c => c.segment === segment);
+            }
+            
+            if (status) {
+                filtered = filtered.filter(c => c.status === status);
+            }
+            
+            if (search) {
+                filtered = filtered.filter(c => 
+                    c.firstname?.toLowerCase().includes(search) ||
+                    c.lastname?.toLowerCase().includes(search) ||
+                    c.email?.toLowerCase().includes(search) ||
+                    c.company?.toLowerCase().includes(search)
+                );
+            }
+            
+            displayClients(filtered);
+        }
+        
+        async function createClient() {
+            const firstname = document.getElementById('client-firstname').value;
+            const lastname = document.getElementById('client-lastname').value;
+            const email = document.getElementById('client-email').value;
+            const company = document.getElementById('client-company').value;
+            const phone = document.getElementById('client-phone').value;
+            const segment = document.getElementById('client-segment').value;
+            const notes = document.getElementById('client-notes').value;
+            
+            if (!firstname || !lastname || !email || !company) {
+                window.App.utils.showAlert('Veuillez remplir tous les champs obligatoires', 'warning');
+                return;
+            }
+            
+            try {
+                const data = {
+                    firstname,
+                    lastname,
+                    email,
+                    company,
+                    phone,
+                    segment,
+                    notes,
+                    status: 'active',
+                    since: new Date().toISOString(),
+                    total_revenue: 0,
+                    projects_count: 0,
+                    last_activity: new Date().toISOString()
+                };
+                
+                // En production, faire un vrai POST
+                // const response = await window.App.api.post('/items/clients', data);
+                
+                window.App.utils.showAlert('Client créé avec succès!', 'success');
+                
+                // Fermer le modal
+                bootstrap.Modal.getInstance(document.getElementById('new-client-modal')).hide();
+                
+                // Recharger les clients
+                loadClients();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.App.utils.showAlert('Erreur lors de la création du client', 'danger');
+            }
+        }
+        
+        function editClient(id) {
+            window.App.utils.showAlert('Édition en cours de développement', 'info');
+        }
+        
+        function contactClient(id) {
+            const client = allClients.find(c => c.id === id);
+            if (client) {
+                window.location.href = `mailto:${client.email}`;
+            }
+        }
+        
+        function exportClients() {
+            // Export CSV simple
+            const csv = [
+                ['Prénom', 'Nom', 'Email', 'Entreprise', 'Segment', 'CA Total', 'Statut'],
+                ...allClients.map(c => [
+                    c.firstname,
+                    c.lastname,
+                    c.email,
+                    c.company,
+                    c.segment,
+                    c.total_revenue,
+                    c.status
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `clients-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            
+            window.App.utils.showAlert('Export CSV réussi', 'success');
+        }
+        
+        function logout() {
+            if (window.AuthDirectus) {
+                window.AuthDirectus.logout();
+            }
+        }
+        
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', loadClients);
+    </script>
+</body>
+</html>

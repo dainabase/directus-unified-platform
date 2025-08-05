@@ -1,0 +1,1514 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Mes Rewards & Performance - Espace Prestataire</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- ApexCharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono for all numeric values */
+        .points-value,
+        .points-gain,
+        .bonus-amount,
+        .revenue-amount,
+        .level-points,
+        .achievement-progress-value,
+        .leaderboard-score,
+        .leaderboard-points {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        /* Level System Styles */
+        .level-card {
+            background: linear-gradient(135deg, var(--tblr-card-bg) 0%, var(--tblr-card-bg-hover) 100%);
+        }
+        
+        .levels-track {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+        
+        .level-item {
+            flex: 0 0 150px;
+            text-align: center;
+            position: relative;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .level-item.completed,
+        .level-item.current {
+            opacity: 1;
+        }
+        
+        .level-item.current {
+            transform: scale(1.1);
+        }
+        
+        .level-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.5rem;
+            background: var(--tblr-secondary-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .level-item.completed .level-icon {
+            background: var(--tblr-success-lt);
+            color: var(--tblr-success);
+        }
+        
+        .level-item.current .level-icon {
+            background: var(--tblr-warning-lt);
+            color: var(--tblr-warning);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+        }
+        
+        .level-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .level-range {
+            font-size: 0.75rem;
+            color: var(--tblr-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .current-indicator {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--tblr-warning);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        
+        /* Points Timeline */
+        .points-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -1.5rem;
+            top: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .timeline-content {
+            background: var(--tblr-card-bg);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--tblr-border-color);
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--tblr-secondary);
+        }
+        
+        .points-gain {
+            color: var(--tblr-success);
+            font-weight: 700;
+        }
+        
+        /* Achievements Grid */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+        
+        .achievement-badge {
+            text-align: center;
+            padding: 1.5rem 0.5rem;
+            border: 2px solid var(--tblr-border-color);
+            border-radius: 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .achievement-badge.unlocked {
+            background: var(--tblr-success-lt);
+            border-color: var(--tblr-success);
+        }
+        
+        .achievement-badge.locked {
+            opacity: 0.6;
+            background: var(--tblr-secondary-lt);
+        }
+        
+        .achievement-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .achievement-desc {
+            font-size: 0.75rem;
+            color: var(--tblr-secondary);
+        }
+        
+        .achievement-progress {
+            margin-top: 0.5rem;
+        }
+        
+        .achievement-progress .progress {
+            height: 4px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .progress-label {
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Bonus Calculation */
+        .bonus-calculation {
+            background: var(--tblr-bg-surface);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        
+        .bonus-items .row {
+            padding: 0.5rem 0;
+        }
+        
+        /* Leaderboard */
+        .leaderboard-row.current-user {
+            background: var(--tblr-primary-lt);
+            font-weight: 600;
+        }
+        
+        /* Badges */
+        .level-badge-container {
+            margin-right: 1rem;
+        }
+        
+        .level-badge {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Points Display */
+        .points-display {
+            text-align: right;
+        }
+        
+        /* Card hover effects */
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        /* Mission status badges */
+        .badge-bronze { background: #cd7f32; color: white; }
+        .badge-silver { background: #c0c0c0; color: #333; }
+        
+        /* Points notification */
+        .points-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--tblr-success);
+            font-family: 'JetBrains Mono', monospace;
+            display: none;
+            z-index: 9999;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .points-notification.show {
+            display: block;
+            animation: bouncePoints 1s ease;
+        }
+        
+        @keyframes bouncePoints {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -150%) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/prestataire/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Portal" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-green">PRESTATAIRE</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-green-lt">PR</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Prestataire Expert</div>
+                                <div class="mt-1 small text-secondary">Rewards & Performance</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="missions.html" class="dropdown-item">
+                                <i class="ti ti-briefcase me-2"></i>
+                                Mes missions
+                            </a>
+                            <a href="performance.html" class="dropdown-item">
+                                <i class="ti ti-chart-line me-2"></i>
+                                Performances
+                            </a>
+                            <a href="rewards.html" class="dropdown-item active">
+                                <i class="ti ti-award me-2"></i>
+                                Récompenses
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="missions.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-briefcase"></i>
+                                            </span>
+                                            <span class="nav-link-title">Missions</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="calendar.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-calendar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Planning</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="performance.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-line"></i>
+                                            </span>
+                                            <span class="nav-link-title">Performance</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="rewards.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-award"></i>
+                                            </span>
+                                            <span class="nav-link-title">Récompenses</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Espace Prestataire</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-award me-2"></i>
+                                Mes Rewards & Performance
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <div class="level-badge-container">
+                                    <span class="badge badge-lg bg-warning level-badge animated">
+                                        <i class="ti ti-star-filled icon"></i>
+                                        GOLD
+                                    </span>
+                                </div>
+                                <div class="points-display">
+                                    <div class="h3 mb-0">
+                                        <span id="pointsCounter" class="points-value">2'450</span> pts
+                                    </div>
+                                    <div class="text-muted small">Points totaux</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Section Niveau & Progression -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card level-card gaming-style">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-warning">
+                                        <i class="ti ti-trophy"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="card-title mb-4">
+                                        <i class="ti ti-trophy icon text-warning"></i>
+                                        Niveau & Progression
+                                    </h3>
+                                    
+                                    <!-- Système de niveaux -->
+                                    <div class="levels-system mb-4">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="levels-track">
+                                                    <div class="level-item completed">
+                                                        <div class="level-icon">
+                                                            <i class="ti ti-award icon"></i>
+                                                        </div>
+                                                        <div class="level-info">
+                                                            <div class="level-name">BRONZE</div>
+                                                            <div class="level-range level-points">0-500 pts</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="level-item completed">
+                                                        <div class="level-icon">
+                                                            <i class="ti ti-award icon"></i>
+                                                        </div>
+                                                        <div class="level-info">
+                                                            <div class="level-name">SILVER</div>
+                                                            <div class="level-range level-points">501-1'500 pts</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="level-item current">
+                                                        <div class="level-icon">
+                                                            <i class="ti ti-star-filled icon"></i>
+                                                        </div>
+                                                        <div class="level-info">
+                                                            <div class="level-name">GOLD</div>
+                                                            <div class="level-range level-points">1'501-3'000 pts</div>
+                                                            <div class="current-indicator">
+                                                                <i class="ti ti-arrow-left icon"></i>
+                                                                Vous êtes ici
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="level-item">
+                                                        <div class="level-icon">
+                                                            <i class="ti ti-award icon"></i>
+                                                        </div>
+                                                        <div class="level-info">
+                                                            <div class="level-name">PLATINUM</div>
+                                                            <div class="level-range level-points">3'001-5'000 pts</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="level-item">
+                                                        <div class="level-icon">
+                                                            <i class="ti ti-diamond icon"></i>
+                                                        </div>
+                                                        <div class="level-info">
+                                                            <div class="level-name">DIAMOND</div>
+                                                            <div class="level-range level-points">5'000+ pts</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Progress bar -->
+                                                <div class="level-progress-container mt-4">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span class="text-muted">Progression actuelle</span>
+                                                        <span class="font-weight-medium">81.7%</span>
+                                                    </div>
+                                                    <div class="progress progress-lg">
+                                                        <div class="progress-bar level-progress bg-warning" style="width: 81.7%" role="progressbar">
+                                                            <span class="progress-bar-label points-value">2'450 / 3'000</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center mt-2">
+                                                        <span class="badge bg-warning-lt">
+                                                            <i class="ti ti-trending-up icon"></i>
+                                                            <span class="points-value">550</span> points avant niveau PLATINUM
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-4">
+                                                <h4 class="mb-3">Avantages niveau GOLD</h4>
+                                                <div class="list-group">
+                                                    <div class="list-group-item">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-auto">
+                                                                <span class="badge bg-warning">
+                                                                    <i class="ti ti-percentage icon"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="font-weight-medium">Bonus missions</div>
+                                                                <div class="text-success">+10%</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-auto">
+                                                                <span class="badge bg-warning">
+                                                                    <i class="ti ti-school icon"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="font-weight-medium">Formations gratuites</div>
+                                                                <div class="text-success">2/an</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-auto">
+                                                                <span class="badge bg-warning">
+                                                                    <i class="ti ti-headset icon"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="font-weight-medium">Support prioritaire</div>
+                                                                <div class="text-success">24/7</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-group-item">
+                                                        <div class="row align-items-center">
+                                                            <div class="col-auto">
+                                                                <span class="badge bg-warning">
+                                                                    <i class="ti ti-award icon"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="font-weight-medium">Badge exclusif</div>
+                                                                <div class="text-success">Profil vérifié</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row Système de Points -->
+                    <div class="row mb-4">
+                        <div class="col-lg-7">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-coins"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Comment gagner des points</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th class="w-1">Points</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-yellow me-2">
+                                                            <i class="ti ti-star icon"></i>
+                                                        </span>
+                                                        Mission 5 étoiles
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+50 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-green me-2">
+                                                            <i class="ti ti-clock icon"></i>
+                                                        </span>
+                                                        Livraison avant deadline
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+20 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-blue me-2">
+                                                            <i class="ti ti-users icon"></i>
+                                                        </span>
+                                                        Client fidèle satisfait
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+30 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-purple me-2">
+                                                            <i class="ti ti-code icon"></i>
+                                                        </span>
+                                                        Tâche complexe réussie
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+15 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-orange me-2">
+                                                            <i class="ti ti-certificate icon"></i>
+                                                        </span>
+                                                        Formation complétée
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+40 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-teal me-2">
+                                                            <i class="ti ti-calendar-check icon"></i>
+                                                        </span>
+                                                        Mois sans retard
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+25 pts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-pink me-2">
+                                                            <i class="ti ti-message-star icon"></i>
+                                                        </span>
+                                                        Feedback excellent
+                                                    </div>
+                                                </td>
+                                                <td class="text-success font-weight-medium points-gain">+10 pts</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-5">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-history"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Historique des points</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-success">
+                                            <i class="ti ti-trending-up icon"></i>
+                                            +185 pts ce mois
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="points-timeline">
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-yellow">
+                                                <i class="ti ti-star icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Mission API excellente</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">Il y a 2 heures</div>
+                                                    <div class="points-gain">+50 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-green">
+                                                <i class="ti ti-clock icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Livraison 2j avance</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">Hier</div>
+                                                    <div class="points-gain">+20 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-blue">
+                                                <i class="ti ti-users icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Client TechCorp satisfait</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">Il y a 3 jours</div>
+                                                    <div class="points-gain">+30 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-purple">
+                                                <i class="ti ti-code icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Migration cloud réussie</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">Il y a 5 jours</div>
+                                                    <div class="points-gain">+15 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-orange">
+                                                <i class="ti ti-certificate icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Formation AWS complétée</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">Il y a 1 semaine</div>
+                                                    <div class="points-gain">+40 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-teal">
+                                                <i class="ti ti-calendar-check icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Janvier sans retard</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">1 Fév</div>
+                                                    <div class="points-gain">+25 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-item completed animated-entry">
+                                            <div class="timeline-marker bg-pink">
+                                                <i class="ti ti-message-star icon"></i>
+                                            </div>
+                                            <div class="timeline-content">
+                                                <div class="timeline-title">Feedback 5 étoiles</div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="timeline-date">30 Jan</div>
+                                                    <div class="points-gain">+10 pts</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Bonus Financiers -->
+                    <div class="row mb-4">
+                        <div class="col-lg-6">
+                            <div class="card bonus-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-calculator"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-calculator icon"></i>
+                                        Calcul des Bonus
+                                    </h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-success">Février 2024</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="bonus-calculation">
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="text-muted">Revenus base ce mois</div>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <div class="h3 mb-0 revenue-amount">CHF 18'750</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr class="my-3">
+                                        
+                                        <div class="bonus-items">
+                                            <div class="row mb-2">
+                                                <div class="col-8">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="ti ti-check icon text-success me-2"></i>
+                                                        Bonus performance (5%)
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <span class="text-success font-weight-medium bonus-amount">+937 CHF</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-8">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="ti ti-check icon text-success me-2"></i>
+                                                        Bonus ponctualité (3%)
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <span class="text-success font-weight-medium bonus-amount">+562 CHF</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-8">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="ti ti-check icon text-success me-2"></i>
+                                                        Bonus qualité (2%)
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 text-end">
+                                                    <span class="text-success font-weight-medium bonus-amount">+375 CHF</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr class="my-3">
+                                        
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="h4 mb-0">TOTAL BONUS</div>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <div class="h3 mb-0 text-success bonus-amount">+1'874 CHF</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-4">
+                                            <button class="btn btn-primary w-100" onclick="showBonusDetails()">
+                                                <i class="ti ti-file-analytics icon"></i>
+                                                Voir détails calcul
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-red">
+                                        <i class="ti ti-chart-line"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Évolution revenus + bonus</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-info">6 derniers mois</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="revenueChart"></div>
+                                    <div class="text-center mt-3">
+                                        <span class="badge bg-success-lt">
+                                            <i class="ti ti-trending-up icon"></i>
+                                            Projection Mars: <span class="revenue-amount">CHF 21'500</span> (+7.8%)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Achievements -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-purple">
+                                        <i class="ti ti-medal"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-medal icon"></i>
+                                        Achievements
+                                    </h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-primary">5/9 débloqués</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="achievements-grid">
+                                        <!-- Achievements débloqués -->
+                                        <div class="achievement-badge unlocked" data-bs-toggle="tooltip" title="Première mission complétée">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">🎯</span>
+                                            </div>
+                                            <div class="achievement-name">First Blood</div>
+                                            <div class="achievement-desc">Première mission</div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge unlocked" data-bs-toggle="tooltip" title="10 livraisons en avance">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">⚡</span>
+                                            </div>
+                                            <div class="achievement-name">Speed Runner</div>
+                                            <div class="achievement-desc">10 livraisons express</div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge unlocked" data-bs-toggle="tooltip" title="20 missions notées 5 étoiles">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">💎</span>
+                                            </div>
+                                            <div class="achievement-name">Quality Master</div>
+                                            <div class="achievement-desc">20 missions 5 étoiles</div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge unlocked" data-bs-toggle="tooltip" title="30 jours consécutifs sans retard">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">🔥</span>
+                                            </div>
+                                            <div class="achievement-name">Hot Streak</div>
+                                            <div class="achievement-desc">30 jours sans retard</div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge unlocked" data-bs-toggle="tooltip" title="50 feedbacks positifs reçus">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">👥</span>
+                                            </div>
+                                            <div class="achievement-name">Team Player</div>
+                                            <div class="achievement-desc">50 feedbacks positifs</div>
+                                        </div>
+                                        
+                                        <!-- Achievements verrouillés -->
+                                        <div class="achievement-badge locked" data-bs-toggle="tooltip" title="Atteindre le niveau PLATINUM (2/3 conditions)">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">🏆</span>
+                                            </div>
+                                            <div class="achievement-name">Champion</div>
+                                            <div class="achievement-desc">Niveau PLATINUM</div>
+                                            <div class="achievement-progress">
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar" style="width: 66%" role="progressbar"></div>
+                                                </div>
+                                                <span class="progress-label achievement-progress-value">2/3</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge locked" data-bs-toggle="tooltip" title="Générer 100k CHF de revenus">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">💰</span>
+                                            </div>
+                                            <div class="achievement-name">Money Maker</div>
+                                            <div class="achievement-desc">100k CHF générés</div>
+                                            <div class="achievement-progress">
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar" style="width: 85%" role="progressbar"></div>
+                                                </div>
+                                                <span class="progress-label achievement-progress-value">85k/100k</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge locked" data-bs-toggle="tooltip" title="Compléter 100 missions avec 5 étoiles">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">🌟</span>
+                                            </div>
+                                            <div class="achievement-name">Perfectionist</div>
+                                            <div class="achievement-desc">100 missions 5 étoiles</div>
+                                            <div class="achievement-progress">
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar" style="width: 47%" role="progressbar"></div>
+                                                </div>
+                                                <span class="progress-label achievement-progress-value">47/100</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="achievement-badge locked" data-bs-toggle="tooltip" title="Faire partie du top 1% des prestataires">
+                                            <div class="achievement-icon">
+                                                <span class="emoji">🚀</span>
+                                            </div>
+                                            <div class="achievement-name">Legendary</div>
+                                            <div class="achievement-desc">Top 1% prestataires</div>
+                                            <div class="achievement-progress">
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar" style="width: 0%" role="progressbar"></div>
+                                                </div>
+                                                <span class="progress-label">Top 2%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Leaderboard -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-podium"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-podium icon"></i>
+                                        Leaderboard
+                                    </h3>
+                                    <div class="card-actions">
+                                        <div class="btn-group" role="group">
+                                            <input type="radio" class="btn-check" name="leaderboard-period" id="btn-monthly" checked>
+                                            <label class="btn btn-sm" for="btn-monthly">Mensuel</label>
+                                            
+                                            <input type="radio" class="btn-check" name="leaderboard-period" id="btn-yearly">
+                                            <label class="btn btn-sm" for="btn-yearly">Annuel</label>
+                                            
+                                            <input type="radio" class="btn-check" name="leaderboard-period" id="btn-alltime">
+                                            <label class="btn btn-sm" for="btn-alltime">All-time</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter">
+                                        <thead>
+                                            <tr>
+                                                <th class="w-1">Position</th>
+                                                <th>Prestataire</th>
+                                                <th>Score</th>
+                                                <th>Points</th>
+                                                <th>Niveau</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-yellow">
+                                                        <i class="ti ti-trophy icon"></i>
+                                                        1
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Jean+Martin)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Jean M.</div>
+                                                            <div class="text-muted small">Senior Developer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-score">98.5</div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-points">4'850 pts</div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-purple">PLATINUM</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="leaderboard-row current-user">
+                                                <td>
+                                                    <span class="badge bg-silver">
+                                                        <i class="ti ti-medal icon"></i>
+                                                        2
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2 bg-green-lt">PR</span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Vous</div>
+                                                            <div class="text-muted small">Full Stack Developer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-score">95.0</div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-points">2'450 pts</div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-warning">GOLD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="badge bg-bronze">
+                                                        <i class="ti ti-medal icon"></i>
+                                                        3
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Sarah+Laurent)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Sarah L.</div>
+                                                            <div class="text-muted small">UI/UX Designer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-score">94.2</div>
+                                                </td>
+                                                <td>
+                                                    <div class="font-weight-medium leaderboard-points">2'380 pts</div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-warning">GOLD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Marc+Dubois)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Marc D.</div>
+                                                            <div class="text-muted small">DevOps Engineer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">93.8</td>
+                                                <td class="leaderboard-points">2'150 pts</td>
+                                                <td>
+                                                    <span class="badge bg-warning">GOLD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Anna+Weber)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Anna W.</div>
+                                                            <div class="text-muted small">Mobile Developer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">91.5</td>
+                                                <td class="leaderboard-points">1'980 pts</td>
+                                                <td>
+                                                    <span class="badge bg-warning">GOLD</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Thomas+Müller)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Thomas M.</div>
+                                                            <div class="text-muted small">Backend Developer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">90.2</td>
+                                                <td class="leaderboard-points">1'420 pts</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">SILVER</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>7</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Sophie+Bernard)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Sophie B.</div>
+                                                            <div class="text-muted small">Data Analyst</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">89.7</td>
+                                                <td class="leaderboard-points">1'350 pts</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">SILVER</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>8</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Pierre+Leroy)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Pierre L.</div>
+                                                            <div class="text-muted small">QA Engineer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">88.3</td>
+                                                <td class="leaderboard-points">1'200 pts</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">SILVER</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>9</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Léa+Martin)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Léa M.</div>
+                                                            <div class="text-muted small">Frontend Developer</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">87.1</td>
+                                                <td class="leaderboard-points">980 pts</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">SILVER</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>10</td>
+                                                <td>
+                                                    <div class="d-flex py-1 align-items-center">
+                                                        <span class="avatar me-2" style="background-image: url(https://ui-avatars.com/api/?name=Nicolas+Robert)"></span>
+                                                        <div>
+                                                            <div class="font-weight-medium">Nicolas R.</div>
+                                                            <div class="text-muted small">Security Expert</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="leaderboard-score">85.9</td>
+                                                <td class="leaderboard-points">750 pts</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">SILVER</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-award me-1"></i>
+                                    Espace Prestataire - Rewards & Performance
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal Level Up -->
+    <div class="modal modal-blur fade" id="levelUpModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center py-5">
+                    <div class="level-up-animation mb-4">
+                        <span class="badge badge-xl bg-warning animated pulse infinite">
+                            <i class="ti ti-trophy icon"></i>
+                        </span>
+                    </div>
+                    <h2 class="mb-2">Félicitations ! 🎉</h2>
+                    <h3 class="text-muted mb-4">Vous avez atteint le niveau <span id="newLevelName" class="text-warning">PLATINUM</span> !</h3>
+                    <div class="text-muted mb-4">
+                        Découvrez vos nouveaux avantages exclusifs.
+                    </div>
+                    <div class="modal-footer bg-transparent border-0 pt-0">
+                        <button type="button" class="btn btn-primary mx-auto" data-bs-dismiss="modal">
+                            <i class="ti ti-sparkles icon"></i>
+                            Découvrir mes avantages
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone pour notifications toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
+    <!-- Notification de points flottante -->
+    <div id="pointsNotification" class="points-notification"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/notion-connector.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    <script src="../assets/js/rewards-system.js"></script>
+    <script src="../assets/js/rewards-notion.js"></script>
+    
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Check authentication
+            if (!PortalApp.checkAuth()) {
+                console.warn('❌ Utilisateur non authentifié');
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            // Check role
+            if (PortalApp.currentRole !== 'prestataire') {
+                console.warn('❌ Accès non autorisé pour ce rôle');
+                PortalApp.redirectToDashboard();
+                return;
+            }
+            
+            // Initialize layout
+            if (typeof PortalApp.initLayout === 'function') {
+                PortalApp.initLayout();
+            }
+            
+            // Initialize rewards system
+            if (typeof RewardsSystem !== 'undefined') {
+                window.rewardsSystem = new RewardsSystem();
+                window.rewardsSystem.init();
+            }
+            
+            // Initialize revenue chart
+            if (typeof ApexCharts !== 'undefined') {
+                var options = {
+                    series: [{
+                        name: 'Revenus Base',
+                        data: [16500, 17200, 17800, 18100, 18400, 18750]
+                    }, {
+                        name: 'Bonus',
+                        data: [1320, 1450, 1580, 1650, 1720, 1874]
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 350,
+                        stacked: true,
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '55%',
+                            endingShape: 'rounded'
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: ['Sept', 'Oct', 'Nov', 'Déc', 'Jan', 'Fév'],
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'CHF'
+                        },
+                        labels: {
+                            formatter: function (val) {
+                                return "CHF " + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+                            }
+                        }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return "CHF " + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+                            }
+                        }
+                    },
+                    colors: ['#206bc4', '#2fb344'],
+                    legend: {
+                        position: 'top',
+                        horizontalAlign: 'left'
+                    }
+                };
+
+                var chart = new ApexCharts(document.querySelector("#revenueChart"), options);
+                chart.render();
+            }
+        });
+        
+        // Show bonus details modal
+        function showBonusDetails() {
+            // Implementation for showing bonus details
+            alert('Détails des calculs de bonus à implémenter');
+        }
+    </script>
+</body>
+</html>

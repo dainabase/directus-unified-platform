@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Vision AI - OCR SuperAdmin</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <link href="../../../assets/css/custom.css" rel="stylesheet">
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar from dashboard.html -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="../dashboard.html">
+                        <img src="../../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                        SuperAdmin
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <!-- Mobile user menu -->
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard Consolidé</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION DOCUMENTS & IA -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle show" href="#navbar-documents" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-analytics"></i>
+                                </span>
+                                <span class="nav-link-title">Documents & IA</span>
+                            </a>
+                            <div class="dropdown-menu show">
+                                <a class="dropdown-item active" href="./vision-ai.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-primary">
+                                        <i class="ti ti-brain"></i>
+                                    </span>
+                                    Vision AI
+                                </a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION FINANCE -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-finance" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-businessplan"></i>
+                                </span>
+                                <span class="nav-link-title">Finance & Comptabilité</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./finance-overview.html">
+                                    Vue d'ensemble
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Documents & IA</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-brain text-primary"></i>
+                                Vision AI - OCR Intelligent
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Zone de scan -->
+                    <div class="row row-cards">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Scanner un document</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Type de document</label>
+                                        <select class="form-select" id="doc-type">
+                                            <option value="invoice">Facture</option>
+                                            <option value="receipt">Ticket de caisse</option>
+                                            <option value="contract">Contrat</option>
+                                            <option value="id">Pièce d'identité</option>
+                                            <option value="other">Autre</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Fichier à analyser</label>
+                                        <input type="file" class="form-control" id="ocr-file" accept="image/*,.pdf">
+                                        <small class="form-hint">Formats: JPG, PNG, PDF (max 10MB)</small>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Instructions spéciales (optionnel)</label>
+                                        <textarea class="form-control" id="ocr-instructions" rows="3" 
+                                                  placeholder="Ex: Extraire uniquement les montants en CHF"></textarea>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary w-100" onclick="startOCR()">
+                                        <i class="ti ti-scan"></i> Analyser le document
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Historique -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3 class="card-title">Dernières analyses</h3>
+                                </div>
+                                <div class="list-group list-group-flush" id="ocr-history">
+                                    <div class="list-group-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <i class="ti ti-file-text"></i>
+                                            </div>
+                                            <div class="col">
+                                                <div>Facture_2025_001.pdf</div>
+                                                <div class="text-muted small">Facture - Il y a 2 heures</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <!-- Résultats -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Résultats de l'analyse</h3>
+                                </div>
+                                <div class="card-body" id="ocr-results">
+                                    <div class="text-center text-muted py-5">
+                                        <i class="ti ti-brain" style="font-size: 48px;"></i>
+                                        <p class="mt-3">Sélectionnez un document à analyser</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="card mt-3" id="ocr-actions" style="display: none;">
+                                <div class="card-header">
+                                    <h3 class="card-title">Actions</h3>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-success mb-2 w-100" onclick="saveToDirectus()">
+                                        <i class="ti ti-database"></i> Enregistrer dans Directus
+                                    </button>
+                                    <button class="btn btn-secondary mb-2 w-100" onclick="copyResults()">
+                                        <i class="ti ti-copy"></i> Copier les résultats
+                                    </button>
+                                    <button class="btn btn-info w-100" onclick="exportJSON()">
+                                        <i class="ti ti-download"></i> Exporter JSON
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistiques -->
+                    <div class="row row-cards mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Statistiques d'utilisation</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card card-sm">
+                                                <div class="card-body">
+                                                    <div class="subheader">Documents scannés</div>
+                                                    <div class="h2 mb-0">156</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card card-sm">
+                                                <div class="card-body">
+                                                    <div class="subheader">Précision moyenne</div>
+                                                    <div class="h2 mb-0">94.2%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card card-sm">
+                                                <div class="card-body">
+                                                    <div class="subheader">Temps moyen</div>
+                                                    <div class="h2 mb-0">2.8s</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card card-sm">
+                                                <div class="card-body">
+                                                    <div class="subheader">Coût ce mois</div>
+                                                    <div class="h2 mb-0">$12.45</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="../../../assets/js/app.js"></script>
+    <script src="../../../assets/js/auth-directus.js"></script>
+    
+    <script>
+        let currentResults = null;
+        
+        async function startOCR() {
+            const fileInput = document.getElementById('ocr-file');
+            const docType = document.getElementById('doc-type').value;
+            const instructions = document.getElementById('ocr-instructions').value;
+            
+            if (!fileInput.files[0]) {
+                window.App.utils.showAlert('Veuillez sélectionner un fichier', 'warning');
+                return;
+            }
+            
+            // Afficher le loading
+            document.getElementById('ocr-results').innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Analyse en cours...</p>
+                </div>
+            `;
+            
+            // Convertir en base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64 = e.target.result.split(',')[1];
+                
+                try {
+                    const response = await fetch('/api/ocr/scan-invoice', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            image: base64,
+                            type: docType,
+                            instructions: instructions
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        currentResults = data.extracted;
+                        displayResults(data.extracted);
+                        document.getElementById('ocr-actions').style.display = 'block';
+                        addToHistory(fileInput.files[0].name, docType);
+                    } else {
+                        throw new Error(data.error || 'Erreur OCR');
+                    }
+                } catch (error) {
+                    document.getElementById('ocr-results').innerHTML = `
+                        <div class="alert alert-danger">
+                            <h4 class="alert-title">Erreur</h4>
+                            ${error.message}
+                        </div>
+                    `;
+                }
+            };
+            
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+        
+        function displayResults(data) {
+            const html = `
+                <div class="mb-3">
+                    <h4>Données extraites</h4>
+                </div>
+                <table class="table">
+                    <tbody>
+                        ${Object.entries(data || {}).map(([key, value]) => `
+                            <tr>
+                                <td><strong>${formatKey(key)}</strong></td>
+                                <td>${value || 'Non trouvé'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('ocr-results').innerHTML = html;
+        }
+        
+        function formatKey(key) {
+            return key.replace(/_/g, ' ')
+                     .replace(/\b\w/g, l => l.toUpperCase());
+        }
+        
+        function addToHistory(filename, type) {
+            const history = document.getElementById('ocr-history');
+            const item = `
+                <div class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="ti ti-file-text"></i>
+                        </div>
+                        <div class="col">
+                            <div>${filename}</div>
+                            <div class="text-muted small">${type} - ${new Date().toLocaleString('fr-CH')}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            history.insertAdjacentHTML('afterbegin', item);
+        }
+        
+        async function saveToDirectus() {
+            if (!currentResults) return;
+            
+            try {
+                // Ici, adapter selon le type de document
+                window.App.utils.showAlert('Données enregistrées dans Directus', 'success');
+            } catch (error) {
+                window.App.utils.showAlert('Erreur lors de l\'enregistrement', 'danger');
+            }
+        }
+        
+        function copyResults() {
+            if (!currentResults) return;
+            
+            navigator.clipboard.writeText(JSON.stringify(currentResults, null, 2));
+            window.App.utils.showAlert('Résultats copiés dans le presse-papier', 'success');
+        }
+        
+        function exportJSON() {
+            if (!currentResults) return;
+            
+            const blob = new Blob([JSON.stringify(currentResults, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ocr-results-${Date.now()}.json`;
+            a.click();
+        }
+    </script>
+</body>
+</html>

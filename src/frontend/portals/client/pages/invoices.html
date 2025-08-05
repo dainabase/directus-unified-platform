@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Mes Factures - Espace Client</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css" rel="stylesheet">
+    <link href="../../../assets/css/custom.css" rel="stylesheet">
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar from client dashboard -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="../dashboard.html">
+                        <img src="../../../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                        Espace Client
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-blue">CLIENT</span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-blue-lt">CL</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Client Premium</div>
+                                <div class="mt-1 small text-secondary">Espace projets</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="../profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="./projects.html" class="dropdown-item">
+                                <i class="ti ti-folder me-2"></i>
+                                Mes projets
+                            </a>
+                            <a href="../documents.html" class="dropdown-item">
+                                <i class="ti ti-file me-2"></i>
+                                Documents
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-danger" onclick="logout()">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Horizontal menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../dashboard.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-home"></i>
+                                    </span>
+                                    <span class="nav-link-title">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./projects.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-folder"></i>
+                                    </span>
+                                    <span class="nav-link-title">Projets</span>
+                                </a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="./invoices.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-file-invoice"></i>
+                                    </span>
+                                    <span class="nav-link-title">Factures</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../documents.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-files"></i>
+                                    </span>
+                                    <span class="nav-link-title">Documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../support.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <i class="ti ti-help"></i>
+                                    </span>
+                                    <span class="nav-link-title">Support</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">Mes Factures</h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn" onclick="exportInvoices()">
+                                    <i class="ti ti-download"></i> Exporter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Filtres -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" id="filter-status">
+                                        <option value="">Tous</option>
+                                        <option value="paid">Payées</option>
+                                        <option value="sent">En attente</option>
+                                        <option value="draft">Brouillons</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Période</label>
+                                    <select class="form-select" id="filter-period">
+                                        <option value="">Toutes</option>
+                                        <option value="month">Ce mois</option>
+                                        <option value="quarter">Ce trimestre</option>
+                                        <option value="year">Cette année</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Rechercher</label>
+                                    <input type="text" class="form-control" id="filter-search" placeholder="N° facture, projet...">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                        <i class="ti ti-filter"></i> Filtrer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Liste des factures -->
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="table table-vcenter card-table">
+                                <thead>
+                                    <tr>
+                                        <th>N° Facture</th>
+                                        <th>Date</th>
+                                        <th>Projet</th>
+                                        <th>Montant HT</th>
+                                        <th>TVA</th>
+                                        <th>Total TTC</th>
+                                        <th>Statut</th>
+                                        <th class="w-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoices-table">
+                                    <!-- Sera rempli par JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <p class="m-0 text-muted">
+                                Affichage de <span id="showing-count">0</span> facture(s)
+                            </p>
+                            <ul class="pagination m-0 ms-auto" id="pagination">
+                                <!-- Pagination -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal détail facture -->
+    <div class="modal modal-blur fade" id="invoice-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Détail de la facture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="invoice-detail">
+                    <!-- Contenu dynamique -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadInvoice()">
+                        <i class="ti ti-download"></i> Télécharger PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="../../../assets/js/app.js"></script>
+    <script src="../../../assets/js/auth-directus.js"></script>
+    
+    <script>
+        let allInvoices = [];
+        let currentInvoice = null;
+        
+        async function loadInvoices() {
+            try {
+                const response = await window.App.api.get('/items/client_invoices');
+                allInvoices = response.data || [];
+                displayInvoices(allInvoices);
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.App.utils.showAlert('Erreur de chargement des factures', 'danger');
+            }
+        }
+        
+        function displayInvoices(invoices) {
+            const tbody = document.getElementById('invoices-table');
+            document.getElementById('showing-count').textContent = invoices.length;
+            
+            if (invoices.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Aucune facture trouvée</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = invoices.map(invoice => {
+                const amount = parseFloat(invoice.amount || 0);
+                const vat = amount * 0.077; // TVA 7.7%
+                const total = amount + vat;
+                
+                return `
+                    <tr>
+                        <td>
+                            <a href="#" onclick="showInvoice('${invoice.id}')" class="text-reset">
+                                ${invoice.invoice_number || 'N/A'}
+                            </a>
+                        </td>
+                        <td>${invoice.issue_date ? new Date(invoice.issue_date).toLocaleDateString('fr-CH') : '-'}</td>
+                        <td>${invoice.project_name || '-'}</td>
+                        <td class="text-end">${window.App.utils.formatCurrency(amount)}</td>
+                        <td class="text-end">${window.App.utils.formatCurrency(vat)}</td>
+                        <td class="text-end"><strong>${window.App.utils.formatCurrency(total)}</strong></td>
+                        <td>
+                            <span class="badge bg-${getStatusColor(invoice.status)}">
+                                ${getStatusLabel(invoice.status)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-list flex-nowrap">
+                                <button class="btn btn-sm" onclick="showInvoice('${invoice.id}')">
+                                    <i class="ti ti-eye"></i>
+                                </button>
+                                <button class="btn btn-sm" onclick="downloadInvoice('${invoice.id}')">
+                                    <i class="ti ti-download"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        function getStatusColor(status) {
+            const colors = {
+                'paid': 'success',
+                'sent': 'warning',
+                'draft': 'secondary',
+                'overdue': 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+        
+        function getStatusLabel(status) {
+            const labels = {
+                'paid': 'Payée',
+                'sent': 'Envoyée',
+                'draft': 'Brouillon',
+                'overdue': 'En retard'
+            };
+            return labels[status] || status;
+        }
+        
+        function applyFilters() {
+            const status = document.getElementById('filter-status').value;
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            
+            let filtered = allInvoices;
+            
+            if (status) {
+                filtered = filtered.filter(inv => inv.status === status);
+            }
+            
+            if (search) {
+                filtered = filtered.filter(inv => 
+                    inv.invoice_number?.toLowerCase().includes(search) ||
+                    inv.project_name?.toLowerCase().includes(search)
+                );
+            }
+            
+            displayInvoices(filtered);
+        }
+        
+        function showInvoice(id) {
+            const invoice = allInvoices.find(inv => inv.id === id);
+            if (!invoice) return;
+            
+            currentInvoice = invoice;
+            const modal = new bootstrap.Modal(document.getElementById('invoice-modal'));
+            
+            const amount = parseFloat(invoice.amount || 0);
+            const vat = amount * 0.077;
+            const total = amount + vat;
+            
+            // Afficher les détails
+            document.getElementById('invoice-detail').innerHTML = `
+                <div class="invoice">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h3>Facture ${invoice.invoice_number || 'N/A'}</h3>
+                            <p class="text-muted">Date: ${invoice.issue_date ? new Date(invoice.issue_date).toLocaleDateString('fr-CH') : '-'}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-${getStatusColor(invoice.status)} fs-6">
+                                ${getStatusLabel(invoice.status)}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h5>De:</h5>
+                            <address>
+                                Dainamics SA<br>
+                                Rue Example 123<br>
+                                1000 Lausanne<br>
+                                Suisse
+                            </address>
+                        </div>
+                        <div class="col-6">
+                            <h5>Pour:</h5>
+                            <address>
+                                ${invoice.client_name || 'Client'}<br>
+                                ${invoice.client_address || 'Adresse du client'}
+                            </address>
+                        </div>
+                    </div>
+                    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th class="text-end">Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${invoice.description || 'Services rendus'}</td>
+                                <td class="text-end">${window.App.utils.formatCurrency(amount)}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Sous-total HT</th>
+                                <td class="text-end">${window.App.utils.formatCurrency(amount)}</td>
+                            </tr>
+                            <tr>
+                                <th>TVA 7.7%</th>
+                                <td class="text-end">${window.App.utils.formatCurrency(vat)}</td>
+                            </tr>
+                            <tr>
+                                <th>Total TTC</th>
+                                <td class="text-end"><strong>${window.App.utils.formatCurrency(total)}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            
+            modal.show();
+        }
+        
+        function downloadInvoice(id) {
+            const invoiceId = id || currentInvoice?.id;
+            if (!invoiceId) return;
+            
+            window.App.utils.showAlert('Téléchargement du PDF en cours...', 'info');
+            // Ici, implémenter le téléchargement réel
+        }
+        
+        function exportInvoices() {
+            window.App.utils.showAlert('Export en cours de développement', 'info');
+        }
+        
+        function logout() {
+            if (window.AuthDirectus) {
+                window.AuthDirectus.logout();
+            }
+        }
+        
+        // Charger au démarrage
+        document.addEventListener('DOMContentLoaded', loadInvoices);
+    </script>
+</body>
+</html>

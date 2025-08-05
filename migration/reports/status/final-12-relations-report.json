@@ -1,0 +1,56 @@
+{
+  "date": "2025-08-03T20:30:59.043Z",
+  "attempted": 12,
+  "success": [
+    "projects.company_id → companies",
+    "bank_transactions.invoice_id → client_invoices",
+    "time_tracking.person_id → people"
+  ],
+  "errors": [
+    {
+      "status": "error",
+      "relation": "payments.project_id → projects",
+      "error": "Invalid payload. Collection \"payments\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "contracts.company_id → companies",
+      "error": "Invalid payload. Collection \"contracts\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "proposals.company_id → companies",
+      "error": "Invalid payload. Collection \"proposals\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "quotes.company_id → companies",
+      "error": "Invalid payload. Collection \"quotes\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "orders.company_id → companies",
+      "error": "Invalid payload. Collection \"orders\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "activities.project_id → projects",
+      "error": "Invalid payload. Collection \"activities\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "comments.project_id → projects",
+      "error": "Invalid payload. Collection \"comments\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "files.project_id → projects",
+      "error": "Invalid payload. Collection \"files\" doesn't exist."
+    },
+    {
+      "status": "error",
+      "relation": "notifications.user_id → people",
+      "error": "Invalid payload. Collection \"notifications\" doesn't exist."
+    }
+  ]
+}

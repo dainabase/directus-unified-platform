@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Dashboard Superadmin - Groupe Consolidé</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="../assets/css/custom.css" rel="stylesheet"/>
+    <link href="../assets/css/superadmin-custom.css" rel="stylesheet"/>
+    
+    <style>
+        /* Dark mode toggle visibility */
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        /* JetBrains Mono pour les valeurs numériques */
+        .metric-value,
+        .h1,
+        .revenue-amount,
+        .treasury-amount,
+        .percentage-value,
+        .invoice-amount {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 600;
+        }
+        
+        .entity-revenue {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--tblr-red);
+        }
+    </style>
+    
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href=".">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row d-lg-none">
+                    <!-- Mobile user menu -->
+                </div>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+                        <!-- MENU SUPERADMIN -->
+                        <li class="nav-item active">
+                            <a class="nav-link" href="./dashboard.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-home"></i>
+                                </span>
+                                <span class="nav-link-title">Dashboard Consolidé</span>
+                            </a>
+                        </li>
+                        
+                        <!-- SECTION DOCUMENTS & IA -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-documents" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-analytics"></i>
+                                </span>
+                                <span class="nav-link-title">Documents & IA</span>
+                            </a>
+                            <div class="dropdown-menu" data-permission="superadmin.documents.view">
+                                <a class="dropdown-item" href="./documents/vision-ai.html" data-permission="superadmin.documents.ai">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-primary">
+                                        <i class="ti ti-brain"></i>
+                                    </span>
+                                    Vision AI
+                                </a>
+                                <a class="dropdown-item" href="./documents/library.html">
+                                    Bibliothèque
+                                </a>
+                                <a class="dropdown-item" href="./documents/analytics.html">
+                                    Analytics
+                                </a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION FINANCE -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-finance" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-businessplan"></i>
+                                </span>
+                                <span class="nav-link-title">Finance & Comptabilité</span>
+                            </a>
+                            <div class="dropdown-menu" data-permission="superadmin.finance.view">
+                                <div class="dropdown-menu-columns">
+                                    <div class="dropdown-menu-column">
+                                        <a class="dropdown-item" href="./finance/invoices-in.html">
+                                            Factures Fournisseurs
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/invoices-out.html">
+                                            Factures Clients
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/expenses.html">
+                                            Notes de Frais
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/banking.html">
+                                            Banking Revolut
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/accounting.html">
+                                            Comptabilité
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/vat-reports.html">
+                                            Déclarations TVA
+                                        </a>
+                                        <a class="dropdown-item" href="./finance/monthly-reports.html">
+                                            Bilans Mensuels
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION CRM -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-crm" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-users"></i>
+                                </span>
+                                <span class="nav-link-title">CRM Unifié</span>
+                            </a>
+                            <div class="dropdown-menu" data-permission="superadmin.crm.view">
+                                <a class="dropdown-item" href="./crm/contacts.html">Contacts</a>
+                                <a class="dropdown-item" href="./crm/companies.html">Entreprises</a>
+                                <a class="dropdown-item" href="./crm/opportunities.html">Opportunités</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION PROJETS -->
+                        <li class="nav-item dropdown" data-permission="superadmin.projects.view">
+                            <a class="nav-link dropdown-toggle" href="#navbar-projects" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-clipboard-check"></i>
+                                </span>
+                                <span class="nav-link-title">Projets Globaux</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./projects/projects-admin.html">Gestion Projets</a>
+                                <a class="dropdown-item" href="./projects/resources.html">Ressources</a>
+                                <a class="dropdown-item" href="./projects/templates.html">Templates</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION UTILISATEURS -->
+                        <li class="nav-item dropdown" data-permission="superadmin.users.view">
+                            <a class="nav-link dropdown-toggle" href="#navbar-users" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-user-search"></i>
+                                </span>
+                                <span class="nav-link-title">Utilisateurs</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./users/users-list.html">Liste Utilisateurs</a>
+                                <a class="dropdown-item" href="./users/roles.html">Rôles</a>
+                                <a class="dropdown-item" href="./users/permissions.html">Permissions</a>
+                                <a class="dropdown-item" href="./users/onboarding.html">Onboarding</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION ENTITÉS -->
+                        <li class="nav-item dropdown" data-permission="superadmin.entities.view">
+                            <a class="nav-link dropdown-toggle" href="#navbar-entities" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-building"></i>
+                                </span>
+                                <span class="nav-link-title">Entités Groupe</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./entities/entities-config.html">Configuration</a>
+                                <a class="dropdown-item" href="./entities/inter-company.html">Inter-sociétés</a>
+                                <a class="dropdown-item" href="./entities/consolidation.html">Consolidation</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION AUTOMATISATION -->
+                        <li class="nav-item dropdown" data-permission="superadmin.automation.view">
+                            <a class="nav-link dropdown-toggle" href="#navbar-automation" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-robot"></i>
+                                </span>
+                                <span class="nav-link-title">Automatisations</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./automation/workflows.html">Workflows n8n</a>
+                                <a class="dropdown-item" href="./automation/email-templates.html">Templates Email</a>
+                                <a class="dropdown-item" href="./automation/notifications.html">Notifications</a>
+                            </div>
+                        </li>
+                        
+                        <!-- SECTION SYSTÈME -->
+                        <li class="nav-item dropdown" data-permission="superadmin.system.view">
+                            <a class="nav-link dropdown-toggle" href="#navbar-system" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-settings"></i>
+                                </span>
+                                <span class="nav-link-title">Système</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./system/settings.html">Configuration</a>
+                                <a class="dropdown-item" href="./system/integrations.html">Intégrations</a>
+                                <a class="dropdown-item" href="./system/audit-logs.html">Logs d'Audit</a>
+                                <a class="dropdown-item" href="./system/backups.html">Sauvegardes</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Header -->
+        <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav flex-row order-md-last">
+                    <!-- Dark Mode Toggle -->
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list-item">
+                            <a href="#" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'dark')">
+                                <i class="ti ti-moon"></i>
+                            </a>
+                            <a href="#" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom" onclick="document.body.setAttribute('data-bs-theme', 'light')">
+                                <i class="ti ti-sun"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- User menu avec badge SUPERADMIN -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown">
+                            <span class="avatar avatar-sm" style="background-image: url(https://eu.ui-avatars.com/api/?name=Paul+Martin&background=c44569&color=fff)"></span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Paul Martin</div>
+                                <div class="mt-1 small text-secondary">
+                                    <span class="badge bg-red">SUPERADMIN</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="#" class="dropdown-item">Mon Profil</a>
+                            <a href="#" class="dropdown-item">Paramètres 2FA</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../logout.html" class="dropdown-item">Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Vue consolidée</div>
+                            <h2 class="page-title">
+                                Dashboard Groupe - 5 Entités
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <span class="d-none d-sm-inline">
+                                    <a href="#" class="btn" data-permission="superadmin.finance.export">
+                                        Exporter PDF
+                                    </a>
+                                </span>
+                                <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-permission="superadmin.finance.create">
+                                    <i class="ti ti-plus"></i>
+                                    Nouvelle Facture
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Loading Indicator -->
+                    <div id="loading-indicator" class="text-center py-4" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Alerts Container -->
+                    <div id="alerts-container">
+                        <!-- Exemple d'alert Tabler -->
+                        <div class="alert alert-important alert-success alert-dismissible d-none" role="alert" id="success-alert">
+                            <div class="d-flex">
+                                <div>
+                                    <i class="ti ti-check icon alert-icon"></i>
+                                </div>
+                                <div>
+                                    <h4 class="alert-title">Succès !</h4>
+                                    <div class="text-secondary">Les données ont été mises à jour avec succès.</div>
+                                </div>
+                            </div>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+                    </div>
+                    
+                    <!-- KPI Cards Row -->
+                    <div class="row row-deck row-cards mb-4">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-red">
+                                        <i class="ti ti-currency-euro"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-primary text-white avatar">
+                                                <i class="ti ti-currency-euro"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-secondary small font-weight-medium">Chiffre d'affaires</div>
+                                            <div class="h1 mb-0 metric-value" id="revenue-value">CHF 0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <div class="text-secondary" id="revenue-trend">
+                                        <i class="ti ti-trending-up text-green"></i>
+                                        <span>+0%</span> ce mois
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-wallet"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-green text-white avatar">
+                                                <i class="ti ti-wallet"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-secondary small font-weight-medium">Trésorerie</div>
+                                            <div class="h1 mb-0 metric-value" id="treasury-value">CHF 0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <div class="text-secondary" id="treasury-trend">
+                                        <i class="ti ti-minus text-yellow"></i>
+                                        <span>0</span> entités
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-clipboard-list"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-azure text-white avatar">
+                                                <i class="ti ti-clipboard-list"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-secondary small font-weight-medium">Projets actifs</div>
+                                            <div class="h1 mb-0 metric-value" id="projects-value">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <div class="text-secondary" id="projects-trend">
+                                        <span>0</span> nouveaux
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-sm">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-file-invoice"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <span class="bg-orange text-white avatar">
+                                                <i class="ti ti-file-invoice"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-uppercase text-secondary small font-weight-medium">En attente</div>
+                                            <div class="h1 mb-0 metric-value" id="invoicing-value">CHF 0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex align-items-center">
+                                    <div class="text-secondary" id="invoicing-trend">
+                                        <span>0</span> factures
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row 1 -->
+                    <div class="row row-deck row-cards mb-4">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-status-top bg-primary"></div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Évolution du chiffre d'affaires</h3>
+                                    <div class="card-actions">
+                                        <div class="dropdown">
+                                            <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="#" data-period="month">Ce mois</a>
+                                                <a class="dropdown-item" href="#" data-period="quarter">Ce trimestre</a>
+                                                <a class="dropdown-item active" href="#" data-period="year">Cette année</a>
+                                                <a class="dropdown-item" href="#" data-period="all">Tout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div id="revenue-chart"></div>
+                                </div>
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-primary">
+                                        <i class="ti ti-chart-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-status-top bg-green"></div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Trésorerie par entité</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="treasury-chart"></div>
+                                </div>
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-wallet"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Entity Performance Table -->
+                    <div class="row row-cards mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-status-top bg-red"></div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Performance des entités</h3>
+                                    <div class="card-actions">
+                                        <a href="#" class="btn btn-primary btn-sm" id="refresh-dashboard">
+                                            <i class="ti ti-refresh"></i>
+                                            Actualiser
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter table-mobile-md card-table" id="entities-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="w-1">Entité</th>
+                                                <th class="text-nowrap text-end">CA Mensuel</th>
+                                                <th class="text-nowrap text-center">Marge</th>
+                                                <th class="text-nowrap text-center">Projets</th>
+                                                <th class="text-nowrap text-end">Trésorerie</th>
+                                                <th class="text-nowrap text-center">Performance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Sera rempli par JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts Row 2 -->
+                    <div class="row row-deck row-cards mb-4">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-status-top bg-azure"></div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Pipeline projets</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="projects-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-status-top bg-orange"></div>
+                                <div class="card-header">
+                                    <h3 class="card-title">Cashflow mensuel</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="cashflow-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Timeline -->
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Activité récente</h3>
+                                    <div class="card-actions">
+                                        <small class="text-secondary">
+                                            Dernière mise à jour : <span id="last-refresh">--:--:--</span>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="timeline" id="activity-timeline">
+                                        <!-- Sera rempli par JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="./system/audit-logs.html" class="link-secondary">Logs d'audit</a></li>
+                                <li class="list-inline-item"><a href="./system/settings.html" class="link-secondary">Configuration</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Groupe</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- JS Tabler -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
+    
+    <!-- App Core -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/auth-notion.js"></script>
+    <script src="../assets/js/permissions-notion.js"></script>
+    
+    <!-- Modules Superadmin -->
+    <script src="../assets/js/auth-superadmin.js"></script>
+    <script src="../assets/js/permissions-superadmin.js"></script>
+    <script src="../assets/js/dashboard-superadmin.js"></script>
+    
+    <script>
+        // Fonction pour charger le dashboard SuperAdmin consolidé
+        async function loadSuperAdminDashboard() {
+            try {
+                // Charger TOUTES les données
+                const [companiesRes, projectsRes, invoicesRes, peopleRes] = await Promise.all([
+                    fetch('/api/directus/items/companies'),
+                    fetch('/api/directus/items/projects'),
+                    fetch('/api/directus/items/client_invoices'),
+                    fetch('/api/directus/items/people')
+                ]);
+                
+                const companies = await companiesRes.json();
+                const projects = await projectsRes.json();
+                const invoices = await invoicesRes.json();
+                const people = await peopleRes.json();
+                
+                // Calculer les statistiques globales
+                const totalCompanies = companies.data.length;
+                const totalProjects = projects.data.length;
+                const totalPeople = people.data.length;
+                
+                // Calculer le revenue total
+                const totalRevenue = invoices.data.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                const paidRevenue = invoices.data.filter(i => i.status === 'paid')
+                    .reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                const pendingRevenue = invoices.data.filter(i => i.status === 'sent')
+                    .reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                
+                // Afficher les stats globales en haut
+                const statsHTML = `
+                    <div class="page-header">
+                        <div class="container-xl">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h1 class="page-title">Dashboard SuperAdmin - Vue Consolidée</h1>
+                                    <button onclick="testAPISuperAdmin()" class="btn btn-success btn-sm">
+                                        <i class="ti ti-refresh"></i> Test Directus
+                                    </button>
+                                    <span id="api-result" class="ms-2"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-body">
+                        <div class="container-xl">
+                            <div class="row row-cards">
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="subheader">Total Entreprises</div>
+                                            <div class="h1 mb-3">${totalCompanies}</div>
+                                            <div class="text-muted">
+                                                ${companies.data.filter(c => c.type === 'client').length} clients,
+                                                ${companies.data.filter(c => c.type === 'provider').length} fournisseurs
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="subheader">Total Projets</div>
+                                            <div class="h1 mb-3">${totalProjects}</div>
+                                            <div class="text-muted">
+                                                ${projects.data.filter(p => p.status === 'active').length} actifs,
+                                                ${projects.data.filter(p => p.status === 'completed').length} terminés
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="subheader">Revenue Total</div>
+                                            <div class="h1 mb-3 text-success">${totalRevenue.toLocaleString('fr-CH')} CHF</div>
+                                            <div class="text-muted">
+                                                ${invoices.data.length} factures
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="subheader">Utilisateurs Actifs</div>
+                                            <div class="h1 mb-3">${totalPeople}</div>
+                                            <div class="text-muted">
+                                                Collaborateurs et contacts
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Graphiques -->
+                            <div class="row mt-4">
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3>Revenue par Mois</h3>
+                                            <div id="revenue-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3>Projets par Statut</h3>
+                                            <div id="projects-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Section OCR existante -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">🤖 OCR Vision AI</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Service OCR configuré avec OpenAI Vision (gpt-4-vision-preview)</p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-primary" onclick="window.location.href='./documents/vision-ai.html'">
+                                                        <i class="ti ti-brain"></i> Accéder à Vision AI
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-success" onclick="openInvoiceScanner()">
+                                                        <i class="ti ti-scan"></i> Scanner une Facture
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Zone de scan OCR -->
+                                            <div id="ocr-scanner" style="display: none;" class="mt-4">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4>Scanner une Facture</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <input type="file" id="invoice-file" accept="image/*" class="form-control mb-3">
+                                                        <button onclick="scanInvoice()" class="btn btn-primary">
+                                                            <i class="ti ti-upload"></i> Analyser la Facture
+                                                        </button>
+                                                        <div id="scan-result" class="mt-3"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Injecter le HTML
+                document.querySelector('.page-wrapper').innerHTML = statsHTML;
+                
+                // Créer les graphiques
+                setTimeout(() => {
+                    // Graphique Revenue
+                    if (typeof ApexCharts !== 'undefined') {
+                        // Revenue par mois (simulation)
+                        const revenueOptions = {
+                            series: [{
+                                name: 'Revenue CHF',
+                                data: [45000, 68000, 52000, 38000, 72000, 85000, 93000]
+                            }],
+                            chart: { type: 'line', height: 250 },
+                            xaxis: { categories: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'] },
+                            colors: ['#10b981']
+                        };
+                        new ApexCharts(document.querySelector("#revenue-chart"), revenueOptions).render();
+                        
+                        // Projets par statut
+                        const projectsOptions = {
+                            series: [
+                                projects.data.filter(p => p.status === 'active').length,
+                                projects.data.filter(p => p.status === 'pending').length,
+                                projects.data.filter(p => p.status === 'completed').length
+                            ],
+                            chart: { type: 'pie', height: 250 },
+                            labels: ['Actifs', 'En attente', 'Terminés'],
+                            colors: ['#10b981', '#f59e0b', '#3b82f6']
+                        };
+                        new ApexCharts(document.querySelector("#projects-chart"), projectsOptions).render();
+                    }
+                }, 100);
+                
+                return { 
+                    companies: totalCompanies, 
+                    projects: totalProjects, 
+                    revenue: Math.round(totalRevenue),
+                    users: totalPeople
+                };
+                
+            } catch (error) {
+                console.error('Erreur chargement dashboard:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Test API SuperAdmin
+        function testAPISuperAdmin() {
+            loadSuperAdminDashboard().then(result => {
+                if (result.error) {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-danger">❌ ' + result.error + '</div>';
+                } else {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-success">✅ ' + result.companies + ' entreprises, ' + 
+                        result.projects + ' projets, ' + result.revenue + ' CHF revenue, ' +
+                        result.users + ' utilisateurs</div>';
+                }
+            });
+        }
+        
+        // Fonctions OCR Scanner
+        function openInvoiceScanner() {
+            document.getElementById('ocr-scanner').style.display = 'block';
+        }
+        
+        async function scanInvoice() {
+            const fileInput = document.getElementById('invoice-file');
+            const resultDiv = document.getElementById('scan-result');
+            
+            if (!fileInput.files[0]) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Veuillez sélectionner une image</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="alert alert-info">🔄 Analyse en cours...</div>';
+            
+            // Convertir l'image en base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64 = e.target.result.split(',')[1];
+                
+                try {
+                    // Appeler l'endpoint OCR
+                    const response = await fetch('/api/ocr/scan-invoice', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image: base64 })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        resultDiv.innerHTML = `
+                            <div class="alert alert-success">
+                                <h5>✅ Facture scannée avec succès !</h5>
+                                <hr>
+                                <p><strong>Numéro:</strong> ${data.extracted.invoice_number || 'Non trouvé'}</p>
+                                <p><strong>Montant:</strong> ${data.extracted.amount || 0} CHF</p>
+                                <p><strong>Date:</strong> ${data.extracted.date || 'Non trouvée'}</p>
+                                <p><strong>Client/Fournisseur:</strong> ${data.extracted.company || 'Non identifié'}</p>
+                                <hr>
+                                <p class="text-muted">Facture créée dans Directus avec l'ID: ${data.invoice.id}</p>
+                                <button class="btn btn-sm btn-primary" onclick="window.location.reload()">
+                                    Rafraîchir le Dashboard
+                                </button>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="alert alert-danger">
+                                ❌ Erreur: ${data.error}<br>
+                                ${data.details || ''}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            ❌ Erreur de connexion: ${error.message}
+                        </div>
+                    `;
+                }
+            };
+            
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Désactiver temporairement les vérifications d'auth pour les tests
+            /*
+            if (!window.AuthSuperadmin.isAuthenticated()) {
+                window.location.href = '/portal-project/login.html';
+                return;
+            }
+            */
+            
+            console.log('Dashboard Superadmin chargé avec succès');
+            
+            // Charger le dashboard consolidé
+            loadSuperAdminDashboard();
+            
+            // Initialiser le dashboard legacy si disponible
+            if (typeof window.DashboardSuperadmin !== 'undefined') {
+                // await window.DashboardSuperadmin.init();
+            }
+        });
+    </script>
+</body>
+</html>

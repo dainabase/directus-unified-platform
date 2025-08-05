@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Tableau de bord - Espace Revendeur</title>
+    
+    <!-- CSS Tabler -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-flags.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-payments.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler-vendors.min.css" rel="stylesheet">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- ApexCharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.css">
+    
+    <style>
+        [data-bs-theme="dark"] .hide-theme-dark { display: none !important; }
+        [data-bs-theme="light"] .hide-theme-light { display: none !important; }
+        
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .revenue-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--tblr-primary);
+        }
+        
+        .revendeur-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .revendeur-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .sales-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .status-active { background: var(--tblr-green-lt); color: var(--tblr-green); }
+        .status-pending { background: var(--tblr-yellow-lt); color: var(--tblr-yellow); }
+        .status-closed { background: var(--tblr-blue-lt); color: var(--tblr-blue); }
+        .status-lost { background: var(--tblr-red-lt); color: var(--tblr-red); }
+        
+        .conversion-rate {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .trend-arrow {
+            font-size: 1.1rem;
+            margin-left: 0.25rem;
+        }
+        
+        .commission-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--tblr-orange);
+        }
+        
+        .pipeline-stage {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .pipeline-stage:hover {
+            background: var(--tblr-hover-bg);
+            transform: translateX(2px);
+        }
+        
+        .activity-item {
+            transition: all 0.2s ease;
+        }
+        
+        .activity-item:hover {
+            background: var(--tblr-hover-bg);
+        }
+    </style>
+</head>
+<body data-bs-theme="light">
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/revendeur/dashboard.html">
+                        <img src="../assets/img/logo.svg" width="110" height="32" alt="Dashboard" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    <div class="nav-item d-none d-md-flex me-3">
+                        <div class="btn-list">
+                            <span class="badge bg-orange">REVENDEUR</span>
+                            <button onclick="testAPIRevendeur()" class="btn btn-success btn-sm ms-2">
+                                <i class="ti ti-refresh"></i> Test Directus
+                            </button>
+                            <span id="api-result" class="ms-2"></span>
+                        </div>
+                    </div>
+                    <div class="d-none d-md-flex">
+                        <a href="#" class="nav-link px-0 hide-theme-dark" onclick="document.body.setAttribute('data-bs-theme', 'dark')" title="Activer le mode sombre" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-moon"></i>
+                        </a>
+                        <a href="#" class="nav-link px-0 hide-theme-light" onclick="document.body.setAttribute('data-bs-theme', 'light')" title="Activer le mode clair" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="ti ti-sun"></i>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                            <span class="avatar avatar-sm bg-orange-lt">RV</span>
+                            <div class="d-none d-xl-block ps-2">
+                                <div>Revendeur Expert</div>
+                                <div class="mt-1 small text-secondary">Ventes & Pipeline</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="ti ti-user me-2"></i>
+                                Mon profil
+                            </a>
+                            <a href="leads.html" class="dropdown-item">
+                                <i class="ti ti-users me-2"></i>
+                                Mes leads
+                            </a>
+                            <a href="pipeline.html" class="dropdown-item">
+                                <i class="ti ti-chart-line me-2"></i>
+                                Pipeline
+                            </a>
+                            <a href="commissions.html" class="dropdown-item">
+                                <i class="ti ti-coin me-2"></i>
+                                Commissions
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/logout.html" class="dropdown-item">
+                                <i class="ti ti-logout me-2"></i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Navbar menu -->
+        <header class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="dashboard.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-home"></i>
+                                            </span>
+                                            <span class="nav-link-title">Tableau de bord</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="leads.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-users"></i>
+                                            </span>
+                                            <span class="nav-link-title">Leads</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pipeline.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-line"></i>
+                                            </span>
+                                            <span class="nav-link-title">Pipeline</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="commissions.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-coin"></i>
+                                            </span>
+                                            <span class="nav-link-title">Commissions</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="reports.html">
+                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                <i class="ti ti-chart-bar"></i>
+                                            </span>
+                                            <span class="nav-link-title">Rapports</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">Espace Revendeur</div>
+                            <h2 class="page-title">
+                                <i class="ti ti-dashboard me-2"></i>
+                                Tableau de bord
+                            </h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <a href="leads.html" class="btn btn-white">
+                                    <i class="ti ti-users"></i>
+                                    Mes leads
+                                </a>
+                                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-lead">
+                                    <i class="ti ti-plus"></i>
+                                    Nouveau lead
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    <!-- Stats row -->
+                    <div class="row row-deck row-cards mb-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-orange">
+                                        <i class="ti ti-currency-dollar"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Chiffre d'affaires</div>
+                                        <div class="ms-auto lh-1">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown">
+                                                    <i class="ti ti-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="reports.html">Voir rapport</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 revenue-amount">CHF 67'500</div>
+                                        <div class="me-auto">
+                                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-trending-up trend-arrow"></i>
+                                                +22%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        Objectif: <span class="revenue-amount">CHF 100'000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-users-plus"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Nouveaux clients</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 metric-value">8</div>
+                                        <div class="me-auto">
+                                            <span class="text-blue d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-target trend-arrow"></i>
+                                                sur 10
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="progress progress-sm mt-2">
+                                        <div class="progress-bar bg-blue" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-green">
+                                        <i class="ti ti-percentage"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Taux conversion</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 conversion-rate text-green">24%</div>
+                                        <div class="me-auto">
+                                            <span class="text-green d-inline-flex align-items-center lh-1">
+                                                <i class="ti ti-arrow-up trend-arrow"></i>
+                                                +3%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        <span class="metric-value">8</span> sur <span class="metric-value">33</span> leads
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card revendeur-card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-yellow">
+                                        <i class="ti ti-coin"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Commissions</div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="h1 mb-0 me-2 commission-amount">CHF 6'750</div>
+                                    </div>
+                                    <div class="text-secondary mt-1">
+                                        Taux: <span class="metric-value">10%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content row -->
+                    <div class="row row-cards">
+                        <!-- Sales evolution chart -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-stamp">
+                                    <div class="card-stamp-icon bg-blue">
+                                        <i class="ti ti-chart-line"></i>
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="ti ti-chart-line me-2"></i>
+                                        Évolution CA vs Objectifs
+                                    </h3>
+                                    <div class="card-actions">
+                                        <a href="reports.html" class="btn btn-white btn-sm">
+                                            Voir rapport
+                                            <i class="ti ti-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter card-table table-striped">
+                                        <thead class="table-active">
+                                            <tr>
+                                                <th><i class="ti ti-calendar me-1"></i>Mois</th>
+                                                <th><i class="ti ti-currency-dollar me-1"></i>CA Réalisé</th>
+                                                <th><i class="ti ti-target me-1"></i>Objectif</th>
+                                                <th><i class="ti ti-percentage me-1"></i>Taux</th>
+                                                <th><i class="ti ti-flag me-1"></i>Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Janvier 2025</td>
+                                                <td class="revenue-amount">CHF 67'500</td>
+                                                <td class="revenue-amount">CHF 100'000</td>
+                                                <td class="metric-value">67.5%</td>
+                                                <td>
+                                                    <span class="sales-status status-active">En cours</span>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>Décembre 2024</td>
+                                                <td class="revenue-amount">CHF 120'000</td>
+                                                <td class="revenue-amount">CHF 110'000</td>
+                                                <td class="metric-value">109%</td>
+                                                <td>
+                                                    <span class="sales-status status-closed">Objectif dépassé</span>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>Novembre 2024</td>
+                                                <td class="revenue-amount">CHF 95'000</td>
+                                                <td class="revenue-amount">CHF 100'000</td>
+                                                <td class="metric-value">95%</td>
+                                                <td>
+                                                    <span class="sales-status status-pending">Proche</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pipeline & Activity -->
+                        <div class="col-lg-4">
+                            <div class="row row-cards">
+                                <!-- Pipeline stages -->
+                                <div class="col-12">
+                                    <a href="./pipeline.html" class="text-decoration-none" style="color: inherit;">
+                                    <div class="card">
+                                        <div class="card-stamp">
+                                            <div class="card-stamp-icon bg-green">
+                                                <i class="ti ti-funnel"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                <i class="ti ti-funnel me-2"></i>
+                                                Pipeline actuel
+                                            </h3>
+                                            <div class="card-actions">
+                                                <span class="badge bg-green">Live</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="list-group list-group-flush">
+                                                <div class="list-group-item pipeline-stage">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-blue-lt me-3">
+                                                            <i class="ti ti-eye"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Prospects</div>
+                                                            <div class="text-secondary small">CHF 2.3M potentiel</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="h4 mb-0 metric-value">45</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item pipeline-stage">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-green-lt me-3">
+                                                            <i class="ti ti-check"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Qualifiés</div>
+                                                            <div class="text-secondary small">CHF 1.5M potentiel</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="h4 mb-0 metric-value">28</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item pipeline-stage">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-yellow-lt me-3">
+                                                            <i class="ti ti-message-circle"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Négociation</div>
+                                                            <div class="text-secondary small">CHF 580k potentiel</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="h4 mb-0 metric-value">12</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item pipeline-stage">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-red-lt me-3">
+                                                            <i class="ti ti-handshake"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Closing</div>
+                                                            <div class="text-secondary small">CHF 220k potentiel</div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <div class="h4 mb-0 metric-value">5</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+                                
+                                <!-- Recent activity -->
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-stamp">
+                                            <div class="card-stamp-icon bg-orange">
+                                                <i class="ti ti-activity"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                <i class="ti ti-activity me-2"></i>
+                                                Activité récente
+                                            </h3>
+                                            <div class="card-actions">
+                                                <span class="badge bg-orange">4</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="list-group list-group-flush">
+                                                <div class="list-group-item activity-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-blue-lt me-3">
+                                                            <i class="ti ti-user-plus"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Nouveau lead</div>
+                                                            <div class="text-secondary small">Entreprise XYZ SA - Il y a 30min</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item activity-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-green-lt me-3">
+                                                            <i class="ti ti-trophy"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Contrat signé</div>
+                                                            <div class="text-secondary small">TechCorp - CHF 35'000</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item activity-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-yellow-lt me-3">
+                                                            <i class="ti ti-calendar"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">RDV planifié</div>
+                                                            <div class="text-secondary small">Tech SA - Demain 14h30</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="list-group-item activity-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="avatar bg-purple-lt me-3">
+                                                            <i class="ti ti-file-invoice"></i>
+                                                        </span>
+                                                        <div class="flex-fill">
+                                                            <div class="font-weight-medium">Devis envoyé</div>
+                                                            <div class="text-secondary small">StartupFood - CHF 15'000</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    <i class="ti ti-chart-line me-1"></i>
+                                    Espace Revendeur - Ventes & Pipeline
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="." class="link-secondary">Dashboard Multi-rôles</a>.
+                                    Tous droits réservés.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/revendeur-dashboard.js"></script>
+    
+    <script>
+        // Fonction pour charger le dashboard revendeur
+        async function loadRevendeurDashboard() {
+            try {
+                // Charger les leads (companies type=lead ou sans type)
+                const companiesResponse = await fetch('/api/directus/items/companies');
+                const companiesData = await companiesResponse.json();
+                
+                // Séparer leads et clients
+                const leads = companiesData.data.filter(c => !c.type || c.type === 'lead' || c.type === 'provider' || c.type === 'partner');
+                const clients = companiesData.data.filter(c => c.type === 'client');
+                
+                // Charger le pipeline (projets pour les ventes)
+                const projectsResponse = await fetch('/api/directus/items/projects');
+                const projectsData = await projectsResponse.json();
+                
+                // Charger les factures pour calculer les commissions
+                const invoicesResponse = await fetch('/api/directus/items/client_invoices?filter[status][_eq]=paid');
+                const invoicesData = await invoicesResponse.json();
+                
+                // Calculer les commissions (10% des factures payées)
+                const totalRevenue = invoicesData.data.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                const commissions = totalRevenue * 0.10;
+                
+                // Afficher les leads
+                const leadsContainer = document.querySelector('.row.row-cards');
+                if (leadsContainer && leads.length > 0) {
+                    const leadsHTML = `
+                        <div class="col-12">
+                            <h2 class="mb-3">Leads & Prospects (${leads.length})</h2>
+                        </div>
+                        ${leads.slice(0, 6).map(lead => `
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card revendeur-card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">${lead.name}</h3>
+                                        <span class="sales-status status-pending">PROSPECT</span>
+                                        <p class="mt-2">${lead.industry || 'Secteur non défini'}</p>
+                                        <p>${lead.email || 'Pas d\'email'}</p>
+                                        ${lead.phone ? `<p><i class="ti ti-phone"></i> ${lead.phone}</p>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                    
+                    const newSection = document.createElement('div');
+                    newSection.className = 'row row-cards mt-4';
+                    newSection.innerHTML = leadsHTML;
+                    leadsContainer.parentNode.insertBefore(newSection, leadsContainer.nextSibling);
+                }
+                
+                // Créer le graphique pipeline
+                const pipelineData = {
+                    'Actif': projectsData.data.filter(p => p.status === 'active').length,
+                    'En attente': projectsData.data.filter(p => p.status === 'pending').length,
+                    'Terminé': projectsData.data.filter(p => p.status === 'completed').length
+                };
+                
+                const pipelineHTML = `
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Pipeline des Ventes</h3>
+                                <div id="pipeline-chart" class="mt-3"></div>
+                                <div class="row mt-3">
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-success">${pipelineData['Actif']}</div>
+                                        <small>Projets Actifs</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-warning">${pipelineData['En attente']}</div>
+                                        <small>En Attente</small>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="metric-value text-info">${pipelineData['Terminé']}</div>
+                                        <small>Terminés</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Afficher les commissions
+                const commissionsHTML = `
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Commissions du Mois</h3>
+                                <div class="commission-amount" style="font-size: 2rem;">
+                                    ${commissions.toLocaleString('fr-CH')} CHF
+                                </div>
+                                <p class="text-muted">Basé sur ${invoicesData.data.length} factures payées</p>
+                                <p>Total des ventes: ${totalRevenue.toLocaleString('fr-CH')} CHF</p>
+                                <div class="progress mt-3">
+                                    <div class="progress-bar bg-orange" style="width: ${Math.min(commissions/5000*100, 100)}%"></div>
+                                </div>
+                                <small>Objectif: 5,000 CHF</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Ajouter pipeline et commissions
+                const container = document.querySelector('.container-xl .row.row-deck');
+                if (container) {
+                    container.insertAdjacentHTML('beforeend', pipelineHTML + commissionsHTML);
+                    
+                    // Créer le graphique simple
+                    setTimeout(() => {
+                        const chartEl = document.getElementById('pipeline-chart');
+                        if (chartEl && typeof ApexCharts !== 'undefined') {
+                            const options = {
+                                series: [pipelineData['Actif'], pipelineData['En attente'], pipelineData['Terminé']],
+                                chart: { type: 'donut', height: 250 },
+                                labels: ['Actifs', 'En attente', 'Terminés'],
+                                colors: ['#10b981', '#f59e0b', '#3b82f6'],
+                                legend: { position: 'bottom' }
+                            };
+                            new ApexCharts(chartEl, options).render();
+                        }
+                    }, 100);
+                }
+                
+                return { 
+                    leads: leads.length, 
+                    clients: clients.length,
+                    pipeline: projectsData.data.length,
+                    commissions: Math.round(commissions)
+                };
+            } catch (error) {
+                console.error('Erreur chargement dashboard:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Test API Revendeur
+        function testAPIRevendeur() {
+            loadRevendeurDashboard().then(result => {
+                if (result.error) {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-danger mt-2">❌ Erreur: ' + result.error + '</div>';
+                } else {
+                    document.getElementById('api-result').innerHTML = 
+                        '<div class="alert alert-success mt-2">✅ ' + result.leads + ' leads, ' + 
+                        result.pipeline + ' projets, ' + result.commissions + ' CHF commissions</div>';
+                }
+            });
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Initialize revendeur dashboard
+            if (typeof RevendeurDashboard !== 'undefined') {
+                RevendeurDashboard.init();
+            }
+            
+            // Charger automatiquement les données
+            loadRevendeurDashboard();
+        });
+    </script>
+</body>
+</html>

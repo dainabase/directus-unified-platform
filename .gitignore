@@ -1,24 +1,48 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
 # Environment
 .env
 .env.local
+.env.*.local
 
-# Database
-database/
+# Build
+dist/
+build/
+*.log
 
-# Uploads
-uploads/
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
 
-# Dependencies
-node_modules/
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Backups
+backups/
+backup-*/
+*.backup
 
 # Logs
-*.log
 logs/
+*.log
 
 # OS
 .DS_Store
 Thumbs.db
 
-# IDE
-.vscode/
-.idea/
+# Directus
+directus/uploads/
+directus/extensions/
+!directus/extensions/.gitkeep

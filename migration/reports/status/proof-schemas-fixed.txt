@@ -1,0 +1,5 @@
+=== 31 COLLECTIONS RÉPARÉES ===
+Toutes les collections virtuelles ont maintenant un schéma DB
+Script utilisé: scripts/fix-missing-schemas.js
+Date: 04/08/2025
+Collections réparées: activities, approvals, audit_logs, comments, contracts, credits, customer_success, debits, deliveries, departments, evaluations, events, files, goals, kpis, notes, notifications, orders, payments, proposals, quotes, reconciliations, refunds, returns, roles, settings, skills, tags, talents_simple, teams, trainings, workflows

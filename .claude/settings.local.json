@@ -43,7 +43,11 @@
       "Bash(open http://localhost:3000/client/dashboard.html)",
       "Bash(open http://localhost:3000/prestataire/dashboard.html)",
       "Bash(open http://localhost:3000/revendeur/dashboard.html)",
-      "Bash(ln:*)"
+      "Bash(ln:*)",
+      "Bash(git checkout:*)",
+      "Bash(./reorganize-repo.sh)",
+      "Bash(timeout 10 npm run dev)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }

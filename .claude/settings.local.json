@@ -48,7 +48,12 @@
       "Bash(./reorganize-repo.sh)",
       "Bash(timeout 10 npm run dev)",
       "Bash(git rm:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(timeout 10 npx directus start)",
+      "Bash(docker-compose:*)",
+      "Bash(docker logs:*)",
+      "Bash(screencapture:*)"
     ],
     "deny": []
   }

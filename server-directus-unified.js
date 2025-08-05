@@ -227,6 +227,51 @@ app.post('/api/ocr/scan', async (req, res) => {
   });
 });
 
+// 8. API Invoice Ninja Integration
+try {
+  const invoiceNinjaAPI = require('./src/backend/api/invoice-ninja/sync');
+
+  app.get('/api/invoice-ninja/test', async (req, res) => {
+    try {
+      const result = await invoiceNinjaAPI.testInvoiceNinjaConnection();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/invoice-ninja/sync-contact', express.json(), async (req, res) => {
+    try {
+      const result = await invoiceNinjaAPI.syncContactToInvoiceNinja(req.body);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/invoice-ninja/create-invoice', express.json(), async (req, res) => {
+    try {
+      const result = await invoiceNinjaAPI.createInvoiceInInvoiceNinja(req.body);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/invoice-ninja/webhook', express.json(), async (req, res) => {
+    try {
+      const result = await invoiceNinjaAPI.handleInvoiceNinjaWebhook(req.body);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  console.log('✅ API Invoice Ninja configurée');
+} catch (error) {
+  console.log('⚠️ API Invoice Ninja non disponible:', error.message);
+}
+
 // 8. Page d'accueil moderne avec tous les portails
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/all-portals.html'));

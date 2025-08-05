@@ -53,7 +53,11 @@
       "Bash(timeout 10 npx directus start)",
       "Bash(docker-compose:*)",
       "Bash(docker logs:*)",
-      "Bash(screencapture:*)"
+      "Bash(screencapture:*)",
+      "Bash(open http://localhost:8082/setup)",
+      "Bash(true)",
+      "Bash(docker exec:*)",
+      "Bash(open http://localhost:8082)"
     ],
     "deny": []
   }

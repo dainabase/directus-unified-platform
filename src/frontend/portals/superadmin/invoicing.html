@@ -174,6 +174,10 @@
                         </div>
                         <div class="col-auto ms-auto d-print-none">
                             <div class="btn-list">
+                                <button class="btn btn-orange" onclick="openInvoiceNinja()" title="Ouvrir Invoice Ninja">
+                                    <i class="ti ti-external-link"></i>
+                                    Invoice Ninja
+                                </button>
                                 <button class="btn btn-white" data-bs-toggle="modal" data-bs-target="#modal-quote">
                                     <i class="ti ti-file-description"></i>
                                     Nouveau Devis
@@ -292,6 +296,35 @@
                             </ul>
                         </div>
                         <div class="card-body">
+                            <!-- Invoice Ninja Integration Panel -->
+                            <div class="alert alert-info d-flex align-items-center" role="alert">
+                                <div class="me-3">
+                                    <i class="ti ti-info-circle icon alert-icon"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h4 class="alert-title">Intégration Invoice Ninja</h4>
+                                    <div class="text-secondary">
+                                        Gérez vos factures professionnelles avec Invoice Ninja. Synchronisation automatique avec Directus.
+                                    </div>
+                                </div>
+                                <div class="ms-auto">
+                                    <div class="btn-list">
+                                        <button class="btn btn-success btn-sm" onclick="testInvoiceNinjaConnection()" id="btn-test-connection">
+                                            <i class="ti ti-plug"></i>
+                                            Tester Connexion
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" onclick="syncContactToInvoiceNinja()" id="btn-sync-contact">
+                                            <i class="ti ti-users"></i>
+                                            Sync Contact
+                                        </button>
+                                        <button class="btn btn-orange btn-sm" onclick="openInvoiceNinja()">
+                                            <i class="ti ti-external-link"></i>
+                                            Ouvrir Invoice Ninja
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="tab-content">
                                 <!-- Tab Devis -->
                                 <div class="tab-pane active show" id="tabs-quotes" role="tabpanel">
@@ -1226,9 +1259,217 @@
             calculateTotals();
         }
         
+        // === INVOICE NINJA INTEGRATION ===
+        
+        // Ouvrir Invoice Ninja dans un nouveau tab
+        function openInvoiceNinja() {
+            window.open('http://localhost:8082', '_blank');
+        }
+        
+        // Tester la connexion Invoice Ninja
+        async function testInvoiceNinjaConnection() {
+            const btn = document.getElementById('btn-test-connection');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="ti ti-loader-2 animate-spin"></i> Test...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/invoice-ninja/test');
+                const result = await response.json();
+                
+                if (result.success) {
+                    btn.innerHTML = '<i class="ti ti-check"></i> Connecté';
+                    btn.className = 'btn btn-success btn-sm';
+                    
+                    // Afficher un toast de succès
+                    showToast('Connexion Invoice Ninja réussie !', 'success');
+                } else {
+                    throw new Error(result.error || 'Erreur de connexion');
+                }
+            } catch (error) {
+                console.error('Erreur test Invoice Ninja:', error);
+                btn.innerHTML = '<i class="ti ti-x"></i> Échec';
+                btn.className = 'btn btn-danger btn-sm';
+                
+                showToast('Erreur de connexion à Invoice Ninja: ' + error.message, 'error');
+            }
+            
+            // Reset après 3 secondes
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.className = 'btn btn-success btn-sm';
+                btn.disabled = false;
+            }, 3000);
+        }
+        
+        // Synchroniser un contact vers Invoice Ninja
+        async function syncContactToInvoiceNinja() {
+            const btn = document.getElementById('btn-sync-contact');
+            const originalText = btn.innerHTML;
+            
+            // Contact de test
+            const testContact = {
+                id: 1,
+                first_name: 'Jean',
+                last_name: 'Dupont',
+                email: 'jean.dupont@example.com',
+                phone: '+33 1 23 45 67 89',
+                address: '123 Rue de la Paix',
+                city: 'Paris',
+                postal_code: '75001'
+            };
+            
+            btn.innerHTML = '<i class="ti ti-loader-2 animate-spin"></i> Sync...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/invoice-ninja/sync-contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testContact)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    btn.innerHTML = '<i class="ti ti-check"></i> Synchronisé';
+                    btn.className = 'btn btn-success btn-sm';
+                    
+                    showToast(`Contact ${testContact.first_name} ${testContact.last_name} synchronisé vers Invoice Ninja`, 'success');
+                } else {
+                    throw new Error(result.error || 'Erreur de synchronisation');
+                }
+            } catch (error) {
+                console.error('Erreur sync contact:', error);
+                btn.innerHTML = '<i class="ti ti-x"></i> Échec';
+                btn.className = 'btn btn-danger btn-sm';
+                
+                showToast('Erreur de synchronisation: ' + error.message, 'error');
+            }
+            
+            // Reset après 3 secondes
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.className = 'btn btn-primary btn-sm';
+                btn.disabled = false;
+            }, 3000);
+        }
+        
+        // Créer une facture dans Invoice Ninja
+        async function createInvoiceInInvoiceNinja(invoiceData) {
+            try {
+                const response = await fetch('/api/invoice-ninja/create-invoice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(invoiceData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('Facture créée dans Invoice Ninja: ' + result.data.number, 'success');
+                    return result.data;
+                } else {
+                    throw new Error(result.error || 'Erreur de création de facture');
+                }
+            } catch (error) {
+                console.error('Erreur création facture Invoice Ninja:', error);
+                showToast('Erreur de création de facture: ' + error.message, 'error');
+                throw error;
+            }
+        }
+        
+        // Afficher un toast de notification
+        function showToast(message, type = 'info') {
+            // Créer l'élément toast
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} alert-dismissible position-fixed`;
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div>
+                        <i class="ti ti-${type === 'success' ? 'check' : type === 'error' ? 'x' : 'info-circle'} icon alert-icon"></i>
+                    </div>
+                    <div>
+                        ${message}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Auto-suppression après 5 secondes
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 5000);
+        }
+        
+        // Modifier le bouton "Créer la facture" pour intégrer Invoice Ninja
+        function enhanceInvoiceCreation() {
+            // Ajouter un listener au bouton de création de facture
+            const createInvoiceBtn = document.querySelector('#modal-invoice .btn-primary');
+            if (createInvoiceBtn) {
+                createInvoiceBtn.addEventListener('click', function() {
+                    // Récupérer les données du formulaire
+                    const modalBody = document.querySelector('#modal-invoice .modal-body');
+                    const entreprise = modalBody.querySelector('select').value;
+                    const client = modalBody.querySelectorAll('select')[1].value;
+                    const date = modalBody.querySelector('input[type="date"]').value;
+                    const echeance = modalBody.querySelectorAll('select')[2].value;
+                    const objet = modalBody.querySelector('input[type="text"]').value;
+                    
+                    if (entreprise && client && objet) {
+                        // Données de facture de test pour Invoice Ninja
+                        const invoiceData = {
+                            client_invoice_ninja_id: 1, // ID du client dans Invoice Ninja
+                            date: date,
+                            due_date: calculateDueDate(date, parseInt(echeance)),
+                            line_items: [
+                                {
+                                    description: objet,
+                                    quantity: 1,
+                                    unit_price: 1000,
+                                    notes: 'Facture créée depuis SuperAdmin'
+                                }
+                            ],
+                            terms: 'Paiement à ' + echeance + ' jours',
+                            notes: 'Facture générée automatiquement'
+                        };
+                        
+                        // Créer la facture dans Invoice Ninja
+                        createInvoiceInInvoiceNinja(invoiceData);
+                    }
+                });
+            }
+        }
+        
+        // Calculer la date d'échéance
+        function calculateDueDate(startDate, days) {
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + days);
+            return date.toISOString().split('T')[0];
+        }
+        
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Module Devis/Factures enrichi chargé');
+            console.log('Module Devis/Factures enrichi avec Invoice Ninja chargé');
+            
+            // Enhanced invoice creation
+            enhanceInvoiceCreation();
+            
+            // Test automatique de la connexion Invoice Ninja au chargement
+            setTimeout(() => {
+                testInvoiceNinjaConnection();
+            }, 2000);
         });
     </script>
 </body>

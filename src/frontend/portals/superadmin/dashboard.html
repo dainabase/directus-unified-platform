@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="assets/css/glassmorphism.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/css/ceo-metrics.css">
     
     <!-- Custom CSS -->
     <style>
@@ -277,53 +278,70 @@
 
         <!-- Navigation principale -->
         <nav class="sidebar-nav">
-            <!-- Dashboard -->
+            <!-- Executive -->
             <div class="nav-section">
-                <div class="nav-section-title">PRINCIPAL</div>
+                <div class="nav-section-title">EXECUTIVE</div>
                 <a href="dashboard.html" class="nav-item active hover-lift">
-                    <i class="ti ti-dashboard nav-icon"></i>
-                    <span class="nav-text">Dashboard</span>
-                    <span class="nav-badge badge-gradient">New</span>
+                    <i class="ti ti-home nav-icon"></i>
+                    <span class="nav-text">Vue Consolidée</span>
+                    <span class="nav-badge badge-gradient">Live</span>
+                </a>
+                <a href="reports.html" class="nav-item hover-lift">
+                    <i class="ti ti-chart-bar nav-icon"></i>
+                    <span class="nav-text">Rapports CEO</span>
+                </a>
+                <a href="alerts.html" class="nav-item hover-lift">
+                    <i class="ti ti-alert-triangle nav-icon"></i>
+                    <span class="nav-text">Centre d'Alertes</span>
+                    <span class="nav-counter alert">3</span>
+                </a>
+            </div>
+
+            <!-- Finances -->
+            <div class="nav-section">
+                <div class="nav-section-title">FINANCES</div>
+                <a href="treasury.html" class="nav-item hover-lift">
+                    <i class="ti ti-wallet nav-icon"></i>
+                    <span class="nav-text">Trésorerie</span>
+                    <span class="status-dot warning"></span>
+                </a>
+                <a href="pnl.html" class="nav-item hover-lift">
+                    <i class="ti ti-trending-up nav-icon"></i>
+                    <span class="nav-text">P&L Consolidé</span>
+                </a>
+                <a href="banking.html" class="nav-item hover-lift">
+                    <i class="ti ti-building-bank nav-icon"></i>
+                    <span class="nav-text">Banking</span>
+                    <span class="status-dot online"></span>
+                </a>
+                <a href="forecasting.html" class="nav-item hover-lift">
+                    <i class="ti ti-crystal-ball nav-icon"></i>
+                    <span class="nav-text">Prévisions</span>
                 </a>
             </div>
 
             <!-- Commercial -->
             <div class="nav-section">
                 <div class="nav-section-title">COMMERCIAL</div>
-                <div class="nav-item has-submenu hover-lift" data-menu="commercial">
-                    <i class="ti ti-shopping-cart nav-icon"></i>
-                    <span class="nav-text">Ventes</span>
-                    <i class="ti ti-chevron-right nav-arrow"></i>
-                </div>
+                <a href="pipeline.html" class="nav-item hover-lift">
+                    <i class="ti ti-funnel nav-icon"></i>
+                    <span class="nav-text">Pipeline Global</span>
+                    <span class="nav-counter">89</span>
+                </a>
                 <a href="invoices.html" class="nav-item hover-lift">
                     <i class="ti ti-file-invoice nav-icon"></i>
                     <span class="nav-text">Factures</span>
                     <span class="nav-counter">127</span>
                 </a>
-                <a href="quotes.html" class="nav-item hover-lift">
-                    <i class="ti ti-file-text nav-icon"></i>
-                    <span class="nav-text">Devis</span>
-                    <span class="nav-counter">23</span>
-                </a>
-            </div>
-
-            <!-- Finance -->
-            <div class="nav-section">
-                <div class="nav-section-title">FINANCE</div>
-                <a href="banking.html" class="nav-item hover-lift">
-                    <i class="ti ti-building-bank nav-icon"></i>
-                    <span class="nav-text">Banking</span>
-                    <span class="status-dot online"></span>
-                </a>
-                <a href="accounting.html" class="nav-item hover-lift">
-                    <i class="ti ti-calculator nav-icon"></i>
-                    <span class="nav-text">Comptabilité</span>
+                <a href="clients.html" class="nav-item hover-lift">
+                    <i class="ti ti-users nav-icon"></i>
+                    <span class="nav-text">Clients</span>
                 </a>
             </div>
 
             <!-- Operations -->
             <div class="nav-section">
-                <div class="nav-section-title">OPERATIONS</div>
+                <div class="nav-section-title">OPÉRATIONS</div>
                 <a href="erp.html" class="nav-item hover-lift">
                     <i class="ti ti-packages nav-icon"></i>
                     <span class="nav-text">ERP</span>
@@ -332,15 +350,39 @@
                     <i class="ti ti-clipboard-list nav-icon"></i>
                     <span class="nav-text">Projets</span>
                 </a>
+                <a href="tasks.html" class="nav-item hover-lift">
+                    <i class="ti ti-checklist nav-icon"></i>
+                    <span class="nav-text">Tâches</span>
+                    <span class="nav-counter">47</span>
+                </a>
             </div>
 
             <!-- Marketing -->
             <div class="nav-section">
                 <div class="nav-section-title">MARKETING</div>
-                <a href="marketing.html" class="nav-item hover-lift">
+                <a href="campaigns.html" class="nav-item hover-lift">
                     <i class="ti ti-speakerphone nav-icon"></i>
                     <span class="nav-text">Campagnes</span>
                     <span class="status-dot pulse-glow"></span>
+                </a>
+                <a href="leads.html" class="nav-item hover-lift">
+                    <i class="ti ti-target nav-icon"></i>
+                    <span class="nav-text">Leads</span>
+                    <span class="nav-counter">234</span>
+                </a>
+            </div>
+
+            <!-- Analytics -->
+            <div class="nav-section">
+                <div class="nav-section-title">ANALYTICS</div>
+                <a href="performance.html" class="nav-item hover-lift">
+                    <i class="ti ti-chart-line nav-icon"></i>
+                    <span class="nav-text">Performance</span>
+                </a>
+                <a href="predictions.html" class="nav-item hover-lift">
+                    <i class="ti ti-brain nav-icon"></i>
+                    <span class="nav-text">IA Prédictive</span>
+                    <span class="nav-badge badge-gradient">Beta</span>
                 </a>
             </div>
         </nav>
@@ -573,144 +615,381 @@
                 </div>
             </div>
             
-            <!-- KPI Row -->
+            <!-- CEO METRICS ROW - 5 KPIs Critiques -->
             <div class="row g-4 mb-4">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="kpi-card glass-card animate-in delay-4 hover-lift">
-                        <div class="kpi-header">
-                            <div class="kpi-icon">
-                                <i class="ti ti-currency-euro"></i>
+                <!-- Cash Runway -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card critical glass-card animate-in delay-4 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon alert">
+                                <i class="ti ti-clock"></i>
                             </div>
-                            <div class="kpi-badge pulse-glow">
-                                <span class="badge-success">+12.5%</span>
+                            <div class="metric-alert danger pulse-glow">
+                                <i class="ti ti-alert-triangle"></i>
                             </div>
                         </div>
-                        <div class="kpi-content">
-                            <div class="kpi-label">Chiffre d'affaires</div>
-                            <div class="kpi-value gradient-text">€2.45M</div>
-                            <div class="kpi-subtitle">Ce mois-ci</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Cash Runway</div>
+                            <div class="metric-value danger">4.2 mois</div>
+                            <div class="metric-subtitle">Burn: €245K/mois</div>
                         </div>
-                        <div class="kpi-chart">
-                            <canvas id="revenueSparkline"></canvas>
+                        <div class="metric-chart">
+                            <div id="cash-sparkline"></div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-3 col-sm-6">
-                    <div class="kpi-card glass-card animate-in delay-5 hover-lift">
-                        <div class="kpi-header">
-                            <div class="kpi-icon">
-                                <i class="ti ti-users"></i>
+                <!-- ARR Consolidé -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-5 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-trending-up"></i>
                             </div>
-                            <div class="kpi-badge">
-                                <span class="badge-info">Actifs</span>
+                            <div class="metric-badge success">
+                                <span>+47% YoY</span>
                             </div>
                         </div>
-                        <div class="kpi-content">
-                            <div class="kpi-label">Clients actifs</div>
-                            <div class="kpi-value gradient-text">1,847</div>
-                            <div class="kpi-subtitle">+12% nouveaux</div>
+                        <div class="metric-content">
+                            <div class="metric-label">ARR Consolidé</div>
+                            <div class="metric-value gradient-text">€7.2M</div>
+                            <div class="metric-subtitle">Target: €8.5M</div>
                         </div>
-                        <div class="kpi-chart">
-                            <canvas id="customersSparkline"></canvas>
+                        <div class="metric-chart">
+                            <div id="arr-sparkline"></div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-3 col-sm-6">
-                    <div class="kpi-card glass-card animate-in delay-6 hover-lift">
-                        <div class="kpi-header">
-                            <div class="kpi-icon">
-                                <i class="ti ti-file-invoice"></i>
+                <!-- EBITDA Margin -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-6 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-percentage"></i>
                             </div>
-                            <div class="kpi-badge">
-                                <span class="badge-warning">23 en attente</span>
+                            <div class="metric-gauge">
+                                <div id="ebitda-gauge"></div>
                             </div>
                         </div>
-                        <div class="kpi-content">
-                            <div class="kpi-label">Factures en attente</div>
-                            <div class="kpi-value gradient-text">€458K</div>
-                            <div class="kpi-subtitle">À recouvrer</div>
-                        </div>
-                        <div class="kpi-chart">
-                            <canvas id="invoicesSparkline"></canvas>
+                        <div class="metric-content">
+                            <div class="metric-label">Marge EBITDA</div>
+                            <div class="metric-value gradient-text">18.7%</div>
+                            <div class="metric-subtitle">Objectif: 25%</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-3 col-sm-6">
-                    <div class="kpi-card glass-card animate-in delay-7 hover-lift">
-                        <div class="kpi-header">
-                            <div class="kpi-icon">
-                                <i class="ti ti-wallet"></i>
+                <!-- LTV:CAC Ratio -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card warning glass-card animate-in delay-7 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-target"></i>
                             </div>
-                            <div class="kpi-badge">
-                                <span class="badge-success">Sain</span>
+                            <div class="metric-alert warning">
+                                <i class="ti ti-zap"></i>
                             </div>
                         </div>
-                        <div class="kpi-content">
-                            <div class="kpi-label">Trésorerie disponible</div>
-                            <div class="kpi-value gradient-text">€892K</div>
-                            <div class="kpi-subtitle">Multi-devises</div>
+                        <div class="metric-content">
+                            <div class="metric-label">LTV:CAC Ratio</div>
+                            <div class="metric-value warning">2.8:1</div>
+                            <div class="metric-subtitle">Sous le seuil 3:1</div>
                         </div>
-                        <div class="kpi-chart">
-                            <canvas id="cashSparkline"></canvas>
+                        <div class="metric-breakdown">
+                            <span>LTV: €4,200</span>
+                            <span>CAC: €1,500</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NPS Global -->
+                <div class="col-xl-2 col-lg-4 col-sm-6">
+                    <div class="metric-card glass-card animate-in delay-8 hover-lift">
+                        <div class="metric-header">
+                            <div class="metric-icon">
+                                <i class="ti ti-heart"></i>
+                            </div>
+                            <div class="metric-indicator">
+                                <div id="nps-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">NPS Global</div>
+                            <div class="metric-value success">52</div>
+                            <div class="metric-subtitle">Promoteurs: 67%</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Charts Row -->
-            <div class="row g-4 mb-4">
-                <div class="col-lg-8">
-                    <div class="glass-card animate-in delay-8">
-                        <div class="card-header">
-                            <h3 class="card-title gradient-text">Évolution du CA par entreprise</h3>
-                            <div class="card-actions">
-                                <button class="btn btn-glass btn-sm active">7J</button>
-                                <button class="btn btn-glass btn-sm">30J</button>
-                                <button class="btn btn-glass btn-sm">12M</button>
+            <!-- 6 BLOCS OPÉRATIONNELS -->
+            <div class="operational-grid mb-4">
+                <!-- Finance -->
+                <div class="operational-block animate-in delay-9">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(16, 185, 129, 0.2); color: #10B981;">
+                                <i class="ti ti-wallet"></i>
+                            </div>
+                            Finance
+                        </div>
+                        <a href="banking.html" class="block-action">Détails</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Trésorerie totale</div>
+                                <div class="metric-detail">5 comptes bancaires</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€892K</div>
+                                <div class="metric-change positive">+€12K</div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <canvas id="revenueChart" height="300"></canvas>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Créances clients</div>
+                                <div class="metric-detail">23 factures impayées</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€458K</div>
+                                <div class="metric-change neutral">45j DSO</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Dettes fournisseurs</div>
+                                <div class="metric-detail">À payer sous 30j</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€234K</div>
+                                <div class="metric-change positive">-€18K</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-lg-4">
-                    <div class="glass-card animate-in delay-9">
-                        <div class="card-header">
-                            <h3 class="card-title gradient-text">Répartition par secteur</h3>
+
+                <!-- Tâches -->
+                <div class="operational-block animate-in delay-10">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(99, 102, 241, 0.2); color: #6366F1;">
+                                <i class="ti ti-clipboard-list"></i>
+                            </div>
+                            Tâches
                         </div>
-                        <div class="card-body">
-                            <canvas id="sectorChart" height="250"></canvas>
-                            <div class="chart-legend mt-3">
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #6366F1"></span>
-                                    <span class="legend-label">HyperVisual</span>
-                                    <span class="legend-value ms-auto">€458K</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #8B5CF6"></span>
-                                    <span class="legend-label">Dynamics</span>
-                                    <span class="legend-value ms-auto">€342K</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #EC4899"></span>
-                                    <span class="legend-label">Lexia</span>
-                                    <span class="legend-value ms-auto">€298K</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #10B981"></span>
-                                    <span class="legend-label">NKReality</span>
-                                    <span class="legend-value ms-auto">€276K</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-dot" style="background: #F59E0B"></span>
-                                    <span class="legend-label">Etekout</span>
-                                    <span class="legend-value ms-auto">€189K</span>
-                                </div>
+                        <a href="tasks.html" class="block-action">Voir tout</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">En cours</div>
+                                <div class="metric-detail">Priorité haute: 12</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">47</div>
+                                <div class="metric-change positive">-5</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">En retard</div>
+                                <div class="metric-detail">Assignées à moi: 3</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">8</div>
+                                <div class="metric-change negative">+2</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Terminées (7j)</div>
+                                <div class="metric-detail">Équipe complète</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">156</div>
+                                <div class="metric-change positive">+23</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commercial -->
+                <div class="operational-block animate-in delay-11">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(139, 92, 246, 0.2); color: #8B5CF6;">
+                                <i class="ti ti-shopping-cart"></i>
+                            </div>
+                            Commercial
+                        </div>
+                        <a href="sales.html" class="block-action">Pipeline</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Pipeline actuel</div>
+                                <div class="metric-detail">89 opportunités</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€1.2M</div>
+                                <div class="metric-change positive">+€180K</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Taux de conversion</div>
+                                <div class="metric-detail">Ce mois</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">32%</div>
+                                <div class="metric-change positive">+4%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Cycle de vente</div>
+                                <div class="metric-detail">Moyenne mobile</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">45j</div>
+                                <div class="metric-change positive">-3j</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketing -->
+                <div class="operational-block animate-in delay-12">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(236, 72, 153, 0.2); color: #EC4899;">
+                                <i class="ti ti-speakerphone"></i>
+                            </div>
+                            Marketing
+                        </div>
+                        <a href="marketing.html" class="block-action">Campagnes</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Leads générés</div>
+                                <div class="metric-detail">Ce mois</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">234</div>
+                                <div class="metric-change positive">+18%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Coût par lead</div>
+                                <div class="metric-detail">Moyenne pondérée</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">€47</div>
+                                <div class="metric-change positive">-€8</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">ROI campagnes</div>
+                                <div class="metric-detail">30 derniers jours</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">340%</div>
+                                <div class="metric-change positive">+45%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance -->
+                <div class="operational-block animate-in delay-13">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">
+                                <i class="ti ti-chart-line"></i>
+                            </div>
+                            Performance
+                        </div>
+                        <a href="analytics.html" class="block-action">Analytics</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Productivité équipe</div>
+                                <div class="metric-detail">Score global</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">87%</div>
+                                <div class="metric-change positive">+3%</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Tickets support</div>
+                                <div class="metric-detail">Temps résolution</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">2.3h</div>
+                                <div class="metric-change positive">-0.5h</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Satisfaction client</div>
+                                <div class="metric-detail">Score CSAT</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">4.6/5</div>
+                                <div class="metric-change positive">+0.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertes -->
+                <div class="operational-block animate-in delay-14">
+                    <div class="block-header">
+                        <div class="block-title">
+                            <div class="block-icon" style="background: rgba(239, 68, 68, 0.2); color: #EF4444;">
+                                <i class="ti ti-alert-triangle"></i>
+                            </div>
+                            Alertes
+                        </div>
+                        <a href="alerts.html" class="block-action">Toutes</a>
+                    </div>
+                    <div class="block-content">
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Critiques</div>
+                                <div class="metric-detail">Action immédiate</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">3</div>
+                                <div class="metric-change negative">+1</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Avertissements</div>
+                                <div class="metric-detail">À surveiller</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">7</div>
+                                <div class="metric-change neutral">±0</div>
+                            </div>
+                        </div>
+                        <div class="block-metric">
+                            <div class="metric-info">
+                                <div class="metric-name">Système</div>
+                                <div class="metric-detail">Intégrations</div>
+                            </div>
+                            <div class="metric-value-block">
+                                <div class="metric-number">1</div>
+                                <div class="metric-change positive">-2</div>
                             </div>
                         </div>
                     </div>
@@ -886,8 +1165,10 @@
     </main>
     
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
     <script src="assets/js/navigation.js"></script>
+    <script src="assets/js/directus-api.js"></script>
+    <script src="assets/js/ceo-dashboard.js"></script>
     <script>
         // Chart configurations
         const chartOptions = {

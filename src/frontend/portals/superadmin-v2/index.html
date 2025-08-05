@@ -132,50 +132,58 @@
         
         <!-- Main Content -->
         <main class="dashboard-main">
-            <!-- KPIs principaux -->
+            <!-- KPIs avec mini-graphiques -->
             <section class="kpi-grid">
+                <!-- CA avec courbe -->
                 <div class="kpi-card kpi-primary">
                     <div class="kpi-header">
-                        <span class="kpi-label">CA TOTAL</span>
+                        <span class="kpi-label">CHIFFRE D'AFFAIRES</span>
                         <i data-lucide="euro"></i>
                     </div>
                     <div class="kpi-value">€2.45M</div>
+                    <div class="kpi-sparkline" id="revenue-sparkline"></div>
                     <div class="kpi-change positive">
                         <i data-lucide="trending-up"></i>
-                        <span>+€245K vs mois dernier</span>
+                        <span>+12% vs mois dernier</span>
                     </div>
                 </div>
                 
+                <!-- Marge avec gauge -->
                 <div class="kpi-card">
                     <div class="kpi-header">
-                        <span class="kpi-label">CROISSANCE</span>
-                        <i data-lucide="chart-line"></i>
+                        <span class="kpi-label">MARGE NETTE</span>
+                        <i data-lucide="percent"></i>
                     </div>
-                    <div class="kpi-value">+23.5%</div>
+                    <div class="kpi-gauge" id="margin-gauge"></div>
+                    <div class="kpi-value">18.7%</div>
                     <div class="kpi-change positive">
-                        <span>vs même période 2024</span>
+                        <span>Objectif: 20%</span>
                     </div>
                 </div>
                 
+                <!-- Trésorerie avec area chart -->
                 <div class="kpi-card">
                     <div class="kpi-header">
                         <span class="kpi-label">TRÉSORERIE</span>
                         <i data-lucide="banknote"></i>
                     </div>
                     <div class="kpi-value">€892K</div>
+                    <div class="kpi-sparkline" id="cash-sparkline"></div>
                     <div class="kpi-change neutral">
                         <span>3.2 mois de BFR</span>
                     </div>
                 </div>
                 
+                <!-- Nouveaux clients avec barres -->
                 <div class="kpi-card">
                     <div class="kpi-header">
-                        <span class="kpi-label">OBJECTIF</span>
-                        <i data-lucide="target"></i>
+                        <span class="kpi-label">NOUVEAUX CLIENTS</span>
+                        <i data-lucide="users"></i>
                     </div>
-                    <div class="kpi-value">87%</div>
-                    <div class="kpi-progress">
-                        <div class="progress-bar" style="width: 87%"></div>
+                    <div class="kpi-value">+47</div>
+                    <div class="kpi-sparkline" id="clients-sparkline"></div>
+                    <div class="kpi-change positive">
+                        <span>+23% vs mois dernier</span>
                     </div>
                 </div>
             </section>
@@ -255,6 +263,62 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Graphiques principaux -->
+            <section class="charts-grid">
+                <!-- Evolution CA 12 mois -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Evolution du Chiffre d'Affaires</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" data-range="1M">1M</button>
+                            <button class="chart-btn" data-range="3M">3M</button>
+                            <button class="chart-btn" data-range="6M">6M</button>
+                            <button class="chart-btn" data-range="1Y">1Y</button>
+                        </div>
+                    </div>
+                    <div id="revenue-chart"></div>
+                </div>
+                
+                <!-- Répartition par entreprise -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Répartition CA par Entreprise</h3>
+                        <span class="chart-subtitle">Période actuelle</span>
+                    </div>
+                    <div id="companies-donut"></div>
+                </div>
+            </section>
+
+            <!-- Métriques avancées -->
+            <section class="metrics-grid">
+                <!-- Cash Flow -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Cash Flow Prévisionnel</h3>
+                        <i data-lucide="trending-up"></i>
+                    </div>
+                    <div id="cashflow-chart"></div>
+                </div>
+                
+                <!-- Pipeline Commercial -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Pipeline Commercial</h3>
+                        <i data-lucide="funnel"></i>
+                    </div>
+                    <div id="pipeline-chart"></div>
+                </div>
+                
+                <!-- Heatmap Activité -->
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Activité par Jour</h3>
+                        <i data-lucide="activity"></i>
+                    </div>
+                    <div id="activity-heatmap"></div>
+                </div>
+            </section>
             
             <!-- Alertes critiques -->
             <section class="alerts-section">
@@ -283,8 +347,19 @@
         </main>
     </div>
     
-    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+
+    <!-- Lucide icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Nos scripts -->
+    <script src="js/dashboard-charts.js"></script>
     <script src="js/app-combined.js"></script>
+
+    <script>
+        // Initialiser les icônes Lucide
+        lucide.createIcons();
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperAdmin - Executive Dashboard</title>
+    <title>CEO Dashboard - Portfolio Multi-Entreprises</title>
     
     <!-- Font moderne -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
                 <button class="menu-toggle" id="menuToggle">
                     <i data-lucide="menu"></i>
                 </button>
-                <h1 class="dashboard-title">Executive Dashboard</h1>
+                <h1 class="dashboard-title">CEO Dashboard</h1>
             </div>
             
             <div class="header-center">
@@ -132,215 +132,309 @@
         
         <!-- Main Content -->
         <main class="dashboard-main">
-            <!-- KPIs avec mini-graphiques -->
-            <section class="kpi-grid">
-                <!-- CA avec courbe -->
-                <div class="kpi-card kpi-primary">
-                    <div class="kpi-header">
-                        <span class="kpi-label">CHIFFRE D'AFFAIRES</span>
-                        <i data-lucide="euro"></i>
+            <!-- SECTION 1 : Métriques Critiques Portfolio (5 max) -->
+            <section class="critical-metrics">
+                <div class="metric-card metric-cash">
+                    <div class="metric-header">
+                        <span class="metric-label">CASH RUNWAY</span>
+                        <span class="metric-alert red">⚠️ ALERTE</span>
                     </div>
-                    <div class="kpi-value">€2.45M</div>
-                    <div class="kpi-sparkline" id="revenue-sparkline"></div>
-                    <div class="kpi-change positive">
-                        <i data-lucide="trending-up"></i>
-                        <span>+12% vs mois dernier</span>
+                    <div class="metric-main">
+                        <div class="metric-value">4.2 mois</div>
+                        <div class="metric-sparkline" id="cash-sparkline"></div>
                     </div>
-                </div>
-                
-                <!-- Marge avec gauge -->
-                <div class="kpi-card">
-                    <div class="kpi-header">
-                        <span class="kpi-label">MARGE NETTE</span>
-                        <i data-lucide="percent"></i>
-                    </div>
-                    <div class="kpi-gauge" id="margin-gauge"></div>
-                    <div class="kpi-value">18.7%</div>
-                    <div class="kpi-change positive">
-                        <span>Objectif: 20%</span>
+                    <div class="metric-footer">
+                        <span class="burn-rate">Burn: €245K/mois</span>
+                        <span class="trend negative">▼ -12%</span>
                     </div>
                 </div>
-                
-                <!-- Trésorerie avec area chart -->
-                <div class="kpi-card">
-                    <div class="kpi-header">
-                        <span class="kpi-label">TRÉSORERIE</span>
-                        <i data-lucide="banknote"></i>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">ARR CONSOLIDÉ</span>
+                        <span class="metric-target">Target: €8.5M</span>
                     </div>
-                    <div class="kpi-value">€892K</div>
-                    <div class="kpi-sparkline" id="cash-sparkline"></div>
-                    <div class="kpi-change neutral">
-                        <span>3.2 mois de BFR</span>
+                    <div class="metric-main">
+                        <div class="metric-value">€7.2M</div>
+                        <div class="metric-sparkline" id="arr-sparkline"></div>
                     </div>
-                </div>
-                
-                <!-- Nouveaux clients avec barres -->
-                <div class="kpi-card">
-                    <div class="kpi-header">
-                        <span class="kpi-label">NOUVEAUX CLIENTS</span>
-                        <i data-lucide="users"></i>
-                    </div>
-                    <div class="kpi-value">+47</div>
-                    <div class="kpi-sparkline" id="clients-sparkline"></div>
-                    <div class="kpi-change positive">
-                        <span>+23% vs mois dernier</span>
+                    <div class="metric-footer">
+                        <span class="growth">+47% YoY</span>
+                        <span class="mrr">MRR: €623K</span>
                     </div>
                 </div>
-            </section>
-            
-            <!-- Performance par entreprise -->
-            <section class="company-performance">
-                <h2 class="section-title">Performance des 5 entreprises</h2>
-                <div class="performance-list">
-                    <div class="performance-item">
-                        <div class="company-icon">📹</div>
-                        <div class="company-info">
-                            <h4>HyperVisual</h4>
-                            <div class="performance-bar">
-                                <div class="bar-fill" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="company-metrics">
-                            <span class="metric-value">€458K</span>
-                            <span class="metric-change positive">▲+18%</span>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">MARGE EBITDA</span>
+                        <div class="metric-gauge" id="ebitda-gauge"></div>
+                    </div>
+                    <div class="metric-main">
+                        <div class="metric-value">18.7%</div>
+                    </div>
+                    <div class="metric-footer">
+                        <span class="target">Objectif: 25%</span>
+                        <span class="trend positive">▲ +3.2pts</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">LTV:CAC RATIO</span>
+                        <span class="metric-alert amber">⚡</span>
+                    </div>
+                    <div class="metric-main">
+                        <div class="metric-value">2.8:1</div>
+                        <div class="metric-breakdown">
+                            <span>LTV: €4,200</span>
+                            <span>CAC: €1,500</span>
                         </div>
                     </div>
-                    
-                    <div class="performance-item">
-                        <div class="company-icon">💡</div>
-                        <div class="company-info">
-                            <h4>Dynamics</h4>
-                            <div class="performance-bar">
-                                <div class="bar-fill" style="width: 92%"></div>
-                            </div>
-                        </div>
-                        <div class="company-metrics">
-                            <span class="metric-value">€623K</span>
-                            <span class="metric-change positive">▲+32%</span>
-                        </div>
+                    <div class="metric-footer">
+                        <span class="warning">Sous le seuil 3:1</span>
                     </div>
-                    
-                    <div class="performance-item">
-                        <div class="company-icon">🗣️</div>
-                        <div class="company-info">
-                            <h4>Lexia</h4>
-                            <div class="performance-bar">
-                                <div class="bar-fill" style="width: 78%"></div>
-                            </div>
-                        </div>
-                        <div class="company-metrics">
-                            <span class="metric-value">€384K</span>
-                            <span class="metric-change positive">▲+12%</span>
-                        </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">NPS GLOBAL</span>
+                        <div class="metric-indicator" id="nps-indicator"></div>
                     </div>
-                    
-                    <div class="performance-item">
-                        <div class="company-icon">🏠</div>
-                        <div class="company-info">
-                            <h4>NKReality</h4>
-                            <div class="performance-bar">
-                                <div class="bar-fill" style="width: 95%"></div>
-                            </div>
-                        </div>
-                        <div class="company-metrics">
-                            <span class="metric-value">€789K</span>
-                            <span class="metric-change positive">▲+45%</span>
-                        </div>
+                    <div class="metric-main">
+                        <div class="metric-value">52</div>
                     </div>
-                    
-                    <div class="performance-item">
-                        <div class="company-icon">🛒</div>
-                        <div class="company-info">
-                            <h4>Etekout</h4>
-                            <div class="performance-bar">
-                                <div class="bar-fill" style="width: 68%"></div>
-                            </div>
-                        </div>
-                        <div class="company-metrics">
-                            <span class="metric-value">€196K</span>
-                            <span class="metric-change negative">▼-3%</span>
-                        </div>
+                    <div class="metric-footer">
+                        <span class="promoters">Promoteurs: 67%</span>
+                        <span class="detractors">Détracteurs: 15%</span>
                     </div>
                 </div>
             </section>
 
-            <!-- Graphiques principaux -->
-            <section class="charts-grid">
-                <!-- Evolution CA 12 mois -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Evolution du Chiffre d'Affaires</h3>
-                        <div class="chart-controls">
-                            <button class="chart-btn active" data-range="1M">1M</button>
-                            <button class="chart-btn" data-range="3M">3M</button>
-                            <button class="chart-btn" data-range="6M">6M</button>
-                            <button class="chart-btn" data-range="1Y">1Y</button>
-                        </div>
-                    </div>
-                    <div id="revenue-chart"></div>
-                </div>
-                
-                <!-- Répartition par entreprise -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>Répartition CA par Entreprise</h3>
-                        <span class="chart-subtitle">Période actuelle</span>
-                    </div>
-                    <div id="companies-donut"></div>
+            <!-- SECTION 2 : Heat Map Comparative des 5 Entreprises -->
+            <section class="portfolio-heatmap">
+                <h2 class="section-title">Performance Portfolio - Vue Heat Map</h2>
+                <div class="heatmap-container">
+                    <table class="heatmap-table">
+                        <thead>
+                            <tr>
+                                <th>Entreprise</th>
+                                <th>Revenue Growth</th>
+                                <th>EBITDA %</th>
+                                <th>Cash Efficiency</th>
+                                <th>Client Retention</th>
+                                <th>Employee NPS</th>
+                                <th>Score Global</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="company-name">
+                                    <span class="company-icon">📹</span>
+                                    HyperVisual
+                                </td>
+                                <td class="heat-cell heat-good">+47%</td>
+                                <td class="heat-cell heat-excellent">22%</td>
+                                <td class="heat-cell heat-warning">1.8x</td>
+                                <td class="heat-cell heat-good">92%</td>
+                                <td class="heat-cell heat-good">72</td>
+                                <td class="heat-score score-good">B+</td>
+                            </tr>
+                            <tr>
+                                <td class="company-name">
+                                    <span class="company-icon">💡</span>
+                                    Dynamics
+                                </td>
+                                <td class="heat-cell heat-excellent">+62%</td>
+                                <td class="heat-cell heat-good">18%</td>
+                                <td class="heat-cell heat-excellent">3.2x</td>
+                                <td class="heat-cell heat-excellent">95%</td>
+                                <td class="heat-cell heat-excellent">81</td>
+                                <td class="heat-score score-excellent">A</td>
+                            </tr>
+                            <tr>
+                                <td class="company-name">
+                                    <span class="company-icon">🗣️</span>
+                                    Lexia
+                                </td>
+                                <td class="heat-cell heat-warning">+12%</td>
+                                <td class="heat-cell heat-warning">14%</td>
+                                <td class="heat-cell heat-good">2.1x</td>
+                                <td class="heat-cell heat-good">88%</td>
+                                <td class="heat-cell heat-warning">61</td>
+                                <td class="heat-score score-warning">C+</td>
+                            </tr>
+                            <tr>
+                                <td class="company-name">
+                                    <span class="company-icon">🏠</span>
+                                    NKReality
+                                </td>
+                                <td class="heat-cell heat-excellent">+78%</td>
+                                <td class="heat-cell heat-excellent">26%</td>
+                                <td class="heat-cell heat-excellent">4.1x</td>
+                                <td class="heat-cell heat-excellent">97%</td>
+                                <td class="heat-cell heat-good">75</td>
+                                <td class="heat-score score-excellent">A+</td>
+                            </tr>
+                            <tr>
+                                <td class="company-name">
+                                    <span class="company-icon">🛒</span>
+                                    Etekout
+                                </td>
+                                <td class="heat-cell heat-danger">-3%</td>
+                                <td class="heat-cell heat-danger">8%</td>
+                                <td class="heat-cell heat-danger">0.9x</td>
+                                <td class="heat-cell heat-warning">78%</td>
+                                <td class="heat-cell heat-danger">42</td>
+                                <td class="heat-score score-danger">D</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
-            <!-- Métriques avancées -->
-            <section class="metrics-grid">
-                <!-- Cash Flow -->
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <h3>Cash Flow Prévisionnel</h3>
-                        <i data-lucide="trending-up"></i>
+            <!-- SECTION 3 : Graphiques Principaux -->
+            <section class="main-charts">
+                <div class="chart-row">
+                    <!-- Waterfall EBITDA Bridge -->
+                    <div class="chart-card chart-wide">
+                        <div class="chart-header">
+                            <h3>EBITDA Bridge - YTD vs Last Year</h3>
+                            <div class="chart-legend">
+                                <span class="legend-item positive">Positif</span>
+                                <span class="legend-item negative">Négatif</span>
+                            </div>
+                        </div>
+                        <div id="ebitda-waterfall"></div>
                     </div>
-                    <div id="cashflow-chart"></div>
+
+                    <!-- Pipeline Velocity -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Pipeline Velocity</h3>
+                            <span class="velocity-score">Score: 3.2x</span>
+                        </div>
+                        <div id="pipeline-velocity"></div>
+                        <div class="chart-metrics">
+                            <div class="velocity-metric">
+                                <span>Deals: 234</span>
+                                <span>€42K avg</span>
+                            </div>
+                            <div class="velocity-metric">
+                                <span>Win rate: 32%</span>
+                                <span>45 jours cycle</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Pipeline Commercial -->
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <h3>Pipeline Commercial</h3>
-                        <i data-lucide="funnel"></i>
+
+                <div class="chart-row">
+                    <!-- Cash Flow Forecast -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Cash Flow Prévisionnel - 6 mois</h3>
+                            <button class="scenario-btn">Scenarios</button>
+                        </div>
+                        <div id="cashflow-forecast"></div>
                     </div>
-                    <div id="pipeline-chart"></div>
-                </div>
-                
-                <!-- Heatmap Activité -->
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <h3>Activité par Jour</h3>
-                        <i data-lucide="activity"></i>
+
+                    <!-- Allocation Capital -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>ROI par Entreprise (MOIC)</h3>
+                        </div>
+                        <div id="roi-comparison"></div>
                     </div>
-                    <div id="activity-heatmap"></div>
                 </div>
             </section>
-            
-            <!-- Alertes critiques -->
-            <section class="alerts-section">
+
+            <!-- SECTION 4 : Alertes Critiques avec Actions -->
+            <section class="critical-alerts">
                 <h2 class="section-title">
-                    <i data-lucide="alert-triangle"></i>
-                    Actions Requises
+                    <span class="alert-icon">🚨</span>
+                    Actions Requises Immédiates
                 </h2>
-                <div class="alerts-list">
-                    <div class="alert-item alert-warning">
-                        <i data-lucide="trending-down"></i>
-                        <span>Etekout: Baisse CA -3% - Analyser urgence</span>
-                        <button class="btn-action">Voir détails</button>
+                <div class="alerts-priority">
+                    <div class="alert-item alert-critical">
+                        <div class="alert-badge">CRITIQUE</div>
+                        <div class="alert-content">
+                            <h4>Etekout : Cash Runway < 3 mois</h4>
+                            <p>Burn rate: €89K/mois | Solde: €196K</p>
+                            <div class="alert-metrics">
+                                <span>Impact: €2.3M revenus annuels</span>
+                                <span>120 employés</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action primary">Bridge Financing</button>
+                            <button class="btn-action secondary">Cost Reduction Plan</button>
+                        </div>
                     </div>
-                    <div class="alert-item alert-danger">
-                        <i data-lucide="dollar-sign"></i>
-                        <span>3 factures impayées > 60 jours (€127K total)</span>
-                        <button class="btn-action">Relancer</button>
-                    </div>
+
                     <div class="alert-item alert-warning">
-                        <i data-lucide="users"></i>
-                        <span>5 congés en attente de validation</span>
-                        <button class="btn-action">Valider</button>
+                        <div class="alert-badge">WARNING</div>
+                        <div class="alert-content">
+                            <h4>Lexia : Churn Client +5% ce mois</h4>
+                            <p>3 clients majeurs perdus (€45K MRR)</p>
+                            <div class="alert-metrics">
+                                <span>NPS: 52 → 41</span>
+                                <span>Tickets support: +67%</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action">Customer Success Review</button>
+                            <button class="btn-action">Product Roadmap</button>
+                        </div>
+                    </div>
+
+                    <div class="alert-item alert-opportunity">
+                        <div class="alert-badge">OPPORTUNITÉ</div>
+                        <div class="alert-content">
+                            <h4>NKReality : Acquisition Target Identifiée</h4>
+                            <p>Synergie potentielle: €3.2M EBITDA additionnel</p>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-action primary">Voir Due Diligence</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5 : Métriques Forward-Looking -->
+            <section class="predictive-metrics">
+                <h2 class="section-title">Indicateurs Prédictifs - IA Analytics</h2>
+                <div class="predictive-grid">
+                    <div class="predictive-card">
+                        <h4>Risque de Churn - 90 jours</h4>
+                        <div class="risk-score high">87%</div>
+                        <ul class="risk-factors">
+                            <li>12 clients à risque (€234K MRR)</li>
+                            <li>Usage -45% sur 30 jours</li>
+                            <li>Support tickets non résolus: 23</li>
+                        </ul>
+                    </div>
+
+                    <div class="predictive-card">
+                        <h4>Prévision ARR - Q4</h4>
+                        <div class="forecast-range">
+                            <span class="best-case">Best: €9.2M</span>
+                            <span class="likely">Likely: €8.5M</span>
+                            <span class="worst-case">Worst: €7.8M</span>
+                        </div>
+                        <div class="confidence">Confiance: 78%</div>
+                    </div>
+
+                    <div class="predictive-card">
+                        <h4>Talent Risk Score</h4>
+                        <div class="talent-alerts">
+                            <div class="talent-risk high">
+                                <span>CTO Dynamics</span>
+                                <span class="risk-level">85% flight risk</span>
+                            </div>
+                            <div class="talent-risk medium">
+                                <span>VP Sales Lexia</span>
+                                <span class="risk-level">62% flight risk</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -354,7 +448,7 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
     <!-- Nos scripts -->
-    <script src="js/dashboard-charts.js"></script>
+    <script src="js/ceo-metrics.js"></script>
     <script src="js/app-combined.js"></script>
 
     <script>

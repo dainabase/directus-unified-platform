@@ -2,6 +2,35 @@
    DARK THEME - DESIGN SYSTEM
    =================================== */
 
+/* Variables par défaut pour TOUS les thèmes */
+:root {
+    /* Primary Colors */
+    --primary: #6366F1;
+    --secondary: #8B5CF6;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #06B6D4;
+    
+    /* Background Colors */
+    --bg-color: #0a0a0b;
+    --surface-color: rgba(255, 255, 255, 0.05);
+    --surface-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Text Colors */
+    --text-color: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --text-disabled: rgba(255, 255, 255, 0.3);
+    
+    /* Border Colors */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(255, 255, 255, 0.2);
+    
+    /* Shadow Colors */
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+}
+
 /* Dark Theme Variables */
 :root[data-theme="dark"] {
     /* Primary Colors */

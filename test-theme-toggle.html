@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Theme Toggle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            border: 2px solid currentColor;
+            border-radius: 10px;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background: #10B98133;
+            color: #10B981;
+        }
+        .info {
+            background: #6366F133;
+            color: #6366F1;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>✅ Test du Toggle Dark/Light Mode</h1>
+        
+        <div class="status success">
+            ✨ Le système de toggle dark/light mode a été implémenté avec succès !
+        </div>
+        
+        <h2>Fonctionnalités ajoutées :</h2>
+        <ul>
+            <li>✅ Variables CSS dynamiques pour les thèmes</li>
+            <li>✅ Bouton de toggle dans la navbar (icône lune/soleil)</li>
+            <li>✅ Transitions fluides entre les thèmes (0.3s)</li>
+            <li>✅ Sauvegarde du choix dans localStorage</li>
+            <li>✅ Mise à jour dynamique des graphiques Chart.js</li>
+            <li>✅ Animation de rotation sur le bouton toggle</li>
+        </ul>
+        
+        <h2>Comment tester :</h2>
+        <div class="status info">
+            👉 Accédez à : <a href="http://localhost:3000/superadmin/test-moderne" target="_blank">http://localhost:3000/superadmin/test-moderne</a>
+        </div>
+        
+        <ol>
+            <li>Cliquez sur l'icône lune 🌙 dans la navbar (en haut à droite)</li>
+            <li>Observez la transition fluide vers le mode light ☀️</li>
+            <li>Les couleurs s'adaptent automatiquement</li>
+            <li>Le graphique Chart.js change ses couleurs</li>
+            <li>Rafraîchissez la page : votre choix est mémorisé !</li>
+        </ol>
+        
+        <h2>Détails techniques :</h2>
+        <ul>
+            <li><strong>Dark mode (défaut)</strong> : Fond noir #0a0a0b, surfaces glassmorphism</li>
+            <li><strong>Light mode</strong> : Fond clair #f8f9fa, ombres douces</li>
+            <li><strong>Transition</strong> : 0.3s ease sur tous les éléments</li>
+            <li><strong>Persistance</strong> : localStorage avec clé 'theme'</li>
+        </ul>
+    </div>
+</body>
+</html>

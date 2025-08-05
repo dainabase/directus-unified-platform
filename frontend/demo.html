@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Demo Ultra-Moderne - Directus Unified Platform</title>
+    
+    <!-- Tabler CSS -->
+    <link href="/shared/tabler/dist/css/tabler.min.css" rel="stylesheet">
+    <link href="/shared/tabler/dist/css/tabler-icons.min.css" rel="stylesheet">
+    
+    <!-- Modern CSS -->
+    <link href="/assets/css/modern-theme.css" rel="stylesheet">
+    <link href="/assets/css/glassmorphism.css" rel="stylesheet">
+    <link href="/assets/css/animations.css" rel="stylesheet">
+    
+    <style>
+        /* Demo specific styles */
+        .demo-section {
+            margin-bottom: 4rem;
+            padding: 2rem 0;
+        }
+        
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .portal-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        
+        .demo-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+    </style>
+</head>
+<body>
+    <!-- Portal Selector -->
+    <div class="portal-selector">
+        <div class="btn-group">
+            <button class="btn btn-glass" onclick="switchPortal('superadmin')">
+                <i class="ti ti-shield-lock"></i> SuperAdmin
+            </button>
+            <button class="btn btn-glass" onclick="switchPortal('client')">
+                <i class="ti ti-building"></i> Client
+            </button>
+            <button class="btn btn-glass" onclick="switchPortal('prestataire')">
+                <i class="ti ti-briefcase"></i> Prestataire
+            </button>
+            <button class="btn btn-glass" onclick="switchPortal('revendeur')">
+                <i class="ti ti-users"></i> Revendeur
+            </button>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="btn-glass theme-toggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; width: 50px; height: 50px; border-radius: 50%;" data-theme-toggle>
+        <i class="ti ti-moon"></i>
+    </button>
+
+    <div class="page">
+        <div class="page-wrapper">
+            <div class="container-xl">
+                <!-- Hero Section -->
+                <div class="demo-section">
+                    <h1 class="demo-title animate-fadeInDown">
+                        🚀 Design System Ultra-Moderne 2025
+                    </h1>
+                    <p class="text-center text-muted mb-5 animate-fadeInUp delay-200">
+                        Glassmorphism • Mesh Gradients • Dark Mode • Animations Fluides
+                    </p>
+                </div>
+
+                <!-- KPI Cards Section -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">📊 KPI Cards Glassmorphism</h2>
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6 animate-fadeInUp">
+                            <div class="glass-card kpi-card-modern hover-lift">
+                                <div class="kpi-icon gradient-superadmin">
+                                    <i class="ti ti-database"></i>
+                                </div>
+                                <div class="kpi-value" data-counter="127453">0</div>
+                                <div class="kpi-label">Données Totales</div>
+                                <div class="kpi-change positive">+12.5%</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 animate-fadeInUp delay-100">
+                            <div class="glass-card kpi-card-modern hover-lift">
+                                <div class="kpi-icon gradient-client">
+                                    <i class="ti ti-users"></i>
+                                </div>
+                                <div class="kpi-value" data-counter="3847">0</div>
+                                <div class="kpi-label">Clients Actifs</div>
+                                <div class="kpi-change positive">+8.3%</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 animate-fadeInUp delay-200">
+                            <div class="glass-card kpi-card-modern hover-lift">
+                                <div class="kpi-icon gradient-prestataire">
+                                    <i class="ti ti-briefcase"></i>
+                                </div>
+                                <div class="kpi-value" data-counter="256">0</div>
+                                <div class="kpi-label">Missions</div>
+                                <div class="kpi-change negative">-3.2%</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 animate-fadeInUp delay-300">
+                            <div class="glass-card kpi-card-modern hover-lift">
+                                <div class="kpi-icon gradient-revendeur">
+                                    <i class="ti ti-currency-dollar"></i>
+                                </div>
+                                <div class="kpi-value">CHF <span data-counter="89450">0</span></div>
+                                <div class="kpi-label">Revenue</div>
+                                <div class="kpi-change positive">+24.7%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glass Components -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">🔮 Composants Glassmorphism</h2>
+                    
+                    <!-- Glass Navigation -->
+                    <div class="mb-4">
+                        <nav class="glass-nav p-3 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3">
+                                    <a href="#" class="nav-link">Dashboard</a>
+                                    <a href="#" class="nav-link">Analytics</a>
+                                    <a href="#" class="nav-link">Reports</a>
+                                    <a href="#" class="nav-link">Settings</a>
+                                </div>
+                                <div class="glass-search">
+                                    <i class="ti ti-search glass-search-icon"></i>
+                                    <input type="text" class="glass-search-input" placeholder="Rechercher...">
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <!-- Glass Cards Grid -->
+                    <div class="demo-grid">
+                        <div class="glass-card p-4 animate-scaleIn">
+                            <h3 class="mb-3">Glass Card Standard</h3>
+                            <p class="text-muted">Une carte avec effet glassmorphism, backdrop-filter et bordures subtiles.</p>
+                            <div class="mt-3">
+                                <button class="btn btn-glass">En savoir plus</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 card-3d">
+                            <h3 class="mb-3">Card 3D Tilt</h3>
+                            <p class="text-muted">Survolez cette carte pour voir l'effet 3D tilt en action.</p>
+                            <div class="mt-3">
+                                <span class="glass-badge glass-badge-primary">Interactive</span>
+                                <span class="glass-badge glass-badge-success">3D</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-4 hover-glow">
+                            <h3 class="mb-3">Glow Effect</h3>
+                            <p class="text-muted">Cette carte brille au survol avec un effet de lueur colorée.</p>
+                            <div class="glass-progress mt-3">
+                                <div class="glass-progress-bar" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animations Showcase -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">✨ Animations Modernes</h2>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="glass-card p-4 text-center animate-bounce">
+                                <i class="ti ti-rocket text-primary" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Bounce</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-4 text-center animate-pulse">
+                                <i class="ti ti-heart text-danger" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Pulse</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-4 text-center animate-float">
+                                <i class="ti ti-cloud text-info" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Float</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-4 text-center animate-spin">
+                                <i class="ti ti-settings text-warning" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Spin</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glass Table -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">📋 Table Glassmorphism</h2>
+                    <div class="glass-card">
+                        <table class="glass-table w-100">
+                            <thead>
+                                <tr>
+                                    <th>Projet</th>
+                                    <th>Client</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="animate-fadeInLeft">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="glass-avatar">AI</div>
+                                            <div>
+                                                <div class="font-weight-bold">AI Vision</div>
+                                                <small class="text-muted">OCR & Documents</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>TechCorp SA</td>
+                                    <td><span class="glass-badge glass-badge-success">Actif</span></td>
+                                    <td>
+                                        <div class="glass-progress">
+                                            <div class="glass-progress-bar" style="width: 85%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">CHF 45'000</td>
+                                </tr>
+                                <tr class="animate-fadeInLeft delay-100">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="glass-avatar gradient-client">DB</div>
+                                            <div>
+                                                <div class="font-weight-bold">Dashboard</div>
+                                                <small class="text-muted">Analytics Platform</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>StartupXYZ</td>
+                                    <td><span class="glass-badge glass-badge-warning">En cours</span></td>
+                                    <td>
+                                        <div class="glass-progress">
+                                            <div class="glass-progress-bar" style="width: 60%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">CHF 28'500</td>
+                                </tr>
+                                <tr class="animate-fadeInLeft delay-200">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="glass-avatar gradient-prestataire">API</div>
+                                            <div>
+                                                <div class="font-weight-bold">API Gateway</div>
+                                                <small class="text-muted">Microservices</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>GlobalCorp</td>
+                                    <td><span class="glass-badge glass-badge-primary">Planifié</span></td>
+                                    <td>
+                                        <div class="glass-progress">
+                                            <div class="glass-progress-bar" style="width: 15%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">CHF 67'000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Interactive Components -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">🎮 Composants Interactifs</h2>
+                    <div class="row g-4">
+                        <!-- Glass Dropdown -->
+                        <div class="col-md-4">
+                            <h4>Dropdown Glass</h4>
+                            <div class="dropdown">
+                                <button class="btn btn-glass dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="ti ti-settings"></i> Options
+                                </button>
+                                <div class="dropdown-menu glass-dropdown">
+                                    <a class="dropdown-item" href="#"><i class="ti ti-user"></i> Profil</a>
+                                    <a class="dropdown-item" href="#"><i class="ti ti-settings"></i> Paramètres</a>
+                                    <a class="dropdown-item" href="#"><i class="ti ti-bell"></i> Notifications</a>
+                                    <hr class="dropdown-divider">
+                                    <a class="dropdown-item text-danger" href="#"><i class="ti ti-logout"></i> Déconnexion</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Glass Tabs -->
+                        <div class="col-md-8">
+                            <h4>Tabs Glass</h4>
+                            <div class="glass-tabs">
+                                <a href="#" class="nav-link active">Vue d'ensemble</a>
+                                <a href="#" class="nav-link">Analytics</a>
+                                <a href="#" class="nav-link">Rapports</a>
+                                <a href="#" class="nav-link">Paramètres</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-4">
+                        <h4>Boutons Magnétiques</h4>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn gradient-superadmin btn-magnetic">SuperAdmin</button>
+                            <button class="btn gradient-client btn-magnetic">Client</button>
+                            <button class="btn gradient-prestataire btn-magnetic">Prestataire</button>
+                            <button class="btn gradient-revendeur btn-magnetic">Revendeur</button>
+                        </div>
+                    </div>
+
+                    <!-- Glass Switch -->
+                    <div class="mt-4">
+                        <h4>Switches Glass</h4>
+                        <div class="d-flex gap-4">
+                            <label class="d-flex align-items-center gap-2">
+                                <div class="glass-switch" onclick="this.classList.toggle('active')">
+                                    <div class="glass-switch-handle"></div>
+                                </div>
+                                <span>Notifications</span>
+                            </label>
+                            <label class="d-flex align-items-center gap-2">
+                                <div class="glass-switch active" onclick="this.classList.toggle('active')">
+                                    <div class="glass-switch-handle"></div>
+                                </div>
+                                <span>Mode Sombre</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast Demo -->
+                <div class="demo-section">
+                    <h2 class="mb-4 gradient-text">🔔 Notifications Toast</h2>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-glass" onclick="showNotification('success')">
+                            <i class="ti ti-check"></i> Success
+                        </button>
+                        <button class="btn btn-glass" onclick="showNotification('error')">
+                            <i class="ti ti-x"></i> Error
+                        </button>
+                        <button class="btn btn-glass" onclick="showNotification('warning')">
+                            <i class="ti ti-alert-triangle"></i> Warning
+                        </button>
+                        <button class="btn btn-glass" onclick="showNotification('info')">
+                            <i class="ti ti-info-circle"></i> Info
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Command Palette Info -->
+                <div class="demo-section">
+                    <div class="glass-card p-5 text-center">
+                        <h2 class="gradient-text mb-3">⌘ Command Palette</h2>
+                        <p class="text-muted mb-4">Appuyez sur <kbd>Cmd</kbd> + <kbd>K</kbd> ou <kbd>Ctrl</kbd> + <kbd>K</kbd> pour ouvrir la palette de commandes</p>
+                        <button class="btn btn-glass btn-lg" onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'k', metaKey: true}))">
+                            <i class="ti ti-command"></i> Ouvrir Command Palette
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="demo-section text-center py-5">
+                    <p class="text-muted">
+                        <i class="ti ti-sparkles"></i> Design System Ultra-Moderne 2025 - Directus Unified Platform <i class="ti ti-sparkles"></i>
+                    </p>
+                    <p class="text-muted small">
+                        Créé avec glassmorphism, mesh gradients, et animations fluides
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000;"></div>
+
+    <!-- Scripts -->
+    <script src="/shared/tabler/dist/js/tabler.min.js"></script>
+    <script src="/assets/js/modern-interactions.js"></script>
+    
+    <script>
+        // Portal Switcher
+        function switchPortal(portal) {
+            const root = document.documentElement;
+            const colors = {
+                superadmin: 'linear-gradient(135deg, #00BFFF 0%, #8B00FF 100%)',
+                client: 'linear-gradient(135deg, #50C878 0%, #4169E1 100%)',
+                prestataire: 'linear-gradient(135deg, #008080 0%, #20B2AA 100%)',
+                revendeur: 'linear-gradient(135deg, #4B0082 0%, #FF7F50 100%)'
+            };
+            
+            // Update gradient
+            root.style.setProperty('--primary-gradient', colors[portal]);
+            
+            // Show notification
+            showNotification('info', `Portail ${portal.charAt(0).toUpperCase() + portal.slice(1)} activé`);
+        }
+
+        // Notification System
+        function showNotification(type, message) {
+            const messages = {
+                success: message || 'Opération réussie avec succès!',
+                error: message || 'Une erreur est survenue.',
+                warning: message || 'Attention requise.',
+                info: message || 'Information importante.'
+            };
+            
+            const icons = {
+                success: 'check-circle',
+                error: 'x-circle',
+                warning: 'alert-triangle',
+                info: 'info-circle'
+            };
+            
+            const colors = {
+                success: '#22c55e',
+                error: '#ef4444',
+                warning: '#fb923c',
+                info: '#4cc9f0'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = 'glass-notification animate-slideInDown';
+            toast.innerHTML = `
+                <div class="d-flex align-items-center gap-3">
+                    <i class="ti ti-${icons[type]}" style="font-size: 1.5rem; color: ${colors[type]}"></i>
+                    <div>
+                        <div class="fw-bold">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                        <div class="text-muted small">${messages[type]}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('toast-container').appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('info', 'Bienvenue dans le Design System 2025!');
+            }, 500);
+            
+            // Add stagger animation to cards
+            document.querySelectorAll('.demo-grid > *').forEach((card, index) => {
+                card.style.animationDelay = `${index * 100}ms`;
+                card.classList.add('animate-fadeInUp');
+            });
+        });
+    </script>
+</body>
+</html>

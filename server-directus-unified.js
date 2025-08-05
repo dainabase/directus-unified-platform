@@ -166,10 +166,27 @@ app.use('/tabler', express.static(path.join(__dirname, 'frontend/shared/tabler')
 app.use('/dist', express.static(path.join(__dirname, 'frontend/shared/dist')));
 app.use('/static', express.static(path.join(__dirname, 'frontend/shared/static')));
 
-// 5b. Fichiers statiques à la racine (login.html, etc)
+// 5b. Fichiers statiques à la racine (login.html, demo.html, etc)
 app.get('/login.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/login.html'));
 });
+
+app.get('/demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/demo.html'));
+});
+
+// Nouveau design SuperAdmin
+app.get('/superadmin/new-design', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/portals/superadmin/new-design/index.html'));
+});
+
+// Test moderne simple
+app.get('/superadmin/test-moderne', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/portals/superadmin/test-moderne.html'));
+});
+
+// Design System
+app.use('/design-system', express.static(path.join(__dirname, 'design-system')));
 
 // 6. Proxy vers Directus pour l'admin et l'API
 app.use('/admin', createProxyMiddleware({
@@ -210,8 +227,13 @@ app.post('/api/ocr/scan', async (req, res) => {
   });
 });
 
-// 8. Page d'accueil avec menu
+// 8. Page d'accueil moderne avec tous les portails
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/all-portals.html'));
+});
+
+// Page d'accueil alternative (ancienne version)
+app.get('/old-home', (req, res) => {
   const ocrStatus = !!process.env.OPENAI_API_KEY;
   res.send(`
     <!DOCTYPE html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperAdmin Dashboard - Modern Design</title>
+    
+    <!-- Tabler CSS depuis CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/@tabler/core@latest/dist/css/tabler.min.css">
+    
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    
+    <!-- Chart.js depuis CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* ===== TOUT LE CSS MODERNE ICI ===== */
+        
+        /* Dark theme (par défaut) */
+        :root {
+            --primary: #6366F1;
+            --secondary: #8B5CF6;
+            --success: #10B981;
+            --dark-bg: #0a0a0b;
+            --dark-surface: rgba(255, 255, 255, 0.05);
+            
+            /* Variables dynamiques */
+            --bg-color: #0a0a0b;
+            --surface-color: rgba(255, 255, 255, 0.05);
+            --surface-hover: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Light theme */
+        [data-theme="light"] {
+            --bg-color: #f8f9fa;
+            --surface-color: rgba(255, 255, 255, 0.9);
+            --surface-hover: rgba(0, 0, 0, 0.05);
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Transition pour le changement de thème */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Gradient animé en background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        /* Light mode gradient */
+        [data-theme="light"] body::before {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+        }
+        
+        /* Glass effect simple */
+        .glass {
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 10, 11, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            padding: 5rem 1rem 1rem;
+            z-index: 100;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--text-muted);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: var(--surface-hover);
+            color: var(--text-color);
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link.active {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        /* Content avec margin pour sidebar */
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            padding-top: 6rem;
+        }
+        
+        /* KPI Cards */
+        .kpi-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+        
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin: 1rem 0;
+        }
+        
+        .kpi-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .kpi-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .kpi-change.positive { color: var(--success); }
+        .kpi-change.negative { color: #ef4444; }
+        
+        /* Charts container */
+        .chart-container {
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 400px;
+        }
+        
+        /* Buttons modernes */
+        .btn-glass {
+            background: var(--surface-hover);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glass:hover {
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background: #5558e3;
+            border-color: #5558e3;
+        }
+        
+        /* Table moderne */
+        .table-modern {
+            background: var(--surface-color);
+        }
+        
+        .table-modern thead th {
+            background: var(--surface-hover);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-modern tbody tr {
+            border-color: var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .table-modern tbody tr:hover {
+            background: var(--surface-hover);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        
+        /* Badge moderne */
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+        
+        /* Avatar glass */
+        .avatar.glass {
+            background: var(--surface-hover);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        /* Light mode specific adjustments */
+        [data-theme="light"] .navbar {
+            background: rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .kpi-card {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .kpi-card:hover {
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);
+        }
+
+        [data-theme="light"] .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="light"] .btn-glass {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-color);
+        }
+
+        [data-theme="light"] .btn-glass:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .table-modern {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="light"] .table-modern thead th {
+            background: rgba(0, 0, 0, 0.03);
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .badge {
+            filter: brightness(1.1);
+        }
+        
+        [data-theme="light"] .sidebar .nav-link.active {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        /* Toggle button style */
+        #themeToggle {
+            transition: transform 0.3s ease;
+        }
+        
+        #themeToggle:hover {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar fixed-top">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <h1 class="mb-0 me-3">
+                    <span style="color: var(--primary);">Directus</span>
+                    <span class="badge badge-gradient ms-2">AI</span>
+                </h1>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3">
+                <kbd style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">⌘K</kbd>
+                
+                <button class="btn btn-glass btn-sm">
+                    <i class="ti ti-bell"></i>
+                </button>
+                
+                <button class="btn btn-glass btn-sm" id="themeToggle">
+                    <i class="ti ti-moon" id="themeIcon"></i>
+                </button>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar avatar-sm glass">JM</div>
+                    <div class="d-none d-lg-block">
+                        <div class="small">Jean-Marie</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">SuperAdmin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav class="nav flex-column">
+            <a href="#" class="nav-link active">
+                <i class="ti ti-dashboard me-2"></i> Dashboard
+            </a>
+            <a href="#" class="nav-link">
+                <i class="ti ti-scan me-2"></i> OCR Processing
+            </a>
+            <a href="#" class="nav-link">
+                <i class="ti ti-users me-2"></i> Utilisateurs
+            </a>
+            <a href="#" class="nav-link">
+                <i class="ti ti-chart-line me-2"></i> Analytics
+            </a>
+            <a href="#" class="nav-link">
+                <i class="ti ti-settings me-2"></i> Paramètres
+            </a>
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="mb-4">
+            <h2 class="h1 mb-1">Dashboard SuperAdmin</h2>
+            <p class="text-muted">Bienvenue dans votre centre de contrôle AI</p>
+        </div>
+        
+        <!-- KPI Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="kpi-card animate-in">
+                    <div class="kpi-label">Utilisateurs Actifs</div>
+                    <div class="kpi-value">1,250</div>
+                    <div class="kpi-change positive">
+                        <i class="ti ti-trending-up"></i> +23.5%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="kpi-card animate-in delay-1">
+                    <div class="kpi-label">OCR en cours</div>
+                    <div class="kpi-value">47</div>
+                    <div class="kpi-change positive">
+                        <i class="ti ti-trending-up"></i> +12%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="kpi-card animate-in delay-2">
+                    <div class="kpi-label">Revenue Total</div>
+                    <div class="kpi-value">CHF 125.8k</div>
+                    <div class="kpi-change positive">
+                        <i class="ti ti-trending-up"></i> +8.2%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="kpi-card animate-in delay-3">
+                    <div class="kpi-label">AI Accuracy</div>
+                    <div class="kpi-value">98.7%</div>
+                    <div class="kpi-change positive">
+                        <i class="ti ti-circle-check"></i> Optimal
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="glass animate-in delay-4" style="padding: 1.5rem; border-radius: 16px;">
+                    <h3 class="h4 mb-3">Analytics Overview</h3>
+                    <div style="height: 300px;">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="glass animate-in delay-4" style="padding: 1.5rem; border-radius: 16px;">
+                    <h3 class="h4 mb-3">Activity Feed</h3>
+                    <div class="space-y-3">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="avatar avatar-sm glass">AI</div>
+                            <div class="flex-fill">
+                                <div class="small">OCR Processing completed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="avatar avatar-sm glass">US</div>
+                            <div class="flex-fill">
+                                <div class="small">New user registered</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">15 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="avatar avatar-sm glass">SY</div>
+                            <div class="flex-fill">
+                                <div class="small">System update completed</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">1 hour ago</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="avatar avatar-sm glass">DB</div>
+                            <div class="flex-fill">
+                                <div class="small">Database backup successful</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">3 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="glass animate-in delay-4" style="padding: 1.5rem; border-radius: 16px;">
+            <h3 class="h4 mb-3">Recent OCR Processing</h3>
+            <div class="table-responsive">
+                <table class="table table-modern">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Accuracy</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="ti ti-file-text"></i>
+                                    Invoice_2025_001.pdf
+                                </div>
+                            </td>
+                            <td>Invoice</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                            <td>99.2%</td>
+                            <td>2 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="ti ti-file-text"></i>
+                                    Contract_ABC.pdf
+                                </div>
+                            </td>
+                            <td>Contract</td>
+                            <td><span class="badge bg-warning">Processing</span></td>
+                            <td>-</td>
+                            <td>In progress</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="ti ti-file-text"></i>
+                                    Receipt_Store_456.jpg
+                                </div>
+                            </td>
+                            <td>Receipt</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                            <td>97.8%</td>
+                            <td>15 min ago</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="ti ti-file-text"></i>
+                                    ID_Card_789.png
+                                </div>
+                            </td>
+                            <td>ID Document</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                            <td>99.5%</td>
+                            <td>1 hour ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="row g-4 mt-4">
+            <div class="col-md-3">
+                <div class="glass p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">CPU Usage</span>
+                        <span class="text-success">42%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 42%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Memory</span>
+                        <span class="text-warning">68%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 68%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Storage</span>
+                        <span class="text-danger">85%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Bandwidth</span>
+                        <span class="text-success">23%</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 23%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js"></script>
+    
+    <script>
+        // Chart.js initialization
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.8)');
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
+        
+        window.myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Documents Processed',
+                    data: [65, 78, 90, 120, 145, 180],
+                    borderColor: '#6366F1',
+                    backgroundColor: gradient,
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Add transition class
+            html.style.transition = 'background-color 0.3s ease';
+            
+            // Change theme
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Remove transition after completion
+            setTimeout(() => {
+                html.style.transition = '';
+            }, 300);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = 'ti ti-moon';
+            } else {
+                themeIcon.className = 'ti ti-sun';
+            }
+        }
+
+        // Update chart colors based on theme
+        function updateChartTheme() {
+            const theme = html.getAttribute('data-theme');
+            const textColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.5)' : '#64748b';
+            const gridColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+            
+            // Update existing chart
+            if (window.myChart) {
+                window.myChart.options.scales.x.ticks.color = textColor;
+                window.myChart.options.scales.y.ticks.color = textColor;
+                window.myChart.options.scales.x.grid.color = gridColor;
+                window.myChart.options.scales.y.grid.color = gridColor;
+                window.myChart.update();
+            }
+        }
+
+        // Listen for theme changes
+        const observer = new MutationObserver(() => {
+            updateChartTheme();
+        });
+
+        observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+        
+        // Counter animation
+        document.querySelectorAll('.kpi-value').forEach(element => {
+            const text = element.textContent;
+            const hasCHF = text.includes('CHF');
+            const hasK = text.includes('k');
+            const hasPercent = text.includes('%');
+            const hasComma = text.includes(',');
+            
+            let value = text.replace(/[^0-9.]/g, '');
+            if (hasComma) {
+                value = value.replace(',', '');
+            }
+            const target = parseFloat(value);
+            
+            if (!isNaN(target)) {
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    let display = current.toFixed(hasPercent ? 1 : 0);
+                    if (hasComma && display.length > 3) {
+                        display = display.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    }
+                    if (hasCHF) display = 'CHF ' + display;
+                    if (hasK) display += 'k';
+                    if (hasPercent) display += '%';
+                    
+                    element.textContent = display;
+                }, 30);
+            }
+        });
+    </script>
+</body>
+</html>

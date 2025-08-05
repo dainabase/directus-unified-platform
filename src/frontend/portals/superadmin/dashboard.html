@@ -3,130 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperAdmin Dashboard CEO</title>
+    <title>CEO Dashboard - Professional Edition</title>
     
-    <!-- OBLIGATOIRE : Tabler CSS -->
+    <!-- Tabler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
     
-    <!-- OBLIGATOIRE : Tabler Icons -->
+    <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     
-    <!-- OBLIGATOIRE : ApexCharts -->
+    <!-- ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
     
-    <!-- Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* Styles minimaux pour sparklines uniquement */
-        .metric-sparkline { height: 35px; margin-top: 10px; }
+        /* Design System Professionnel inspiré de Stripe/Linear */
+        :root {
+            /* Palette Professionnelle */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafb;
+            --bg-tertiary: #f3f4f6;
+            
+            /* Textes */
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-tertiary: #9ca3af;
+            
+            /* Accents */
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --accent-purple: #8b5cf6;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Sidebar Premium */
+        .navbar-vertical {
+            background: var(--bg-primary);
+            border-right: 1px solid #e5e7eb;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .navbar-vertical .navbar-brand {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text-primary);
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .navbar-vertical .nav-link {
+            color: var(--text-secondary);
+            padding: 0.625rem 1rem;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 2px 8px;
+            transition: all 0.15s ease;
+        }
+        
+        .navbar-vertical .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .navbar-vertical .nav-link.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .nav-subtitle {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            padding: 1rem 1rem 0.5rem;
+        }
+        
+        /* Cards Premium */
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid #f3f4f6;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        /* Métriques CEO */
+        .metric-card {
+            position: relative;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .metric-change {
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .metric-change.positive {
+            color: var(--accent-green);
+        }
+        
+        .metric-change.negative {
+            color: var(--accent-red);
+        }
+        
+        .metric-sparkline {
+            height: 40px;
+            margin-top: 12px;
+        }
+        
+        /* Badges Premium */
+        .badge {
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+        
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Tables Premium */
+        .table {
+            font-size: 13px;
+        }
+        
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .table td {
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        /* Alerts Premium */
+        .alert {
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        
+        .alert-warning {
+            background: #fffbeb;
+            color: #92400e;
+        }
+        
+        .alert-info {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+        
+        /* Buttons Premium */
+        .btn {
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            transition: all 0.15s ease;
+        }
+        
+        .btn-primary {
+            background: var(--accent-blue);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Responsive Grid */
+        @media (max-width: 768px) {
+            .metric-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="page">
-        <!-- Sidebar Menu Validé -->
-        <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+        <!-- Sidebar Navigation -->
+        <aside class="navbar navbar-vertical navbar-expand-lg">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <h1 class="navbar-brand navbar-brand-autodark">
-                    <a href="#" class="text-white text-decoration-none">
-                        🚀 SuperAdmin CEO
-                    </a>
+                <h1 class="navbar-brand">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" style="margin-right: 8px;">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 21h18" />
+                        <path d="M5 21v-14l8 -4v18" />
+                        <path d="M19 21v-10l-6 -4" />
+                    </svg>
+                    Dashboard CEO
                 </h1>
+                
                 <div class="navbar-collapse">
-                    <ul class="navbar-nav pt-lg-3">
-                        <!-- SECTION CRÉER -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-                                </span>
-                                <span class="nav-link-title">CRÉER</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Nouvelle Entreprise/Lead</a>
-                                <a class="dropdown-item" href="#">Nouveau Contact</a>
-                                <a class="dropdown-item" href="#">Nouveau Projet</a>
-                                <a class="dropdown-item" href="#">Nouvelle Facture/Devis</a>
-                                <a class="dropdown-item" href="#">Nouveau Paiement</a>
-                            </div>
-                        </li>
-                        
-                        <!-- SECTION GÉRER -->
-                        <li class="nav-item active">
+                    <ul class="navbar-nav">
+                        <li class="nav-subtitle">CRÉER</li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">📊</span>
-                                <span class="nav-link-title">Dashboard</span>
+                                <span class="nav-link-icon">➕</span>
+                                <span>Nouvelle Entreprise</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">🏢</span>
-                                <span class="nav-link-title">Entreprises & Contacts</span>
+                                <span class="nav-link-icon">➕</span>
+                                <span>Nouveau Contact</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">📁</span>
-                                <span class="nav-link-title">Projets & Tâches</span>
+                                <span class="nav-link-icon">➕</span>
+                                <span>Nouveau Projet</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">💰</span>
-                                <span class="nav-link-title">Finances</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">👥</span>
-                                <span class="nav-link-title">Prestataires</span>
+                                <span class="nav-link-icon">➕</span>
+                                <span>Nouvelle Facture</span>
                             </a>
                         </li>
                         
-                        <hr class="navbar-divider my-3">
+                        <li class="nav-subtitle" style="margin-top: 1rem;">GÉRER</li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <span class="nav-link-icon">📊</span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon">🏢</span>
+                                <span>Entreprises</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon">📁</span>
+                                <span>Projets & Tâches</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon">💰</span>
+                                <span>Finances</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span class="nav-link-icon">👥</span>
+                                <span>Prestataires</span>
+                            </a>
+                        </li>
                         
-                        <!-- SECTION OUTILS -->
+                        <li class="nav-subtitle" style="margin-top: 1rem;">OUTILS</li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">📄</span>
-                                <span class="nav-link-title">OCR Scanner</span>
+                                <span class="nav-link-icon">📄</span>
+                                <span>OCR Scanner</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">📧</span>
-                                <span class="nav-link-title">Communications</span>
+                                <span class="nav-link-icon">🤖</span>
+                                <span>Automatisations</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">🤖</span>
-                                <span class="nav-link-title">Automatisations</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">📈</span>
-                                <span class="nav-link-title">Rapports</span>
-                            </a>
-                        </li>
-                        
-                        <hr class="navbar-divider my-3">
-                        
-                        <!-- SECTION CONFIG -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">⚙️</span>
-                                <span class="nav-link-title">Paramètres</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">👤</span>
-                                <span class="nav-link-title">Mon Profil</span>
+                                <span class="nav-link-icon">📈</span>
+                                <span>Rapports</span>
                             </a>
                         </li>
                     </ul>
@@ -134,361 +384,329 @@
             </div>
         </aside>
         
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <div class="page-wrapper">
-            <!-- Page Header avec Sélecteur Entreprise -->
-            <div class="page-header d-print-none">
+            <!-- Header -->
+            <div class="page-header">
                 <div class="container-xl">
-                    <div class="row g-2 align-items-center">
+                    <div class="row align-items-center">
                         <div class="col">
-                            <h2 class="page-title">CEO Operations Dashboard</h2>
+                            <h2 class="page-title">Vue d'ensemble</h2>
                         </div>
                         <div class="col-auto">
-                            <select class="form-select" id="companyFilter">
-                                <option value="all">📊 Vue Consolidée</option>
-                                <option value="hypervisual">HYPERVISUAL</option>
-                                <option value="dainamics">DAINAMICS</option>
-                                <option value="lexaia">LEXAIA</option>
-                                <option value="enki">ENKI REALTY</option>
-                                <option value="takeout">TAKEOUT</option>
+                            <select class="form-select" style="min-width: 180px;">
+                                <option>📊 Vue Consolidée</option>
+                                <option>HYPERVISUAL</option>
+                                <option>DAINAMICS</option>
+                                <option>LEXAIA</option>
+                                <option>ENKI REALTY</option>
+                                <option>TAKEOUT</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Page Body avec Métriques et Blocs -->
+            <!-- Page Body -->
             <div class="page-body">
                 <div class="container-xl">
-                    <!-- LIGNE 1 : 5 MÉTRIQUES CEO -->
-                    <div class="row row-cards mb-3">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body p-3">
-                                    <div class="row g-3">
-                                        <!-- Métrique 1: Cash Runway -->
-                                        <div class="col">
-                                            <div class="text-center">
-                                                <div class="text-uppercase text-muted small">Cash Runway</div>
-                                                <div class="display-6 fw-bold text-success">7.3 mois</div>
-                                                <div class="text-muted small">↑ +1.2 mois</div>
-                                                <div id="sparkline1" class="metric-sparkline"></div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Métrique 2: ARR/MRR -->
-                                        <div class="col">
-                                            <div class="text-center">
-                                                <div class="text-uppercase text-muted small">ARR / MRR</div>
-                                                <div class="display-6 fw-bold">€2.4M</div>
-                                                <div class="text-muted small">€198K/mois • +23% YoY</div>
-                                                <div id="sparkline2" class="metric-sparkline"></div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Métrique 3: EBITDA -->
-                                        <div class="col">
-                                            <div class="text-center">
-                                                <div class="text-uppercase text-muted small">EBITDA Margin</div>
-                                                <div class="display-6 fw-bold">18.5%</div>
-                                                <div class="text-muted small">Target: 20%</div>
-                                                <div id="sparkline3" class="metric-sparkline"></div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Métrique 4: LTV:CAC -->
-                                        <div class="col">
-                                            <div class="text-center">
-                                                <div class="text-uppercase text-muted small">LTV:CAC Ratio</div>
-                                                <div class="display-6 fw-bold text-success">4.2:1</div>
-                                                <div class="text-muted small">Healthy > 3:1</div>
-                                                <div id="sparkline4" class="metric-sparkline"></div>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Métrique 5: NPS -->
-                                        <div class="col">
-                                            <div class="text-center">
-                                                <div class="text-uppercase text-muted small">NPS Global</div>
-                                                <div class="display-6 fw-bold text-success">72</div>
-                                                <div class="text-muted small">Excellent • +5</div>
-                                                <div id="sparkline5" class="metric-sparkline"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <!-- CEO Metrics Row -->
+                    <div class="row g-3 mb-4">
+                        <div class="col">
+                            <div class="metric-card">
+                                <div class="metric-label">Cash Runway</div>
+                                <div class="metric-value">7.3 mois</div>
+                                <div class="metric-change positive">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg>
+                                    +1.2 mois
                                 </div>
+                                <div id="spark1" class="metric-sparkline"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="metric-card">
+                                <div class="metric-label">ARR / MRR</div>
+                                <div class="metric-value">€2.4M</div>
+                                <div class="metric-change positive">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg>
+                                    +23% YoY
+                                </div>
+                                <div id="spark2" class="metric-sparkline"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="metric-card">
+                                <div class="metric-label">EBITDA Margin</div>
+                                <div class="metric-value">18.5%</div>
+                                <div class="metric-change positive">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg>
+                                    Target: 20%
+                                </div>
+                                <div id="spark3" class="metric-sparkline"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="metric-card">
+                                <div class="metric-label">LTV:CAC Ratio</div>
+                                <div class="metric-value">4.2:1</div>
+                                <div class="metric-change positive">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg>
+                                    Healthy
+                                </div>
+                                <div id="spark4" class="metric-sparkline"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="metric-card">
+                                <div class="metric-label">NPS Global</div>
+                                <div class="metric-value">72</div>
+                                <div class="metric-change positive">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                                    </svg>
+                                    Excellent
+                                </div>
+                                <div id="spark5" class="metric-sparkline"></div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- LIGNE 2 : 6 BLOCS OPÉRATIONNELS (3x2) -->
-                    <div class="row row-cards g-3">
-                        <!-- Bloc 1: Finance & Trésorerie -->
+                    <!-- Operational Blocks -->
+                    <div class="row g-3">
+                        <!-- Finance Block -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">💰 Finance & Trésorerie</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Cash Disponible</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="h2 mb-0">€847K</div>
-                                            </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-secondary">Cash Disponible</span>
+                                        <span class="h3 mb-0">€847K</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-secondary">Factures Impayées</span>
+                                        <div>
+                                            <span class="badge badge-danger">12</span>
+                                            <span class="ms-2 fw-bold">€45K</span>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Factures Impayées</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge bg-red">12</span>
-                                                <span class="text-red ms-2">€45K</span>
-                                            </div>
-                                        </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-secondary">En Attente</span>
+                                        <span class="fw-bold">€127K</span>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Paiements en Attente</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge bg-blue">8</span>
-                                                <span class="ms-2">€127K</span>
-                                            </div>
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="text-secondary small">CA Mensuel</span>
+                                            <span class="small">€198K / €220K</span>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div class="text-muted mb-2">CA du Mois</div>
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: 90%" role="progressbar">
-                                                €198K / €220K
-                                            </div>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" style="width: 90%"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Bloc 2: Tâches & Opérationnel -->
+                        <!-- Tasks Block -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">📋 Tâches & Opérationnel</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <span class="badge bg-blue me-2">14</span>
+                                    <div class="mb-3">
+                                        <span class="badge badge-info me-2">14</span>
                                         <span>Tâches Aujourd'hui</span>
                                     </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <span class="badge bg-red me-2">3</span>
-                                        <span>Tâches en Retard</span>
-                                        <span class="badge bg-orange ms-auto">1 critique</span>
+                                    <div class="mb-3">
+                                        <span class="badge badge-danger me-2">3</span>
+                                        <span>En Retard</span>
+                                        <span class="badge badge-warning ms-2">1 critique</span>
                                     </div>
                                     <div class="mb-3">
-                                        <div class="h2 mb-1">8 Projets Actifs</div>
-                                        <div class="text-muted small">3 deadlines cette semaine</div>
+                                        <div class="h4 mb-1">8 Projets Actifs</div>
+                                        <div class="text-secondary small">3 deadlines cette semaine</div>
                                     </div>
                                     <div class="list-group list-group-flush">
-                                        <div class="list-group-item px-0">
-                                            <div class="row align-items-center">
-                                                <div class="col">→ Valider devis BNP</div>
-                                                <div class="col-auto">
-                                                    <span class="badge bg-red-lt">Urgent</span>
-                                                </div>
+                                        <div class="list-group-item px-0 border-0">
+                                            <div class="d-flex justify-content-between">
+                                                <span>→ Valider devis BNP</span>
+                                                <span class="badge badge-danger">Urgent</span>
                                             </div>
                                         </div>
-                                        <div class="list-group-item px-0">→ Call client X à 14h</div>
+                                        <div class="list-group-item px-0 border-0">
+                                            → Call client X à 14h
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Bloc 3: Commercial & Ventes -->
+                        <!-- Commercial Block -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">🎯 Commercial & Ventes</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <div class="h2 mb-1">€1.2M</div>
-                                        <div class="text-muted">Pipeline Total • 24 opportunités</div>
+                                        <div class="h3 mb-1">€1.2M</div>
+                                        <div class="text-secondary">Pipeline • 24 opportunités</div>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Devis Actifs</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge bg-blue">7</span>
-                                                <span class="ms-2 fw-bold">€340K</span>
-                                            </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="text-secondary">Devis Actifs</span>
+                                        <div>
+                                            <span class="badge badge-info">7</span>
+                                            <span class="ms-2 fw-bold">€340K</span>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Taux Conversion</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge bg-success">32% ↑</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-muted small">vs 28% mois dernier</div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="text-secondary">Conversion</span>
+                                        <span class="badge badge-success">32% ↑</span>
                                     </div>
-                                    <div class="alert alert-info mb-0">
-                                        <div class="alert-title">5 RDV cette semaine</div>
+                                    <div class="alert alert-info">
+                                        <strong>5 RDV</strong> cette semaine
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Bloc 4: Marketing & Trafic -->
+                        <!-- Marketing Block -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">📊 Marketing & Trafic</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="row text-center mb-3">
                                         <div class="col">
-                                            <div class="h1 mb-0">1,847</div>
-                                            <div class="text-muted small">Visiteurs Aujourd'hui</div>
+                                            <div class="h2 mb-0">1,847</div>
+                                            <div class="text-secondary small">Visiteurs</div>
                                         </div>
                                         <div class="col">
-                                            <div class="h1 mb-0">124</div>
-                                            <div class="text-muted small">Leads Semaine</div>
+                                            <div class="h2 mb-0">124</div>
+                                            <div class="text-secondary small">Leads</div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <div class="row align-items-center">
-                                            <div class="col">
-                                                <div class="text-muted">Conversion Web</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="h3 mb-0">6.7%</div>
-                                            </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-secondary">Conversion</span>
+                                            <span class="h4 mb-0">6.7%</span>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div class="text-muted small mb-2">Top Sources</div>
-                                        <div class="row g-2">
-                                            <div class="col-auto">
-                                                <span class="badge">Google 45%</span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge">Direct 30%</span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="badge">Social 25%</span>
-                                            </div>
-                                        </div>
+                                    <div class="text-secondary small mb-1">Top Sources</div>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge">Google 45%</span>
+                                        <span class="badge">Direct 30%</span>
+                                        <span class="badge">Social 25%</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Bloc 5: Performance Entreprises -->
+                        <!-- Companies Performance -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">🏢 Performance Entreprises</h3>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-vcenter">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="fw-bold">HYPERVISUAL</td>
-                                                    <td class="text-end">€67K</td>
-                                                    <td class="text-end">
-                                                        <span class="badge bg-green">22%</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fw-bold">DAINAMICS</td>
-                                                    <td class="text-end">€89K</td>
-                                                    <td class="text-end">
-                                                        <span class="badge bg-green">31%</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fw-bold">LEXAIA</td>
-                                                    <td class="text-end">€12K</td>
-                                                    <td class="text-end">
-                                                        <span class="badge bg-orange">8%</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fw-bold">ENKI REALTY</td>
-                                                    <td class="text-end">€24K</td>
-                                                    <td class="text-end">
-                                                        <span class="badge bg-green">15%</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="fw-bold">TAKEOUT</td>
-                                                    <td class="text-end">€6K</td>
-                                                    <td class="text-end">
-                                                        <span class="badge bg-red">-12%</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table class="table table-sm mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Entreprise</th>
+                                                <th class="text-end">CA</th>
+                                                <th class="text-end">Marge</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>HYPERVISUAL</td>
+                                                <td class="text-end">€67K</td>
+                                                <td class="text-end">
+                                                    <span class="badge badge-success">22%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>DAINAMICS</td>
+                                                <td class="text-end">€89K</td>
+                                                <td class="text-end">
+                                                    <span class="badge badge-success">31%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>LEXAIA</td>
+                                                <td class="text-end">€12K</td>
+                                                <td class="text-end">
+                                                    <span class="badge badge-warning">8%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>ENKI REALTY</td>
+                                                <td class="text-end">€24K</td>
+                                                <td class="text-end">
+                                                    <span class="badge badge-success">15%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>TAKEOUT</td>
+                                                <td class="text-end">€6K</td>
+                                                <td class="text-end">
+                                                    <span class="badge badge-danger">-12%</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Bloc 6: Alertes & Actions -->
+                        <!-- Alerts Block -->
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">⚡ Alertes & Actions</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="alert alert-danger mb-2">
-                                        <div class="d-flex">
+                                        <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h4 class="alert-title">3 factures impayées</h4>
-                                                <div class="text-muted">Plus de 60 jours</div>
+                                                <strong>3 factures impayées</strong>
+                                                <div class="small">Plus de 60 jours</div>
                                             </div>
-                                            <div class="ms-auto">
-                                                <a href="#" class="btn btn-danger btn-sm">Voir</a>
-                                            </div>
+                                            <button class="btn btn-sm btn-danger">Voir</button>
                                         </div>
                                     </div>
                                     <div class="alert alert-warning mb-2">
-                                        <div class="d-flex">
+                                        <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h4 class="alert-title">Cash runway < 6 mois</h4>
-                                                <div class="text-muted">TAKEOUT en danger</div>
+                                                <strong>Cash < 6 mois</strong>
+                                                <div class="small">TAKEOUT</div>
                                             </div>
-                                            <div class="ms-auto">
-                                                <a href="#" class="btn btn-warning btn-sm">Analyser</a>
-                                            </div>
+                                            <button class="btn btn-sm btn-warning">Analyser</button>
                                         </div>
                                     </div>
-                                    <div class="alert alert-info mb-3">
-                                        <div class="d-flex">
+                                    <div class="alert alert-info">
+                                        <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h4 class="alert-title">5 devis expirent</h4>
-                                                <div class="text-muted">Cette semaine</div>
+                                                <strong>5 devis expirent</strong>
+                                                <div class="small">Cette semaine</div>
                                             </div>
-                                            <div class="ms-auto">
-                                                <a href="#" class="btn btn-info btn-sm">Relancer</a>
-                                            </div>
+                                            <button class="btn btn-sm btn-info">Relancer</button>
                                         </div>
-                                    </div>
-                                    <div class="btn-group w-100" role="group">
-                                        <a href="#" class="btn btn-primary">Nouvelle facture</a>
-                                        <a href="#" class="btn btn-primary">Nouveau projet</a>
                                     </div>
                                 </div>
                             </div>
@@ -499,75 +717,83 @@
         </div>
     </div>
     
-    <!-- Scripts Tabler et ApexCharts -->
+    <!-- Tabler Core -->
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
     
+    <!-- ApexCharts Configuration -->
     <script>
-        // Configuration des sparklines ApexCharts
-        document.addEventListener('DOMContentLoaded', function() {
-            const sparklineOptions = {
-                chart: {
-                    type: 'line',
-                    height: 35,
-                    sparkline: { enabled: true },
-                    animations: { enabled: false }
+        // Sparkline configuration professionnelle
+        const sparklineOptions = {
+            chart: {
+                type: 'area',
+                height: 40,
+                sparkline: {
+                    enabled: true
                 },
-                stroke: { width: 2, curve: 'smooth' },
-                tooltip: { enabled: false },
-                xaxis: { crosshairs: { width: 0 } }
-            };
-            
-            // Sparkline 1 - Cash Runway (vert si > 3 mois)
-            new ApexCharts(document.querySelector("#sparkline1"), {
-                ...sparklineOptions,
-                series: [{ data: [6.1, 5.8, 6.2, 6.5, 6.8, 7.1, 7.3] }],
-                colors: ['#2fb344']
-            }).render();
-            
-            // Sparkline 2 - ARR/MRR (bleu)
-            new ApexCharts(document.querySelector("#sparkline2"), {
-                ...sparklineOptions,
-                series: [{ data: [1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4] }],
-                colors: ['#206bc4']
-            }).render();
-            
-            // Sparkline 3 - EBITDA (violet)
-            new ApexCharts(document.querySelector("#sparkline3"), {
-                ...sparklineOptions,
-                series: [{ data: [15.2, 16.1, 16.8, 17.3, 17.8, 18.1, 18.5] }],
-                colors: ['#5eba00']
-            }).render();
-            
-            // Sparkline 4 - LTV:CAC (cyan)
-            new ApexCharts(document.querySelector("#sparkline4"), {
-                ...sparklineOptions,
-                series: [{ data: [3.1, 3.4, 3.6, 3.8, 4.0, 4.1, 4.2] }],
-                colors: ['#4299e1']
-            }).render();
-            
-            // Sparkline 5 - NPS (orange)
-            new ApexCharts(document.querySelector("#sparkline5"), {
-                ...sparklineOptions,
-                series: [{ data: [65, 67, 68, 69, 70, 71, 72] }],
-                colors: ['#fab005']
-            }).render();
-            
-            // Company Filter Handler
-            document.getElementById('companyFilter').addEventListener('change', function(e) {
-                const selectedCompany = e.target.value;
-                console.log('Filtrage par entreprise:', selectedCompany);
-                // Ici on pourrait filtrer les données par entreprise
-                // Pour l'instant, on log juste la sélection
-            });
-            
-            // Auto-refresh toutes les 30 secondes
-            setInterval(function() {
-                console.log('📊 Dashboard actualisé:', new Date().toLocaleTimeString());
-                // Ici on pourrait recharger les données depuis l'API
-            }, 30000);
-            
-            console.log('✅ Dashboard CEO Tabler.io + ApexCharts chargé avec succès');
-        });
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 1000
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            fill: {
+                opacity: 0.2
+            },
+            tooltip: {
+                enabled: false
+            }
+        };
+        
+        // Sparkline 1 - Cash Runway
+        new ApexCharts(document.querySelector("#spark1"), {
+            ...sparklineOptions,
+            series: [{
+                data: [6.1, 5.8, 6.2, 6.5, 6.8, 7.1, 7.3]
+            }],
+            colors: ['#10b981']
+        }).render();
+        
+        // Sparkline 2 - ARR
+        new ApexCharts(document.querySelector("#spark2"), {
+            ...sparklineOptions,
+            series: [{
+                data: [1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4]
+            }],
+            colors: ['#3b82f6']
+        }).render();
+        
+        // Sparkline 3 - EBITDA
+        new ApexCharts(document.querySelector("#spark3"), {
+            ...sparklineOptions,
+            series: [{
+                data: [15.2, 16.1, 16.8, 17.3, 17.8, 18.1, 18.5]
+            }],
+            colors: ['#8b5cf6']
+        }).render();
+        
+        // Sparkline 4 - LTV:CAC
+        new ApexCharts(document.querySelector("#spark4"), {
+            ...sparklineOptions,
+            series: [{
+                data: [3.1, 3.4, 3.6, 3.8, 4.0, 4.1, 4.2]
+            }],
+            colors: ['#06b6d4']
+        }).render();
+        
+        // Sparkline 5 - NPS
+        new ApexCharts(document.querySelector("#spark5"), {
+            ...sparklineOptions,
+            series: [{
+                data: [65, 67, 68, 69, 70, 71, 72]
+            }],
+            colors: ['#f59e0b']
+        }).render();
+        
+        console.log('✅ Dashboard CEO Professional Edition - Loaded Successfully');
     </script>
 </body>
 </html>

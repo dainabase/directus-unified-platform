@@ -15,9 +15,10 @@
     <!-- Tabler Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     
-    <!-- Custom CSS -->
-    <link href="../assets/css/custom.css" rel="stylesheet"/>
-    <link href="../assets/css/superadmin-custom.css" rel="stylesheet"/>
+    <!-- Modern Theme 2025 -->
+    <link href="/assets/css/modern-theme.css" rel="stylesheet">
+    <link href="/assets/css/glassmorphism.css" rel="stylesheet">
+    <link href="/assets/css/animations.css" rel="stylesheet">
     
     <style>
         /* Dark mode toggle visibility */
@@ -40,10 +41,67 @@
             font-weight: 500;
             color: var(--tblr-red);
         }
+
+        /* Glassmorphism style */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        [data-bs-theme="light"] .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* KPI Cards styling */
+        .kpi-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            bottom: -50%;
+            left: -50%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .kpi-card:hover::before {
+            animation: shimmer 0.5s ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* Progress bars */
+        .progress {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Charts background */
+        .apexcharts-canvas {
+            background: transparent !important;
+        }
     </style>
     
 </head>
-<body data-bs-theme="light">
+<body data-bs-theme="dark" class="theme-modern">
+    <!-- Mesh Gradient Background -->
+    <div class="mesh-gradient-bg"></div>
+    
     <div class="page">
         <!-- Sidebar -->
         <aside class="navbar navbar-vertical navbar-expand-lg navbar-superadmin" data-bs-theme="dark">
@@ -141,25 +199,36 @@
                                 <span class="nav-link-title">CRM Unifié</span>
                             </a>
                             <div class="dropdown-menu" data-permission="superadmin.crm.view">
+                                <a class="dropdown-item" href="./crm.html">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block text-primary">
+                                        <i class="ti ti-address-book"></i>
+                                    </span>
+                                    CRM Multi-Entreprises
+                                </a>
                                 <a class="dropdown-item" href="./crm/contacts.html">Contacts</a>
                                 <a class="dropdown-item" href="./crm/companies.html">Entreprises</a>
                                 <a class="dropdown-item" href="./crm/opportunities.html">Opportunités</a>
                             </div>
                         </li>
                         
+                        <!-- SECTION DEVIS & FACTURES -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="./invoicing.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <i class="ti ti-file-invoice"></i>
+                                </span>
+                                <span class="nav-link-title">Devis & Factures</span>
+                            </a>
+                        </li>
+                        
                         <!-- SECTION PROJETS -->
-                        <li class="nav-item dropdown" data-permission="superadmin.projects.view">
-                            <a class="nav-link dropdown-toggle" href="#navbar-projects" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./projects.html">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <i class="ti ti-clipboard-check"></i>
                                 </span>
-                                <span class="nav-link-title">Projets Globaux</span>
+                                <span class="nav-link-title">Gestion Projets</span>
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="./projects/projects-admin.html">Gestion Projets</a>
-                                <a class="dropdown-item" href="./projects/resources.html">Ressources</a>
-                                <a class="dropdown-item" href="./projects/templates.html">Templates</a>
-                            </div>
                         </li>
                         
                         <!-- SECTION UTILISATEURS -->
@@ -323,163 +392,182 @@
                         </div>
                     </div>
                     
-                    <!-- KPI Cards Row -->
-                    <div class="row row-deck row-cards mb-4">
+                    <!-- Row 1: KPIs Globaux avec Glassmorphism -->
+                    <div class="row row-cards mb-4">
+                        <!-- CA Total -->
                         <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-red">
-                                        <i class="ti ti-currency-euro"></i>
-                                    </div>
-                                </div>
+                            <div class="card card-sm glass-card kpi-card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-primary text-white avatar">
-                                                <i class="ti ti-currency-euro"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-uppercase text-secondary small font-weight-medium">Chiffre d'affaires</div>
-                                            <div class="h1 mb-0 metric-value" id="revenue-value">CHF 0</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Chiffre d'Affaires Global</div>
+                                        <div class="ms-auto text-green">
+                                            <i class="ti ti-trending-up"></i> +12%
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center">
-                                    <div class="text-secondary" id="revenue-trend">
-                                        <i class="ti ti-trending-up text-green"></i>
-                                        <span>+0%</span> ce mois
+                                    <div class="h1 mb-3 metric-value">€2.4M</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-primary" style="width: 75%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="visually-hidden">75% Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-2 mt-2">
+                                        <div>Objectif: €3.2M</div>
+                                        <div class="ms-auto">
+                                            <span class="text-muted">75%</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Marge Nette -->
                         <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-green">
-                                        <i class="ti ti-wallet"></i>
-                                    </div>
-                                </div>
+                            <div class="card card-sm glass-card kpi-card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-green text-white avatar">
-                                                <i class="ti ti-wallet"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-uppercase text-secondary small font-weight-medium">Trésorerie</div>
-                                            <div class="h1 mb-0 metric-value" id="treasury-value">CHF 0</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Marge Nette</div>
+                                        <div class="ms-auto text-yellow">
+                                            <i class="ti ti-minus"></i> 0%
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center">
-                                    <div class="text-secondary" id="treasury-trend">
-                                        <i class="ti ti-minus text-yellow"></i>
-                                        <span>0</span> entités
+                                    <div class="h1 mb-3 metric-value">22.5%</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-green" style="width: 90%" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="visually-hidden">90% Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-2 mt-2">
+                                        <div>Objectif: 25%</div>
+                                        <div class="ms-auto">
+                                            <span class="text-muted">90%</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Trésorerie -->
                         <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-blue">
-                                        <i class="ti ti-clipboard-list"></i>
-                                    </div>
-                                </div>
+                            <div class="card card-sm glass-card kpi-card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-azure text-white avatar">
-                                                <i class="ti ti-clipboard-list"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-uppercase text-secondary small font-weight-medium">Projets actifs</div>
-                                            <div class="h1 mb-0 metric-value" id="projects-value">0</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Trésorerie</div>
+                                        <div class="ms-auto text-green">
+                                            <i class="ti ti-trending-up"></i> +8%
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center">
-                                    <div class="text-secondary" id="projects-trend">
-                                        <span>0</span> nouveaux
+                                    <div class="h1 mb-3 metric-value">€485K</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-azure" style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="visually-hidden">60% Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-2 mt-2">
+                                        <div>5 entités</div>
+                                        <div class="ms-auto">
+                                            <span class="text-muted">Consolidé</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Projets Actifs -->
                         <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-orange">
-                                        <i class="ti ti-file-invoice"></i>
-                                    </div>
-                                </div>
+                            <div class="card card-sm glass-card kpi-card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-orange text-white avatar">
-                                                <i class="ti ti-file-invoice"></i>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="text-uppercase text-secondary small font-weight-medium">En attente</div>
-                                            <div class="h1 mb-0 metric-value" id="invoicing-value">CHF 0</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="subheader">Projets Actifs</div>
+                                        <div class="ms-auto text-green">
+                                            <i class="ti ti-plus"></i> +5
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer d-flex align-items-center">
-                                    <div class="text-secondary" id="invoicing-trend">
-                                        <span>0</span> factures
+                                    <div class="h1 mb-3 metric-value">47</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-orange" style="width: 82%" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="visually-hidden">82% Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-2 mt-2">
+                                        <div>En cours: 38</div>
+                                        <div class="ms-auto">
+                                            <span class="text-muted">Planning: 9</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Charts Row 1 -->
-                    <div class="row row-deck row-cards mb-4">
+                    <!-- Row 2: Graphiques par Entreprise -->
+                    <div class="row row-cards mb-4">
                         <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-status-top bg-primary"></div>
+                            <div class="card glass-card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Évolution du chiffre d'affaires</h3>
+                                    <h3 class="card-title">Performance par Entreprise</h3>
                                     <div class="card-actions">
-                                        <div class="dropdown">
-                                            <a href="#" class="btn-action dropdown-toggle" data-bs-toggle="dropdown">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#" data-period="month">Ce mois</a>
-                                                <a class="dropdown-item" href="#" data-period="quarter">Ce trimestre</a>
-                                                <a class="dropdown-item active" href="#" data-period="year">Cette année</a>
-                                                <a class="dropdown-item" href="#" data-period="all">Tout</a>
-                                            </div>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm" data-period="day">Jour</button>
+                                            <button type="button" class="btn btn-sm active" data-period="month">Mois</button>
+                                            <button type="button" class="btn btn-sm" data-period="year">Année</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div id="revenue-chart"></div>
-                                </div>
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-primary">
-                                        <i class="ti ti-chart-line"></i>
-                                    </div>
+                                    <div id="chart-revenue-multicompany" style="min-height: 300px;"></div>
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-lg-4">
-                            <div class="card">
-                                <div class="card-status-top bg-green"></div>
+                            <div class="card glass-card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Trésorerie par entité</h3>
+                                    <h3 class="card-title">Alertes Critiques</h3>
+                                    <div class="card-actions">
+                                        <span class="badge bg-red">5</span>
+                                    </div>
                                 </div>
                                 <div class="card-body">
-                                    <div id="treasury-chart"></div>
-                                </div>
-                                <div class="card-stamp">
-                                    <div class="card-stamp-icon bg-green">
-                                        <i class="ti ti-wallet"></i>
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-red"></span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-truncate">
+                                                        <strong>HyperVisual</strong> - Facture impayée > 90j
+                                                    </div>
+                                                    <div class="text-muted small">€15,000 - Client: TechCorp</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-orange"></span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-truncate">
+                                                        <strong>Dynamics</strong> - Budget projet dépassé
+                                                    </div>
+                                                    <div class="text-muted small">115% du budget initial</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="badge bg-yellow"></span>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="text-truncate">
+                                                        <strong>Lexia</strong> - Trésorerie faible
+                                                    </div>
+                                                    <div class="text-muted small">< 2 mois de charges</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -609,6 +697,7 @@
     <script src="../assets/js/auth-superadmin.js"></script>
     <script src="../assets/js/permissions-superadmin.js"></script>
     <script src="../assets/js/dashboard-superadmin.js"></script>
+    <script src="./js/superadmin.js"></script>
     
     <script>
         // Fonction pour charger le dashboard SuperAdmin consolidé

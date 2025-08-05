@@ -11,8 +11,8 @@
     
     <!-- Design System CSS -->
     <link rel="stylesheet" href="assets/css/glassmorphism.css">
-    <link rel="stylesheet" href="assets/css/dark-theme.css">
-    <link rel="stylesheet" href="assets/css/light-theme.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/modern-theme.css">
     
     <!-- Custom CSS -->
@@ -229,62 +229,148 @@
         }
     </style>
 </head>
-<body class="theme-dark">
-    <!-- Include navbar -->
-    <nav class="navbar-glass">
-        <div class="navbar-content">
-            <div class="navbar-brand shimmer">
-                <i class="ti ti-sparkles"></i>
-                <span class="gradient-text">SuperAdmin</span>
+<body class="theme-dark page-loaded">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar-glass">
+        <div class="sidebar-header">
+            <div class="logo-wrapper">
+                <i class="ti ti-sparkles" style="font-size: 2rem; color: #6366F1;"></i>
+                <span class="logo-text">SuperAdmin</span>
             </div>
-            
-            <div class="navbar-menu">
-                <a href="dashboard.html" class="btn-glass">
-                    <i class="ti ti-dashboard"></i>
-                    <span>Dashboard</span>
+            <button class="sidebar-toggle btn-glass" id="sidebarToggle">
+                <i class="ti ti-menu-2"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-title">PRINCIPAL</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ti ti-dashboard nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
                 </a>
-                <a href="invoices.html" class="btn-glass">
-                    <i class="ti ti-file-invoice"></i>
-                    <span>Factures</span>
+                <a href="invoices.html" class="nav-item">
+                    <i class="ti ti-file-invoice nav-icon"></i>
+                    <span class="nav-text">Factures</span>
                 </a>
-                <a href="banking.html" class="btn-glass">
-                    <i class="ti ti-building-bank"></i>
-                    <span>Banking</span>
+                <a href="banking.html" class="nav-item">
+                    <i class="ti ti-building-bank nav-icon"></i>
+                    <span class="nav-text">Banking</span>
                 </a>
-                <a href="erp.html" class="btn-glass">
-                    <i class="ti ti-building-factory-2"></i>
-                    <span>ERP</span>
+                <a href="erp.html" class="nav-item">
+                    <i class="ti ti-building-factory-2 nav-icon"></i>
+                    <span class="nav-text">ERP</span>
                 </a>
-                <a href="marketing.html" class="btn-glass active">
-                    <i class="ti ti-mail"></i>
-                    <span>Marketing</span>
+                <a href="marketing.html" class="nav-item active">
+                    <i class="ti ti-mail nav-icon"></i>
+                    <span class="nav-text">Marketing</span>
                 </a>
             </div>
-            
-            <div class="navbar-actions">
-                <button class="btn-glass btn-primary ms-2">
+        </div>
+    </aside>
+
+    <!-- Top Navigation Bar -->
+    <nav class="top-navbar glass">
+        <!-- Left section -->
+        <div class="navbar-left">
+            <button class="mobile-menu-toggle btn-glass" id="mobileMenuToggle">
+                <i class="ti ti-menu-2"></i>
+            </button>
+
+            <!-- Breadcrumbs -->
+            <nav class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="dashboard.html">
+                            <i class="ti ti-home"></i>
+                            Accueil
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Marketing</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Center section -->
+        <div class="navbar-center">
+            <div class="search-wrapper">
+                <i class="ti ti-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Rechercher...">
+                <div class="search-shortcut">⌘K</div>
+            </div>
+        </div>
+
+        <!-- Right section -->
+        <div class="navbar-right">
+            <!-- Company Selector -->
+            <div class="company-selector">
+                <div class="company-current">
+                    <div class="company-avatar">
+                        <span style="font-size: 1.25rem">🏢</span>
+                    </div>
+                    <div class="company-info">
+                        <div class="company-name">Toutes les entreprises</div>
+                        <div class="company-count">5 actives</div>
+                    </div>
+                    <i class="ti ti-chevron-down"></i>
+                </div>
+                <div class="company-dropdown">
+                    <div class="company-item active">
+                        <span class="company-icon">🏢</span>
+                        <span>Toutes les entreprises</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-icon">📹</span>
+                        <span>HyperVisual</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-icon">💡</span>
+                        <span>Dynamics</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-icon">🗣️</span>
+                        <span>Lexia</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-icon">🏠</span>
+                        <span>NKReality</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-icon">🛒</span>
+                        <span>Etekout</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button class="btn-glass btn-icon" id="themeToggle">
+                <i class="ti ti-sun"></i>
+            </button>
+
+            <!-- Profile -->
+            <div class="profile-menu">
+                <div class="profile-avatar">
                     <i class="ti ti-user-circle"></i>
-                    <span>Admin</span>
-                </button>
+                </div>
             </div>
         </div>
     </nav>
     
     <!-- Main Content -->
-    <main class="main-content" style="margin-top: 80px; padding: 2rem;">
+    <main class="main-content">
         <!-- Page Header -->
         <div class="page-header mb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h1 class="gradient-text animate-in">Marketing Automation</h1>
-                    <p class="text-muted animate-in delay-1">Mautic 5.x - Campagnes multi-entreprises</p>
+                    <h1 class="page-title animate-in">Marketing Automation</h1>
+                    <p class="page-subtitle animate-in delay-1">Mautic 5.x - Campagnes multi-entreprises</p>
                 </div>
-                <div class="animate-in delay-2">
+                <div class="page-actions animate-in delay-2">
                     <button class="btn-glass btn-primary" onclick="showNewCampaignModal()">
                         <i class="ti ti-plus"></i>
                         Nouvelle campagne
                     </button>
-                    <button class="btn-glass ms-2" onclick="window.open('http://localhost:8084', '_blank')">
+                    <button class="btn-glass" onclick="window.open('http://localhost:8084', '_blank')">
                         <i class="ti ti-external-link"></i>
                         Ouvrir Mautic
                     </button>
@@ -644,7 +730,7 @@
     </main>
     
     <!-- Scripts -->
-    <script src="assets/js/theme-switcher.js"></script>
+    <script src="assets/js/navigation.js"></script>
     <script>
         function showNewCampaignModal() {
             console.log('Show new campaign modal');

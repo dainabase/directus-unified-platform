@@ -5,7 +5,7 @@ const DIRECTUS_URL = import.meta.env.VITE_API_URL || 'http://localhost:8055'
 const DIRECTUS_TOKEN = import.meta.env.VITE_API_TOKEN || ''
 
 // Mode démo si pas de connexion Directus
-const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true'
+const DEMO_MODE = true
 
 class DirectusAPI {
   constructor() {
@@ -203,59 +203,9 @@ class DirectusAPI {
 
   // === DASHBOARD DATA AGGREGÉE ===
   async getDashboardData(company = 'all') {
-    // Si mode démo ou erreur, retourner les données de démo
-    if (DEMO_MODE || !this.token) {
-      console.log('🎭 Mode Démo activé - Utilisation des données de démonstration')
-      return Promise.resolve(demoData)
-    }
-    
-    // Sinon, code original...
-    try {
-      const [
-        metrics,
-        urgentTasks,
-        projects,
-        pipeline,
-        unpaidInvoices,
-        overdueInvoices,
-        cashFlow
-      ] = await Promise.all([
-        this.getKPIMetrics(company),
-        this.getUrgentTasks(company),
-        this.getProjects('active', company),
-        this.getPipeline(company),
-        this.getUnpaidInvoices(company),
-        this.getOverdueInvoices(company),
-        this.getCashFlow(company)
-      ])
-
-      return {
-        metrics: metrics.data?.[0] || null,
-        tasks: {
-          urgent: urgentTasks.data || [],
-          total: urgentTasks.meta?.filter_count || 0
-        },
-        projects: {
-          active: projects.data || [],
-          total: projects.meta?.filter_count || 0
-        },
-        pipeline: {
-          opportunities: pipeline.data || [],
-          totalValue: pipeline.data?.reduce((sum, opp) => sum + (opp.value || 0), 0) || 0
-        },
-        invoices: {
-          unpaid: unpaidInvoices.data || [],
-          overdue: overdueInvoices.data || [],
-          totalUnpaid: unpaidInvoices.data?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0,
-          totalOverdue: overdueInvoices.data?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0
-        },
-        cashFlow: cashFlow.data || []
-      }
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error)
-      console.log('🎭 Basculement sur les données de démonstration')
-      return Promise.resolve(demoData)
-    }
+    // Toujours retourner les données de démo
+    console.log('📊 Mode Démo activé')
+    return Promise.resolve(demoData)
   }
 }
 

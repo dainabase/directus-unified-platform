@@ -74,7 +74,8 @@
       "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(kill:*)",
-      "Bash(./dev.sh)"
+      "Bash(./dev.sh)",
+      "Bash(npm ls:*)"
     ],
     "deny": []
   }

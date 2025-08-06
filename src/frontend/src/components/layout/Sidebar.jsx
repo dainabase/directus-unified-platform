@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import styles from './Sidebar.module.css'
 
-const Sidebar = ({ currentPortal, collapsed = false, setCollapsed }) => {
+const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {} }) => {
   const menuItems = {
     superadmin: [
       { section: 'CRÉER', items: [

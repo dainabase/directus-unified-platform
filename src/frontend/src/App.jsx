@@ -14,6 +14,7 @@ function App() {
   const [currentPortal, setCurrentPortal] = useState('superadmin')
   const [selectedCompany, setSelectedCompany] = useState('all')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const portals = {
     superadmin: { 
@@ -191,8 +192,8 @@ function App() {
         {/* Sidebar */}
         <Sidebar 
           currentPortal={currentPortal} 
-          collapsed={!sidebarOpen}
-          setCollapsed={(collapsed) => setSidebarOpen(!collapsed)}
+          collapsed={sidebarCollapsed}
+          setCollapsed={setSidebarCollapsed}
         />
         
         {/* Main Content */}

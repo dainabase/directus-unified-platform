@@ -35,6 +35,19 @@ const DashboardV3 = ({ selectedCompany }) => {
   const getFormattedMetrics = useStore(state => state.getFormattedMetrics)
   const getAlerts = useStore(state => state.getAlerts)
   
+  // Helper function for metric icons
+  const getMetricIcon = (metricKey) => {
+    const icons = {
+      mrr: <DollarSign size={20} />,
+      arr: <TrendingUp size={20} />,
+      runway: <Clock size={20} />,
+      users: <Users size={20} />,
+      projects: <Folder size={20} />,
+      tasks: <ClipboardList size={20} />
+    }
+    return icons[metricKey.toLowerCase()] || <Activity size={20} />
+  }
+  
   // Data fetching
   const { data: dashboardData, isLoading, error } = useDashboardData()
   const { mutate: refreshDashboard, isLoading: isRefreshing } = useRefreshDashboard()
@@ -144,6 +157,13 @@ const DashboardV3 = ({ selectedCompany }) => {
       <div className={styles.header}>
         <h1 className={styles.title}>Centre de Commande</h1>
         <div className={styles.headerActions}>
+          <button 
+            className={styles.themeToggle}
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          
           <button 
             className={styles.refreshButton}
             onClick={() => refreshDashboard()}
@@ -276,35 +296,18 @@ const DashboardV3 = ({ selectedCompany }) => {
         </motion.div>
       </div>
       
-      {/* Section Métriques Clés avec titre externe */}
-      <div className={styles.metricsSection}>
-        <h2 className={styles.metricsTitle}>MÉTRIQUES CLÉS</h2>
-        <div className={styles.metricsGrid}>
+      {/* Métriques Clés - Ligne horizontale simple */}
+      <div className={styles.metricsRow}>
+        <h3 className={styles.metricsTitle}>Métriques Clés</h3>
+        <div className={styles.metricsLine}>
           {Object.entries(metrics).map(([key, metric], index) => (
-            <motion.div
-              key={key}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              className={styles.metricCard}
-            >
-              <div className={styles.metricIcon}>
-                {getMetricIcon(key)}
-              </div>
-              <div className={styles.metricContent}>
-                <div className={styles.metricLabel}>{key.toUpperCase()}</div>
-                <div className={styles.metricValue}>{metric.formatted}</div>
-                <div className={styles.metricTrend}>
-                  {metric.trend === 'up' ? (
-                    <span className={styles.trendUp}>↑ +12%</span>
-                  ) : metric.trend === 'down' ? (
-                    <span className={styles.trendDown}>↓ -5%</span>
-                  ) : (
-                    <span className={styles.trendNeutral}>→ 0%</span>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+            <div key={key} className={styles.metricItem}>
+              <span className={styles.metricLabel}>{key.toUpperCase()}</span>
+              <span className={styles.metricValue}>{metric.formatted}</span>
+              <span className={`${styles.metricTrend} ${styles[`trend-${metric.trend}`]}`}>
+                {metric.trend === 'up' ? '↑' : metric.trend === 'down' ? '↓' : '→'}
+              </span>
+            </div>
           ))}
         </div>
       </div>

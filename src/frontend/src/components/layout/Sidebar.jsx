@@ -26,7 +26,10 @@ import {
   Clock,
   Package,
   ShoppingCart as Cart,
-  PieChart
+  PieChart,
+  Shield,
+  User,
+  ShoppingCart
 } from 'lucide-react'
 import styles from './Sidebar.module.css'
 
@@ -155,6 +158,39 @@ const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {}, se
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
       )}
+
+      {/* Navigation entre portails */}
+      <div className={styles.portalNav}>
+        <div className={styles.portalTitle}>PORTAILS</div>
+        <button 
+          className={`${styles.portalItem} ${currentPortal === 'superadmin' ? styles.active : ''}`}
+          onClick={() => window.location.href = '#superadmin'}
+        >
+          <Shield size={20} />
+          {!collapsed && <span>SuperAdmin</span>}
+        </button>
+        <button 
+          className={`${styles.portalItem} ${currentPortal === 'client' ? styles.active : ''}`}
+          onClick={() => window.location.href = '#client'}
+        >
+          <User size={20} />
+          {!collapsed && <span>Client</span>}
+        </button>
+        <button 
+          className={`${styles.portalItem} ${currentPortal === 'prestataire' ? styles.active : ''}`}
+          onClick={() => window.location.href = '#prestataire'}
+        >
+          <Briefcase size={20} />
+          {!collapsed && <span>Prestataire</span>}
+        </button>
+        <button 
+          className={`${styles.portalItem} ${currentPortal === 'revendeur' ? styles.active : ''}`}
+          onClick={() => window.location.href = '#revendeur'}
+        >
+          <ShoppingCart size={20} />
+          {!collapsed && <span>Revendeur</span>}
+        </button>
+      </div>
 
       {/* Portal Header */}
       <div className={styles.portalHeader} style={{ '--portal-color': portal.color }}>

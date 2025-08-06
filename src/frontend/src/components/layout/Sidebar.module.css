@@ -1,17 +1,16 @@
 .sidebar {
   position: fixed;
   left: 0;
-  top: 56px;
+  top: 0; /* COMMENCE À 0 */
   bottom: 0;
   width: 260px;
+  height: 100vh; /* PLEINE HAUTEUR */
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 100;
-  overflow: hidden;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: width 0.3s;
 }
 
 .sidebar.collapsed {
@@ -99,34 +98,38 @@
   color: white;
 }
 
-/* Toggle button plus beau */
+/* Bouton toggle VISIBLE et FONCTIONNEL */
 .toggleBtn {
-  position: fixed;
-  left: 244px; /* À la limite du sidebar */
-  top: 80px; /* Plus bas */
-  width: 36px;
-  height: 36px;
-  background: white;
-  border: 2px solid #E5E7EB;
-  border-radius: 8px;
+  position: absolute;
+  right: -20px;
+  top: 80px;
+  width: 40px;
+  height: 40px;
+  background: #6366F1;
+  border: 2px solid white;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6366F1;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 1001;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
 }
 
 .toggleBtn:hover {
-  background: #6366F1;
-  color: white;
-  transform: translateX(2px);
+  background: #4F46E5;
+  transform: scale(1.1);
 }
 
-.sidebar.collapsed + .toggleBtn {
-  left: 64px;
+/* État collapsed */
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar.collapsed .toggleBtn {
+  right: -20px; /* Reste visible même collapsed */
 }
 
 /* Portal Header */
@@ -318,4 +321,64 @@
 
 .nav::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Navigation entre portails */
+.portalNav {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.portalNav .portalTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.portalItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.portalItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.portalItem.active {
+  background: rgba(99, 102, 241, 0.2);
+  color: white;
+}
+
+.portalItem svg {
+  flex-shrink: 0;
+}
+
+.collapsed .portalNav .portalTitle {
+  display: none;
+}
+
+.collapsed .portalItem {
+  justify-content: center;
+  padding: 10px;
+}
+
+.collapsed .portalItem span {
+  display: none;
 }

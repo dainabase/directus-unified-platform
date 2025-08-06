@@ -80,28 +80,24 @@
   letter-spacing: 1px;
 }
 
-/* Améliorer le contraste général */
+/* Titres simples sans bloc autour */
 .columnsHeader {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 32px;
-  margin: 32px 0 24px 0;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 24px 0 16px 0;
+  /* PAS de background, PAS de padding, PAS de border */
 }
 
-/* Titres des colonnes - TRÈS VISIBLES */
+/* Titres simples sans bloc autour */
 .columnMainTitle {
-  font-size: 24px;
-  font-weight: 800;
-  color: #0F172A; /* Très sombre pour être très visible */
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E293B;
   margin: 0;
-  padding-bottom: 16px;
-  border-bottom: 3px solid #6366F1;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #6366F1;
+  /* PAS de background */
 }
 
 .headerActions {
@@ -151,8 +147,8 @@
 .commandCenter {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 16px; /* RÉDUIT de 24px à 16px */
+  margin-bottom: 24px;
 }
 
 .commandBlock {
@@ -294,87 +290,66 @@
   font-size: 14px;
 }
 
-/* Section Métriques avec titre externe */
-.metricsSection {
-  margin: 32px 0;
+/* Métriques en ligne simple */
+.metricsRow {
+  margin: 24px 0;
 }
 
 .metricsTitle {
-  font-size: 24px;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 16px 0;
-  padding-bottom: 16px;
-  border-bottom: 3px solid #6366F1;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #6366F1;
 }
 
-.metricsGrid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-}
-
-.metricCard {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 12px;
+.metricsLine {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.metricItem {
+  flex: 1;
   text-align: center;
-  transition: all 0.3s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.metricCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-  border-color: #6366F1;
-}
-
-.metricIcon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-  border-radius: 10px;
-  margin-bottom: 12px;
-  color: white;
-}
-
-.metricContent {
-  width: 100%;
+.metricItem:last-child {
+  border-right: none;
 }
 
 .metricLabel {
-  font-size: 11px;
-  font-weight: 700;
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
   color: #64748B;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .metricValue {
-  font-size: 20px;
-  font-weight: 800;
-  color: #0F172A;
-  margin-bottom: 8px;
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 2px;
 }
 
 .metricTrend {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
 }
 
-.trendUp { color: #10B981; }
-.trendDown { color: #EF4444; }
-.trendNeutral { color: #6B7280; }
+.trend-up { color: #10B981; }
+.trend-down { color: #EF4444; }
+.trend-neutral { color: #6B7280; }
 
 /* Grille principale sans overlap */
 .mainGrid {

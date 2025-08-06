@@ -59,8 +59,9 @@ function App() {
         style={{ 
           marginLeft: sidebarCollapsed ? '80px' : '260px',
           transition: 'margin-left 0.3s',
-          padding: '20px',
-          minHeight: '100vh'
+          padding: '32px',
+          minHeight: '100vh',
+          background: 'transparent' // Pas de fond, on voit le gradient du body
         }}
       >
         <CurrentDashboard selectedCompany={selectedCompany} />

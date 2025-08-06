@@ -19,11 +19,6 @@ const queryClient = new QueryClient({
   },
 })
 
-// Ajouter un fond gradient au body
-document.body.style.minHeight = '100vh'
-document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-document.body.style.backgroundAttachment = 'fixed'
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

@@ -1,6 +1,11 @@
+import demoData from './demoData'
+
 // Configuration Directus avec gestion d'erreurs avancée
 const DIRECTUS_URL = import.meta.env.VITE_API_URL || 'http://localhost:8055'
 const DIRECTUS_TOKEN = import.meta.env.VITE_API_TOKEN || ''
+
+// Mode démo si pas de connexion Directus
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true'
 
 class DirectusAPI {
   constructor() {
@@ -198,6 +203,13 @@ class DirectusAPI {
 
   // === DASHBOARD DATA AGGREGÉE ===
   async getDashboardData(company = 'all') {
+    // Si mode démo ou erreur, retourner les données de démo
+    if (DEMO_MODE || !this.token) {
+      console.log('🎭 Mode Démo activé - Utilisation des données de démonstration')
+      return Promise.resolve(demoData)
+    }
+    
+    // Sinon, code original...
     try {
       const [
         metrics,
@@ -241,7 +253,8 @@ class DirectusAPI {
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
-      throw error
+      console.log('🎭 Basculement sur les données de démonstration')
+      return Promise.resolve(demoData)
     }
   }
 }

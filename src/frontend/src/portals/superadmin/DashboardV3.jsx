@@ -443,7 +443,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                     </span>
                   </div>
                   <div className={styles.invoiceStat}>
-                    <span>En retard (>30j)</span>
+                    <span>En retard (&gt;30j)</span>
                     <span className={styles.amountDanger}>
                       €{((dashboardData?.invoices?.totalOverdue || 0) / 1000).toFixed(0)}K
                     </span>

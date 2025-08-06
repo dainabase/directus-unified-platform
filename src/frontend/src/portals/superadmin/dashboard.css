@@ -1,0 +1,44 @@
+/* Dashboard SuperAdmin Styles */
+.timeline-marker {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.metric-group {
+  margin-bottom: 1.5rem;
+}
+
+.metric-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Custom scrollbar for KPI sidebar */
+.col-lg-4 .card-body {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.col-lg-4 .card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.col-lg-4 .card-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.col-lg-4 .card-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.col-lg-4 .card-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1199px) {
+  .col-lg-4 .card-body {
+    max-height: none;
+  }
+}

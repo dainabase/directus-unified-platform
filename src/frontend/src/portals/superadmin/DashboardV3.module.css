@@ -1,0 +1,454 @@
+/* Dashboard V3 Premium Styles */
+.dashboard {
+  padding: 20px;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+}
+
+.refreshButton,
+.settingsButton {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.refreshButton:hover,
+.settingsButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.refreshButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Command Section */
+.commandSection {
+  margin-bottom: 32px;
+}
+
+/* KPI Row */
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.kpiCard {
+  cursor: pointer;
+}
+
+/* Main Grid */
+.mainGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cards */
+.card {
+  padding: 0 !important;
+}
+
+.cardHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  padding: 4px 12px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #60A5FA;
+}
+
+.value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #10B981;
+}
+
+.cardContent {
+  padding: 20px;
+}
+
+/* Tasks */
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.taskItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.taskPriority {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EF4444;
+  color: white;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.taskContent {
+  flex: 1;
+}
+
+.taskName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.taskDeadline {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Projects */
+.projectsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.projectItem {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.projectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.projectName {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.projectStatus {
+  padding: 2px 8px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #10B981;
+  text-transform: uppercase;
+}
+
+.projectProgress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Pipeline */
+.pipelineStats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.stageStat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.stageIndicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.stageName {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stageValue {
+  font-weight: 600;
+  color: white;
+}
+
+/* Marketing */
+.marketingMetrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.metricRow:last-child {
+  border-bottom: none;
+}
+
+.metricValue {
+  font-weight: 600;
+  color: white;
+}
+
+/* Cash Flow */
+.cashStats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cashStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cashStatItem span:first-child {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.positive {
+  color: #10B981;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.negative {
+  color: #EF4444;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Invoices */
+.invoicesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.invoiceStat {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.amount {
+  font-weight: 700;
+  color: #F59E0B;
+  font-size: 18px;
+}
+
+.amountDanger {
+  font-weight: 700;
+  color: #EF4444;
+  font-size: 18px;
+}
+
+.invoiceItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.invoiceClient {
+  color: white;
+  font-weight: 500;
+}
+
+.invoiceAmount {
+  color: #EF4444;
+  font-weight: 600;
+}
+
+.actionButton {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Loading & Error States */
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: white;
+  gap: 16px;
+}
+
+.retryButton {
+  padding: 10px 24px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retryButton:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .kpiRow {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .dashboard {
+    padding: 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+}

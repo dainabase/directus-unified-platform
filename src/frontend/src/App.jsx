@@ -87,9 +87,9 @@ function App() {
                           e.preventDefault()
                           setCurrentPortal(key)
                         }}
+                        style={{ color: 'white' }}
                       >
-                        <i className={`ti ti-${portal.icon} me-2`}></i>
-                        {portal.name}
+                        {portal.icon} {portal.name}
                       </a>
                     </li>
                   ))}
@@ -132,6 +132,7 @@ function App() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

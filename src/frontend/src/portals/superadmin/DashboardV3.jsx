@@ -276,24 +276,35 @@ const DashboardV3 = ({ selectedCompany }) => {
         </motion.div>
       </div>
       
-      {/* KPIs SÉPARÉS - PAS dans les colonnes */}
-      <div className={styles.kpiContainer}>
-        <h2 className={styles.kpiTitle}>Métriques Clés</h2>
-        <div className={styles.kpiSection}>
-          {Object.entries(metrics).map(([key, metric]) => (
-            <div key={key} className={styles.kpiItem}>
-              <div className={styles.kpiIcon}>
-                {getKPIIcon(key)}
+      {/* Section Métriques Clés avec titre externe */}
+      <div className={styles.metricsSection}>
+        <h2 className={styles.metricsTitle}>MÉTRIQUES CLÉS</h2>
+        <div className={styles.metricsGrid}>
+          {Object.entries(metrics).map(([key, metric], index) => (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + index * 0.05 }}
+              className={styles.metricCard}
+            >
+              <div className={styles.metricIcon}>
+                {getMetricIcon(key)}
               </div>
-              <div className={styles.kpiContent}>
-                <div className={styles.kpiLabel}>{getKPILabel(key)}</div>
-                <div className={styles.kpiValue}>{metric.formatted}</div>
-                <div className={styles.kpiTrend}>
-                  {metric.trend === 'up' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-                  <span>{metric.trend === 'up' ? '+12%' : '-5%'}</span>
+              <div className={styles.metricContent}>
+                <div className={styles.metricLabel}>{key.toUpperCase()}</div>
+                <div className={styles.metricValue}>{metric.formatted}</div>
+                <div className={styles.metricTrend}>
+                  {metric.trend === 'up' ? (
+                    <span className={styles.trendUp}>↑ +12%</span>
+                  ) : metric.trend === 'down' ? (
+                    <span className={styles.trendDown}>↓ -5%</span>
+                  ) : (
+                    <span className={styles.trendNeutral}>→ 0%</span>
+                  )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -534,8 +545,8 @@ const DashboardV3 = ({ selectedCompany }) => {
   )
 }
 
-// Helper pour les icônes des KPIs
-const getKPIIcon = (key) => {
+// Helper function for metric icons
+const getMetricIcon = (key) => {
   const icons = {
     runway: <Wallet size={20} />,
     arr: <TrendingUp size={20} />,
@@ -545,19 +556,6 @@ const getKPIIcon = (key) => {
     nps: <Award size={20} />
   }
   return icons[key] || <BarChart3 size={20} />
-}
-
-// Helper pour les labels des KPIs
-const getKPILabel = (key) => {
-  const labels = {
-    runway: 'Cash Runway',
-    arr: 'ARR',
-    mrr: 'MRR',
-    ebitda: 'EBITDA Margin',
-    ltvcac: 'LTV:CAC',
-    nps: 'NPS Score'
-  }
-  return labels[key] || key.toUpperCase()
 }
 
 export default DashboardV3

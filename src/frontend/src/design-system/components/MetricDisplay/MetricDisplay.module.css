@@ -1,0 +1,108 @@
+.metricDisplay {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.valueContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-weight: 700;
+  color: white;
+}
+
+.prefix,
+.suffix {
+  font-size: 0.75em;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Sizes */
+.size-small .value { font-size: 24px; }
+.size-medium .value { font-size: 32px; }
+.size-large .value { font-size: 48px; }
+
+/* Trend */
+.trendContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.trendIconUp {
+  width: 16px;
+  height: 16px;
+  color: #10B981;
+}
+
+.trendIconDown {
+  width: 16px;
+  height: 16px;
+  color: #EF4444;
+}
+
+.trendIconNeutral {
+  width: 16px;
+  height: 16px;
+  color: #6B7280;
+}
+
+.trendValue {
+  font-weight: 600;
+}
+
+.trend-up { color: #10B981; }
+.trend-down { color: #EF4444; }
+.trend-neutral { color: #6B7280; }
+
+.trendLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+/* Sparkline */
+.sparklineContainer {
+  margin-top: 12px;
+  height: 40px;
+}
+
+/* Variants */
+.variant-success .value { color: #10B981; }
+.variant-warning .value { color: #F59E0B; }
+.variant-danger .value { color: #EF4444; }
+.variant-info .value { color: #3B82F6; }

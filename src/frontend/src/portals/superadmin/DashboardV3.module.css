@@ -36,10 +36,10 @@
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Dashboard Container */
+/* Réduire l'espace avec le sidebar */
 .dashboard {
   margin-left: 260px;
-  padding: 24px;
+  padding: 16px 24px; /* Réduit de 24px à 16px en haut */
   min-height: 100vh;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: fadeIn 0.5s ease-out;
@@ -54,25 +54,37 @@
   to { opacity: 1; }
 }
 
-/* Header */
+/* Header simplifié */
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-  gap: 16px;
+  justify-content: flex-end;
+  margin-bottom: 16px;
 }
 
-.title {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--text-primary);
+/* Titre principal */
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Titres des colonnes alignés */
+.columnsHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  margin: 32px 0 20px 0;
+}
+
+.columnMainTitle {
+  font-size: 20px; /* Même taille que l'ancien "Dashboard SuperAdmin" */
+  font-weight: 700;
+  color: #1E293B;
   margin: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #6366F1;
 }
 
 .headerActions {
@@ -265,69 +277,71 @@
   font-size: 14px;
 }
 
-/* KPI Row - Grille fixe */
-.kpiRow {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+/* KPIs en ligne horizontale sous les titres */
+.kpiSection {
+  display: flex;
+  justify-content: space-between;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
 }
 
-@media (max-width: 1400px) {
-  .kpiRow {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.kpiItem {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
-@media (max-width: 768px) {
-  .kpiRow {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.kpiLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-/* KPI Cards au-dessus - hauteur réduite */
-.kpiCard {
-  cursor: pointer;
-  height: 100px !important;
-  padding: 16px !important;
+.kpiValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 4px;
 }
 
-/* Grille principale avec 3 colonnes égales */
+.kpiTrend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #10B981;
+}
+
+/* Grille principale sans overlap */
 .mainGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 32px;
-  margin-top: 24px;
+  margin-top: 0; /* Plus de margin-top car titres au-dessus */
 }
 
-/* Colonnes avec titre */
+/* Colonnes sans titre (déjà au-dessus) */
 .column {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.columnTitle {
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-secondary);
-  margin: 0 0 16px 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--primary);
-}
-
-.columnContent {
-  display: flex;
-  flex-direction: column;
   gap: 20px;
-  flex: 1;
 }
 
-/* Cards avec fond plus clair */
+/* Cards restent pareilles */
 .card {
-  background: var(--bg-card) !important;
+  height: 320px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(12px) !important;
   border: 1px solid var(--border-color) !important;
   box-shadow: var(--shadow) !important;
@@ -337,7 +351,6 @@
   display: flex;
   flex-direction: column;
   padding: 0 !important;
-  height: 320px !important; /* Hauteur fixe pour TOUS les blocs */
 }
 
 .cardHeader {
@@ -756,6 +769,17 @@
     grid-template-columns: 1fr;
   }
   
+  .columnsHeader {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .kpiSection {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
   .dashboard {
     margin-left: 80px;
   }
@@ -773,16 +797,25 @@
     margin-left: 0;
   }
   
-  .title {
-    font-size: 24px;
+  .pageTitle {
+    font-size: 20px;
+  }
+  
+  .columnsHeader {
+    margin: 16px 0 12px 0;
+  }
+  
+  .columnMainTitle {
+    font-size: 18px;
+  }
+  
+  .kpiSection {
+    margin-bottom: 16px;
+    padding: 12px;
   }
   
   .mainGrid {
     gap: 16px;
-  }
-  
-  .kpiRow {
-    gap: 12px;
   }
   
   .metricsGrid {

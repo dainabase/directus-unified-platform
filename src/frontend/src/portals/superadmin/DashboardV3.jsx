@@ -139,16 +139,8 @@ const DashboardV3 = ({ selectedCompany }) => {
   
   return (
     <div className={`${styles.dashboard} ${darkMode ? styles.dark : ''}`}>
-      {/* Header avec actions */}
+      {/* Header simplifié - juste les boutons */}
       <div className={styles.header}>
-        <motion.h1 
-          className={styles.title}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          Dashboard SuperAdmin
-        </motion.h1>
-        
         <div className={styles.headerActions}>
           <button 
             className={styles.refreshButton}
@@ -159,22 +151,16 @@ const DashboardV3 = ({ selectedCompany }) => {
             {isRefreshing ? 'Actualisation...' : 'Actualiser'}
           </button>
           
-          <button 
-            className={styles.themeToggle}
-            onClick={() => setDarkMode(!darkMode)}
-            title={darkMode ? 'Mode clair' : 'Mode sombre'}
-          >
-            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          
           <button className={styles.settingsButton}>
             <Settings />
           </button>
         </div>
       </div>
       
-      {/* Command Center - 3 blocs séparés */}
-      <div className={styles.commandCenter}>
+      {/* Command Center avec titre */}
+      <div className={styles.commandSection}>
+        <h1 className={styles.pageTitle}>Centre de Commande</h1>
+        <div className={styles.commandCenter}>
         {/* Bloc 1: Alertes */}
         <motion.div 
           className={styles.commandBlock}
@@ -288,33 +274,32 @@ const DashboardV3 = ({ selectedCompany }) => {
             </div>
           </GlassCard>
         </motion.div>
+        </div>
       </div>
       
-      {/* KPI Cards Row */}
-      <div className={styles.kpiRow}>
+      {/* Titres des colonnes au même niveau visuel */}
+      <div className={styles.columnsHeader}>
+        <h2 className={styles.columnMainTitle}>OPÉRATIONNEL</h2>
+        <h2 className={styles.columnMainTitle}>COMMERCIAL & MARKETING</h2>
+        <h2 className={styles.columnMainTitle}>FINANCE</h2>
+      </div>
+
+      {/* KPIs déplacés APRÈS les titres */}
+      <div className={styles.kpiSection}>
         {Object.entries(metrics).map(([key, metric], index) => (
           <motion.div
             key={key}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 + index * 0.05 }}
-            className={styles.kpiCard}
+            className={styles.kpiItem}
           >
-            <GlassCard 
-              variant="colored" 
-              hover={true}
-              onClick={() => setActiveMetric(key)}
-            >
-              <MetricDisplay
-                label={key.toUpperCase()}
-                value={metric.formatted}
-                trend={metric.trend}
-                trendValue={metric.trend === 'up' ? '+12%' : '-5%'}
-                icon={getMetricIcon(key)}
-                size="medium"
-                animated={true}
-              />
-            </GlassCard>
+            <div className={styles.kpiLabel}>{key.toUpperCase()}</div>
+            <div className={styles.kpiValue}>{metric.formatted}</div>
+            <div className={styles.kpiTrend}>
+              {metric.trend === 'up' ? '↑' : metric.trend === 'down' ? '↓' : '→'}
+              <span>{metric.trend === 'up' ? '+12%' : '-5%'}</span>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -324,8 +309,6 @@ const DashboardV3 = ({ selectedCompany }) => {
         
         {/* Colonne 1: OPÉRATIONNEL */}
         <div className={styles.column}>
-          <h2 className={styles.columnTitle}>OPÉRATIONNEL</h2>
-          <div className={styles.columnContent}>
             {/* Bloc 1: Tâches & Actions */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
@@ -394,14 +377,10 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               </div>
             </GlassCard>
-            
-          </div>
         </div>
         
         {/* Colonne 2: COMMERCIAL & MARKETING */}
         <div className={styles.column}>
-          <h2 className={styles.columnTitle}>COMMERCIAL & MARKETING</h2>
-          <div className={styles.columnContent}>
             {/* Bloc 1: Pipeline Commercial */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
@@ -475,14 +454,10 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               </div>
             </GlassCard>
-            
-          </div>
         </div>
         
         {/* Colonne 3: FINANCE */}
         <div className={styles.column}>
-          <h2 className={styles.columnTitle}>FINANCE</h2>
-          <div className={styles.columnContent}>
             {/* Bloc 1: Métriques Financières (au lieu de Cash Flow) */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
@@ -552,8 +527,6 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </button>
               </div>
             </GlassCard>
-            
-          </div>
         </div>
       </div>
     </div>

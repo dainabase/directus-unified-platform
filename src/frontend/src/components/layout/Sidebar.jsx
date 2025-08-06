@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import styles from './Sidebar.module.css'
 
-const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {} }) => {
+const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {}, selectedCompany, onCompanyChange }) => {
   const menuItems = {
     superadmin: [
       { section: 'CRÉER', items: [
@@ -123,6 +123,24 @@ const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {} }) 
         <Building2 size={32} className={styles.logoIcon} />
         {!collapsed && <span className={styles.logoText}>DAINAMICS</span>}
       </div>
+
+      {/* Sélecteur d'entreprise dans le sidebar */}
+      {!collapsed && (
+        <div className={styles.companySelector}>
+          <select 
+            className={styles.companyDropdown}
+            value={selectedCompany || 'all'}
+            onChange={(e) => onCompanyChange && onCompanyChange(e.target.value)}
+          >
+            <option value="all">📊 Vue Consolidée</option>
+            <option value="hypervisual">HYPERVISUAL</option>
+            <option value="dainamics">DAINAMICS</option>
+            <option value="lexaia">LEXAIA</option>
+            <option value="enki">ENKI REALTY</option>
+            <option value="takeout">TAKEOUT</option>
+          </select>
+        </div>
+      )}
 
       {/* Toggle Button */}
       {setCollapsed && (

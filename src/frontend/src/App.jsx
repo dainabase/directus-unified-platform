@@ -39,14 +39,6 @@ function App() {
     }
   }
 
-  const companies = [
-    { id: 'all', name: 'Vue Consolidée', icon: <Building2 size={16} /> },
-    { id: 'hypervisual', name: 'HYPERVISUAL' },
-    { id: 'dainamics', name: 'DAINAMICS' },
-    { id: 'lexaia', name: 'LEXAIA' },
-    { id: 'enki', name: 'ENKI REALTY' },
-    { id: 'takeout', name: 'TAKEOUT' }
-  ]
 
   const CurrentDashboard = portals[currentPortal].component
 
@@ -110,26 +102,6 @@ function App() {
           
           <div className="navbar-nav flex-row order-md-last">
             <div className="d-flex align-items-center gap-3">
-              {/* Company Selector */}
-              <select 
-                className="form-select form-select-sm"
-                value={selectedCompany}
-                onChange={(e) => setSelectedCompany(e.target.value)}
-                style={{ 
-                  width: '180px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: 'white',
-                  backdropFilter: 'blur(10px)'
-                }}
-              >
-                {companies.map(company => (
-                  <option key={company.id} value={company.id} style={{ background: '#1e293b' }}>
-                    {company.icon && <span style={{ marginRight: '8px' }}>{company.icon}</span>}
-                    {company.name}
-                  </option>
-                ))}
-              </select>
               
               {/* Portal Selector */}
               <div className="dropdown">
@@ -194,6 +166,8 @@ function App() {
           currentPortal={currentPortal} 
           collapsed={sidebarCollapsed}
           setCollapsed={setSidebarCollapsed}
+          selectedCompany={selectedCompany}
+          onCompanyChange={setSelectedCompany}
         />
         
         {/* Main Content */}

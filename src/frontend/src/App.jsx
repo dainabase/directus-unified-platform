@@ -4,7 +4,6 @@ import SuperAdminDashboard from './portals/superadmin/Dashboard'
 import ClientDashboard from './portals/client/Dashboard'
 import PrestataireDashboard from './portals/prestataire/Dashboard'
 import RevendeurDashboard from './portals/revendeur/Dashboard'
-import { Toaster } from 'react-hot-toast'
 
 function App() {
   const [currentPortal, setCurrentPortal] = useState('superadmin')
@@ -30,8 +29,6 @@ function App() {
 
   return (
     <>
-      <Toaster position="top-right" />
-      
       {/* Sidebar */}
       <Sidebar currentPortal={currentPortal} />
       

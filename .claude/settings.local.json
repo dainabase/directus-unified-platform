@@ -68,7 +68,10 @@
       "Bash(open:*)",
       "Bash(DIRECTUS_URL=\"http://localhost:8055\" DIRECTUS_TOKEN=\"e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW\" node node_modules/directus-mcp-server/server.js)",
       "Bash(mv:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

@@ -5,7 +5,7 @@ import {
   AlertCircle, CheckCircle, Clock, Zap,
   Package, FileText, CreditCard, BarChart3,
   RefreshCw, Settings, Calendar, Target,
-  Sun, Moon
+  Sun, Moon, Info
 } from 'lucide-react'
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar,
@@ -173,21 +173,122 @@ const DashboardV3 = ({ selectedCompany }) => {
         </div>
       </div>
       
-      {/* Command Center */}
-      <motion.div 
-        className={styles.commandSection}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <GlassCard variant="gradient" blur="strong">
-          <CommandCenter 
-            alerts={commandCenterData.alerts}
-            actions={commandCenterData.actions}
-            insights={commandCenterData.insights}
-          />
-        </GlassCard>
-      </motion.div>
+      {/* Command Center - 3 blocs séparés */}
+      <div className={styles.commandCenter}>
+        {/* Bloc 1: Alertes */}
+        <motion.div 
+          className={styles.commandBlock}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <GlassCard className={styles.commandCard}>
+            <div className={styles.commandHeader}>
+              <div className={styles.commandIcon}>
+                <AlertCircle size={20} className={styles.iconAlert} />
+              </div>
+              <div className={styles.commandInfo}>
+                <h3 className={styles.commandTitle}>Alertes</h3>
+                <p className={styles.commandCount}>{commandCenterData.alerts.length} actives</p>
+              </div>
+            </div>
+            <div className={styles.commandContent}>
+              {commandCenterData.alerts.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <CheckCircle size={32} className={styles.emptyIcon} />
+                  <p>Aucune alerte</p>
+                </div>
+              ) : (
+                <div className={styles.alertsList}>
+                  {commandCenterData.alerts.slice(0, 3).map((alert, index) => (
+                    <div key={alert.id || index} className={styles.alertItem}>
+                      <span className={styles.alertBadge}>{alert.type}</span>
+                      <span className={styles.alertText}>{alert.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </GlassCard>
+        </motion.div>
+
+        {/* Bloc 2: Actions */}
+        <motion.div 
+          className={styles.commandBlock}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <GlassCard className={styles.commandCard}>
+            <div className={styles.commandHeader}>
+              <div className={styles.commandIcon}>
+                <Zap size={20} className={styles.iconAction} />
+              </div>
+              <div className={styles.commandInfo}>
+                <h3 className={styles.commandTitle}>Actions</h3>
+                <p className={styles.commandCount}>{commandCenterData.actions.length} à traiter</p>
+              </div>
+            </div>
+            <div className={styles.commandContent}>
+              {commandCenterData.actions.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <CheckCircle size={32} className={styles.emptyIcon} />
+                  <p>Aucune action requise</p>
+                </div>
+              ) : (
+                <div className={styles.actionsList}>
+                  {commandCenterData.actions.slice(0, 3).map((action, index) => (
+                    <div key={action.id || index} className={styles.actionItem}>
+                      <span className={styles.actionPriority}>{action.priority}</span>
+                      <span className={styles.actionText}>{action.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </GlassCard>
+        </motion.div>
+
+        {/* Bloc 3: Insights */}
+        <motion.div 
+          className={styles.commandBlock}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <GlassCard className={styles.commandCard}>
+            <div className={styles.commandHeader}>
+              <div className={styles.commandIcon}>
+                <TrendingUp size={20} className={styles.iconInsight} />
+              </div>
+              <div className={styles.commandInfo}>
+                <h3 className={styles.commandTitle}>Insights IA</h3>
+                <p className={styles.commandCount}>{commandCenterData.insights.length} disponibles</p>
+              </div>
+            </div>
+            <div className={styles.commandContent}>
+              {commandCenterData.insights.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <Info size={32} className={styles.emptyIcon} />
+                  <p>Analyse en cours...</p>
+                </div>
+              ) : (
+                <div className={styles.insightsList}>
+                  {commandCenterData.insights.slice(0, 3).map((insight, index) => (
+                    <div key={insight.id || index} className={styles.insightItem}>
+                      <span className={styles.insightIcon}>💡</span>
+                      <div>
+                        <p className={styles.insightTitle}>{insight.title}</p>
+                        <p className={styles.insightValue}>{insight.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </GlassCard>
+        </motion.div>
+      </div>
       
       {/* KPI Cards Row */}
       <div className={styles.kpiRow}>

@@ -8,16 +8,17 @@ import RevendeurDashboard from './portals/revendeur/Dashboard'
 function App() {
   const [currentPortal, setCurrentPortal] = useState('superadmin')
   const [selectedCompany, setSelectedCompany] = useState('all')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const portals = {
-    superadmin: { name: 'SuperAdmin', icon: '🚀', component: SuperAdminDashboard },
-    client: { name: 'Client', icon: '👤', component: ClientDashboard },
-    prestataire: { name: 'Prestataire', icon: '🛠️', component: PrestataireDashboard },
-    revendeur: { name: 'Revendeur', icon: '🏪', component: RevendeurDashboard }
+    superadmin: { name: 'SuperAdmin', icon: 'shield', component: SuperAdminDashboard },
+    client: { name: 'Client', icon: 'user', component: ClientDashboard },
+    prestataire: { name: 'Prestataire', icon: 'briefcase', component: PrestataireDashboard },
+    revendeur: { name: 'Revendeur', icon: 'shopping-cart', component: RevendeurDashboard }
   }
 
   const companies = [
-    { id: 'all', name: '📊 Vue Consolidée' },
+    { id: 'all', name: 'Toutes les entreprises' },
     { id: 'hypervisual', name: 'HYPERVISUAL' },
     { id: 'dainamics', name: 'DAINAMICS' },
     { id: 'lexaia', name: 'LEXAIA' },
@@ -28,74 +29,109 @@ function App() {
   const CurrentDashboard = portals[currentPortal].component
 
   return (
-    <>
-      {/* Sidebar */}
-      <Sidebar currentPortal={currentPortal} />
-      
-      {/* Header */}
-      <header className="page-header">
+    <div className="page">
+      {/* Navbar Top */}
+      <header className="navbar navbar-expand-md navbar-dark bg-dark" style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        zIndex: 1000,
+        height: '56px'
+      }}>
         <div className="container-fluid">
-          <div className="row align-items-center">
-            <div className="col">
-              <h2 className="page-title m-0">
-                Dashboard {portals[currentPortal].name}
-              </h2>
-            </div>
-            <div className="col-auto">
-              <div className="d-flex align-items-center gap-3">
-                {/* Company Selector */}
-                <select 
-                  className="form-select"
-                  value={selectedCompany}
-                  onChange={(e) => setSelectedCompany(e.target.value)}
-                  style={{ minWidth: '180px' }}
+          <button 
+            className="navbar-toggler"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          
+          <h1 className="navbar-brand navbar-brand-autodark">
+            DIRECTUS PLATFORM
+          </h1>
+          
+          <div className="navbar-nav flex-row order-md-last">
+            <div className="d-flex align-items-center gap-3">
+              {/* Company Selector */}
+              <select 
+                className="form-select form-select-sm"
+                value={selectedCompany}
+                onChange={(e) => setSelectedCompany(e.target.value)}
+                style={{ width: '180px' }}
+              >
+                {companies.map(company => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+              
+              {/* Portal Selector */}
+              <div className="dropdown">
+                <button 
+                  className="btn btn-primary btn-sm dropdown-toggle d-flex align-items-center gap-2" 
+                  type="button" 
+                  data-bs-toggle="dropdown"
                 >
-                  {companies.map(company => (
-                    <option key={company.id} value={company.id}>
-                      {company.name}
-                    </option>
+                  <i className={`ti ti-${portals[currentPortal].icon}`}></i>
+                  {portals[currentPortal].name}
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  {Object.entries(portals).map(([key, portal]) => (
+                    <li key={key}>
+                      <a 
+                        className={`dropdown-item ${currentPortal === key ? 'active' : ''}`}
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setCurrentPortal(key)
+                        }}
+                      >
+                        <i className={`ti ti-${portal.icon} me-2`}></i>
+                        {portal.name}
+                      </a>
+                    </li>
                   ))}
-                </select>
-                
-                {/* Portal Selector */}
-                <div className="dropdown">
-                  <button 
-                    className="btn btn-primary dropdown-toggle" 
-                    type="button" 
-                    data-bs-toggle="dropdown"
-                  >
-                    {portals[currentPortal].icon} {portals[currentPortal].name}
-                  </button>
-                  <ul className="dropdown-menu">
-                    {Object.entries(portals).map(([key, portal]) => (
-                      <li key={key}>
-                        <a 
-                          className={`dropdown-item ${currentPortal === key ? 'active' : ''}`}
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setCurrentPortal(key)
-                          }}
-                        >
-                          {portal.icon} {portal.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </header>
-      
-      {/* Main Content */}
-      <main className="page-main">
-        <div className="page-body">
-          <CurrentDashboard selectedCompany={selectedCompany} />
+
+      {/* Layout with Sidebar */}
+      <div className="page-wrapper" style={{ paddingTop: '56px' }}>
+        {/* Sidebar */}
+        {sidebarOpen && (
+          <aside className="navbar navbar-vertical navbar-expand-lg" style={{
+            position: 'fixed',
+            top: '56px',
+            left: 0,
+            bottom: 0,
+            width: '250px',
+            backgroundColor: '#1e293b',
+            overflowY: 'auto',
+            zIndex: 100
+          }}>
+            <Sidebar currentPortal={currentPortal} />
+          </aside>
+        )}
+        
+        {/* Main Content */}
+        <div className="page-main" style={{
+          marginLeft: sidebarOpen ? '250px' : '0',
+          transition: 'margin-left 0.3s ease',
+          minHeight: 'calc(100vh - 56px)'
+        }}>
+          <div className="page-body">
+            <div className="container-fluid">
+              <CurrentDashboard selectedCompany={selectedCompany} />
+            </div>
+          </div>
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   )
 }
 

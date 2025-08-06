@@ -35,10 +35,10 @@ Directus Unified Platform est une solution complète de gestion d'entreprise mul
 
 ### Frontend
 - **React 18.2** - Framework UI
-- **Vite 5.0** - Build tool
-- **Recharts** - Visualisations de données
+- **Vite 5.4.19** - Build tool
+- **Recharts 2.10.0** - Visualisations de données
 - **Tabler.io** - Framework CSS
-- **React Hot Toast** - Notifications
+- **@tabler/icons-react** - Icônes
 
 ## 📦 Installation
 
@@ -75,7 +75,7 @@ npm install
 # Démarrer le serveur de développement
 npm run dev
 
-# L'application sera accessible sur http://localhost:3000
+# L'application sera accessible sur http://localhost:5173
 ```
 
 ## 🏗️ Architecture du Projet
@@ -108,12 +108,23 @@ directus-unified-platform/
 
 ## 🎨 Fonctionnalités
 
-### Dashboard SuperAdmin (CEO)
-- **Grille 5-3-3-3** : Layout optimisé pour vision globale
-- **Métriques KPI** : Cash Runway, ARR/MRR, EBITDA, LTV:CAC, NPS
-- **Sections thématiques** : Finance, Commercial, Opérationnel
-- **Graphiques Recharts** : Visualisations interactives
-- **Vue consolidée** : Toutes les entreprises du groupe
+### Dashboard SuperAdmin (CEO) - Architecture Validée ✅
+- **Bloc Tâches Importantes** : En haut avec barre rouge d'alerte
+- **3 Colonnes Thématiques** :
+  - 🔧 **Opérationnel** (cyan) - Tâches, projets, tickets, bugs
+  - 📈 **Commercial** (vert) - Pipeline, devis, leads, contrats
+  - 💰 **Finance** (bleu) - Cash, factures, CA, marges
+- **5 KPIs CEO Stratégiques** (colonne droite) :
+  - Cash Runway avec alerte
+  - ARR/MRR avec évolution
+  - EBITDA Margin
+  - LTV:CAC Ratio
+  - NPS Global
+- **4 Sections Détaillées** (bas) :
+  - Revenus Mensuels (graphique)
+  - Top Clients (tableau)
+  - Activité Récente (timeline)
+  - Tâches Récentes (liste)
 
 ### Dashboard Client
 - **Suivi de projets** : Progression en temps réel
@@ -182,13 +193,70 @@ npm run build
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
+## 🐛 Dépannage
+
+### Problèmes Résolus
+
+#### 1. Erreur "react-hot-toast"
+**Problème**: Module "react-hot-toast" externalized for browser compatibility
+**Solution**: Import retiré de App.jsx car non utilisé
+
+#### 2. Port 5173 déjà utilisé
+**Solution**:
+```bash
+pkill -f "node.*vite"
+npm run dev -- --port 3000
+```
+
+#### 3. Application React ne s'affiche pas
+**Vérifications effectuées**:
+- ✅ Import CSS dans main.jsx
+- ✅ Simplification de App.jsx
+- ✅ Vérification du serveur Vite
+- ✅ Test avec composant basique
+
+**Solution finale**: Refonte complète de App.jsx avec structure layout correcte
+
+#### 4. Layout Header/Sidebar Cassé
+**Problème**: Chevauchement des éléments
+**Solution**: Positions CSS fixes avec z-index appropriés
+
+#### 5. Serveur s'arrête après que Claude Code termine
+**Problème**: Le serveur de développement s'arrête quand Claude Code finit son exécution
+**Solution**: Utiliser un terminal séparé pour maintenir le serveur actif
+```bash
+# Terminal dédié
+cd src/frontend
+npm run dev
+
+# Ou avec PM2 pour gestion avancée
+pm2 start npm --name "frontend-dev" -- run dev
+```
+**Documentation**: Voir [DEVELOPER_WORKFLOW_GUIDE.md](./DEVELOPER_WORKFLOW_GUIDE.md)
+
+### 📚 Documentation Complète
+- **[CLAUDE_CODE_ANALYSIS.md](./CLAUDE_CODE_ANALYSIS.md)** - Analyse complète pour Claude Code
+- **[TROUBLESHOOTING_GUIDE.md](./TROUBLESHOOTING_GUIDE.md)** - Guide de dépannage détaillé
+- **[DASHBOARD_CEO_IMPLEMENTATION.md](./DASHBOARD_CEO_IMPLEMENTATION.md)** - Implémentation Dashboard CEO
+- **[DASHBOARD_TECHNICAL_GUIDE.md](./src/frontend/DASHBOARD_TECHNICAL_GUIDE.md)** - Guide technique développeurs
+- **[DASHBOARD_USER_GUIDE.md](./DASHBOARD_USER_GUIDE.md)** - Guide d'utilisation pour dirigeants
+- **[DASHBOARD_CEO_HOTFIX.md](./DASHBOARD_CEO_HOTFIX.md)** - 🚨 Correction urgente conflits CSS
+- **[CSS_CONFLICTS_TROUBLESHOOTING.md](./CSS_CONFLICTS_TROUBLESHOOTING.md)** - Guide conflits CSS
+- **[DEBUG_HISTORY.md](./src/frontend/DEBUG_HISTORY.md)** - Historique des problèmes
+- **[SERVER_PERSISTENCE_ISSUE.md](./SERVER_PERSISTENCE_ISSUE.md)** - 🔴 Problème serveur qui s'arrête
+- **[DEVELOPER_WORKFLOW_GUIDE.md](./DEVELOPER_WORKFLOW_GUIDE.md)** - 🔄 Guide workflow développement
+- **[KEEP_SERVER_RUNNING.md](./src/frontend/KEEP_SERVER_RUNNING.md)** - 🚀 Maintenir serveur actif
+
 ## 📊 État du Projet
 
 ### Frontend React ✅
 - **Portails créés**: 4/4 (100%)
-- **Dashboards fonctionnels**: 4/4 (100%)
+- **Dashboard SuperAdmin validé**: 100%
 - **Graphiques Recharts**: 100%
 - **Responsive design**: 100%
+- **Architecture 3 colonnes + KPIs**: ✅
+- **Application fonctionnelle**: ✅ (Port 3000)
+- **Tous les bugs résolus**: ✅
 
 ### Backend Directus 🔄
 - **Collections migrées**: 7/62 (11.3%)
@@ -196,6 +264,19 @@ docker-compose -f docker-compose.prod.yml up -d
 - **Dashboard importé**: 100%
 - **OCR fonctionnel**: 100%
 - **Endpoints adaptés**: 38/156 (24%)
+
+### 🚀 Dernière Session de Travail (2025-08-06)
+- ✅ Résolution définitive du problème react-hot-toast
+- ✅ Correction complète du layout (header/sidebar/content)
+- ✅ **Dashboard CEO Validé** avec structure 3 colonnes + KPI sidebar
+- ✅ **5 KPIs CEO** avec sparklines Recharts interactives
+- ✅ **Graphique Cash Flow** 7 jours avec AreaChart
+- ✅ **3 Alertes prioritaires** avec système de couleurs
+- ✅ **🚨 HOTFIX Dashboard CEO** - Résolution conflits CSS et affichage
+- ✅ **Structure HTML optimisée** - Double wrapping résolu
+- ✅ **CSS Tabler natif** - Conflits custom résolus
+- ✅ Sélecteurs d'entreprise et portail opérationnels
+- ✅ Application stable sur http://localhost:3000
 
 ## 🧪 Tests
 
@@ -222,18 +303,28 @@ npm run test:coverage
 
 1. Fork le projet
 2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
+3. Commit les changements (`git commit -m 'feat: Add AmazingFeature'`)
 4. Push sur la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrir une Pull Request
 
+### Conventions de Commit
+- `feat:` Nouvelle fonctionnalité
+- `fix:` Correction de bug
+- `docs:` Documentation
+- `style:` Formatage, style
+- `refactor:` Refactoring code
+- `test:` Ajout de tests
+- `chore:` Maintenance
+
 ## 📝 Changelog
 
-### v2.0.0 (2024-12-06)
+### v2.0.0 (2025-08-06)
 - 🎉 Migration complète vers React 18
 - 📊 Intégration Recharts pour les visualisations
 - 🎨 Nouveau design avec Tabler.io
 - 🚀 4 portails distincts fonctionnels
 - ⚡ Performance optimisée avec Vite
+- ✅ Dashboard SuperAdmin avec architecture validée
 
 ### v1.0.0 (2024-11-01)
 - Version initiale avec Directus
@@ -255,6 +346,7 @@ Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de
 - 📧 Email: support@dainamics.ch
 - 💬 Discord: [Rejoindre le serveur](https://discord.gg/dainamics)
 - 📚 Documentation: [Wiki](https://github.com/dainabase/directus-unified-platform/wiki)
+- 🐛 Issues: [GitHub Issues](https://github.com/dainabase/directus-unified-platform/issues)
 
 ---
 

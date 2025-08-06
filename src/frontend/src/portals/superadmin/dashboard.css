@@ -42,3 +42,54 @@
     max-height: none;
   }
 }
+
+/* Timeline styles for activity */
+.timeline {
+  position: relative;
+  padding-left: 35px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.timeline-item:before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 20px;
+  height: calc(100% - 20px);
+  width: 2px;
+  background: #e5e7eb;
+}
+
+.timeline-item:last-child:before {
+  display: none;
+}
+
+.timeline-badge {
+  position: absolute;
+  left: -35px;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.timeline-content {
+  margin-left: 10px;
+}
+
+.timeline-time {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.timeline-text {
+  font-size: 14px;
+}

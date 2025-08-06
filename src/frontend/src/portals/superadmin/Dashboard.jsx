@@ -1,511 +1,386 @@
 import React from 'react'
 import { 
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend 
+  LineChart, Line, BarChart, Bar, AreaChart, Area,
+  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip 
 } from 'recharts'
 
 const SuperAdminDashboard = ({ selectedCompany }) => {
   // Données pour les graphiques
-  const revenueData = [
-    { month: 'Jan', 2024: 45000, 2023: 38000 },
-    { month: 'Fév', 2024: 52000, 2023: 42000 },
-    { month: 'Mar', 2024: 48000, 2023: 44000 },
-    { month: 'Avr', 2024: 61000, 2023: 50000 },
-    { month: 'Mai', 2024: 69000, 2023: 55000 },
-    { month: 'Jun', 2024: 72000, 2023: 58000 },
+  const cashFlowData = [
+    { day: 'Lun', entrees: 45, sorties: 32 },
+    { day: 'Mar', entrees: 52, sorties: 28 },
+    { day: 'Mer', entrees: 38, sorties: 35 },
+    { day: 'Jeu', entrees: 65, sorties: 40 },
+    { day: 'Ven', entrees: 48, sorties: 38 },
+    { day: 'Sam', entrees: 25, sorties: 20 },
+    { day: 'Dim', entrees: 15, sorties: 12 }
   ]
 
-  const projectsData = [
-    { month: 'Jan', actifs: 12, terminés: 8, enPause: 2 },
-    { month: 'Fév', actifs: 15, terminés: 10, enPause: 3 },
-    { month: 'Mar', actifs: 18, terminés: 12, enPause: 4 },
-    { month: 'Avr', actifs: 22, terminés: 15, enPause: 5 },
-    { month: 'Mai', actifs: 25, terminés: 18, enPause: 6 },
-    { month: 'Jun', actifs: 28, terminés: 20, enPause: 7 },
-  ]
+  const sparklineData = {
+    cashRunway: [7.5, 7.4, 7.3, 7.2, 7.3, 7.3, 7.3],
+    arr: [2.2, 2.3, 2.3, 2.4, 2.4, 2.4, 2.4],
+    ebitda: [17.2, 17.5, 17.8, 18.0, 18.2, 18.5, 18.5],
+    ltv: [3.8, 3.9, 4.0, 4.1, 4.1, 4.2, 4.2],
+    nps: [68, 69, 70, 71, 71, 72, 72]
+  }
 
-  const teamData = [
-    { name: 'Développement', valeur: 35 },
-    { name: 'Design', valeur: 25 },
-    { name: 'Marketing', valeur: 20 },
-    { name: 'Commercial', valeur: 20 },
-  ]
-
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444']
-
-  const kpiCards = [
-    { label: 'Revenue Total', value: '€357k', change: '+12.5%', trend: 'up' },
-    { label: 'Projets Actifs', value: '28', change: '+3', trend: 'up' },
-    { label: 'Clients Actifs', value: '156', change: '+8%', trend: 'up' },
-    { label: 'Taux Satisfaction', value: '94%', change: '+2%', trend: 'up' },
-    { label: 'Temps Moyen', value: '3.2j', change: '-0.5j', trend: 'down' },
-  ]
+  // Composant Sparkline réutilisable
+  const Sparkline = ({ data, color }) => (
+    <ResponsiveContainer width="100%" height={40}>
+      <LineChart data={data.map((value, index) => ({ value, index }))}>
+        <Line 
+          type="monotone" 
+          dataKey="value" 
+          stroke={color} 
+          strokeWidth={2}
+          dot={false}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  )
 
   return (
-    <div className="container-fluid">
-      {/* Alerte en haut */}
-      <div className="alert alert-info d-flex align-items-center mb-4" role="alert">
-        <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img">
-          <use xlinkHref="#info-fill"/>
-        </svg>
-        <div>
-          <strong>3 nouvelles missions</strong> ont été assignées aujourd'hui. 
-          <a href="#" className="alert-link ms-2">Voir les détails →</a>
-        </div>
-      </div>
-
-      {/* KPI Cards - Ligne de 5 */}
-      <div className="row g-3 mb-4">
-        {kpiCards.map((kpi, index) => (
-          <div key={index} className="col">
-            <div className="metric-card">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <span className="text-muted small">{kpi.label}</span>
-                <span className={`badge ${kpi.trend === 'up' ? 'bg-success' : 'bg-danger'} small`}>
-                  {kpi.change}
-                </span>
+    <>
+      {/* BLOC ALERTES EN HAUT */}
+        <div className="card mb-4">
+          <div className="card-body">
+            <h3 className="card-title mb-3">📢 Alertes & Actions Prioritaires</h3>
+            <div className="row g-3">
+              <div className="col-md-4">
+                <div className="alert alert-danger d-flex align-items-center mb-0">
+                  <div className="flex-fill">
+                    <h4 className="alert-title">3 actions urgentes</h4>
+                    <div className="text-secondary">À faire aujourd'hui</div>
+                  </div>
+                  <div className="h1 mb-0 ms-3">3</div>
+                </div>
               </div>
-              <h3 className="mb-0">{kpi.value}</h3>
+              <div className="col-md-4">
+                <div className="alert alert-warning d-flex align-items-center mb-0">
+                  <div className="flex-fill">
+                    <h4 className="alert-title">5 deadlines cette semaine</h4>
+                    <div className="text-secondary">2 projets critiques</div>
+                  </div>
+                  <div className="h1 mb-0 ms-3">5</div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="alert alert-info d-flex align-items-center mb-0">
+                  <div className="flex-fill">
+                    <h4 className="alert-title">2 alertes financières</h4>
+                    <div className="text-secondary">Factures impayées {'> 30j'}</div>
+                  </div>
+                  <div className="h1 mb-0 ms-3">2</div>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="row g-4">
-        {/* Colonne principale - 8 colonnes */}
-        <div className="col-lg-8">
-          {/* Ligne 1: 3 cards */}
-          <div className="row g-3 mb-4">
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Répartition Équipe</h5>
+        {/* GRILLE 4 COLONNES */}
+        <div className="row g-3">
+          {/* Colonne 1 : Opérationnel */}
+          <div className="col-lg-3">
+            {/* Bloc 1 : Tâches & Actions */}
+            <div className="card mb-3">
+              <div className="card-body">
+                <h4 className="card-title">📋 Tâches & Actions</h4>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Tâches totales actives</span>
+                    <span className="h3 mb-0">47</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Cette semaine</span>
+                    <span className="h4 mb-0">14</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">En retard</span>
+                    <span className="badge bg-danger">3</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">À faire aujourd'hui</span>
+                    <span className="h4 mb-0">5</span>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <ResponsiveContainer width="100%" height={280}>
-                    <PieChart>
-                      <Pie
-                        data={teamData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="valeur"
-                      >
-                        {teamData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="mt-3">
-                    {teamData.map((item, index) => (
-                      <div key={index} className="d-flex justify-content-between align-items-center mb-2">
-                        <div className="d-flex align-items-center">
-                          <div 
-                            className="rounded-circle me-2" 
-                            style={{ width: '10px', height: '10px', backgroundColor: COLORS[index] }}
-                          />
-                          <span className="small">{item.name}</span>
-                        </div>
-                        <span className="small fw-bold">{item.valeur}%</span>
-                      </div>
-                    ))}
+                <div className="mt-4">
+                  <h5 className="mb-2">TOP 3 PRIORITÉS</h5>
+                  <div className="list-group list-group-flush">
+                    <div className="list-group-item px-0 py-2">
+                      <small>1. Valider devis LEXAIA</small>
+                    </div>
+                    <div className="list-group-item px-0 py-2">
+                      <small>2. Call client ENKI</small>
+                    </div>
+                    <div className="list-group-item px-0 py-2">
+                      <small>3. Review code PR #234</small>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Projets par Statut</h5>
+
+            {/* Bloc 2 : Projets & Deliverables */}
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">📁 Projets & Deliverables</h4>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Projets actifs</span>
+                    <span className="h3 mb-0">8</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">En cours</span>
+                    <span className="badge bg-blue">5</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">En attente</span>
+                    <span className="badge bg-orange">3</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">Livraisons cette semaine</span>
+                    <span className="h4 mb-0">2</span>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <ResponsiveContainer width="100%" height={280}>
-                    <AreaChart data={projectsData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
+                <div className="mt-4">
+                  <h5 className="mb-2">PROCHAINS JALONS</h5>
+                  <div className="list-group list-group-flush">
+                    <div className="list-group-item px-0 py-2">
+                      <small>Ven: Livraison App Mobile</small>
+                    </div>
+                    <div className="list-group-item px-0 py-2">
+                      <small>Lun: Demo client HYPERVISUAL</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Colonne 2 : Commercial & Marketing */}
+          <div className="col-lg-3">
+            {/* Bloc 1 : Pipeline Commercial */}
+            <div className="card mb-3">
+              <div className="card-body">
+                <h4 className="card-title">🎯 Pipeline Commercial</h4>
+                <div className="h2 mb-3">€1.2M <small className="text-secondary">en gros</small></div>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">24 opportunités actives</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Devis actifs</span>
+                    <span>7 - €340K</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Taux conversion</span>
+                    <span className="text-success">32% ↑</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">Closing prévu ce mois</span>
+                    <span className="h4 mb-0">€450K</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="mb-2">HOT LEADS</h5>
+                  <div className="list-group list-group-flush">
+                    <div className="list-group-item px-0 py-2">
+                      <small>TechCorp - €125K - 80%</small>
+                    </div>
+                    <div className="list-group-item px-0 py-2">
+                      <small>StartupXYZ - €85K - 60%</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bloc 2 : Marketing & Acquisition */}
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">📊 Marketing & Acquisition</h4>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Visiteurs aujourd'hui</span>
+                    <span className="h4 mb-0">1,847</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Leads cette semaine</span>
+                    <span className="h4 mb-0">124</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Taux conversion</span>
+                    <span>6.7%</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">CAC ce mois</span>
+                    <span>€320</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="mb-2">TOP SOURCES</h5>
+                  <div className="mb-2">
+                    <div className="d-flex justify-content-between mb-1">
+                      <small>Google Ads</small>
+                      <small>45%</small>
+                    </div>
+                    <div className="progress" style={{ height: '8px' }}>
+                      <div className="progress-bar bg-primary" style={{ width: '45%' }}></div>
+                    </div>
+                  </div>
+                  <div className="mb-2">
+                    <div className="d-flex justify-content-between mb-1">
+                      <small>LinkedIn</small>
+                      <small>30%</small>
+                    </div>
+                    <div className="progress" style={{ height: '8px' }}>
+                      <div className="progress-bar bg-info" style={{ width: '30%' }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="d-flex justify-content-between mb-1">
+                      <small>Direct</small>
+                      <small>25%</small>
+                    </div>
+                    <div className="progress" style={{ height: '8px' }}>
+                      <div className="progress-bar bg-success" style={{ width: '25%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Colonne 3 : Finance & Comptabilité */}
+          <div className="col-lg-3">
+            {/* Bloc 1 : Trésorerie & Cash */}
+            <div className="card mb-3">
+              <div className="card-body">
+                <h4 className="card-title">💵 Trésorerie & Cash</h4>
+                <div className="h2 mb-3">€847K <small className="text-secondary">en gros</small></div>
+                <div className="mb-3">
+                  <div className="text-secondary mb-1">Cash disponible</div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Entrées prévues (7j)</span>
+                    <span className="text-success">+€127K</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Sorties prévues (7j)</span>
+                    <span className="text-danger">-€85K</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Burn rate mensuel</span>
+                    <span>€115K</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">Runway</span>
+                    <span className="badge bg-success">7.3 mois</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="mb-2">CASH FLOW 7 JOURS</h5>
+                  <ResponsiveContainer width="100%" height={120}>
+                    <AreaChart data={cashFlowData}>
+                      <Area type="monotone" dataKey="entrees" stackId="1" stroke="#2fb344" fill="#2fb344" />
+                      <Area type="monotone" dataKey="sorties" stackId="1" stroke="#d63939" fill="#d63939" />
+                      <XAxis dataKey="day" tick={{ fontSize: 10 }} />
                       <Tooltip />
-                      <Area type="monotone" dataKey="actifs" stackId="1" stroke="#3b82f6" fill="#3b82f6" />
-                      <Area type="monotone" dataKey="terminés" stackId="1" stroke="#10b981" fill="#10b981" />
-                      <Area type="monotone" dataKey="enPause" stackId="1" stroke="#f59e0b" fill="#f59e0b" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Performance Équipes</h5>
-                </div>
-                <div className="card-body">
-                  <div className="space-y-3">
-                    <div className="mb-3">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span className="small">Développement</span>
-                        <span className="small fw-bold">92%</span>
-                      </div>
-                      <div className="progress" style={{ height: '8px' }}>
-                        <div className="progress-bar bg-primary" style={{ width: '92%' }}></div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span className="small">Design</span>
-                        <span className="small fw-bold">88%</span>
-                      </div>
-                      <div className="progress" style={{ height: '8px' }}>
-                        <div className="progress-bar bg-success" style={{ width: '88%' }}></div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span className="small">Marketing</span>
-                        <span className="small fw-bold">79%</span>
-                      </div>
-                      <div className="progress" style={{ height: '8px' }}>
-                        <div className="progress-bar bg-warning" style={{ width: '79%' }}></div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div className="d-flex justify-content-between mb-1">
-                        <span className="small">Commercial</span>
-                        <span className="small fw-bold">95%</span>
-                      </div>
-                      <div className="progress" style={{ height: '8px' }}>
-                        <div className="progress-bar bg-info" style={{ width: '95%' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Ligne 2: 3 cards */}
-          <div className="row g-3 mb-4">
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Tâches Récentes</h5>
-                </div>
-                <div className="card-body">
-                  <div className="list-group list-group-flush">
-                    <div className="list-group-item px-0">
-                      <div className="d-flex align-items-start">
-                        <div className="badge bg-primary rounded-circle p-2 me-3">UI</div>
-                        <div className="flex-grow-1">
-                          <h6 className="mb-1">Refonte Dashboard</h6>
-                          <p className="text-muted small mb-0">HYPERVISUAL • En cours</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="list-group-item px-0">
-                      <div className="d-flex align-items-start">
-                        <div className="badge bg-success rounded-circle p-2 me-3">API</div>
-                        <div className="flex-grow-1">
-                          <h6 className="mb-1">Intégration Stripe</h6>
-                          <p className="text-muted small mb-0">LEXAIA • Terminé</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="list-group-item px-0">
-                      <div className="d-flex align-items-start">
-                        <div className="badge bg-warning rounded-circle p-2 me-3">SEO</div>
-                        <div className="flex-grow-1">
-                          <h6 className="mb-1">Optimisation Core Web</h6>
-                          <p className="text-muted small mb-0">DAINAMICS • En attente</p>
-                        </div>
-                      </div>
-                    </div>
+            {/* Bloc 2 : Factures & Paiements */}
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">📄 Factures & Paiements</h4>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">Factures impayées</span>
+                    <span>12 - €45K</span>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Activité Récente</h5>
-                </div>
-                <div className="card-body">
-                  <div className="timeline">
-                    <div className="timeline-item mb-3">
-                      <div className="d-flex">
-                        <div className="timeline-marker bg-primary rounded-circle p-1 me-3"></div>
-                        <div>
-                          <p className="mb-1">Nouveau client <strong>TechCorp</strong></p>
-                          <small className="text-muted">Il y a 2 heures</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="timeline-item mb-3">
-                      <div className="d-flex">
-                        <div className="timeline-marker bg-success rounded-circle p-1 me-3"></div>
-                        <div>
-                          <p className="mb-1">Projet <strong>E-commerce</strong> terminé</p>
-                          <small className="text-muted">Il y a 4 heures</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="timeline-item mb-3">
-                      <div className="d-flex">
-                        <div className="timeline-marker bg-warning rounded-circle p-1 me-3"></div>
-                        <div>
-                          <p className="mb-1">Facture #2024-089 payée</p>
-                          <small className="text-muted">Il y a 6 heures</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="timeline-item">
-                      <div className="d-flex">
-                        <div className="timeline-marker bg-info rounded-circle p-1 me-3"></div>
-                        <div>
-                          <p className="mb-1">5 nouveaux tickets support</p>
-                          <small className="text-muted">Il y a 8 heures</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Top Clients</h5>
-                </div>
-                <div className="card-body">
-                  <div className="space-y-3">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <div>
-                        <h6 className="mb-0">TechCorp</h6>
-                        <small className="text-muted">12 projets</small>
-                      </div>
-                      <span className="badge bg-primary">€45k</span>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <div>
-                        <h6 className="mb-0">StartupXYZ</h6>
-                        <small className="text-muted">8 projets</small>
-                      </div>
-                      <span className="badge bg-primary">€32k</span>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <div>
-                        <h6 className="mb-0">FinanceHub</h6>
-                        <small className="text-muted">6 projets</small>
-                      </div>
-                      <span className="badge bg-primary">€28k</span>
-                    </div>
+                  <div className="ps-3 mb-2">
                     <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h6 className="mb-0">MediaGroup</h6>
-                        <small className="text-muted">5 projets</small>
-                      </div>
-                      <span className="badge bg-primary">€22k</span>
+                      <small className="text-danger">{'> 30 jours'}</small>
+                      <small className="text-danger">3 - €18K</small>
                     </div>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-secondary">À émettre cette semaine</span>
+                    <span>8</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary">Paiements en attente</span>
+                    <span className="h4 mb-0">€127K</span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h5 className="mb-2">ACTIONS REQUISES</h5>
+                  <div className="d-grid gap-2">
+                    <button className="btn btn-sm btn-primary">Relancer factures</button>
+                    <button className="btn btn-sm btn-outline-primary">Émettre factures</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Ligne 3: 3 cards */}
-          <div className="row g-3">
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Revenue Mensuel</h5>
-                </div>
-                <div className="card-body">
-                  <ResponsiveContainer width="100%" height={280}>
-                    <BarChart data={revenueData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="2023" fill="#e5e7eb" />
-                      <Bar dataKey="2024" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Prochaines Échéances</h5>
-                </div>
-                <div className="card-body">
-                  <div className="list-group list-group-flush">
-                    <div className="list-group-item px-0">
-                      <div className="d-flex justify-content-between align-items-start">
-                        <div>
-                          <h6 className="mb-1">Livraison App Mobile</h6>
-                          <p className="text-muted small mb-0">Client: TechCorp</p>
-                        </div>
-                        <span className="badge bg-danger">2 jours</span>
-                      </div>
-                    </div>
-                    <div className="list-group-item px-0">
-                      <div className="d-flex justify-content-between align-items-start">
-                        <div>
-                          <h6 className="mb-1">Audit SEO</h6>
-                          <p className="text-muted small mb-0">Client: StartupXYZ</p>
-                        </div>
-                        <span className="badge bg-warning">5 jours</span>
-                      </div>
-                    </div>
-                    <div className="list-group-item px-0">
-                      <div className="d-flex justify-content-between align-items-start">
-                        <div>
-                          <h6 className="mb-1">Migration Cloud</h6>
-                          <p className="text-muted small mb-0">Client: FinanceHub</p>
-                        </div>
-                        <span className="badge bg-info">1 semaine</span>
-                      </div>
-                    </div>
+          {/* Colonne 4 : KPI Sidebar */}
+          <div className="col-lg-3">
+            <div className="card h-100">
+              <div className="card-body">
+                <h4 className="card-title text-center mb-4">MÉTRIQUES CEO</h4>
+                
+                {/* KPI 1: Cash Runway */}
+                <div className="mb-4">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-uppercase small text-secondary">CASH RUNWAY</span>
+                    <span className="h3 mb-0">7.3m</span>
                   </div>
+                  <Sparkline data={sparklineData.cashRunway} color="#f59f00" />
                 </div>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card" style={{ minHeight: '380px' }}>
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Ressources</h5>
+
+                {/* KPI 2: ARR / MRR */}
+                <div className="mb-4">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-uppercase small text-secondary">ARR / MRR</span>
+                    <span className="h3 mb-0">€2.4M</span>
+                  </div>
+                  <Sparkline data={sparklineData.arr} color="#2fb344" />
                 </div>
-                <div className="card-body">
-                  <div className="mb-4">
-                    <h6 className="mb-2">Serveurs</h6>
-                    <div className="row g-2">
-                      <div className="col-6">
-                        <div className="text-center p-3 bg-light rounded">
-                          <h4 className="mb-0 text-primary">87%</h4>
-                          <small className="text-muted">CPU</small>
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="text-center p-3 bg-light rounded">
-                          <h4 className="mb-0 text-success">64%</h4>
-                          <small className="text-muted">RAM</small>
-                        </div>
-                      </div>
-                    </div>
+
+                {/* KPI 3: EBITDA Margin */}
+                <div className="mb-4">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-uppercase small text-secondary">EBITDA MARGIN</span>
+                    <span className="h3 mb-0">18.5%</span>
                   </div>
-                  <div>
-                    <h6 className="mb-2">Stockage</h6>
-                    <div className="progress mb-2" style={{ height: '20px' }}>
-                      <div className="progress-bar bg-primary" style={{ width: '72%' }}>72%</div>
-                    </div>
-                    <small className="text-muted">432 GB / 600 GB utilisés</small>
+                  <Sparkline data={sparklineData.ebitda} color="#206bc4" />
+                </div>
+
+                {/* KPI 4: LTV:CAC Ratio */}
+                <div className="mb-4">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-uppercase small text-secondary">LTV:CAC RATIO</span>
+                    <span className="h3 mb-0">4.2:1</span>
                   </div>
+                  <Sparkline data={sparklineData.ltv} color="#ae3ec9" />
+                </div>
+
+                {/* KPI 5: NPS Global */}
+                <div className="mb-0">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="text-uppercase small text-secondary">NPS GLOBAL</span>
+                    <span className="h3 mb-0">72</span>
+                  </div>
+                  <Sparkline data={sparklineData.nps} color="#0ca678" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Colonne KPI latérale - 4 colonnes */}
-        <div className="col-lg-4">
-          <div className="card" style={{ minHeight: '100%' }}>
-            <div className="card-header">
-              <h5 className="card-title mb-0">📊 Métriques Clés</h5>
-            </div>
-            <div className="card-body">
-              {/* Evolution du CA */}
-              <div className="mb-4">
-                <h6 className="text-muted mb-3">Évolution CA (6 mois)</h6>
-                <ResponsiveContainer width="100%" height={200}>
-                  <LineChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="2024" stroke="#3b82f6" strokeWidth={2} />
-                    <Line type="monotone" dataKey="2023" stroke="#e5e7eb" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-
-              <hr className="my-4" />
-
-              {/* Métriques détaillées */}
-              <div className="space-y-4">
-                <div className="metric-group">
-                  <h6 className="text-muted mb-3">Finance</h6>
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between mb-1">
-                      <span className="small">MRR</span>
-                      <span className="small fw-bold">€68,400</span>
-                    </div>
-                    <div className="progress" style={{ height: '6px' }}>
-                      <div className="progress-bar bg-success" style={{ width: '85%' }}></div>
-                    </div>
-                  </div>
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between mb-1">
-                      <span className="small">ARR</span>
-                      <span className="small fw-bold">€820,800</span>
-                    </div>
-                    <div className="progress" style={{ height: '6px' }}>
-                      <div className="progress-bar bg-primary" style={{ width: '92%' }}></div>
-                    </div>
-                  </div>
-                </div>
-
-                <hr />
-
-                <div className="metric-group">
-                  <h6 className="text-muted mb-3">Opérations</h6>
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between mb-1">
-                      <span className="small">Tickets Résolus</span>
-                      <span className="small fw-bold">94%</span>
-                    </div>
-                    <div className="progress" style={{ height: '6px' }}>
-                      <div className="progress-bar bg-info" style={{ width: '94%' }}></div>
-                    </div>
-                  </div>
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between mb-1">
-                      <span className="small">Temps Réponse</span>
-                      <span className="small fw-bold">2.3h</span>
-                    </div>
-                    <div className="progress" style={{ height: '6px' }}>
-                      <div className="progress-bar bg-warning" style={{ width: '78%' }}></div>
-                    </div>
-                  </div>
-                </div>
-
-                <hr />
-
-                <div className="metric-group">
-                  <h6 className="text-muted mb-3">Équipe</h6>
-                  <div className="row g-2">
-                    <div className="col-6">
-                      <div className="text-center p-3 bg-light rounded">
-                        <h5 className="mb-0">42</h5>
-                        <small className="text-muted">Employés</small>
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="text-center p-3 bg-light rounded">
-                        <h5 className="mb-0">18</h5>
-                        <small className="text-muted">Freelances</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
 

@@ -70,7 +70,8 @@ const Sidebar = ({ currentPortal }) => {
   const menu = menuItems[currentPortal] || menuItems.superadmin
 
   return (
-    <aside className="navbar navbar-vertical navbar-expand-lg navbar-dark">
+    <aside className="navbar navbar-vertical navbar-expand-lg navbar-dark" 
+           style={{ background: '#1e293b' }}>
       <div className="container-fluid">
         <h1 className="navbar-brand text-white">
           {portalTitles[currentPortal]}

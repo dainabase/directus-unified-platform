@@ -71,7 +71,10 @@
       "Bash(git fetch:*)",
       "Bash(ls:*)",
       "Bash(rm:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(kill:*)",
+      "Bash(./dev.sh)"
     ],
     "deny": []
   }

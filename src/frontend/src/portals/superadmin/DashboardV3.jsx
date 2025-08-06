@@ -5,7 +5,8 @@ import {
   AlertCircle, CheckCircle, Clock, Zap,
   Package, FileText, CreditCard, BarChart3,
   RefreshCw, Settings, Calendar, Target,
-  Sun, Moon, Info
+  Sun, Moon, Info, TrendingDown,
+  ClipboardList, Folder, Wallet, Award
 } from 'lucide-react'
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar,
@@ -139,28 +140,27 @@ const DashboardV3 = ({ selectedCompany }) => {
   
   return (
     <div className={`${styles.dashboard} ${darkMode ? styles.dark : ''}`}>
-      {/* Header simplifié - juste les boutons */}
+      {/* Header avec titre à gauche et actions à droite */}
       <div className={styles.header}>
+        <h1 className={styles.title}>Centre de Commande</h1>
         <div className={styles.headerActions}>
           <button 
             className={styles.refreshButton}
             onClick={() => refreshDashboard()}
             disabled={isRefreshing}
           >
-            <RefreshCw className={isRefreshing ? styles.spinning : ''} />
-            {isRefreshing ? 'Actualisation...' : 'Actualiser'}
+            <RefreshCw className={isRefreshing ? styles.spinning : ''} size={18} />
+            <span>Actualiser</span>
           </button>
           
           <button className={styles.settingsButton}>
-            <Settings />
+            <Settings size={18} />
           </button>
         </div>
       </div>
       
-      {/* Command Center avec titre */}
-      <div className={styles.commandSection}>
-        <h1 className={styles.pageTitle}>Centre de Commande</h1>
-        <div className={styles.commandCenter}>
+      {/* 3 Blocs Command Center */}
+      <div className={styles.commandCenter}>
         {/* Bloc 1: Alertes */}
         <motion.div 
           className={styles.commandBlock}
@@ -262,7 +262,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                 <div className={styles.insightsList}>
                   {commandCenterData.insights.slice(0, 3).map((insight, index) => (
                     <div key={insight.id || index} className={styles.insightItem}>
-                      <span className={styles.insightIcon}>💡</span>
+                      <TrendingUp size={16} className={styles.insightIcon} />
                       <div>
                         <p className={styles.insightTitle}>{insight.title}</p>
                         <p className={styles.insightValue}>{insight.value}</p>
@@ -277,31 +277,33 @@ const DashboardV3 = ({ selectedCompany }) => {
         </div>
       </div>
       
-      {/* Titres des colonnes au même niveau visuel */}
+      {/* KPIs SÉPARÉS - PAS dans les colonnes */}
+      <div className={styles.kpiContainer}>
+        <h2 className={styles.kpiTitle}>Métriques Clés</h2>
+        <div className={styles.kpiSection}>
+          {Object.entries(metrics).map(([key, metric]) => (
+            <div key={key} className={styles.kpiItem}>
+              <div className={styles.kpiIcon}>
+                {getKPIIcon(key)}
+              </div>
+              <div className={styles.kpiContent}>
+                <div className={styles.kpiLabel}>{getKPILabel(key)}</div>
+                <div className={styles.kpiValue}>{metric.formatted}</div>
+                <div className={styles.kpiTrend}>
+                  {metric.trend === 'up' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                  <span>{metric.trend === 'up' ? '+12%' : '-5%'}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Titres des 3 colonnes */}
       <div className={styles.columnsHeader}>
         <h2 className={styles.columnMainTitle}>OPÉRATIONNEL</h2>
         <h2 className={styles.columnMainTitle}>COMMERCIAL & MARKETING</h2>
         <h2 className={styles.columnMainTitle}>FINANCE</h2>
-      </div>
-
-      {/* KPIs déplacés APRÈS les titres */}
-      <div className={styles.kpiSection}>
-        {Object.entries(metrics).map(([key, metric], index) => (
-          <motion.div
-            key={key}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 + index * 0.05 }}
-            className={styles.kpiItem}
-          >
-            <div className={styles.kpiLabel}>{key.toUpperCase()}</div>
-            <div className={styles.kpiValue}>{metric.formatted}</div>
-            <div className={styles.kpiTrend}>
-              {metric.trend === 'up' ? '↑' : metric.trend === 'down' ? '↓' : '→'}
-              <span>{metric.trend === 'up' ? '+12%' : '-5%'}</span>
-            </div>
-          </motion.div>
-        ))}
       </div>
       
       {/* Main Grid - 3 colonnes */}
@@ -312,7 +314,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 1: Tâches & Actions */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>📋 Tâches & Actions</h3>
+                <h3><ClipboardList size={18} /> Tâches & Actions</h3>
                 <span className={styles.badge}>
                   {dashboardData?.tasks?.total || 0} actives
                 </span>
@@ -346,7 +348,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 2: Projets Actifs */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>📁 Projets Actifs</h3>
+                <h3><Folder size={18} /> Projets Actifs</h3>
                 <span className={styles.badge}>
                   {dashboardData?.projects?.total || 0}
                 </span>
@@ -384,7 +386,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 1: Pipeline Commercial */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>🎯 Pipeline Commercial</h3>
+                <h3><Target size={18} /> Pipeline Commercial</h3>
                 <span className={styles.value}>
                   €{((dashboardData?.pipeline?.totalValue || 0) / 1000).toFixed(0)}K
                 </span>
@@ -430,7 +432,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 2: Marketing & Acquisition */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>📈 Marketing & Acquisition</h3>
+                <h3><BarChart3 size={18} /> Marketing & Acquisition</h3>
               </div>
               
               <div className={styles.cardContent}>
@@ -461,7 +463,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 1: Métriques Financières (au lieu de Cash Flow) */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>💰 Métriques Financières</h3>
+                <h3><DollarSign size={18} /> Métriques Financières</h3>
               </div>
               
               <div className={styles.cardContent}>
@@ -489,7 +491,7 @@ const DashboardV3 = ({ selectedCompany }) => {
             {/* Bloc 2: Factures */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3>📄 Factures</h3>
+                <h3><FileText size={18} /> Factures</h3>
                 <span className={styles.badge}>
                   {dashboardData?.invoices?.unpaid?.length || 0} impayées
                 </span>
@@ -533,17 +535,30 @@ const DashboardV3 = ({ selectedCompany }) => {
   )
 }
 
-// Helper function for metric icons
-const getMetricIcon = (key) => {
+// Helper pour les icônes des KPIs
+const getKPIIcon = (key) => {
   const icons = {
-    runway: <Clock size={24} />,
-    arr: <TrendingUp size={24} />,
-    mrr: <Activity size={24} />,
-    ebitda: <DollarSign size={24} />,
-    ltvcac: <Users size={24} />,
-    nps: <Zap size={24} />
+    runway: <Wallet size={20} />,
+    arr: <TrendingUp size={20} />,
+    mrr: <Activity size={20} />,
+    ebitda: <DollarSign size={20} />,
+    ltvcac: <Users size={20} />,
+    nps: <Award size={20} />
   }
-  return icons[key] || <BarChart3 size={24} />
+  return icons[key] || <BarChart3 size={20} />
+}
+
+// Helper pour les labels des KPIs
+const getKPILabel = (key) => {
+  const labels = {
+    runway: 'Cash Runway',
+    arr: 'ARR',
+    mrr: 'MRR',
+    ebitda: 'EBITDA Margin',
+    ltvcac: 'LTV:CAC',
+    nps: 'NPS Score'
+  }
+  return labels[key] || key.toUpperCase()
 }
 
 export default DashboardV3

@@ -39,7 +39,7 @@
 /* Réduire l'espace avec le sidebar */
 .dashboard {
   margin-left: 260px;
-  padding: 16px 24px; /* Réduit de 24px à 16px en haut */
+  padding: 20px; /* Au lieu de padding: 16px 24px */
   min-height: 100vh;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   animation: fadeIn 0.5s ease-out;
@@ -54,20 +54,21 @@
   to { opacity: 1; }
 }
 
-/* Header simplifié */
+/* Header aligné */
 .header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
-/* Titre principal */
-.pageTitle {
+/* Titre principal VISIBLE */
+.title {
   font-size: 24px;
   font-weight: 700;
-  color: #1E293B;
+  color: #1E293B !important; /* Noir foncé */
   margin: 0 0 20px 0;
-  text-align: center;
+  text-align: left; /* Aligné à gauche comme demandé */
 }
 
 /* Titres des colonnes alignés */
@@ -79,9 +80,9 @@
 }
 
 .columnMainTitle {
-  font-size: 20px; /* Même taille que l'ancien "Dashboard SuperAdmin" */
+  font-size: 20px;
   font-weight: 700;
-  color: #1E293B;
+  color: #1E293B !important; /* Noir foncé visible */
   margin: 0;
   padding-bottom: 12px;
   border-bottom: 3px solid #6366F1;
@@ -277,25 +278,49 @@
   font-size: 14px;
 }
 
-/* KPIs en ligne horizontale sous les titres */
+/* Container des KPIs séparé */
+.kpiContainer {
+  margin: 32px 0;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.kpiTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .kpiSection {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
 }
 
 .kpiItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kpiIcon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #EFF6FF 0%, #E0E7FF 100%);
+  border-radius: 10px;
+  color: #6366F1;
+}
+
+.kpiContent {
   flex: 1;
-  text-align: center;
-  padding: 12px;
-  background: rgba(99, 102, 241, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
 .kpiLabel {
@@ -303,24 +328,24 @@
   font-weight: 600;
   color: #64748B;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
 }
 
 .kpiValue {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #1E293B;
-  margin-bottom: 4px;
+  line-height: 1.2;
 }
 
 .kpiTrend {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 4px;
   font-size: 12px;
   color: #10B981;
+  margin-top: 2px;
 }
 
 /* Grille principale sans overlap */
@@ -365,13 +390,17 @@
 }
 
 .cardHeader h3 {
-  color: var(--text-primary);
-  font-weight: 600;
-  margin: 0;
-  font-size: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.cardHeader h3 svg {
+  color: #6366F1;
 }
 
 .badge {
@@ -776,7 +805,7 @@
   }
   
   .kpiSection {
-    flex-direction: column;
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
   
@@ -810,8 +839,8 @@
   }
   
   .kpiSection {
-    margin-bottom: 16px;
-    padding: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   
   .mainGrid {

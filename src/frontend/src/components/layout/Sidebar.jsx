@@ -124,21 +124,25 @@ const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {}, se
         {!collapsed && <span className={styles.logoText}>DAINAMICS</span>}
       </div>
 
-      {/* Sélecteur d'entreprise dans le sidebar */}
+      {/* Sélecteur d'entreprise mieux intégré */}
       {!collapsed && (
         <div className={styles.companySelector}>
-          <select 
-            className={styles.companyDropdown}
-            value={selectedCompany || 'all'}
-            onChange={(e) => onCompanyChange && onCompanyChange(e.target.value)}
-          >
-            <option value="all">📊 Vue Consolidée</option>
-            <option value="hypervisual">HYPERVISUAL</option>
-            <option value="dainamics">DAINAMICS</option>
-            <option value="lexaia">LEXAIA</option>
-            <option value="enki">ENKI REALTY</option>
-            <option value="takeout">TAKEOUT</option>
-          </select>
+          <label className={styles.selectorLabel}>ENTREPRISE</label>
+          <div className={styles.selectorWrapper}>
+            <Building2 size={16} className={styles.selectorIcon} />
+            <select 
+              className={styles.companyDropdown}
+              value={selectedCompany || 'all'}
+              onChange={(e) => onCompanyChange && onCompanyChange(e.target.value)}
+            >
+              <option value="all">Vue Consolidée</option>
+              <option value="hypervisual">HYPERVISUAL</option>
+              <option value="dainamics">DAINAMICS</option>
+              <option value="lexaia">LEXAIA</option>
+              <option value="enki">ENKI REALTY</option>
+              <option value="takeout">TAKEOUT</option>
+            </select>
+          </div>
         </div>
       )}
 

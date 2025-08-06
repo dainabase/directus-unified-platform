@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Sidebar from './components/layout/Sidebar'
-import SuperAdminDashboard from './portals/superadmin/Dashboard'
+import SuperAdminDashboard from './portals/superadmin/DashboardV3'
 import ClientDashboard from './portals/client/Dashboard'
 import PrestataireDashboard from './portals/prestataire/Dashboard'
 import RevendeurDashboard from './portals/revendeur/Dashboard'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   const [currentPortal, setCurrentPortal] = useState('superadmin')
@@ -29,7 +30,20 @@ function App() {
   const CurrentDashboard = portals[currentPortal].component
 
   return (
-    <div className="page">
+    <>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: '#fff',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }
+        }}
+      />
+      
+      <div className="page">
       {/* Navbar Top */}
       <header className="navbar navbar-expand-md navbar-dark bg-dark" style={{ 
         position: 'fixed', 

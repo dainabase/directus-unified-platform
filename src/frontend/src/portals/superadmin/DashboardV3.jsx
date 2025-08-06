@@ -179,6 +179,34 @@ const DashboardV3 = ({ selectedCompany }) => {
         </div>
       </div>
       
+      {/* Barre de navigation des portails */}
+      <div className={styles.portalNavBar}>
+        <button 
+          className={`${styles.portalBtn} ${styles.active}`}
+          onClick={() => window.location.href = '/superadmin'}
+        >
+          <Shield size={16} /> SuperAdmin
+        </button>
+        <button 
+          className={styles.portalBtn}
+          onClick={() => window.location.href = '/client'}
+        >
+          <User size={16} /> Client
+        </button>
+        <button 
+          className={styles.portalBtn}
+          onClick={() => window.location.href = '/prestataire'}
+        >
+          <Briefcase size={16} /> Prestataire
+        </button>
+        <button 
+          className={styles.portalBtn}
+          onClick={() => window.location.href = '/revendeur'}
+        >
+          <ShoppingCart size={16} /> Revendeur
+        </button>
+      </div>
+      
       {/* 3 Blocs Command Center */}
       <div className={styles.commandCenter}>
         {/* Bloc 1: Alertes */}

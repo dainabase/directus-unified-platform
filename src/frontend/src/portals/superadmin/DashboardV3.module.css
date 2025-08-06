@@ -106,8 +106,7 @@
 }
 
 .refreshButton,
-.settingsButton,
-.themeToggle {
+.settingsButton {
   padding: 10px 20px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -122,11 +121,30 @@
   backdrop-filter: blur(10px);
 }
 
+.themeToggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #475569;
+}
+
 .refreshButton:hover,
-.settingsButton:hover,
-.themeToggle:hover {
+.settingsButton:hover {
   background: var(--bg-card-hover);
   transform: translateY(-2px);
+}
+
+.themeToggle:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .refreshButton:disabled {
@@ -141,6 +159,51 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Barre de navigation des portails */
+.portalNavBar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.portalBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #64748B;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.portalBtn:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366F1;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.portalBtn.active {
+  background: #6366F1;
+  color: white;
+  border-color: #6366F1;
+}
+
+.portalBtn svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Command Center - 3 blocs */

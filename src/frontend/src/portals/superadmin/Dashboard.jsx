@@ -326,60 +326,88 @@ const SuperAdminDashboard = ({ selectedCompany }) => {
             </div>
           </div>
 
-          {/* Colonne 4 : KPI Sidebar */}
+          {/* Colonne 4 : INDICATEURS CLÉS */}
           <div className="col-lg-3">
-            <div className="card h-100">
-              <div className="card-body">
-                <h4 className="card-title text-center mb-4">MÉTRIQUES CEO</h4>
-                
-                {/* KPI 1: Cash Runway */}
-                <div className="mb-4">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-uppercase small text-secondary">CASH RUNWAY</span>
-                    <span className="h3 mb-0">7.3m</span>
-                  </div>
+            <div className="d-flex flex-column h-100">
+              
+              {/* Titre de la colonne */}
+              <div className="mb-2">
+                <h5 className="text-uppercase text-muted" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+                  📈 INDICATEURS CLÉS
+                </h5>
+              </div>
+              
+              {/* KPI 1: Cash Runway */}
+              <div className="card mb-2" style={{ flex: 1 }}>
+                <div className="card-body p-3">
+                  <div className="text-muted small text-uppercase mb-1">CASH RUNWAY</div>
+                  <div className="h3 mb-1">7.3m</div>
+                  <div className="text-success small mb-2">↑ +1.2 mois</div>
                   <Sparkline data={sparklineData.cashRunway} color="#f59f00" />
                 </div>
-
-                {/* KPI 2: ARR / MRR */}
-                <div className="mb-4">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-uppercase small text-secondary">ARR / MRR</span>
-                    <span className="h3 mb-0">€2.4M</span>
-                  </div>
+              </div>
+              
+              {/* KPI 2: ARR/MRR */}
+              <div className="card mb-2" style={{ flex: 1 }}>
+                <div className="card-body p-3">
+                  <div className="text-muted small text-uppercase mb-1">ARR / MRR</div>
+                  <div className="h3 mb-1">€2.4M</div>
+                  <div className="text-success small mb-2">↑ +23% YoY</div>
                   <Sparkline data={sparklineData.arr} color="#2fb344" />
                 </div>
-
-                {/* KPI 3: EBITDA Margin */}
-                <div className="mb-4">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-uppercase small text-secondary">EBITDA MARGIN</span>
-                    <span className="h3 mb-0">18.5%</span>
-                  </div>
+              </div>
+              
+              {/* KPI 3: EBITDA */}
+              <div className="card mb-2" style={{ flex: 1 }}>
+                <div className="card-body p-3">
+                  <div className="text-muted small text-uppercase mb-1">EBITDA MARGIN</div>
+                  <div className="h3 mb-1">18.5%</div>
+                  <div className="text-success small mb-2">↑ +2.3%</div>
                   <Sparkline data={sparklineData.ebitda} color="#206bc4" />
                 </div>
-
-                {/* KPI 4: LTV:CAC Ratio */}
-                <div className="mb-4">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-uppercase small text-secondary">LTV:CAC RATIO</span>
-                    <span className="h3 mb-0">4.2:1</span>
-                  </div>
+              </div>
+              
+              {/* KPI 4: LTV:CAC */}
+              <div className="card mb-2" style={{ flex: 1 }}>
+                <div className="card-body p-3">
+                  <div className="text-muted small text-uppercase mb-1">LTV:CAC RATIO</div>
+                  <div className="h3 mb-1">4.2:1</div>
+                  <div className="text-success small mb-2">Healthy</div>
                   <Sparkline data={sparklineData.ltv} color="#ae3ec9" />
                 </div>
-
-                {/* KPI 5: NPS Global */}
-                <div className="mb-0">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-uppercase small text-secondary">NPS GLOBAL</span>
-                    <span className="h3 mb-0">72</span>
-                  </div>
+              </div>
+              
+              {/* KPI 5: NPS */}
+              <div className="card" style={{ flex: 1 }}>
+                <div className="card-body p-3">
+                  <div className="text-muted small text-uppercase mb-1">NPS SCORE</div>
+                  <div className="h3 mb-1">72</div>
+                  <div className="text-success small mb-2">↑ Excellent</div>
                   <Sparkline data={sparklineData.nps} color="#0ca678" />
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
+
+        {/* CSS Styles */}
+        <style jsx>{`
+          .card {
+            transition: all 0.2s ease;
+          }
+          .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          }
+          .col-lg-3 .card-body {
+            overflow-y: auto;
+          }
+          @media (min-width: 992px) {
+            .row {
+              align-items: stretch;
+            }
+          }
+        `}</style>
     </>
   )
 }

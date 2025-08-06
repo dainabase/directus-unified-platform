@@ -3,18 +3,29 @@
   box-sizing: border-box;
 }
 
-:root {
+/* Mode Light (par défaut) */
+.dashboard {
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.8);
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
   --primary: #8B5CF6;
   --secondary: #3B82F6;
   --success: #10B981;
   --warning: #F59E0B;
   --danger: #EF4444;
-  --bg-primary: rgba(255, 255, 255, 0.05);
-  --bg-secondary: rgba(255, 255, 255, 0.02);
-  --border: rgba(255, 255, 255, 0.1);
-  --text-primary: rgba(255, 255, 255, 0.95);
+}
+
+/* Mode Dark */
+.dashboard.dark {
+  --bg-card: rgba(0, 0, 0, 0.4);
+  --bg-card-hover: rgba(0, 0, 0, 0.5);
+  --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Dashboard Container */
@@ -48,7 +59,7 @@
 .title {
   font-size: 32px;
   font-weight: 800;
-  color: white;
+  color: var(--text-primary);
   margin: 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -62,12 +73,13 @@
 }
 
 .refreshButton,
-.settingsButton {
+.settingsButton,
+.themeToggle {
   padding: 10px 20px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -78,8 +90,9 @@
 }
 
 .refreshButton:hover,
-.settingsButton:hover {
-  background: rgba(255, 255, 255, 0.1);
+.settingsButton:hover,
+.themeToggle:hover {
+  background: var(--bg-card-hover);
   transform: translateY(-2px);
 }
 
@@ -102,6 +115,12 @@
   margin-bottom: 32px;
 }
 
+.commandSection > div {
+  background: rgba(0, 0, 0, 0.4) !important; /* Fond noir semi-transparent */
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
 /* KPI Row - Grille fixe */
 .kpiRow {
   display: grid;
@@ -122,42 +141,64 @@
   }
 }
 
+/* KPI Cards au-dessus - hauteur réduite */
 .kpiCard {
   cursor: pointer;
-  min-height: 120px;
+  height: 100px !important;
+  padding: 16px !important;
 }
 
-/* Main Grid - Layout principal */
+/* Grille principale avec 3 colonnes égales */
 .mainGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 24px;
+  gap: 32px;
   margin-top: 24px;
 }
 
-/* Colonnes avec hauteur égale */
+/* Colonnes avec titre */
 .column {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-height: 0;
+  gap: 16px;
 }
 
-/* Cards - Styles globaux */
+.columnTitle {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.columnContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* IMPORTANT : Cards de hauteur fixe */
 .card {
-  background: var(--bg-primary) !important;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text-primary) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 0 !important;
+  height: 320px !important; /* Hauteur fixe pour TOUS les blocs */
 }
 
 .cardHeader {
   padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -190,11 +231,66 @@
   color: var(--success);
 }
 
+.cardBody,
 .cardContent {
   flex: 1;
-  overflow-y: auto;
-  max-height: 400px;
   padding: 20px;
+  overflow-y: auto; /* Scroll si contenu trop grand */
+  overflow-x: hidden;
+}
+
+/* Scrollbar stylée */
+.cardBody::-webkit-scrollbar,
+.cardContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cardBody::-webkit-scrollbar-track,
+.cardContent::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.cardBody::-webkit-scrollbar-thumb,
+.cardContent::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.cardBody::-webkit-scrollbar-thumb:hover,
+.cardContent::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Métriques Financières */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.metricLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 /* Tasks */
@@ -209,7 +305,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: var(--bg-secondary);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   transition: all 0.2s;
 }
@@ -263,7 +359,7 @@
 
 .projectItem {
   padding: 12px;
-  background: var(--bg-secondary);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
 }
 
@@ -297,7 +393,7 @@
 
 .projectProgress {
   height: 4px;
-  background: var(--bg-primary);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -360,7 +456,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
   font-size: 14px;
   color: var(--text-secondary);
 }
@@ -369,7 +465,7 @@
   border-bottom: none;
 }
 
-.metricValue {
+.metricRow .metricValue {
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -380,7 +476,7 @@
   justify-content: space-around;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-color);
 }
 
 .cashStatItem {
@@ -418,7 +514,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .amount {
@@ -537,5 +633,9 @@
   
   .kpiRow {
     gap: 12px;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
   }
 }

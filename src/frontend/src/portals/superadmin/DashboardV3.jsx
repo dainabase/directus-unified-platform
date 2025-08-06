@@ -4,7 +4,8 @@ import {
   Activity, TrendingUp, Users, DollarSign, 
   AlertCircle, CheckCircle, Clock, Zap,
   Package, FileText, CreditCard, BarChart3,
-  RefreshCw, Settings, Calendar, Target
+  RefreshCw, Settings, Calendar, Target,
+  Sun, Moon
 } from 'lucide-react'
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar,
@@ -26,6 +27,7 @@ import styles from './DashboardV3.module.css'
 
 const DashboardV3 = ({ selectedCompany }) => {
   const [activeMetric, setActiveMetric] = useState(null)
+  const [darkMode, setDarkMode] = useState(false) // Mode clair par défaut
   
   // Store
   const setSelectedCompany = useStore(state => state.setSelectedCompany)
@@ -136,7 +138,7 @@ const DashboardV3 = ({ selectedCompany }) => {
   }
   
   return (
-    <div className={styles.dashboard}>
+    <div className={`${styles.dashboard} ${darkMode ? styles.dark : ''}`}>
       {/* Header avec actions */}
       <div className={styles.header}>
         <motion.h1 
@@ -155,6 +157,14 @@ const DashboardV3 = ({ selectedCompany }) => {
           >
             <RefreshCw className={isRefreshing ? styles.spinning : ''} />
             {isRefreshing ? 'Actualisation...' : 'Actualiser'}
+          </button>
+          
+          <button 
+            className={styles.themeToggle}
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? 'Mode clair' : 'Mode sombre'}
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           
           <button className={styles.settingsButton}>
@@ -208,19 +218,17 @@ const DashboardV3 = ({ selectedCompany }) => {
         ))}
       </div>
       
-      {/* Main Grid */}
+      {/* Main Grid - 3 colonnes */}
       <div className={styles.mainGrid}>
-        {/* Column 1: Operations */}
+        
+        {/* Colonne 1: OPÉRATIONNEL */}
         <div className={styles.column}>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            {/* Tasks Card */}
+          <h2 className={styles.columnTitle}>OPÉRATIONNEL</h2>
+          <div className={styles.columnContent}>
+            {/* Bloc 1: Tâches & Actions */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><CheckCircle size={20} /> Tâches & Actions</h3>
+                <h3>📋 Tâches & Actions</h3>
                 <span className={styles.badge}>
                   {dashboardData?.tasks?.total || 0} actives
                 </span>
@@ -251,10 +259,10 @@ const DashboardV3 = ({ selectedCompany }) => {
               </div>
             </GlassCard>
             
-            {/* Projects Card */}
+            {/* Bloc 2: Projets Actifs */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><Package size={20} /> Projets Actifs</h3>
+                <h3>📁 Projets Actifs</h3>
                 <span className={styles.badge}>
                   {dashboardData?.projects?.total || 0}
                 </span>
@@ -285,20 +293,18 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               </div>
             </GlassCard>
-          </motion.div>
+            
+          </div>
         </div>
         
-        {/* Column 2: Commercial */}
+        {/* Colonne 2: COMMERCIAL & MARKETING */}
         <div className={styles.column}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-          >
-            {/* Pipeline Card */}
+          <h2 className={styles.columnTitle}>COMMERCIAL & MARKETING</h2>
+          <div className={styles.columnContent}>
+            {/* Bloc 1: Pipeline Commercial */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><Target size={20} /> Pipeline Commercial</h3>
+                <h3>🎯 Pipeline Commercial</h3>
                 <span className={styles.value}>
                   €{((dashboardData?.pipeline?.totalValue || 0) / 1000).toFixed(0)}K
                 </span>
@@ -341,10 +347,10 @@ const DashboardV3 = ({ selectedCompany }) => {
               </div>
             </GlassCard>
             
-            {/* Marketing Metrics */}
+            {/* Bloc 2: Marketing & Acquisition */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><BarChart3 size={20} /> Performance Marketing</h3>
+                <h3>📈 Marketing & Acquisition</h3>
               </div>
               
               <div className={styles.cardContent}>
@@ -368,67 +374,46 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               </div>
             </GlassCard>
-          </motion.div>
+            
+          </div>
         </div>
         
-        {/* Column 3: Finance */}
+        {/* Colonne 3: FINANCE */}
         <div className={styles.column}>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            {/* Cash Flow Card */}
+          <h2 className={styles.columnTitle}>FINANCE</h2>
+          <div className={styles.columnContent}>
+            {/* Bloc 1: Métriques Financières (au lieu de Cash Flow) */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><DollarSign size={20} /> Cash Flow (7 jours)</h3>
+                <h3>💰 Métriques Financières</h3>
               </div>
               
               <div className={styles.cardContent}>
-                <ResponsiveContainer width="100%" height={150}>
-                  <BarChart data={formatCashFlowData()}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis 
-                      dataKey="day" 
-                      stroke="rgba(255,255,255,0.5)"
-                      tick={{ fill: 'rgba(255,255,255,0.7)' }}
-                    />
-                    <YAxis 
-                      stroke="rgba(255,255,255,0.5)"
-                      tick={{ fill: 'rgba(255,255,255,0.7)' }}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        borderRadius: '8px'
-                      }}
-                    />
-                    <Bar 
-                      dataKey="value" 
-                      fill="#10B981"
-                      radius={[8, 8, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-                
-                <div className={styles.cashStats}>
-                  <div className={styles.cashStatItem}>
-                    <span>Entrées prévues</span>
-                    <span className={styles.positive}>+€127K</span>
+                <div className={styles.metricsGrid}>
+                  <div className={styles.metric}>
+                    <span className={styles.metricLabel}>Trésorerie</span>
+                    <span className={styles.metricValue}>€847K</span>
                   </div>
-                  <div className={styles.cashStatItem}>
-                    <span>Sorties prévues</span>
-                    <span className={styles.negative}>-€85K</span>
+                  <div className={styles.metric}>
+                    <span className={styles.metricLabel}>Burn Rate</span>
+                    <span className={styles.metricValue}>€115K/mois</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricLabel}>Revenus mensuels</span>
+                    <span className={styles.metricValue}>€200K</span>
+                  </div>
+                  <div className={styles.metric}>
+                    <span className={styles.metricLabel}>Marge EBITDA</span>
+                    <span className={styles.metricValue}>18.5%</span>
                   </div>
                 </div>
               </div>
             </GlassCard>
             
-            {/* Invoices Card */}
+            {/* Bloc 2: Factures */}
             <GlassCard className={styles.card}>
               <div className={styles.cardHeader}>
-                <h3><FileText size={20} /> Factures</h3>
+                <h3>📄 Factures</h3>
                 <span className={styles.badge}>
                   {dashboardData?.invoices?.unpaid?.length || 0} impayées
                 </span>
@@ -466,7 +451,8 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </button>
               </div>
             </GlassCard>
-          </motion.div>
+            
+          </div>
         </div>
       </div>
     </div>

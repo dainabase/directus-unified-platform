@@ -1,100 +1,263 @@
 # 🚀 Directus Unified Platform
 
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![React](https://img.shields.io/badge/React-18.2.0-61dafb.svg)
+![Directus](https://img.shields.io/badge/Directus-10.x-6644ff.svg)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![Directus](https://img.shields.io/badge/directus-v10-purple.svg)]()
-[![Tabler](https://img.shields.io/badge/tabler-v1.0.0--beta20-blue.svg)]()
 
-## 🎯 SuperAdmin - Cockpit Central Multi-Entreprises
+## 📋 Vue d'ensemble
 
-**🔥 NOUVEAU : [Audit Complet SuperAdmin](./docs/superadmin/AUDIT-COMPLET-SUPERADMIN.md)**
+Directus Unified Platform est une solution complète de gestion d'entreprise multi-portails construite sur Directus CMS avec un frontend React moderne. La plateforme offre 4 portails distincts pour différents types d'utilisateurs.
 
-Le SuperAdmin est le cœur du système, permettant de gérer 5+ entreprises depuis une interface unique :
-- HyperVisual, Dynamics, Lexia, NKReality, Etekout
-- Dashboard exécutif consolidé
-- CRM unifié multi-entreprises
-- Gestion commerciale, projets, finance, RH, stocks, etc.
+### 🎯 Portails disponibles
 
-## 📊 État du Projet (Réorganisé)
+- **🚀 SuperAdmin** - Dashboard CEO avec vue consolidée et gestion multi-entreprises
+- **👤 Client** - Espace client pour le suivi de projets
+- **🛠️ Prestataire** - Gestion des missions et timesheet
+- **🏪 Revendeur** - Gestion des ventes et commissions
 
-### Migration Notion → Directus
-- **Collections migrées**: 7/62 (11.3%) ✅
-- **Relations créées**: 10/105 (9.5%) ✅
-- **Dashboard importé**: 100% ✅
-- **OCR fonctionnel**: 100% ✅
-- **Endpoints adaptés**: 38/156 (24%) 🔄
+### 🏢 Entreprises gérées
+- HYPERVISUAL - Studio créatif
+- DAINAMICS - Solutions tech
+- LEXAIA - Services juridiques
+- ENKI REALTY - Immobilier
+- TAKEOUT - Restauration
 
-### Infrastructure
-- **Backend**: Node.js + Express + Directus SDK
-- **Frontend**: 4 portails avec Tabler.io
-- **Base de données**: PostgreSQL via Docker
-- **Cache**: Redis
-- **OCR**: OpenAI Vision API
+## 🛠️ Stack Technique
 
-## 🚀 Démarrage Rapide
+### Backend
+- **Directus 10.x** - Headless CMS
+- **PostgreSQL** - Base de données via Docker
+- **Node.js + Express** - API backend
+- **Redis** - Cache
+- **OpenAI Vision API** - OCR
 
+### Frontend
+- **React 18.2** - Framework UI
+- **Vite 5.0** - Build tool
+- **Recharts** - Visualisations de données
+- **Tabler.io** - Framework CSS
+- **React Hot Toast** - Notifications
+
+## 📦 Installation
+
+### Prérequis
+- Node.js 18+
+- Docker & Docker Compose
+- PostgreSQL 15+
+
+### 1. Cloner le repository
 ```bash
-# Installation
+git clone https://github.com/dainabase/directus-unified-platform.git
+cd directus-unified-platform
+```
+
+### 2. Configuration Backend (Directus)
+```bash
+# Copier le fichier d'environnement
+cp .env.example .env
+
+# Démarrer Directus avec Docker
+docker-compose up -d
+
+# L'API Directus sera accessible sur http://localhost:8055
+```
+
+### 3. Configuration Frontend (React)
+```bash
+# Naviguer vers le dossier frontend
+cd src/frontend
+
+# Installer les dépendances
 npm install
 
-# Configuration
-cp .env.example .env
-# Éditer .env avec vos clés API
-
-# Développement
+# Démarrer le serveur de développement
 npm run dev
 
-# Production
+# L'application sera accessible sur http://localhost:3000
+```
+
+## 🏗️ Architecture du Projet
+
+```
+directus-unified-platform/
+├── src/
+│   ├── frontend/                # Application React
+│   │   ├── src/
+│   │   │   ├── components/      # Composants réutilisables
+│   │   │   │   └── layout/      # Sidebar, Navigation
+│   │   │   ├── portals/         # Dashboards par portail
+│   │   │   │   ├── superadmin/  # Dashboard CEO
+│   │   │   │   ├── client/      # Dashboard Client
+│   │   │   │   ├── prestataire/ # Dashboard Prestataire
+│   │   │   │   └── revendeur/   # Dashboard Revendeur
+│   │   │   ├── App.jsx          # Composant principal
+│   │   │   ├── main.jsx         # Point d'entrée
+│   │   │   └── index.css        # Styles globaux
+│   │   ├── index.html           # Template HTML
+│   │   ├── package.json         # Dépendances npm
+│   │   └── vite.config.js       # Configuration Vite
+│   ├── backend/                 # Backend Node.js
+│   ├── extensions/              # Extensions Directus
+│   └── directus/                # Configuration Directus
+├── docker-compose.yml           # Configuration Docker
+├── .env.example                 # Variables d'environnement
+└── README.md                    # Ce fichier
+```
+
+## 🎨 Fonctionnalités
+
+### Dashboard SuperAdmin (CEO)
+- **Grille 5-3-3-3** : Layout optimisé pour vision globale
+- **Métriques KPI** : Cash Runway, ARR/MRR, EBITDA, LTV:CAC, NPS
+- **Sections thématiques** : Finance, Commercial, Opérationnel
+- **Graphiques Recharts** : Visualisations interactives
+- **Vue consolidée** : Toutes les entreprises du groupe
+
+### Dashboard Client
+- **Suivi de projets** : Progression en temps réel
+- **Gestion documentaire** : Accès aux documents
+- **Historique factures** : Visualisation des paiements
+- **Support intégré** : Messages et tickets
+
+### Dashboard Prestataire
+- **Gestion missions** : Suivi des projets actifs
+- **Timesheet** : Enregistrement des heures
+- **Planning** : Vue hebdomadaire
+- **Revenus** : Calcul automatique
+
+### Dashboard Revendeur
+- **Gestion ventes** : Suivi des commandes
+- **Calcul commissions** : Automatique
+- **Stock** : Alertes rupture
+- **Analytics** : Performance commerciale
+
+## 🔧 Configuration
+
+### Variables d'environnement
+```env
+# Backend Directus
+KEY=your-random-key
+SECRET=your-random-secret
+DATABASE_CLIENT=pg
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=directus
+DATABASE_USER=directus
+DATABASE_PASSWORD=directus
+
+# Frontend React
+VITE_API_URL=http://localhost:8055
+VITE_API_TOKEN=your-directus-token
+```
+
+### Proxy API
+Le frontend utilise un proxy Vite pour communiquer avec Directus :
+```javascript
+// vite.config.js
+proxy: {
+  '/api': {
+    target: 'http://localhost:8055',
+    changeOrigin: true,
+    rewrite: (path) => path.replace(/^\/api/, '')
+  }
+}
+```
+
+## 🚀 Déploiement
+
+### Production Build
+```bash
+# Frontend
+cd src/frontend
 npm run build
-npm start
+
+# Les fichiers de production seront dans dist/
 ```
 
-## 📁 Nouvelle Structure du Projet
-
-```
-src/
-├── backend/        # Serveur Node.js unifié
-├── frontend/       # 4 portails métier
-│   └── portals/
-│       ├── dashboard-legacy/  # Dashboard original préservé
-│       ├── superadmin/       # Dashboard consolidé + OCR
-│       ├── client/           # Espace client
-│       ├── prestataire/      # Espace prestataire
-│       └── revendeur/        # Espace revendeur
-└── directus/       # Extensions Directus
-
-migration/          # Scripts de migration Notion
-docs/              # Documentation complète
-design-system/     # Design System Tabler
-tests/            # Tests automatisés
+### Docker Production
+```bash
+# Build et démarrer tous les services
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## 📚 Documentation
+## 📊 État du Projet
 
-### Documentation Générale
-- [Architecture](./docs/architecture/overview.md)
-- [API Reference](./docs/api/reference.md)
-- [Guide de développement](./docs/development/setup.md)
-- [Déploiement](./docs/deployment/production.md)
+### Frontend React ✅
+- **Portails créés**: 4/4 (100%)
+- **Dashboards fonctionnels**: 4/4 (100%)
+- **Graphiques Recharts**: 100%
+- **Responsive design**: 100%
 
-### Documentation SuperAdmin
-- **[🎯 AUDIT COMPLET SUPERADMIN](./docs/superadmin/AUDIT-COMPLET-SUPERADMIN.md)** - Toutes les fonctionnalités détaillées
-- [Roadmap développement](./docs/superadmin/roadmap.md)
-- [Guide d'utilisation](./docs/superadmin/user-guide.md)
+### Backend Directus 🔄
+- **Collections migrées**: 7/62 (11.3%)
+- **Relations créées**: 10/105 (9.5%)
+- **Dashboard importé**: 100%
+- **OCR fonctionnel**: 100%
+- **Endpoints adaptés**: 38/156 (24%)
 
-## 🔧 Scripts Disponibles
+## 🧪 Tests
 
-- `npm run dev` - Lance l'environnement de développement
-- `npm run migrate` - Execute les migrations
-- `npm run test` - Lance les tests
-- `npm run backup` - Créé un backup complet
+```bash
+# Tests unitaires
+npm run test
 
-## ⚠️ Notes Importantes
+# Tests E2E
+npm run test:e2e
 
-- Le dashboard original est préservé dans `src/frontend/portals/dashboard-legacy/`
-- Les 156 endpoints legacy sont dans `src/backend/api/legacy/`
-- Le code OCR n'a pas été modifié
-- Tous les fichiers originaux ont été préservés
+# Coverage
+npm run test:coverage
+```
 
-## 📄 Licence
+## 📈 Performance
 
-Propriétaire - Dainamics SA
+- Code splitting par portail
+- Lazy loading des composants
+- Cache API avec React Query
+- Optimisation des bundles Vite
+- CDN pour les assets statiques
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
+4. Push sur la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+## 📝 Changelog
+
+### v2.0.0 (2024-12-06)
+- 🎉 Migration complète vers React 18
+- 📊 Intégration Recharts pour les visualisations
+- 🎨 Nouveau design avec Tabler.io
+- 🚀 4 portails distincts fonctionnels
+- ⚡ Performance optimisée avec Vite
+
+### v1.0.0 (2024-11-01)
+- Version initiale avec Directus
+- Dashboard HTML basique
+- Structure multi-entreprises
+
+## 📄 License
+
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 👥 Équipe
+
+- **CEO Operations** - Architecture & Vision
+- **Développement** - DAINAMICS Team
+- **Design** - HYPERVISUAL Studio
+
+## 📞 Support
+
+- 📧 Email: support@dainamics.ch
+- 💬 Discord: [Rejoindre le serveur](https://discord.gg/dainamics)
+- 📚 Documentation: [Wiki](https://github.com/dainabase/directus-unified-platform/wiki)
+
+---
+
+<p align="center">
+  Fait avec ❤️ par <a href="https://dainamics.ch">DAINAMICS</a>
+</p>

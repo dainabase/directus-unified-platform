@@ -5,52 +5,72 @@ import {
 } from 'recharts'
 
 const SuperAdminDashboard = ({ selectedCompany }) => {
-  // Données pour les graphiques
+  // Données mockées pour le dashboard
+  const tasksData = {
+    total: 47,
+    semaine: 12,
+    retard: 3,
+    urgent: 8
+  }
+
+  const projectsData = {
+    actifs: 8,
+    livraison: 3,
+    alertes: 2
+  }
+
+  const pipelineData = {
+    total: '€1.2M',
+    enCours: 15,
+    closing: 5,
+    nouveau: 8
+  }
+
+  const marketingData = {
+    visiteurs: 1847,
+    leads: 127,
+    conversion: '6.9%',
+    campagnes: 5
+  }
+
+  const cashData = {
+    disponible: '€847K',
+    runway: '7.3 mois',
+    burn: '€116K/mois',
+    prevision: '€2.1M'
+  }
+
+  const facturesData = {
+    impayees: { count: 12, montant: '€45K' },
+    retard30j: { count: 3, montant: '€18K' },
+    aEmettre: 8,
+    attente: '€127K'
+  }
+
+  // Graphique Cash Flow 7 jours
   const cashFlowData = [
     { day: 'Lun', entrees: 45, sorties: 32 },
     { day: 'Mar', entrees: 52, sorties: 28 },
     { day: 'Mer', entrees: 38, sorties: 35 },
     { day: 'Jeu', entrees: 65, sorties: 40 },
     { day: 'Ven', entrees: 48, sorties: 38 },
-    { day: 'Sam', entrees: 25, sorties: 20 },
-    { day: 'Dim', entrees: 15, sorties: 12 }
+    { day: 'Sam', entrees: 15, sorties: 12 },
+    { day: 'Dim', entrees: 8, sorties: 5 }
   ]
 
-  const sparklineData = {
-    cashRunway: [7.5, 7.4, 7.3, 7.2, 7.3, 7.3, 7.3],
-    arr: [2.2, 2.3, 2.3, 2.4, 2.4, 2.4, 2.4],
-    ebitda: [17.2, 17.5, 17.8, 18.0, 18.2, 18.5, 18.5],
-    ltv: [3.8, 3.9, 4.0, 4.1, 4.1, 4.2, 4.2],
-    nps: [68, 69, 70, 71, 71, 72, 72]
-  }
-
-  // Composant Sparkline réutilisable
-  const Sparkline = ({ data, color }) => (
-    <ResponsiveContainer width="100%" height={40}>
-      <LineChart data={data.map((value, index) => ({ value, index }))}>
-        <Line 
-          type="monotone" 
-          dataKey="value" 
-          stroke={color} 
-          strokeWidth={2}
-          dot={false}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  )
-
   return (
-    <>
-      {/* BLOC ALERTES EN HAUT */}
-        <div className="card mb-4">
+    <div className="page-body">
+      <div className="container-fluid px-3">
+        
+        {/* BLOC ALERTES EN HAUT */}
+        <div className="card mb-3">
           <div className="card-body">
-            <h3 className="card-title mb-3">📢 Alertes & Actions Prioritaires</h3>
-            <div className="row g-3">
+            <div className="row">
               <div className="col-md-4">
                 <div className="alert alert-danger d-flex align-items-center mb-0">
                   <div className="flex-fill">
                     <h4 className="alert-title">3 actions urgentes</h4>
-                    <div className="text-secondary">À faire aujourd'hui</div>
+                    <div className="text-secondary">Délais dépassés</div>
                   </div>
                   <div className="h1 mb-0 ms-3">3</div>
                 </div>
@@ -59,7 +79,7 @@ const SuperAdminDashboard = ({ selectedCompany }) => {
                 <div className="alert alert-warning d-flex align-items-center mb-0">
                   <div className="flex-fill">
                     <h4 className="alert-title">5 deadlines cette semaine</h4>
-                    <div className="text-secondary">2 projets critiques</div>
+                    <div className="text-secondary">À surveiller</div>
                   </div>
                   <div className="h1 mb-0 ms-3">5</div>
                 </div>
@@ -77,14 +97,24 @@ const SuperAdminDashboard = ({ selectedCompany }) => {
           </div>
         </div>
 
-        {/* GRILLE 4 COLONNES */}
+        {/* Grille principale avec structure asymétrique */}
         <div className="row g-3">
-          {/* Colonne 1 : Opérationnel */}
-          <div className="col-lg-3">
-            {/* Bloc 1 : Tâches & Actions */}
-            <div className="card mb-3">
-              <div className="card-body">
-                <h4 className="card-title">📋 Tâches & Actions</h4>
+          
+          {/* COLONNE 1: OPÉRATIONNEL - Large */}
+          <div className="col-12 col-md-4 col-lg-3">
+            {/* Titre de colonne */}
+            <div className="mb-3" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
+              <h4 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                ⚙️ OPÉRATIONNEL
+              </h4>
+            </div>
+            
+            {/* Bloc 1.1: Tâches & Actions */}
+            <div className="card mb-3" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">📋 Tâches & Actions</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Tâches totales actives</span>
@@ -92,209 +122,235 @@ const SuperAdminDashboard = ({ selectedCompany }) => {
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Cette semaine</span>
-                    <span className="h4 mb-0">14</span>
+                    <span className="badge bg-primary">12</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">En retard</span>
                     <span className="badge bg-danger">3</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="text-secondary">À faire aujourd'hui</span>
-                    <span className="h4 mb-0">5</span>
+                    <span className="text-secondary">Urgent</span>
+                    <span className="badge bg-warning">8</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h5 className="mb-2">TOP 3 PRIORITÉS</h5>
+                  <h5 className="mb-2">TOP PRIORITÉS</h5>
                   <div className="list-group list-group-flush">
                     <div className="list-group-item px-0 py-2">
-                      <small>1. Valider devis LEXAIA</small>
+                      <small className="text-danger">🔴 Migration DB Lexaia</small>
                     </div>
                     <div className="list-group-item px-0 py-2">
-                      <small>2. Call client ENKI</small>
+                      <small className="text-warning">🟡 Audit sécurité Q4</small>
                     </div>
                     <div className="list-group-item px-0 py-2">
-                      <small>3. Review code PR #234</small>
+                      <small className="text-warning">🟡 Revue contrats 2024</small>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Bloc 2 : Projets & Deliverables */}
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">📁 Projets & Deliverables</h4>
+            
+            {/* Bloc 1.2: Projets & Deliverables */}
+            <div className="card" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">📁 Projets & Deliverables</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Projets actifs</span>
                     <span className="h3 mb-0">8</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">En cours</span>
-                    <span className="badge bg-blue">5</span>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">En attente</span>
-                    <span className="badge bg-orange">3</span>
+                    <span className="text-secondary">Livraison ce mois</span>
+                    <span className="badge bg-success">3</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="text-secondary">Livraisons cette semaine</span>
-                    <span className="h4 mb-0">2</span>
+                    <span className="text-secondary">Alertes projet</span>
+                    <span className="badge bg-danger">2</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h5 className="mb-2">PROCHAINS JALONS</h5>
-                  <div className="list-group list-group-flush">
-                    <div className="list-group-item px-0 py-2">
-                      <small>Ven: Livraison App Mobile</small>
+                  <h5 className="mb-2">STATUT PROJETS</h5>
+                  <div className="vstack gap-2">
+                    <div className="progress" style={{ height: '20px' }}>
+                      <div className="progress-bar bg-success" style={{ width: '75%' }}>
+                        <small>HYPERVISUAL - 75%</small>
+                      </div>
                     </div>
-                    <div className="list-group-item px-0 py-2">
-                      <small>Lun: Demo client HYPERVISUAL</small>
+                    <div className="progress" style={{ height: '20px' }}>
+                      <div className="progress-bar bg-warning" style={{ width: '45%' }}>
+                        <small>DAINAMICS - 45%</small>
+                      </div>
+                    </div>
+                    <div className="progress" style={{ height: '20px' }}>
+                      <div className="progress-bar bg-danger" style={{ width: '25%' }}>
+                        <small>LEXAIA - 25%</small>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Colonne 2 : Commercial & Marketing */}
-          <div className="col-lg-3">
-            {/* Bloc 1 : Pipeline Commercial */}
-            <div className="card mb-3">
-              <div className="card-body">
-                <h4 className="card-title">🎯 Pipeline Commercial</h4>
-                <div className="h2 mb-3">€1.2M <small className="text-secondary">en gros</small></div>
+          
+          {/* COLONNE 2: COMMERCIAL & MARKETING - Large */}
+          <div className="col-12 col-md-4 col-lg-3">
+            {/* Titre de colonne */}
+            <div className="mb-3" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
+              <h4 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                📈 COMMERCIAL & MARKETING
+              </h4>
+            </div>
+            
+            {/* Bloc 2.1: Pipeline Commercial */}
+            <div className="card mb-3" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">🎯 Pipeline Commercial</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">24 opportunités actives</span>
+                    <span className="text-secondary">Pipeline total</span>
+                    <span className="h3 mb-0">€1.2M</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Devis actifs</span>
-                    <span>7 - €340K</span>
+                    <span className="text-secondary">Deals en cours</span>
+                    <span>15</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Taux conversion</span>
-                    <span className="text-success">32% ↑</span>
+                    <span className="text-secondary">Closing ce mois</span>
+                    <span className="badge bg-success">5</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="text-secondary">Closing prévu ce mois</span>
-                    <span className="h4 mb-0">€450K</span>
+                    <span className="text-secondary">Nouveau leads</span>
+                    <span className="badge bg-primary">8</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h5 className="mb-2">HOT LEADS</h5>
+                  <h5 className="mb-2">TOP DEALS</h5>
                   <div className="list-group list-group-flush">
-                    <div className="list-group-item px-0 py-2">
-                      <small>TechCorp - €125K - 80%</small>
+                    <div className="list-group-item px-0 py-2 d-flex justify-content-between">
+                      <small>Contrat ENKI</small>
+                      <small className="text-success fw-bold">€280K</small>
                     </div>
-                    <div className="list-group-item px-0 py-2">
-                      <small>StartupXYZ - €85K - 60%</small>
+                    <div className="list-group-item px-0 py-2 d-flex justify-content-between">
+                      <small>Projet TAKEOUT</small>
+                      <small className="text-warning fw-bold">€150K</small>
+                    </div>
+                    <div className="list-group-item px-0 py-2 d-flex justify-content-between">
+                      <small>Migration LEXAIA</small>
+                      <small className="text-primary fw-bold">€95K</small>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Bloc 2 : Marketing & Acquisition */}
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">📊 Marketing & Acquisition</h4>
+            
+            {/* Bloc 2.2: Marketing & Acquisition */}
+            <div className="card" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">📊 Marketing & Acquisition</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Visiteurs aujourd'hui</span>
-                    <span className="h4 mb-0">1,847</span>
+                    <span className="text-secondary">Visiteurs cette semaine</span>
+                    <span className="h3 mb-0">1,847</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Leads cette semaine</span>
-                    <span className="h4 mb-0">124</span>
+                    <span className="text-secondary">Nouveaux leads</span>
+                    <span>127</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Taux conversion</span>
-                    <span>6.7%</span>
+                    <span className="badge bg-success">6.9%</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="text-secondary">CAC ce mois</span>
-                    <span>€320</span>
+                    <span className="text-secondary">Campagnes actives</span>
+                    <span>5</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h5 className="mb-2">TOP SOURCES</h5>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between mb-1">
-                      <small>Google Ads</small>
-                      <small>45%</small>
+                  <h5 className="mb-2">CANAUX ACQUISITION</h5>
+                  <div className="vstack gap-2">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <small>SEO Organique</small>
+                      <small className="text-success">42%</small>
                     </div>
-                    <div className="progress" style={{ height: '8px' }}>
-                      <div className="progress-bar bg-primary" style={{ width: '45%' }}></div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <small>LinkedIn Ads</small>
+                      <small className="text-primary">28%</small>
                     </div>
-                  </div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between mb-1">
-                      <small>LinkedIn</small>
-                      <small>30%</small>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <small>Referral</small>
+                      <small className="text-warning">18%</small>
                     </div>
-                    <div className="progress" style={{ height: '8px' }}>
-                      <div className="progress-bar bg-info" style={{ width: '30%' }}></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="d-flex justify-content-between mb-1">
+                    <div className="d-flex justify-content-between align-items-center">
                       <small>Direct</small>
-                      <small>25%</small>
-                    </div>
-                    <div className="progress" style={{ height: '8px' }}>
-                      <div className="progress-bar bg-success" style={{ width: '25%' }}></div>
+                      <small className="text-secondary">12%</small>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Colonne 3 : Finance & Comptabilité */}
-          <div className="col-lg-3">
-            {/* Bloc 1 : Trésorerie & Cash */}
-            <div className="card mb-3">
-              <div className="card-body">
-                <h4 className="card-title">💵 Trésorerie & Cash</h4>
-                <div className="h2 mb-3">€847K <small className="text-secondary">en gros</small></div>
+          
+          {/* COLONNE 3: FINANCES - Large */}
+          <div className="col-12 col-md-4 col-lg-3">
+            {/* Titre de colonne */}
+            <div className="mb-3" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
+              <h4 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                💰 FINANCES
+              </h4>
+            </div>
+            
+            {/* Bloc 3.1: Trésorerie & Cash */}
+            <div className="card mb-3" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">💵 Trésorerie & Cash</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
-                  <div className="text-secondary mb-1">Cash disponible</div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Entrées prévues (7j)</span>
-                    <span className="text-success">+€127K</span>
+                    <span className="text-secondary">Cash disponible</span>
+                    <span className="h3 mb-0">€847K</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-secondary">Sorties prévues (7j)</span>
-                    <span className="text-danger">-€85K</span>
+                    <span className="text-secondary">Runway</span>
+                    <span>7.3 mois</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Burn rate mensuel</span>
-                    <span>€115K</span>
+                    <span className="text-danger">€116K/mois</span>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
-                    <span className="text-secondary">Runway</span>
-                    <span className="badge bg-success">7.3 mois</span>
+                    <span className="text-secondary">Prévision 3 mois</span>
+                    <span className="text-success">€2.1M</span>
                   </div>
                 </div>
-                <div className="mt-4">
-                  <h5 className="mb-2">CASH FLOW 7 JOURS</h5>
-                  <ResponsiveContainer width="100%" height={120}>
+                <div className="mt-3">
+                  <h6 className="text-muted small mb-2">CASH FLOW 7 JOURS</h6>
+                  <ResponsiveContainer width="100%" height={100}>
                     <AreaChart data={cashFlowData}>
-                      <Area type="monotone" dataKey="entrees" stackId="1" stroke="#2fb344" fill="#2fb344" />
-                      <Area type="monotone" dataKey="sorties" stackId="1" stroke="#d63939" fill="#d63939" />
+                      <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="day" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} />
                       <Tooltip />
+                      <Area type="monotone" dataKey="entrees" stackId="1" stroke="#2fb344" fill="#2fb344" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="sorties" stackId="1" stroke="#d63939" fill="#d63939" fillOpacity={0.6} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
               </div>
             </div>
-
-            {/* Bloc 2 : Factures & Paiements */}
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">📄 Factures & Paiements</h4>
+            
+            {/* Bloc 3.2: Factures & Paiements */}
+            <div className="card" style={{ height: 'calc(50% - 50px)' }}>
+              <div className="card-header">
+                <h3 className="card-title">📄 Factures & Paiements</h3>
+              </div>
+              <div className="card-body" style={{ overflowY: 'auto' }}>
                 <div className="mb-3">
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <span className="text-secondary">Factures impayées</span>
@@ -325,90 +381,89 @@ const SuperAdminDashboard = ({ selectedCompany }) => {
               </div>
             </div>
           </div>
-
-          {/* Colonne 4 : INDICATEURS CLÉS */}
-          <div className="col-lg-3">
-            <div className="d-flex flex-column h-100">
+          
+          {/* COLONNE 4: INDICATEURS CLÉS - Étroite avec blocs carrés */}
+          <div className="col-12 col-md-12 col-lg-3">
+            {/* Titre de colonne */}
+            <div className="mb-3" style={{ height: '40px', display: 'flex', alignItems: 'center' }}>
+              <h4 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.875rem', fontWeight: 600, letterSpacing: '0.5px' }}>
+                🎯 INDICATEURS CLÉS
+              </h4>
+            </div>
+            
+            {/* Container pour les KPIs carrés */}
+            <div className="d-flex flex-column gap-2" style={{ height: 'calc(100% - 55px)' }}>
               
-              {/* Titre de la colonne */}
-              <div className="mb-2">
-                <h5 className="text-uppercase text-muted" style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                  📈 INDICATEURS CLÉS
-                </h5>
-              </div>
-              
-              {/* KPI 1: Cash Runway */}
-              <div className="card mb-2" style={{ flex: 1 }}>
-                <div className="card-body p-3">
-                  <div className="text-muted small text-uppercase mb-1">CASH RUNWAY</div>
-                  <div className="h3 mb-1">7.3m</div>
-                  <div className="text-success small mb-2">↑ +1.2 mois</div>
-                  <Sparkline data={sparklineData.cashRunway} color="#f59f00" />
+              {/* KPI 1: Runway - Bloc carré */}
+              <div className="card" style={{ aspectRatio: '1/1', width: '100%' }}>
+                <div className="card-body p-2 d-flex flex-column justify-content-center align-items-center text-center">
+                  <div className="text-muted" style={{ fontSize: '0.7rem' }}>RUNWAY</div>
+                  <div className="h2 mb-0">7.3m</div>
+                  <div className="text-success" style={{ fontSize: '0.7rem' }}>↑ +1.2</div>
                 </div>
               </div>
               
-              {/* KPI 2: ARR/MRR */}
-              <div className="card mb-2" style={{ flex: 1 }}>
-                <div className="card-body p-3">
-                  <div className="text-muted small text-uppercase mb-1">ARR / MRR</div>
-                  <div className="h3 mb-1">€2.4M</div>
-                  <div className="text-success small mb-2">↑ +23% YoY</div>
-                  <Sparkline data={sparklineData.arr} color="#2fb344" />
+              {/* KPI 2: ARR - Bloc carré */}
+              <div className="card" style={{ aspectRatio: '1/1', width: '100%' }}>
+                <div className="card-body p-2 d-flex flex-column justify-content-center align-items-center text-center">
+                  <div className="text-muted" style={{ fontSize: '0.7rem' }}>ARR</div>
+                  <div className="h2 mb-0">€2.4M</div>
+                  <div className="text-success" style={{ fontSize: '0.7rem' }}>↑ 23%</div>
                 </div>
               </div>
               
-              {/* KPI 3: EBITDA */}
-              <div className="card mb-2" style={{ flex: 1 }}>
-                <div className="card-body p-3">
-                  <div className="text-muted small text-uppercase mb-1">EBITDA MARGIN</div>
-                  <div className="h3 mb-1">18.5%</div>
-                  <div className="text-success small mb-2">↑ +2.3%</div>
-                  <Sparkline data={sparklineData.ebitda} color="#206bc4" />
+              {/* KPI 3: EBITDA - Bloc carré */}
+              <div className="card" style={{ aspectRatio: '1/1', width: '100%' }}>
+                <div className="card-body p-2 d-flex flex-column justify-content-center align-items-center text-center">
+                  <div className="text-muted" style={{ fontSize: '0.7rem' }}>EBITDA</div>
+                  <div className="h2 mb-0">18.5%</div>
+                  <div className="text-success" style={{ fontSize: '0.7rem' }}>↑ 2.3%</div>
                 </div>
               </div>
               
-              {/* KPI 4: LTV:CAC */}
-              <div className="card mb-2" style={{ flex: 1 }}>
-                <div className="card-body p-3">
-                  <div className="text-muted small text-uppercase mb-1">LTV:CAC RATIO</div>
-                  <div className="h3 mb-1">4.2:1</div>
-                  <div className="text-success small mb-2">Healthy</div>
-                  <Sparkline data={sparklineData.ltv} color="#ae3ec9" />
+              {/* KPI 4: LTV:CAC - Bloc carré */}
+              <div className="card" style={{ aspectRatio: '1/1', width: '100%' }}>
+                <div className="card-body p-2 d-flex flex-column justify-content-center align-items-center text-center">
+                  <div className="text-muted" style={{ fontSize: '0.7rem' }}>LTV:CAC</div>
+                  <div className="h2 mb-0">4.2:1</div>
+                  <div className="text-success" style={{ fontSize: '0.7rem' }}>Good</div>
                 </div>
               </div>
               
-              {/* KPI 5: NPS */}
-              <div className="card" style={{ flex: 1 }}>
-                <div className="card-body p-3">
-                  <div className="text-muted small text-uppercase mb-1">NPS SCORE</div>
-                  <div className="h3 mb-1">72</div>
-                  <div className="text-success small mb-2">↑ Excellent</div>
-                  <Sparkline data={sparklineData.nps} color="#0ca678" />
+              {/* KPI 5: NPS - Bloc carré */}
+              <div className="card" style={{ aspectRatio: '1/1', width: '100%' }}>
+                <div className="card-body p-2 d-flex flex-column justify-content-center align-items-center text-center">
+                  <div className="text-muted" style={{ fontSize: '0.7rem' }}>NPS</div>
+                  <div className="h2 mb-0">72</div>
+                  <div className="text-success" style={{ fontSize: '0.7rem' }}>Excel</div>
                 </div>
               </div>
               
             </div>
           </div>
+          
         </div>
-
-        {/* CSS Styles */}
-        <style jsx>{`
-          .card {
-            transition: all 0.2s ease;
+      </div>
+      
+      {/* Styles React inline */}
+      <style jsx>{`
+        .container-fluid {
+          max-width: 1920px;
+        }
+        .card {
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        @media (min-width: 992px) {
+          .row > div {
+            min-height: 750px;
           }
-          .card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-          }
-          .col-lg-3 .card-body {
-            overflow-y: auto;
-          }
-          @media (min-width: 992px) {
-            .row {
-              align-items: stretch;
-            }
-          }
-        `}</style>
-    </>
+        }
+      `}</style>
+    </div>
   )
 }
 

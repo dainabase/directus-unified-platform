@@ -274,7 +274,6 @@ const DashboardV3 = ({ selectedCompany }) => {
             </div>
           </GlassCard>
         </motion.div>
-        </div>
       </div>
       
       {/* KPIs SÉPARÉS - PAS dans les colonnes */}

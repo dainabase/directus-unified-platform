@@ -26,13 +26,15 @@
 }
 
 body {
-  /* Pas de background ici, on laisse glassmorphism.css le gérer */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--text-primary);
+  /* PAS DE BACKGROUND ICI */
+  color: #1E293B; /* Texte sombre pour contraste */
   overflow-x: hidden;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 /* Overlay supprimé - géré dans glassmorphism.css */

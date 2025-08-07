@@ -20,6 +20,15 @@ services:
       DB_USER: "directus"
       DB_PASSWORD: "${DB_PASSWORD}"
       
+      # CORS Configuration - TRÈS IMPORTANT
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:3000"
+      CORS_CREDENTIALS: "true"
+      CORS_METHODS: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+      CORS_ALLOWED_HEADERS: "Content-Type,Authorization,X-Requested-With"
+      CORS_EXPOSED_HEADERS: "Content-Range,X-Content-Range"
+      CORS_MAX_AGE: "18000"
+      
       # Optimisations migration
       DB_POOL__MIN: 10
       DB_POOL__MAX: 50

@@ -16,10 +16,7 @@ import {
 } from 'recharts'
 import toast from 'react-hot-toast'
 
-// Design System Components
-import { GlassCard, MetricDisplay, CommandCenter } from '../../design-system/components'
-
-// Services & Hooks
+// Services & Hooks - PAS de design-system
 import useStore from '../../services/state/store'
 import { useDashboardData, useRefreshDashboard } from '../../services/hooks/useDirectusQuery'
 import { useInitialize } from '../../services/hooks/useInitialize'
@@ -221,7 +218,7 @@ const DashboardV3 = ({ selectedCompany }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <GlassCard className={styles.commandCard}>
+          <div className={styles.commandCard}>
             <div className={styles.commandHeader}>
               <div className={styles.commandIcon}>
                 <AlertCircle size={20} className={styles.iconAlert} />
@@ -248,7 +245,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               )}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
         {/* Bloc 2: Actions */}
@@ -258,7 +255,7 @@ const DashboardV3 = ({ selectedCompany }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <GlassCard className={styles.commandCard}>
+          <div className={styles.commandCard}>
             <div className={styles.commandHeader}>
               <div className={styles.commandIcon}>
                 <Zap size={20} className={styles.iconAction} />
@@ -285,7 +282,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               )}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
 
         {/* Bloc 3: Insights */}
@@ -295,7 +292,7 @@ const DashboardV3 = ({ selectedCompany }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <GlassCard className={styles.commandCard}>
+          <div className={styles.commandCard}>
             <div className={styles.commandHeader}>
               <div className={styles.commandIcon}>
                 <TrendingUp size={20} className={styles.iconInsight} />
@@ -325,7 +322,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                 </div>
               )}
             </div>
-          </GlassCard>
+          </div>
         </motion.div>
       </div>
       
@@ -358,7 +355,7 @@ const DashboardV3 = ({ selectedCompany }) => {
         {/* Colonne 1: OPÉRATIONNEL */}
         <div className={styles.column}>
             {/* Bloc 1: Tâches & Actions */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><ClipboardList size={18} /> Tâches & Actions</h3>
                 <span className={styles.badge}>
@@ -389,10 +386,10 @@ const DashboardV3 = ({ selectedCompany }) => {
                   ))}
                 </div>
               </div>
-            </GlassCard>
+            </div>
             
             {/* Bloc 2: Projets Actifs */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><Folder size={18} /> Projets Actifs</h3>
                 <span className={styles.badge}>
@@ -424,13 +421,13 @@ const DashboardV3 = ({ selectedCompany }) => {
                   ))}
                 </div>
               </div>
-            </GlassCard>
+            </div>
         </div>
         
         {/* Colonne 2: COMMERCIAL & MARKETING */}
         <div className={styles.column}>
             {/* Bloc 1: Pipeline Commercial */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><Target size={18} /> Pipeline Commercial</h3>
                 <span className={styles.value}>
@@ -473,10 +470,10 @@ const DashboardV3 = ({ selectedCompany }) => {
                   ))}
                 </div>
               </div>
-            </GlassCard>
+            </div>
             
             {/* Bloc 2: Marketing & Acquisition */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><BarChart3 size={18} /> Marketing & Acquisition</h3>
               </div>
@@ -501,13 +498,13 @@ const DashboardV3 = ({ selectedCompany }) => {
                   </div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
         </div>
         
         {/* Colonne 3: FINANCE */}
         <div className={styles.column}>
             {/* Bloc 1: Métriques Financières (au lieu de Cash Flow) */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><DollarSign size={18} /> Métriques Financières</h3>
               </div>
@@ -532,10 +529,10 @@ const DashboardV3 = ({ selectedCompany }) => {
                   </div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
             
             {/* Bloc 2: Factures */}
-            <GlassCard className={styles.card}>
+            <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h3><FileText size={18} /> Factures</h3>
                 <span className={styles.badge}>
@@ -574,7 +571,7 @@ const DashboardV3 = ({ selectedCompany }) => {
                   Relancer les impayés
                 </button>
               </div>
-            </GlassCard>
+            </div>
         </div>
       </div>
     </div>

@@ -1359,6 +1359,10 @@
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
   overflow: hidden;
   position: relative;
+  min-height: 350px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .chartCard::before {
@@ -1372,13 +1376,25 @@
   animation: shimmer 3s infinite;
 }
 
+.chartCard .cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .chartCard .cardContent {
   padding: 24px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Section Métriques Globales */
 .metricsSection {
-  margin-top: 48px;
+  grid-column: 1 / -1;
+  margin-top: 30px;
   padding-top: 32px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }

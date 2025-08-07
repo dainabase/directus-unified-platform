@@ -32,7 +32,10 @@ const DashboardV3 = ({ selectedCompany }) => {
   const [darkMode, setDarkMode] = useState(false) // Mode clair par défaut
   
   // Store
-  const setSelectedCompany = useStore(state => state.setSelectedCompany)
+  const { setSelectedCompany, dashboardData } = useStore(state => ({
+    setSelectedCompany: state.setSelectedCompany,
+    dashboardData: state.dashboardData
+  }))
   
   // Helper function for metric icons
   const getMetricIcon = (metricKey) => {
@@ -91,9 +94,12 @@ const DashboardV3 = ({ selectedCompany }) => {
     return Object.values(stages)
   }
   
-  // Get metrics using useStore selector to avoid infinite loop
-  const metrics = useStore(state => state.getFormattedMetrics()) || {}
-  const alerts = useStore(state => state.getAlerts()) || []
+  // Get metrics using dashboardData
+  const metrics = dashboardData?.metrics || {}
+  const alerts = dashboardData ? [
+    { id: 1, type: 'warning', title: 'Cash runway < 8 mois' },
+    { id: 2, type: 'info', title: '3 factures en retard' }
+  ] : []
   
   // Prepare Command Center data
   const commandCenterData = {

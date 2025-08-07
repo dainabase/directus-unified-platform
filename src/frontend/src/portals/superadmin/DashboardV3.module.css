@@ -978,6 +978,331 @@
   }
 }
 
+/* ===== AMÉLIORATIONS VISUELLES ===== */
+
+/* 1. MEILLEUR CONTRASTE DES CARTES */
+.card {
+  background: rgba(17, 24, 39, 0.8) !important; /* Plus sombre, moins transparent */
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3) !important;
+  border-color: rgba(139, 92, 246, 0.4) !important;
+}
+
+/* 2. COMMAND CENTER PLUS VISIBLE */
+.commandCard {
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.1) 0%, 
+    rgba(59, 130, 246, 0.1) 100%) !important;
+  border: 2px solid rgba(139, 92, 246, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.commandCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    #8B5CF6, 
+    transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 3. MÉTRIQUES AVEC GRADIENT */
+.metricItem {
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.1) 0%, 
+    rgba(139, 92, 246, 0.05) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 16px 20px;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.metricItem:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.15) 0%, 
+    rgba(139, 92, 246, 0.08) 100%);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+}
+
+.metricValue {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 4. TITRES DES COLONNES AMÉLIORÉS */
+.columnMainTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(139, 92, 246, 0.9);
+  text-transform: uppercase;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, 
+    rgba(139, 92, 246, 0.1), 
+    transparent);
+  border-left: 3px solid #8B5CF6;
+  margin-bottom: 16px;
+}
+
+/* 5. BADGES AMÉLIORÉS */
+.badge {
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* 6. BOUTONS D'ACTION MODERNES */
+.actionButton {
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+/* Remplacer le bouton rouge agressif */
+.actionButton.danger {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+}
+
+/* 7. PROGRESS BARS AMÉLIORÉES */
+.progressBar {
+  background: linear-gradient(90deg, #8B5CF6, #3B82F6);
+  height: 6px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+}
+
+.progressBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);
+  animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 8. ALERTES AVEC ICÔNES COLORÉES */
+.alertItem {
+  background: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.alertItem:hover {
+  background: rgba(30, 41, 59, 0.7);
+  transform: translateX(4px);
+}
+
+.alertItem[data-type="warning"] {
+  border-left-color: #F59E0B;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.alertItem[data-type="info"] {
+  border-left-color: #3B82F6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.alertItem[data-type="success"] {
+  border-left-color: #10B981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* 9. HEADER AMÉLIORÉ */
+.header {
+  background: linear-gradient(135deg, 
+    rgba(17, 24, 39, 0.9), 
+    rgba(31, 41, 55, 0.9));
+  padding: 24px 32px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+/* 10. SCROLLBAR CUSTOM */
+.cardContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cardContent::-webkit-scrollbar-track {
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 10px;
+}
+
+.cardContent::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8B5CF6, #6366F1);
+  border-radius: 10px;
+}
+
+/* 11. ANIMATIONS D'ENTRÉE */
+.dashboard {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.commandBlock {
+  animation: slideUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.commandBlock:nth-child(1) { animation-delay: 0.1s; }
+.commandBlock:nth-child(2) { animation-delay: 0.2s; }
+.commandBlock:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 12. ESPACEMENT AMÉLIORÉ */
+.mainGrid {
+  gap: 24px;
+  padding: 0 8px;
+}
+
+.column {
+  gap: 20px;
+}
+
+.cardHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.cardContent {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* 13. VALEURS FINANCIÈRES COLORÉES */
+.value {
+  color: #10B981;
+  font-weight: 700;
+}
+
+.amountDanger {
+  color: #EF4444;
+  font-weight: 700;
+}
+
+.amount {
+  color: #F59E0B;
+  font-weight: 700;
+}
+
+/* 14. EFFET GLOW SUR LES ÉLÉMENTS IMPORTANTS */
+.commandIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.2), 
+    rgba(59, 130, 246, 0.2));
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+.iconAlert { color: #F59E0B; }
+.iconAction { color: #8B5CF6; }
+.iconInsight { color: #10B981; }
+
+/* Animation de rotation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;

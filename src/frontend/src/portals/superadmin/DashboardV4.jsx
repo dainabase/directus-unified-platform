@@ -162,6 +162,20 @@ const DashboardV4 = ({ selectedCompany }) => {
     // Montrer le contenu après un court délai
     setTimeout(() => setShowContent(true), 100)
   }, [])
+
+  // DEBUG: Log des données reçues
+  useEffect(() => {
+    console.log('🔍 DEBUG DONNÉES:');
+    console.log('Companies:', companies);
+    console.log('Projects:', projects);
+    console.log('Cash Flow:', cashFlow);
+    console.log('Revenue:', revenue);
+    console.log('Runway:', runway);
+    console.log('KPIs:', kpis);
+    console.log('Alerts:', alerts);
+    console.log('Tasks:', tasks);
+    console.log('Insights:', insights);
+  }, [companies, projects, cashFlow, revenue, runway, kpis, alerts, tasks, insights])
   
   // Formater les métriques pour l'affichage
   const metrics = {

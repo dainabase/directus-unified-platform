@@ -14,16 +14,26 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    cors: true, // Activer CORS
     proxy: {
       '/api': {
         target: 'http://localhost:8055',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('proxy error', err);
+          });
+        }
       }
     }
   },
   build: {
     outDir: 'dist',
     sourcemap: true
+  },
+  // Supprimer les warnings de dépendances
+  optimizeDeps: {
+    exclude: ['lucide-react']
   }
 })

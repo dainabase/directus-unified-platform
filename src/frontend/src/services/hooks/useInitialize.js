@@ -3,13 +3,22 @@ import useStore from '../state/store'
 
 export const useInitialize = () => {
   const initialized = useRef(false)
-  
+  const { fetchCompanies, fetchDashboardData } = useStore()
+
   useEffect(() => {
-    // Éviter la double initialisation
     if (initialized.current) return
     initialized.current = true
-    
-    // Initialisation simple sans appels API
-    console.log('🚀 Dashboard initialisé en mode démo')
-  }, []) // Pas de dépendances
+
+    const initialize = async () => {
+      try {
+        console.log('🚀 Initialisation du dashboard')
+        await fetchCompanies()
+        await fetchDashboardData()
+      } catch (error) {
+        console.error('Erreur initialisation:', error)
+      }
+    }
+
+    initialize()
+  }, []) // Vide = une seule fois
 }

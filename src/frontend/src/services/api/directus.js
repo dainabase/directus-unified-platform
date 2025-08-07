@@ -196,7 +196,7 @@ class DirectusAPI {
   // Méthodes spécifiques au dashboard
   async getDashboardData() {
     if (this.demoMode) {
-      return demoData.dashboard
+      return demoData
     }
     
     try {

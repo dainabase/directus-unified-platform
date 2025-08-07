@@ -33,8 +33,6 @@ const DashboardV3 = ({ selectedCompany }) => {
   
   // Store
   const setSelectedCompany = useStore(state => state.setSelectedCompany)
-  const getFormattedMetrics = useStore(state => state.getFormattedMetrics)
-  const getAlerts = useStore(state => state.getAlerts)
   
   // Helper function for metric icons
   const getMetricIcon = (metricKey) => {
@@ -93,9 +91,9 @@ const DashboardV3 = ({ selectedCompany }) => {
     return Object.values(stages)
   }
   
-  // Get metrics
-  const metrics = getFormattedMetrics() || {}
-  const alerts = getAlerts() || []
+  // Get metrics using useStore selector to avoid infinite loop
+  const metrics = useStore(state => state.getFormattedMetrics()) || {}
+  const alerts = useStore(state => state.getAlerts()) || []
   
   // Prepare Command Center data
   const commandCenterData = {

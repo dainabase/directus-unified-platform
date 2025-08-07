@@ -30,7 +30,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* PAS DE BACKGROUND ICI */
-  color: #1E293B; /* Texte sombre pour contraste */
+  color: rgba(255, 255, 255, 0.95); /* Texte clair pour dark mode */
   overflow-x: hidden;
   min-height: 100vh;
   margin: 0;

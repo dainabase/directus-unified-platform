@@ -27,6 +27,9 @@ const useStore = create(
           autoRefresh: true,
           refreshInterval: 30000 // 30 secondes
         },
+        
+        // Mode démo
+        demoMode: true,
 
         // === ACTIONS ===
         // Setters simples
@@ -104,6 +107,9 @@ const useStore = create(
           }))
         },
         
+        // Set demo mode
+        setDemoMode: (demoMode) => set({ demoMode }),
+        
         // Clear all data
         clearData: () => set({
           dashboardData: null,
@@ -160,7 +166,7 @@ const useStore = create(
           const alerts = []
           
           // Tâches urgentes
-          if (dashboardData.tasks.urgent.length > 0) {
+          if (dashboardData.tasks?.urgent?.length > 0) {
             alerts.push({
               id: 'urgent-tasks',
               type: 'critical',
@@ -171,7 +177,7 @@ const useStore = create(
           }
           
           // Factures en retard
-          if (dashboardData.invoices.overdue.length > 0) {
+          if (dashboardData.invoices?.overdue?.length > 0) {
             alerts.push({
               id: 'overdue-invoices',
               type: 'warning',

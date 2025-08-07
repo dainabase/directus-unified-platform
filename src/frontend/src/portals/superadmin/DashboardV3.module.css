@@ -14,27 +14,28 @@
   --bg-white: rgba(255, 255, 255, 0.95);
 }
 
-/* Variables pour un thème plus clair */
+/* Variables dark theme comme le sidebar */
 .dashboard {
-  --primary: #6366F1; /* Indigo */
-  --secondary: #3B82F6; /* Blue */
-  --success: #10B981; /* Green */
-  --warning: #F59E0B; /* Amber */
-  --danger: #EF4444; /* Red */
+  --primary: #8B5CF6; /* Violet principal comme sidebar */
+  --secondary: #6366F1; /* Indigo secondaire */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
   
-  /* Backgrounds plus clairs */
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 0.95);
-  --bg-header: rgba(248, 250, 252, 0.9);
+  /* Backgrounds dark */
+  --bg-body: #0F172A; /* Même que sidebar */
+  --bg-card: rgba(255, 255, 255, 0.05); /* Cards légèrement plus claires */
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --bg-header: rgba(255, 255, 255, 0.03);
   
-  /* Textes */
-  --text-primary: #1E293B;
-  --text-secondary: #475569;
-  --text-tertiary: #64748B;
+  /* Textes clairs */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
   
-  /* Bordures */
-  --border-color: rgba(148, 163, 184, 0.2);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  /* Bordures subtiles */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
 /* Mode Dark */
@@ -68,14 +69,14 @@
   margin-bottom: 24px;
 }
 
-/* Titre Centre de Commande - même style que le menu */
+/* Titre Centre de Commande - style dark */
 .title {
   font-size: 28px;
   font-weight: 800;
-  color: #0F172A; /* Même couleur sombre que le menu */
+  color: rgba(255, 255, 255, 0.95);
   margin: 0 0 16px 0;
   padding-bottom: 16px;
-  border-bottom: 3px solid #6366F1; /* Ligne violette comme demandé */
+  border-bottom: 3px solid #8B5CF6; /* Accent violet */
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -89,15 +90,17 @@
   /* PAS de background, PAS de padding, PAS de border */
 }
 
-/* Titres simples sans bloc autour */
+/* Titres colonnes - style dark */
 .columnMainTitle {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
-  color: #1E293B;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   margin: 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #6366F1;
-  /* PAS de background */
+  border-bottom: 2px solid #8B5CF6;
+  background: transparent;
 }
 
 .headerActions {
@@ -105,13 +108,14 @@
   gap: 12px;
 }
 
+/* Boutons dark */
 .refreshButton,
 .settingsButton {
   padding: 10px 20px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -125,26 +129,28 @@
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
-  color: #475569;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .refreshButton:hover,
 .settingsButton:hover {
-  background: var(--bg-card-hover);
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
   transform: translateY(-2px);
 }
 
 .themeToggle:hover {
-  background: white;
+  background: rgba(139, 92, 246, 0.2);
+  color: #A78BFA;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
 }
 
 .refreshButton:disabled {
@@ -161,16 +167,16 @@
   to { transform: rotate(360deg); }
 }
 
-/* Barre de navigation des portails */
+/* Navigation portails dark */
 .portalNavBar {
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .portalBtn {
@@ -181,7 +187,7 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: #64748B;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -190,15 +196,15 @@
 }
 
 .portalBtn:hover {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366F1;
-  border-color: rgba(99, 102, 241, 0.2);
+  background: rgba(139, 92, 246, 0.1);
+  color: #A78BFA;
+  border-color: rgba(139, 92, 246, 0.2);
 }
 
 .portalBtn.active {
-  background: #6366F1;
+  background: #8B5CF6;
   color: white;
-  border-color: #6366F1;
+  border-color: #8B5CF6;
 }
 
 .portalBtn svg {
@@ -218,10 +224,13 @@
   min-height: 180px;
 }
 
+/* Command Center - style dark premium */
 .commandCard {
   height: 100%;
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 .commandHeader {
@@ -229,8 +238,8 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(139, 92, 246, 0.1); /* Fond violet subtil */
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .commandIcon {
@@ -239,14 +248,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .iconAlert { color: #EF4444; }
 .iconAction { color: #F59E0B; }
-.iconInsight { color: #6366F1; }
+.iconInsight { color: #8B5CF6; }
 
 .commandInfo {
   flex: 1;
@@ -256,13 +265,13 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #1E293B;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .commandCount {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #64748B;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .commandContent {
@@ -276,7 +285,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  color: #94A3B8;
+  color: rgba(255, 255, 255, 0.4);
   text-align: center;
 }
 
@@ -301,15 +310,17 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: rgba(248, 250, 252, 0.8);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   font-size: 13px;
 }
 
 .alertBadge {
   padding: 2px 8px;
-  background: #FEE2E2;
-  color: #DC2626;
+  background: rgba(239, 68, 68, 0.2);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
@@ -322,8 +333,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FEF3C7;
-  color: #D97706;
+  background: rgba(245, 158, 11, 0.2);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 6px;
   font-weight: 700;
   font-size: 12px;
@@ -332,23 +344,24 @@
 .alertText,
 .actionText {
   flex: 1;
-  color: #334155;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .insightIcon {
   font-size: 20px;
+  color: #8B5CF6;
 }
 
 .insightTitle {
   margin: 0;
   font-weight: 600;
-  color: #334155;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 13px;
 }
 
 .insightValue {
   margin: 2px 0 0;
-  color: #6366F1;
+  color: #A78BFA;
   font-weight: 700;
   font-size: 14px;
 }
@@ -361,18 +374,20 @@
 .metricsTitle {
   font-size: 18px;
   font-weight: 700;
-  color: #1E293B;
+  color: rgba(255, 255, 255, 0.95);
   margin: 0 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #6366F1;
+  border-bottom: 2px solid #8B5CF6;
 }
 
+/* Métriques - style dark */
 .metricsLine {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   backdrop-filter: blur(10px);
 }
@@ -381,7 +396,7 @@
   flex: 1;
   text-align: center;
   padding: 8px;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .metricItem:last-child {
@@ -392,8 +407,9 @@
   display: block;
   font-size: 10px;
   font-weight: 600;
-  color: #64748B;
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 4px;
 }
 
@@ -401,7 +417,7 @@
   display: block;
   font-size: 18px;
   font-weight: 700;
-  color: #1E293B;
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 2px;
 }
 
@@ -429,14 +445,14 @@
   gap: 20px;
 }
 
-/* Cards avec bon contraste */
+/* Cards principales - style dark premium */
 .card {
   height: 320px !important;
-  background: var(--bg-white) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
   backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(148, 163, 184, 0.2) !important;
-  box-shadow: var(--shadow) !important;
-  color: var(--text-primary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease;
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -444,10 +460,16 @@
   padding: 0 !important;
 }
 
+.card:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  transform: translateY(-2px);
+}
+
 .cardHeader {
-  background: var(--bg-header);
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-primary);
+  background: rgba(139, 92, 246, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
   padding: 16px 20px;
   display: flex;
   justify-content: space-between;
@@ -462,21 +484,22 @@
   margin: 0;
   font-size: 15px;
   font-weight: 700;
-  color: var(--text-dark);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .cardHeader h3 svg {
-  color: var(--primary-violet);
+  color: #8B5CF6; /* Icônes violet */
 }
 
+/* Badges et valeurs */
 .badge {
   padding: 4px 12px;
-  background: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  color: #60A5FA;
+  color: #A78BFA;
 }
 
 .value {
@@ -547,7 +570,7 @@
   color: var(--text-primary);
 }
 
-/* Tasks */
+/* Tasks - style dark */
 .tasksList {
   display: flex;
   flex-direction: column;
@@ -559,13 +582,16 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   transition: all 0.2s;
+  backdrop-filter: blur(5px);
 }
 
 .taskItem:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.2);
   transform: translateX(4px);
 }
 
@@ -575,12 +601,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--danger);
+  background: rgba(239, 68, 68, 0.9);
   color: white;
   border-radius: 6px;
   font-weight: 700;
   font-size: 12px;
   flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
 }
 
 .taskContent {
@@ -592,7 +619,7 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -601,10 +628,10 @@
 .taskDeadline {
   margin: 2px 0 0;
   font-size: 12px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
 }
 
-/* Projects */
+/* Projects - style dark */
 .projectsList {
   display: flex;
   flex-direction: column;
@@ -613,8 +640,16 @@
 
 .projectItem {
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
+  transition: all 0.2s;
+  backdrop-filter: blur(5px);
+}
+
+.projectItem:hover {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.15);
 }
 
 .projectHeader {
@@ -628,7 +663,7 @@
 .projectName {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -638,11 +673,13 @@
 .projectStatus {
   padding: 2px 8px;
   background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 4px;
   font-size: 11px;
-  color: var(--success);
+  color: #10B981;
   text-transform: uppercase;
   flex-shrink: 0;
+  font-weight: 600;
 }
 
 .projectProgress {
@@ -654,9 +691,10 @@
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  background: linear-gradient(90deg, #6366F1, #8B5CF6);
   border-radius: 2px;
   transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
 }
 
 /* Charts Container */
@@ -666,7 +704,7 @@
   margin: 16px 0;
 }
 
-/* Pipeline */
+/* Pipeline - style dark */
 .pipelineStats {
   display: flex;
   flex-direction: column;
@@ -679,6 +717,14 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.stageStat:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .stageIndicator {
@@ -686,19 +732,20 @@
   height: 12px;
   border-radius: 3px;
   flex-shrink: 0;
+  box-shadow: 0 0 4px rgba(139, 92, 246, 0.4);
 }
 
 .stageName {
   flex: 1;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .stageValue {
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
 }
 
-/* Marketing */
+/* Marketing - style dark */
 .marketingMetrics {
   display: flex;
   flex-direction: column;
@@ -710,9 +757,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 14px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s;
+}
+
+.metricRow:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .metricRow:last-child {
@@ -721,16 +773,16 @@
 
 .metricRow .metricValue {
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
 }
 
-/* Cash Flow */
+/* Cash Flow - style dark */
 .cashStats {
   display: flex;
   justify-content: space-around;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cashStatItem {
@@ -738,26 +790,38 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.cashStatItem:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .cashStatItem span:first-child {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .positive {
-  color: var(--success);
+  color: #10B981;
   font-weight: 700;
   font-size: 18px;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
 .negative {
-  color: var(--danger);
+  color: #EF4444;
   font-weight: 700;
   font-size: 18px;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
-/* Invoices */
+/* Invoices - style dark */
 .invoicesList {
   display: flex;
   flex-direction: column;
@@ -768,34 +832,44 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .amount {
   font-weight: 700;
-  color: var(--warning);
+  color: #F59E0B;
   font-size: 18px;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
 .amountDanger {
   font-weight: 700;
-  color: var(--danger);
+  color: #EF4444;
   font-size: 18px;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 .invoiceItem {
   display: flex;
   justify-content: space-between;
   padding: 8px 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.15);
   border-radius: 8px;
   font-size: 13px;
   gap: 8px;
+  transition: all 0.2s;
+  backdrop-filter: blur(5px);
+}
+
+.invoiceItem:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: translateX(2px);
 }
 
 .invoiceClient {
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -804,7 +878,7 @@
 }
 
 .invoiceAmount {
-  color: var(--danger);
+  color: #EF4444;
   font-weight: 600;
   flex-shrink: 0;
 }
@@ -813,21 +887,25 @@
   width: 100%;
   margin-top: 16px;
   padding: 12px;
-  background: linear-gradient(135deg, var(--danger), #DC2626);
-  border: none;
+  background: rgba(239, 68, 68, 0.9);
+  border: 1px solid rgba(239, 68, 68, 1);
   border-radius: 8px;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
 }
 
 .actionButton:hover {
+  background: #EF4444;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
 }
 
-/* Loading & Error States */
+/* Loading & Error States - style dark */
 .loadingContainer,
 .errorContainer {
   display: flex;
@@ -835,23 +913,32 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
   gap: 16px;
+}
+
+.loadingContainer svg {
+  color: #8B5CF6;
+  animation: spin 1s linear infinite;
 }
 
 .retryButton {
   padding: 10px 24px;
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 8px;
-  color: white;
+  color: #EF4444;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  backdrop-filter: blur(10px);
 }
 
 .retryButton:hover {
-  background: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.2);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 /* Responsive */

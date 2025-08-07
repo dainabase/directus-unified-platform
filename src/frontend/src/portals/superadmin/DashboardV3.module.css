@@ -980,18 +980,69 @@
 
 /* ===== AMÉLIORATIONS VISUELLES ===== */
 
-/* 1. MEILLEUR CONTRASTE DES CARTES */
+/* Variables CSS pour le thème */
+:root {
+  /* Couleurs principales */
+  --color-primary: #8b5cf6;
+  --color-primary-light: #a78bfa;
+  --color-primary-dark: #7c3aed;
+  
+  /* Couleurs d'accent */
+  --color-accent-blue: #3b82f6;
+  --color-accent-green: #10b981;
+  --color-accent-yellow: #f59e0b;
+  --color-accent-red: #ef4444;
+  
+  /* Gradients premium */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #667eea 0%, #10b981 100%);
+  --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* 1. MEILLEUR CONTRASTE DES CARTES AVEC GLASSMORPHISM */
 .card {
-  background: rgba(17, 24, 39, 0.8) !important; /* Plus sombre, moins transparent */
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(30, 41, 59, 0.6) 100%
+  ) !important;
   backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
   border: 1px solid rgba(139, 92, 246, 0.2) !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(139, 92, 246, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(30, 41, 59, 0.7) 100%
+  ) !important;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 20px 60px rgba(139, 92, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   border-color: rgba(139, 92, 246, 0.4) !important;
 }
 
@@ -1301,6 +1352,90 @@
 
 .spinning {
   animation: spin 1s linear infinite;
+}
+
+/* SKELETON LOADING & SHIMMER EFFECT */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.8) 0%,
+    rgba(51, 65, 85, 0.8) 50%,
+    rgba(30, 41, 59, 0.8) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  height: 200px;
+  margin: 20px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* EFFET NÉON POUR ALERTES CRITIQUES */
+.alertCritical {
+  animation: neonPulse 2s ease-in-out infinite;
+  border: 1px solid #ef4444 !important;
+  box-shadow: 
+    0 0 5px #ef4444,
+    0 0 10px #ef4444,
+    0 0 20px #ef4444,
+    inset 0 0 5px rgba(239, 68, 68, 0.2) !important;
+}
+
+@keyframes neonPulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 5px #ef4444,
+      0 0 10px #ef4444,
+      0 0 20px #ef4444,
+      inset 0 0 5px rgba(239, 68, 68, 0.2);
+  }
+  50% { 
+    box-shadow: 
+      0 0 10px #ef4444,
+      0 0 20px #ef4444,
+      0 0 30px #ef4444,
+      inset 0 0 10px rgba(239, 68, 68, 0.3);
+  }
+}
+
+/* PROGRESS CONTAINER POUR ANIMATIONS */
+.progressContainer {
+  width: 100%;
+  height: 6px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+/* EFFET GLOW POUR MÉTRIQUES */
+.metricCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.1) 0%,
+    transparent 70%
+  );
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
 @media (max-width: 768px) {

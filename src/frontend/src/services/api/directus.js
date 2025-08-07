@@ -138,14 +138,14 @@ export const directus = {
       const response = await directusAPI.get(`/${collection}`, { params })
       
       // Si mode démo activé
-      if (response.data?.demo || import.meta.env.VITE_USE_DEMO_DATA !== 'false') {
+      if (response.data?.demo || import.meta.env.VITE_USE_DEMO_DATA === 'true') {
         console.warn(`📊 Mode démo pour ${collection}`)
         return getDemoData(collection)
       }
       
       return response.data.data || []
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA !== 'false') {
+      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
         console.warn(`📊 Mode démo pour ${collection}`)
         return getDemoData(collection)
       }
@@ -166,7 +166,7 @@ export const directus = {
       
       return response.data.data
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA !== 'false') {
+      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
         const demoData = getDemoData(collection)
         return demoData.find(item => item.id === parseInt(id)) || null
       }
@@ -209,7 +209,7 @@ export const directus = {
       
       return response.data.data || []
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA !== 'false') {
+      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
         const demoData = getDemoData(collection)
         const result = {}
         

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Sidebar from './components/layout/Sidebar'
-import SuperAdminDashboard from './portals/superadmin/DashboardV3'
+import SuperAdminDashboard from './portals/superadmin/EmergencyDashboard'
 import ClientDashboard from './portals/client/Dashboard'
 import PrestataireDashboard from './portals/prestataire/Dashboard'
 import RevendeurDashboard from './portals/revendeur/Dashboard'

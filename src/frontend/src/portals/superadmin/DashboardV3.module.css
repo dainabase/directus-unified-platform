@@ -1354,6 +1354,63 @@
   animation: spin 1s linear infinite;
 }
 
+/* Styles pour les cartes de graphiques */
+.chartCard {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+  overflow: hidden;
+  position: relative;
+}
+
+.chartCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
+  animation: shimmer 3s infinite;
+}
+
+.chartCard .cardContent {
+  padding: 24px;
+}
+
+/* Section Métriques Globales */
+.metricsSection {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s;
+}
+
+.sectionTitle::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, #8B5CF6, #3B82F6);
+  border-radius: 2px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
 /* SKELETON LOADING & SHIMMER EFFECT */
 .skeleton {
   background: linear-gradient(

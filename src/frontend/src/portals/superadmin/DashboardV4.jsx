@@ -10,6 +10,14 @@ import {
 import toast from 'react-hot-toast'
 import styles from './DashboardV3.module.css'
 
+// Importer les graphiques
+import RevenueChart from '../../components/charts/RevenueChart'
+import CashFlowChart from '../../components/charts/CashFlowChart'
+import ProjectsChart from '../../components/charts/ProjectsChart'
+import PerformanceChart from '../../components/charts/PerformanceChart'
+import ClientsChart from '../../components/charts/ClientsChart'
+import MetricsRadar from '../../components/charts/MetricsRadar'
+
 // Variants d'animation pour les cards
 const cardVariants = {
   hidden: { 
@@ -507,6 +515,23 @@ const DashboardV4 = ({ selectedCompany }) => {
               </div>
             </div>
           </motion.div>
+
+          {/* Graphique Projets */}
+          <motion.div 
+            className={`${styles.card} ${styles.chartCard}`}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: 0.2 }}
+          >
+            <div className={styles.cardHeader}>
+              <h3><BarChart3 size={18} /> Statut des Projets</h3>
+            </div>
+            <div className={styles.cardContent}>
+              <ProjectsChart height={250} />
+            </div>
+          </motion.div>
         </div>
 
         {/* Colonne 2: COMMERCIAL */}
@@ -598,6 +623,40 @@ const DashboardV4 = ({ selectedCompany }) => {
               </div>
             </div>
           </motion.div>
+
+          {/* Graphique Performance */}
+          <motion.div 
+            className={`${styles.card} ${styles.chartCard}`}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: 0.4 }}
+          >
+            <div className={styles.cardHeader}>
+              <h3><Activity size={18} /> Performance Commerciale</h3>
+            </div>
+            <div className={styles.cardContent}>
+              <PerformanceChart height={300} />
+            </div>
+          </motion.div>
+
+          {/* Graphique Clients */}
+          <motion.div 
+            className={`${styles.card} ${styles.chartCard}`}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: 0.5 }}
+          >
+            <div className={styles.cardHeader}>
+              <h3><Users size={18} /> Évolution Clients</h3>
+            </div>
+            <div className={styles.cardContent}>
+              <ClientsChart height={300} />
+            </div>
+          </motion.div>
         </div>
 
         {/* Colonne 3: FINANCE */}
@@ -683,7 +742,72 @@ const DashboardV4 = ({ selectedCompany }) => {
               </div>
             </div>
           </motion.div>
+
+          {/* Graphique Revenus */}
+          <motion.div 
+            className={`${styles.card} ${styles.chartCard}`}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: 0.6 }}
+          >
+            <div className={styles.cardHeader}>
+              <h3><TrendingUp size={18} /> Évolution ARR/MRR</h3>
+            </div>
+            <div className={styles.cardContent}>
+              <RevenueChart height={300} />
+            </div>
+          </motion.div>
+
+          {/* Graphique Cash Flow */}
+          <motion.div 
+            className={`${styles.card} ${styles.chartCard}`}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            transition={{ delay: 0.7 }}
+          >
+            <div className={styles.cardHeader}>
+              <h3><Wallet size={18} /> Cash Flow</h3>
+            </div>
+            <div className={styles.cardContent}>
+              <CashFlowChart height={300} />
+            </div>
+          </motion.div>
         </div>
+      </motion.div>
+
+      {/* Section Métriques Globales */}
+      <motion.div 
+        className={styles.metricsSection}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+      >
+        <motion.h2 
+          className={styles.sectionTitle}
+          whileHover={{ x: 10 }}
+        >
+          MÉTRIQUES GLOBALES
+        </motion.h2>
+        
+        <motion.div 
+          className={`${styles.card} ${styles.chartCard} ${styles.fullWidth}`}
+          variants={cardVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          transition={{ delay: 0.9 }}
+        >
+          <div className={styles.cardHeader}>
+            <h3><Activity size={18} /> Vue d'ensemble des performances</h3>
+          </div>
+          <div className={styles.cardContent}>
+            <MetricsRadar height={400} />
+          </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   )

@@ -3,7 +3,7 @@ const testAPI = async () => {
   console.log('🔧 Test de connexion API Directus...\n');
   
   const API_URL = 'http://localhost:8055';
-  const TOKEN = 'de366613eba7c0fa39d9e6c3ced8b0ac282fe7726741e44d9f04dd65ca67ca3c'; // Token du .env
+  const TOKEN = 'dashboard-api-token-2025'; // Token du .env
   
   // Test 1: Ping serveur
   console.log('1️⃣ Test ping serveur...');
@@ -68,7 +68,7 @@ const testAPI = async () => {
     const response = await fetch(`${API_URL}/items/companies`, {
       method: 'OPTIONS',
       headers: {
-        'Origin': 'http://localhost:5173',
+        'Origin': 'http://localhost:5175',
         'Access-Control-Request-Method': 'GET',
         'Access-Control-Request-Headers': 'Content-Type,Authorization'
       }

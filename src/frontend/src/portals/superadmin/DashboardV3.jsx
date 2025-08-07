@@ -6,7 +6,8 @@ import {
   Package, FileText, CreditCard, BarChart3,
   RefreshCw, Settings, Calendar, Target,
   Sun, Moon, Info, TrendingDown,
-  ClipboardList, Folder, Wallet, Award
+  ClipboardList, Folder, Wallet, Award,
+  Shield, User, Briefcase, ShoppingCart
 } from 'lucide-react'
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar,
@@ -574,19 +575,6 @@ const DashboardV3 = ({ selectedCompany }) => {
       </div>
     </div>
   )
-}
-
-// Helper function for metric icons
-const getMetricIcon = (key) => {
-  const icons = {
-    runway: <Wallet size={20} />,
-    arr: <TrendingUp size={20} />,
-    mrr: <Activity size={20} />,
-    ebitda: <DollarSign size={20} />,
-    ltvcac: <Users size={20} />,
-    nps: <Award size={20} />
-  }
-  return icons[key] || <BarChart3 size={20} />
 }
 
 export default DashboardV3

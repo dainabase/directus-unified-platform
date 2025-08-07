@@ -7,6 +7,7 @@ import {
   RefreshCw, Settings,
   ClipboardList, Folder, Wallet
 } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import styles from './DashboardV3.module.css'
 
@@ -17,6 +18,12 @@ import ProjectsChart from '../../components/charts/ProjectsChart'
 import PerformanceChart from '../../components/charts/PerformanceChart'
 import ClientsChart from '../../components/charts/ClientsChart'
 import MetricsRadar from '../../components/charts/MetricsRadar'
+
+// Importer les hooks
+import { useCompanies, useCompanyMetrics } from '../../services/hooks/useCompanies'
+import { useProjects, useProjectStatus, useProjectTimeline } from '../../services/hooks/useProjects'
+import { useCashFlow, useRevenue, useRunway } from '../../services/hooks/useFinances'
+import { useMetrics, useAlerts, useUrgentTasks, useInsights } from '../../services/hooks/useMetrics'
 
 // Variants d'animation pour les cards
 const cardVariants = {
@@ -132,51 +139,139 @@ const showNotification = (message, type = 'success') => {
 const DashboardV4 = ({ selectedCompany }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [showContent, setShowContent] = useState(false)
+  const queryClient = useQueryClient()
+  
+  // Requêtes API avec React Query
+  const { data: companies, isLoading: loadingCompanies } = useCompanies()
+  const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
+  const { data: projects, isLoading: loadingProjects } = useProjects(selectedCompany !== 'all' ? { company: { _eq: selectedCompany } } : {})
+  const { data: projectStatus } = useProjectStatus()
+  const { data: cashFlow } = useCashFlow()
+  const { data: revenue } = useRevenue()
+  const { data: runway } = useRunway()
+  const { data: kpis } = useMetrics()
+  const { data: alerts = [] } = useAlerts()
+  const { data: tasks = [] } = useUrgentTasks()
+  const { data: insights = [] } = useInsights()
+  
+  // Gérer le loading global
+  const isLoadingData = loadingCompanies || loadingProjects || !kpis || !revenue || !runway
   
   useEffect(() => {
     console.log('✅ DashboardV4 monté avec succès')
-    // Simuler un chargement initial
+    // Montrer le contenu après un court délai
     setTimeout(() => setShowContent(true), 100)
   }, [])
-
-  // Données démo statiques
+  
+  // Formater les métriques pour l'affichage
   const metrics = {
-    runway: { value: '7.3 mois', trend: 'up', color: '#8B5CF6' },
-    arr: { value: '€2.4M', trend: 'up', color: '#3B82F6' },
-    mrr: { value: '€200K', trend: 'up', color: '#10B981' },
-    ebitda: { value: '18.5%', trend: 'up', color: '#F59E0B' },
-    ltvcac: { value: '3.2x', trend: 'up', color: '#EC4899' },
-    nps: { value: '72', trend: 'up', color: '#6366F1' }
+    runway: { 
+      value: runway ? `${runway.runway} mois` : '...',
+      trend: runway?.status === 'critical' ? 'down' : 'up',
+      color: '#8B5CF6'
+    },
+    arr: { 
+      value: revenue ? `€${(revenue.arr / 1000000).toFixed(1)}M` : '...',
+      trend: 'up',
+      color: '#3B82F6'
+    },
+    mrr: { 
+      value: revenue ? `€${(revenue.mrr / 1000).toFixed(0)}K` : '...',
+      trend: 'up',
+      color: '#10B981'
+    },
+    ebitda: { 
+      value: kpis ? `${kpis.ebitda}%` : '...',
+      trend: kpis?.ebitda > 15 ? 'up' : 'down',
+      color: '#F59E0B'
+    },
+    ltvcac: { 
+      value: kpis ? `${kpis.ltvcac}x` : '...',
+      trend: kpis?.ltvcac > 3 ? 'up' : 'down',
+      color: '#EC4899'
+    },
+    nps: { 
+      value: kpis ? kpis.nps.toString() : '...',
+      trend: kpis?.nps > 70 ? 'up' : 'down',
+      color: '#6366F1'
+    }
   }
+  
+  // Données pour les graphiques
+  const chartData = {
+    revenue: cashFlow?.map((month, index) => ({
+      month: month.month,
+      arr: revenue?.arr || 0,
+      mrr: revenue?.mrr || 0,
+      growth: index > 0 ? Math.random() * 30 : 0 // À calculer depuis les données réelles
+    })),
+    cashFlow: cashFlow?.map(month => ({
+      ...month,
+      entrees: month.entrees / 1000, // Convertir en K€
+      sorties: Math.abs(month.sorties) / 1000,
+      net: month.net / 1000
+    })),
+    projects: projectStatus ? [
+      { name: 'Terminés', value: projectStatus.completed, color: '#10B981' },
+      { name: 'En cours', value: projectStatus.in_progress, color: '#3B82F6' },
+      { name: 'En attente', value: projectStatus.on_hold, color: '#F59E0B' },
+      { name: 'Annulés', value: projectStatus.cancelled, color: '#EF4444' },
+    ].filter(p => p.value > 0) : null,
+    performance: null, // À implémenter selon vos besoins
+    clients: null, // À implémenter selon vos besoins
+    metricsRadar: kpis ? [
+      { metric: 'Croissance', current: revenue?.growth || 0, target: 25 },
+      { metric: 'Rentabilité', current: kpis.ebitda || 0, target: 20 },
+      { metric: 'Satisfaction', current: kpis.nps || 0, target: 80 },
+      { metric: 'Productivité', current: (kpis.productivity || 0.85) * 100, target: 90 },
+      { metric: 'Efficacité', current: 88, target: 90 },
+      { metric: 'Qualité', current: 95, target: 95 },
+    ] : null
+  }
+  
+  // Formater les projets pour l'affichage
+  const displayProjects = projects?.slice(0, 3).map(project => ({
+    id: project.id,
+    name: project.name,
+    status: project.status === 'in_progress' ? 'En cours' : 
+            project.status === 'completed' ? 'Terminé' : 
+            project.status === 'on_hold' ? 'En attente' : 'Annulé',
+    progress: project.progress || 0,
+    color: project.status === 'in_progress' ? '#3B82F6' : 
+           project.status === 'completed' ? '#10B981' : '#F59E0B'
+  })) || []
 
-  const alerts = [
-    { id: 1, type: 'warning', title: 'Cash runway < 8 mois', priority: 'high' },
-    { id: 2, type: 'info', title: '3 factures en retard', priority: 'medium' },
-    { id: 3, type: 'success', title: 'Objectif Q4 atteint', priority: 'low' }
-  ]
-
-  const tasks = [
-    { id: 1, name: 'Révision contrat client', priority: 1, deadline: '15 Dec' },
-    { id: 2, name: 'Présentation investisseurs', priority: 2, deadline: '20 Dec' },
-    { id: 3, name: 'Audit sécurité', priority: 3, deadline: '18 Dec' }
-  ]
-
-  const projects = [
-    { id: 1, name: 'Migration Cloud', status: 'En cours', progress: 65, color: '#8B5CF6' },
-    { id: 2, name: 'Refonte UI/UX', status: 'En cours', progress: 40, color: '#3B82F6' },
-    { id: 3, name: 'API v2', status: 'En cours', progress: 80, color: '#10B981' }
-  ]
-
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsLoading(true)
-    showNotification('Données actualisées avec succès', 'success')
-    setTimeout(() => setIsLoading(false), 2000)
+    try {
+      // Invalider toutes les requêtes pour forcer le rafraîchissement
+      await queryClient.invalidateQueries()
+      showNotification('Données actualisées avec succès', 'success')
+    } catch (error) {
+      showNotification('Erreur lors de l\'actualisation', 'error')
+    }
+    setTimeout(() => setIsLoading(false), 1000)
   }
 
-  if (!showContent) {
+  // Skeleton loading pendant le chargement des données
+  if (!showContent || isLoadingData) {
     return (
       <div className={styles.dashboard}>
-        <SkeletonCard />
+        <div className={styles.header}>
+          <h1 className={styles.title}>Centre de Commande V4</h1>
+        </div>
+        <div className={styles.commandCenter}>
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className={styles.commandBlock}>
+              <SkeletonCard />
+            </div>
+          ))}
+        </div>
+        <div className={styles.mainGrid}>
+          {[...Array(6)].map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       </div>
     )
   }
@@ -346,21 +441,26 @@ const DashboardV4 = ({ selectedCompany }) => {
               </motion.div>
               <div className={styles.commandInfo}>
                 <h3 className={styles.commandTitle}>Insights IA</h3>
-                <p className={styles.commandCount}>2 disponibles</p>
+                <p className={styles.commandCount}>{insights.length} disponibles</p>
               </div>
             </div>
             <div className={styles.commandContent}>
               <div className={styles.insightsList}>
-                <motion.div 
-                  className={styles.insightItem}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <TrendingUp size={16} />
-                  <div>
-                    <p className={styles.insightTitle}>Prévision revenus</p>
-                    <p className={styles.insightValue}>+23% ce trimestre</p>
-                  </div>
-                </motion.div>
+                {insights.map((insight, index) => (
+                  <motion.div 
+                    key={insight.id}
+                    className={styles.insightItem}
+                    variants={itemVariants}
+                    custom={index}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <TrendingUp size={16} />
+                    <div>
+                      <p className={styles.insightTitle}>{insight.title}</p>
+                      <p className={styles.insightValue}>{insight.value}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </div>
@@ -493,11 +593,11 @@ const DashboardV4 = ({ selectedCompany }) => {
           >
             <div className={styles.cardHeader}>
               <h3><Folder size={18} /> Projets Actifs</h3>
-              <span className={styles.badge}>{projects.length}</span>
+              <span className={styles.badge}>{displayProjects.length}</span>
             </div>
             <div className={styles.cardContent}>
               <div className={styles.projectsList}>
-                {projects.map((project, index) => (
+                {displayProjects.map((project, index) => (
                   <motion.div 
                     key={project.id} 
                     className={styles.projectItem}
@@ -529,7 +629,7 @@ const DashboardV4 = ({ selectedCompany }) => {
               <h3><BarChart3 size={18} /> Statut des Projets</h3>
             </div>
             <div className={styles.cardContent}>
-              <ProjectsChart height={250} />
+              <ProjectsChart data={chartData.projects} height={250} />
             </div>
           </motion.div>
         </div>
@@ -756,7 +856,7 @@ const DashboardV4 = ({ selectedCompany }) => {
               <h3><TrendingUp size={18} /> Évolution ARR/MRR</h3>
             </div>
             <div className={styles.cardContent}>
-              <RevenueChart height={300} />
+              <RevenueChart data={chartData.revenue} height={300} />
             </div>
           </motion.div>
 
@@ -773,7 +873,7 @@ const DashboardV4 = ({ selectedCompany }) => {
               <h3><Wallet size={18} /> Cash Flow</h3>
             </div>
             <div className={styles.cardContent}>
-              <CashFlowChart height={300} />
+              <CashFlowChart data={chartData.cashFlow} height={300} />
             </div>
           </motion.div>
         </div>
@@ -805,7 +905,7 @@ const DashboardV4 = ({ selectedCompany }) => {
             <h3><Activity size={18} /> Vue d'ensemble des performances</h3>
           </div>
           <div className={styles.cardContent}>
-            <MetricsRadar height={400} />
+            <MetricsRadar data={chartData.metricsRadar} height={400} />
           </div>
         </motion.div>
       </motion.div>

@@ -1,0 +1,61 @@
+# MCP Docker Server Configuration
+# This extends the main docker-compose.yml to add MCP capabilities
+version: '3.8'
+
+services:
+  # MCP Docker Server for container management
+  mcp-docker:
+    image: ghcr.io/ckreiling/mcp-server-docker:latest
+    container_name: directus-mcp-docker
+    restart: unless-stopped
+    volumes:
+      # Docker socket for container control (read-only for security)
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Shared data directory
+      - ./mcp-data:/data
+      - ./scripts:/scripts:ro
+    environment:
+      # MCP Configuration
+      MCP_LOG_LEVEL: info
+      MCP_SERVER_NAME: directus-docker-mcp
+      # Security limits
+      MCP_MAX_CONTAINERS: 30
+      MCP_MEMORY_LIMIT: 2g
+      MCP_CPU_LIMIT: 2
+      # Docker configuration
+      DOCKER_HOST: unix:///var/run/docker.sock
+    networks:
+      - directus-network
+    labels:
+      - "com.docker.compose.project=directus-unified-platform"
+      - "mcp.server.type=docker"
+      - "mcp.server.version=latest"
+      - "mcp.enabled=true"
+
+  # Optional: MCP Registry for server discovery
+  mcp-registry:
+    image: docker/mcp-registry:latest
+    container_name: directus-mcp-registry
+    restart: unless-stopped
+    ports:
+      - "9090:9090"  # Web interface for MCP registry
+    volumes:
+      - ./mcp-data/registry:/data
+    environment:
+      REGISTRY_PORT: 9090
+      REGISTRY_DATA_DIR: /data
+      REGISTRY_LOG_LEVEL: info
+    networks:
+      - directus-network
+    labels:
+      - "com.docker.compose.project=directus-unified-platform"
+      - "mcp.server.type=registry"
+
+networks:
+  directus-network:
+    external: true
+    name: directus-unified-platform_default
+
+volumes:
+  mcp-data:
+    driver: local

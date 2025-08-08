@@ -1,0 +1,2101 @@
+{
+  "timestamp": "2025-08-08T17:02:50.134Z",
+  "summary": {
+    "total_collections": 53,
+    "accessible_collections": 53,
+    "collections_with_errors": [],
+    "collections_with_owner_company": 52,
+    "collections_missing_owner_company": [
+      "owner_companies"
+    ],
+    "critical_issues": [
+      {
+        "collection": "bank_transactions",
+        "issue": "missing_critical_fields",
+        "fields": [
+          "transaction_date",
+          "transaction_type"
+        ]
+      },
+      {
+        "collection": "expenses",
+        "issue": "missing_critical_fields",
+        "fields": [
+          "expense_date"
+        ]
+      },
+      {
+        "collection": "kpis",
+        "issue": "missing_critical_fields",
+        "fields": [
+          "metric_name",
+          "value",
+          "date"
+        ]
+      },
+      {
+        "collection": "payments",
+        "issue": "missing_critical_fields",
+        "fields": [
+          "payment_date"
+        ]
+      }
+    ]
+  },
+  "collections": {
+    "accounting_entries": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "entry_number",
+        "description",
+        "debit",
+        "credit",
+        "date",
+        "date_created",
+        "project_id",
+        "transaction_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "activities": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "type",
+        "description",
+        "project_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "approvals": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "audit_logs": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "bank_transactions": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3230",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "description",
+        "amount",
+        "type",
+        "date",
+        "date_created",
+        "project_id",
+        "account_id",
+        "invoice_id",
+        "company_id",
+        "owner_company"
+      ],
+      "missing_fields": [
+        "transaction_date",
+        "transaction_type"
+      ],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "1657",
+        "DAINAMICS": "414",
+        "LEXAIA": "443",
+        "ENKI_REALTY": "382",
+        "TAKEOUT": "334",
+        "null": "0"
+      }
+    },
+    "budgets": {
+      "accessible": true,
+      "error": null,
+      "record_count": "53",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "title",
+        "category",
+        "budget_type",
+        "amount",
+        "spent_amount",
+        "remaining_amount",
+        "period",
+        "year",
+        "department",
+        "status",
+        "notes",
+        "notion_id",
+        "sort",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "project_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "0",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "53"
+      }
+    },
+    "client_invoices": {
+      "accessible": true,
+      "error": null,
+      "record_count": "1043",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "invoice_number",
+        "client_name",
+        "amount",
+        "status",
+        "date_created",
+        "project_id",
+        "company_id",
+        "contact_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [
+        {
+          "field": "project_id",
+          "expected_target": "projects"
+        },
+        {
+          "field": "company_id",
+          "expected_target": "companies"
+        },
+        {
+          "field": "contact_id",
+          "expected_target": "people"
+        }
+      ],
+      "data_distribution": {
+        "HYPERVISUAL": "644",
+        "DAINAMICS": "99",
+        "LEXAIA": "90",
+        "ENKI_REALTY": "118",
+        "TAKEOUT": "92",
+        "null": "0"
+      }
+    },
+    "comments": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "companies": {
+      "accessible": true,
+      "error": null,
+      "record_count": "127",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "name",
+        "industry",
+        "website",
+        "email",
+        "phone",
+        "address",
+        "test_field_1754248771214",
+        "parent_company_id",
+        "account_manager_id",
+        "primary_contact_id",
+        "is_client",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "127",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "company_people": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "companies_id",
+        "people_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "compliance": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "title",
+        "compliance_type",
+        "status",
+        "due_date",
+        "responsible_id",
+        "description",
+        "last_audit_date",
+        "next_audit_date",
+        "risk_level",
+        "audit_log",
+        "notion_id",
+        "sort",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "company_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "content_calendar": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "title",
+        "content_type",
+        "status",
+        "platform",
+        "content_text",
+        "media_urls",
+        "hashtags",
+        "author_id",
+        "performance_metrics",
+        "notion_id",
+        "sort",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "publish_date",
+        "campaign_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "contracts": {
+      "accessible": true,
+      "error": null,
+      "record_count": "60",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "title",
+        "contract_number",
+        "status",
+        "value",
+        "company_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "60",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "credits": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "customer_success": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "debits": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "deliverables": {
+      "accessible": true,
+      "error": null,
+      "record_count": "550",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "title",
+        "description",
+        "status",
+        "due_date",
+        "project_id",
+        "assigned_to",
+        "reviewed_by",
+        "parent_task_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [
+        {
+          "field": "project_id",
+          "expected_target": "projects"
+        },
+        {
+          "field": "assigned_to",
+          "expected_target": "people"
+        },
+        {
+          "field": "reviewed_by",
+          "expected_target": "people"
+        }
+      ],
+      "data_distribution": {
+        "HYPERVISUAL": "301",
+        "DAINAMICS": "62",
+        "LEXAIA": "65",
+        "ENKI_REALTY": "67",
+        "TAKEOUT": "55",
+        "null": "0"
+      }
+    },
+    "deliveries": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "departments": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "evaluations": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "events": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "expenses": {
+      "accessible": true,
+      "error": null,
+      "record_count": "763",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "description",
+        "amount",
+        "category",
+        "date",
+        "date_created",
+        "project_id",
+        "employee_id",
+        "approved_by",
+        "category_id",
+        "owner_company"
+      ],
+      "missing_fields": [
+        "expense_date"
+      ],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "284",
+        "DAINAMICS": "136",
+        "LEXAIA": "121",
+        "ENKI_REALTY": "120",
+        "TAKEOUT": "102",
+        "null": "0"
+      }
+    },
+    "goals": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "interactions": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "title",
+        "interaction_type",
+        "client_id",
+        "contact_person",
+        "interaction_date",
+        "duration_minutes",
+        "notes",
+        "status",
+        "assigned_to",
+        "notion_id",
+        "sort",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "contact_id",
+        "project_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "kpis": {
+      "accessible": true,
+      "error": null,
+      "record_count": "240",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [
+        "metric_name",
+        "value",
+        "date"
+      ],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "48",
+        "DAINAMICS": "48",
+        "LEXAIA": "48",
+        "ENKI_REALTY": "48",
+        "TAKEOUT": "48",
+        "null": "0"
+      }
+    },
+    "notes": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "notifications": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "orders": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "owner_companies": {
+      "accessible": true,
+      "error": null,
+      "record_count": "5",
+      "has_owner_company": false,
+      "fields": [
+        "id",
+        "code",
+        "name",
+        "type",
+        "color",
+        "sort",
+        "status",
+        "description"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "payments": {
+      "accessible": true,
+      "error": null,
+      "record_count": "100",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "amount",
+        "currency",
+        "method",
+        "status",
+        "project_id",
+        "invoice_id",
+        "owner_company"
+      ],
+      "missing_fields": [
+        "payment_date"
+      ],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [
+        {
+          "field": "invoice_id",
+          "expected_target": "client_invoices"
+        }
+      ],
+      "data_distribution": {
+        "HYPERVISUAL": "100",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "people": {
+      "accessible": true,
+      "error": null,
+      "record_count": "515",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "position",
+        "company_id",
+        "manager_id",
+        "department_id",
+        "team_id",
+        "role_id",
+        "is_employee",
+        "employee_company",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [
+        {
+          "field": "company_id",
+          "expected_target": "companies"
+        },
+        {
+          "field": "manager_id",
+          "expected_target": "people"
+        },
+        {
+          "field": "department_id",
+          "expected_target": "departments"
+        },
+        {
+          "field": "team_id",
+          "expected_target": "teams"
+        }
+      ],
+      "data_distribution": {
+        "HYPERVISUAL": "515",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "permissions": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "notion_id",
+        "resource",
+        "role",
+        "action",
+        "scope",
+        "conditions",
+        "is_active",
+        "priority",
+        "description",
+        "notes",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "user_id",
+        "role_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "projects": {
+      "accessible": true,
+      "error": null,
+      "record_count": "299",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "name",
+        "description",
+        "status",
+        "start_date",
+        "end_date",
+        "budget",
+        "client_id",
+        "main_provider_id",
+        "project_manager_id",
+        "sales_person_id",
+        "company_id",
+        "owner_company",
+        "date_created"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [
+        {
+          "field": "client_id",
+          "expected_target": "companies"
+        },
+        {
+          "field": "project_manager_id",
+          "expected_target": "people"
+        },
+        {
+          "field": "company_id",
+          "expected_target": "companies"
+        }
+      ],
+      "data_distribution": {
+        "HYPERVISUAL": "181",
+        "DAINAMICS": "28",
+        "LEXAIA": "30",
+        "ENKI_REALTY": "27",
+        "TAKEOUT": "33",
+        "null": "0"
+      }
+    },
+    "projects_team": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "projects_id",
+        "people_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "proposals": {
+      "accessible": true,
+      "error": null,
+      "record_count": "80",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "80",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "providers": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "name",
+        "status",
+        "sort",
+        "date_created",
+        "date_updated",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "quotes": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "reconciliations": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "refunds": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "returns": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "roles": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "settings": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "skills": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "subscriptions": {
+      "accessible": true,
+      "error": null,
+      "record_count": "120",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "name",
+        "amount",
+        "billing_cycle",
+        "status",
+        "start_date",
+        "end_date",
+        "date_created",
+        "project_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "120",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "supplier_invoices": {
+      "accessible": true,
+      "error": null,
+      "record_count": "375",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "invoice_number",
+        "supplier_name",
+        "amount",
+        "status",
+        "date_created",
+        "project_id",
+        "provider_id",
+        "approved_by",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "375",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "support_tickets": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "ticket_number",
+        "subject",
+        "description",
+        "priority",
+        "status",
+        "date_created",
+        "project_id",
+        "requester_id",
+        "assigned_to",
+        "company_id",
+        "priority_id",
+        "category_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "tags": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "talents": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "full_name",
+        "role",
+        "skills",
+        "level",
+        "department",
+        "status",
+        "start_date",
+        "location",
+        "email",
+        "phone",
+        "certifications",
+        "performance_rating",
+        "salary_range",
+        "notion_id",
+        "sort",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "manager_id",
+        "company_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "talents_simple": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "teams": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "time_tracking": {
+      "accessible": true,
+      "error": null,
+      "record_count": "3",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "notion_id",
+        "project_name",
+        "user_name",
+        "task_description",
+        "hours",
+        "date",
+        "billable",
+        "billed",
+        "hourly_rate",
+        "category",
+        "status",
+        "notes",
+        "date_created",
+        "date_updated",
+        "user_created",
+        "user_updated",
+        "project_id",
+        "task_id",
+        "deliverable_id",
+        "person_id",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": "3",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0",
+        "null": "0"
+      }
+    },
+    "trainings": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    },
+    "workflows": {
+      "accessible": true,
+      "error": null,
+      "record_count": "0",
+      "has_owner_company": true,
+      "fields": [
+        "id",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "status",
+        "owner_company"
+      ],
+      "missing_fields": [],
+      "relations": {
+        "undefined": {}
+      },
+      "broken_relations": [],
+      "data_distribution": {
+        "HYPERVISUAL": 0,
+        "DAINAMICS": 0,
+        "LEXAIA": 0,
+        "ENKI_REALTY": 0,
+        "TAKEOUT": 0,
+        "null": 0
+      }
+    }
+  },
+  "relations_matrix": {
+    "accounting_entries": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "activities": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "approvals": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "audit_logs": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "bank_transactions": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "budgets": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "client_invoices": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "comments": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "companies": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "company_people": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "compliance": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "content_calendar": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "contracts": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "credits": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "customer_success": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "debits": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "deliverables": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "deliveries": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "departments": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "evaluations": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "events": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "expenses": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "goals": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "interactions": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "kpis": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "notes": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "notifications": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "orders": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "owner_companies": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "payments": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "people": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "permissions": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "projects": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "projects_team": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "proposals": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "providers": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "quotes": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "reconciliations": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "refunds": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "returns": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "roles": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "settings": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "skills": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "subscriptions": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "supplier_invoices": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "support_tickets": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "tags": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "talents": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "talents_simple": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "teams": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "time_tracking": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "trainings": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    },
+    "workflows": {
+      "outgoing": {
+        "undefined": {}
+      },
+      "incoming": {}
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "type": "missing_owner_company",
+      "message": "1 collections n'ont pas de champ owner_company",
+      "collections": [
+        "owner_companies"
+      ],
+      "action": "Exécuter le script SQL pour ajouter owner_company à ces collections"
+    },
+    {
+      "priority": "MEDIUM",
+      "type": "broken_relations",
+      "message": "5 collections ont des relations manquantes",
+      "collections": [
+        "client_invoices",
+        "deliverables",
+        "payments",
+        "people",
+        "projects"
+      ],
+      "action": "Créer les relations manquantes via l'API Directus"
+    },
+    {
+      "priority": "HIGH",
+      "type": "null_owner_company",
+      "message": "1 collections ont des données sans owner_company",
+      "details": [
+        {
+          "collection": "budgets",
+          "count": "53"
+        }
+      ],
+      "action": "Mettre à jour les enregistrements pour assigner une valeur owner_company"
+    }
+  ]
+}

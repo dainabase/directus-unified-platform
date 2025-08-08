@@ -25,6 +25,9 @@ import { useProjects, useProjectStatus, useProjectTimeline } from '../../service
 import { useCashFlow, useRevenue, useRunway } from '../../services/hooks/useFinances'
 import { useMetrics, useAlerts, useUrgentTasks, useInsights } from '../../services/hooks/useMetrics'
 
+// Importer le mapping centralisé
+import { FIELD_MAPPINGS } from '../../utils/field-mappings'
+
 // Variants d'animation pour les cards
 const cardVariants = {
   hidden: { 
@@ -201,11 +204,27 @@ const DashboardV4 = ({ selectedCompany }) => {
   // Requêtes API avec React Query
   const { data: companies, isLoading: loadingCompanies } = useCompanies()
   const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
-  const { data: projects, isLoading: loadingProjects } = useProjects(selectedCompany !== 'all' ? { owner_company: { _eq: selectedCompany } } : {})
+  const { data: projects, isLoading: loadingProjects } = useProjects(
+    selectedCompany !== 'all' 
+      ? { owner_company: { _eq: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } } 
+      : {}
+  )
   const { data: projectStatus } = useProjectStatus()
-  const { data: cashFlow } = useCashFlow(selectedCompany !== 'all' ? { owner_company: selectedCompany } : {})
-  const { data: revenue } = useRevenue(selectedCompany !== 'all' ? { owner_company: selectedCompany } : {})
-  const { data: runway } = useRunway(selectedCompany !== 'all' ? { owner_company: selectedCompany } : {})
+  const { data: cashFlow } = useCashFlow(
+    selectedCompany !== 'all' 
+      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      : {}
+  )
+  const { data: revenue } = useRevenue(
+    selectedCompany !== 'all' 
+      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      : {}
+  )
+  const { data: runway } = useRunway(
+    selectedCompany !== 'all' 
+      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      : {}
+  )
   const { data: kpis } = useMetrics()
   const { data: alerts = [] } = useAlerts()
   const { data: tasks = [] } = useUrgentTasks()
@@ -219,6 +238,19 @@ const DashboardV4 = ({ selectedCompany }) => {
     // Montrer le contenu après un court délai
     setTimeout(() => setShowContent(true), 100)
   }, [])
+  
+  // DEBUG FILTRE
+  useEffect(() => {
+    console.log('🎯 FILTRE ACTIF:')
+    console.log('   selectedCompany:', selectedCompany)
+    console.log('   normalized:', selectedCompany ? FIELD_MAPPINGS.normalizeCompany(selectedCompany) : 'all')
+    console.log('   projects count:', projects?.length || 0)
+    
+    if (projects && projects.length > 0) {
+      const companiesInData = [...new Set(projects.map(p => p.owner_company))]
+      console.log('   Entreprises dans les données:', companiesInData)
+    }
+  }, [selectedCompany, projects])
 
   // DEBUG: Log des données reçues
   useEffect(() => {

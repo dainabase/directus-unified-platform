@@ -6,7 +6,14 @@ export const financesAPI = {
     const params = { fields: ['*'] }
     
     if (filters.owner_company) {
-      params.filter = { owner_company: { _eq: filters.owner_company } }
+      // Support des deux formats de filtre
+      if (typeof filters.owner_company === 'string') {
+        params.filter = { owner_company: { _eq: filters.owner_company } }
+      } else if (filters.owner_company._eq) {
+        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
+      } else {
+        params.filter = filters
+      }
     }
     
     return directus.get('client_invoices', params)
@@ -17,7 +24,14 @@ export const financesAPI = {
     const params = { fields: ['*'] }
     
     if (filters.owner_company) {
-      params.filter = { owner_company: { _eq: filters.owner_company } }
+      // Support des deux formats de filtre
+      if (typeof filters.owner_company === 'string') {
+        params.filter = { owner_company: { _eq: filters.owner_company } }
+      } else if (filters.owner_company._eq) {
+        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
+      } else {
+        params.filter = filters
+      }
     }
     
     return directus.get('expenses', params)
@@ -28,7 +42,14 @@ export const financesAPI = {
     const params = { fields: ['*'] }
     
     if (filters.owner_company) {
-      params.filter = { owner_company: { _eq: filters.owner_company } }
+      // Support des deux formats de filtre
+      if (typeof filters.owner_company === 'string') {
+        params.filter = { owner_company: { _eq: filters.owner_company } }
+      } else if (filters.owner_company._eq) {
+        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
+      } else {
+        params.filter = filters
+      }
     }
     
     return directus.get('bank_transactions', params)

@@ -10,13 +10,29 @@ export const projectsAPI = {
         fields: ['id', 'name', 'status', 'owner_company', 'budget', 'start_date', 'end_date', 'client_id', 'company_id']
       }
       
-      // Utiliser owner_company au lieu de company
+      // CORRIGER : Gérer les deux formats de filtre
       if (filters.owner_company) {
-        params.filter = { owner_company: { _eq: filters.owner_company } }
+        // Si c'est un objet avec _eq (format Directus)
+        if (filters.owner_company._eq) {
+          params.filter = { owner_company: { _eq: filters.owner_company._eq } }
+        } 
+        // Si c'est une string directe (ancien format)
+        else if (typeof filters.owner_company === 'string') {
+          params.filter = { owner_company: { _eq: filters.owner_company } }
+        }
+        // Si c'est déjà un objet de filtre complet
+        else {
+          params.filter = filters
+        }
       }
       
       const projects = await directus.get('projects', params)
-      console.log(`✅ Projects loaded: ${projects.length}`, filters.owner_company ? `for ${filters.owner_company}` : '(all)')
+      console.log(`✅ Projects loaded: ${projects.length}`)
+      
+      if (params.filter?.owner_company?._eq) {
+        console.log(`   Filtré pour: ${params.filter.owner_company._eq}`)
+      }
+      
       return projects || []
     } catch (error) {
       console.error('❌ Error fetching projects:', error)

@@ -156,10 +156,52 @@ const DashboardV4 = ({ selectedCompany }) => {
     showNotification('success', 'Données réelles chargées !')
   }
   
+  // DEBUG API DIRECT
+  useEffect(() => {
+    console.log('🔍 DEBUG DASHBOARD V4 - DÉMARRAGE');
+    
+    // Test direct de l'API
+    const debugAPI = async () => {
+      try {
+        // Import dynamique pour éviter les erreurs
+        const { default: directus } = await import('../../services/api/directus');
+        
+        // Test 1: Récupérer les projets directement
+        const projects = await directus.get('projects');
+        console.log('📂 PROJETS DIRECTS:', projects);
+        console.log('   Nombre:', projects?.length || 0);
+        
+        // Test 2: Récupérer les factures directement
+        const invoices = await directus.get('client_invoices');
+        console.log('💰 FACTURES DIRECTES:', invoices);
+        console.log('   Nombre:', invoices?.length || 0);
+        
+        // Test 3: Récupérer par entreprise
+        if (projects && projects.length > 0) {
+          const hypervisualProjects = projects.filter(p => p.owner_company === 'HYPERVISUAL');
+          console.log('🏢 PROJETS HYPERVISUAL:', hypervisualProjects.length);
+        }
+        
+        // Test 4: Calculer les vraies métriques
+        if (invoices && invoices.length > 0) {
+          const paidInvoices = invoices.filter(i => i.status === 'paid');
+          const totalRevenue = paidInvoices.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+          console.log('💎 REVENUE TOTAL RÉEL:', totalRevenue.toLocaleString(), 'CHF');
+          console.log('📊 MRR RÉEL:', Math.round(totalRevenue / 12).toLocaleString(), 'CHF');
+        }
+        
+      } catch (error) {
+        console.error('❌ ERREUR DEBUG:', error);
+      }
+    };
+    
+    debugAPI();
+  }, [])
+  
   // Requêtes API avec React Query
   const { data: companies, isLoading: loadingCompanies } = useCompanies()
   const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
-  const { data: projects, isLoading: loadingProjects } = useProjects(selectedCompany !== 'all' ? { company: { _eq: selectedCompany } } : {})
+  const { data: projects, isLoading: loadingProjects } = useProjects(selectedCompany !== 'all' ? { owner_company: { _eq: selectedCompany } } : {})
   const { data: projectStatus } = useProjectStatus()
   const { data: cashFlow } = useCashFlow()
   const { data: revenue } = useRevenue()
@@ -180,7 +222,7 @@ const DashboardV4 = ({ selectedCompany }) => {
 
   // DEBUG: Log des données reçues
   useEffect(() => {
-    console.log('🔍 DEBUG DONNÉES RÉELLES:');
+    console.log('🔍 DEBUG DONNÉES HOOKS:');
     console.log('Companies:', companies);
     console.log('Projects:', projects);
     console.log('Cash Flow:', cashFlow);
@@ -198,7 +240,14 @@ const DashboardV4 = ({ selectedCompany }) => {
     if (runway?.runway < 0) {
       console.warn('⚠️ ATTENTION: Runway négatif, probablement des données démo !');
     }
-  }, [companies, projects, cashFlow, revenue, runway, kpis, alerts, tasks, insights])
+    
+    // Vérifier si selectedCompany filtre correctement
+    console.log('🎯 SELECTED COMPANY:', selectedCompany);
+    if (projects && projects.length > 0 && selectedCompany && selectedCompany !== 'all') {
+      const filtered = projects.filter(p => p.owner_company === selectedCompany);
+      console.log(`📊 Projets filtrés pour ${selectedCompany}:`, filtered.length);
+    }
+  }, [companies, projects, cashFlow, revenue, runway, kpis, alerts, tasks, insights, selectedCompany])
   
   // Formater les métriques pour l'affichage
   const metrics = {

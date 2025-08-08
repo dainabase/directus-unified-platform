@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Dashboard Directus</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #0f0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .data { background: #000; padding: 10px; overflow: auto; max-height: 200px; }
+        button { background: #0f0; color: #000; padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 DEBUG DASHBOARD DIRECTUS</h1>
+    
+    <div class="section">
+        <h2>1. Test Connexion API</h2>
+        <button onclick="testConnection()">Tester Connexion</button>
+        <div id="connection-result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>2. Vérifier Collections</h2>
+        <button onclick="checkCollections()">Vérifier Toutes Collections</button>
+        <div id="collections-result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>3. Données Par Entreprise</h2>
+        <button onclick="checkByCompany('HYPERVISUAL')">HYPERVISUAL</button>
+        <button onclick="checkByCompany('DAINAMICS')">DAINAMICS</button>
+        <button onclick="checkByCompany('LEXAIA')">LEXAIA</button>
+        <button onclick="checkByCompany('ENKI_REALTY')">ENKI REALTY</button>
+        <button onclick="checkByCompany('TAKEOUT')">TAKEOUT</button>
+        <div id="company-result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>4. Calculs Métriques</h2>
+        <button onclick="calculateMetrics()">Calculer ARR/MRR/Runway</button>
+        <div id="metrics-result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8055';
+        const API_TOKEN = 'dashboard-api-token-2025';
+        
+        const api = axios.create({
+            baseURL: API_URL,
+            headers: {
+                'Authorization': `Bearer ${API_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        async function testConnection() {
+            const div = document.getElementById('connection-result');
+            try {
+                const response = await api.get('/server/ping');
+                div.innerHTML = '<span class="success">✅ Connexion OK</span>';
+            } catch (error) {
+                div.innerHTML = `<span class="error">❌ Erreur: ${error.message}</span>`;
+            }
+        }
+        
+        async function checkCollections() {
+            const div = document.getElementById('collections-result');
+            div.innerHTML = 'Chargement...';
+            
+            try {
+                const collections = [
+                    'companies', 'projects', 'client_invoices', 
+                    'bank_transactions', 'expenses', 'people'
+                ];
+                
+                let html = '<div class="data">';
+                for (const collection of collections) {
+                    const response = await api.get(`/items/${collection}?limit=1000`);
+                    const count = response.data.data.length;
+                    html += `<div>${collection}: <strong>${count}</strong> enregistrements</div>`;
+                }
+                html += '</div>';
+                
+                div.innerHTML = html;
+            } catch (error) {
+                div.innerHTML = `<span class="error">❌ Erreur: ${error.message}</span>`;
+            }
+        }
+        
+        async function checkByCompany(company) {
+            const div = document.getElementById('company-result');
+            div.innerHTML = `<h3>Données pour ${company}</h3>`;
+            
+            try {
+                // Projets
+                const projects = await api.get(`/items/projects?filter[owner_company][_eq]=${company}`);
+                div.innerHTML += `<div>Projets: ${projects.data.data.length}</div>`;
+                
+                // Factures
+                const invoices = await api.get(`/items/client_invoices?filter[owner_company][_eq]=${company}`);
+                div.innerHTML += `<div>Factures: ${invoices.data.data.length}</div>`;
+                
+                // Total factures
+                const total = invoices.data.data.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                div.innerHTML += `<div>CA Total: ${total.toLocaleString()} CHF</div>`;
+                
+                // Transactions
+                const transactions = await api.get(`/items/bank_transactions?filter[owner_company][_eq]=${company}`);
+                div.innerHTML += `<div>Transactions: ${transactions.data.data.length}</div>`;
+                
+                // Solde
+                const balance = transactions.data.data.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+                div.innerHTML += `<div>Solde bancaire: ${balance.toLocaleString()} CHF</div>`;
+                
+            } catch (error) {
+                div.innerHTML += `<div class="error">❌ Erreur: ${error.message}</div>`;
+            }
+        }
+        
+        async function calculateMetrics() {
+            const div = document.getElementById('metrics-result');
+            div.innerHTML = '<h3>Calcul des métriques globales</h3>';
+            
+            try {
+                // Toutes les factures payées
+                const invoices = await api.get('/items/client_invoices?filter[status][_eq]=paid');
+                const totalRevenue = invoices.data.data.reduce((sum, inv) => sum + parseFloat(inv.amount || 0), 0);
+                
+                // MRR et ARR
+                const mrr = Math.floor(totalRevenue / 12);
+                const arr = mrr * 12;
+                
+                // Toutes les transactions
+                const transactions = await api.get('/items/bank_transactions');
+                const totalBalance = transactions.data.data.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+                
+                // Toutes les dépenses
+                const expenses = await api.get('/items/expenses');
+                const monthlyExpenses = expenses.data.data.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0) / 12;
+                
+                // Runway
+                const runway = totalBalance > 0 ? Math.floor(totalBalance / monthlyExpenses) : 0;
+                
+                div.innerHTML += `
+                    <div class="data">
+                        <div>💰 Revenue Total: ${totalRevenue.toLocaleString()} CHF</div>
+                        <div>📊 MRR: ${mrr.toLocaleString()} CHF</div>
+                        <div>📈 ARR: ${arr.toLocaleString()} CHF</div>
+                        <div>🏦 Solde Total: ${totalBalance.toLocaleString()} CHF</div>
+                        <div>💸 Dépenses Mensuelles: ${monthlyExpenses.toLocaleString()} CHF</div>
+                        <div>🚀 Runway: ${runway} mois</div>
+                    </div>
+                `;
+            } catch (error) {
+                div.innerHTML = `<span class="error">❌ Erreur: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

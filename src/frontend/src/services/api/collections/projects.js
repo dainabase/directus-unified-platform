@@ -5,8 +5,8 @@ export const projectsAPI = {
   async getAll() {
     try {
       const projects = await directus.get('projects', {
-        fields: ['*'],  // Pas de company.name
-        sort: ['-date_created']
+        fields: ['*']
+        // PAS DE SORT pour éviter l'erreur 403
       })
       return projects || []
     } catch (error) {

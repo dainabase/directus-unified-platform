@@ -141,6 +141,21 @@ const DashboardV4 = ({ selectedCompany }) => {
   const [showContent, setShowContent] = useState(false)
   const queryClient = useQueryClient()
   
+  // Fonction pour forcer le rafraîchissement des vraies données
+  const forceRefreshData = async () => {
+    console.log('🔄 FORCE REFRESH DE TOUTES LES DONNÉES...')
+    showNotification('info', 'Rafraîchissement des données...')
+    
+    // Invalider toutes les queries pour forcer le rechargement
+    await queryClient.invalidateQueries()
+    
+    // Refetch tout
+    await queryClient.refetchQueries()
+    
+    console.log('✅ Données rafraîchies !')
+    showNotification('success', 'Données réelles chargées !')
+  }
+  
   // Requêtes API avec React Query
   const { data: companies, isLoading: loadingCompanies } = useCompanies()
   const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
@@ -165,7 +180,7 @@ const DashboardV4 = ({ selectedCompany }) => {
 
   // DEBUG: Log des données reçues
   useEffect(() => {
-    console.log('🔍 DEBUG DONNÉES:');
+    console.log('🔍 DEBUG DONNÉES RÉELLES:');
     console.log('Companies:', companies);
     console.log('Projects:', projects);
     console.log('Cash Flow:', cashFlow);
@@ -175,6 +190,14 @@ const DashboardV4 = ({ selectedCompany }) => {
     console.log('Alerts:', alerts);
     console.log('Tasks:', tasks);
     console.log('Insights:', insights);
+    
+    // Vérifier si les données sont réelles ou démo
+    if (revenue?.arr > 10000000) {
+      console.warn('⚠️ ATTENTION: ARR trop élevé, probablement des données démo !');
+    }
+    if (runway?.runway < 0) {
+      console.warn('⚠️ ATTENTION: Runway négatif, probablement des données démo !');
+    }
   }, [companies, projects, cashFlow, revenue, runway, kpis, alerts, tasks, insights])
   
   // Formater les métriques pour l'affichage
@@ -923,6 +946,32 @@ const DashboardV4 = ({ selectedCompany }) => {
           </div>
         </motion.div>
       </motion.div>
+      
+      {/* Bouton temporaire pour forcer les vraies données */}
+      <button 
+        onClick={forceRefreshData}
+        style={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 9999,
+          background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+          color: 'white',
+          padding: '15px 25px',
+          borderRadius: '10px',
+          border: 'none',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          boxShadow: '0 10px 30px rgba(239, 68, 68, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}
+      >
+        <RefreshCw size={20} />
+        🔄 FORCER VRAIES DONNÉES
+      </button>
     </motion.div>
   )
 }

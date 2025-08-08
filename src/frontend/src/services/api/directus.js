@@ -44,10 +44,10 @@ directusAPI.interceptors.response.use(
                    error.message || 
                    'Une erreur est survenue'
     
-    // Si erreur CORS ou connexion, utiliser mode démo
+    // Si erreur CORS ou connexion, NE PAS UTILISER MODE DÉMO
     if (error.code === 'ERR_NETWORK' || error.response?.status === 0) {
-      console.warn('⚠️ API non disponible, mode démo activé')
-      return { data: { data: null, demo: true } }
+      console.error('❌ API non disponible')
+      // Laisser l'erreur se propager
     }
     
     // Notification d'erreur
@@ -137,18 +137,9 @@ export const directus = {
     try {
       const response = await directusAPI.get(`/${collection}`, { params })
       
-      // Si mode démo activé
-      if (response.data?.demo || import.meta.env.VITE_USE_DEMO_DATA === 'true') {
-        console.warn(`📊 Mode démo pour ${collection}`)
-        return getDemoData(collection)
-      }
-      
+      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
       return response.data.data || []
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
-        console.warn(`📊 Mode démo pour ${collection}`)
-        return getDemoData(collection)
-      }
       console.error(`Error fetching ${collection}:`, error)
       return []
     }
@@ -159,17 +150,9 @@ export const directus = {
     try {
       const response = await directusAPI.get(`/${collection}/${id}`, { params })
       
-      if (response.data?.demo) {
-        const demoData = getDemoData(collection)
-        return demoData.find(item => item.id === parseInt(id)) || null
-      }
-      
+      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
       return response.data.data
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
-        const demoData = getDemoData(collection)
-        return demoData.find(item => item.id === parseInt(id)) || null
-      }
       console.error(`Error fetching ${collection}/${id}:`, error)
       return null
     }
@@ -189,42 +172,9 @@ export const directus = {
       
       const response = await directusAPI.get(`/${collection}`, { params: aggregateParams })
       
-      if (response.data?.demo) {
-        // Simuler l'agrégation pour le mode démo
-        const demoData = getDemoData(collection)
-        const result = {}
-        
-        if (params.count) {
-          result.count = demoData.length
-        }
-        
-        if (params.sum) {
-          params.sum.forEach(field => {
-            result[`sum_${field}`] = demoData.reduce((sum, item) => sum + (item[field] || 0), 0)
-          })
-        }
-        
-        return [result]
-      }
-      
+      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
       return response.data.data || []
     } catch (error) {
-      if (import.meta.env.VITE_USE_DEMO_DATA === 'true') {
-        const demoData = getDemoData(collection)
-        const result = {}
-        
-        if (params.count) {
-          result.count = demoData.length
-        }
-        
-        if (params.sum) {
-          params.sum.forEach(field => {
-            result[`sum_${field}`] = demoData.reduce((sum, item) => sum + (item[field] || 0), 0)
-          })
-        }
-        
-        return [result]
-      }
       console.error(`Error aggregating ${collection}:`, error)
       return []
     }

@@ -1,15 +1,19 @@
 import directus from '../directus'
 import { financesAPI } from './finances'
+import { addOwnerCompanyToParams } from '../../../utils/filter-helpers'
 
 export const metricsAPI = {
-  async getKPIs() {
+  async getKPIs(filters = {}) {
     try {
+      // Préparer les paramètres avec filtre owner_company si nécessaire
+      const params = addOwnerCompanyToParams({}, filters)
+      
       const [companies, people, projects, revenue, runway] = await Promise.all([
-        directus.get('companies'),
-        directus.get('people'),
-        directus.get('projects'),
-        financesAPI.getRevenue(),
-        financesAPI.getRunway()
+        directus.get('companies'), // Les companies n'ont pas owner_company
+        directus.get('people', params),
+        directus.get('projects', params),
+        financesAPI.getRevenue(filters),
+        financesAPI.getRunway(filters)
       ])
 
       // Calculer EBITDA (simple pour l'instant)
@@ -60,11 +64,21 @@ export const metricsAPI = {
   },
 
   // Clients actifs - simplifié
-  async getActiveClients() {
+  async getActiveClients(filters = {}) {
     try {
-      const companies = await directus.get('companies')
+      // Les companies n'ont pas owner_company, on pourrait filtrer par les projets actifs
+      const params = addOwnerCompanyToParams({}, filters)
+      const projects = await directus.get('projects', params)
+      
+      // Compter les clients uniques avec des projets actifs
+      const activeClientIds = [...new Set(projects
+        .filter(p => p.status === 'active' || p.status === 'in_progress')
+        .map(p => p.client_id)
+        .filter(Boolean)
+      )]
+      
       return {
-        count: companies.filter(c => c.status === 'active' || !c.status).length
+        count: activeClientIds.length
       }
     } catch (error) {
       console.error('Error getActiveClients:', error)
@@ -73,9 +87,10 @@ export const metricsAPI = {
   },
 
   // Métriques équipe - simplifié
-  async getTeamMetrics() {
+  async getTeamMetrics(filters = {}) {
     try {
-      const people = await directus.get('people')
+      const params = addOwnerCompanyToParams({}, filters)
+      const people = await directus.get('people', params)
       return {
         count: people.length,
         productivity: 85.2 // Métrique simulée
@@ -90,9 +105,10 @@ export const metricsAPI = {
   },
 
   // Simplifier getAlerts - pas de filtres complexes
-  async getAlerts() {
+  async getAlerts(filters = {}) {
     try {
-      const deliverables = await directus.get('deliverables')
+      const params = addOwnerCompanyToParams({}, filters)
+      const deliverables = await directus.get('deliverables', params)
       
       // Filtrer côté client
       const urgentTasks = deliverables
@@ -120,9 +136,10 @@ export const metricsAPI = {
   },
 
   // Simplifier getUrgentTasks
-  async getUrgentTasks() {
+  async getUrgentTasks(filters = {}) {
     try {
-      const deliverables = await directus.get('deliverables')
+      const params = addOwnerCompanyToParams({}, filters)
+      const deliverables = await directus.get('deliverables', params)
       
       return deliverables
         .filter(d => {
@@ -147,12 +164,12 @@ export const metricsAPI = {
   },
 
   // getInsights avec données simulées mais cohérentes
-  async getInsights() {
+  async getInsights(filters = {}) {
     try {
       // Récupérer des données de base pour contextualiser les insights
       const [revenue, runway] = await Promise.all([
-        financesAPI.getRevenue().catch(() => ({ mrr: 0, arr: 0, growth: 0 })),
-        financesAPI.getRunway().catch(() => ({ runway: 0, status: 'unknown' }))
+        financesAPI.getRevenue(filters).catch(() => ({ mrr: 0, arr: 0, growth: 0 })),
+        financesAPI.getRunway(filters).catch(() => ({ runway: 0, status: 'unknown' }))
       ])
 
       const insights = [

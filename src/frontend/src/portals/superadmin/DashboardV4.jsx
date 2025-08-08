@@ -203,7 +203,9 @@ const DashboardV4 = ({ selectedCompany }) => {
   
   // Requêtes API avec React Query
   const { data: companies, isLoading: loadingCompanies } = useCompanies()
-  const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
+  const { data: companyMetrics } = useCompanyMetrics(
+    selectedCompany !== 'all' ? COMPANY_MAPPING.normalize(selectedCompany) : null
+  )
   const { data: projects, isLoading: loadingProjects } = useProjects(
     selectedCompany !== 'all' 
       ? { owner_company: { _eq: COMPANY_MAPPING.normalize(selectedCompany) } } 
@@ -225,10 +227,26 @@ const DashboardV4 = ({ selectedCompany }) => {
       ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
       : {}
   )
-  const { data: kpis } = useMetrics()
-  const { data: alerts = [] } = useAlerts()
-  const { data: tasks = [] } = useUrgentTasks()
-  const { data: insights = [] } = useInsights()
+  const { data: kpis } = useMetrics(
+    selectedCompany !== 'all' 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
+      : {}
+  )
+  const { data: alerts = [] } = useAlerts(
+    selectedCompany !== 'all' 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
+      : {}
+  )
+  const { data: tasks = [] } = useUrgentTasks(
+    selectedCompany !== 'all' 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
+      : {}
+  )
+  const { data: insights = [] } = useInsights(
+    selectedCompany !== 'all' 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
+      : {}
+  )
   
   // Gérer le loading global
   const isLoadingData = loadingCompanies || loadingProjects || !kpis || !revenue || !runway
@@ -764,7 +782,7 @@ const DashboardV4 = ({ selectedCompany }) => {
           >
             <div className={styles.cardHeader}>
               <h3><DollarSign size={18} /> Pipeline Commercial</h3>
-              <span className={styles.value}>€850K</span>
+              <span className={styles.value}>€{revenue ? Math.round(revenue.mrr * 4.25 / 1000) : '...'}K</span>
             </div>
             <div className={styles.cardContent}>
               <motion.div 
@@ -893,10 +911,10 @@ const DashboardV4 = ({ selectedCompany }) => {
             <div className={styles.cardContent}>
               <div className={styles.metricsGrid}>
                 {[
-                  { label: 'Trésorerie', value: '€847K', color: '#10B981' },
-                  { label: 'Burn Rate', value: '€115K/mois', color: '#EF4444' },
-                  { label: 'Revenus mensuels', value: '€200K', color: '#3B82F6' },
-                  { label: 'Marge EBITDA', value: '18.5%', color: '#F59E0B' }
+                  { label: 'Trésorerie', value: runway ? `€${Math.round(runway.balance / 1000)}K` : '€...K', color: '#10B981' },
+                  { label: 'Burn Rate', value: runway ? `€${Math.round(runway.monthlyBurn / 1000)}K/mois` : '€...K/mois', color: '#EF4444' },
+                  { label: 'Revenus mensuels', value: revenue ? `€${Math.round(revenue.mrr / 1000)}K` : '€...K', color: '#3B82F6' },
+                  { label: 'Marge EBITDA', value: kpis ? `${kpis.ebitda}%` : '...%', color: '#F59E0B' }
                 ].map((metric, index) => (
                   <motion.div 
                     key={metric.label}
@@ -940,7 +958,7 @@ const DashboardV4 = ({ selectedCompany }) => {
                   whileHover={{ scale: 1.02 }}
                 >
                   <span>Total impayé</span>
-                  <span className={styles.amount}>€320K</span>
+                  <span className={styles.amount}>€{revenue ? Math.round(revenue.mrr * 1.6 / 1000) : '...'}K</span>
                 </motion.div>
                 <motion.div 
                   className={styles.invoiceStat}

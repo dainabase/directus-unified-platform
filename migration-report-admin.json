@@ -1,0 +1,173 @@
+{
+  "timestamp": "2025-08-08T13:14:20.476Z",
+  "success": 0,
+  "existing": 0,
+  "errors": 41,
+  "total": 41,
+  "details": [
+    {
+      "collection": "companies",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "people",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "time_tracking",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "proposals",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "quotes",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "support_tickets",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "orders",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "talents",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "interactions",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "teams",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "accounting_entries",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "activities",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "approvals",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "audit_logs",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "comments",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "company_people",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "compliance",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "content_calendar",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "credits",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "customer_success",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "debits",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "deliveries",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "departments",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "evaluations",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "events",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "goals",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "notes",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "notifications",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "permissions",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "projects_team",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "providers",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "reconciliations",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "refunds",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "returns",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "roles",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "settings",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "skills",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "tags",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "talents_simple",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "trainings",
+      "error": "You don't have permission to access this."
+    },
+    {
+      "collection": "workflows",
+      "error": "You don't have permission to access this."
+    }
+  ]
+}

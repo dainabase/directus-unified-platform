@@ -52,12 +52,12 @@ const COLLECTIONS_TO_FIX = [
   'workflows'
 ];
 
-async function createFieldsViaAdmin() {
-  console.log('🔐 CRÉATION DES CHAMPS VIA LOGIN ADMIN');
+async function fixWithJMDLogin() {
+  console.log('🔐 AJOUT OWNER_COMPANY VIA LOGIN JMD');
   console.log('='.repeat(80));
   
   try {
-    // 1. Login avec les credentials admin
+    // 1. Login avec JMD
     console.log('🔑 Connexion avec jmd@hypervisual.ch...');
     
     const loginRes = await axios.post(`${API_URL}/auth/login`, {
@@ -65,11 +65,11 @@ async function createFieldsViaAdmin() {
       password: 'Spiral74@#'
     });
     
-    const { access_token, refresh_token } = loginRes.data.data;
+    const { access_token } = loginRes.data.data;
     console.log('✅ Connexion réussie!');
     
     // Créer un client avec le token de session
-    const adminClient = axios.create({
+    const client = axios.create({
       baseURL: API_URL,
       headers: {
         'Authorization': `Bearer ${access_token}`,
@@ -77,12 +77,6 @@ async function createFieldsViaAdmin() {
       },
       timeout: 30000
     });
-    
-    // Vérifier que c'est bien un admin
-    const meRes = await adminClient.get('/users/me');
-    const user = meRes.data.data;
-    console.log(`   Utilisateur: ${user.email}`);
-    console.log(`   Nom: ${user.first_name} ${user.last_name}`);
     
     let successCount = 0;
     let errorCount = 0;
@@ -100,7 +94,7 @@ async function createFieldsViaAdmin() {
       try {
         // Vérifier si le champ existe déjà
         try {
-          await adminClient.get(`/fields/${collection}/owner_company`);
+          await client.get(`/fields/${collection}/owner_company`);
           console.log('  ℹ️  owner_company existe déjà');
           existingCount++;
           continue;
@@ -108,7 +102,7 @@ async function createFieldsViaAdmin() {
           if (e.response?.status !== 404) throw e;
         }
         
-        // Créer le champ
+        // Créer le champ avec le format qui fonctionne
         console.log('  ➕ Ajout du champ owner_company...');
         
         const fieldConfig = {
@@ -156,14 +150,14 @@ async function createFieldsViaAdmin() {
           }
         };
         
-        const response = await adminClient.post(`/fields/${collection}`, fieldConfig);
+        const response = await client.post(`/fields/${collection}`, fieldConfig);
         
         if (response.status === 200 || response.status === 201) {
           console.log('  ✅ owner_company ajouté avec succès!');
           successCount++;
           
           // Migrer quelques données
-          await migrateCollectionData(adminClient, collection);
+          await migrateCollectionData(client, collection);
         }
         
       } catch (error) {
@@ -203,17 +197,12 @@ async function createFieldsViaAdmin() {
       details: errors
     };
     
-    await fs.writeFile('migration-report-admin.json', JSON.stringify(report, null, 2));
-    console.log('\n📄 Rapport sauvegardé: migration-report-admin.json');
+    await fs.writeFile('migration-report-jmd.json', JSON.stringify(report, null, 2));
+    console.log('\n📄 Rapport sauvegardé: migration-report-jmd.json');
     
     if (successCount > 0) {
       console.log('\n🎉 MIGRATION RÉUSSIE!');
       console.log('Prochaine étape: Relancer les tests de filtrage');
-    }
-    
-    // Rafraîchir le token si besoin
-    if (refresh_token) {
-      console.log('\n🔄 Token de session actif pour les prochaines opérations');
     }
     
   } catch (error) {
@@ -274,4 +263,4 @@ async function migrateCollectionData(client, collection) {
 }
 
 // Exécuter
-createFieldsViaAdmin().catch(console.error);
+fixWithJMDLogin().catch(console.error);

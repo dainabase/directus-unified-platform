@@ -79,7 +79,9 @@
       "Bash(test:*)",
       "Bash(npm run build:*)",
       "Bash(npx vite:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(find:*)",
+      "Bash(npx directus users passwd:*)"
     ],
     "deny": []
   }

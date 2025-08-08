@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'; // Token JMD avec permissions
 
 // Configuration du champ owner_company
 const OWNER_COMPANY_FIELD = {

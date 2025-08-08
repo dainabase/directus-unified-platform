@@ -1,5 +1,5 @@
 # 📊 POINT DE SITUATION - PROJET DIRECTUS UNIFIED PLATFORM
-## 📅 Date : 8 Août 2025
+## 📅 Date : 8 Août 2024
 
 ## 🎯 OBJECTIF INITIAL DU PROJET
 Créer une plateforme unifiée multi-entreprises avec :

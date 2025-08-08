@@ -1,0 +1,42 @@
+[
+  {
+    "id": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a",
+    "name": "Claude code",
+    "icon": "badge",
+    "description": "API full admin",
+    "ip_access": null,
+    "enforce_tfa": false,
+    "admin_access": false,
+    "app_access": false
+  },
+  {
+    "id": "abf8a154-5b1c-4a46-ac9c-7300570f4f17",
+    "name": "$t:public_label",
+    "icon": "public",
+    "description": "$t:public_description",
+    "ip_access": null,
+    "enforce_tfa": false,
+    "admin_access": false,
+    "app_access": false
+  },
+  {
+    "id": "ba39ea0c-0d79-47f7-bb54-aab2112224a1",
+    "name": "Administrator",
+    "icon": "verified",
+    "description": "$t:admin_description",
+    "ip_access": null,
+    "enforce_tfa": false,
+    "admin_access": true,
+    "app_access": true
+  },
+  {
+    "id": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c",
+    "name": "Admin",
+    "icon": "badge",
+    "description": "Claude code",
+    "ip_access": null,
+    "enforce_tfa": false,
+    "admin_access": true,
+    "app_access": true
+  }
+]

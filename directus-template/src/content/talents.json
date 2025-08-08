@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "full_name": "Emma Leclerc",
+    "role": "Développeur Full Stack",
+    "skills": [
+      "ENKI-REALTY",
+      "ALEXAIA"
+    ],
+    "level": "mid",
+    "department": "tech",
+    "status": "active",
+    "start_date": "2025-07-08",
+    "location": "Remote",
+    "email": "emma.leclerc@example.com",
+    "phone": "+33698532147",
+    "certifications": null,
+    "performance_rating": null,
+    "salary_range": null,
+    "notion_id": "22eadb95-3c6f-80bc-b2de-d61798426b73",
+    "sort": null,
+    "date_created": "2025-08-03T05:54:03.552Z",
+    "date_updated": "2025-07-12T17:27:00.000Z",
+    "user_created": "49513d7d-87f4-4ad4-9a9f-007beda04df1",
+    "user_updated": null,
+    "manager_id": null,
+    "company_id": null
+  },
+  {
+    "id": 2,
+    "full_name": "Thomas Dubois",
+    "role": "Responsable Marketing",
+    "skills": [
+      "TAKE-OUT.AI"
+    ],
+    "level": "mid",
+    "department": "marketing",
+    "status": "active",
+    "start_date": "2025-07-11",
+    "location": "Remote",
+    "email": "thomas.dubois@example.com",
+    "phone": "+33612457836",
+    "certifications": null,
+    "performance_rating": null,
+    "salary_range": null,
+    "notion_id": "22eadb95-3c6f-806c-8e4c-f01f5d3eaeb7",
+    "sort": null,
+    "date_created": "2025-08-03T05:54:03.559Z",
+    "date_updated": "2025-07-12T17:27:00.000Z",
+    "user_created": "49513d7d-87f4-4ad4-9a9f-007beda04df1",
+    "user_updated": null,
+    "manager_id": null,
+    "company_id": null
+  },
+  {
+    "id": 3,
+    "full_name": "Sophie Martin",
+    "role": "Chef de Projet Digital",
+    "skills": [
+      "HYPERVISUAL",
+      "DAINAMICS"
+    ],
+    "level": "mid",
+    "department": "tech",
+    "status": "active",
+    "start_date": "2025-07-10",
+    "location": "Remote",
+    "email": "sophie.martin@example.com",
+    "phone": "+33678541290",
+    "certifications": null,
+    "performance_rating": null,
+    "salary_range": null,
+    "notion_id": "22eadb95-3c6f-80f5-8744-e5597b6c9860",
+    "sort": null,
+    "date_created": "2025-08-03T05:54:03.564Z",
+    "date_updated": "2025-07-12T17:27:00.000Z",
+    "user_created": "49513d7d-87f4-4ad4-9a9f-007beda04df1",
+    "user_updated": null,
+    "manager_id": null,
+    "company_id": null
+  }
+]

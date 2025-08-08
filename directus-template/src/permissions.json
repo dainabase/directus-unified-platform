@@ -1,0 +1,4611 @@
+[
+  {
+    "collection": "directus_activity",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_users",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_users",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_users",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_users",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_files",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_files",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_files",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_files",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_files",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_access",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_access",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_access",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_access",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_access",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "talents",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "talents",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "talents",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "talents",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "talents",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "projects",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "projects",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "projects",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "projects",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "projects",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "permissions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "permissions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "permissions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "permissions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "permissions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "people",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "people",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "people",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "people",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "people",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "interactions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "interactions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "interactions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "interactions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "interactions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "deliverables",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "deliverables",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "deliverables",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "deliverables",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "deliverables",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "compliance",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "compliance",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "compliance",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "compliance",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "compliance",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "companies",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "companies",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "companies",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "companies",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "companies",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "budgets",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "budgets",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "budgets",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "budgets",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "budgets",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "d57f90b8-7dc2-4b5c-b6ba-66281c93792c"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_webhooks",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_versions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_users",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_users",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_users",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_users",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_users",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_translations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_shares",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_settings",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_sessions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_roles",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_revisions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_relations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_presets",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_policies",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_permissions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_panels",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_operations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_notifications",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_migrations",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_folders",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_flows",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_files",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_files",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_files",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_files",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_files",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_fields",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_extensions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_dashboards",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_comments",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_collections",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_activity",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_access",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_access",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_access",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_access",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "directus_access",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "time_tracking",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "talents",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "talents",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "talents",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "talents",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "talents",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "support_tickets",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "support_tickets",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "support_tickets",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "support_tickets",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "support_tickets",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "supplier_invoices",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "supplier_invoices",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "supplier_invoices",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "supplier_invoices",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "supplier_invoices",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "subscriptions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "subscriptions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "subscriptions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "subscriptions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "subscriptions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "providers",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "providers",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "providers",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "providers",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "providers",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects_team",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects_team",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects_team",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects_team",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects_team",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "projects",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "permissions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "permissions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "permissions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "permissions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "permissions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "people",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "people",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "people",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "people",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "people",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "interactions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "interactions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "interactions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "interactions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "interactions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "expenses",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "expenses",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "expenses",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "expenses",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "expenses",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "deliverables",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "deliverables",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "deliverables",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "deliverables",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "deliverables",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "content_calendar",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "compliance",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "compliance",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "compliance",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "compliance",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "compliance",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "companies",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "companies",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "companies",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "companies",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "companies",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "client_invoices",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "client_invoices",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "client_invoices",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "client_invoices",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "client_invoices",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "budgets",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "budgets",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "budgets",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "budgets",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "budgets",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "bank_transactions",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "bank_transactions",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "bank_transactions",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "bank_transactions",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "bank_transactions",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "accounting_entries",
+    "action": "create",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "accounting_entries",
+    "action": "read",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "accounting_entries",
+    "action": "update",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "accounting_entries",
+    "action": "delete",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  },
+  {
+    "collection": "accounting_entries",
+    "action": "share",
+    "permissions": null,
+    "validation": null,
+    "presets": null,
+    "fields": [
+      "*"
+    ],
+    "policy": "52c7c44f-a2d7-404b-abe4-9115cfa91b8a"
+  }
+]

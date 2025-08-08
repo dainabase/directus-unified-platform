@@ -81,7 +81,8 @@
       "Bash(npx vite:*)",
       "Bash(git reset:*)",
       "Bash(find:*)",
-      "Bash(npx directus users passwd:*)"
+      "Bash(npx directus users passwd:*)",
+      "Bash(npx directus-template-cli:*)"
     ],
     "deny": []
   }

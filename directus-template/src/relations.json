@@ -1,0 +1,1302 @@
+[
+  {
+    "collection": "talents",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "talents_company_id_foreign",
+      "table": "talents",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "talents",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": "talents",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "time_tracking",
+    "field": "person_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "time_tracking_person_id_foreign",
+      "table": "time_tracking",
+      "column": "person_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "time_tracking",
+      "many_field": "person_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "time_tracking",
+    "field": "deliverable_id",
+    "related_collection": "deliverables",
+    "schema": {
+      "constraint_name": "time_tracking_deliverable_id_foreign",
+      "table": "time_tracking",
+      "column": "deliverable_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "deliverables",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "time_tracking",
+      "many_field": "deliverable_id",
+      "one_collection": "deliverables",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "time_tracking",
+    "field": "task_id",
+    "related_collection": "deliverables",
+    "schema": {
+      "constraint_name": "time_tracking_task_id_foreign",
+      "table": "time_tracking",
+      "column": "task_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "deliverables",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "time_tracking",
+      "many_field": "task_id",
+      "one_collection": "deliverables",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "time_tracking",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "time_tracking_project_id_foreign",
+      "table": "time_tracking",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "time_tracking",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "permissions",
+    "field": "role_id",
+    "related_collection": "directus_roles",
+    "schema": {
+      "constraint_name": "permissions_role_id_foreign",
+      "table": "permissions",
+      "column": "role_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "directus_roles",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "permissions",
+      "many_field": "role_id",
+      "one_collection": "directus_roles",
+      "one_field": "permissions",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "permissions",
+    "field": "user_id",
+    "related_collection": "directus_users",
+    "schema": {
+      "constraint_name": "permissions_user_id_foreign",
+      "table": "permissions",
+      "column": "user_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "directus_users",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "permissions",
+      "many_field": "user_id",
+      "one_collection": "directus_users",
+      "one_field": "permissions",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "compliance",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "compliance_company_id_foreign",
+      "table": "compliance",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "compliance",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": "compliance_records",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "interactions",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "interactions_project_id_foreign",
+      "table": "interactions",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "interactions",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "interactions",
+    "field": "contact_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "interactions_contact_id_foreign",
+      "table": "interactions",
+      "column": "contact_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "interactions",
+      "many_field": "contact_id",
+      "one_collection": "people",
+      "one_field": "interactions",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "content_calendar",
+    "field": "campaign_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "content_calendar_campaign_id_foreign",
+      "table": "content_calendar",
+      "column": "campaign_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "content_calendar",
+      "many_field": "campaign_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "supplier_invoices",
+    "field": "approved_by",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "supplier_invoices_approved_by_foreign",
+      "table": "supplier_invoices",
+      "column": "approved_by",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "supplier_invoices",
+      "many_field": "approved_by",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "supplier_invoices",
+    "field": "provider_id",
+    "related_collection": "providers",
+    "schema": {
+      "constraint_name": "supplier_invoices_provider_id_foreign",
+      "table": "supplier_invoices",
+      "column": "provider_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "providers",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "supplier_invoices",
+      "many_field": "provider_id",
+      "one_collection": "providers",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "supplier_invoices",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "supplier_invoices_project_id_foreign",
+      "table": "supplier_invoices",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "supplier_invoices",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "supplier_invoices",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "expenses",
+    "field": "approved_by",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "expenses_approved_by_foreign",
+      "table": "expenses",
+      "column": "approved_by",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "expenses",
+      "many_field": "approved_by",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "expenses",
+    "field": "employee_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "expenses_employee_id_foreign",
+      "table": "expenses",
+      "column": "employee_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "expenses",
+      "many_field": "employee_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "expenses",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "expenses_project_id_foreign",
+      "table": "expenses",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "expenses",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "expenses",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "people",
+    "field": "manager_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "people_manager_id_foreign",
+      "table": "people",
+      "column": "manager_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "people",
+      "many_field": "manager_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "people",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "people_company_id_foreign",
+      "table": "people",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "people",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "projects_company_id_foreign",
+      "table": "projects",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "projects",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects",
+    "field": "main_provider_id",
+    "related_collection": "providers",
+    "schema": {
+      "constraint_name": "projects_main_provider_id_foreign",
+      "table": "projects",
+      "column": "main_provider_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "providers",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "projects",
+      "many_field": "main_provider_id",
+      "one_collection": "providers",
+      "one_field": "main_projects",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects",
+    "field": "sales_person_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "projects_sales_person_id_foreign",
+      "table": "projects",
+      "column": "sales_person_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "projects",
+      "many_field": "sales_person_id",
+      "one_collection": "people",
+      "one_field": "sales_projects",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects",
+    "field": "project_manager_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "projects_project_manager_id_foreign",
+      "table": "projects",
+      "column": "project_manager_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "projects",
+      "many_field": "project_manager_id",
+      "one_collection": "people",
+      "one_field": "managed_projects",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects",
+    "field": "client_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "projects_client_id_foreign",
+      "table": "projects",
+      "column": "client_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "RESTRICT"
+    },
+    "meta": {
+      "many_collection": "projects",
+      "many_field": "client_id",
+      "one_collection": "companies",
+      "one_field": "client_projects",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "budgets",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "budgets_project_id_foreign",
+      "table": "budgets",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "budgets",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "budgets",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "deliverables",
+    "field": "parent_task_id",
+    "related_collection": "deliverables",
+    "schema": {
+      "constraint_name": "deliverables_parent_task_id_foreign",
+      "table": "deliverables",
+      "column": "parent_task_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "deliverables",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "deliverables",
+      "many_field": "parent_task_id",
+      "one_collection": "deliverables",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "deliverables",
+    "field": "reviewed_by",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "deliverables_reviewed_by_foreign",
+      "table": "deliverables",
+      "column": "reviewed_by",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "deliverables",
+      "many_field": "reviewed_by",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "deliverables",
+    "field": "assigned_to",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "deliverables_assigned_to_foreign",
+      "table": "deliverables",
+      "column": "assigned_to",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "deliverables",
+      "many_field": "assigned_to",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "deliverables",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "deliverables_project_id_foreign",
+      "table": "deliverables",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "deliverables",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "deliverables",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects_team",
+    "field": "people_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "projects_team_people_id_foreign",
+      "table": "projects_team",
+      "column": "people_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "projects_team",
+      "many_field": "people_id",
+      "one_collection": "people",
+      "one_field": "projects",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": "projects_id",
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "projects_team",
+    "field": "projects_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "projects_team_projects_id_foreign",
+      "table": "projects_team",
+      "column": "projects_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "CASCADE"
+    },
+    "meta": {
+      "many_collection": "projects_team",
+      "many_field": "projects_id",
+      "one_collection": "projects",
+      "one_field": "team",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": "people_id",
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "client_invoices",
+    "field": "contact_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "client_invoices_contact_id_foreign",
+      "table": "client_invoices",
+      "column": "contact_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "client_invoices",
+      "many_field": "contact_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "client_invoices",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "client_invoices_company_id_foreign",
+      "table": "client_invoices",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "client_invoices",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "client_invoices",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "client_invoices_project_id_foreign",
+      "table": "client_invoices",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "client_invoices",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "client_invoices",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "companies",
+    "field": "primary_contact_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "companies_primary_contact_id_foreign",
+      "table": "companies",
+      "column": "primary_contact_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "companies",
+      "many_field": "primary_contact_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "companies",
+    "field": "account_manager_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "companies_account_manager_id_foreign",
+      "table": "companies",
+      "column": "account_manager_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "companies",
+      "many_field": "account_manager_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "companies",
+    "field": "parent_company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "companies_parent_company_id_foreign",
+      "table": "companies",
+      "column": "parent_company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "companies",
+      "many_field": "parent_company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "bank_transactions",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "bank_transactions_company_id_foreign",
+      "table": "bank_transactions",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "NO ACTION"
+    },
+    "meta": {
+      "many_collection": "bank_transactions",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "bank_transactions",
+    "field": "invoice_id",
+    "related_collection": "client_invoices",
+    "schema": {
+      "constraint_name": "bank_transactions_invoice_id_foreign",
+      "table": "bank_transactions",
+      "column": "invoice_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "client_invoices",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "bank_transactions",
+      "many_field": "invoice_id",
+      "one_collection": "client_invoices",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "bank_transactions",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "bank_transactions_project_id_foreign",
+      "table": "bank_transactions",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "bank_transactions",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "bank_transactions",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "support_tickets",
+    "field": "company_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "support_tickets_company_id_foreign",
+      "table": "support_tickets",
+      "column": "company_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "support_tickets",
+      "many_field": "company_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "support_tickets",
+    "field": "assigned_to",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "support_tickets_assigned_to_foreign",
+      "table": "support_tickets",
+      "column": "assigned_to",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "support_tickets",
+      "many_field": "assigned_to",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "support_tickets",
+    "field": "requester_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "support_tickets_requester_id_foreign",
+      "table": "support_tickets",
+      "column": "requester_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "support_tickets",
+      "many_field": "requester_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "support_tickets",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "support_tickets_project_id_foreign",
+      "table": "support_tickets",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "support_tickets",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "support_tickets",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "accounting_entries",
+    "field": "transaction_id",
+    "related_collection": "bank_transactions",
+    "schema": {
+      "constraint_name": "accounting_entries_transaction_id_foreign",
+      "table": "accounting_entries",
+      "column": "transaction_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "bank_transactions",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "accounting_entries",
+      "many_field": "transaction_id",
+      "one_collection": "bank_transactions",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "accounting_entries",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "accounting_entries_project_id_foreign",
+      "table": "accounting_entries",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "accounting_entries",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "accounting_entries",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "subscriptions",
+    "field": "project_id",
+    "related_collection": "projects",
+    "schema": {
+      "constraint_name": "subscriptions_project_id_foreign",
+      "table": "subscriptions",
+      "column": "project_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "projects",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "SET NULL"
+    },
+    "meta": {
+      "many_collection": "subscriptions",
+      "many_field": "project_id",
+      "one_collection": "projects",
+      "one_field": "subscriptions",
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "payments",
+    "field": "invoice_id",
+    "related_collection": "client_invoices",
+    "schema": {
+      "constraint_name": "payments_invoice_id_foreign",
+      "table": "payments",
+      "column": "invoice_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "client_invoices",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "NO ACTION"
+    },
+    "meta": {
+      "many_collection": "payments",
+      "many_field": "invoice_id",
+      "one_collection": "client_invoices",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "company_people",
+    "field": "people_id",
+    "related_collection": "people",
+    "schema": {
+      "constraint_name": "company_people_people_id_foreign",
+      "table": "company_people",
+      "column": "people_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "people",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "NO ACTION"
+    },
+    "meta": {
+      "many_collection": "company_people",
+      "many_field": "people_id",
+      "one_collection": "people",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  },
+  {
+    "collection": "company_people",
+    "field": "companies_id",
+    "related_collection": "companies",
+    "schema": {
+      "constraint_name": "company_people_companies_id_foreign",
+      "table": "company_people",
+      "column": "companies_id",
+      "foreign_key_schema": "public",
+      "foreign_key_table": "companies",
+      "foreign_key_column": "id",
+      "on_update": "NO ACTION",
+      "on_delete": "NO ACTION"
+    },
+    "meta": {
+      "many_collection": "company_people",
+      "many_field": "companies_id",
+      "one_collection": "companies",
+      "one_field": null,
+      "one_collection_field": null,
+      "one_allowed_collections": null,
+      "junction_field": null,
+      "sort_field": null,
+      "one_deselect_action": "nullify"
+    }
+  }
+]

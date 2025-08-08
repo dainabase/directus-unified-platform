@@ -1,0 +1,11 @@
+{
+  "author": "",
+  "description": "",
+  "directusTemplate": true,
+  "files": [
+    "src"
+  ],
+  "name": "directus-template-directus-schema",
+  "templateName": "directus-schema",
+  "version": "1.0.0"
+}

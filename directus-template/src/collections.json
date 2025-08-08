@@ -1,0 +1,1620 @@
+[
+  {
+    "collection": "accounting_entries",
+    "meta": {
+      "collection": "accounting_entries",
+      "icon": "calculate",
+      "note": null,
+      "display_template": "{{entry_number}} - {{description}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "accounting_entries",
+      "comment": null
+    }
+  },
+  {
+    "collection": "activities",
+    "meta": {
+      "collection": "activities",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "activities",
+      "comment": null
+    }
+  },
+  {
+    "collection": "approvals",
+    "meta": {
+      "collection": "approvals",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "approvals",
+      "comment": null
+    }
+  },
+  {
+    "collection": "audit_logs",
+    "meta": {
+      "collection": "audit_logs",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "audit_logs",
+      "comment": null
+    }
+  },
+  {
+    "collection": "bank_transactions",
+    "meta": {
+      "collection": "bank_transactions",
+      "icon": "account_balance",
+      "note": null,
+      "display_template": "{{date}} - {{amount}}€ - {{description}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "bank_transactions",
+      "comment": null
+    }
+  },
+  {
+    "collection": "budgets",
+    "meta": {
+      "collection": "budgets",
+      "icon": "account_balance_wallet",
+      "note": "Budget planning and financial tracking",
+      "display_template": "{{title}} - {{category}} ({{year}})",
+      "hidden": false,
+      "singleton": false,
+      "translations": [
+        {
+          "language": "fr-FR",
+          "translation": "Budgets",
+          "singular": "Budget",
+          "plural": "Budgets"
+        }
+      ],
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "closed",
+      "unarchive_value": "active",
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": "#4CAF50",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "budgets",
+      "comment": null
+    }
+  },
+  {
+    "collection": "client_invoices",
+    "meta": {
+      "collection": "client_invoices",
+      "icon": "receipt",
+      "note": null,
+      "display_template": "{{invoice_number}} - {{client_name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "cancelled",
+      "unarchive_value": "draft",
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "client_invoices",
+      "comment": null
+    }
+  },
+  {
+    "collection": "comments",
+    "meta": {
+      "collection": "comments",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "comments",
+      "comment": null
+    }
+  },
+  {
+    "collection": "companies",
+    "meta": {
+      "collection": "companies",
+      "icon": "business",
+      "note": "Entreprises et clients",
+      "display_template": "{{name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "companies",
+      "comment": null
+    }
+  },
+  {
+    "collection": "company_people",
+    "meta": {
+      "collection": "company_people",
+      "icon": "link",
+      "note": "Liaison entre companies et people",
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "company_people",
+      "comment": null
+    }
+  },
+  {
+    "collection": "compliance",
+    "meta": {
+      "collection": "compliance",
+      "icon": "gavel",
+      "note": "Compliance and regulatory requirements from DB-COMPLIANCE",
+      "display_template": "{{title}} - {{status}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": "#FF5722",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "compliance",
+      "comment": null
+    }
+  },
+  {
+    "collection": "content_calendar",
+    "meta": {
+      "collection": "content_calendar",
+      "icon": "calendar_month",
+      "note": "Content publishing calendar from DB-CONTENT-CALENDAR",
+      "display_template": "{{title}} - {{publish_date}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "archived",
+      "unarchive_value": "draft",
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": "#4CAF50",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "content_calendar",
+      "comment": null
+    }
+  },
+  {
+    "collection": "contracts",
+    "meta": {
+      "collection": "contracts",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "contracts",
+      "comment": null
+    }
+  },
+  {
+    "collection": "credits",
+    "meta": {
+      "collection": "credits",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "credits",
+      "comment": null
+    }
+  },
+  {
+    "collection": "customer_success",
+    "meta": {
+      "collection": "customer_success",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "customer_success",
+      "comment": null
+    }
+  },
+  {
+    "collection": "debits",
+    "meta": {
+      "collection": "debits",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "debits",
+      "comment": null
+    }
+  },
+  {
+    "collection": "deliverables",
+    "meta": {
+      "collection": "deliverables",
+      "icon": "task_alt",
+      "note": "Livrables et tâches",
+      "display_template": "{{title}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "deliverables",
+      "comment": null
+    }
+  },
+  {
+    "collection": "deliveries",
+    "meta": {
+      "collection": "deliveries",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "deliveries",
+      "comment": null
+    }
+  },
+  {
+    "collection": "departments",
+    "meta": {
+      "collection": "departments",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "departments",
+      "comment": null
+    }
+  },
+  {
+    "collection": "evaluations",
+    "meta": {
+      "collection": "evaluations",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "evaluations",
+      "comment": null
+    }
+  },
+  {
+    "collection": "events",
+    "meta": {
+      "collection": "events",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "events",
+      "comment": null
+    }
+  },
+  {
+    "collection": "expenses",
+    "meta": {
+      "collection": "expenses",
+      "icon": "payments",
+      "note": null,
+      "display_template": "{{description}} - {{amount}}€",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "expenses",
+      "comment": null
+    }
+  },
+  {
+    "collection": "goals",
+    "meta": {
+      "collection": "goals",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "goals",
+      "comment": null
+    }
+  },
+  {
+    "collection": "interactions",
+    "meta": {
+      "collection": "interactions",
+      "icon": "phone_in_talk",
+      "note": "Client interactions and communication history",
+      "display_template": "{{interaction_type}} - {{interaction_date}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": [
+        {
+          "language": "fr-FR",
+          "translation": "Interactions",
+          "singular": "Interaction",
+          "plural": "Interactions"
+        }
+      ],
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "cancelled",
+      "unarchive_value": "completed",
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": "#2196F3",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "interactions",
+      "comment": null
+    }
+  },
+  {
+    "collection": "kpis",
+    "meta": {
+      "collection": "kpis",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "kpis",
+      "comment": null
+    }
+  },
+  {
+    "collection": "notes",
+    "meta": {
+      "collection": "notes",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "notes",
+      "comment": null
+    }
+  },
+  {
+    "collection": "notifications",
+    "meta": {
+      "collection": "notifications",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "notifications",
+      "comment": null
+    }
+  },
+  {
+    "collection": "orders",
+    "meta": {
+      "collection": "orders",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "orders",
+      "comment": null
+    }
+  },
+  {
+    "collection": "owner_companies",
+    "meta": {
+      "collection": "owner_companies",
+      "icon": "business",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": "#2196F3",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "owner_companies",
+      "comment": null
+    }
+  },
+  {
+    "collection": "payments",
+    "meta": {
+      "collection": "payments",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "payments",
+      "comment": null
+    }
+  },
+  {
+    "collection": "people",
+    "meta": {
+      "collection": "people",
+      "icon": "person",
+      "note": "Contacts et personnes",
+      "display_template": "{{first_name}} {{last_name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "people",
+      "comment": null
+    }
+  },
+  {
+    "collection": "permissions",
+    "meta": {
+      "collection": "permissions",
+      "icon": "lock",
+      "note": null,
+      "display_template": "{{resource}} - {{role}} - {{action}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": [
+        {
+          "language": "fr-FR",
+          "translation": "Permissions",
+          "singular": "Permission",
+          "plural": "Permissions"
+        }
+      ],
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": "#F44336",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "permissions",
+      "comment": null
+    }
+  },
+  {
+    "collection": "projects",
+    "meta": {
+      "collection": "projects",
+      "icon": "folder_open",
+      "note": "Gestion des projets",
+      "display_template": "{{name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "projects",
+      "comment": null
+    }
+  },
+  {
+    "collection": "projects_team",
+    "meta": {
+      "collection": "projects_team",
+      "icon": "groups",
+      "note": null,
+      "display_template": null,
+      "hidden": true,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "projects_team",
+      "comment": null
+    }
+  },
+  {
+    "collection": "proposals",
+    "meta": {
+      "collection": "proposals",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "proposals",
+      "comment": null
+    }
+  },
+  {
+    "collection": "providers",
+    "meta": {
+      "collection": "providers",
+      "icon": "business",
+      "note": null,
+      "display_template": "{{name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "archived",
+      "unarchive_value": "published",
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "providers",
+      "comment": null
+    }
+  },
+  {
+    "collection": "quotes",
+    "meta": {
+      "collection": "quotes",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "quotes",
+      "comment": null
+    }
+  },
+  {
+    "collection": "reconciliations",
+    "meta": {
+      "collection": "reconciliations",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "reconciliations",
+      "comment": null
+    }
+  },
+  {
+    "collection": "refunds",
+    "meta": {
+      "collection": "refunds",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "refunds",
+      "comment": null
+    }
+  },
+  {
+    "collection": "returns",
+    "meta": {
+      "collection": "returns",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "returns",
+      "comment": null
+    }
+  },
+  {
+    "collection": "roles",
+    "meta": {
+      "collection": "roles",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "roles",
+      "comment": null
+    }
+  },
+  {
+    "collection": "settings",
+    "meta": {
+      "collection": "settings",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "settings",
+      "comment": null
+    }
+  },
+  {
+    "collection": "skills",
+    "meta": {
+      "collection": "skills",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "skills",
+      "comment": null
+    }
+  },
+  {
+    "collection": "subscriptions",
+    "meta": {
+      "collection": "subscriptions",
+      "icon": "subscriptions",
+      "note": null,
+      "display_template": "{{name}} - {{status}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "cancelled",
+      "unarchive_value": "active",
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "subscriptions",
+      "comment": null
+    }
+  },
+  {
+    "collection": "supplier_invoices",
+    "meta": {
+      "collection": "supplier_invoices",
+      "icon": "receipt_long",
+      "note": null,
+      "display_template": "{{invoice_number}} - {{supplier_name}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "cancelled",
+      "unarchive_value": "pending",
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "supplier_invoices",
+      "comment": null
+    }
+  },
+  {
+    "collection": "support_tickets",
+    "meta": {
+      "collection": "support_tickets",
+      "icon": "support_agent",
+      "note": null,
+      "display_template": "#{{ticket_number}} - {{subject}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "closed",
+      "unarchive_value": "open",
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "support_tickets",
+      "comment": null
+    }
+  },
+  {
+    "collection": "tags",
+    "meta": {
+      "collection": "tags",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "tags",
+      "comment": null
+    }
+  },
+  {
+    "collection": "talents",
+    "meta": {
+      "collection": "talents",
+      "icon": "people",
+      "note": "Talents and human resources",
+      "display_template": "{{full_name}} - {{role}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": "status",
+      "archive_app_filter": true,
+      "archive_value": "inactive",
+      "unarchive_value": "active",
+      "sort_field": "sort",
+      "accountability": "all",
+      "color": "#673AB7",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "talents",
+      "comment": null
+    }
+  },
+  {
+    "collection": "talents_simple",
+    "meta": {
+      "collection": "talents_simple",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "talents_simple",
+      "comment": null
+    }
+  },
+  {
+    "collection": "teams",
+    "meta": {
+      "collection": "teams",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "teams",
+      "comment": null
+    }
+  },
+  {
+    "collection": "time_tracking",
+    "meta": {
+      "collection": "time_tracking",
+      "icon": "schedule",
+      "note": null,
+      "display_template": "{{project_name}} - {{hours}}h - {{date}}",
+      "hidden": false,
+      "singleton": false,
+      "translations": [
+        {
+          "language": "fr-FR",
+          "translation": "Suivi du temps",
+          "singular": "Entrée de temps",
+          "plural": "Entrées de temps"
+        }
+      ],
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": "#4CAF50",
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "time_tracking",
+      "comment": null
+    }
+  },
+  {
+    "collection": "trainings",
+    "meta": {
+      "collection": "trainings",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "trainings",
+      "comment": null
+    }
+  },
+  {
+    "collection": "workflows",
+    "meta": {
+      "collection": "workflows",
+      "icon": "folder",
+      "note": null,
+      "display_template": null,
+      "hidden": false,
+      "singleton": false,
+      "translations": null,
+      "archive_field": null,
+      "archive_app_filter": true,
+      "archive_value": null,
+      "unarchive_value": null,
+      "sort_field": null,
+      "accountability": "all",
+      "color": null,
+      "item_duplication_fields": null,
+      "sort": null,
+      "group": null,
+      "collapse": "open",
+      "preview_url": null,
+      "versioning": false
+    },
+    "schema": {
+      "schema": "public",
+      "name": "workflows",
+      "comment": null
+    }
+  }
+]

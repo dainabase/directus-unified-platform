@@ -1,0 +1,10 @@
+{
+  "name": "owner-company-migration",
+  "version": "1.0.0",
+  "description": "Ajoute le champ owner_company aux collections manquantes",
+  "type": "module",
+  "directusTemplateCli": {
+    "name": "Owner Company Migration",
+    "description": "Adds owner_company field to 41 collections"
+  }
+}

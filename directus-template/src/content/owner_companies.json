@@ -1,0 +1,52 @@
+[
+  {
+    "id": "2d6b906a-5b8a-4d9e-a37b-aee8c1281b22",
+    "code": "HYPERVISUAL",
+    "name": "HYPERVISUAL",
+    "type": "main",
+    "color": "#2196F3",
+    "sort": 1,
+    "status": "active",
+    "description": "Entreprise principale - Solutions de visualisation et développement"
+  },
+  {
+    "id": "55483d07-6621-43d4-89a9-5ebbffe86fea",
+    "code": "DAINAMICS",
+    "name": "DAINAMICS",
+    "type": "subsidiary",
+    "color": "#4CAF50",
+    "sort": 2,
+    "status": "active",
+    "description": "Filiale spécialisée en data analytics et intelligence artificielle"
+  },
+  {
+    "id": "6f4bc42a-d083-4df5-ace3-6b910164ae18",
+    "code": "ENKI_REALTY",
+    "name": "ENKI REALTY",
+    "type": "subsidiary",
+    "color": "#9C27B0",
+    "sort": 4,
+    "status": "active",
+    "description": "Immobilier commercial et résidentiel"
+  },
+  {
+    "id": "9314fda4-cf3b-4021-9556-3acaa5f35b3f",
+    "code": "LEXAIA",
+    "name": "LEXAIA",
+    "type": "subsidiary",
+    "color": "#FF9800",
+    "sort": 3,
+    "status": "active",
+    "description": "Solutions juridiques et conformité réglementaire"
+  },
+  {
+    "id": "a1313adf-0347-424b-aff2-c5f0b33c4a05",
+    "code": "TAKEOUT",
+    "name": "TAKEOUT",
+    "type": "subsidiary",
+    "color": "#F44336",
+    "sort": 5,
+    "status": "active",
+    "description": "Services de restauration et livraison"
+  }
+]

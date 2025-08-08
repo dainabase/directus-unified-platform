@@ -1,0 +1,4184 @@
+[
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "companies",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "companies",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "companies"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "people",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "people",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "people"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "time_tracking",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "time_tracking",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "time_tracking"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "proposals",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "proposals",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "proposals"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "quotes",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "quotes",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "quotes"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "support_tickets",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "support_tickets",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "support_tickets"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "orders",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "orders",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "orders"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "talents",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "talents",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "talents"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "interactions",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "interactions",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "interactions"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "teams",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "teams",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "teams"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "accounting_entries",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "accounting_entries",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "accounting_entries"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "activities",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "activities",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "activities"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "approvals",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "approvals",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "approvals"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "audit_logs",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "audit_logs",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "audit_logs"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "comments",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "comments",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "comments"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "company_people",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "company_people",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "company_people"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "compliance",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "compliance",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "compliance"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "content_calendar",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "content_calendar",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "content_calendar"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "credits",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "credits",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "credits"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "customer_success",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "customer_success",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "customer_success"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "debits",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "debits",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "debits"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "deliveries",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "deliveries",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "deliveries"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "departments",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "departments",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "departments"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "evaluations",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "evaluations",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "evaluations"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "events",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "events",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "events"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "goals",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "goals",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "goals"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "notes",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "notes",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "notes"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "notifications",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "notifications",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "notifications"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "permissions",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "permissions",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "permissions"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "projects_team",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "projects_team",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "projects_team"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "providers",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "providers",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "providers"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "reconciliations",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "reconciliations",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "reconciliations"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "refunds",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "refunds",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "refunds"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "returns",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "returns",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "returns"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "roles",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "roles",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "roles"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "settings",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "settings",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "settings"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "skills",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "skills",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "skills"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "tags",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "tags",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "tags"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "talents_simple",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "talents_simple",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "talents_simple"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "trainings",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "trainings",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "trainings"
+  },
+  {
+    "field": "owner_company",
+    "type": "string",
+    "schema": {
+      "name": "owner_company",
+      "table": "workflows",
+      "data_type": "character varying",
+      "default_value": "HYPERVISUAL",
+      "generation_expression": null,
+      "max_length": 50,
+      "numeric_precision": null,
+      "numeric_scale": null,
+      "is_generated": false,
+      "is_nullable": true,
+      "is_unique": false,
+      "is_indexed": false,
+      "is_primary_key": false,
+      "has_auto_increment": false,
+      "foreign_key_schema": null,
+      "foreign_key_table": null,
+      "foreign_key_column": null,
+      "comment": null
+    },
+    "meta": {
+      "collection": "workflows",
+      "field": "owner_company",
+      "special": null,
+      "interface": "select-dropdown",
+      "options": {
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT"
+          }
+        ]
+      },
+      "display": "labels",
+      "display_options": {
+        "showAsDot": true,
+        "choices": [
+          {
+            "text": "HYPERVISUAL",
+            "value": "HYPERVISUAL",
+            "foreground": "#FFFFFF",
+            "background": "#2196F3"
+          },
+          {
+            "text": "DAINAMICS",
+            "value": "DAINAMICS",
+            "foreground": "#FFFFFF",
+            "background": "#4CAF50"
+          },
+          {
+            "text": "LEXAIA",
+            "value": "LEXAIA",
+            "foreground": "#FFFFFF",
+            "background": "#FF9800"
+          },
+          {
+            "text": "ENKI REALTY",
+            "value": "ENKI_REALTY",
+            "foreground": "#FFFFFF",
+            "background": "#9C27B0"
+          },
+          {
+            "text": "TAKEOUT",
+            "value": "TAKEOUT",
+            "foreground": "#FFFFFF",
+            "background": "#F44336"
+          }
+        ]
+      },
+      "readonly": false,
+      "hidden": false,
+      "sort": 20,
+      "width": "half",
+      "translations": null,
+      "note": "Entreprise propriétaire",
+      "conditions": null,
+      "required": false,
+      "group": null,
+      "validation": null,
+      "validation_message": null
+    },
+    "collection": "workflows"
+  }
+]

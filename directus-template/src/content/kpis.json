@@ -1,0 +1,2162 @@
+[
+  {
+    "id": "016cb291-d25f-42c9-b03b-9200b5318d95",
+    "created_at": "2025-08-08T04:21:30.135Z",
+    "updated_at": "2025-08-08T04:21:30.134Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "047deca9-684c-4b17-961a-a0b8ecfbc9aa",
+    "created_at": "2025-08-08T04:21:30.396Z",
+    "updated_at": "2025-08-08T04:21:30.395Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "04c5370b-32db-4042-b81d-35b3a7853563",
+    "created_at": "2025-08-08T04:21:30.355Z",
+    "updated_at": "2025-08-08T04:21:30.355Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "0a67707d-3caa-4433-a1ec-9817031d0109",
+    "created_at": "2025-08-08T04:21:29.635Z",
+    "updated_at": "2025-08-08T04:21:29.635Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "0a839336-05cf-4621-ba69-a1e011cdc162",
+    "created_at": "2025-08-08T04:21:30.265Z",
+    "updated_at": "2025-08-08T04:21:30.265Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "0d02d1fe-a272-4dde-b7b9-4dee6a07ff4a",
+    "created_at": "2025-08-08T04:21:30.102Z",
+    "updated_at": "2025-08-08T04:21:30.102Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "0eef6da1-e184-4bb7-8155-c17bace17158",
+    "created_at": "2025-08-08T04:21:30.110Z",
+    "updated_at": "2025-08-08T04:21:30.110Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "0f026d78-0ea9-4aa4-ba98-982e3d924f27",
+    "created_at": "2025-08-08T04:21:30.033Z",
+    "updated_at": "2025-08-08T04:21:30.033Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "0f0ec9de-048a-48c8-b692-4e9a174fd90e",
+    "created_at": "2025-08-08T04:21:30.118Z",
+    "updated_at": "2025-08-08T04:21:30.118Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "0f149eee-8e9d-4dff-aebe-e0b34df9b1a1",
+    "created_at": "2025-08-08T04:21:29.819Z",
+    "updated_at": "2025-08-08T04:21:29.818Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "0f2b5e9e-964b-4c53-b58b-16dcf4761b49",
+    "created_at": "2025-08-08T04:21:30.369Z",
+    "updated_at": "2025-08-08T04:21:30.368Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "1090cdcf-c63a-4384-bc1f-996ef57be662",
+    "created_at": "2025-08-08T04:21:29.444Z",
+    "updated_at": "2025-08-08T04:21:29.444Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "116ffe91-1307-4b13-a3de-e91ab11b4ea6",
+    "created_at": "2025-08-08T04:21:29.581Z",
+    "updated_at": "2025-08-08T04:21:29.580Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "123b0ed7-040b-43e4-8eca-70a3a46ce72c",
+    "created_at": "2025-08-08T04:21:29.811Z",
+    "updated_at": "2025-08-08T04:21:29.810Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "1464b49a-3c7a-442c-9723-b7c7fc368b94",
+    "created_at": "2025-08-08T04:21:30.300Z",
+    "updated_at": "2025-08-08T04:21:30.299Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "15067719-c36c-4bb9-90b8-71239dd6585b",
+    "created_at": "2025-08-08T04:21:30.185Z",
+    "updated_at": "2025-08-08T04:21:30.185Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "15487ca9-5af3-4eea-ad4a-059250c85316",
+    "created_at": "2025-08-08T04:21:30.218Z",
+    "updated_at": "2025-08-08T04:21:30.218Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "17800578-42e9-4be5-b740-5ee36c98b6a6",
+    "created_at": "2025-08-08T04:21:29.875Z",
+    "updated_at": "2025-08-08T04:21:29.875Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "18dcac85-b84e-4d18-9a66-5d0618ad9504",
+    "created_at": "2025-08-08T04:21:29.798Z",
+    "updated_at": "2025-08-08T04:21:29.797Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "19c7245d-d7e9-40c3-a610-2cacec338aab",
+    "created_at": "2025-08-08T04:21:29.677Z",
+    "updated_at": "2025-08-08T04:21:29.676Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "1cdac34d-794a-4db3-b3cc-f81f6690e974",
+    "created_at": "2025-08-08T04:21:29.538Z",
+    "updated_at": "2025-08-08T04:21:29.538Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "1d881d58-e0bc-4e91-a237-0d28afe17024",
+    "created_at": "2025-08-08T04:21:29.898Z",
+    "updated_at": "2025-08-08T04:21:29.898Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "1df36e1d-7731-4e5e-a12f-efc339c4eb12",
+    "created_at": "2025-08-08T04:21:30.248Z",
+    "updated_at": "2025-08-08T04:21:30.248Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "1e127ffd-3ce0-4057-aac7-0101ff5cb08c",
+    "created_at": "2025-08-08T04:21:29.436Z",
+    "updated_at": "2025-08-08T04:21:29.436Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "1e61b076-fb94-410c-a1c5-ce8226fb5cd1",
+    "created_at": "2025-08-08T04:21:29.421Z",
+    "updated_at": "2025-08-08T04:21:29.421Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "1e7f4d68-b210-496a-9843-aca8bdd3fb43",
+    "created_at": "2025-08-08T04:21:30.431Z",
+    "updated_at": "2025-08-08T04:21:30.431Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "1f41caac-afa7-444c-b258-0d832170f0cc",
+    "created_at": "2025-08-08T04:21:29.565Z",
+    "updated_at": "2025-08-08T04:21:29.563Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "206abf80-1660-45c9-ab1a-058a3336d181",
+    "created_at": "2025-08-08T04:21:29.857Z",
+    "updated_at": "2025-08-08T04:21:29.857Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "211bb6dc-924e-4ac9-a7a3-2dcc4bf35240",
+    "created_at": "2025-08-08T04:21:30.286Z",
+    "updated_at": "2025-08-08T04:21:30.286Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "23943783-2753-40b9-a7a1-a6663d8334b1",
+    "created_at": "2025-08-08T04:21:29.413Z",
+    "updated_at": "2025-08-08T04:21:29.413Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "23cc7042-6927-4731-94a1-92fe956811d5",
+    "created_at": "2025-08-08T04:21:29.732Z",
+    "updated_at": "2025-08-08T04:21:29.731Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "2520a4c9-4b48-496d-a1b3-2bfec539e813",
+    "created_at": "2025-08-08T04:21:29.893Z",
+    "updated_at": "2025-08-08T04:21:29.892Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "25384d27-e5c4-42ff-a62d-8978619c90ba",
+    "created_at": "2025-08-08T04:21:29.620Z",
+    "updated_at": "2025-08-08T04:21:29.620Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "27137029-574e-4d7d-99ee-2b174589cfdc",
+    "created_at": "2025-08-08T04:21:29.793Z",
+    "updated_at": "2025-08-08T04:21:29.793Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "291ec151-a9b9-4ac3-b9f3-343c2184fec1",
+    "created_at": "2025-08-08T04:21:30.147Z",
+    "updated_at": "2025-08-08T04:21:30.146Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "2ab0884e-a8ee-4447-b720-826c6827d41c",
+    "created_at": "2025-08-08T04:21:29.598Z",
+    "updated_at": "2025-08-08T04:21:29.598Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "2bb68d6c-7c6f-4b06-9605-586fcae381a6",
+    "created_at": "2025-08-08T04:21:29.504Z",
+    "updated_at": "2025-08-08T04:21:29.503Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "2d9af459-8cd0-4834-bdd2-7103688ba8cd",
+    "created_at": "2025-08-08T04:21:29.909Z",
+    "updated_at": "2025-08-08T04:21:29.909Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "2e96ea45-3038-4b77-8786-afb5319e96fc",
+    "created_at": "2025-08-08T04:21:30.226Z",
+    "updated_at": "2025-08-08T04:21:30.225Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "2ec20fda-205c-434c-bfe7-4f6eb45583df",
+    "created_at": "2025-08-08T04:21:29.689Z",
+    "updated_at": "2025-08-08T04:21:29.689Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "2ece90a5-3ef3-4c0b-a7c6-ac21f29f8665",
+    "created_at": "2025-08-08T04:21:29.832Z",
+    "updated_at": "2025-08-08T04:21:29.832Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "2f95432c-39da-4e93-9556-c442333f6f4f",
+    "created_at": "2025-08-08T04:21:29.948Z",
+    "updated_at": "2025-08-08T04:21:29.947Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "303955b1-6329-4511-9b24-c6eb00b11268",
+    "created_at": "2025-08-08T04:21:30.023Z",
+    "updated_at": "2025-08-08T04:21:30.023Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "310aa560-fa87-4a82-bcdb-ca95f851954f",
+    "created_at": "2025-08-08T04:21:30.130Z",
+    "updated_at": "2025-08-08T04:21:30.130Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "32cf4857-e48e-4677-b76a-27b548783c07",
+    "created_at": "2025-08-08T04:21:29.681Z",
+    "updated_at": "2025-08-08T04:21:29.681Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "35b71d34-dbcf-4802-89ce-a47dbf0368ce",
+    "created_at": "2025-08-08T04:21:29.555Z",
+    "updated_at": "2025-08-08T04:21:29.555Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "366db398-6006-4e64-a42e-c23ac14640c0",
+    "created_at": "2025-08-08T04:21:29.760Z",
+    "updated_at": "2025-08-08T04:21:29.760Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "367fa1e7-10fc-42fa-95da-6ea857bf6036",
+    "created_at": "2025-08-08T04:21:30.417Z",
+    "updated_at": "2025-08-08T04:21:30.416Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "377a33b7-7cd5-4504-bd69-cad21418c767",
+    "created_at": "2025-08-08T04:21:29.572Z",
+    "updated_at": "2025-08-08T04:21:29.572Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "37c7b4d5-4fd7-4ffe-a4f7-4c56b57a9104",
+    "created_at": "2025-08-08T04:21:29.642Z",
+    "updated_at": "2025-08-08T04:21:29.642Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "3847f8bd-6e81-46a6-bd13-7c41bf67a28c",
+    "created_at": "2025-08-08T04:21:30.421Z",
+    "updated_at": "2025-08-08T04:21:30.421Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "39c97790-70f4-4ed9-b61a-3f9adf103386",
+    "created_at": "2025-08-08T04:21:30.020Z",
+    "updated_at": "2025-08-08T04:21:30.020Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "3bbf34e7-d55f-4a31-9629-dd36b98969a1",
+    "created_at": "2025-08-08T04:21:30.196Z",
+    "updated_at": "2025-08-08T04:21:30.196Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "3d12ebe1-2771-4cb9-bdc3-f9903a3e456a",
+    "created_at": "2025-08-08T04:21:29.973Z",
+    "updated_at": "2025-08-08T04:21:29.973Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "3d327d89-3dc3-4dd6-aa2d-2390865e246c",
+    "created_at": "2025-08-08T04:21:30.058Z",
+    "updated_at": "2025-08-08T04:21:30.058Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "3e470e3e-baaa-47fe-8857-8269830af11b",
+    "created_at": "2025-08-08T04:21:29.863Z",
+    "updated_at": "2025-08-08T04:21:29.863Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "4106d126-15ae-4d52-8f03-0b2ae5da00dd",
+    "created_at": "2025-08-08T04:21:30.351Z",
+    "updated_at": "2025-08-08T04:21:30.351Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "42d606a7-eaec-4108-9c68-31188d1041de",
+    "created_at": "2025-08-08T04:21:29.685Z",
+    "updated_at": "2025-08-08T04:21:29.685Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "44452cfc-fe34-421b-b243-5833cdd0c783",
+    "created_at": "2025-08-08T04:21:29.490Z",
+    "updated_at": "2025-08-08T04:21:29.489Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "45a38e83-cde4-4d7c-9e83-7511fa73339b",
+    "created_at": "2025-08-08T04:21:29.885Z",
+    "updated_at": "2025-08-08T04:21:29.885Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "46bc8bf8-e40d-40fb-ae22-6504837c3bc2",
+    "created_at": "2025-08-08T04:21:29.482Z",
+    "updated_at": "2025-08-08T04:21:29.481Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "47afae6d-1eef-4505-9dae-86e121c8dde8",
+    "created_at": "2025-08-08T04:21:29.919Z",
+    "updated_at": "2025-08-08T04:21:29.919Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "483ae601-8e4e-4fdb-bf06-6effb1268cfb",
+    "created_at": "2025-08-08T04:21:29.839Z",
+    "updated_at": "2025-08-08T04:21:29.839Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "49eb588b-0b14-4f2d-a823-20b4210188e9",
+    "created_at": "2025-08-08T04:21:29.740Z",
+    "updated_at": "2025-08-08T04:21:29.739Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "4b151359-d6b3-406c-a762-2f8b015e5c70",
+    "created_at": "2025-08-08T04:21:30.152Z",
+    "updated_at": "2025-08-08T04:21:30.151Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "4b93ca73-86db-4ed2-98f8-48a6974e2c11",
+    "created_at": "2025-08-08T04:21:29.902Z",
+    "updated_at": "2025-08-08T04:21:29.902Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "4bb11353-c763-449e-94ad-8f23795b899f",
+    "created_at": "2025-08-08T04:21:30.273Z",
+    "updated_at": "2025-08-08T04:21:30.273Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "4bc7617e-03ed-4ee4-a8f2-c4501c123ceb",
+    "created_at": "2025-08-08T04:21:29.408Z",
+    "updated_at": "2025-08-08T04:21:29.407Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "4c408bc4-37bc-4a0d-82bf-5f4b3d1dbdcb",
+    "created_at": "2025-08-08T04:21:30.252Z",
+    "updated_at": "2025-08-08T04:21:30.252Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "4d4012f8-b29d-4bc6-bad5-c562079c2eb1",
+    "created_at": "2025-08-08T04:21:30.072Z",
+    "updated_at": "2025-08-08T04:21:30.072Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "4d6f0f3c-b237-4cc1-9c4a-375749b29337",
+    "created_at": "2025-08-08T04:21:29.789Z",
+    "updated_at": "2025-08-08T04:21:29.789Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "525486d7-4556-49c7-b82b-a7e843387af2",
+    "created_at": "2025-08-08T04:21:30.008Z",
+    "updated_at": "2025-08-08T04:21:30.006Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "540098f2-d19a-4a4f-bc9e-5b3b726e2dee",
+    "created_at": "2025-08-08T04:21:30.364Z",
+    "updated_at": "2025-08-08T04:21:30.364Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "546502c0-1715-4121-8252-f663c28e87b6",
+    "created_at": "2025-08-08T04:21:29.693Z",
+    "updated_at": "2025-08-08T04:21:29.692Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "568dcb40-e312-4d08-a1ef-128f7154729a",
+    "created_at": "2025-08-08T04:21:29.963Z",
+    "updated_at": "2025-08-08T04:21:29.963Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "56cf080b-3cc6-4ab3-b78a-cb271ecf76b5",
+    "created_at": "2025-08-08T04:21:29.559Z",
+    "updated_at": "2025-08-08T04:21:29.558Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "573a16f9-e5ea-46ac-bc61-784610b188c7",
+    "created_at": "2025-08-08T04:21:29.753Z",
+    "updated_at": "2025-08-08T04:21:29.753Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "57fb15f8-21c3-4781-954f-6b044c2afbc9",
+    "created_at": "2025-08-08T04:21:29.867Z",
+    "updated_at": "2025-08-08T04:21:29.867Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "583a15ff-890f-45f2-a616-c21b11cc0ca2",
+    "created_at": "2025-08-08T04:21:30.294Z",
+    "updated_at": "2025-08-08T04:21:30.294Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "5887e8bd-ac8d-42e1-ba2b-acf021274481",
+    "created_at": "2025-08-08T04:21:29.513Z",
+    "updated_at": "2025-08-08T04:21:29.513Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "58aab64c-30e7-4f33-b8d4-6e35c719f751",
+    "created_at": "2025-08-08T04:21:29.957Z",
+    "updated_at": "2025-08-08T04:21:29.956Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "58b5dd89-d5bb-4de8-9181-b4aec542f304",
+    "created_at": "2025-08-08T04:21:29.390Z",
+    "updated_at": "2025-08-08T04:21:29.390Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "58ccf691-30df-4818-bd37-c012a6d693dd",
+    "created_at": "2025-08-08T04:21:30.205Z",
+    "updated_at": "2025-08-08T04:21:30.205Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "593c7271-de43-4f8a-90f7-214ee2c587ea",
+    "created_at": "2025-08-08T04:21:29.815Z",
+    "updated_at": "2025-08-08T04:21:29.815Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "5aa3ab1e-d4f0-421e-a4c3-6bfdb98ec3be",
+    "created_at": "2025-08-08T04:21:29.736Z",
+    "updated_at": "2025-08-08T04:21:29.736Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "5b3765d8-e0f0-4a95-be5a-086e8a70038f",
+    "created_at": "2025-08-08T04:21:29.630Z",
+    "updated_at": "2025-08-08T04:21:29.629Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "5d290a4f-9467-4843-aa52-0783791c7e42",
+    "created_at": "2025-08-08T04:21:29.547Z",
+    "updated_at": "2025-08-08T04:21:29.547Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "5f3773e8-867d-42e8-a79b-b3033a324394",
+    "created_at": "2025-08-08T04:21:30.047Z",
+    "updated_at": "2025-08-08T04:21:30.046Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "62a74de2-dbc2-458a-b0ff-11acb2b0879e",
+    "created_at": "2025-08-08T04:21:30.029Z",
+    "updated_at": "2025-08-08T04:21:30.027Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "637e7d90-a95a-4d63-a191-0c998004a448",
+    "created_at": "2025-08-08T04:21:30.121Z",
+    "updated_at": "2025-08-08T04:21:30.121Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "64e5a911-5ee3-45bc-ac7e-6899cd3a309d",
+    "created_at": "2025-08-08T04:21:30.173Z",
+    "updated_at": "2025-08-08T04:21:30.172Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "651fdcb7-1457-44b3-a1c7-d7addf1a1dbe",
+    "created_at": "2025-08-08T04:21:30.222Z",
+    "updated_at": "2025-08-08T04:21:30.222Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "65757061-eebb-487e-82e4-c3fcb6ac90b1",
+    "created_at": "2025-08-08T04:21:30.260Z",
+    "updated_at": "2025-08-08T04:21:30.260Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "661b254e-ca3e-44e7-890e-89223bbcf2bb",
+    "created_at": "2025-08-08T04:21:30.230Z",
+    "updated_at": "2025-08-08T04:21:30.230Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "66ae81bc-b4ba-4c5b-9e4c-640d64b86b01",
+    "created_at": "2025-08-08T04:21:29.710Z",
+    "updated_at": "2025-08-08T04:21:29.709Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "678425e7-d7f0-4a55-b747-3f9bf24fa70e",
+    "created_at": "2025-08-08T04:21:29.850Z",
+    "updated_at": "2025-08-08T04:21:29.849Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "696bce72-d29c-443e-acf6-f073ef70b56a",
+    "created_at": "2025-08-08T04:21:29.698Z",
+    "updated_at": "2025-08-08T04:21:29.698Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "6bb047a9-ccb0-4cd0-9be8-d846fdd57a71",
+    "created_at": "2025-08-08T04:21:29.612Z",
+    "updated_at": "2025-08-08T04:21:29.612Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "6e359396-5f21-4ed5-8ae7-e410bdd67081",
+    "created_at": "2025-08-08T04:21:29.773Z",
+    "updated_at": "2025-08-08T04:21:29.773Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "74530975-ea35-4fe3-bbd5-a62c11b98d1f",
+    "created_at": "2025-08-08T04:21:29.586Z",
+    "updated_at": "2025-08-08T04:21:29.585Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "745ce817-90f2-486f-96fd-f7f6bdea8c18",
+    "created_at": "2025-08-08T04:21:29.980Z",
+    "updated_at": "2025-08-08T04:21:29.979Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "74b15e2d-ac22-4f5d-92ff-05145a93f497",
+    "created_at": "2025-08-08T04:21:30.326Z",
+    "updated_at": "2025-08-08T04:21:30.326Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "74b25fef-d8bb-4b52-b8d3-abbe8fc955e0",
+    "created_at": "2025-08-08T04:21:29.575Z",
+    "updated_at": "2025-08-08T04:21:29.575Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "74ba46dd-588c-4174-881e-04f389eba5c4",
+    "created_at": "2025-08-08T04:21:30.440Z",
+    "updated_at": "2025-08-08T04:21:30.440Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "7651c073-edc9-41c5-a386-72606b86b5a1",
+    "created_at": "2025-08-08T04:21:29.660Z",
+    "updated_at": "2025-08-08T04:21:29.660Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "772b65fc-c7e4-4c71-84d0-48f81c6e7645",
+    "created_at": "2025-08-08T04:21:29.766Z",
+    "updated_at": "2025-08-08T04:21:29.764Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "77c68d37-8eed-4f8d-9768-e2ef864bcc37",
+    "created_at": "2025-08-08T04:21:30.083Z",
+    "updated_at": "2025-08-08T04:21:30.083Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "780089af-f62e-46c3-a94c-4c8f41fbb2fd",
+    "created_at": "2025-08-08T04:21:30.036Z",
+    "updated_at": "2025-08-08T04:21:30.036Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "798a6275-a3b2-4fbb-8c67-629f1621a067",
+    "created_at": "2025-08-08T04:21:29.881Z",
+    "updated_at": "2025-08-08T04:21:29.880Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "79aedee7-b09f-40e1-87d7-124f150b7f3c",
+    "created_at": "2025-08-08T04:21:29.457Z",
+    "updated_at": "2025-08-08T04:21:29.457Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "79ca9167-e272-4d3c-9b70-411c44330ece",
+    "created_at": "2025-08-08T04:21:29.777Z",
+    "updated_at": "2025-08-08T04:21:29.777Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "7a26ccb1-b0dc-4b33-a9db-1a6af5467350",
+    "created_at": "2025-08-08T04:21:29.985Z",
+    "updated_at": "2025-08-08T04:21:29.984Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "7a69621a-7033-460d-8488-bd7a0a1adaaf",
+    "created_at": "2025-08-08T04:21:30.381Z",
+    "updated_at": "2025-08-08T04:21:30.381Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "7aed73db-acd8-4f79-8e2a-578b626f95e0",
+    "created_at": "2025-08-08T04:21:29.757Z",
+    "updated_at": "2025-08-08T04:21:29.756Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "7bd451e5-a448-4695-ae59-edfb7b073ea7",
+    "created_at": "2025-08-08T04:21:30.039Z",
+    "updated_at": "2025-08-08T04:21:30.039Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "7c02f214-5346-4994-bd7f-056965431e61",
+    "created_at": "2025-08-08T04:21:29.624Z",
+    "updated_at": "2025-08-08T04:21:29.624Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "7dd2416b-bc87-44fe-bc53-dc316479a539",
+    "created_at": "2025-08-08T04:21:29.943Z",
+    "updated_at": "2025-08-08T04:21:29.943Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "80ee9afb-816f-47c5-b96a-cc0b8c166fe2",
+    "created_at": "2025-08-08T04:21:29.607Z",
+    "updated_at": "2025-08-08T04:21:29.606Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "8174984d-f97e-4b94-94cb-d95846e9de98",
+    "created_at": "2025-08-08T04:21:29.871Z",
+    "updated_at": "2025-08-08T04:21:29.871Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "81ca4275-69a4-4325-ae72-5f3d67e9673e",
+    "created_at": "2025-08-08T04:21:30.126Z",
+    "updated_at": "2025-08-08T04:21:30.124Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "83cc2d2f-9853-4658-9b56-d09081867f55",
+    "created_at": "2025-08-08T04:21:29.638Z",
+    "updated_at": "2025-08-08T04:21:29.638Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "861c4cd3-e7cf-4c72-849a-ca60bbd6cf5f",
+    "created_at": "2025-08-08T04:21:30.449Z",
+    "updated_at": "2025-08-08T04:21:30.449Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "8684e0cd-0901-488d-908d-b76c1e156ec8",
+    "created_at": "2025-08-08T04:21:29.425Z",
+    "updated_at": "2025-08-08T04:21:29.425Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "879d3d50-88d3-47ac-86f8-149353f161a2",
+    "created_at": "2025-08-08T04:21:29.923Z",
+    "updated_at": "2025-08-08T04:21:29.922Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "897c3ef2-94ef-4782-ac67-760be92fc335",
+    "created_at": "2025-08-08T04:21:30.163Z",
+    "updated_at": "2025-08-08T04:21:30.163Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "89e9a227-4c7f-4016-88f1-8e7eb3202a20",
+    "created_at": "2025-08-08T04:21:29.589Z",
+    "updated_at": "2025-08-08T04:21:29.589Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "8a215d29-0534-4fed-8a12-fb91f46330a3",
+    "created_at": "2025-08-08T04:21:29.998Z",
+    "updated_at": "2025-08-08T04:21:29.997Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "8aba509a-a97c-4fb0-b685-0e47d443c8bb",
+    "created_at": "2025-08-08T04:21:29.431Z",
+    "updated_at": "2025-08-08T04:21:29.430Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "8cdd52ed-3098-4c0f-b43a-cfeebcfa7fe0",
+    "created_at": "2025-08-08T04:21:30.168Z",
+    "updated_at": "2025-08-08T04:21:30.167Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "8d52ead6-79c9-4b3a-9459-2d15474d3e9a",
+    "created_at": "2025-08-08T04:21:30.388Z",
+    "updated_at": "2025-08-08T04:21:30.388Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "8db4f1d0-3577-43ff-8a85-58d66d96c23f",
+    "created_at": "2025-08-08T04:21:29.593Z",
+    "updated_at": "2025-08-08T04:21:29.592Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "8e3f3665-bfd9-4e12-aed7-a51965faacbc",
+    "created_at": "2025-08-08T04:21:29.715Z",
+    "updated_at": "2025-08-08T04:21:29.715Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "921e2e7c-5a8b-4b56-8d0e-7c8c66ba721f",
+    "created_at": "2025-08-08T04:21:29.403Z",
+    "updated_at": "2025-08-08T04:21:29.403Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "94ec0221-38f5-4dba-8739-feb00c0c660c",
+    "created_at": "2025-08-08T04:21:29.470Z",
+    "updated_at": "2025-08-08T04:21:29.470Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "992cf41c-564b-4b3e-9c86-b949772279b8",
+    "created_at": "2025-08-08T04:21:30.407Z",
+    "updated_at": "2025-08-08T04:21:30.407Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "995aad7e-3326-4805-9fea-6ebc7f5be7ac",
+    "created_at": "2025-08-08T04:21:30.159Z",
+    "updated_at": "2025-08-08T04:21:30.159Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "995d8945-1bef-4d0f-873f-87a65a8b198a",
+    "created_at": "2025-08-08T04:21:29.474Z",
+    "updated_at": "2025-08-08T04:21:29.474Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "9be548a7-19c5-46ac-bb2e-17d6acba7947",
+    "created_at": "2025-08-08T04:21:29.725Z",
+    "updated_at": "2025-08-08T04:21:29.725Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "9e673751-9d35-4c55-9c62-1b86304c1488",
+    "created_at": "2025-08-08T04:21:29.494Z",
+    "updated_at": "2025-08-08T04:21:29.494Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "9eaa750f-9258-411d-b610-972879a92032",
+    "created_at": "2025-08-08T04:21:30.042Z",
+    "updated_at": "2025-08-08T04:21:30.042Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "9ec1ea95-dbb9-4b08-b6a6-df5ebae1f567",
+    "created_at": "2025-08-08T04:21:29.721Z",
+    "updated_at": "2025-08-08T04:21:29.719Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "9f276355-34c3-496c-86d1-2f34e329aeff",
+    "created_at": "2025-08-08T04:21:30.445Z",
+    "updated_at": "2025-08-08T04:21:30.443Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "a0d35de0-ab78-4f37-860d-4ece25160e80",
+    "created_at": "2025-08-08T04:21:29.448Z",
+    "updated_at": "2025-08-08T04:21:29.448Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "a137e196-e828-46e2-8ef4-d7b7356957b9",
+    "created_at": "2025-08-08T04:21:30.002Z",
+    "updated_at": "2025-08-08T04:21:30.002Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "a238797a-20ba-49fe-aa06-8ec96c56b98b",
+    "created_at": "2025-08-08T04:21:29.853Z",
+    "updated_at": "2025-08-08T04:21:29.853Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "a286a648-5627-4425-93ac-d5976952dae1",
+    "created_at": "2025-08-08T04:21:30.257Z",
+    "updated_at": "2025-08-08T04:21:30.256Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "a432affa-3aa7-4eaa-8abb-35e4cf8fbf08",
+    "created_at": "2025-08-08T04:21:29.522Z",
+    "updated_at": "2025-08-08T04:21:29.521Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "a9a7daab-68b0-4755-9701-ee43cf87a282",
+    "created_at": "2025-08-08T04:21:29.531Z",
+    "updated_at": "2025-08-08T04:21:29.530Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "aa0696bd-8fdd-41bb-a465-748f13470859",
+    "created_at": "2025-08-08T04:21:29.843Z",
+    "updated_at": "2025-08-08T04:21:29.843Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "aac6396c-21f8-40e0-b611-4ff0797f08dd",
+    "created_at": "2025-08-08T04:21:29.826Z",
+    "updated_at": "2025-08-08T04:21:29.825Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "ad338768-c088-4dd6-9b94-a6cde6712ecf",
+    "created_at": "2025-08-08T04:21:30.156Z",
+    "updated_at": "2025-08-08T04:21:30.155Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "af03183a-2f9b-4a66-a3bb-902ca4538e98",
+    "created_at": "2025-08-08T04:21:30.335Z",
+    "updated_at": "2025-08-08T04:21:30.335Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "af1317ef-88f9-4024-9aeb-6a494ce89cae",
+    "created_at": "2025-08-08T04:21:29.669Z",
+    "updated_at": "2025-08-08T04:21:29.669Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "af9c88d7-f788-47dc-84f9-a64e26342a93",
+    "created_at": "2025-08-08T04:21:29.770Z",
+    "updated_at": "2025-08-08T04:21:29.770Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "b09a2314-d84d-47c7-993a-b2cf5a71d86a",
+    "created_at": "2025-08-08T04:21:29.517Z",
+    "updated_at": "2025-08-08T04:21:29.517Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "b0f327a9-c897-4a4b-bc37-99eb83454c00",
+    "created_at": "2025-08-08T04:21:30.402Z",
+    "updated_at": "2025-08-08T04:21:30.402Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "b236ee08-4913-45cb-9423-025f3afbb96f",
+    "created_at": "2025-08-08T04:21:30.208Z",
+    "updated_at": "2025-08-08T04:21:30.208Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "b39d39c8-849e-4df5-9948-d0aa25758ed6",
+    "created_at": "2025-08-08T04:21:29.551Z",
+    "updated_at": "2025-08-08T04:21:29.551Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "b458e3b7-c2c6-49dc-b4d8-b2fd6130c647",
+    "created_at": "2025-08-08T04:21:29.652Z",
+    "updated_at": "2025-08-08T04:21:29.651Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "b45f141c-8824-4aaa-b4c9-c10b42fa873b",
+    "created_at": "2025-08-08T04:21:30.055Z",
+    "updated_at": "2025-08-08T04:21:30.054Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "b46e5d05-b0dc-497d-bbe6-2f8c22fdc482",
+    "created_at": "2025-08-08T04:21:29.802Z",
+    "updated_at": "2025-08-08T04:21:29.801Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "b68621ff-3073-428c-a308-56ecaaf39e3a",
+    "created_at": "2025-08-08T04:21:30.063Z",
+    "updated_at": "2025-08-08T04:21:30.063Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "b7984a71-7e3c-43f9-8dde-64c01e80cade",
+    "created_at": "2025-08-08T04:21:29.968Z",
+    "updated_at": "2025-08-08T04:21:29.967Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "b8d9bd98-9a21-4706-afb1-05683489fa8c",
+    "created_at": "2025-08-08T04:21:30.345Z",
+    "updated_at": "2025-08-08T04:21:30.342Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "ba439ef9-6007-4149-a303-ad74d3ba67cc",
+    "created_at": "2025-08-08T04:21:29.466Z",
+    "updated_at": "2025-08-08T04:21:29.466Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "bc996225-3cf7-425d-82c9-12578034ab6b",
+    "created_at": "2025-08-08T04:21:29.461Z",
+    "updated_at": "2025-08-08T04:21:29.460Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "bd57ba1b-58fb-4578-8045-2758576e4b21",
+    "created_at": "2025-08-08T04:21:29.507Z",
+    "updated_at": "2025-08-08T04:21:29.507Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "becccb59-8b0f-4e04-9574-b7cef4aed181",
+    "created_at": "2025-08-08T04:21:30.426Z",
+    "updated_at": "2025-08-08T04:21:30.425Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "befcac8a-c835-47e2-98a3-81a437513674",
+    "created_at": "2025-08-08T04:21:29.656Z",
+    "updated_at": "2025-08-08T04:21:29.656Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "bf03c812-e47d-4722-af49-4ba14d7c6f2d",
+    "created_at": "2025-08-08T04:21:30.373Z",
+    "updated_at": "2025-08-08T04:21:30.373Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "c0e0ee60-7d56-44b5-ae1d-166af978fa24",
+    "created_at": "2025-08-08T04:21:29.453Z",
+    "updated_at": "2025-08-08T04:21:29.452Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "c0f704b8-b9ff-4548-9042-0f9e7b2b9f87",
+    "created_at": "2025-08-08T04:21:30.114Z",
+    "updated_at": "2025-08-08T04:21:30.114Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "c191bbf9-174a-431d-b376-396db4fb0f59",
+    "created_at": "2025-08-08T04:21:30.240Z",
+    "updated_at": "2025-08-08T04:21:30.239Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "c3554e30-5815-4d53-89b3-db439e07794a",
+    "created_at": "2025-08-08T04:21:29.781Z",
+    "updated_at": "2025-08-08T04:21:29.780Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "c3dea2a7-df66-4875-bbf6-0102ec7bac00",
+    "created_at": "2025-08-08T04:21:30.091Z",
+    "updated_at": "2025-08-08T04:21:30.091Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "c52686df-15cb-4e0a-9803-4d73773b4539",
+    "created_at": "2025-08-08T04:21:29.673Z",
+    "updated_at": "2025-08-08T04:21:29.672Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "c58b9b75-ace6-4154-994b-8707eb5a0629",
+    "created_at": "2025-08-08T04:21:30.244Z",
+    "updated_at": "2025-08-08T04:21:30.243Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "c68a1181-2914-41ea-acfe-1c9c5c60bce9",
+    "created_at": "2025-08-08T04:21:29.993Z",
+    "updated_at": "2025-08-08T04:21:29.992Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "c7050f2e-f523-4855-b888-b21f87a0a756",
+    "created_at": "2025-08-08T04:21:30.377Z",
+    "updated_at": "2025-08-08T04:21:30.377Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "c893a8c8-dff3-42b8-8701-06fdae6b806e",
+    "created_at": "2025-08-08T04:21:29.500Z",
+    "updated_at": "2025-08-08T04:21:29.499Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "c8ce53fa-3bce-412f-b359-35a162976dd4",
+    "created_at": "2025-08-08T04:21:29.535Z",
+    "updated_at": "2025-08-08T04:21:29.535Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "c9851d46-4ea8-4019-bc3d-f4dc4b3c3e7d",
+    "created_at": "2025-08-08T04:21:30.307Z",
+    "updated_at": "2025-08-08T04:21:30.307Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "cbab0803-d0b4-469c-ad6d-b4b77ed6e410",
+    "created_at": "2025-08-08T04:21:30.282Z",
+    "updated_at": "2025-08-08T04:21:30.282Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "cce9cf74-891a-47bc-8f25-84af557b6f00",
+    "created_at": "2025-08-08T04:21:30.322Z",
+    "updated_at": "2025-08-08T04:21:30.321Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "ce5e37a9-ffc2-4ac7-b9d0-1fff400cf2ea",
+    "created_at": "2025-08-08T04:21:30.142Z",
+    "updated_at": "2025-08-08T04:21:30.142Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "cf046b8e-3188-4ced-8ee6-9482eae14335",
+    "created_at": "2025-08-08T04:21:29.603Z",
+    "updated_at": "2025-08-08T04:21:29.602Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "cfb8cd49-3b8b-4099-a1cc-b193f67cf972",
+    "created_at": "2025-08-08T04:21:30.190Z",
+    "updated_at": "2025-08-08T04:21:30.189Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "cfd81995-1000-44a5-b655-2e3fbcbc74d3",
+    "created_at": "2025-08-08T04:21:30.201Z",
+    "updated_at": "2025-08-08T04:21:30.201Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "d049db73-5b09-4882-b553-878098d5f1e6",
+    "created_at": "2025-08-08T04:21:30.075Z",
+    "updated_at": "2025-08-08T04:21:30.075Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "d16a0323-e3b5-4124-832a-878364f5911a",
+    "created_at": "2025-08-08T04:21:29.926Z",
+    "updated_at": "2025-08-08T04:21:29.926Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "d1b02f76-cf96-4342-8ad6-26377c52102a",
+    "created_at": "2025-08-08T04:21:29.542Z",
+    "updated_at": "2025-08-08T04:21:29.541Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "d22e08d6-7578-403a-87fe-0c502932c4b7",
+    "created_at": "2025-08-08T04:21:29.647Z",
+    "updated_at": "2025-08-08T04:21:29.647Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "d265e674-085b-4435-a5cd-7df5bd810292",
+    "created_at": "2025-08-08T04:21:30.303Z",
+    "updated_at": "2025-08-08T04:21:30.303Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "d284472e-5ae5-4d93-99cf-3d715d09107e",
+    "created_at": "2025-08-08T04:21:30.051Z",
+    "updated_at": "2025-08-08T04:21:30.051Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "d31e734b-7c52-48f4-bcd2-f81f313e6557",
+    "created_at": "2025-08-08T04:21:29.749Z",
+    "updated_at": "2025-08-08T04:21:29.749Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "d34ac4f5-9fc4-458f-8b6a-4b260ba696dc",
+    "created_at": "2025-08-08T04:21:29.888Z",
+    "updated_at": "2025-08-08T04:21:29.888Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "d3aadbe0-aef3-4af3-86b9-a453f14fdf3f",
+    "created_at": "2025-08-08T04:21:30.016Z",
+    "updated_at": "2025-08-08T04:21:30.016Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "d4faee6c-014e-4af5-acce-01f7ae73d9db",
+    "created_at": "2025-08-08T04:21:29.936Z",
+    "updated_at": "2025-08-08T04:21:29.935Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "d540b8e0-c215-4161-8b03-2001acb6deb8",
+    "created_at": "2025-08-08T04:21:30.087Z",
+    "updated_at": "2025-08-08T04:21:30.087Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "d579d88d-2b5b-4c0b-a074-76248b0f485a",
+    "created_at": "2025-08-08T04:21:30.290Z",
+    "updated_at": "2025-08-08T04:21:30.290Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "d651386c-ff8f-4450-9e26-df59982dbf4c",
+    "created_at": "2025-08-08T04:21:29.745Z",
+    "updated_at": "2025-08-08T04:21:29.744Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "d9e6de8d-9447-46a7-8dc2-ad46531bd1d6",
+    "created_at": "2025-08-08T04:21:30.339Z",
+    "updated_at": "2025-08-08T04:21:30.339Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "d9fa95d8-c1e7-4871-9342-5807dac96402",
+    "created_at": "2025-08-08T04:21:29.702Z",
+    "updated_at": "2025-08-08T04:21:29.702Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "da564389-435c-49c8-8ef3-47e96455db4f",
+    "created_at": "2025-08-08T04:21:30.235Z",
+    "updated_at": "2025-08-08T04:21:30.234Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "db037d6b-562e-4258-bd3c-a5923417ad49",
+    "created_at": "2025-08-08T04:21:30.106Z",
+    "updated_at": "2025-08-08T04:21:30.106Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "db146827-b180-4454-ae7f-5cd0818815d9",
+    "created_at": "2025-08-08T04:21:30.269Z",
+    "updated_at": "2025-08-08T04:21:30.269Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "dd4f0f8d-35a5-4106-938f-df313b8d8c85",
+    "created_at": "2025-08-08T04:21:30.181Z",
+    "updated_at": "2025-08-08T04:21:30.181Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "de5e12bc-6279-4d26-b506-3237604b0fe3",
+    "created_at": "2025-08-08T04:21:30.068Z",
+    "updated_at": "2025-08-08T04:21:30.067Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "dfb5b20b-b2a6-440e-8df8-74eea7bfe85a",
+    "created_at": "2025-08-08T04:21:30.277Z",
+    "updated_at": "2025-08-08T04:21:30.276Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "dfdc414b-6dd4-40ec-80c1-edc498a18a89",
+    "created_at": "2025-08-08T04:21:29.836Z",
+    "updated_at": "2025-08-08T04:21:29.835Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "e2f338f1-dafb-4d52-a96c-354b357df809",
+    "created_at": "2025-08-08T04:21:29.399Z",
+    "updated_at": "2025-08-08T04:21:29.398Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "e43552e6-3bf7-41e0-9865-2ecfb84ae7de",
+    "created_at": "2025-08-08T04:21:30.317Z",
+    "updated_at": "2025-08-08T04:21:30.316Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "e487039b-a293-4e0f-834d-719f4897ed8c",
+    "created_at": "2025-08-08T04:21:30.138Z",
+    "updated_at": "2025-08-08T04:21:30.138Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "e60d1a74-dfe8-475e-950b-3661100de5dd",
+    "created_at": "2025-08-08T04:21:29.526Z",
+    "updated_at": "2025-08-08T04:21:29.525Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "e6cde524-819a-46c7-adec-66dd6285e37e",
+    "created_at": "2025-08-08T04:21:29.665Z",
+    "updated_at": "2025-08-08T04:21:29.665Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "e9076133-7e9d-4907-80b8-d90dfbf6e553",
+    "created_at": "2025-08-08T04:21:30.012Z",
+    "updated_at": "2025-08-08T04:21:30.011Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "e954059e-241f-42b7-8a56-b042fc92bf14",
+    "created_at": "2025-08-08T04:21:30.331Z",
+    "updated_at": "2025-08-08T04:21:30.331Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "e9ba43bc-bfcc-4564-98bc-1e682f43d479",
+    "created_at": "2025-08-08T04:21:29.952Z",
+    "updated_at": "2025-08-08T04:21:29.952Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "eb65c317-bdee-4082-b03e-566bd61494ea",
+    "created_at": "2025-08-08T04:21:30.359Z",
+    "updated_at": "2025-08-08T04:21:30.359Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "ee3f3b2e-ad20-4e04-b629-85232a9c517c",
+    "created_at": "2025-08-08T04:21:30.079Z",
+    "updated_at": "2025-08-08T04:21:30.079Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "ef9739f5-512e-43bd-bea9-ba37652c48d2",
+    "created_at": "2025-08-08T04:21:29.440Z",
+    "updated_at": "2025-08-08T04:21:29.439Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "efd4a75f-c7b9-45af-acfd-e3a4de15b709",
+    "created_at": "2025-08-08T04:21:29.939Z",
+    "updated_at": "2025-08-08T04:21:29.939Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "f07ccebd-8281-4894-b8c2-bfed9f2e18d6",
+    "created_at": "2025-08-08T04:21:30.311Z",
+    "updated_at": "2025-08-08T04:21:30.311Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "f0e8ee54-38db-4933-b40c-38762ffaa693",
+    "created_at": "2025-08-08T04:21:30.099Z",
+    "updated_at": "2025-08-08T04:21:30.099Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "f1cafe2a-0143-4dc4-8588-0c865291e086",
+    "created_at": "2025-08-08T04:21:30.436Z",
+    "updated_at": "2025-08-08T04:21:30.436Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "f2308f05-551f-4f15-a3f2-048f7ae811cb",
+    "created_at": "2025-08-08T04:21:29.905Z",
+    "updated_at": "2025-08-08T04:21:29.905Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "f2428f54-cf6c-4f27-b949-d2b101d1a099",
+    "created_at": "2025-08-08T04:21:30.095Z",
+    "updated_at": "2025-08-08T04:21:30.094Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "f31d6b12-4b63-4df4-929b-31eec6c6d940",
+    "created_at": "2025-08-08T04:21:29.786Z",
+    "updated_at": "2025-08-08T04:21:29.785Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "f3d2dc70-2661-4478-99f5-1ea2895821eb",
+    "created_at": "2025-08-08T04:21:29.822Z",
+    "updated_at": "2025-08-08T04:21:29.822Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "f51006a0-6af9-4dde-879b-0d6d27ddccd6",
+    "created_at": "2025-08-08T04:21:30.411Z",
+    "updated_at": "2025-08-08T04:21:30.411Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "TAKEOUT"
+  },
+  {
+    "id": "f6b1000e-f3e4-4db3-9834-0ec35126fa2b",
+    "created_at": "2025-08-08T04:21:29.931Z",
+    "updated_at": "2025-08-08T04:21:29.930Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "f7bc751f-4dbe-476a-8cec-81028af161b9",
+    "created_at": "2025-08-08T04:21:30.213Z",
+    "updated_at": "2025-08-08T04:21:30.212Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "f7ebc180-c0c5-4fd4-8a4c-1cd50e7ed078",
+    "created_at": "2025-08-08T04:21:29.486Z",
+    "updated_at": "2025-08-08T04:21:29.486Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "f804190d-570e-4007-9ee4-50b04fbdd0f6",
+    "created_at": "2025-08-08T04:21:29.418Z",
+    "updated_at": "2025-08-08T04:21:29.417Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  },
+  {
+    "id": "fa4f1295-fbfc-4f5f-be18-c0306d0957bb",
+    "created_at": "2025-08-08T04:21:30.176Z",
+    "updated_at": "2025-08-08T04:21:30.176Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "ENKI_REALTY"
+  },
+  {
+    "id": "fbb6b991-caed-4cba-b023-97bae292f253",
+    "created_at": "2025-08-08T04:21:29.617Z",
+    "updated_at": "2025-08-08T04:21:29.616Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "fc527bfe-9549-445e-86ee-7ea7f78df433",
+    "created_at": "2025-08-08T04:21:29.989Z",
+    "updated_at": "2025-08-08T04:21:29.989Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "fc7b09a8-4a3b-4e7e-8e03-4129cc3151b1",
+    "created_at": "2025-08-08T04:21:29.915Z",
+    "updated_at": "2025-08-08T04:21:29.914Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "LEXAIA"
+  },
+  {
+    "id": "fd9d2933-b2d3-45cd-bd4e-2756e33d539c",
+    "created_at": "2025-08-08T04:21:29.806Z",
+    "updated_at": "2025-08-08T04:21:29.805Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "DAINAMICS"
+  },
+  {
+    "id": "fe43e1c8-7f09-4105-aa9d-f82e952e184c",
+    "created_at": "2025-08-08T04:21:29.569Z",
+    "updated_at": "2025-08-08T04:21:29.569Z",
+    "name": null,
+    "description": null,
+    "status": "active",
+    "owner_company": "HYPERVISUAL"
+  }
+]

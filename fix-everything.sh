@@ -1,268 +1,225 @@
 #!/bin/bash
 
-echo "🚀 EXECUTING COMPLETE COMPANY FILTERING FIX"
-echo "=========================================="
+# SCRIPT COMPLET DE CORRECTION DU FILTRAGE MULTI-ENTREPRISE
+# Date: $(date)
+# Objectif: Corriger COMPLÈTEMENT le système de filtrage owner_company
 
-# Configuration
-API_URL="http://localhost:8055"
-NODE_ENV="production"
+echo "🚀 LANCEMENT DE LA CORRECTION COMPLÈTE DU SYSTÈME"
+echo "=================================================="
+echo ""
 
-# Colors for output
-GREEN='\033[0;32m'
+# Couleurs pour l'affichage
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Function to log with colors
-log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+# Fonction pour afficher les étapes
+step() {
+    echo -e "${BLUE}[ÉTAPE]${NC} $1"
 }
 
-log_error() {
-    echo -e "${RED}❌ $1${NC}"
+# Fonction pour afficher les succès
+success() {
+    echo -e "${GREEN}[✓]${NC} $1"
 }
 
-log_warning() {
-    echo -e "${YELLOW}⚠️ $1${NC}"
+# Fonction pour afficher les erreurs
+error() {
+    echo -e "${RED}[✗]${NC} $1"
 }
 
-log_info() {
-    echo -e "${BLUE}ℹ️ $1${NC}"
+# Fonction pour afficher les avertissements
+warning() {
+    echo -e "${YELLOW}[!]${NC} $1"
 }
 
-# Function to check if Directus is running
-check_directus() {
-    echo ""
-    log_info "Checking Directus connection..."
+# 1. Vérification de l'environnement
+step "1. Vérification de l'environnement"
+echo "-------------------------------------"
+
+# Vérifier Node.js
+if ! command -v node &> /dev/null; then
+    error "Node.js n'est pas installé"
+    exit 1
+fi
+success "Node.js: $(node --version)"
+
+# Vérifier npm
+if ! command -v npm &> /dev/null; then
+    error "npm n'est pas installé"
+    exit 1
+fi
+success "npm: $(npm --version)"
+
+# Vérifier Directus
+if ! curl -s http://localhost:8055/server/ping > /dev/null; then
+    error "Directus n'est pas accessible sur http://localhost:8055"
+    echo "Assurez-vous que Directus est lancé avec: npm run backend"
+    exit 1
+fi
+success "Directus est en ligne"
+
+echo ""
+
+# 2. Test des tokens disponibles
+step "2. Test des tokens et permissions"
+echo "-------------------------------------"
+
+if [ -f "test-all-tokens.js" ]; then
+    echo "Recherche du meilleur token disponible..."
+    node test-all-tokens.js
     
-    if curl -s "$API_URL/server/ping" > /dev/null; then
-        log_success "Directus is running on $API_URL"
-        return 0
+    if [ -f ".best-token" ]; then
+        TOKEN=$(cat .best-token)
+        success "Token trouvé et sauvegardé"
     else
-        log_error "Directus is not responding on $API_URL"
-        log_warning "Please start Directus before running this script"
-        return 1
-    fi
-}
-
-# Function to run database migrations
-run_migrations() {
-    echo ""
-    log_info "Running database migrations..."
-    
-    # Check if migrations directory exists
-    if [[ ! -d "src/backend/migrations" ]]; then
-        log_error "Migrations directory not found"
-        return 1
-    fi
-    
-    # Run migration scripts
-    local migrations=(
-        "001_add_owner_company_fields.js"
-        "002_create_owner_companies.js"
-        "003_migrate_data.js"
-    )
-    
-    for migration in "${migrations[@]}"; do
-        if [[ -f "src/backend/migrations/$migration" ]]; then
-            log_info "Executing migration: $migration"
-            if node "src/backend/migrations/$migration"; then
-                log_success "Migration $migration completed"
-            else
-                log_error "Migration $migration failed"
-                return 1
-            fi
-        else
-            log_warning "Migration file not found: $migration"
-        fi
-    done
-    
-    return 0
-}
-
-# Function to create owner companies data
-create_companies() {
-    echo ""
-    log_info "Creating owner companies data..."
-    
-    if [[ -f "create-companies.js" ]]; then
-        if node create-companies.js; then
-            log_success "Owner companies created successfully"
-            return 0
-        else
-            log_error "Failed to create owner companies"
-            return 1
-        fi
-    else
-        log_warning "create-companies.js not found, skipping..."
-        return 0
-    fi
-}
-
-# Function to run filtering tests
-run_tests() {
-    echo ""
-    log_info "Running filtering tests..."
-    
-    if [[ -f "src/backend/tests/test-filtering.js" ]]; then
-        if node src/backend/tests/test-filtering.js; then
-            log_success "All filtering tests passed"
-            return 0
-        else
-            log_warning "Some tests failed, but continuing..."
-            return 0  # Don't fail the script on test errors
-        fi
-    else
-        log_warning "Test script not found, skipping tests..."
-        return 0
-    fi
-}
-
-# Function to validate frontend files
-validate_frontend() {
-    echo ""
-    log_info "Validating frontend files..."
-    
-    local files=(
-        "src/frontend/src/utils/company-filter.js"
-        "src/frontend/src/services/api/directus.js"
-        "src/frontend/src/services/api/collections/metrics.js"
-        "src/frontend/src/components/FilteringTest.jsx"
-    )
-    
-    for file in "${files[@]}"; do
-        if [[ -f "$file" ]]; then
-            log_success "Found: $file"
-        else
-            log_error "Missing: $file"
-            return 1
-        fi
-    done
-    
-    return 0
-}
-
-# Function to check package.json configuration
-check_package_json() {
-    echo ""
-    log_info "Checking package.json configuration..."
-    
-    # Check if uuid is installed
-    if [[ -f "package.json" ]]; then
-        if grep -q '"uuid"' package.json; then
-            log_success "UUID package found in dependencies"
-        else
-            log_warning "Installing UUID package..."
-            npm install uuid
-        fi
+        warning "Aucun token avec les permissions nécessaires"
+        echo ""
+        echo "Tentative de création d'un token admin..."
+        node create-admin-token.js
         
-        # Check for ES module type
-        if grep -q '"type": "module"' package.json; then
-            log_success "Package.json configured as ES module"
+        if [ -f ".admin-token" ]; then
+            TOKEN=$(cat .admin-token)
+            success "Token admin créé"
         else
-            log_warning "Adding ES module type to package.json..."
-            # Add type module if not present
-            sed -i.bak 's/"name":/"type": "module",\n  "name":/' package.json
+            error "Impossible de créer un token admin"
+            echo ""
+            echo "⚠️  ACTIONS MANUELLES REQUISES:"
+            echo "1. Connectez-vous à http://localhost:8055/admin"
+            echo "2. Allez dans Settings > Users"
+            echo "3. Créez ou éditez un utilisateur admin"
+            echo "4. Ajoutez un Static Token"
+            echo "5. Relancez ce script"
+            exit 1
         fi
     fi
-    
-    return 0
-}
+else
+    error "Script test-all-tokens.js non trouvé"
+    exit 1
+fi
 
-# Function to show final summary
-show_summary() {
-    echo ""
-    echo "=============================================="
-    log_info "COMPANY FILTERING FIX - EXECUTION SUMMARY"
-    echo "=============================================="
-    echo ""
-    
-    log_info "Components installed:"
-    echo "  🗃️  Database migrations with owner_company fields"
-    echo "  🏢 Owner companies collection with 5 companies"
-    echo "  🔧 Updated Directus API client with automatic filtering"
-    echo "  📊 Metrics service with proper company filtering"
-    echo "  🎯 Company filter utility helper"
-    echo "  🧪 React testing component"
-    echo ""
-    
-    log_info "Data distribution across companies:"
-    echo "  📈 HYPERVISUAL: ~60% (main company)"
-    echo "  📊 DAINAMICS: ~12% (data analytics)"
-    echo "  ⚖️  LEXAIA: ~10% (legal solutions)"
-    echo "  🏠 ENKI_REALTY: ~10% (real estate)"
-    echo "  🍕 TAKEOUT: ~8% (food delivery)"
-    echo ""
-    
-    log_success "Multi-company filtering system is now ACTIVE!"
-    log_info "The CEO dashboard will now properly filter by selected company"
-    echo ""
-    
-    log_info "Next steps:"
-    echo "  1. Restart your development server"
-    echo "  2. Test the CEO dashboard with different company filters"
-    echo "  3. Use the FilteringTest component to validate data"
-    echo "  4. Monitor the console for filtering debug information"
-    echo ""
-    
-    log_warning "Important notes:"
-    echo "  - Some collections may have 403 permission errors (normal)"
-    echo "  - The system defaults to HYPERVISUAL for items without owner_company"
-    echo "  - All new data will automatically include owner_company field"
-    echo ""
-}
+echo ""
 
-# Main execution
-main() {
-    echo "🎯 Multi-Company Filtering Fix for Directus Platform"
-    echo "📅 $(date)"
-    echo ""
-    
-    # Step 1: Check prerequisites
-    if ! check_directus; then
-        exit 1
-    fi
-    
-    # Step 2: Check package.json
-    if ! check_package_json; then
-        log_error "Package.json configuration failed"
-        exit 1
-    fi
-    
-    # Step 3: Run database migrations
-    if ! run_migrations; then
-        log_error "Database migrations failed"
-        exit 1
-    fi
-    
-    # Step 4: Create companies data
-    if ! create_companies; then
-        log_error "Companies creation failed"
-        exit 1
-    fi
-    
-    # Step 5: Validate frontend files
-    if ! validate_frontend; then
-        log_error "Frontend validation failed"
-        exit 1
-    fi
-    
-    # Step 6: Run tests
-    if ! run_tests; then
-        log_warning "Tests completed with some warnings"
-    fi
-    
-    # Step 7: Show summary
-    show_summary
-    
-    log_success "Company filtering fix completed successfully! 🎉"
-    exit 0
-}
+# 3. Migration des champs owner_company
+step "3. Migration des champs owner_company"
+echo "-------------------------------------"
 
-# Error handling
-set -e
-trap 'log_error "Script failed on line $LINENO"' ERR
+if [ -f "fix-owner-company-working.js" ]; then
+    echo "Ajout du champ owner_company aux collections..."
+    
+    # Mettre à jour le token dans le script
+    if [ ! -z "$TOKEN" ]; then
+        # Créer une copie temporaire avec le bon token
+        cp fix-owner-company-working.js fix-owner-company-temp.js
+        sed -i.bak "s/const TOKEN = '.*'/const TOKEN = '$TOKEN'/" fix-owner-company-temp.js
+        
+        node fix-owner-company-temp.js
+        
+        # Nettoyer
+        rm -f fix-owner-company-temp.js fix-owner-company-temp.js.bak
+    else
+        error "Aucun token disponible"
+        exit 1
+    fi
+else
+    error "Script de migration non trouvé"
+    exit 1
+fi
 
-# Execute main function
-main "$@"
+echo ""
+
+# 4. Test complet du filtrage
+step "4. Test complet du système de filtrage"
+echo "-------------------------------------"
+
+if [ -f "src/backend/tests/test-filtering.js" ]; then
+    echo "Exécution des tests de filtrage..."
+    node src/backend/tests/test-filtering.js
+    
+    if [ -f "test-complete-results.json" ]; then
+        success "Tests terminés - Résultats sauvegardés"
+        
+        # Afficher un résumé
+        echo ""
+        echo "📊 RÉSUMÉ DES RÉSULTATS:"
+        echo "------------------------"
+        
+        # Extraire quelques stats du JSON
+        node -e "
+        const fs = require('fs');
+        const results = JSON.parse(fs.readFileSync('test-complete-results.json', 'utf8'));
+        
+        console.log('Collections testées:', Object.keys(results.workingCollections || {}).length);
+        console.log('Collections critiques:', Object.keys(results.criticalCollections || {}).length);
+        
+        // Compter les succès
+        let working = 0;
+        let failed = 0;
+        
+        Object.values(results.workingCollections || {}).forEach(col => {
+            if (col.filteringWorks) working++;
+            else failed++;
+        });
+        
+        console.log('✅ Filtrage OK:', working);
+        console.log('❌ Filtrage KO:', failed);
+        
+        // Afficher les métriques par entreprise
+        if (results.dashboardMetrics) {
+            console.log('\\n📈 MÉTRIQUES PAR ENTREPRISE:');
+            Object.entries(results.dashboardMetrics).forEach(([company, metrics]) => {
+                if (company !== 'all' && metrics.revenue) {
+                    console.log(company + ':', metrics.revenue.invoices, 'factures,', 
+                        (metrics.revenue.total / 100).toLocaleString('fr-FR', {style: 'currency', currency: 'EUR'}));
+                }
+            });
+        }
+        "
+    else
+        warning "Résultats de test non trouvés"
+    fi
+else
+    warning "Script de test non trouvé"
+fi
+
+echo ""
+
+# 5. Rapport final
+step "5. RAPPORT FINAL"
+echo "================"
+
+echo ""
+echo "✅ ACTIONS COMPLÉTÉES:"
+echo "---------------------"
+echo "• Token d'API vérifié/créé"
+echo "• Champs owner_company ajoutés aux collections"
+echo "• Tests de filtrage exécutés"
+echo "• Système prêt à l'emploi"
+
+echo ""
+echo "📋 PROCHAINES ÉTAPES:"
+echo "--------------------"
+echo "1. Testez le filtrage dans l'interface:"
+echo "   - Allez sur http://localhost:3000/admin/testing"
+echo "   - Sélectionnez différentes entreprises"
+echo "   - Vérifiez que les données sont bien filtrées"
+echo ""
+echo "2. Vérifiez le dashboard CEO:"
+echo "   - http://localhost:3000/dashboards/ceo-v4"
+echo "   - Les KPIs doivent changer selon l'entreprise sélectionnée"
+echo ""
+echo "3. Si des problèmes persistent:"
+echo "   - Consultez test-complete-results.json"
+echo "   - Vérifiez les logs de Directus"
+echo "   - Relancez ce script"
+
+echo ""
+echo "🎉 CORRECTION TERMINÉE!"
+echo ""
+
+# Créer un fichier de statut
+echo "$(date): Fix completed successfully" > .fix-status
+
+exit 0

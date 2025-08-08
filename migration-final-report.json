@@ -1,0 +1,469 @@
+{
+  "timestamp": "2025-08-08T11:41:16.125Z",
+  "collections": {
+    "companies": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "people": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "time_tracking": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "proposals": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "quotes": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "orders": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "support_tickets": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "interactions": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "talents": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "teams": {
+      "priority": "critical",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "accounting_entries": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "activities": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "approvals": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "audit_logs": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "comments": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "company_people": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "compliance": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "content_calendar": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "credits": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "customer_success": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "debits": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "deliveries": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "departments": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "evaluations": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "events": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "goals": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "notes": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "notifications": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "permissions": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "projects_team": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "providers": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "reconciliations": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "refunds": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "returns": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "roles": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "settings": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "skills": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "tags": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "talents_simple": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "trainings": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    },
+    "workflows": {
+      "priority": "other",
+      "hasField": false,
+      "fieldAdded": false,
+      "totalRecords": 0,
+      "migratedRecords": 0,
+      "distribution": {},
+      "errors": [
+        "Request failed with status code 403"
+      ]
+    }
+  },
+  "summary": {
+    "totalCollections": 53,
+    "collectionsWithOwnerCompany": 11,
+    "coverage": 20.8,
+    "stats": {
+      "fieldsAdded": 0,
+      "fieldsExisting": 0,
+      "fieldsError": 0,
+      "recordsMigrated": 0,
+      "recordsError": 0,
+      "collectionsProcessed": 0
+    }
+  }
+}

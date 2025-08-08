@@ -1,0 +1,319 @@
+{
+  "timestamp": "2025-08-08T11:44:15.157Z",
+  "workingCollections": {
+    "projects": {
+      "hasOwnerCompany": true,
+      "totalRecords": "299",
+      "distribution": {
+        "HYPERVISUAL": "181",
+        "DAINAMICS": "28",
+        "LEXAIA": "30",
+        "ENKI_REALTY": "27",
+        "TAKEOUT": "33"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "client_invoices": {
+      "hasOwnerCompany": true,
+      "totalRecords": "1043",
+      "distribution": {
+        "HYPERVISUAL": "644",
+        "DAINAMICS": "99",
+        "LEXAIA": "90",
+        "ENKI_REALTY": "118",
+        "TAKEOUT": "92"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "bank_transactions": {
+      "hasOwnerCompany": true,
+      "totalRecords": "3230",
+      "distribution": {
+        "HYPERVISUAL": "1657",
+        "DAINAMICS": "414",
+        "LEXAIA": "443",
+        "ENKI_REALTY": "382",
+        "TAKEOUT": "334"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "expenses": {
+      "hasOwnerCompany": true,
+      "totalRecords": "763",
+      "distribution": {
+        "HYPERVISUAL": "284",
+        "DAINAMICS": "136",
+        "LEXAIA": "121",
+        "ENKI_REALTY": "120",
+        "TAKEOUT": "102"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "deliverables": {
+      "hasOwnerCompany": true,
+      "totalRecords": "550",
+      "distribution": {
+        "HYPERVISUAL": "301",
+        "DAINAMICS": "62",
+        "LEXAIA": "65",
+        "ENKI_REALTY": "67",
+        "TAKEOUT": "55"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "subscriptions": {
+      "hasOwnerCompany": true,
+      "totalRecords": "120",
+      "distribution": {
+        "HYPERVISUAL": "120",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "supplier_invoices": {
+      "hasOwnerCompany": true,
+      "totalRecords": "375",
+      "distribution": {
+        "HYPERVISUAL": "375",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "contracts": {
+      "hasOwnerCompany": true,
+      "totalRecords": "60",
+      "distribution": {
+        "HYPERVISUAL": "60",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "payments": {
+      "hasOwnerCompany": true,
+      "totalRecords": "100",
+      "distribution": {
+        "HYPERVISUAL": "100",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "kpis": {
+      "hasOwnerCompany": true,
+      "totalRecords": "240",
+      "distribution": {
+        "HYPERVISUAL": "48",
+        "DAINAMICS": "48",
+        "LEXAIA": "48",
+        "ENKI_REALTY": "48",
+        "TAKEOUT": "48"
+      },
+      "filteringWorks": true,
+      "errors": []
+    },
+    "budgets": {
+      "hasOwnerCompany": true,
+      "totalRecords": "53",
+      "distribution": {
+        "HYPERVISUAL": "0",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "filteringWorks": false,
+      "errors": []
+    }
+  },
+  "criticalCollections": {
+    "companies": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "127",
+      "errors": []
+    },
+    "people": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "515",
+      "errors": []
+    },
+    "time_tracking": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "3",
+      "errors": []
+    },
+    "support_tickets": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "0",
+      "errors": []
+    },
+    "proposals": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "80",
+      "errors": []
+    },
+    "quotes": {
+      "hasOwnerCompany": false,
+      "canRead": true,
+      "totalRecords": "0",
+      "errors": []
+    }
+  },
+  "dashboardMetrics": {
+    "all": {
+      "projects": {
+        "total": 0,
+        "active": "72"
+      },
+      "revenue": {
+        "total": 92093591,
+        "invoices": "1043"
+      },
+      "expenses": {
+        "total": 4459289
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    },
+    "HYPERVISUAL": {
+      "projects": {
+        "total": 0,
+        "active": "43"
+      },
+      "revenue": {
+        "total": 45335857,
+        "invoices": "644"
+      },
+      "expenses": {
+        "total": 1539291
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    },
+    "DAINAMICS": {
+      "projects": {
+        "total": 0,
+        "active": "7"
+      },
+      "revenue": {
+        "total": 4835458,
+        "invoices": "99"
+      },
+      "expenses": {
+        "total": 765402
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    },
+    "LEXAIA": {
+      "projects": {
+        "total": 0,
+        "active": "7"
+      },
+      "revenue": {
+        "total": 4834175,
+        "invoices": "90"
+      },
+      "expenses": {
+        "total": 647462
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    },
+    "ENKI_REALTY": {
+      "projects": {
+        "total": 0,
+        "active": "7"
+      },
+      "revenue": {
+        "total": 32126806,
+        "invoices": "118"
+      },
+      "expenses": {
+        "total": 819680
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    },
+    "TAKEOUT": {
+      "projects": {
+        "total": 0,
+        "active": "8"
+      },
+      "revenue": {
+        "total": 4961295,
+        "invoices": "92"
+      },
+      "expenses": {
+        "total": 687454
+      },
+      "clients": {
+        "total": 0,
+        "active": 0
+      },
+      "time": {
+        "hours": 0,
+        "billable": 0
+      }
+    }
+  },
+  "summary": {
+    "totalTested": 11,
+    "totalWorking": 10,
+    "totalFailed": 1
+  }
+}

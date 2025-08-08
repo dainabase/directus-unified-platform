@@ -4,7 +4,7 @@ import axios from 'axios';
 import fs from 'fs/promises';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'; // Token JMD qui fonctionne avec les permissions de création de champs !
+const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
 
 // Collections qui n'ont PAS owner_company
 const COLLECTIONS_TO_FIX = [
@@ -53,10 +53,11 @@ const COLLECTIONS_TO_FIX = [
   'workflows'
 ];
 
-async function fixOwnerCompany() {
-  console.log('🚀 AJOUT OWNER_COMPANY - VERSION QUI FONCTIONNE!');
+async function fixOwnerCompanyDirect() {
+  console.log('🚀 AJOUT DIRECT DU CHAMP OWNER_COMPANY');
   console.log('='.repeat(80));
-  console.log(`Collections à traiter: ${COLLECTIONS_TO_FIX.length}`);
+  console.log('Token utilisé:', TOKEN.substring(0, 20) + '...');
+  console.log('Collections à traiter:', COLLECTIONS_TO_FIX.length);
   console.log('='.repeat(80));
   
   const client = axios.create({
@@ -67,6 +68,15 @@ async function fixOwnerCompany() {
     },
     timeout: 30000
   });
+  
+  // D'abord vérifier l'utilisateur
+  try {
+    const userRes = await client.get('/users/me');
+    console.log('✅ Utilisateur connecté:', userRes.data.data.email);
+  } catch (e) {
+    console.error('❌ Token invalide');
+    return;
+  }
   
   let successCount = 0;
   let errorCount = 0;
@@ -81,36 +91,32 @@ async function fixOwnerCompany() {
     console.log('-'.repeat(40));
     
     try {
-      // 1. Vérifier si le champ existe déjà
+      // Vérifier si le champ existe déjà
       try {
         await client.get(`/fields/${collection}/owner_company`);
         console.log('  ℹ️  owner_company existe déjà');
         existingCount++;
         continue;
       } catch (e) {
-        if (e.response?.status !== 404) throw e;
+        if (e.response?.status !== 404) {
+          throw e;
+        }
         // 404 = le champ n'existe pas, on continue
       }
       
-      // 2. Créer le champ avec le format EXACT qui fonctionne dans test-all-tokens.js
+      // Créer le champ avec le format minimal qui fonctionne
       console.log('  ➕ Ajout du champ owner_company...');
       
       const fieldConfig = {
-        collection: collection,
         field: 'owner_company',
         type: 'string',
         schema: {
-          name: 'owner_company',
-          table: collection,
-          data_type: 'varchar',
           max_length: 50,
-          is_nullable: true
+          is_nullable: true,
+          default_value: 'HYPERVISUAL'
         },
         meta: {
-          collection: collection,
-          field: 'owner_company',
           interface: 'select-dropdown',
-          special: null,
           options: {
             choices: [
               { text: 'HYPERVISUAL', value: 'HYPERVISUAL' },
@@ -131,9 +137,6 @@ async function fixOwnerCompany() {
               { text: 'TAKEOUT', value: 'TAKEOUT', foreground: '#FFFFFF', background: '#F44336' }
             ]
           },
-          readonly: false,
-          hidden: false,
-          required: false,
           width: 'half',
           note: 'Entreprise propriétaire'
         }
@@ -144,15 +147,25 @@ async function fixOwnerCompany() {
       if (response.status === 200 || response.status === 201) {
         console.log('  ✅ owner_company ajouté avec succès!');
         successCount++;
-        
-        // 3. Migrer quelques données de test
-        await migrateCollectionData(client, collection);
       }
       
     } catch (error) {
       errorCount++;
       const errorMsg = error.response?.data?.errors?.[0]?.message || error.message;
       console.log(`  ❌ Erreur: ${errorMsg}`);
+      
+      // Si c'est une erreur de permission, essayer de comprendre pourquoi
+      if (error.response?.status === 403) {
+        console.log('  ℹ️  Vérification des permissions sur la collection...');
+        try {
+          // Essayer de lire la collection
+          await client.get(`/items/${collection}?limit=1`);
+          console.log('     ✅ Lecture OK');
+        } catch (e) {
+          console.log('     ❌ Pas d\'accès en lecture non plus');
+        }
+      }
+      
       errors.push({ collection, error: errorMsg });
     }
     
@@ -187,63 +200,24 @@ async function fixOwnerCompany() {
   };
   
   try {
-    await fs.writeFile('migration-report-final.json', JSON.stringify(report, null, 2));
-    console.log('\n📄 Rapport sauvegardé: migration-report-final.json');
+    await fs.writeFile('migration-report-direct.json', JSON.stringify(report, null, 2));
+    console.log('\n📄 Rapport sauvegardé: migration-report-direct.json');
   } catch (e) {
     // Ignorer
   }
   
   if (successCount > 0) {
     console.log('\n🎉 MIGRATION RÉUSSIE!');
-    console.log('Prochaine étape: node src/backend/test/test-complete-filtering.js');
-  }
-}
-
-async function migrateCollectionData(client, collection) {
-  console.log('  🔄 Migration de quelques données...');
-  
-  try {
-    // Récupérer quelques items sans owner_company
-    const response = await client.get(`/items/${collection}`, {
-      params: {
-        filter: { owner_company: { _null: true } },
-        limit: 10
-      }
-    });
-    
-    const items = response.data.data || [];
-    
-    if (items.length === 0) {
-      console.log('  ✅ Pas de données à migrer');
-      return;
-    }
-    
-    // Distribuer selon les proportions
-    const distribution = ['HYPERVISUAL', 'HYPERVISUAL', 'HYPERVISUAL', 'HYPERVISUAL', 
-                         'DAINAMICS', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'ENKI_REALTY', 'TAKEOUT'];
-    
-    let migratedCount = 0;
-    
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const company = distribution[i % distribution.length];
-      
-      try {
-        await client.patch(`/items/${collection}/${item.id}`, {
-          owner_company: company
-        });
-        migratedCount++;
-      } catch (e) {
-        // Ignorer les erreurs individuelles
-      }
-    }
-    
-    console.log(`  ✅ ${migratedCount} items migrés`);
-    
-  } catch (error) {
-    console.log('  ⚠️  Erreur migration:', error.message);
+    console.log('Prochaine étape: node src/backend/tests/test-filtering.js');
+  } else if (errorCount > 0) {
+    console.log('\n⚠️  PROBLÈME DE PERMISSIONS');
+    console.log('Il semble que ce token n\'a pas les permissions sur ces collections spécifiques.');
+    console.log('\nSOLUTIONS POSSIBLES:');
+    console.log('1. Utiliser l\'interface Directus Admin pour ajouter les champs manuellement');
+    console.log('2. Vérifier les permissions du rôle de cet utilisateur');
+    console.log('3. Créer un token avec le rôle Administrator complet');
   }
 }
 
 // Exécuter
-fixOwnerCompany().catch(console.error);
+fixOwnerCompanyDirect().catch(console.error);

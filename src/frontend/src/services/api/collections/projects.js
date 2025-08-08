@@ -1,4 +1,5 @@
 import directus from '../directus'
+import { addOwnerCompanyToParams } from '../../../utils/filter-helpers'
 
 export const projectsAPI = {
   // Simplifier - pas de relations ni sort
@@ -6,25 +7,12 @@ export const projectsAPI = {
     try {
       console.log('🔄 Fetching all projects...', filters)
       
-      const params = {
+      let params = {
         fields: ['id', 'name', 'status', 'owner_company', 'budget', 'start_date', 'end_date', 'client_id', 'company_id']
       }
       
-      // CORRIGER : Gérer les deux formats de filtre
-      if (filters.owner_company) {
-        // Si c'est un objet avec _eq (format Directus)
-        if (filters.owner_company._eq) {
-          params.filter = { owner_company: { _eq: filters.owner_company._eq } }
-        } 
-        // Si c'est une string directe (ancien format)
-        else if (typeof filters.owner_company === 'string') {
-          params.filter = { owner_company: { _eq: filters.owner_company } }
-        }
-        // Si c'est déjà un objet de filtre complet
-        else {
-          params.filter = filters
-        }
-      }
+      // Utiliser le helper pour gérer tous les formats de filtre
+      params = addOwnerCompanyToParams(params, filters)
       
       const projects = await directus.get('projects', params)
       console.log(`✅ Projects loaded: ${projects.length}`)

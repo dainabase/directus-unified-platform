@@ -26,7 +26,7 @@ import { useCashFlow, useRevenue, useRunway } from '../../services/hooks/useFina
 import { useMetrics, useAlerts, useUrgentTasks, useInsights } from '../../services/hooks/useMetrics'
 
 // Importer le mapping centralisé
-import { FIELD_MAPPINGS } from '../../utils/field-mappings'
+import { COMPANY_MAPPING } from '../../utils/company-mapping'
 
 // Variants d'animation pour les cards
 const cardVariants = {
@@ -206,23 +206,23 @@ const DashboardV4 = ({ selectedCompany }) => {
   const { data: companyMetrics } = useCompanyMetrics(selectedCompany)
   const { data: projects, isLoading: loadingProjects } = useProjects(
     selectedCompany !== 'all' 
-      ? { owner_company: { _eq: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } } 
+      ? { owner_company: { _eq: COMPANY_MAPPING.normalize(selectedCompany) } } 
       : {}
   )
   const { data: projectStatus } = useProjectStatus()
   const { data: cashFlow } = useCashFlow(
     selectedCompany !== 'all' 
-      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
       : {}
   )
   const { data: revenue } = useRevenue(
     selectedCompany !== 'all' 
-      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
       : {}
   )
   const { data: runway } = useRunway(
     selectedCompany !== 'all' 
-      ? { owner_company: FIELD_MAPPINGS.normalizeCompany(selectedCompany) } 
+      ? { owner_company: COMPANY_MAPPING.normalize(selectedCompany) } 
       : {}
   )
   const { data: kpis } = useMetrics()
@@ -243,7 +243,7 @@ const DashboardV4 = ({ selectedCompany }) => {
   useEffect(() => {
     console.log('🎯 FILTRE ACTIF:')
     console.log('   selectedCompany:', selectedCompany)
-    console.log('   normalized:', selectedCompany ? FIELD_MAPPINGS.normalizeCompany(selectedCompany) : 'all')
+    console.log('   normalized:', selectedCompany ? COMPANY_MAPPING.normalize(selectedCompany) : 'all')
     console.log('   projects count:', projects?.length || 0)
     
     if (projects && projects.length > 0) {

@@ -1,57 +1,25 @@
 import directus from '../directus'
+import { addOwnerCompanyToParams } from '../../../utils/filter-helpers'
 
 export const financesAPI = {
   // Récupérer les factures clients avec filtrage optionnel par owner_company
   async getInvoices(filters = {}) {
-    const params = { fields: ['*'] }
-    
-    if (filters.owner_company) {
-      // Support des deux formats de filtre
-      if (typeof filters.owner_company === 'string') {
-        params.filter = { owner_company: { _eq: filters.owner_company } }
-      } else if (filters.owner_company._eq) {
-        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
-      } else {
-        params.filter = filters
-      }
-    }
-    
+    let params = { fields: ['*'] }
+    params = addOwnerCompanyToParams(params, filters)
     return directus.get('client_invoices', params)
   },
 
   // Récupérer les dépenses avec filtrage optionnel par owner_company
   async getExpenses(filters = {}) {
-    const params = { fields: ['*'] }
-    
-    if (filters.owner_company) {
-      // Support des deux formats de filtre
-      if (typeof filters.owner_company === 'string') {
-        params.filter = { owner_company: { _eq: filters.owner_company } }
-      } else if (filters.owner_company._eq) {
-        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
-      } else {
-        params.filter = filters
-      }
-    }
-    
+    let params = { fields: ['*'] }
+    params = addOwnerCompanyToParams(params, filters)
     return directus.get('expenses', params)
   },
 
   // Récupérer les transactions bancaires avec filtrage optionnel par owner_company
   async getTransactions(filters = {}) {
-    const params = { fields: ['*'] }
-    
-    if (filters.owner_company) {
-      // Support des deux formats de filtre
-      if (typeof filters.owner_company === 'string') {
-        params.filter = { owner_company: { _eq: filters.owner_company } }
-      } else if (filters.owner_company._eq) {
-        params.filter = { owner_company: { _eq: filters.owner_company._eq } }
-      } else {
-        params.filter = filters
-      }
-    }
-    
+    let params = { fields: ['*'] }
+    params = addOwnerCompanyToParams(params, filters)
     return directus.get('bank_transactions', params)
   },
 
@@ -61,12 +29,8 @@ export const financesAPI = {
       // Récupérer toutes les données avec filtrage optionnel
       const [invoices, suppliers, payments] = await Promise.all([
         this.getInvoices(filters),
-        directus.get('supplier_invoices', filters.owner_company ? {
-          filter: { owner_company: { _eq: filters.owner_company } }
-        } : {}), 
-        directus.get('payments', filters.owner_company ? {
-          filter: { owner_company: { _eq: filters.owner_company } }
-        } : {})
+        directus.get('supplier_invoices', addOwnerCompanyToParams({}, filters)), 
+        directus.get('payments', addOwnerCompanyToParams({}, filters))
       ])
 
       // Filtrer côté client pour l'année en cours
@@ -180,12 +144,8 @@ export const financesAPI = {
   async getRunway(filters = {}) {
     try {
       const [bankTransactions, expenses] = await Promise.all([
-        directus.get('bank_transactions', filters.owner_company ? {
-          filter: { owner_company: { _eq: filters.owner_company } }
-        } : {}),
-        directus.get('expenses', filters.owner_company ? {
-          filter: { owner_company: { _eq: filters.owner_company } }
-        } : {}).catch(() => []) // Fallback si expenses n'existe pas
+        directus.get('bank_transactions', addOwnerCompanyToParams({}, filters)),
+        directus.get('expenses', addOwnerCompanyToParams({}, filters)).catch(() => []) // Fallback si expenses n'existe pas
       ])
 
       // Calculer le solde bancaire
@@ -235,9 +195,7 @@ export const financesAPI = {
   // Burn rate mensuel moyen - simplifié
   async getMonthlyBurn(filters = {}) {
     try {
-      const bankTx = await directus.get('bank_transactions', filters.owner_company ? {
-        filter: { owner_company: { _eq: filters.owner_company } }
-      } : {})
+      const bankTx = await directus.get('bank_transactions', addOwnerCompanyToParams({}, filters))
       const expenses = bankTx.filter(tx => parseFloat(tx.amount || 0) < 0)
       const totalExpenses = expenses.reduce((sum, tx) => sum + Math.abs(parseFloat(tx.amount || 0)), 0)
       return Math.round(totalExpenses / 3) // Moyenne sur 3 mois

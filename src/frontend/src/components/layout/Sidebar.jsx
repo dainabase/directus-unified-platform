@@ -139,11 +139,11 @@ const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {}, se
               onChange={(e) => onCompanyChange && onCompanyChange(e.target.value)}
             >
               <option value="all">Vue Consolidée</option>
-              <option value="hypervisual">HYPERVISUAL</option>
-              <option value="dainamics">DAINAMICS</option>
-              <option value="lexaia">LEXAIA</option>
-              <option value="enki">ENKI REALTY</option>
-              <option value="takeout">TAKEOUT</option>
+              <option value="HYPERVISUAL">HYPERVISUAL</option>
+              <option value="DAINAMICS">DAINAMICS</option>
+              <option value="LEXAIA">LEXAIA</option>
+              <option value="ENKI_REALTY">ENKI REALTY</option>
+              <option value="TAKEOUT">TAKEOUT</option>
             </select>
           </div>
         </div>

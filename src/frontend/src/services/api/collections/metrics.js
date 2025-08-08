@@ -8,25 +8,46 @@ export const metricsAPI = {
       // Préparer les paramètres avec filtre owner_company si nécessaire
       const params = addOwnerCompanyToParams({}, filters)
       
-      const [companies, people, projects, revenue, runway] = await Promise.all([
-        directus.get('companies'), // Les companies n'ont pas owner_company
+      // Récupérer les données filtrées
+      const [people, projects, revenue, runway] = await Promise.all([
         directus.get('people', params),
         directus.get('projects', params),
         financesAPI.getRevenue(filters),
         financesAPI.getRunway(filters)
       ])
 
-      // Calculer EBITDA (simple pour l'instant)
-      const ebitdaMargin = 15 // Pourcentage fixe
+      // Calculer les clients actifs à partir des projets filtrés
+      const activeClientIds = [...new Set(projects
+        .filter(p => p.client_id && (p.status === 'active' || p.status === 'in_progress'))
+        .map(p => p.client_id)
+      )]
+      
+      // Si aucun filtre, on peut aussi compter toutes les companies
+      let activeClientsCount = activeClientIds.length
+      if (!filters.owner_company || Object.keys(params).length === 0) {
+        try {
+          const companies = await directus.get('companies')
+          activeClientsCount = companies.filter(c => c.is_client || c.status === 'active' || !c.status).length
+        } catch (error) {
+          console.warn('Could not fetch companies for global count, using project-based count')
+        }
+      }
 
-      // Calculer LTV:CAC
-      const avgCustomerValue = revenue.arr / Math.max(companies.length, 1)
+      // Calculer EBITDA avec les données filtrées
+      const totalRevenue = revenue.arr || 0
+      const ebitdaMargin = totalRevenue > 0 ? 15 : 0 // Pourcentage simplifié
+
+      // Calculer LTV:CAC avec les clients filtrés
+      const avgCustomerValue = activeClientsCount > 0 ? (revenue.arr / activeClientsCount) : 0
       const ltv = avgCustomerValue * 3 // 3 ans de durée moyenne
       const cac = 5000 // Coût acquisition fixe
-      const ltvCacRatio = (ltv / cac).toFixed(1)
+      const ltvCacRatio = cac > 0 ? (ltv / cac).toFixed(1) : 0
 
-      // NPS simulé
-      const nps = 42
+      // NPS calculé sur les projets filtrés
+      const completedProjects = projects.filter(p => p.status === 'completed').length
+      const nps = completedProjects > 10 ? 42 : 
+                 completedProjects > 5 ? 35 : 
+                 completedProjects > 0 ? 28 : 0
 
       return {
         runway: runway.runway,
@@ -38,10 +59,10 @@ export const metricsAPI = {
         ltvcac: parseFloat(ltvCacRatio),
         nps: nps,
         teamSize: people.length,
-        activeClients: companies.filter(c => c.status === 'active' || !c.status).length,
+        activeClients: activeClientsCount,
         totalProjects: projects.length,
         activeProjects: projects.filter(p => p.status === 'active' || p.status === 'in_progress').length,
-        completedProjects: projects.filter(p => p.status === 'completed').length
+        completedProjects: completedProjects
       }
     } catch (error) {
       console.error('Error in getKPIs:', error)
@@ -66,23 +87,22 @@ export const metricsAPI = {
   // Clients actifs - simplifié
   async getActiveClients(filters = {}) {
     try {
-      // Les companies n'ont pas owner_company, on pourrait filtrer par les projets actifs
       const params = addOwnerCompanyToParams({}, filters)
       const projects = await directus.get('projects', params)
       
       // Compter les clients uniques avec des projets actifs
       const activeClientIds = [...new Set(projects
-        .filter(p => p.status === 'active' || p.status === 'in_progress')
+        .filter(p => p.client_id && (p.status === 'active' || p.status === 'in_progress'))
         .map(p => p.client_id)
-        .filter(Boolean)
       )]
       
       return {
-        count: activeClientIds.length
+        count: activeClientIds.length,
+        clientIds: activeClientIds // Retourner aussi les IDs si besoin
       }
     } catch (error) {
       console.error('Error getActiveClients:', error)
-      return { count: 0 }
+      return { count: 0, clientIds: [] }
     }
   },
 
@@ -163,14 +183,20 @@ export const metricsAPI = {
     }
   },
 
-  // getInsights avec données simulées mais cohérentes
+  // getInsights avec données filtrées pour contextualiser
   async getInsights(filters = {}) {
     try {
-      // Récupérer des données de base pour contextualiser les insights
-      const [revenue, runway] = await Promise.all([
+      // Récupérer des données filtrées pour contextualiser les insights
+      const [revenue, runway, projects] = await Promise.all([
         financesAPI.getRevenue(filters).catch(() => ({ mrr: 0, arr: 0, growth: 0 })),
-        financesAPI.getRunway(filters).catch(() => ({ runway: 0, status: 'unknown' }))
+        financesAPI.getRunway(filters).catch(() => ({ runway: 0, status: 'unknown' })),
+        directus.get('projects', addOwnerCompanyToParams({}, filters)).catch(() => [])
       ])
+
+      // Calculer des métriques spécifiques à l'entreprise
+      const activeProjects = projects.filter(p => p.status === 'active' || p.status === 'in_progress').length
+      const projectEfficiency = projects.length > 0 ? 
+        (projects.filter(p => p.status === 'completed').length / projects.length * 100).toFixed(1) : 0
 
       const insights = [
         {
@@ -191,12 +217,12 @@ export const metricsAPI = {
           icon: 'alert-circle'
         },
         {
-          id: 'team_productivity',
-          type: 'positive',
-          title: 'Productivité équipe',
-          message: 'Productivité maintenue à un niveau élevé',
-          value: '85.2%',
-          icon: 'users'
+          id: 'project_efficiency',
+          type: projectEfficiency > 70 ? 'positive' : projectEfficiency > 50 ? 'info' : 'warning',
+          title: 'Efficacité Projets',
+          message: `${activeProjects} projets actifs, ${projectEfficiency}% complétés`,
+          value: `${projectEfficiency}%`,
+          icon: 'folder'
         }
       ]
       

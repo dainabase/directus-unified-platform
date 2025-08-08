@@ -1,6 +1,7 @@
 {
   "name": "directus-unified-platform",
   "version": "2.0.0",
+  "type": "module",
   "description": "Plateforme unifiée avec Directus CMS et 4 portails métier",
   "main": "src/backend/server.js",
   "scripts": {
@@ -45,6 +46,7 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.5-lts.1",
+    "uuid": "^11.1.0",
     "winston": "^3.8.2"
   },
   "devDependencies": {

@@ -1,20 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { financesAPI } from '../api/collections/finances'
 
-export const useCashFlow = (year) => {
+export const useCashFlow = (filters = {}) => {
   return useQuery({
-    queryKey: ['cash-flow', year],
-    queryFn: () => financesAPI.getCashFlow(year),
+    queryKey: ['cash-flow', filters],
+    queryFn: () => financesAPI.getCashFlow(filters),
     staleTime: 1000 * 60 * 30, // 30 minutes
   })
 }
 
-export const useRevenue = () => {
+export const useRevenue = (filters = {}) => {
   return useQuery({
-    queryKey: ['revenue'],
+    queryKey: ['revenue', filters],
     queryFn: async () => {
-      console.log('🔄 Fetching revenue...');
-      const revenue = await financesAPI.getRevenue();
+      console.log('🔄 Fetching revenue with filters:', filters);
+      const revenue = await financesAPI.getRevenue(filters);
       console.log('✅ Revenue fetched:', revenue);
       
       // Vérifier si les données sont réalistes
@@ -34,12 +34,12 @@ export const useRevenue = () => {
   })
 }
 
-export const useRunway = () => {
+export const useRunway = (filters = {}) => {
   return useQuery({
-    queryKey: ['runway'],
+    queryKey: ['runway', filters],
     queryFn: async () => {
-      console.log('🔄 Fetching runway...');
-      const runway = await financesAPI.getRunway();
+      console.log('🔄 Fetching runway with filters:', filters);
+      const runway = await financesAPI.getRunway(filters);
       console.log('✅ Runway fetched:', runway);
       
       // Vérifier si les données sont réalistes

@@ -76,7 +76,10 @@
       "Bash(kill:*)",
       "Bash(./dev.sh)",
       "Bash(npm ls:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx vite:*)",
+      "Bash(git reset:*)"
     ],
     "deny": []
   }

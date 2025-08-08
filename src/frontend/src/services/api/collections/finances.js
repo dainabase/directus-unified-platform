@@ -1,14 +1,51 @@
 import directus from '../directus'
 
 export const financesAPI = {
+  // Récupérer les factures clients avec filtrage optionnel par owner_company
+  async getInvoices(filters = {}) {
+    const params = { fields: ['*'] }
+    
+    if (filters.owner_company) {
+      params.filter = { owner_company: { _eq: filters.owner_company } }
+    }
+    
+    return directus.get('client_invoices', params)
+  },
+
+  // Récupérer les dépenses avec filtrage optionnel par owner_company
+  async getExpenses(filters = {}) {
+    const params = { fields: ['*'] }
+    
+    if (filters.owner_company) {
+      params.filter = { owner_company: { _eq: filters.owner_company } }
+    }
+    
+    return directus.get('expenses', params)
+  },
+
+  // Récupérer les transactions bancaires avec filtrage optionnel par owner_company
+  async getTransactions(filters = {}) {
+    const params = { fields: ['*'] }
+    
+    if (filters.owner_company) {
+      params.filter = { owner_company: { _eq: filters.owner_company } }
+    }
+    
+    return directus.get('bank_transactions', params)
+  },
+
   // Simplifier getCashFlow - pas de filtres dates complexes
-  async getCashFlow() {
+  async getCashFlow(filters = {}) {
     try {
-      // Récupérer toutes les données sans filtres
+      // Récupérer toutes les données avec filtrage optionnel
       const [invoices, suppliers, payments] = await Promise.all([
-        directus.get('client_invoices'),
-        directus.get('supplier_invoices'), 
-        directus.get('payments')
+        this.getInvoices(filters),
+        directus.get('supplier_invoices', filters.owner_company ? {
+          filter: { owner_company: { _eq: filters.owner_company } }
+        } : {}), 
+        directus.get('payments', filters.owner_company ? {
+          filter: { owner_company: { _eq: filters.owner_company } }
+        } : {})
       ])
 
       // Filtrer côté client pour l'année en cours
@@ -38,11 +75,12 @@ export const financesAPI = {
           new Date(p.date_created || p.date).getMonth() === month
         )
 
+        // UTILISER amount au lieu de amount_ttc
         const income = monthInvoices.reduce((sum, i) => 
-          sum + parseFloat(i.amount || i.amount_ttc || 0), 0
+          sum + parseFloat(i.amount || 0), 0
         )
         const expenses = monthSuppliers.reduce((sum, s) => 
-          sum + parseFloat(s.amount || s.amount_ttc || 0), 0
+          sum + parseFloat(s.amount || 0), 0
         )
         const payments_total = monthPayments.reduce((sum, p) => 
           sum + parseFloat(p.amount || 0), 0
@@ -74,10 +112,10 @@ export const financesAPI = {
   },
 
   // Simplifier getRevenue - pas de filtre sur subscriptions
-  async getRevenue() {
+  async getRevenue(filters = {}) {
     try {
-      // Récupérer les factures sans subscriptions (qui causent 403)
-      const invoices = await directus.get('client_invoices')
+      // Récupérer les factures avec filtre optionnel
+      const invoices = await this.getInvoices(filters)
       
       // Calculer MRR/ARR depuis les factures
       const currentMonth = new Date().getMonth()
@@ -89,8 +127,9 @@ export const financesAPI = {
                date.getFullYear() === currentYear
       })
       
+      // UTILISER amount au lieu de amount_ttc
       const mrr = monthlyInvoices.reduce((sum, i) => 
-        sum + parseFloat(i.amount || i.amount_ttc || 0), 0
+        sum + parseFloat(i.amount || 0), 0
       )
       
       // Estimer l'ARR basé sur la moyenne des 3 derniers mois
@@ -102,7 +141,7 @@ export const financesAPI = {
       })
       
       const avgMonthly = last3Months.reduce((sum, i) => 
-        sum + parseFloat(i.amount || i.amount_ttc || 0), 0
+        sum + parseFloat(i.amount || 0), 0
       ) / 3
       
       return {
@@ -117,11 +156,15 @@ export const financesAPI = {
   },
 
   // Corriger getRunway
-  async getRunway() {
+  async getRunway(filters = {}) {
     try {
       const [bankTransactions, expenses] = await Promise.all([
-        directus.get('bank_transactions'),
-        directus.get('expenses').catch(() => []) // Fallback si expenses n'existe pas
+        directus.get('bank_transactions', filters.owner_company ? {
+          filter: { owner_company: { _eq: filters.owner_company } }
+        } : {}),
+        directus.get('expenses', filters.owner_company ? {
+          filter: { owner_company: { _eq: filters.owner_company } }
+        } : {}).catch(() => []) // Fallback si expenses n'existe pas
       ])
 
       // Calculer le solde bancaire
@@ -169,9 +212,11 @@ export const financesAPI = {
   },
 
   // Burn rate mensuel moyen - simplifié
-  async getMonthlyBurn() {
+  async getMonthlyBurn(filters = {}) {
     try {
-      const bankTx = await directus.get('bank_transactions')
+      const bankTx = await directus.get('bank_transactions', filters.owner_company ? {
+        filter: { owner_company: { _eq: filters.owner_company } }
+      } : {})
       const expenses = bankTx.filter(tx => parseFloat(tx.amount || 0) < 0)
       const totalExpenses = expenses.reduce((sum, tx) => sum + Math.abs(parseFloat(tx.amount || 0)), 0)
       return Math.round(totalExpenses / 3) // Moyenne sur 3 mois

@@ -16,26 +16,26 @@ export const companiesAPI = {
     })
   },
 
-  // Métriques par entreprise
+  // Métriques par entreprise - CORRIGÉ avec owner_company et amount
   async getMetrics(companyId) {
     const [projects, invoices, payments] = await Promise.all([
       directus.get('projects', {
-        filter: { company: { _eq: companyId } },
+        filter: { owner_company: { _eq: companyId } },
         aggregate: { count: '*' }
       }),
       directus.get('client_invoices', {
-        filter: { company: { _eq: companyId } },
-        aggregate: { sum: ['amount_ttc'] }
+        filter: { owner_company: { _eq: companyId } },
+        aggregate: { sum: ['amount'] } // amount au lieu de amount_ttc
       }),
       directus.get('payments', {
-        filter: { company: { _eq: companyId } },
+        filter: { owner_company: { _eq: companyId } },
         aggregate: { sum: ['amount'] }
       })
     ])
     
     return {
       totalProjects: projects[0]?.count || 0,
-      totalRevenue: invoices[0]?.sum?.amount_ttc || 0,
+      totalRevenue: invoices[0]?.sum?.amount || 0, // amount au lieu de amount_ttc
       totalPayments: payments[0]?.sum?.amount || 0
     }
   }

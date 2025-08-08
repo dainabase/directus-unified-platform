@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Champs Directus</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .ok { color: green; }
+        .error { color: red; }
+        pre { background: #f0f0f0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test des Champs Directus</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'http://localhost:8055';
+        const TOKEN = 'dashboard-api-token-2025';
+        
+        async function testFields() {
+            const results = document.getElementById('results');
+            let html = '';
+            
+            // Test 1: Projects avec owner_company
+            try {
+                const res = await fetch(`${API_URL}/items/projects?filter[owner_company][_eq]=HYPERVISUAL&limit=2`, {
+                    headers: { 'Authorization': `Bearer ${TOKEN}` }
+                });
+                const data = await res.json();
+                html += `<div class="ok">✅ Projects avec owner_company: ${data.data?.length || 0} résultats</div>`;
+            } catch(e) {
+                html += `<div class="error">❌ Erreur projects: ${e.message}</div>`;
+            }
+            
+            // Test 2: Invoices avec owner_company
+            try {
+                const res = await fetch(`${API_URL}/items/client_invoices?filter[owner_company][_eq]=HYPERVISUAL&limit=2`, {
+                    headers: { 'Authorization': `Bearer ${TOKEN}` }
+                });
+                const data = await res.json();
+                html += `<div class="ok">✅ Invoices avec owner_company: ${data.data?.length || 0} résultats</div>`;
+            } catch(e) {
+                html += `<div class="error">❌ Erreur invoices: ${e.message}</div>`;
+            }
+            
+            // Test 3: Vérifier les champs
+            try {
+                const res = await fetch(`${API_URL}/items/client_invoices?limit=1`, {
+                    headers: { 'Authorization': `Bearer ${TOKEN}` }
+                });
+                const data = await res.json();
+                if (data.data?.[0]) {
+                    const fields = Object.keys(data.data[0]);
+                    html += `<div class="ok">📋 Champs disponibles dans client_invoices:</div>`;
+                    html += `<pre>${fields.join('\n')}</pre>`;
+                    
+                    // Vérifier champs critiques
+                    const hasAmount = fields.includes('amount');
+                    const hasAmountTTC = fields.includes('amount_ttc');
+                    const hasOwnerCompany = fields.includes('owner_company');
+                    
+                    html += `<div class="${hasAmount ? 'ok' : 'error'}">
+                        ${hasAmount ? '✅' : '❌'} Champ 'amount' existe
+                    </div>`;
+                    html += `<div class="${hasAmountTTC ? 'ok' : 'error'}">
+                        ${hasAmountTTC ? '✅' : '❌'} Champ 'amount_ttc' existe
+                    </div>`;
+                    html += `<div class="${hasOwnerCompany ? 'ok' : 'error'}">
+                        ${hasOwnerCompany ? '✅' : '❌'} Champ 'owner_company' existe
+                    </div>`;
+                }
+            } catch(e) {
+                html += `<div class="error">❌ Erreur structure: ${e.message}</div>`;
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        testFields();
+    </script>
+</body>
+</html>

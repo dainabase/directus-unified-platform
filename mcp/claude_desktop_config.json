@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "docker-manager": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-v", "/var/run/docker.sock:/var/run/docker.sock:ro",
+        "ghcr.io/ckreiling/mcp-server-docker:latest"
+      ],
+      "env": {
+        "MCP_MODE": "docker",
+        "DOCKER_HOST": "unix:///var/run/docker.sock",
+        "LOG_LEVEL": "info"
+      }
+    },
+    "directus-api": {
+      "command": "npx",
+      "args": ["-y", "@directus/mcp-server"],
+      "env": {
+        "DIRECTUS_URL": "http://localhost:8055",
+        "DIRECTUS_TOKEN": "dashboard-token-2025",
+        "MCP_LOG_LEVEL": "info"
+      }
+    },
+    "docker-compose-manager": {
+      "command": "docker",
+      "args": [
+        "exec", "-i",
+        "directus-mcp-docker",
+        "mcp-server"
+      ],
+      "env": {
+        "MCP_MODE": "compose",
+        "PROJECT_PATH": "${PWD}/directus-unified-platform"
+      }
+    }
+  },
+  "globalSettings": {
+    "logLevel": "info",
+    "timeout": 30000,
+    "maxRetries": 3,
+    "enableDebug": false
+  }
+}

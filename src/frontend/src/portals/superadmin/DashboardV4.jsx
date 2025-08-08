@@ -289,7 +289,7 @@ const DashboardV4 = ({ selectedCompany }) => {
       month: month.month,
       arr: revenue?.arr || 0,
       mrr: revenue?.mrr || 0,
-      growth: index > 0 ? Math.random() * 30 : 0 // À calculer depuis les données réelles
+      growth: revenue?.growth || 0 // Utiliser la vraie croissance
     })),
     cashFlow: cashFlow?.map(month => ({
       ...month,

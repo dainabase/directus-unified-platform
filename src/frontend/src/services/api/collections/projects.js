@@ -1,16 +1,19 @@
 import directus from '../directus'
 
 export const projectsAPI = {
-  // Simplifier - pas de relations
+  // Simplifier - pas de relations ni sort
   async getAll() {
     try {
+      console.log('🔄 Fetching all projects...')
+      // Requête TRÈS simple pour éviter toute erreur 403
       const projects = await directus.get('projects', {
-        fields: ['*']
-        // PAS DE SORT pour éviter l'erreur 403
+        fields: ['id', 'name', 'status', 'owner_company', 'budget', 'start_date', 'end_date']
+        // PAS de sort, PAS de relations
       })
+      console.log(`✅ Projects loaded: ${projects.length}`)
       return projects || []
     } catch (error) {
-      console.error('Error fetching projects:', error)
+      console.error('❌ Error fetching projects:', error)
       return []
     }
   },

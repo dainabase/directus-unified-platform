@@ -65,82 +65,30 @@ directusAPI.interceptors.response.use(
   }
 )
 
-// Données démo fallback
-const getDemoData = (collection) => {
-  const demoData = {
-    companies: [
-      { id: 1, name: 'HYPERVISUAL', type: 'client', status: 'active' },
-      { id: 2, name: 'DAINAMICS', type: 'internal', status: 'active' },
-      { id: 3, name: 'LEXAIA', type: 'client', status: 'active' },
-      { id: 4, name: 'ENKI REALTY', type: 'client', status: 'active' },
-      { id: 5, name: 'TAKEOUT', type: 'client', status: 'active' }
-    ],
-    projects: [
-      { id: 1, name: 'Migration Cloud', status: 'in_progress', progress: 65, company: { name: 'HYPERVISUAL' } },
-      { id: 2, name: 'Refonte UI/UX', status: 'in_progress', progress: 40, company: { name: 'DAINAMICS' } },
-      { id: 3, name: 'API v2', status: 'in_progress', progress: 80, company: { name: 'LEXAIA' } },
-      { id: 4, name: 'Module CRM', status: 'completed', progress: 100, company: { name: 'ENKI REALTY' } },
-      { id: 5, name: 'App Mobile', status: 'on_hold', progress: 25, company: { name: 'TAKEOUT' } }
-    ],
-    client_invoices: [
-      { id: 1, invoice_date: '2024-01-15', amount_ttc: 45000, status: 'paid' },
-      { id: 2, invoice_date: '2024-02-15', amount_ttc: 62000, status: 'paid' },
-      { id: 3, invoice_date: '2024-03-15', amount_ttc: 38000, status: 'overdue' },
-      { id: 4, invoice_date: '2024-04-15', amount_ttc: 55000, status: 'paid' },
-      { id: 5, invoice_date: '2024-05-15', amount_ttc: 71000, status: 'paid' },
-      { id: 6, invoice_date: '2024-06-15', amount_ttc: 48000, status: 'pending' }
-    ],
-    supplier_invoices: [
-      { id: 1, invoice_date: '2024-01-10', amount_ttc: 15000, status: 'paid' },
-      { id: 2, invoice_date: '2024-02-10', amount_ttc: 22000, status: 'paid' },
-      { id: 3, invoice_date: '2024-03-10', amount_ttc: 18000, status: 'paid' },
-      { id: 4, invoice_date: '2024-04-10', amount_ttc: 25000, status: 'pending' },
-      { id: 5, invoice_date: '2024-05-10', amount_ttc: 20000, status: 'paid' },
-      { id: 6, invoice_date: '2024-06-10', amount_ttc: 23000, status: 'paid' }
-    ],
-    subscriptions: [
-      { id: 1, monthly_amount: 50000, annual_amount: 600000, status: 'active' },
-      { id: 2, monthly_amount: 75000, annual_amount: 900000, status: 'active' },
-      { id: 3, monthly_amount: 30000, annual_amount: 360000, status: 'active' },
-      { id: 4, monthly_amount: 45000, annual_amount: 540000, status: 'active' }
-    ],
-    bank_transactions: [
-      { id: 1, amount: 847000 } // Solde bancaire
-    ],
-    expenses: [
-      { id: 1, date: '2024-04-01', amount: 115000 },
-      { id: 2, date: '2024-05-01', amount: 108000 },
-      { id: 3, date: '2024-06-01', amount: 122000 }
-    ],
-    people: [
-      { id: 1, role: 'employee' },
-      { id: 2, role: 'employee' },
-      { id: 3, role: 'contractor' },
-      { id: 4, role: 'employee' },
-      { id: 5, role: 'employee' },
-      { id: 6, role: 'contractor' }
-    ],
-    time_tracking: [
-      { id: 1, hours: 160, date: '2024-06-01' },
-      { id: 2, hours: 168, date: '2024-06-02' },
-      { id: 3, hours: 152, date: '2024-06-03' }
-    ]
-  }
-  
-  return demoData[collection] || []
-}
+// SUPPRIMÉ : Plus de données démo ! On utilise UNIQUEMENT les vraies données Directus
 
 // Fonctions helper avec cache
 export const directus = {
   // GET avec paramètres
   async get(collection, params = {}) {
     try {
+      console.log(`📡 GET /${collection}`, params)
       const response = await directusAPI.get(`/${collection}`, { params })
+      const data = response.data.data || []
+      console.log(`✅ ${collection}: ${data.length} items`)
       
-      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
-      return response.data.data || []
+      // Log des premières données pour debug
+      if (data.length > 0) {
+        console.log(`   Exemple:`, data[0])
+      }
+      
+      return data
     } catch (error) {
-      console.error(`Error fetching ${collection}:`, error)
+      console.error(`❌ Error fetching ${collection}:`, error.message)
+      console.error(`   Status:`, error.response?.status)
+      console.error(`   Data:`, error.response?.data)
+      
+      // IMPORTANT: Retourner tableau vide, JAMAIS de données démo
       return []
     }
   },
@@ -148,12 +96,13 @@ export const directus = {
   // GET par ID
   async getById(collection, id, params = {}) {
     try {
+      console.log(`📡 GET /${collection}/${id}`, params)
       const response = await directusAPI.get(`/${collection}/${id}`, { params })
-      
-      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
-      return response.data.data
+      const data = response.data.data
+      console.log(`✅ ${collection}/${id}:`, data)
+      return data
     } catch (error) {
-      console.error(`Error fetching ${collection}/${id}:`, error)
+      console.error(`❌ Error fetching ${collection}/${id}:`, error.message)
       return null
     }
   },
@@ -171,11 +120,11 @@ export const directus = {
       }
       
       const response = await directusAPI.get(`/${collection}`, { params: aggregateParams })
-      
-      // FORCER LES VRAIES DONNÉES - PAS DE MODE DÉMO
-      return response.data.data || []
+      const data = response.data.data || []
+      console.log(`✅ Aggregate ${collection}:`, data)
+      return data
     } catch (error) {
-      console.error(`Error aggregating ${collection}:`, error)
+      console.error(`❌ Error aggregating ${collection}:`, error.message)
       return []
     }
   },

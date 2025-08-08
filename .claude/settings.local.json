@@ -82,7 +82,17 @@
       "Bash(git reset:*)",
       "Bash(find:*)",
       "Bash(npx directus users passwd:*)",
-      "Bash(npx directus-template-cli:*)"
+      "Bash(npx directus-template-cli:*)",
+      "Bash(./check-docker-status.sh:*)",
+      "Bash(./diagnose-mcp.sh:*)",
+      "Bash(./fix-mcp-config.sh:*)",
+      "Bash(./verify-mcp-final.sh:*)",
+      "Bash(./fix-docker-permissions.sh:*)",
+      "Bash(npx @smithery/cli install:*)",
+      "Bash(docker:*)",
+      "WebFetch(domain:docs.docker.com)",
+      "Bash(./scripts/fix-mcp-claude.sh:*)",
+      "Bash(./run-fix-mcp.sh:*)"
     ],
     "deny": []
   }

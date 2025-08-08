@@ -1,0 +1,14 @@
+{
+  "name": "simple-docker-mcp",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Simple Docker MCP Server",
+  "main": "simple-docker-mcp.js",
+  "scripts": {
+    "start": "node simple-docker-mcp.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "dockerode": "^4.0.2"
+  }
+}

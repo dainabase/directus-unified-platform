@@ -1,0 +1,14 @@
+   table_name    | total_records | records_with_owner | records_without_owner 
+-----------------+---------------+--------------------+-----------------------
+ client_invoices |          1043 |               1043 |                     0
+ companies       |           127 |                127 |                     0
+ orders          |             0 |                  0 |                     0
+ people          |           515 |                515 |                     0
+ projects        |           299 |                299 |                     0
+ proposals       |            80 |                 80 |                     0
+ quotes          |             0 |                  0 |                     0
+ support_tickets |             0 |                  0 |                     0
+ talents         |             3 |                  3 |                     0
+ time_tracking   |             3 |                  3 |                     0
+(10 rows)
+

@@ -1,0 +1,92 @@
+🔍 DIAGNOSTIC SYSTÈME DOCKER ET DIRECTUS
+========================================
+
+📦 Docker Version:
+Docker version 28.3.2, build 578ccf6
+Docker Compose version v2.39.1-desktop.1
+
+🐳 Conteneurs actifs:
+NAMES                                  STATUS                                  PORTS
+directus-unified-platform-directus-1   Up 5 hours                              0.0.0.0:8055->8055/tcp, [::]:8055->8055/tcp
+directus-unified-platform-postgres-1   Up 5 hours                              5432/tcp
+erpnext-redis-queue-1                  Up 5 hours                              6379/tcp
+erpnext-redis-socketio-1               Up 5 hours                              6379/tcp
+erpnext-redis-cache-1                  Up 5 hours                              6379/tcp
+erpnext-frontend-1                     Restarting (1) 33 seconds ago           
+erpnext-queue-short-1                  Restarting (1) 31 seconds ago           
+erpnext-db-1                           Up 5 hours (healthy)                    3306/tcp
+erpnext-websocket-1                    Restarting (1) Less than a second ago   
+erpnext-backend-1                      Up 5 hours                              
+erpnext-scheduler-1                    Restarting (1) 31 seconds ago           
+erpnext-queue-default-1                Restarting (1) 31 seconds ago           
+erpnext-queue-long-1                   Restarting (1) 31 seconds ago           
+invoice-ninja-nginx                    Up 5 hours                              0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
+invoice-ninja-app                      Up 5 hours                              9000/tcp
+invoice-ninja-db                       Up 5 hours                              3306/tcp
+directus-adminer                       Up 5 hours                              0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+directus-redis-commander               Up 5 hours (healthy)                    0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp
+directus-redis                         Up 5 hours (healthy)                    0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+nervous_meninsky                       Up 5 hours                              5678/tcp
+
+💾 Utilisation disque Docker:
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          24        12        18.83GB   9.208GB (48%)
+Containers      24        20        49.67MB   16.38kB (0%)
+Local Volumes   33        19        1.255GB   393.3MB (31%)
+Build Cache     20        0         208.6MB   208.6MB
+
+🎯 Status Directus:
+{"status":"ok"}
+🗄️ PostgreSQL:
+                                            version                                             
+------------------------------------------------------------------------------------------------
+ PostgreSQL 15.13 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+(1 row)
+
+
+🔌 MCP Actuellement configurés:
+total 880
+drwx------@  38 jean-mariedelaunay  staff    1216 Aug  8 17:19 .
+drwx------+ 181 jean-mariedelaunay  staff    5792 Aug  7 14:17 ..
+drwx------@   3 jean-mariedelaunay  staff      96 Aug  8 16:45 blob_storage
+drwx------@   3 jean-mariedelaunay  staff      96 Apr  2 13:05 Cache
+drwxr-xr-x@   2 jean-mariedelaunay  staff      64 Jul 21 14:46 Claude Extensions
+drwxr-xr-x@   2 jean-mariedelaunay  staff      64 Jul 21 14:46 Claude Extensions Settings
+-rw-r--r--@   1 jean-mariedelaunay  staff    1856 Aug  3 22:23 claude_desktop_config.json
+-rw-r--r--@   1 jean-mariedelaunay  staff    1532 Jul 31 21:31 claude_desktop_config.json.backup
+-rw-r--r--@   1 jean-mariedelaunay  staff     564 Jul 31 21:36 claude_desktop_config.json.backup.20250731_213625
+-rw-------    1 jean-mariedelaunay  staff     859 Jul 11 18:12 claude_desktop_config.json.save
+drwx------@   4 jean-mariedelaunay  staff     128 Apr  2 13:05 Code Cache
+-rw-rw-rw-@   1 jean-mariedelaunay  staff    1025 Aug  8 17:19 config.json
+-rw-------@   1 jean-mariedelaunay  staff   28672 Aug  8 17:19 Cookies
+-rw-------@   1 jean-mariedelaunay  staff       0 Aug  8 17:19 Cookies-journal
+drwx------@   7 jean-mariedelaunay  staff     224 Apr  2 13:05 Crashpad
+drwx------@   7 jean-mariedelaunay  staff     224 Apr  2 13:05 DawnGraphiteCache
+drwx------@   7 jean-mariedelaunay  staff     224 Apr  2 13:05 DawnWebGPUCache
+-rw-------@   1 jean-mariedelaunay  staff   36864 Aug  8 16:45 DIPS
+-rw-------@   1 jean-mariedelaunay  staff   32768 Aug  8 16:45 DIPS-shm
+-rw-------@   1 jean-mariedelaunay  staff  247232 Aug  8 17:19 DIPS-wal
+-rw-r--r--@   1 jean-mariedelaunay  staff     153 Aug  8 16:45 extensions-blocklist.json
+-rw-r--r--@   1 jean-mariedelaunay  staff      18 Jul 21 14:46 extensions-installations.json
+drwx------@   7 jean-mariedelaunay  staff     224 Apr  2 13:05 GPUCache
+drwx------@   3 jean-mariedelaunay  staff      96 May 26 11:13 IndexedDB
+drwx------@   3 jean-mariedelaunay  staff      96 Apr  2 13:05 Local Storage
+-rw-------@   1 jean-mariedelaunay  staff    3014 Aug  8 17:18 Network Persistent State
+-rw-------@   1 jean-mariedelaunay  staff     102 Aug  8 17:19 Preferences
+drwxr-xr-x@   5 jean-mariedelaunay  staff     160 Aug  8 16:45 sentry
+drwx------@   4 jean-mariedelaunay  staff     128 May 26 11:13 Service Worker
+drwx------@  12 jean-mariedelaunay  staff     384 Aug  8 16:45 Session Storage
+drwx------@   5 jean-mariedelaunay  staff     160 Apr  2 13:05 Shared Dictionary
+-rw-------@   1 jean-mariedelaunay  staff    4096 Apr  2 13:08 SharedStorage
+-rw-------@   1 jean-mariedelaunay  staff       0 Aug  8 16:47 SharedStorage-wal
+-rw-------@   1 jean-mariedelaunay  staff    3695 Aug  8 17:15 TransportSecurity
+-rw-------@   1 jean-mariedelaunay  staff   36864 Jun 30 18:12 Trust Tokens
+-rw-------@   1 jean-mariedelaunay  staff       0 Jun 30 18:12 Trust Tokens-journal
+drwx------@   4 jean-mariedelaunay  staff     128 May 26 11:13 WebStorage
+-rw-r--r--@   1 jean-mariedelaunay  staff     140 Aug  8 16:45 window-state.json
+
+📦 Node.js Version:
+v22.17.0
+10.9.2
+
+✅ Diagnostic terminé

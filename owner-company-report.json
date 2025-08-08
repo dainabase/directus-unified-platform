@@ -1,0 +1,377 @@
+{
+  "totalCollections": 57,
+  "collectionsWithOwnerCompany": 10,
+  "collectionsWithoutOwnerCompany": 0,
+  "totalRecords": "03230104360550763240100299120375",
+  "recordsWithOwnerCompany": "00165741444338233406449990118920600000030162656755028413612112010204848484848010000000181283027330120000003750000",
+  "recordsWithoutOwnerCompany": "00000000000",
+  "distributionByCompany": {
+    "HYPERVISUAL": "016576446030128448100181120375",
+    "DAINAMICS": "0414990621364802800",
+    "LEXAIA": "0443900651214803000",
+    "ENKI_REALTY": "03821180671204802700",
+    "TAKEOUT": "0334920551024803300"
+  },
+  "collectionDetails": [
+    {
+      "name": "bank_transactions",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "3230",
+      "recordsByCompany": {
+        "HYPERVISUAL": "1657",
+        "DAINAMICS": "414",
+        "LEXAIA": "443",
+        "ENKI_REALTY": "382",
+        "TAKEOUT": "334"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "51313140661991.8",
+      "issues": [
+        "Incohérence: Total=3230, Somme=016574144433823340"
+      ]
+    },
+    {
+      "name": "client_invoices",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "1043",
+      "recordsByCompany": {
+        "HYPERVISUAL": "644",
+        "DAINAMICS": "99",
+        "LEXAIA": "90",
+        "ENKI_REALTY": "118",
+        "TAKEOUT": "92"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "61840748982.9",
+      "issues": [
+        "Incohérence: Total=1043, Somme=06449990118920"
+      ]
+    },
+    {
+      "name": "contracts",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "60",
+      "recordsByCompany": {
+        "HYPERVISUAL": "60",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "1000000.0",
+      "issues": [
+        "Incohérence: Total=60, Somme=06000000"
+      ]
+    },
+    {
+      "name": "deliverables",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "550",
+      "recordsByCompany": {
+        "HYPERVISUAL": "301",
+        "DAINAMICS": "62",
+        "LEXAIA": "65",
+        "ENKI_REALTY": "67",
+        "TAKEOUT": "55"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "5484119410.0",
+      "issues": [
+        "Incohérence: Total=550, Somme=0301626567550"
+      ]
+    },
+    {
+      "name": "expenses",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "763",
+      "recordsByCompany": {
+        "HYPERVISUAL": "284",
+        "DAINAMICS": "136",
+        "LEXAIA": "121",
+        "ENKI_REALTY": "120",
+        "TAKEOUT": "102"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "37239334353879.7",
+      "issues": [
+        "Incohérence: Total=763, Somme=02841361211201020"
+      ]
+    },
+    {
+      "name": "kpis",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "240",
+      "recordsByCompany": {
+        "HYPERVISUAL": "48",
+        "DAINAMICS": "48",
+        "LEXAIA": "48",
+        "ENKI_REALTY": "48",
+        "TAKEOUT": "48"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "2020202020.0",
+      "issues": [
+        "Incohérence: Total=240, Somme=048484848480"
+      ]
+    },
+    {
+      "name": "payments",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "100",
+      "recordsByCompany": {
+        "HYPERVISUAL": "100",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "1000000.0",
+      "issues": [
+        "Incohérence: Total=100, Somme=010000000"
+      ]
+    },
+    {
+      "name": "projects",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "299",
+      "recordsByCompany": {
+        "HYPERVISUAL": "181",
+        "DAINAMICS": "28",
+        "LEXAIA": "30",
+        "ENKI_REALTY": "27",
+        "TAKEOUT": "33"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "6062977502.7",
+      "issues": [
+        "Incohérence: Total=299, Somme=0181283027330"
+      ]
+    },
+    {
+      "name": "subscriptions",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "120",
+      "recordsByCompany": {
+        "HYPERVISUAL": "120",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "1000000.0",
+      "issues": [
+        "Incohérence: Total=120, Somme=012000000"
+      ]
+    },
+    {
+      "name": "supplier_invoices",
+      "hasOwnerCompanyField": true,
+      "totalRecords": "375",
+      "recordsByCompany": {
+        "HYPERVISUAL": "375",
+        "DAINAMICS": "0",
+        "LEXAIA": "0",
+        "ENKI_REALTY": "0",
+        "TAKEOUT": "0"
+      },
+      "recordsWithoutOwnerCompany": "0",
+      "percentageWithOwnerCompany": "1000000.0",
+      "issues": [
+        "Incohérence: Total=375, Somme=037500000"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "collection": "accounting_entries",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "activities",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "approvals",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "audit_logs",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "budgets",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "comments",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "companies",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "company_people",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "compliance",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "content_calendar",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "credits",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "customer_success",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "debits",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "deliveries",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "departments",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "evaluations",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "events",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "goals",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "interactions",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "notes",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "notifications",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "orders",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "owner_companies",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "people",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "permissions",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "projects_team",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "proposals",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "providers",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "quotes",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "reconciliations",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "refunds",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "returns",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "roles",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "settings",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "skills",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "support_tickets",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "tags",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "talents",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "talents_simple",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "teams",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "time_tracking",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "trainings",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "workflows",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "directus_access",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "directus_comments",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "directus_policies",
+      "error": "Request failed with status code 403"
+    },
+    {
+      "collection": "directus_versions",
+      "error": "Request failed with status code 403"
+    }
+  ]
+}

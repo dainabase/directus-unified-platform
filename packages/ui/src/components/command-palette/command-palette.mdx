@@ -1,0 +1,12 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./command-palette.stories";
+<Meta of={Stories} />
+
+# Command Palette
+Palette d'actions (⌘K / Ctrl+K) basée sur **cmdk** + **Radix Dialog**.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Conseils
+- Groupez les actions par domaine (Navigation, Actions…).
+- Raccourcis clairs (`kbd`), labels explicites, focus visible.

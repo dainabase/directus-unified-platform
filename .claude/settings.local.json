@@ -101,7 +101,8 @@
       "Bash(if [ -f \"docker-compose.invoice-ninja.yml\" ])",
       "Bash(then [ -f \"docker-compose.yml\" ])",
       "Bash(./test-erpnext.sh:*)",
-      "Bash(CONTAINER=\"erpnext-simple\")"
+      "Bash(CONTAINER=\"erpnext-simple\")",
+      "Bash(./verify-all-mcp-emergency.sh:*)"
     ],
     "deny": []
   }

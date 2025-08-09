@@ -1,0 +1,57 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_ZUBvhZnxHMZlMUvw4jXG3LgZNHkBqs47pRXt"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem"],
+      "env": {
+        "FILESYSTEM_ROOT": "/Users/jean-mariedelaunay/directus-unified-platform"
+      }
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-notion"],
+      "env": {
+        "NOTION_API_KEY": "secret_A93Lhgx9PW94Fgg3gOqFi1O9aHCHVB2ATu0HKp8mBmf"
+      }
+    },
+    "directus": {
+      "command": "node",
+      "args": ["/Users/jean-mariedelaunay/directus-unified-platform/.mcp/directus-mcp-server.js"],
+      "env": {
+        "DIRECTUS_URL": "https://app.getmaastr.com",
+        "DIRECTUS_TOKEN": "VGSPFhqGxEBQE31zQ-3PXxxqYKLKJjYq"
+      }
+    },
+    "erpnext": {
+      "command": "npx",
+      "args": ["rakeshgangwar/erpnext-mcp-server"],
+      "env": {
+        "ERPNEXT_URL": "http://localhost:8083",
+        "ERPNEXT_API_KEY": "erpnext_api_key_2025_dev",
+        "ERPNEXT_API_SECRET": "erpnext_secret_key_secure_development_2025"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {}
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "env": {}
+    },
+    "mcp-installer": {
+      "command": "npx",
+      "args": ["-y", "mcp-installer"],
+      "env": {}
+    }
+  }
+}

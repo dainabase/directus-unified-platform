@@ -1,0 +1,94 @@
+{
+  "companies": {
+    "HYPERVISUAL": {
+      "name": "HYPERVISUAL Studio Créatif",
+      "sector": "Creative Studio",
+      "revolut_client_id": "rev_live_hypervisual_xxx",
+      "revolut_account_ids": {
+        "CHF": "acc_hypervisual_chf",
+        "EUR": "acc_hypervisual_eur"
+      },
+      "webhook_secret": "whsec_hypervisual_xxx",
+      "sync_enabled": true,
+      "features": {
+        "multi_currency": true,
+        "auto_reconciliation": true,
+        "real_time_sync": true
+      }
+    },
+    "DAINAMICS": {
+      "name": "DAINAMICS Solutions Tech",
+      "sector": "Technology",
+      "revolut_client_id": "rev_live_dainamics_yyy",
+      "revolut_account_ids": {
+        "CHF": "acc_dainamics_chf",
+        "EUR": "acc_dainamics_eur",
+        "USD": "acc_dainamics_usd"
+      },
+      "webhook_secret": "whsec_dainamics_yyy",
+      "sync_enabled": true,
+      "features": {
+        "multi_currency": true,
+        "auto_reconciliation": true,
+        "real_time_sync": true
+      }
+    },
+    "LEXAIA": {
+      "name": "LEXAIA Services Juridiques",
+      "sector": "Legal Services",
+      "revolut_client_id": "rev_live_lexaia_zzz",
+      "revolut_account_ids": {
+        "CHF": "acc_lexaia_chf",
+        "EUR": "acc_lexaia_eur"
+      },
+      "webhook_secret": "whsec_lexaia_zzz",
+      "sync_enabled": true,
+      "features": {
+        "multi_currency": true,
+        "auto_reconciliation": true,
+        "real_time_sync": true
+      }
+    },
+    "ENKI_REALTY": {
+      "name": "ENKI REALTY Immobilier Premium",
+      "sector": "Real Estate",
+      "revolut_client_id": "rev_live_enki_aaa",
+      "revolut_account_ids": {
+        "CHF": "acc_enki_chf",
+        "EUR": "acc_enki_eur",
+        "GBP": "acc_enki_gbp"
+      },
+      "webhook_secret": "whsec_enki_aaa",
+      "sync_enabled": true,
+      "features": {
+        "multi_currency": true,
+        "auto_reconciliation": true,
+        "real_time_sync": true
+      }
+    },
+    "TAKEOUT": {
+      "name": "TAKEOUT Restauration",
+      "sector": "Restaurant",
+      "revolut_client_id": "rev_live_takeout_bbb",
+      "revolut_account_ids": {
+        "CHF": "acc_takeout_chf",
+        "EUR": "acc_takeout_eur"
+      },
+      "webhook_secret": "whsec_takeout_bbb",
+      "sync_enabled": true,
+      "features": {
+        "multi_currency": true,
+        "auto_reconciliation": false,
+        "real_time_sync": true
+      }
+    }
+  },
+  "global_settings": {
+    "default_currency": "CHF",
+    "supported_currencies": ["CHF", "EUR", "USD", "GBP"],
+    "sync_interval_minutes": 5,
+    "reconciliation_hour": 2,
+    "webhook_retry_attempts": 3,
+    "rate_limit_per_minute": 1000
+  }
+}

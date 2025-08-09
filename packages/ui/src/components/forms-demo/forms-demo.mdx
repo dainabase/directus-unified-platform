@@ -1,0 +1,13 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./forms-demo.stories";
+<Meta of={Stories} />
+
+# Forms – Démo complète
+Formulaire avec **React Hook Form + Zod** et composants du Design System.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Règles DS
+- Pas de styles en dur (tokens only).
+- Labels + messages d'erreurs obligatoires (a11y).
+- Composants Radix entièrement claviers-compatibles.

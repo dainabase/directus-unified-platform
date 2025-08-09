@@ -1,0 +1,3 @@
+# Design System & Demo App ownership
+packages/ui/*       @dainabase
+apps/web/*          @dainabase

@@ -11,10 +11,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "@tanstack/react-table": "^8.10.0",
+    "class-variance-authority": "^0.7.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
+    "@storybook/blocks": "^7.6.0",
+    "@storybook/react": "^7.6.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.19",

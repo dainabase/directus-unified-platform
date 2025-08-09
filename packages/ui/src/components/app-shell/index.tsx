@@ -22,7 +22,7 @@ export function AppShell({ sidebar, topbarRight, children, title = "Dashboard" }
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Topbar */}
-      <div className="sticky top-0 z-[1030] flex h-14 items-center gap-2 border-b border-border bg-white px-3">
+      <div className="sticky top-0 z-[1030] flex h-14 items-center gap-2 border-b border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 px-3">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="Open menu" className="md:hidden">☰</Button>
@@ -57,7 +57,7 @@ export function AppShell({ sidebar, topbarRight, children, title = "Dashboard" }
 
       {/* Body */}
       <div className="mx-auto flex w-full max-w-[1400px]">
-        <aside className="sticky top-14 hidden min-w-[240px] border-r border-border bg-white md:block">
+        <aside className="sticky top-14 hidden min-w-[240px] border-r border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 md:block">
           {sidebar}
         </aside>
         <main className="flex-1 p-4">{children}</main>

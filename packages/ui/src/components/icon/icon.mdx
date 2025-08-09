@@ -1,0 +1,20 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./icon.stories";
+
+<Meta of={Stories} />
+
+# Icon
+
+Wrapper autour **lucide-react** avec normalisation du nom (`"search"`, `"Search"`…).
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+<Canvas><Story of={Stories.Colors} /></Canvas>
+
+<Canvas><Story of={Stories.Sizes} /></Canvas>
+
+## Bonnes pratiques
+
+- **a11y** : ajouter `aria-label` si l'icône est cliquable/sémantique, sinon `aria-hidden`.
+- **Couleurs** : préférez `text-*` (tokens) pour s'aligner au DS.
+- **Taille** : `size={18|20|24}` pour rester dans l'échelle.

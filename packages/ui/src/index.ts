@@ -16,6 +16,7 @@ export * from "./components/command-palette";
 export * from "./components/calendar";
 export * from "./components/date-picker";
 export * from "./components/date-range-picker";
+export * from "./components/icon";
 
 // Data Display
 export * from "./components/data-grid";

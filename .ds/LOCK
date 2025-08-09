@@ -1,14 +1,15 @@
 {
-  "status": "pack-05-fully-completed",
-  "step": 5,
-  "timestamp": "2025-08-09T16:18:40Z",
+  "status": "pack-06-completed",
+  "step": 6,
+  "timestamp": "2025-08-09T16:25:30Z",
   "workflow_loaded": true,
   "packs_completed": [
     "01-tokens-tailwind-pr",
     "02-button-card-datagrid",
     "03-command-date-dialog-sheet",
     "04-appshell-tabs-breadcrumbs-dropdown-toast",
-    "05-storybook-docker"
+    "05-storybook-docker",
+    "06-forms-kit-input-controls"
   ],
   "storybook": {
     "configured": true,
@@ -17,5 +18,18 @@
     "montserrat_font": true,
     "artifacts_ready": true
   },
-  "next_step": "Ready for app demo or CI/CD setup"
+  "forms": {
+    "rhf_integrated": true,
+    "zod_configured": true,
+    "components": [
+      "form",
+      "input",
+      "textarea",
+      "select",
+      "switch",
+      "checkbox"
+    ],
+    "demo_story": true
+  },
+  "next_step": "Dependencies to install + app demo or CI/CD setup"
 }

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  erpnext:
+    image: frappe/erpnext:latest
+    container_name: erpnext-ultra
+    restart: unless-stopped
+    ports:
+      - "8083:8000"
+    environment:
+      - SITE_NAME=localhost
+      - ADMIN_PASSWORD=Admin@ERPNext2025
+      - INSTALL_APPS=erpnext
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_ROOT_PASSWORD=Admin@ERPNext2025
+      - REDIS_CACHE=localhost:6379
+      - MARIADB_HOST=localhost
+      - MARIADB_ROOT_PASSWORD=Admin@ERPNext2025
+    command: >
+      bash -c "
+        echo 'Initialisation ERPNext...' &&
+        sleep 5 &&
+        bench start
+      "

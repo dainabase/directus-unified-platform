@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  erpnext:
+    image: frappe/erpnext:latest
+    container_name: erpnext-simple
+    restart: unless-stopped
+    environment:
+      - SITE_NAME=erp.local
+      - ADMIN_PASSWORD=Admin@ERPNext2025
+      - INSTALL_APPS=erpnext
+      - DB_HOST=erpnext-db-simple
+      - DB_PORT=3306
+      - DB_ROOT_PASSWORD=root_erpnext_2025
+      - REDIS_CACHE=erpnext-redis-simple:6379
+    ports:
+      - "8083:8000"
+    volumes:
+      - erpnext-data:/home/frappe/frappe-bench
+    depends_on:
+      - erpnext-db-simple
+      - erpnext-redis-simple
+    networks:
+      - erpnext-network
+
+  erpnext-db-simple:
+    image: mariadb:10.6
+    container_name: erpnext-db-simple
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_erpnext_2025
+      - MYSQL_DATABASE=erpnext
+      - MYSQL_USER=erpnext
+      - MYSQL_PASSWORD=erpnext_secure_2025
+    volumes:
+      - erpnext-db:/var/lib/mysql
+    networks:
+      - erpnext-network
+
+  erpnext-redis-simple:
+    image: redis:7-alpine
+    container_name: erpnext-redis-simple
+    restart: unless-stopped
+    networks:
+      - erpnext-network
+
+volumes:
+  erpnext-data:
+  erpnext-db:
+
+networks:
+  erpnext-network:
+    driver: bridge

@@ -1,51 +1,88 @@
-version: '3.7'
+version: '3.8'
 
 services:
+  invoice-ninja-nginx:
+    image: nginx:1.25-alpine
+    container_name: invoice-ninja-nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - invoice-public:/var/www/app/public:ro
+    ports:
+      - "8090:80"
+    depends_on:
+      - invoice-ninja-app
+    networks:
+      - invoice-ninja-network
+      - directus-unified-platform_default
+
   invoice-ninja-app:
     image: invoiceninja/invoiceninja:5
     container_name: invoice-ninja-app
-    environment:
-      - APP_URL=http://localhost:8082
-      - APP_KEY=base64:O1S3kAJEDgo92gPkXtxZj6lH5Z1ztHp3+K2LunzKQqU=
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - REQUIRE_HTTPS=false
-      - DB_HOST=invoice-ninja-db
-      - DB_PORT=3306
-      - DB_DATABASE=invoiceninja
-      - DB_USERNAME=invoiceninja
-      - DB_PASSWORD=invoiceninja_secure_password
-      - TRUSTED_PROXIES=*
-      - MULTI_DB_ENABLED=false
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
     volumes:
-      - invoice-public:/var/www/app/public
-      - invoice-storage:/var/www/app/storage
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
     depends_on:
       - invoice-ninja-db
+      - invoice-ninja-redis
     networks:
+      - directus-unified-platform_default
       - invoice-ninja-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   invoice-ninja-db:
-    image: mariadb:10
+    image: mariadb:10.6
     container_name: invoice-ninja-db
+    restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=root_secure_password
-      - MYSQL_DATABASE=invoiceninja
-      - MYSQL_USER=invoiceninja
-      - MYSQL_PASSWORD=invoiceninja_secure_password
+      MYSQL_ROOT_PASSWORD: ninja_root_password
+      MYSQL_DATABASE: ninja
+      MYSQL_USER: ninja
+      MYSQL_PASSWORD: ninja_password
     volumes:
-      - invoice-db-data:/var/lib/mysql
+      - invoice-db-data:/var/lib/mysql:rw,delegated
+    networks:
+      - invoice-ninja-network
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=500
+
+  invoice-ninja-redis:
+    image: redis:7-alpine
+    container_name: invoice-ninja-redis
+    restart: unless-stopped
+    volumes:
+      - invoice-redis-data:/data
     networks:
       - invoice-ninja-network
 
-  invoice-ninja-nginx:
-    image: nginx:1
-    container_name: invoice-ninja-nginx
+  invoice-ninja-queue:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoice-ninja-queue
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/in-vhost.conf:ro
-      - invoice-public:/var/www/app/public:ro
-    ports:
-      - "8082:80"
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    depends_on:
+      - invoice-ninja-app
+    networks:
+      - invoice-ninja-network
+
+  invoice-ninja-scheduler:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoice-ninja-scheduler
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
+    volumes:
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
+    command: /bin/sh -c "while true; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
     depends_on:
       - invoice-ninja-app
     networks:
@@ -55,6 +92,10 @@ volumes:
   invoice-public:
   invoice-storage:
   invoice-db-data:
+  invoice-redis-data:
 
 networks:
   invoice-ninja-network:
+    driver: bridge
+  directus-unified-platform_default:
+    external: true

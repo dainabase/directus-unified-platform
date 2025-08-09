@@ -46,3 +46,16 @@ Thumbs.db
 directus/uploads/
 directus/extensions/
 !directus/extensions/.gitkeep
+
+# Revolut secrets - NEVER commit
+integrations/revolut/keys/*.pem
+integrations/revolut/keys/*.key
+integrations/revolut/.env
+integrations/revolut/logs/*.log
+
+# Invoice Ninja
+integrations/invoice-ninja/.env
+integrations/invoice-ninja/.env.invoice-ninja
+
+# Backups
+backup-revolut-*.tar.gz

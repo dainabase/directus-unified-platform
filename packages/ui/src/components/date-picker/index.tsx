@@ -1,95 +1,61 @@
 "use client";
 
 import * as React from "react";
-import * as Popover from "@radix-ui/react-popover";
-import { DayPicker, type DateRange } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { Calendar } from "../calendar";
 import { Button } from "../button";
+import * as Popover from "@radix-ui/react-popover";
 import { twMerge } from "tailwind-merge";
 
 export interface DatePickerProps {
-  value?: Date | null;
-  onChange?: (date: Date | null) => void;
+  value?: Date;
+  onChange?: (date?: Date) => void;
   placeholder?: string;
+  className?: string;
+  disabled?: boolean;
 }
 
-export function DatePicker({ value, onChange, placeholder = "Choisir une date" }: DatePickerProps) {
+export function DatePicker({
+  value,
+  onChange,
+  placeholder = "Sélectionner une date",
+  className,
+  disabled,
+}: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Date | undefined>(value ?? undefined);
-
-  React.useEffect(() => setSelected(value ?? undefined), [value]);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <Button variant="outline">
-          {selected ? selected.toLocaleDateString() : placeholder}
+        <Button
+          variant="outline"
+          className={twMerge(
+            "w-[260px] justify-start text-left font-normal",
+            !value && "text-neutral-500",
+            className
+          )}
+          disabled={disabled}
+        >
+          <span className="mr-2">📅</span>
+          {value ? format(value, "dd MMM yyyy", { locale: fr }) : placeholder}
         </Button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content
-          className={twMerge(
-            "z-[1050] rounded-lg border border-border bg-white p-2 shadow-lg"
-          )}
+          className="z-[1050] w-auto rounded-lg border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 p-2 shadow-lg"
+          align="start"
         >
-          <DayPicker
+          <Calendar
             mode="single"
-            selected={selected}
-            onSelect={(d) => {
-              setSelected(d ?? undefined);
-              onChange?.(d ?? null);
+            selected={value}
+            onSelect={(date) => {
+              onChange?.(date);
               setOpen(false);
             }}
+            initialFocus
+            locale={fr}
           />
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
-  );
-}
-
-export interface DateRangePickerProps {
-  value?: DateRange | undefined;
-  onChange?: (range: DateRange | undefined) => void;
-  placeholder?: string;
-}
-
-export function DateRangePicker({
-  value,
-  onChange,
-  placeholder = "Choisir une période",
-}: DateRangePickerProps) {
-  const [open, setOpen] = React.useState(false);
-  const [range, setRange] = React.useState<DateRange | undefined>(value);
-
-  React.useEffect(() => setRange(value), [value]);
-
-  const label =
-    range?.from && range?.to
-      ? `${range.from.toLocaleDateString()} → ${range.to.toLocaleDateString()}`
-      : placeholder;
-
-  return (
-    <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger asChild>
-        <Button variant="outline">{label}</Button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content className="z-[1050] rounded-lg border border-border bg-white p-2 shadow-lg">
-          <DayPicker
-            mode="range"
-            selected={range}
-            onSelect={(r) => {
-              setRange(r);
-              onChange?.(r);
-            }}
-            numberOfMonths={2}
-          />
-          <div className="flex justify-end gap-2 p-2">
-            <Button variant="ghost" onClick={() => setRange(undefined)}>
-              Effacer
-            </Button>
-            <Button onClick={() => setOpen(false)}>OK</Button>
-          </div>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

@@ -1,114 +1,105 @@
 "use client";
 
 import * as React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Command as Cmdk } from "cmdk";
+import * as Cmdk from "cmdk";
+import { Dialog, DialogContent } from "../dialog";
 import { twMerge } from "tailwind-merge";
-import { Button } from "../button";
 
-type CommandItem = {
+export interface CommandPaletteItem {
   id: string;
   label: string;
+  group?: string;
+  icon?: React.ReactNode;
   shortcut?: string;
   onSelect?: () => void;
-  group?: string;
-};
-
-export interface CommandPaletteProps {
-  placeholder?: string;
-  items: CommandItem[];
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  hotkey?: string; // ex: "mod+k"
 }
 
-function parseHotkey(h: string) {
-  const isMac = typeof window !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
-  return h.replace("mod", isMac ? "⌘" : "Ctrl");
+export interface CommandPaletteProps {
+  items: CommandPaletteItem[];
+  placeholder?: string;
+  emptyText?: string;
+  trigger?: React.ReactNode;
 }
 
 export function CommandPalette({
-  placeholder = "Rechercher une action…",
   items,
-  open,
-  onOpenChange,
-  hotkey = "mod+k",
+  placeholder = "Rechercher...",
+  emptyText = "Aucun résultat.",
+  trigger,
 }: CommandPaletteProps) {
-  const [isOpen, setIsOpen] = React.useState(open ?? false);
-  const setOpen = (v: boolean) => {
-    setIsOpen(v);
-    onOpenChange?.(v);
-  };
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
-      const isMod = isMac ? e.metaKey : e.ctrlKey;
-      if (isMod && e.key.toLowerCase() === "k") {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen(true);
+        setOpen((open) => !open);
       }
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, []);
 
-  const groups = Array.from(new Set(items.map(i => i.group || "General")));
+  const groups = items.reduce((acc, item) => {
+    const group = item.group || "Défaut";
+    if (!acc[group]) acc[group] = [];
+    acc[group].push(item);
+    return acc;
+  }, {} as Record<string, CommandPaletteItem[]>);
 
   return (
     <>
-      <Button variant="outline" onClick={() => setOpen(true)}>
-        Ouvrir la palette ({parseHotkey(hotkey)})
-      </Button>
-
-      <Dialog.Root open={isOpen} onOpenChange={setOpen}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-          <Dialog.Content
-            className={twMerge(
-              "fixed left-1/2 top-1/5 z-[1050] w-[90vw] max-w-2xl -translate-x-1/2 rounded-lg border border-border bg-white shadow-xl outline-none"
-            )}
-          >
-            <Cmdk label="Command Menu" className="cmdk-ui">
-              <div className="p-2 border-b border-border">
-                <Cmdk.Input
-                  autoFocus
-                  placeholder={placeholder}
-                  className="h-11 w-full rounded-md bg-white px-3 text-sm outline-none placeholder:text-neutral-400"
-                />
-              </div>
-              <Cmdk.List className="max-h-[60vh] overflow-auto py-2">
-                {groups.map(g => (
-                  <Cmdk.Group key={g} heading={g} className="px-2 py-1">
-                    {items
-                      .filter(i => (i.group || "General") === g)
-                      .map(i => (
-                        <Cmdk.Item
-                          key={i.id}
-                          onSelect={() => {
-                            i.onSelect?.();
-                            setOpen(false);
-                          }}
-                          className="cursor-pointer rounded-md px-2 py-2 text-sm aria-selected:bg-neutral-100"
-                        >
-                          <span>{i.label}</span>
-                          {i.shortcut && (
-                            <kbd className="ml-auto rounded border border-border bg-neutral-50 px-1 text-[10px]">
-                              {i.shortcut}
-                            </kbd>
-                          )}
-                        </Cmdk.Item>
-                      ))}
-                  </Cmdk.Group>
-                ))}
-                <Cmdk.Empty className="px-3 py-6 text-sm text-neutral-500">
-                  Aucun résultat
-                </Cmdk.Empty>
-              </Cmdk.List>
-            </Cmdk>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+      {trigger ? (
+        <div onClick={() => setOpen(true)}>{trigger}</div>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"
+        >
+          <span>⌘K</span>
+        </button>
+      )}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-[640px] p-0">
+          <Cmdk.Command className="rounded-lg border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 shadow-xl">
+            <Cmdk.Input
+              placeholder={placeholder}
+              className="w-full border-0 bg-white dark:bg-neutral-900 px-4 py-3 text-sm outline-none placeholder:text-neutral-500"
+            />
+            <Cmdk.List className="max-h-[300px] overflow-y-auto p-2">
+              <Cmdk.Empty className="px-4 py-6 text-center text-sm text-neutral-600">
+                {emptyText}
+              </Cmdk.Empty>
+              {Object.entries(groups).map(([group, groupItems]) => (
+                <Cmdk.Group key={group} heading={group}>
+                  <div className="px-2 py-1.5 text-xs font-medium text-neutral-600">
+                    {group}
+                  </div>
+                  {groupItems.map((item) => (
+                    <Cmdk.Item
+                      key={item.id}
+                      value={item.label}
+                      onSelect={() => {
+                        item.onSelect?.();
+                        setOpen(false);
+                      }}
+                      className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-neutral-100 aria-selected:bg-neutral-100"
+                    >
+                      {item.icon && <span>{item.icon}</span>}
+                      <span>{item.label}</span>
+                      {item.shortcut && (
+                        <span className="ml-auto text-xs text-neutral-500">
+                          {item.shortcut}
+                        </span>
+                      )}
+                    </Cmdk.Item>
+                  ))}
+                </Cmdk.Group>
+              ))}
+            </Cmdk.List>
+          </Cmdk.Command>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -92,7 +92,8 @@
       "Bash(docker:*)",
       "WebFetch(domain:docs.docker.com)",
       "Bash(./scripts/fix-mcp-claude.sh:*)",
-      "Bash(./run-fix-mcp.sh:*)"
+      "Bash(./run-fix-mcp.sh:*)",
+      "Bash(npm run setup:*)"
     ],
     "deny": []
   }

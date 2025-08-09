@@ -1,0 +1,16 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./charts.stories";
+<Meta of={Stories} />
+
+# Charts
+Wrappers **Recharts** harmonisés au Design System (tokens couleurs, carte blanche Apple-style).
+
+<Canvas><Story of={Stories.Lines} /></Canvas>
+<Canvas><Story of={Stories.Bars} /></Canvas>
+<Canvas><Story of={Stories.Areas} /></Canvas>
+<Canvas><Story of={Stories.Donut} /></Canvas>
+<Canvas><Story of={Stories.Gauge} /></Canvas>
+
+## Conseils
+- Préférez `yAxisFormatter`/`tooltipFormatter` pour unités (€ / % / k).
+- Évitez >3–4 séries sur un même graphe pour la lisibilité.

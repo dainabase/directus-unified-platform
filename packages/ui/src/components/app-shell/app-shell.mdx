@@ -1,0 +1,12 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./app-shell.stories";
+<Meta of={Stories} />
+
+# AppShell
+Layout de base : **Topbar + Sidebar** responsive, contenu centré, actions à droite, et **Command Palette** intégrée.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Conseils
+- Sidebar en `md+`, mobile via `Sheet`.
+- Largeur max ~1400px pour confort.

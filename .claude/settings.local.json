@@ -94,7 +94,12 @@
       "Bash(./scripts/fix-mcp-claude.sh:*)",
       "Bash(./run-fix-mcp.sh:*)",
       "Bash(npm run setup:*)",
-      "Bash(npm init:*)"
+      "Bash(npm init:*)",
+      "Bash(if [ ! -d \"node_modules\" ])",
+      "Bash(then echo \"⚠️ Installation des dépendances nécessaire...\")",
+      "Bash(else echo \"✅ Dépendances déjà installées\")",
+      "Bash(if [ -f \"docker-compose.invoice-ninja.yml\" ])",
+      "Bash(then [ -f \"docker-compose.yml\" ])"
     ],
     "deny": []
   }

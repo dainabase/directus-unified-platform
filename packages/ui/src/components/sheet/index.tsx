@@ -1,72 +1,125 @@
 "use client";
 
 import * as React from "react";
-import * as RD from "@radix-ui/react-dialog";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { twMerge } from "tailwind-merge";
 
-export type SheetSide = "left" | "right" | "top" | "bottom";
+const Sheet = SheetPrimitive.Root;
+const SheetTrigger = SheetPrimitive.Trigger;
+const SheetPortal = SheetPrimitive.Portal;
 
-export const Sheet = RD.Root;
-export const SheetTrigger = RD.Trigger;
-export const SheetPortal = RD.Portal;
-export const SheetClose = RD.Close;
+const SheetOverlay = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Overlay>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+  <SheetPrimitive.Overlay
+    className={twMerge(
+      "fixed inset-0 z-[1040] bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
+    {...props}
+    ref={ref}
+  />
+));
+SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
-function sideClasses(side: SheetSide) {
-  switch (side) {
-    case "left":
-      return "left-0 top-0 h-screen w-[90vw] max-w-md";
-    case "right":
-      return "right-0 top-0 h-screen w-[90vw] max-w-md";
-    case "top":
-      return "top-0 left-0 w-screen h-[85vh] max-h-[85vh]";
-    case "bottom":
-    default:
-      return "bottom-0 left-0 w-screen h-[85vh] max-h-[85vh]";
-  }
+interface SheetContentProps
+  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> {
+  side?: "top" | "right" | "bottom" | "left";
 }
 
-export function SheetContent({
-  side = "right",
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof RD.Content> & { side?: SheetSide }) {
-  const position =
-    side === "right"
-      ? "fixed right-0"
-      : side === "left"
-      ? "fixed left-0"
-      : side === "top"
-      ? "fixed top-0"
-      : "fixed bottom-0";
+const sheetVariants = {
+  top: "inset-x-0 top-0 data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top",
+  bottom:
+    "inset-x-0 bottom-0 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom",
+  left: "inset-y-0 left-0 h-full w-3/4 sm:max-w-sm data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left",
+  right:
+    "inset-y-0 right-0 h-full w-3/4 sm:max-w-sm data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right",
+};
 
-  return (
-    <RD.Portal>
-      <RD.Overlay className="fixed inset-0 bg-black/50" />
-      <RD.Content
-        className={twMerge(
-          position,
-          sideClasses(side),
-          "z-[1040] rounded-none border border-border bg-white shadow-xl outline-none",
-          className
-        )}
-        {...props}
-      >
+const SheetContent = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Content>,
+  SheetContentProps
+>(({ side = "right", className, children, ...props }, ref) => (
+  <SheetPortal>
+    <SheetOverlay />
+    <SheetPrimitive.Content
+      ref={ref}
+      className={twMerge(
+        "fixed z-[1050] overflow-auto rounded-none border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 shadow-xl transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-200 data-[state=open]:duration-300",
+        sheetVariants[side],
+        className
+      )}
+      {...props}
+    >
+      <div className="p-4">
         {children}
-      </RD.Content>
-    </RD.Portal>
-  );
-}
+      </div>
+    </SheetPrimitive.Content>
+  </SheetPortal>
+));
+SheetContent.displayName = SheetPrimitive.Content.displayName;
 
-export function SheetHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={twMerge("border-b border-border p-4", className)} {...props} />;
-}
-export function SheetTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={twMerge("text-base font-semibold", className)} {...props} />;
-}
-export function SheetDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={twMerge("text-sm text-neutral-600", className)} {...props} />;
-}
-export function SheetFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={twMerge("border-t border-border p-4 flex items-center justify-end gap-2", className)} {...props} />;
-}
+const SheetHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={twMerge(
+      "flex flex-col space-y-2 text-center sm:text-left",
+      className
+    )}
+    {...props}
+  />
+);
+SheetHeader.displayName = "SheetHeader";
+
+const SheetFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={twMerge(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    )}
+    {...props}
+  />
+);
+SheetFooter.displayName = "SheetFooter";
+
+const SheetTitle = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Title>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
+>(({ className, ...props }, ref) => (
+  <SheetPrimitive.Title
+    ref={ref}
+    className={twMerge("text-lg font-semibold", className)}
+    {...props}
+  />
+));
+SheetTitle.displayName = SheetPrimitive.Title.displayName;
+
+const SheetDescription = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <SheetPrimitive.Description
+    ref={ref}
+    className={twMerge("text-sm text-neutral-600", className)}
+    {...props}
+  />
+));
+SheetDescription.displayName = SheetPrimitive.Description.displayName;
+
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+};

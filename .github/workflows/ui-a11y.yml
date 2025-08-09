@@ -1,0 +1,36 @@
+name: UI a11y (Storybook Test Runner)
+
+on:
+  push:
+    branches: [ feat-design-system-apple ]
+  pull_request:
+    branches: [ feat-design-system-apple, main, master ]
+
+jobs:
+  a11y:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node + pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      
+      - name: Install
+        run: pnpm install
+      
+      - name: Build Storybook (static)
+        run: pnpm build:sb:static
+      
+      - name: Run Storybook test-runner (a11y)
+        run: pnpm test:stories

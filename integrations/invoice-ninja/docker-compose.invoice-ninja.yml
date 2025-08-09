@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  invoice-ninja-app:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoice-ninja-app
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
+    volumes:
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
+    depends_on:
+      - invoice-ninja-db
+      - invoice-ninja-redis
+    networks:
+      - directus-unified-platform_default
+      - invoice-ninja-network
+    ports:
+      - "8090:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  invoice-ninja-db:
+    image: mariadb:10.6
+    container_name: invoice-ninja-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ninja_root_password
+      MYSQL_DATABASE: ninja
+      MYSQL_USER: ninja
+      MYSQL_PASSWORD: ninja_password
+    volumes:
+      - invoice-db-data:/var/lib/mysql:rw,delegated
+    networks:
+      - invoice-ninja-network
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=500
+
+  invoice-ninja-redis:
+    image: redis:7-alpine
+    container_name: invoice-ninja-redis
+    restart: unless-stopped
+    volumes:
+      - invoice-redis-data:/data
+    networks:
+      - invoice-ninja-network
+
+  invoice-ninja-queue:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoice-ninja-queue
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
+    volumes:
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    depends_on:
+      - invoice-ninja-app
+    networks:
+      - invoice-ninja-network
+
+  invoice-ninja-scheduler:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoice-ninja-scheduler
+    restart: unless-stopped
+    env_file: .env.invoice-ninja
+    volumes:
+      - invoice-public:/var/www/app/public:rw,delegated
+      - invoice-storage:/var/www/app/storage:rw,delegated
+    command: /bin/sh -c "while true; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+    depends_on:
+      - invoice-ninja-app
+    networks:
+      - invoice-ninja-network
+
+volumes:
+  invoice-public:
+  invoice-storage:
+  invoice-db-data:
+  invoice-redis-data:
+
+networks:
+  invoice-ninja-network:
+    driver: bridge
+  directus-unified-platform_default:
+    external: true

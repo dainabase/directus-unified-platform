@@ -1,0 +1,18 @@
+{
+  "name": "invoice-ninja-integration",
+  "version": "1.0.0",
+  "description": "Invoice Ninja v5 integration with Directus",
+  "type": "module",
+  "scripts": {
+    "setup": "node setup-invoice-ninja.js",
+    "sync": "node sync-invoices.js",
+    "webhook": "node invoice-webhook.js",
+    "test": "node test-connection.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "crypto": "^1.0.1"
+  }
+}

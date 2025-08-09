@@ -1,0 +1,45 @@
+name: UI Storybook Pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [ feat-design-system-apple ]
+permissions:
+  pages: write
+  id-token: write
+concurrency:
+  group: "ui-storybook-pages"
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install
+        run: pnpm install
+      - name: Build Storybook
+        run: pnpm build:sb:static
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/ui/storybook-static
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

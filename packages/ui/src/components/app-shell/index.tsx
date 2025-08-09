@@ -7,6 +7,7 @@ import { Button } from "../button";
 import { CommandPalette } from "../command-palette";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu";
 import { useToast } from "../toast";
+import { Icon } from "../icon";
 
 export interface AppShellProps {
   sidebar?: React.ReactNode;
@@ -25,7 +26,9 @@ export function AppShell({ sidebar, topbarRight, children, title = "Dashboard" }
       <div className="sticky top-0 z-[1030] flex h-14 items-center gap-2 border-b border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 px-3">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Open menu" className="md:hidden">☰</Button>
+            <Button variant="ghost" size="icon" aria-label="Open menu" className="md:hidden">
+              <Icon name="Menu" />
+            </Button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0">
             <div className="w-full max-w-md">{sidebar}</div>
@@ -43,12 +46,25 @@ export function AppShell({ sidebar, topbarRight, children, title = "Dashboard" }
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Compte ▾</Button>
+              <Button variant="outline" className="flex items-center gap-1">
+                <Icon name="User" size={16} />
+                <span>Compte</span>
+                <Icon name="ChevronDown" size={14} />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => toast({ title: "Profil" })}>Profil</DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => toast({ title: "Paramètres" })}>Paramètres</DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => toast({ title: "Déconnexion" })}>Déconnexion</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => toast({ title: "Profil" })}>
+                <Icon name="User" size={16} className="mr-2" />
+                Profil
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => toast({ title: "Paramètres" })}>
+                <Icon name="Settings" size={16} className="mr-2" />
+                Paramètres
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => toast({ title: "Déconnexion" })}>
+                <Icon name="LogOut" size={16} className="mr-2" />
+                Déconnexion
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           {topbarRight}

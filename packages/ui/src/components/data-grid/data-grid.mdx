@@ -1,0 +1,12 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./data-grid.stories";
+<Meta of={Stories} />
+
+# DataGrid (base)
+Tableau **entreprise** avec tri, filtre global, pagination, et export **CSV**.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Conseils
+- Préparer les colonnes avec `accessorKey` cohérents.
+- Pour 1k+ lignes, préférer la version **DataGrid avancée** (virtualized).

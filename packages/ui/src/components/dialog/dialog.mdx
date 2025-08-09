@@ -1,0 +1,12 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./dialog.stories";
+<Meta of={Stories} />
+
+# Dialog
+Modale accessible via **Radix Dialog**.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Conseils
+- Utiliser `DialogTitle` + `DialogDescription` pour a11y.
+- Focus piégé automatiquement.

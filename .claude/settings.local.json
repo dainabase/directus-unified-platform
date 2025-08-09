@@ -102,7 +102,11 @@
       "Bash(then [ -f \"docker-compose.yml\" ])",
       "Bash(./test-erpnext.sh:*)",
       "Bash(CONTAINER=\"erpnext-simple\")",
-      "Bash(./verify-all-mcp-emergency.sh:*)"
+      "Bash(./verify-all-mcp-emergency.sh:*)",
+      "Bash(./test-all-services.sh:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npx @pixelsock/directus-mcp@latest:*)",
+      "Bash(DIRECTUS_URL=\"http://localhost:8055\" DIRECTUS_ACCESS_TOKEN=\"e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW\" timeout 5 node directus-mcp-server-v2.js)"
     ],
     "deny": []
   }

@@ -18,7 +18,7 @@ Directus Unified Platform est une solution complète de gestion d'entreprise mul
 - **🏪 Revendeur** - Gestion des ventes et commissions
 
 ### 🏢 Entreprises gérées
-- HYPERVISUAL - Studio créatif
+- HYPERVISUAL - Digital Signage
 - DAINAMICS - Solutions tech
 - LEXAIA - Services juridiques
 - ENKI REALTY - Immobilier

@@ -5,7 +5,7 @@ import {
   AppShell, Button, Card, CardHeader, CardTitle, CardContent,
   Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetFooter, SheetClose,
   DateRangePicker, Tabs, TabsList, TabsTrigger, TabsContent,
-  Breadcrumbs, ToastProvider
+  Breadcrumbs, ToastProvider, ThemeToggle
 } from "@dainabase/ui";
 import { LineChart, BarChart, DonutChart, RadialGauge } from "@dainabase/ui";
 import { DataGridAdv } from "@dainabase/ui";
@@ -55,7 +55,7 @@ export default function DashboardPage() {
 
   return (
     <ToastProvider>
-      <AppShell sidebar={sidebar} title="Unified Dashboard">
+      <AppShell sidebar={sidebar} title="Unified Dashboard" topbarRight={<ThemeToggle />}>
         <div className="mb-3 flex items-center justify-between">
           <Breadcrumbs items={[{ label: "Home", href: "#" }, { label: "Dashboard" }]} />
           <Sheet>

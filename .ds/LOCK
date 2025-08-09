@@ -1,5 +1,6 @@
 {
-  "status": "initializing",
+  "status": "ready",
   "step": 0,
-  "timestamp": "2025-08-09T15:30:00Z"
+  "timestamp": "2025-08-09T15:35:00Z",
+  "workflow_loaded": true
 }

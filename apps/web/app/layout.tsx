@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Montserrat } from "next/font/google";
+import { ThemeProvider } from "@dainabase/ui";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -14,8 +15,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={montserrat.variable}>
-      <body>{children}</body>
+    <html lang="fr" className={montserrat.variable} suppressHydrationWarning>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

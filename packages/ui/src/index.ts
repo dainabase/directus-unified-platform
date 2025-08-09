@@ -13,6 +13,11 @@ export * from './components/command-palette';
 export * from './components/date-picker';
 export * from './components/dialog';
 export * from './components/sheet';
+export * from './components/app-shell';
+export * from './components/tabs';
+export * from './components/breadcrumbs';
+export * from './components/dropdown-menu';
+export * from './components/toast';
 
 // Export Tailwind config for external usage
 export { default as tailwindConfig } from '../tailwind.config';

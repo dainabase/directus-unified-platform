@@ -25,6 +25,7 @@ export * from './components/textarea';
 export * from './components/select';
 export * from './components/switch';
 export * from './components/checkbox';
+export * from './components/charts';
 
 // Export Tailwind config for external usage
 export { default as tailwindConfig } from '../tailwind.config';

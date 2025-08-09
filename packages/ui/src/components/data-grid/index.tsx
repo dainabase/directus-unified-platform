@@ -1,128 +1,145 @@
 "use client";
 
 import * as React from "react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { twMerge } from "tailwind-merge";
 import { Button } from "../button";
 
-export type DataGridProps<TData, TValue> = {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  className?: string;
-  initialSorting?: { id: string; desc?: boolean }[];
-  globalFilterPlaceholder?: string;
-};
-
-function exportCSV<T>(rows: T[], filename = "export.csv") {
-  if (!rows.length) return;
-  const headers = Object.keys(rows[0] as any);
-  const lines = rows.map((r: any) =>
-    headers.map((h) => JSON.stringify(r[h] ?? "")).join(",")
-  );
-  const csv = [headers.join(","), ...lines].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
+export interface Column<T> {
+  key: keyof T | string;
+  header: string;
+  width?: string;
+  align?: "left" | "center" | "right";
+  render?: (item: T, rowIndex: number) => React.ReactNode;
+  sortable?: boolean;
 }
 
-export function DataGrid<TData, TValue>({
+export interface DataGridProps<T> {
+  columns: Column<T>[];
+  data: T[];
+  onSort?: (key: string, direction: "asc" | "desc") => void;
+  sortKey?: string;
+  sortDirection?: "asc" | "desc";
+  selectable?: boolean;
+  selectedRows?: Set<number>;
+  onSelectRow?: (index: number, selected: boolean) => void;
+  onSelectAll?: (selected: boolean) => void;
+  className?: string;
+  emptyMessage?: string;
+}
+
+export function DataGrid<T extends Record<string, any>>({
   columns,
   data,
+  onSort,
+  sortKey,
+  sortDirection,
+  selectable = false,
+  selectedRows = new Set(),
+  onSelectRow,
+  onSelectAll,
   className,
-  initialSorting,
-  globalFilterPlaceholder = "Search…",
-}: DataGridProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<any[]>(initialSorting ?? []);
-  const [globalFilter, setGlobalFilter] = React.useState("");
+  emptyMessage = "Aucune donnée disponible",
+}: DataGridProps<T>) {
+  const handleSort = (key: string) => {
+    if (!onSort) return;
+    const newDirection =
+      sortKey === key && sortDirection === "asc" ? "desc" : "asc";
+    onSort(key, newDirection);
+  };
 
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting, globalFilter },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  const allSelected = data.length > 0 && selectedRows.size === data.length;
+  const someSelected = selectedRows.size > 0 && selectedRows.size < data.length;
 
   return (
-    <div className={twMerge("w-full space-y-3", className)}>
-      {/* Toolbar */}
-      <div className="flex items-center justify-between gap-3">
-        <input
-          placeholder={globalFilterPlaceholder}
-          value={globalFilter ?? ""}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          className="h-10 w-64 rounded-md border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-primary"
-        />
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={() => exportCSV(table.getFilteredRowModel().rows.map(r => r.original))}>
-            Export CSV
-          </Button>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="overflow-auto rounded-lg border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-neutral-50 text-neutral-700">
-            {table.getHeaderGroups().map((hg) => (
-              <tr key={hg.id}>
-                {hg.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="select-none px-3 py-2 text-left font-medium"
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                    {{"asc":" ▲","desc":" ▼"}[header.column.getIsSorted() as string] ?? null}
-                  </th>
-                ))}
-              </tr>
+    <div className={twMerge("overflow-auto rounded-lg border border-border dark:border-neutral-800", className)}>
+      <table className="w-full border-collapse">
+        <thead className="bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200">
+          <tr>
+            {selectable && (
+              <th className="w-12 px-4 py-3 text-left">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  ref={(el) => {
+                    if (el) el.indeterminate = someSelected;
+                  }}
+                  onChange={(e) => onSelectAll?.(e.target.checked)}
+                  className="h-4 w-4"
+                />
+              </th>
+            )}
+            {columns.map((column) => (
+              <th
+                key={String(column.key)}
+                className={twMerge(
+                  "px-4 py-3 text-left text-sm font-medium",
+                  column.align === "center" && "text-center",
+                  column.align === "right" && "text-right",
+                  column.sortable && "cursor-pointer select-none hover:bg-neutral-100"
+                )}
+                style={{ width: column.width }}
+                onClick={() => column.sortable && handleSort(String(column.key))}
+              >
+                <div className="flex items-center gap-1">
+                  {column.header}
+                  {column.sortable && sortKey === String(column.key) && (
+                    <span className="text-xs">
+                      {sortDirection === "asc" ? "▲" : "▼"}
+                    </span>
+                  )}
+                </div>
+              </th>
             ))}
-          </thead>
-          <tbody className="divide-y divide-neutral-200 bg-white">
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-3 py-2">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </tr>
+        </thead>
+        <tbody>
+          {data.length === 0 ? (
+            <tr>
+              <td
+                colSpan={columns.length + (selectable ? 1 : 0)}
+                className="px-4 py-8 text-center text-sm text-neutral-500"
+              >
+                {emptyMessage}
+              </td>
+            </tr>
+          ) : (
+            data.map((item, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className={twMerge(
+                  "border-b border-neutral-200 bg-white dark:bg-neutral-900 hover:bg-neutral-50",
+                  selectedRows.has(rowIndex) && "bg-blue-50"
+                )}
+              >
+                {selectable && (
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedRows.has(rowIndex)}
+                      onChange={(e) => onSelectRow?.(rowIndex, e.target.checked)}
+                      className="h-4 w-4"
+                    />
+                  </td>
+                )}
+                {columns.map((column) => (
+                  <td
+                    key={String(column.key)}
+                    className={twMerge(
+                      "px-4 py-3 text-sm",
+                      column.align === "center" && "text-center",
+                      column.align === "right" && "text-right"
+                    )}
+                  >
+                    {column.render
+                      ? column.render(item, rowIndex)
+                      : (item[column.key as keyof T] as React.ReactNode)}
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-end gap-2">
-        <span className="text-sm text-neutral-600">
-          {table.getState().pagination.pageIndex + 1} / {table.getPageCount() || 1}
-        </span>
-        <Button variant="outline" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          Prev
-        </Button>
-        <Button variant="outline" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
-      </div>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

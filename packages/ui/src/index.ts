@@ -1,31 +1,40 @@
-// packages/ui/src/index.ts
-// Central export point for the Design System
+// Tokens
+export * from "./tokens";
 
-// Export tokens
-export { tokens } from '../tokens';
-export type { Tokens } from '../tokens';
+// Layout
+export * from "./components/app-shell";
 
-// Components exports
-export * from './components/button';
-export * from './components/card';
-export * from './components/data-grid';
-export * from './components/data-grid-adv';
-export * from './components/command-palette';
-export * from './components/date-picker';
-export * from './components/dialog';
-export * from './components/sheet';
-export * from './components/app-shell';
-export * from './components/tabs';
-export * from './components/breadcrumbs';
-export * from './components/dropdown-menu';
-export * from './components/toast';
-export * from './components/form';
-export * from './components/input';
-export * from './components/textarea';
-export * from './components/select';
-export * from './components/switch';
-export * from './components/checkbox';
-export * from './components/charts';
+// Core Components
+export * from "./components/button";
+export * from "./components/card";
+export * from "./components/dialog";
+export * from "./components/sheet";
+export * from "./components/tabs";
+export * from "./components/dropdown-menu";
+export * from "./components/toast";
+export * from "./components/command-palette";
+export * from "./components/calendar";
+export * from "./components/date-picker";
+export * from "./components/date-range-picker";
 
-// Export Tailwind config for external usage
-export { default as tailwindConfig } from '../tailwind.config';
+// Data Display
+export * from "./components/data-grid";
+export * from "./components/data-grid-adv";
+
+// Forms
+export * from "./components/input";
+export * from "./components/textarea";
+export * from "./components/select";
+export * from "./components/switch";
+export * from "./components/checkbox";
+
+// Charts
+export * from "./components/charts/line-chart";
+export * from "./components/charts/bar-chart";
+export * from "./components/charts/area-chart";
+export * from "./components/charts/donut-chart";
+export * from "./components/charts/radial-gauge";
+
+// Theme
+export * from "./theme/ThemeProvider";
+export * from "./components/theme-toggle";

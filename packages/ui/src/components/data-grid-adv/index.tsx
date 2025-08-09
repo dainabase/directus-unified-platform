@@ -1,302 +1,276 @@
 "use client";
 
 import * as React from "react";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getVisibilityState,
-  useReactTable,
-  ColumnFiltersState,
-  SortingState,
-  RowSelectionState,
-} from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { twMerge } from "tailwind-merge";
+import { useVirtual } from "@tanstack/react-virtual";
 import { Button } from "../button";
 import { Input } from "../input";
-import { Checkbox } from "../checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu";
-import { Select } from "../select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+} from "../dropdown-menu";
 
-export type Density = "compact" | "normal" | "spacious";
-
-export type RowAction<T> = {
-  id: string;
-  label: string;
-  onAction: (row: T) => void;
-};
-
-export type DataGridAdvProps<TData, TValue> = {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  className?: string;
-  virtualization?: boolean;
-  initialDensity?: Density;
-  actionsPerRow?: RowAction<TData>[];
-  onRowAction?: (actionId: string, row: TData) => void;
-  globalFilterPlaceholder?: string;
-};
-
-function exportCSV<T>(rows: T[], filename = "export.csv") {
-  if (!rows.length) return;
-  const headers = Object.keys(rows[0] as any);
-  const lines = rows.map((r: any) => headers.map((h) => JSON.stringify(r[h] ?? "")).join(","));
-  const csv = [headers.join(","), ...lines].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
+export interface Column<T> {
+  key: keyof T | string;
+  header: string;
+  width?: string;
+  align?: "left" | "center" | "right";
+  render?: (item: T, rowIndex: number) => React.ReactNode;
+  sortable?: boolean;
+  filterable?: boolean;
+  sticky?: boolean;
 }
 
-export function DataGridAdv<TData, TValue>({
-  columns,
+export interface DataGridAdvProps<T> {
+  columns: Column<T>[];
+  data: T[];
+  height?: number;
+  rowHeight?: number;
+  onSort?: (key: string, direction: "asc" | "desc") => void;
+  sortKey?: string;
+  sortDirection?: "asc" | "desc";
+  selectable?: boolean;
+  selectedRows?: Set<number>;
+  onSelectRow?: (index: number, selected: boolean) => void;
+  onSelectAll?: (selected: boolean) => void;
+  className?: string;
+  emptyMessage?: string;
+  enableColumnToggle?: boolean;
+  enableGlobalFilter?: boolean;
+  globalFilter?: string;
+  onGlobalFilterChange?: (value: string) => void;
+  enableExport?: boolean;
+  onExport?: (format: "csv" | "json") => void;
+}
+
+export function DataGridAdv<T extends Record<string, any>>({
+  columns: initialColumns,
   data,
+  height = 600,
+  rowHeight = 48,
+  onSort,
+  sortKey,
+  sortDirection,
+  selectable = false,
+  selectedRows = new Set(),
+  onSelectRow,
+  onSelectAll,
   className,
-  virtualization = true,
-  initialDensity = "normal",
-  actionsPerRow,
-  onRowAction,
-  globalFilterPlaceholder = "Search…",
-}: DataGridAdvProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
-  const [columnVisibility, setColumnVisibility] = React.useState(getVisibilityState({}));
+  emptyMessage = "Aucune donnée disponible",
+  enableColumnToggle = false,
+  enableGlobalFilter = false,
+  globalFilter = "",
+  onGlobalFilterChange,
+  enableExport = false,
+  onExport,
+}: DataGridAdvProps<T>) {
+  const [visibleColumns, setVisibleColumns] = React.useState<Set<string>>(
+    new Set(initialColumns.map((c) => String(c.key)))
+  );
 
-  const table = useReactTable({
-    data,
-    columns: React.useMemo(() => {
-      if (!actionsPerRow?.length) return columns;
-      // Ajoute une colonne Actions à la fin si demandée
-      return [
-        ...columns,
-        {
-          id: "__actions",
-          header: "Actions",
-          cell: ({ row }) => (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Actions ▾</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {actionsPerRow.map((a) => (
-                  <DropdownMenuItem
-                    key={a.id}
-                    onSelect={() => (onRowAction ? onRowAction(a.id, row.original) : a.onAction(row.original))}
-                  >
-                    {a.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ),
-          enableSorting: false,
-        } as ColumnDef<TData, any>,
-      ];
-    }, [columns, actionsPerRow, onRowAction]),
-    state: { sorting, globalFilter, columnFilters, rowSelection, columnVisibility },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
-    onColumnFiltersChange: setColumnFilters,
-    onRowSelectionChange: setRowSelection,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    enableRowSelection: true,
+  const columns = initialColumns.filter((c) =>
+    visibleColumns.has(String(c.key))
+  );
+
+  const parentRef = React.useRef<HTMLDivElement>(null);
+
+  const rowVirtualizer = useVirtual({
+    size: data.length,
+    parentRef,
+    estimateSize: React.useCallback(() => rowHeight, [rowHeight]),
+    overscan: 10,
   });
 
-  // Densité = hauteur des lignes
-  const rowHeights: Record<Density, number> = { compact: 34, normal: 42, spacious: 54 };
-  const [density, setDensity] = React.useState<Density>(initialDensity);
+  const handleSort = (key: string) => {
+    if (!onSort) return;
+    const newDirection =
+      sortKey === key && sortDirection === "asc" ? "desc" : "asc";
+    onSort(key, newDirection);
+  };
 
-  const parentRef = React.useRef<HTMLDivElement | null>(null);
-  const rows = table.getRowModel().rows;
+  const allSelected = data.length > 0 && selectedRows.size === data.length;
+  const someSelected = selectedRows.size > 0 && selectedRows.size < data.length;
 
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => rowHeights[density],
-    overscan: 12,
-    enabled: virtualization,
-  });
-
-  const virtualItems = virtualization ? rowVirtualizer.getVirtualItems() : rows.map((_, i) => ({ index: i }));
-
-  const pageInfo = {
-    page: table.getState().pagination.pageIndex + 1,
-    pageCount: table.getPageCount() || 1,
+  const toggleColumn = (key: string) => {
+    setVisibleColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
   };
 
   return (
-    <div className={twMerge("w-full space-y-3", className)}>
+    <div className={twMerge("flex flex-col gap-2", className)}>
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      {(enableGlobalFilter || enableColumnToggle || enableExport) && (
         <div className="flex items-center gap-2">
-          <Input
-            placeholder={globalFilterPlaceholder}
-            value={globalFilter ?? ""}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="w-64"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Colonnes ▾</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {table.getAllLeafColumns().map((col) => (
-                <DropdownMenuItem
-                  key={col.id}
-                  onSelect={(e) => {
-                    e.preventDefault();
-                    col.toggleVisibility();
-                  }}
-                >
-                  <span className="mr-2">
-                    <Checkbox
-                      checked={col.getIsVisible()}
-                      onCheckedChange={() => col.toggleVisibility()}
-                    />
-                  </span>
-                  {col.id}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Select
-            value={density}
-            onValueChange={(v) => setDensity(v as Density)}
-            items={[
-              { label: "Compact", value: "compact" },
-              { label: "Normal", value: "normal" },
-              { label: "Spacieux", value: "spacious" },
-            ]}
-            placeholder="Densité"
-          />
+          {enableGlobalFilter && (
+            <Input
+              placeholder="Rechercher..."
+              value={globalFilter}
+              onChange={(e) => onGlobalFilterChange?.(e.target.value)}
+              className="max-w-xs"
+            />
+          )}
+          <div className="ml-auto flex gap-2">
+            {enableColumnToggle && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    Colonnes
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {initialColumns.map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={String(column.key)}
+                      checked={visibleColumns.has(String(column.key))}
+                      onCheckedChange={() => toggleColumn(String(column.key))}
+                    >
+                      {column.header}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            {enableExport && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    Exporter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onSelect={() => onExport?.("csv")}>
+                    Export CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onExport?.("json")}>
+                    Export JSON
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
         </div>
+      )}
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            onClick={() => exportCSV(table.getFilteredRowModel().rows.map((r) => r.original))}
-          >
-            Export CSV
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => table.resetColumnFilters()}
-            title="Réinitialiser filtres"
-          >
-            Reset filtres
-          </Button>
-        </div>
-      </div>
-
-      {/* Table container */}
-      <div className="overflow-auto rounded-lg border border-border">
-        <table className="w-full text-sm">
-          <thead className="sticky top-0 z-10 bg-neutral-50 text-neutral-700">
-            {table.getHeaderGroups().map((hg) => (
-              <tr key={hg.id}>
-                <th className="px-2 py-2 w-8">
-                  <Checkbox
-                    checked={table.getIsAllPageRowsSelected()}
-                    onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-                    aria-label="Select all"
+      {/* Grid */}
+      <div className="overflow-auto rounded-lg border border-border dark:border-neutral-800">
+        <div className="relative">
+          {/* Header */}
+          <div className="sticky top-0 z-10 bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200">
+            <div className="flex">
+              {selectable && (
+                <div className="sticky left-0 z-20 flex w-12 items-center bg-neutral-50 px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someSelected;
+                    }}
+                    onChange={(e) => onSelectAll?.(e.target.checked)}
+                    className="h-4 w-4"
                   />
-                </th>
-                {hg.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="select-none px-3 py-2 text-left font-medium"
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                    {{{"asc":" ▲","desc":" ▼"}[header.column.getIsSorted() as string] ?? null}}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-
-          <tbody
-            ref={parentRef}
-            className="block max-h-[540px] overflow-auto"
-            style={{ position: "relative" }}
-          >
-            <tr style={{ height: virtualization ? rowVirtualizer.getTotalSize() : undefined }}>
-              <td colSpan={table.getAllLeafColumns().length + 1} style={{ padding: 0 }}>
-                <div style={{ position: "relative" }}>
-                  {virtualItems.map((vi: any) => {
-                    const row = rows[vi.index];
-                    if (!row) return null;
-                    return (
-                      <div
-                        key={row.id}
-                        data-index={vi.index}
-                        style={{
-                          position: virtualization ? "absolute" : "relative",
-                          transform: virtualization ? `translateY(${vi.start}px)` : undefined,
-                          height: rowHeights[density],
-                          width: "100%",
-                        }}
-                        className="border-b border-neutral-200"
-                      >
-                        <div className="table w-full">
-                          <div className="table-row">
-                            <div className="table-cell align-middle px-2 w-8">
-                              <Checkbox
-                                checked={row.getIsSelected()}
-                                onCheckedChange={(v) => row.toggleSelected(!!v)}
-                                aria-label="Select row"
-                              />
-                            </div>
-                            {row.getVisibleCells().map((cell) => (
-                              <div key={cell.id} className="table-cell align-middle px-3">
-                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              )}
+              {columns.map((column) => (
+                <div
+                  key={String(column.key)}
+                  className={twMerge(
+                    "flex items-center px-4 py-3 text-sm font-medium",
+                    column.align === "center" && "justify-center",
+                    column.align === "right" && "justify-end",
+                    column.sortable && "cursor-pointer select-none hover:bg-neutral-100",
+                    column.sticky && "sticky left-0 z-10 bg-neutral-50"
+                  )}
+                  style={{ width: column.width || "auto", minWidth: column.width }}
+                  onClick={() => column.sortable && handleSort(String(column.key))}
+                >
+                  {column.header}
+                  {column.sortable && sortKey === String(column.key) && (
+                    <span className="ml-1 text-xs">
+                      {sortDirection === "asc" ? "▲" : "▼"}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
-      {/* Footer / Pagination */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="text-sm text-neutral-600">
-          {Object.keys(rowSelection).length} sélectionné(s) • Page {pageInfo.page}/{pageInfo.pageCount}
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
-            «
-          </Button>
-          <Button variant="outline" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-            Prev
-          </Button>
-          <Button variant="outline" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-          <Button variant="outline" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
-            »
-          </Button>
+          {/* Body */}
+          <div
+            ref={parentRef}
+            className="relative"
+            style={{ height }}
+          >
+            <div
+              style={{
+                height: `${rowVirtualizer.totalSize}px`,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {rowVirtualizer.virtualItems.map((virtualRow) => {
+                const rowIndex = virtualRow.index;
+                const item = data[rowIndex];
+                const isSelected = selectedRows.has(rowIndex);
+
+                return (
+                  <div
+                    key={virtualRow.index}
+                    className={twMerge(
+                      "absolute left-0 top-0 flex w-full border-b border-neutral-200 dark:border-neutral-800",
+                      isSelected ? "bg-blue-50" : "bg-white hover:bg-neutral-50"
+                    )}
+                    style={{
+                      height: `${virtualRow.size}px`,
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    {selectable && (
+                      <div className="sticky left-0 z-10 flex w-12 items-center bg-inherit px-4">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => onSelectRow?.(rowIndex, e.target.checked)}
+                          className="h-4 w-4"
+                        />
+                      </div>
+                    )}
+                    {columns.map((column) => (
+                      <div
+                        key={String(column.key)}
+                        className={twMerge(
+                          "flex items-center px-4 text-sm",
+                          column.align === "center" && "justify-center",
+                          column.align === "right" && "justify-end",
+                          column.sticky && "sticky left-0 z-10 bg-inherit"
+                        )}
+                        style={{ width: column.width || "auto", minWidth: column.width }}
+                      >
+                        {column.render
+                          ? column.render(item, rowIndex)
+                          : (item[column.key as keyof T] as React.ReactNode)}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+
+            {data.length === 0 && (
+              <div className="flex h-full items-center justify-center">
+                <p className="text-sm text-neutral-500">{emptyMessage}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

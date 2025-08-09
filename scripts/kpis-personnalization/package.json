@@ -1,0 +1,29 @@
+{
+  "name": "kpis-personnalization",
+  "version": "1.0.0",
+  "description": "Script de personnalisation des KPIs par entreprise pour le Dashboard Premium V4",
+  "type": "module",
+  "main": "personnalize-kpis.js",
+  "scripts": {
+    "start": "node personnalize-kpis.js --clear",
+    "backup-kpis": "node personnalize-kpis.js --backup",
+    "clear-kpis": "node personnalize-kpis.js --clear",
+    "test-connection": "node test-connection.js"
+  },
+  "keywords": [
+    "directus",
+    "kpis",
+    "dashboard",
+    "metrics"
+  ],
+  "author": "Directus Team",
+  "license": "MIT",
+  "dependencies": {
+    "@directus/sdk": "^17.0.0",
+    "axios": "^1.11.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

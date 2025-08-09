@@ -100,7 +100,8 @@
       "Bash(else echo \"✅ Dépendances déjà installées\")",
       "Bash(if [ -f \"docker-compose.invoice-ninja.yml\" ])",
       "Bash(then [ -f \"docker-compose.yml\" ])",
-      "Bash(./test-erpnext.sh:*)"
+      "Bash(./test-erpnext.sh:*)",
+      "Bash(CONTAINER=\"erpnext-simple\")"
     ],
     "deny": []
   }

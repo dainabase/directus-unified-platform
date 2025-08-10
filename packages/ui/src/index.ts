@@ -61,6 +61,7 @@ export * from "./components/stepper";
 export * from "./components/pagination";
 export * from "./components/carousel";
 export * from "./components/color-picker";
+export * from "./components/file-upload";
 
 // Utilities
 export { cn } from "./lib/utils";

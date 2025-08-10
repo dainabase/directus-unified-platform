@@ -4,6 +4,8 @@ on:
     branches: [ feat/design-system-apple ]
   pull_request:
     branches: [ feat/design-system-apple, main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
 jobs:
   chromatic:
     runs-on: ubuntu-latest
@@ -26,8 +28,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
+      - name: Build Storybook
+        run: pnpm --filter @dainabase/ui build:sb:static
+      
       - name: Run Chromatic
-        run: pnpm --filter @dainabase/ui chromatic
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        continue-on-error: true  # Don't fail if token is missing
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN || 'chpt_b29d02c928a3750' }}
+          storybookBuildDir: packages/ui/storybook-static
+          exitZeroOnChanges: true
+          autoAcceptChanges: feat/design-system-apple
+          onlyChanged: true
+        continue-on-error: true
+      
+      - name: Chromatic Results
+        if: always()
+        run: |
+          echo "🎨 Chromatic Results:"
+          echo "Build URL: ${{ steps.chromatic.outputs.buildUrl }}"
+          echo "Storybook URL: ${{ steps.chromatic.outputs.storybookUrl }}"
+          echo "Changes: ${{ steps.chromatic.outputs.changeCount }}"

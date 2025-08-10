@@ -13,6 +13,7 @@ export const buttonVariants = cva(
         outline: "border border-border bg-white hover:bg-[rgba(0,0,0,0.04)]",
         link: "underline underline-offset-4 text-primary hover:opacity-80",
         destructive: "bg-danger-500 text-white hover:bg-danger-600",
+        success: "bg-success-500 text-white hover:bg-success-600",
       },
       size: {
         sm: "h-9 px-3",
@@ -36,8 +37,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        ref={ref}
         className={twMerge(buttonVariants({ variant, size }), className)}
+        ref={ref}
         {...props}
       />
     );

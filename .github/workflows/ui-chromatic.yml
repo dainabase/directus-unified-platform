@@ -4,6 +4,8 @@ on:
     branches: [ feat/design-system-apple ]
   pull_request:
     branches: [ feat/design-system-apple, main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
 jobs:
   chromatic:
     runs-on: ubuntu-latest
@@ -26,8 +28,51 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       
+      - name: Build Storybook
+        run: pnpm --filter @dainabase/ui build:sb:static
+      
       - name: Run Chromatic
-        run: pnpm --filter @dainabase/ui chromatic
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        continue-on-error: true  # Don't fail if token is missing
+        id: chromatic
+        uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN || 'chpt_3606195941442a3' }}
+          storybookBuildDir: packages/ui/storybook-static
+          # exitZeroOnChanges removed - now blocking on visual changes
+          autoAcceptChanges: feat/design-system-apple
+          onlyChanged: true
+      
+      - name: Chromatic Results
+        if: always()
+        run: |
+          echo "🎨 Chromatic Results:"
+          echo "Build URL: ${{ steps.chromatic.outputs.buildUrl }}"
+          echo "Storybook URL: ${{ steps.chromatic.outputs.storybookUrl }}"
+          echo "Changes: ${{ steps.chromatic.outputs.changeCount }}"
+          
+      - name: Comment PR with Chromatic URLs
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const chromatic = {
+              buildUrl: '${{ steps.chromatic.outputs.buildUrl }}',
+              storybookUrl: '${{ steps.chromatic.outputs.storybookUrl }}',
+              changes: '${{ steps.chromatic.outputs.changeCount }}'
+            };
+            
+            const body = `## 🎨 Chromatic Visual Testing
+            
+            | Status | Value |
+            |--------|-------|
+            | **Build** | [View Build](${chromatic.buildUrl}) |
+            | **Storybook** | [View Storybook](${chromatic.storybookUrl}) |
+            | **Changes Detected** | ${chromatic.changes || '0'} |
+            
+            ${chromatic.changes > 0 ? '⚠️ Visual changes detected - review required' : '✅ No visual changes detected'}`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

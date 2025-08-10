@@ -1,41 +1,49 @@
+// packages/ui/src/index.ts
+// Central export point for the Design System
+
 // Tokens
-export * from "./tokens";
+export { tokens } from "../tokens";
+export type { Tokens } from "../tokens";
 
-// Layout
-export * from "./components/app-shell";
-
-// Core Components
+// Core & Layout
 export * from "./components/button";
 export * from "./components/card";
-export * from "./components/dialog";
-export * from "./components/sheet";
+export * from "./components/app-shell";
 export * from "./components/tabs";
+export * from "./components/breadcrumbs";
 export * from "./components/dropdown-menu";
 export * from "./components/toast";
-export * from "./components/command-palette";
-export * from "./components/calendar";
-export * from "./components/date-picker";
-export * from "./components/date-range-picker";
 export * from "./components/icon";
 
-// Data Display
+// Data
 export * from "./components/data-grid";
 export * from "./components/data-grid-adv";
 
+// Overlays & Interactions
+export * from "./components/dialog";
+export * from "./components/sheet";
+export * from "./components/command-palette";
+
+// Date & Time
+export * from "./components/date-picker";
+// NOTE: Non implémentés → ne pas exporter (bloquait la publication)
+// export * from "./components/calendar";
+// export * from "./components/date-range-picker";
+
 // Forms
+export * from "./components/form";
 export * from "./components/input";
 export * from "./components/textarea";
 export * from "./components/select";
 export * from "./components/switch";
 export * from "./components/checkbox";
 
-// Charts
-export * from "./components/charts/line-chart";
-export * from "./components/charts/bar-chart";
-export * from "./components/charts/area-chart";
-export * from "./components/charts/donut-chart";
-export * from "./components/charts/radial-gauge";
-
-// Theme
+// Theming
 export * from "./theme/ThemeProvider";
 export * from "./components/theme-toggle";
+
+// Charts
+export * from "./components/charts";
+
+// Export Tailwind config for external usage (si nécessaire)
+// export { default as tailwindConfig } from "../tailwind.config";

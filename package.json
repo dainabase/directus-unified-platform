@@ -24,8 +24,10 @@
     "monitor": "node monitor-health.js",
     "test": "jest || echo 'Tests à configurer'",
     "test:watch": "jest --watch || echo 'Tests à configurer'",
-    "lint": "eslint src --ext .js,.jsx || echo 'Linting à configurer'",
-    "format": "prettier --write \"src/**/*.{js,jsx,css,md}\" || echo 'Prettier à configurer'",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md,mdx,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md,mdx,yml,yaml}\"",
     "migrate": "node migration/active/run-migration.js || echo 'Migration disponible'",
     "migrate:status": "node migration/reports/status/check-status.js || echo 'Status disponible'",
     "backup": "pnpm run backup:db && pnpm run backup:files",
@@ -33,7 +35,28 @@
     "backup:files": "node scripts/maintenance/backup-files.js || echo 'Script backup à créer'",
     "changeset": "changeset",
     "version-packages": "changeset version && pnpm install",
-    "release-packages": "pnpm -r --filter @dainabase/ui run prepublish && pnpm -r --filter @dainabase/ui publish --no-git-checks"
+    "release-packages": "pnpm -r --filter @dainabase/ui run prepublish && pnpm -r --filter @dainabase/ui publish --no-git-checks",
+    "prepare": "simple-git-hooks",
+    "pre-commit": "lint-staged"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm run pre-commit",
+    "commit-msg": "npx --no -- commitlint --edit $1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md,mdx}": [
+      "prettier --write"
+    ],
+    "*.{yml,yaml}": [
+      "prettier --write"
+    ],
+    "packages/ui/**/*.{ts,tsx}": [
+      "pnpm --filter @dainabase/ui typecheck"
+    ]
   },
   "dependencies": {
     "@directus/sdk": "^10.3.5",
@@ -56,10 +79,14 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "concurrently": "^8.0.1",
     "eslint": "^8.39.0",
     "jest": "^29.5.0",
+    "lint-staged": "^15.2.0",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "simple-git-hooks": "^2.9.0"
   }
 }

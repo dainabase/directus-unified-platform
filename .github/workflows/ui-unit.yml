@@ -1,0 +1,80 @@
+name: UI Unit Tests
+on:
+  push:
+    branches: [ feat/design-system-apple ]
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/ui-unit.yml'
+  pull_request:
+    branches: [ feat/design-system-apple, main, master ]
+    paths:
+      - 'packages/ui/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run unit tests with coverage
+        run: pnpm --filter @dainabase/ui test:ci
+        
+      - name: Generate coverage report
+        id: coverage
+        if: always()
+        run: |
+          cd packages/ui
+          COVERAGE=$(npx c8 report --reporter=text-summary | grep "Lines" | awk '{print $2}')
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "### 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Lines**: $COVERAGE" >> $GITHUB_STEP_SUMMARY
+          npx c8 report --reporter=text >> coverage-report.txt
+          cat coverage-report.txt >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ github.sha }}
+          path: |
+            packages/ui/coverage/
+            packages/ui/coverage-report.txt
+          retention-days: 30
+      
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const coverage = '${{ steps.coverage.outputs.coverage }}' || 'N/A';
+            
+            const body = `## 🧪 Unit Test Results
+            
+            | Metric | Value |
+            |--------|-------|
+            | **Test Status** | ${{ job.status }} |
+            | **Coverage** | ${coverage} |
+            
+            [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

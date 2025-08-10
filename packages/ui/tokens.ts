@@ -13,6 +13,14 @@ export const tokens = {
       DEFAULT: "#FF9F0A",
       foreground: "#FFFFFF",
     },
+    success: {
+      500: "#34C759", // Apple Green
+      600: "#2FB350",
+    },
+    danger: {
+      500: "#FF3B30", // Apple Red
+      600: "#E6342A",
+    },
     background: "#F5F5F7",
     foreground: "#1C1C1E",
     muted: "#D1D1D6",

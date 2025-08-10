@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+storybook-static/
+
+# Configs
+*.config.js
+*.config.ts
+vite.config.ts
+next.config.js
+tailwind.config.ts
+postcss.config.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+.turbo/
+.parcel-cache/
+
+# Environment
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Documentation
+docs/
+*.md
+
+# Generated files
+*.generated.ts
+*.generated.js
+
+# Migrations
+migrations/
+migration/
+
+# Public assets
+public/
+static/
+
+# Directus
+directus/
+.directus/
+
+# Package manager
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

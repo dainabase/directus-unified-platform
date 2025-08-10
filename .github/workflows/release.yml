@@ -9,6 +9,7 @@ permissions:
   contents: write
   pull-requests: write
   id-token: write
+  packages: write
 
 jobs:
   version_or_release:
@@ -19,18 +20,20 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Setup Node + pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
       
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
+          registry-url: 'https://npm.pkg.github.com'
       
-      - name: Install
-        run: pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       
       - name: Create or Publish Release PR
         id: changesets
@@ -40,5 +43,4 @@ jobs:
           publish: pnpm release-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Dé-commente si publication npm (Option 2):
-          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

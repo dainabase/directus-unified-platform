@@ -1,17 +1,77 @@
-import { Meta, Canvas, Story } from "@storybook/blocks";
+import { Meta, Canvas, Story, ArgsTable, Source } from "@storybook/blocks";
 import * as Stories from "./button.stories";
-<Meta of={Stories} />
+
+<Meta of={Stories} title="Core/Button" />
 
 # Button
-Bouton principal du DS. Utilise les **tokens** (pas de valeurs en dur).
 
-## Variants & Sizes
-- Variants: `default | ghost | outline | link | destructive`  
-- Sizes: `sm | md | lg | icon`
+Bouton principal du Design System. Utilise des **tokens** pour couleurs, radius et ombres. Accessible (focus visible, ARIA, clavier).
 
-<Canvas><Story of={Stories.Default} /></Canvas>
+<Canvas>
+  <Story of={Stories.Primary} />
+</Canvas>
 
-## A11y
-- Focus visible (`focus-visible:ring-2`)
+## Variants
+
+- `primary` (par défaut)
+- `secondary`
+- `outline`
+- `ghost`
+- `destructive` (usage parcimonieux)
+
+<Canvas>
+  <Story of={Stories.Variants} />
+</Canvas>
+
+## Tailles
+
+- `sm`, `md` (défaut), `lg`
+
+<Canvas>
+  <Story of={Stories.Sizes} />
+</Canvas>
+
+## Icônes
+
+Utiliser le composant `Icon` (lucide-react) à gauche/droite.
+
+<Canvas>
+  <Story of={Stories.WithIcon} />
+</Canvas>
+
+## Props
+
+<ArgsTable of={Stories.Primary} />
+
+## Accessibilité
+
 - Rôle natif `button`
-- Éviter les icônes seules sans `aria-label`
+- States `disabled` supportés
+- Focus visible via tokens
+- Utiliser un `<button type="button">` explicite pour éviter le submit implicite
+
+## Bonnes pratiques
+
+**Do**
+- Utiliser `variant` et `size` (aucun style inline)
+- Libellés concis et actionnables
+
+**Don't**
+- Empiler des icônes décoratives sans `aria-hidden`
+- Changer les couleurs hors tokens
+
+## Exemple
+
+<Source
+  code={`import { Button, Icon } from "@dainabase/ui";
+
+export function CTA() {
+  return (
+    <Button onClick={() => {}}>
+      <Icon name="Sparkles" className="mr-2" />
+      Essayer maintenant
+    </Button>
+  );
+}`}
+language="tsx"
+/>

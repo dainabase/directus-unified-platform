@@ -25,28 +25,53 @@ yarn add @dainabase/ui
 
 ### 1. Configure Tailwind
 
-Extend your `tailwind.config.ts` to use the design system tokens:
+Use the design system tokens in your `tailwind.config.ts`:
 
 ```ts
-import { tailwindConfig } from "@dainabase/ui/tailwind.config";
+import type { Config } from "tailwindcss";
+import { tokens } from "@dainabase/ui/tokens";
 
 export default {
-  ...tailwindConfig,
   content: [
     "./src/**/*.{ts,tsx}",
-    "./node_modules/@dainabase/ui/src/**/*.{ts,tsx}"
+    "./node_modules/@dainabase/ui/dist/**/*.{js,ts}"
   ],
-  // Your overrides here
-};
+  theme: {
+    extend: {
+      colors: tokens.colors,
+      borderRadius: tokens.radius,
+      spacing: tokens.spacing,
+      boxShadow: tokens.shadow,
+      fontFamily: { 
+        sans: [tokens.font.sans, "sans-serif"] 
+      }
+    }
+  },
+  plugins: []
+} satisfies Config;
 ```
 
-### 2. Import styles
+### 2. Setup Font (Next.js example)
 
-In your root CSS file:
+```tsx
+// app/layout.tsx
+import { Montserrat } from "next/font/google";
 
-```css
-@import "@dainabase/ui/src/globals.css";
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  variable: "--font-sans"
+});
+
+export default function RootLayout({ children }) {
+  return (
+    <html className={montserrat.variable}>
+      <body>{children}</body>
+    </html>
+  );
+}
 ```
+
+For other frameworks, load Montserrat and set the CSS variable `--font-sans`.
 
 ### 3. Setup Theme Provider
 
@@ -62,6 +87,18 @@ function App() {
     </ThemeProvider>
   );
 }
+```
+
+### 4. Import base styles
+
+Add to your global CSS:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: Add any custom global styles */
 ```
 
 ## Usage
@@ -87,6 +124,14 @@ function MyComponent() {
 - **Date**: Calendar, DatePicker, DateRangePicker
 - **Charts**: LineChart, BarChart, AreaChart, DonutChart, RadialGauge
 - **Utils**: CommandPalette, ThemeToggle, Icon
+
+## TypeScript
+
+Full TypeScript support with exported types:
+
+```tsx
+import type { ButtonProps, CardProps } from "@dainabase/ui";
+```
 
 ## Features
 

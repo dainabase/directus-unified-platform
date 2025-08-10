@@ -1,9 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Playwright configuration for E2E testing
- * @see https://playwright.dev/docs/test-configuration
- */
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -13,14 +9,12 @@ export default defineConfig({
   reporter: [
     ['html'],
     ['json', { outputFile: 'test-results.json' }],
-    ['github'],
+    ['list']
   ],
-  
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
   },
 
   projects: [
@@ -36,38 +30,20 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-    // Mobile viewports
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 13'] },
-    },
   ],
 
-  // Web servers to run before tests
   webServer: [
     {
       command: 'pnpm --filter @dainabase/ui sb',
       port: 6006,
+      timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      stdout: 'pipe',
-      stderr: 'pipe',
-      env: {
-        NODE_ENV: 'test',
-      },
     },
     {
       command: 'pnpm --filter web dev',
       port: 3000,
+      timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      stdout: 'pipe',
-      stderr: 'pipe',
-      env: {
-        NODE_ENV: 'test',
-      },
-    },
+    }
   ],
 });

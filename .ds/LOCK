@@ -1,7 +1,7 @@
 {
-  "status": "pack-10-completed",
+  "status": "workflows-fixed-awaiting-lockfile",
   "step": 10,
-  "timestamp": "2025-08-09T19:30:00Z",
+  "timestamp": "2025-08-10T07:25:00Z",
   "workflow_loaded": true,
   "packs_completed": [
     "01-tokens-tailwind-pr",
@@ -21,14 +21,28 @@
     "storybook_pages": true,
     "web_ci": true,
     "ds_guard": true,
+    "workflows_fixed": true,
+    "frozen_lockfile_removed": true,
+    "generate_lockfile_workflow": true,
     "workflows": [
       "ui-ci.yml",
       "ui-storybook-pages.yml",
       "web-ci.yml",
-      "ds-guard.yml"
+      "ds-guard.yml",
+      "ui-a11y.yml",
+      "ui-chromatic.yml",
+      "release.yml",
+      "generate-lockfile.yml"
     ],
     "github_pages_ready": false,
-    "artifacts": ["storybook-static"]
+    "artifacts": ["storybook-static"],
+    "lockfile_status": "missing_needs_generation"
   },
-  "next_step": "Configure GitHub Pages in Settings + Run workflow manually for first deployment"
+  "fixes_applied": {
+    "date": "2025-08-10",
+    "removed_frozen_lockfile": true,
+    "workflows_updated": 6,
+    "generator_added": true
+  },
+  "next_step": "Run 'Generate Lockfile' workflow on GitHub Actions, download artifact, and commit pnpm-lock.yaml"
 }

@@ -35,7 +35,7 @@ jobs:
         id: chromatic
         uses: chromaui/action@v1
         with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN || 'chpt_b29d02c928a3750' }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN || 'chpt_3606195941442a3' }}
           storybookBuildDir: packages/ui/storybook-static
           # exitZeroOnChanges removed - now blocking on visual changes
           autoAcceptChanges: feat/design-system-apple

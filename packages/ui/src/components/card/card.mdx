@@ -1,12 +1,53 @@
-import { Meta, Canvas, Story } from "@storybook/blocks";
+import { Meta, Canvas, Story, ArgsTable, Source } from "@storybook/blocks";
 import * as Stories from "./card.stories";
-<Meta of={Stories} />
+
+<Meta of={Stories} title="Core/Card" />
 
 # Card
-Conteneur avec **élévation douce** et séparateurs.
 
-<Canvas><Story of={Stories.Example} /></Canvas>
+Conteneur visuel pour grouper du contenu. Respecte les tokens (radius, shadow, border, background) et gère le **dark mode**.
 
-## A11y
-- Titres (`h3`) descriptifs
-- Contrastes conformes (tokens)
+<Canvas>
+  <Story of={Stories.Basic} />
+</Canvas>
+
+## Composition
+
+- `Card`
+- `CardHeader`
+- `CardTitle`
+- `CardDescription`
+- `CardContent`
+- `CardFooter`
+
+<Canvas>
+  <Story of={Stories.Composition} />
+</Canvas>
+
+## Accessibilité
+
+- Structure sémantique libre (rôles non imposés)
+- Contrastes conformes via tokens
+- Pas d'`h1` multiple : utiliser `CardTitle` sous un seul `h1` par page
+
+## Props
+
+<ArgsTable of={Stories.Basic} />
+
+## Exemple
+
+<Source
+  code={`import { Card, CardHeader, CardTitle, CardContent } from "@dainabase/ui";
+
+export function MetricCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Revenu (M-1)</CardTitle>
+      </CardHeader>
+      <CardContent className="text-2xl font-semibold">€ 128 420</CardContent>
+    </Card>
+  );
+}`}
+language="tsx"
+/>

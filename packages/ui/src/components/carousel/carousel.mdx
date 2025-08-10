@@ -1,0 +1,412 @@
+import { Meta, Canvas, Controls, Story } from '@storybook/blocks'
+import * as CarouselStories from './carousel.stories'
+
+<Meta of={CarouselStories} />
+
+# Carousel
+
+A feature-rich carousel component with support for touch gestures, autoplay, multiple animation types, and various display modes. Perfect for image galleries, testimonials, product showcases, and hero sections.
+
+## Features
+
+- 🎯 **Multiple animation types**: Slide, Fade, and Scale transitions
+- 📱 **Touch/Swipe support**: Native mobile gesture support
+- ⏯️ **Autoplay**: Automatic progression with play/pause controls
+- 🎨 **4 variants**: Default, Cards, Fullscreen, and Thumbnail
+- ⌨️ **Keyboard navigation**: Arrow keys for navigation
+- ♿ **Accessibility**: WCAG compliant with ARIA labels
+- 🔄 **Infinite loop**: Optional continuous scrolling
+- 📏 **Multi-slide display**: Show multiple items at once
+- 🎛️ **Customizable controls**: Custom arrows and dots
+
+## Import
+
+```tsx
+import { Carousel } from '@dainabase/ui'
+```
+
+## Basic Usage
+
+<Canvas of={CarouselStories.Default} />
+
+## Animation Types
+
+### Slide Animation (Default)
+
+The classic sliding carousel animation.
+
+<Canvas of={CarouselStories.Default} />
+
+### Fade Animation
+
+Smooth fade transition between slides.
+
+<Canvas of={CarouselStories.FadeAnimation} />
+
+### Scale Animation
+
+Combination of fade and scale effects.
+
+<Canvas of={CarouselStories.ScaleAnimation} />
+
+## Autoplay
+
+Enable automatic slide progression with customizable intervals.
+
+<Canvas of={CarouselStories.Autoplay} />
+
+## Multiple Slides
+
+Display multiple slides simultaneously with custom gaps.
+
+<Canvas of={CarouselStories.MultipleSlides} />
+
+## Variants
+
+### Default Variant
+
+Standard carousel presentation.
+
+<Canvas of={CarouselStories.Default} />
+
+### Cards Variant
+
+Optimized for card-based content with padding.
+
+<Canvas of={CarouselStories.CardsVariant} />
+
+### Hero Carousel
+
+Full-width hero section with call-to-action buttons.
+
+<Canvas of={CarouselStories.HeroCarousel} />
+
+## Custom Controls
+
+### Custom Arrows
+
+Replace default arrows with custom components.
+
+<Canvas of={CarouselStories.CustomArrows} />
+
+### Custom Dots
+
+Customize dot indicators appearance.
+
+<Canvas of={CarouselStories.CustomDots} />
+
+## Use Cases
+
+### Testimonials
+
+Perfect for displaying customer testimonials.
+
+<Canvas of={CarouselStories.Testimonials} />
+
+### Product Gallery
+
+Showcase products with multi-slide display.
+
+<Canvas of={CarouselStories.ProductGallery} />
+
+### Responsive Design
+
+Adapts to different screen sizes.
+
+<Canvas of={CarouselStories.MobileResponsive} />
+
+## API Reference
+
+<Controls />
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `CarouselItem[]` | - | Array of carousel items (required) |
+| `activeIndex` | `number` | - | Controlled active slide index |
+| `onChange` | `(index: number) => void` | - | Callback when slide changes |
+| `autoplay` | `boolean` | `false` | Enable automatic progression |
+| `autoplayInterval` | `number` | `5000` | Time between slides (ms) |
+| `pauseOnHover` | `boolean` | `true` | Pause autoplay on hover |
+| `showArrows` | `boolean` | `true` | Show navigation arrows |
+| `showDots` | `boolean` | `true` | Show dot indicators |
+| `showPlayPause` | `boolean` | `false` | Show play/pause button |
+| `loop` | `boolean` | `true` | Enable infinite loop |
+| `keyboard` | `boolean` | `true` | Enable keyboard navigation |
+| `touch` | `boolean` | `true` | Enable touch/swipe |
+| `swipeThreshold` | `number` | `50` | Minimum swipe distance (px) |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Carousel direction |
+| `animation` | `'slide' \| 'fade' \| 'scale'` | `'slide'` | Animation type |
+| `animationDuration` | `number` | `300` | Animation duration (ms) |
+| `slidesToShow` | `number` | `1` | Slides visible at once |
+| `slidesToScroll` | `number` | `1` | Slides to scroll |
+| `gap` | `number` | `0` | Gap between slides (px) |
+| `variant` | `'default' \| 'cards' \| 'fullscreen' \| 'thumbnail'` | `'default'` | Visual variant |
+| `renderArrow` | `function` | - | Custom arrow renderer |
+| `renderDot` | `function` | - | Custom dot renderer |
+
+### CarouselItem Interface
+
+```tsx
+interface CarouselItem {
+  id: string | number
+  content: React.ReactNode
+  caption?: string
+  alt?: string
+}
+```
+
+## Usage Examples
+
+### Basic Image Carousel
+
+```tsx
+const imageItems: CarouselItem[] = [
+  {
+    id: 1,
+    content: <img src="/image1.jpg" alt="Slide 1" />,
+    caption: "Beautiful landscape"
+  },
+  {
+    id: 2,
+    content: <img src="/image2.jpg" alt="Slide 2" />,
+    caption: "City skyline"
+  }
+]
+
+function MyCarousel() {
+  return (
+    <Carousel
+      items={imageItems}
+      className="w-full h-[400px]"
+    />
+  )
+}
+```
+
+### Controlled Carousel
+
+```tsx
+function ControlledCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  
+  return (
+    <>
+      <Carousel
+        items={items}
+        activeIndex={activeIndex}
+        onChange={setActiveIndex}
+      />
+      <div className="mt-4">
+        Current slide: {activeIndex + 1}
+      </div>
+    </>
+  )
+}
+```
+
+### Autoplay with Controls
+
+```tsx
+function AutoplayCarousel() {
+  return (
+    <Carousel
+      items={items}
+      autoplay
+      autoplayInterval={3000}
+      pauseOnHover
+      showPlayPause
+    />
+  )
+}
+```
+
+### Multi-Item Carousel
+
+```tsx
+function ProductCarousel() {
+  return (
+    <Carousel
+      items={productItems}
+      slidesToShow={3}
+      slidesToScroll={1}
+      gap={16}
+      variant="cards"
+    />
+  )
+}
+```
+
+### Custom Navigation
+
+```tsx
+function CustomCarousel() {
+  return (
+    <Carousel
+      items={items}
+      renderArrow={(direction, onClick, disabled) => (
+        <button
+          onClick={onClick}
+          disabled={disabled}
+          className="custom-arrow"
+        >
+          {direction === 'prev' ? '←' : '→'}
+        </button>
+      )}
+      renderDot={(index, isActive, onClick) => (
+        <button
+          onClick={onClick}
+          className={isActive ? 'dot-active' : 'dot'}
+        />
+      )}
+    />
+  )
+}
+```
+
+### Responsive Carousel
+
+```tsx
+function ResponsiveCarousel() {
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
+  
+  return (
+    <Carousel
+      items={items}
+      slidesToShow={isMobile ? 1 : isTablet ? 2 : 3}
+      showArrows={!isMobile}
+      touch={isMobile}
+    />
+  )
+}
+```
+
+## Accessibility
+
+The Carousel component is built with accessibility in mind:
+
+- ✅ **ARIA labels**: Proper labeling for screen readers
+- ✅ **Keyboard navigation**: Arrow keys for slide navigation
+- ✅ **Focus management**: Proper focus states and tab order
+- ✅ **Motion preferences**: Respects prefers-reduced-motion
+- ✅ **Semantic HTML**: Uses appropriate roles and attributes
+- ✅ **Touch gestures**: Accessible swipe gestures on mobile
+
+### Keyboard Shortcuts
+
+- `←` / `↑`: Previous slide
+- `→` / `↓`: Next slide
+- `Space`: Play/pause (when autoplay is enabled)
+
+## Performance Considerations
+
+- **Lazy loading**: Images should use lazy loading for better performance
+- **Optimized animations**: Hardware-accelerated CSS transforms
+- **Touch optimization**: Passive event listeners for smooth scrolling
+- **Memory management**: Cleanup of intervals and event listeners
+- **Reduced motion**: Respects user's motion preferences
+
+## Best Practices
+
+1. **Image optimization**: Use optimized images with appropriate sizes
+2. **Lazy loading**: Implement lazy loading for images not immediately visible
+3. **Touch support**: Enable touch for mobile devices
+4. **Keyboard navigation**: Keep keyboard navigation enabled for accessibility
+5. **Autoplay considerations**: Use autoplay sparingly and always with controls
+6. **Content structure**: Ensure consistent content structure across slides
+7. **Performance**: Limit the number of slides for better performance
+8. **Accessibility**: Always provide alt text for images
+
+## Design Tokens
+
+The component uses the following design tokens:
+
+- `--radius`: Border radius for cards variant
+- `--primary`: Active dot color
+- `--muted`: Inactive control colors
+- `--background`: Background color
+- `--foreground`: Text color
+
+## Styling
+
+The Carousel component can be styled using:
+
+- `className`: Apply custom styles to the container
+- CSS variables: Override design tokens
+- Tailwind classes: Use utility classes for customization
+
+### Example Custom Styling
+
+```css
+.custom-carousel {
+  --carousel-height: 500px;
+  --carousel-gap: 1rem;
+  --carousel-arrow-size: 3rem;
+  --carousel-dot-size: 0.75rem;
+}
+
+.custom-carousel .carousel-arrow {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.custom-carousel .carousel-dot {
+  transition: all 0.3s ease;
+}
+
+.custom-carousel .carousel-dot.active {
+  transform: scale(1.5);
+}
+```
+
+## Common Patterns
+
+### Hero Slider
+
+```tsx
+<Carousel
+  items={heroSlides}
+  variant="fullscreen"
+  animation="fade"
+  autoplay
+  autoplayInterval={7000}
+  showPlayPause
+/>
+```
+
+### Product Gallery
+
+```tsx
+<Carousel
+  items={products}
+  variant="cards"
+  slidesToShow={4}
+  slidesToScroll={1}
+  gap={16}
+  loop
+/>
+```
+
+### Testimonials
+
+```tsx
+<Carousel
+  items={testimonials}
+  animation="fade"
+  autoplay
+  showArrows={false}
+/>
+```
+
+### Image Thumbnails
+
+```tsx
+<Carousel
+  items={thumbnails}
+  variant="thumbnail"
+  slidesToShow={5}
+  gap={8}
+/>
+```

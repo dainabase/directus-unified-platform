@@ -1,0 +1,370 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as FileUploadStories from './file-upload.stories';
+
+<Meta of={FileUploadStories} />
+
+# FileUpload
+
+A comprehensive file upload component with drag-and-drop support, file preview, progress tracking, validation, and chunked upload capabilities.
+
+## Features
+
+- 📁 **Drag & Drop**: Native drag-and-drop file selection
+- 🖼️ **Image Preview**: Automatic thumbnail generation for images
+- 📊 **Progress Tracking**: Real-time upload progress indicators
+- ✅ **Validation**: File type, size, and custom validation rules
+- 🔄 **Chunked Upload**: Split large files into chunks for reliable uploads
+- 🎯 **Multiple Variants**: Default, compact, and card layouts
+- ♻️ **Retry Logic**: Failed upload retry capability
+- 🗑️ **File Management**: Remove files before/after upload
+- 📱 **Responsive**: Works on all screen sizes
+- ♿ **Accessible**: Full keyboard and screen reader support
+
+## Usage
+
+```tsx
+import { FileUpload } from '@dainabase/ui';
+
+function App() {
+  const [files, setFiles] = useState([]);
+  
+  const handleUpload = async (files) => {
+    // Upload logic here
+    await uploadToServer(files);
+  };
+  
+  return (
+    <FileUpload
+      multiple
+      accept="image/*,.pdf"
+      maxSize={10 * 1024 * 1024} // 10MB
+      onChange={setFiles}
+      onUpload={handleUpload}
+      label="Upload documents"
+      description="Drag files here or click to browse"
+    />
+  );
+}
+```
+
+## Examples
+
+### Default
+
+Basic file upload with drag-and-drop support.
+
+<Canvas>
+  <Story of={FileUploadStories.Default} />
+</Canvas>
+
+### Controlled Component
+
+Fully controlled file upload with state management.
+
+<Canvas>
+  <Story of={FileUploadStories.Controlled} />
+</Canvas>
+
+### File Types
+
+#### Single File
+<Canvas>
+  <Story of={FileUploadStories.SingleFile} />
+</Canvas>
+
+#### Multiple Files
+<Canvas>
+  <Story of={FileUploadStories.MultipleFiles} />
+</Canvas>
+
+#### Image Upload with Preview
+<Canvas>
+  <Story of={FileUploadStories.ImageUpload} />
+</Canvas>
+
+#### Document Upload
+<Canvas>
+  <Story of={FileUploadStories.DocumentUpload} />
+</Canvas>
+
+### Variants
+
+Different visual layouts for various use cases.
+
+#### Compact Variant
+<Canvas>
+  <Story of={FileUploadStories.CompactVariant} />
+</Canvas>
+
+#### Card Variant
+<Canvas>
+  <Story of={FileUploadStories.CardVariant} />
+</Canvas>
+
+### Upload Modes
+
+#### Auto Upload
+Files upload automatically upon selection.
+<Canvas>
+  <Story of={FileUploadStories.AutoUpload} />
+</Canvas>
+
+#### Manual Upload
+Requires explicit upload action.
+<Canvas>
+  <Story of={FileUploadStories.ManualUpload} />
+</Canvas>
+
+#### Chunked Upload
+Large files split into chunks for reliable upload.
+<Canvas>
+  <Story of={FileUploadStories.ChunkedUpload} />
+</Canvas>
+
+### Validation
+
+#### Size Limits
+<Canvas>
+  <Story of={FileUploadStories.WithSizeLimits} />
+</Canvas>
+
+#### Custom Validation
+<Canvas>
+  <Story of={FileUploadStories.CustomValidation} />
+</Canvas>
+
+### Complete Example
+
+A fully-featured file upload system.
+
+<Canvas>
+  <Story of={FileUploadStories.CompleteExample} />
+</Canvas>
+
+### Drag & Drop Demo
+
+Interactive drag-and-drop demonstration.
+
+<Canvas>
+  <Story of={FileUploadStories.DragDropDemo} />
+</Canvas>
+
+## Props
+
+<Controls />
+
+## API Reference
+
+### FileUpload Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `accept` | `string` | - | Accepted file types (e.g., "image/*,.pdf") |
+| `multiple` | `boolean` | `false` | Allow multiple file selection |
+| `maxFiles` | `number` | `10` | Maximum number of files |
+| `maxSize` | `number` | `10485760` | Maximum file size in bytes (10MB) |
+| `minSize` | `number` | `0` | Minimum file size in bytes |
+| `disabled` | `boolean` | `false` | Disable the upload component |
+| `label` | `string` | `"Upload files"` | Upload area label |
+| `description` | `string` | `"Drag and drop..."` | Upload area description |
+| `className` | `string` | - | Additional CSS classes |
+| `variant` | `"default" \| "compact" \| "card"` | `"default"` | Visual variant |
+| `showPreview` | `boolean` | `true` | Show image previews |
+| `showProgress` | `boolean` | `true` | Show upload progress |
+| `showFileList` | `boolean` | `true` | Show file list |
+| `allowRemove` | `boolean` | `true` | Allow file removal |
+| `allowRetry` | `boolean` | `true` | Allow retry on failure |
+| `autoUpload` | `boolean` | `false` | Auto-upload on selection |
+| `chunked` | `boolean` | `false` | Enable chunked upload |
+| `chunkSize` | `number` | `1048576` | Chunk size in bytes (1MB) |
+| `onUpload` | `(files: FileItem[]) => Promise<void>` | - | Upload handler |
+| `onChange` | `(files: FileItem[]) => void` | - | Change handler |
+| `onRemove` | `(file: FileItem) => void` | - | Remove handler |
+| `onError` | `(error: string, file?: FileItem) => void` | - | Error handler |
+| `validateFile` | `(file: File) => string \| null` | - | Custom validation |
+
+### FileItem Interface
+
+```typescript
+interface FileItem {
+  id: string;
+  file: File;
+  status: "idle" | "uploading" | "success" | "error";
+  progress: number;
+  error?: string;
+  preview?: string;
+  uploaded?: boolean;
+}
+```
+
+### File Categories
+
+The component automatically categorizes and icons files:
+
+```typescript
+const FILE_CATEGORIES = {
+  image: ["jpg", "jpeg", "png", "gif", "svg", "webp"],
+  video: ["mp4", "avi", "mov", "wmv", "mkv", "webm"],
+  audio: ["mp3", "wav", "ogg", "flac", "aac"],
+  document: ["pdf", "doc", "docx", "xls", "xlsx", "ppt"],
+  archive: ["zip", "rar", "7z", "tar", "gz"],
+  code: ["js", "ts", "jsx", "tsx", "css", "html", "json"]
+};
+```
+
+## Validation
+
+### Built-in Validation
+
+- **File Type**: Via `accept` prop (MIME types or extensions)
+- **File Size**: Via `minSize` and `maxSize` props
+- **File Count**: Via `maxFiles` prop
+
+### Custom Validation
+
+```tsx
+<FileUpload
+  validateFile={(file) => {
+    // Custom validation logic
+    if (file.name.length < 5) {
+      return "File name too short";
+    }
+    if (file.name.includes("temp")) {
+      return "Temporary files not allowed";
+    }
+    return null; // Valid file
+  }}
+/>
+```
+
+## Upload Handling
+
+### Simple Upload
+
+```tsx
+const handleUpload = async (files) => {
+  const formData = new FormData();
+  files.forEach(item => {
+    formData.append('files', item.file);
+  });
+  
+  await fetch('/api/upload', {
+    method: 'POST',
+    body: formData
+  });
+};
+```
+
+### Chunked Upload
+
+```tsx
+const handleChunkedUpload = async (files) => {
+  for (const fileItem of files) {
+    const chunks = Math.ceil(fileItem.file.size / chunkSize);
+    
+    for (let i = 0; i < chunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, fileItem.file.size);
+      const chunk = fileItem.file.slice(start, end);
+      
+      await uploadChunk(chunk, i, chunks);
+    }
+  }
+};
+```
+
+## Accessibility
+
+The FileUpload component follows WAI-ARIA guidelines:
+
+- ✅ Keyboard navigation support
+- ✅ ARIA labels and descriptions
+- ✅ Focus management
+- ✅ Screen reader announcements
+- ✅ Drag-and-drop with keyboard alternative
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Space` / `Enter` | Open file browser |
+| `Delete` | Remove selected file |
+| `Tab` | Navigate between files |
+| `Escape` | Cancel current operation |
+
+## Browser Support
+
+### Drag & Drop
+- ✅ All modern browsers
+- ✅ Mobile browsers (with file input fallback)
+
+### File Preview
+- ✅ Images: All browsers
+- ⚠️ PDF: Browser-dependent
+- ❌ Office files: Not supported (icons only)
+
+## Best Practices
+
+1. **Set Appropriate Limits**: Configure reasonable file size and count limits
+2. **Provide Clear Feedback**: Show upload progress and errors clearly
+3. **Validate Early**: Use client-side validation to catch issues before upload
+4. **Handle Errors Gracefully**: Provide retry options and clear error messages
+5. **Consider Network**: Use chunked upload for large files or slow connections
+6. **Preview When Possible**: Show image previews to confirm selection
+7. **Accessibility First**: Ensure keyboard navigation works properly
+
+## Examples with Different Use Cases
+
+### Profile Picture Upload
+
+```tsx
+<FileUpload
+  accept="image/*"
+  multiple={false}
+  maxSize={5 * 1024 * 1024} // 5MB
+  variant="compact"
+  showPreview={true}
+  label="Upload avatar"
+  validateFile={(file) => {
+    const img = new Image();
+    // Additional image dimension validation
+    return null;
+  }}
+/>
+```
+
+### Document Management
+
+```tsx
+<FileUpload
+  accept=".pdf,.doc,.docx"
+  multiple={true}
+  maxFiles={20}
+  showFileList={true}
+  allowRemove={true}
+  onUpload={async (files) => {
+    // Upload to document management system
+  }}
+/>
+```
+
+### Bulk Image Upload
+
+```tsx
+<FileUpload
+  accept="image/*"
+  multiple={true}
+  showPreview={true}
+  chunked={true}
+  autoUpload={true}
+  onUpload={async (files) => {
+    // Process and optimize images
+  }}
+/>
+```
+
+## Related Components
+
+- [Button](/?path=/docs/components-core-button--docs) - Used for upload triggers
+- [Progress](/?path=/docs/components-feedback-progress--docs) - Upload progress display
+- [Card](/?path=/docs/components-layout-card--docs) - Card variant container

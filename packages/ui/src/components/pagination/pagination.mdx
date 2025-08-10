@@ -1,0 +1,285 @@
+import { Meta, Canvas, Controls, Story } from '@storybook/blocks'
+import * as PaginationStories from './pagination.stories'
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+A flexible and accessible pagination component for navigating through pages of content. Supports multiple variants, page size selection, direct page navigation, and extensive customization options.
+
+## Features
+
+- 🎨 **Three variants**: Default, Compact, and Dots
+- 📏 **Multiple sizes**: Small, Medium, and Large
+- 🔢 **Smart page range**: Automatic ellipsis for large page counts
+- 📱 **Responsive design**: Different variants for different screen sizes
+- ♿ **WCAG AAA compliant**: Full keyboard navigation and screen reader support
+- 🌍 **i18n ready**: Customizable labels for internationalization
+- ⚡ **Performance optimized**: Memoized calculations for large datasets
+
+## Import
+
+```tsx
+import { Pagination } from '@dainabase/ui'
+```
+
+## Basic Usage
+
+<Canvas of={PaginationStories.Default} />
+
+## Variants
+
+### Default Variant
+
+The default variant shows page numbers with navigation controls.
+
+<Canvas of={PaginationStories.Default} />
+
+### Compact Variant
+
+Perfect for mobile interfaces or when space is limited.
+
+<Canvas of={PaginationStories.Compact} />
+
+### Dots Variant
+
+Minimalist design using dots to represent pages.
+
+<Canvas of={PaginationStories.Dots} />
+
+## Advanced Features
+
+### With All Features
+
+Demonstrates all available features including page size selector, page jumper, and total count.
+
+<Canvas of={PaginationStories.WithAllFeatures} />
+
+### Page Size Selector
+
+Allow users to change the number of items displayed per page.
+
+<Canvas of={PaginationStories.WithPageSizeSelector} />
+
+### Page Jumper
+
+Enable direct navigation to a specific page number.
+
+<Canvas of={PaginationStories.WithPageJumper} />
+
+## Handling Large Page Counts
+
+The component intelligently handles large numbers of pages using ellipsis.
+
+<Canvas of={PaginationStories.ManyPages} />
+
+## Sizes
+
+### Small Size
+
+<Canvas of={PaginationStories.SmallSize} />
+
+### Medium Size (Default)
+
+<Canvas of={PaginationStories.Default} />
+
+### Large Size
+
+<Canvas of={PaginationStories.LargeSize} />
+
+## Internationalization
+
+Customize all text labels for different languages.
+
+<Canvas of={PaginationStories.CustomLabels} />
+
+## Integration Examples
+
+### Table Integration
+
+A complete example showing pagination with a data table.
+
+<Canvas of={PaginationStories.TableIntegration} />
+
+### Responsive Design
+
+Different variants for different screen sizes.
+
+<Canvas of={PaginationStories.ResponsiveExample} />
+
+## API Reference
+
+<Controls />
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `currentPage` | `number` | `1` | Current active page (1-indexed) |
+| `totalPages` | `number` | - | Total number of pages (required) |
+| `pageSize` | `number` | `10` | Number of items per page |
+| `totalItems` | `number` | - | Total number of items |
+| `pageSizes` | `number[]` | `[10, 20, 30, 50, 100]` | Available page size options |
+| `onPageChange` | `(page: number) => void` | - | Callback when page changes |
+| `onPageSizeChange` | `(pageSize: number) => void` | - | Callback when page size changes |
+| `siblingCount` | `number` | `1` | Number of sibling pages to show |
+| `boundaryCount` | `number` | `1` | Number of boundary pages to show |
+| `showFirstLast` | `boolean` | `true` | Show first/last navigation buttons |
+| `showPageSize` | `boolean` | `false` | Show page size selector |
+| `showPageJumper` | `boolean` | `false` | Show page jumper input |
+| `showTotal` | `boolean` | `false` | Show total items count |
+| `variant` | `'default' \| 'compact' \| 'dots'` | `'default'` | Visual variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of controls |
+| `labels` | `object` | See below | Custom text labels |
+
+### Label Customization
+
+```tsx
+interface PaginationLabels {
+  first?: string       // Default: "First"
+  previous?: string    // Default: "Previous"
+  next?: string        // Default: "Next"
+  last?: string        // Default: "Last"
+  page?: string        // Default: "Page"
+  of?: string          // Default: "of"
+  items?: string       // Default: "items"
+  itemsPerPage?: string // Default: "Items per page"
+  goToPage?: string    // Default: "Go to page"
+}
+```
+
+## Usage Examples
+
+### Basic Pagination
+
+```tsx
+function MyComponent() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = 10
+
+  return (
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+    />
+  )
+}
+```
+
+### With Page Size Control
+
+```tsx
+function MyTable() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const totalItems = 248
+  const totalPages = Math.ceil(totalItems / pageSize)
+
+  return (
+    <>
+      <Table data={currentData} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        totalItems={totalItems}
+        onPageChange={setCurrentPage}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize)
+          setCurrentPage(1) // Reset to page 1
+        }}
+        showPageSize
+        showTotal
+      />
+    </>
+  )
+}
+```
+
+### Responsive Pagination
+
+```tsx
+function ResponsivePagination() {
+  const isMobile = useMediaQuery('(max-width: 640px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
+
+  return (
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+      variant={isMobile ? 'dots' : isTablet ? 'compact' : 'default'}
+      showFirstLast={!isMobile}
+      showPageJumper={!isMobile && !isTablet}
+    />
+  )
+}
+```
+
+### Custom Labels (i18n)
+
+```tsx
+const frenchLabels = {
+  first: 'Premier',
+  previous: 'Précédent',
+  next: 'Suivant',
+  last: 'Dernier',
+  page: 'Page',
+  of: 'sur',
+  items: 'éléments',
+  itemsPerPage: 'Éléments par page',
+  goToPage: 'Aller à la page'
+}
+
+function FrenchPagination() {
+  return (
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+      labels={frenchLabels}
+    />
+  )
+}
+```
+
+## Accessibility
+
+The Pagination component is built with accessibility in mind:
+
+- ✅ **ARIA labels**: All interactive elements have proper ARIA labels
+- ✅ **Keyboard navigation**: Full keyboard support with Tab, Enter, and Space keys
+- ✅ **Screen reader support**: Announces current page and navigation state
+- ✅ **Focus management**: Clear focus indicators and logical tab order
+- ✅ **Semantic HTML**: Uses proper `<nav>` element with role="navigation"
+- ✅ **Current page indication**: Uses `aria-current="page"` for active page
+- ✅ **Disabled states**: Properly indicates disabled navigation buttons
+
+## Design Tokens
+
+The component uses the following design tokens:
+
+- `--radius`: Border radius for buttons
+- `--primary`: Primary color for active page
+- `--muted`: Background for inactive elements
+- `--border`: Border color for inputs and buttons
+- `--foreground`: Text color
+- `--background`: Background color
+
+## Performance Considerations
+
+- **Memoized calculations**: Page range calculations are memoized to avoid unnecessary recalculations
+- **Controlled component**: Can be controlled for optimal state management
+- **Lazy rendering**: Only renders visible page numbers, using ellipsis for hidden ranges
+- **Event delegation**: Uses single event handlers for multiple buttons when possible
+
+## Best Practices
+
+1. **Always provide total pages**: The `totalPages` prop is required for the component to function
+2. **Reset page on size change**: When changing page size, reset to page 1 to avoid invalid states
+3. **Use appropriate variant**: Choose variant based on available space and use case
+4. **Consider mobile users**: Use compact or dots variant for mobile interfaces
+5. **Provide context**: Use `showTotal` to give users context about the data set
+6. **Enable direct navigation**: For large datasets, enable `showPageJumper`
+7. **Optimize for performance**: For very large datasets, consider server-side pagination

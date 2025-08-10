@@ -1,12 +1,40 @@
-import { Meta, Canvas, Story } from "@storybook/blocks";
+import { Meta, Canvas, Story, ArgsTable, Source } from "@storybook/blocks";
 import * as Stories from "./dialog.stories";
-<Meta of={Stories} />
+
+<Meta of={Stories} title="Overlay/Dialog" />
 
 # Dialog
-Modale accessible via **Radix Dialog**.
 
-<Canvas><Story of={Stories.Basic} /></Canvas>
+Fenêtre modale basée sur Radix Dialog. Focus trap, retour de focus, fermeture via `Esc`, support clavier complet.
 
-## Conseils
-- Utiliser `DialogTitle` + `DialogDescription` pour a11y.
-- Focus piégé automatiquement.
+<Canvas>
+  <Story of={Stories.Basic} />
+</Canvas>
+
+## Accessibilité
+
+- Géré par Radix : focus trap + aria-labelledby/aria-describedby
+- Fournir un titre (`DialogTitle`) concis
+- Éviter les contenus défilants trop longs (préférer `Dialog.Description` + scroll interne)
+
+## Props
+
+<ArgsTable of={Stories.Basic} />
+
+## Exemple
+
+<Source
+  code={`import { Dialog } from "@dainabase/ui";
+
+export function Confirm() {
+  return (
+    <Dialog
+      title="Supprimer l'élément ?"
+      description="Cette action est irréversible."
+      triggerLabel="Supprimer"
+      onConfirm={() => {/* ... */}}
+    />
+  );
+}`}
+language="tsx"
+/>

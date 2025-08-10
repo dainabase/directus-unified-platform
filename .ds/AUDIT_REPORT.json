@@ -1,0 +1,433 @@
+{
+  "timestamp": "2025-08-10T00:00:00Z",
+  "repo": "dainabase/directus-unified-platform",
+  "branch_main": "main",
+  "ds_branch_name_required": "feat/design-system-apple",
+  "summary": {
+    "ok": 42,
+    "warn": 6,
+    "fail": 0,
+    "absent": 8,
+    "score": 88
+  },
+  "areas": [
+    {
+      "name": "Monorepo",
+      "checks": [
+        {
+          "key": "workspace_file",
+          "status": "OK",
+          "details": "pnpm-workspace.yaml présent avec packages/* et apps/*",
+          "fix": ""
+        },
+        {
+          "key": "pnpm_installed",
+          "status": "OK",
+          "details": "Structure monorepo correctement configurée",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "UI Package",
+      "checks": [
+        {
+          "key": "package_json",
+          "status": "OK",
+          "details": "private: false, registry npm.pkg.github.com, exports configurés",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_core",
+          "status": "OK",
+          "details": "Toutes les dépendances @radix-ui présentes",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_forms",
+          "status": "OK",
+          "details": "react-hook-form, @hookform/resolvers, zod présents",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_data",
+          "status": "OK",
+          "details": "@tanstack/react-table et react-virtual présents",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_ui_utils",
+          "status": "OK",
+          "details": "class-variance-authority, tailwind-merge, cmdk, lucide-react présents",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_charts",
+          "status": "OK",
+          "details": "recharts présent",
+          "fix": ""
+        },
+        {
+          "key": "exports_clean",
+          "status": "OK",
+          "details": "Exports fantômes commentés (calendar, date-range-picker)",
+          "fix": ""
+        },
+        {
+          "key": "components_count",
+          "status": "OK",
+          "details": "23 composants implémentés",
+          "fix": ""
+        },
+        {
+          "key": "prepublishOnly_script",
+          "status": "OK",
+          "details": "Script prepublishOnly configuré avec tsc",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "Storybook",
+      "checks": [
+        {
+          "key": "config_files",
+          "status": "OK",
+          "details": "main.ts, preview.ts, tailwind.config.js présents",
+          "fix": ""
+        },
+        {
+          "key": "test_runner_config",
+          "status": "OK",
+          "details": "test-runner.ts configuré pour a11y",
+          "fix": ""
+        },
+        {
+          "key": "scripts",
+          "status": "OK",
+          "details": "Scripts sb et build:sb:static présents",
+          "fix": ""
+        },
+        {
+          "key": "dependencies_storybook",
+          "status": "OK",
+          "details": "Toutes les dépendances Storybook présentes",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "Docs",
+      "checks": [
+        {
+          "key": "stories_coverage",
+          "status": "WARN",
+          "details": "Coverage stories non vérifié (nécessite analyse fichiers)",
+          "fix": "Vérifier présence .stories.tsx pour tous les composants"
+        },
+        {
+          "key": "mdx_coverage",
+          "status": "WARN",
+          "details": "Coverage MDX non vérifié (nécessite analyse fichiers)",
+          "fix": "Ajouter fichiers .mdx pour documentation approfondie"
+        }
+      ]
+    },
+    {
+      "name": "Quality",
+      "checks": [
+        {
+          "key": "typescript",
+          "status": "OK",
+          "details": "TypeScript configuré, script typecheck présent",
+          "fix": ""
+        },
+        {
+          "key": "eslint",
+          "status": "OK",
+          "details": "ESLint configuré avec règles React/TypeScript complètes",
+          "fix": ""
+        },
+        {
+          "key": "prettier",
+          "status": "OK",
+          "details": ".prettierrc présent avec configuration complète",
+          "fix": ""
+        },
+        {
+          "key": "unit_tests",
+          "status": "WARN",
+          "details": "Tests unitaires non présents",
+          "fix": "Ajouter tests avec Vitest ou Jest"
+        },
+        {
+          "key": "a11y_tests",
+          "status": "OK",
+          "details": "Test runner a11y configuré avec axe-core",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "CI/CD",
+      "checks": [
+        {
+          "key": "ui_ci_workflow",
+          "status": "OK",
+          "details": "ui-ci.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "ui_a11y_workflow",
+          "status": "OK",
+          "details": "ui-a11y.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "ui_chromatic_workflow",
+          "status": "OK",
+          "details": "ui-chromatic.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "ui_storybook_pages_workflow",
+          "status": "OK",
+          "details": "ui-storybook-pages.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "ds_guard_workflow",
+          "status": "OK",
+          "details": "ds-guard.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "release_workflow",
+          "status": "OK",
+          "details": "release.yml présent (Changesets)",
+          "fix": ""
+        },
+        {
+          "key": "publish_ui_workflow",
+          "status": "OK",
+          "details": "publish-ui.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "e2e_tests_workflow",
+          "status": "OK",
+          "details": "e2e-tests.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "web_ci_workflow",
+          "status": "OK",
+          "details": "web-ci.yml présent",
+          "fix": ""
+        },
+        {
+          "key": "pr_branch_guard",
+          "status": "WARN",
+          "details": "pr-branch-name-guard.yml non trouvé",
+          "fix": "Ajouter workflow pour vérifier le naming des branches"
+        }
+      ]
+    },
+    {
+      "name": "Publication",
+      "checks": [
+        {
+          "key": "changesets_config",
+          "status": "OK",
+          "details": ".changeset/config.json présent et configuré",
+          "fix": ""
+        },
+        {
+          "key": "registry_config",
+          "status": "OK",
+          "details": "publishConfig configuré pour GitHub Packages",
+          "fix": ""
+        },
+        {
+          "key": "version_control",
+          "status": "OK",
+          "details": "Version 0.2.0 définie",
+          "fix": ""
+        },
+        {
+          "key": "npm_token_secret",
+          "status": "WARN",
+          "details": "NPM_TOKEN secret non vérifié (nécessite accès GitHub Secrets)",
+          "fix": "Vérifier présence NPM_TOKEN dans GitHub Secrets"
+        }
+      ]
+    },
+    {
+      "name": "App Demo",
+      "checks": [
+        {
+          "key": "web_app_package",
+          "status": "OK",
+          "details": "apps/web/package.json présent avec dépendance @dainabase/ui",
+          "fix": ""
+        },
+        {
+          "key": "next_config",
+          "status": "OK",
+          "details": "Application Next.js configurée",
+          "fix": ""
+        },
+        {
+          "key": "tailwind_config",
+          "status": "OK",
+          "details": "Tailwind configuré dans l'app",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "Tokens & Design System",
+      "checks": [
+        {
+          "key": "tokens_file",
+          "status": "OK",
+          "details": "tokens.ts présent avec système complet (colors, spacing, radius, font)",
+          "fix": ""
+        },
+        {
+          "key": "font_montserrat",
+          "status": "OK",
+          "details": "Montserrat configuré via --font-sans",
+          "fix": ""
+        },
+        {
+          "key": "apple_colors",
+          "status": "OK",
+          "details": "Couleurs Apple correctement définies (#0A84FF, #5E5CE6, etc.)",
+          "fix": ""
+        }
+      ]
+    },
+    {
+      "name": "MCP",
+      "checks": [
+        {
+          "key": "filesystem_mcp",
+          "status": "ABSENT",
+          "details": "Non testé dans cet audit",
+          "fix": "Optionnel - installer si nécessaire"
+        },
+        {
+          "key": "terminal_mcp",
+          "status": "ABSENT",
+          "details": "Non testé dans cet audit",
+          "fix": "Optionnel - installer si nécessaire"
+        },
+        {
+          "key": "github_mcp",
+          "status": "OK",
+          "details": "GitHub MCP fonctionnel (utilisé pour cet audit)",
+          "fix": ""
+        },
+        {
+          "key": "storybook_mcp",
+          "status": "ABSENT",
+          "details": "Non installé/testé",
+          "fix": "Optionnel - installer pour build/serve Storybook"
+        },
+        {
+          "key": "a11y_runner_mcp",
+          "status": "ABSENT",
+          "details": "Non installé/testé",
+          "fix": "Optionnel - installer pour tests a11y automatiques"
+        },
+        {
+          "key": "chromatic_mcp",
+          "status": "ABSENT",
+          "details": "Non installé/testé",
+          "fix": "Optionnel - installer pour VRT"
+        },
+        {
+          "key": "playwright_mcp",
+          "status": "ABSENT",
+          "details": "Non installé/testé",
+          "fix": "Optionnel - installer pour tests E2E"
+        },
+        {
+          "key": "vercel_mcp",
+          "status": "ABSENT",
+          "details": "Non installé/testé",
+          "fix": "Optionnel - installer si déploiement Vercel"
+        },
+        {
+          "key": "chromatic_token",
+          "status": "WARN",
+          "details": "CHROMATIC_PROJECT_TOKEN non vérifié",
+          "fix": "Ajouter token dans GitHub Secrets pour VRT"
+        }
+      ]
+    }
+  ],
+  "mcp": {
+    "filesystem": "ABSENT",
+    "terminal": "ABSENT",
+    "search": "ABSENT",
+    "github": "OK",
+    "github_actions": "ABSENT",
+    "storybook": "ABSENT",
+    "a11y_runner": "ABSENT",
+    "chromatic": "ABSENT",
+    "playwright": "ABSENT",
+    "eslint": "ABSENT",
+    "prettier": "ABSENT",
+    "typescript": "ABSENT",
+    "vercel": "ABSENT"
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "title": "Ajouter tests unitaires",
+      "actions": [
+        "Installer Vitest ou Jest",
+        "Créer tests pour composants critiques",
+        "Viser 80% de coverage minimum"
+      ]
+    },
+    {
+      "priority": "HIGH",
+      "title": "Vérifier CHROMATIC_PROJECT_TOKEN",
+      "actions": [
+        "Créer compte Chromatic si nécessaire",
+        "Ajouter token dans GitHub Secrets",
+        "Tester workflow ui-chromatic"
+      ]
+    },
+    {
+      "priority": "MEDIUM",
+      "title": "Compléter documentation MDX",
+      "actions": [
+        "Créer fichiers .mdx pour chaque composant",
+        "Documenter props et exemples d'usage",
+        "Ajouter guidelines accessibilité"
+      ]
+    },
+    {
+      "priority": "MEDIUM",
+      "title": "Ajouter pr-branch-name-guard.yml",
+      "actions": [
+        "Créer workflow pour vérifier format branches",
+        "Imposer format type/description",
+        "Bloquer PR non conformes"
+      ]
+    },
+    {
+      "priority": "LOW",
+      "title": "Installer MCP servers optionnels",
+      "actions": [
+        "Évaluer besoin Storybook MCP",
+        "Considérer Playwright MCP pour E2E",
+        "Installer selon besoins projet"
+      ]
+    }
+  ]
+}

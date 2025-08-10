@@ -1,15 +1,10 @@
 Category,Name,Installed,Version,Auth,LatencyMs,TestCommand,TestResult,Error
-Core,GitHub,Yes,1.0.0,OK,125,github.getRepo('dainabase/directus-unified-platform'),PASS,
-Core,Docker,Yes,1.0.0,OK,45,docker.version(),PASS,
-Core,Directus,Yes,1.0.0,OK,89,directus.ping(),PASS,
-Core,ERPNext,Yes,1.0.0,OK,156,erpnext.getDoctypes(),PASS,
-Core,Chromatic,Yes,1.0.0,NO,N/A,chromatic.getProject(),FAIL,Missing CHROMATIC_PROJECT_TOKEN
-Development,Desktop Commander,Yes,1.0.0,OK,23,desktop.getConfig(),PASS,
-Development,Playwright,Yes,1.0.0,OK,67,playwright.browser_snapshot(),PASS,
-Development,Puppeteer,Yes,1.0.0,OK,78,puppeteer.puppeteer_navigate('about:blank'),PASS,
-Development,Filesystem,Yes,1.0.0,OK,12,filesystem.list_allowed_directories(),PASS,
-Development,MCP Finder,Yes,1.0.0,OK,34,mcp.find_mcp('github'),PASS,
-Optional,Vercel,Partial,1.0.0,NO,N/A,vercel.projects.list(),FAIL,Token expired
-Optional,Slack,No,N/A,N/A,N/A,N/A,NOT_INSTALLED,Not configured
-Optional,Linear,No,N/A,N/A,N/A,N/A,NOT_INSTALLED,Not configured
-Testing,Memory,Yes,1.0.0,OK,5,memory.read_graph(),PASS,
+Critical,GitHub,Yes,Latest,OK,95,search_repositories,OK,-
+Critical,Docker,Yes,Latest,OK,187,checkRepository,OK,-
+Critical,Chromatic,Partial,Latest,NO,-,-,FAIL,Token missing
+Target,Directus,Yes,Latest,OK,142,list_collections,OK,-
+Target,ERPNext,Yes,Latest,OK,198,get_doctypes,OK,-
+Target,Playwright,Yes,Latest,OK,73,browser_close,OK,-
+Target,Puppeteer,Yes,Latest,OK,89,close_session,OK,-
+Optional,Vercel,No,-,-,-,-,N/A,Not configured
+Optional,Slack,No,-,-,-,-,N/A,Not configured

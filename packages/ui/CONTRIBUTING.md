@@ -1,241 +1,137 @@
-# 🤝 Contributing to @dainabase/ui
+# Contributing to @dainabase/ui
 
-First off, thank you for considering contributing to our Design System! 🎉
+Thank you for your interest in contributing to our Design System! This guide will help you get started.
 
-## 📋 Table of Contents
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [How to Contribute](#how-to-contribute)
-- [Component Development](#component-development)
-- [Testing Guidelines](#testing-guidelines)
-- [Documentation](#documentation)
-- [Pull Request Process](#pull-request-process)
-- [Style Guide](#style-guide)
+## 🚀 Quick Start
 
-## 📜 Code of Conduct
-
-This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code.
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js >= 18.0.0
-- pnpm >= 8.0.0
-- Git
-
-### Installation
 ```bash
 # Clone the repository
 git clone https://github.com/dainabase/directus-unified-platform.git
-cd directus-unified-platform
+cd directus-unified-platform/packages/ui
 
 # Install dependencies
 pnpm install
 
-# Navigate to the UI package
-cd packages/ui
-
-# Start development
-pnpm dev
-```
-
-## 🛠️ Development Setup
-
-### Environment Setup
-```bash
-# Install dependencies
-pnpm install
-
-# Build the Design System
-pnpm build
-
-# Run Storybook for development
+# Start Storybook for development
 pnpm sb
 
-# Run tests
-pnpm test
-
-# Run linting
-pnpm lint
-
-# Format code
-pnpm format
+# Run tests in watch mode
+pnpm test:watch
 ```
 
-### Project Structure
-```
-packages/ui/
-├── src/
-│   ├── components/      # Component implementations
-│   │   ├── [component]/
-│   │   │   ├── index.tsx
-│   │   │   ├── [component].tsx
-│   │   │   ├── [component].stories.tsx
-│   │   │   ├── [component].test.tsx
-│   │   │   └── [component].mdx
-│   ├── lib/             # Utilities and helpers
-│   └── index.ts         # Main exports
-├── tokens.ts            # Design tokens
-└── tailwind.config.ts   # Tailwind configuration
-```
+## 📋 Development Workflow
 
-## 🎯 How to Contribute
+### 1. Creating a New Component
 
-### Types of Contributions
-
-#### 🐛 Bug Reports
-- Use the bug report template
-- Include reproduction steps
-- Provide system information
-- Include screenshots if applicable
-
-#### ✨ Feature Requests
-- Use the feature request template
-- Explain the use case
-- Provide examples
-- Consider backwards compatibility
-
-#### 🔧 Code Contributions
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Write/update tests
-5. Update documentation
-6. Submit a pull request
-
-## 🎨 Component Development
-
-### Creating a New Component
-
-1. **Plan the Component**
-   - Define props interface
-   - Consider accessibility
-   - Plan variants and states
-   - Review existing patterns
-
-2. **Create Component Structure**
 ```bash
-# Use the component generator
-pnpm create:component ComponentName
+# Use the component template
+mkdir src/components/YourComponent
+touch src/components/YourComponent/YourComponent.tsx
+touch src/components/YourComponent/YourComponent.stories.tsx
+touch src/components/YourComponent/YourComponent.test.tsx
+touch src/components/YourComponent/index.ts
 ```
 
-This creates:
-- `ComponentName/index.tsx` - Component export
-- `ComponentName/ComponentName.tsx` - Implementation
-- `ComponentName/ComponentName.stories.tsx` - Storybook stories
-- `ComponentName/ComponentName.test.tsx` - Unit tests
-- `ComponentName/ComponentName.mdx` - Documentation
+### 2. Component Requirements
 
-3. **Implementation Checklist**
-- [ ] TypeScript types defined
-- [ ] Props documented with JSDoc
-- [ ] Accessibility attributes (ARIA)
-- [ ] Keyboard navigation
-- [ ] Theme support (dark/light)
-- [ ] Responsive design
-- [ ] RTL support ready
-- [ ] Performance optimized
+Every component must have:
+- ✅ TypeScript implementation (.tsx)
+- ✅ Storybook stories (.stories.tsx)
+- ✅ Unit tests (.test.tsx)
+- ✅ Proper TypeScript types
+- ✅ JSDoc documentation
+- ✅ Accessibility compliance (WCAG AAA)
 
-### Component Guidelines
+### 3. Component Template
 
-#### Props
-```typescript
-interface ComponentProps {
-  /** Visual style variant */
-  variant?: 'primary' | 'secondary' | 'outline';
-  
-  /** Size of the component */
-  size?: 'sm' | 'md' | 'lg';
-  
-  /** Additional CSS classes */
-  className?: string;
-  
-  /** Accessibility label */
-  'aria-label'?: string;
-}
-```
-
-#### Styling
-- Use Tailwind classes via `cn()` utility
-- Follow design tokens
-- Support dark mode
-- Ensure responsive behavior
-
-#### Example Component
-```typescript
+```tsx
+// YourComponent.tsx
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { ComponentProps } from './types';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-export const Component = React.forwardRef<
+const yourComponentVariants = cva(
+  'base-classes',
+  {
+    variants: {
+      variant: {
+        default: 'default-classes',
+        secondary: 'secondary-classes',
+      },
+      size: {
+        sm: 'small-classes',
+        md: 'medium-classes',
+        lg: 'large-classes',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
+);
+
+export interface YourComponentProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof yourComponentVariants> {
+  /** Additional prop documentation */
+  customProp?: string;
+}
+
+/**
+ * YourComponent displays...
+ * 
+ * @example
+ * <YourComponent variant="secondary" size="lg">
+ *   Content
+ * </YourComponent>
+ */
+export const YourComponent = React.forwardRef<
   HTMLDivElement,
-  ComponentProps
->(({ className, variant = 'primary', ...props }, ref) => {
+  YourComponentProps
+>(({ className, variant, size, ...props }, ref) => {
   return (
     <div
       ref={ref}
-      className={cn(
-        'base-styles',
-        variants[variant],
-        className
-      )}
+      className={cn(yourComponentVariants({ variant, size }), className)}
       {...props}
     />
   );
 });
 
-Component.displayName = 'Component';
+YourComponent.displayName = 'YourComponent';
 ```
 
 ## 🧪 Testing Guidelines
 
-### Test Requirements
-- Minimum 90% coverage
-- Test all props and variants
-- Test accessibility
-- Test keyboard navigation
-- Test error states
-
-### Test Structure
-```typescript
+### Unit Tests
+```tsx
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Component } from './Component';
+import { YourComponent } from './YourComponent';
 
-describe('Component', () => {
+describe('YourComponent', () => {
   it('renders correctly', () => {
-    render(<Component>Content</Component>);
-    expect(screen.getByText('Content')).toBeInTheDocument();
+    render(<YourComponent>Test</YourComponent>);
+    expect(screen.getByText('Test')).toBeInTheDocument();
   });
-
-  it('handles user interaction', async () => {
-    const user = userEvent.setup();
-    const onClick = vi.fn();
-    
-    render(<Component onClick={onClick}>Click me</Component>);
-    await user.click(screen.getByText('Click me'));
-    
-    expect(onClick).toHaveBeenCalledTimes(1);
-  });
-
-  it('is accessible', () => {
-    const { container } = render(<Component aria-label="Test" />);
-    expect(container.firstChild).toHaveAttribute('aria-label', 'Test');
+  
+  it('applies variant classes', () => {
+    const { container } = render(
+      <YourComponent variant="secondary">Test</YourComponent>
+    );
+    expect(container.firstChild).toHaveClass('secondary-classes');
   });
 });
 ```
 
-## 📚 Documentation
-
 ### Storybook Stories
-```typescript
+```tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { Component } from './Component';
+import { YourComponent } from './YourComponent';
 
-const meta: Meta<typeof Component> = {
-  title: 'Components/Component',
-  component: Component,
+const meta: Meta<typeof YourComponent> = {
+  title: 'Components/YourComponent',
+  component: YourComponent,
   parameters: {
     layout: 'centered',
   },
@@ -243,7 +139,7 @@ const meta: Meta<typeof Component> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline'],
+      options: ['default', 'secondary'],
     },
   },
 };
@@ -253,127 +149,133 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Component',
+    children: 'Your Component',
   },
 };
 
 export const AllVariants: Story = {
   render: () => (
     <div className="flex gap-4">
-      <Component variant="primary">Primary</Component>
-      <Component variant="secondary">Secondary</Component>
-      <Component variant="outline">Outline</Component>
+      <YourComponent>Default</YourComponent>
+      <YourComponent variant="secondary">Secondary</YourComponent>
     </div>
   ),
 };
 ```
 
-### MDX Documentation
-- Include usage examples
-- Document all props
-- Provide accessibility notes
-- Include do's and don'ts
-- Add migration guides if breaking changes
+## 📏 Code Standards
+
+### TypeScript
+- Strict mode enabled
+- All props must be typed
+- Use interfaces over types for component props
+- Export types that consumers might need
+
+### Styling
+- Use Tailwind classes only
+- No inline styles
+- Use design tokens from `tokens.ts`
+- Follow mobile-first responsive design
+
+### Accessibility
+- WCAG AAA compliance required
+- Proper ARIA labels
+- Keyboard navigation support
+- Screen reader friendly
+
+### Performance
+- Components should be under 5KB gzipped
+- Use React.memo for expensive components
+- Lazy load heavy dependencies
+- Implement proper code splitting
 
 ## 🔄 Pull Request Process
 
-### Before Submitting
-1. **Check existing PRs** to avoid duplicates
-2. **Update from main** to avoid conflicts
-3. **Run all checks locally**:
+### 1. Before Submitting
+
 ```bash
+# Run all checks
 pnpm lint
 pnpm typecheck
-pnpm test
+pnpm test:ci
 pnpm build
+pnpm size
 ```
 
-### PR Requirements
-- [ ] Clear, descriptive title
-- [ ] Description of changes
-- [ ] Link to related issue
-- [ ] Tests added/updated
+### 2. PR Requirements
+
+- [ ] Descriptive title following conventional commits
+- [ ] Clear description of changes
+- [ ] Tests pass with >95% coverage
+- [ ] No bundle size regression (check with `pnpm size`)
+- [ ] Storybook stories added/updated
 - [ ] Documentation updated
-- [ ] No breaking changes (or documented)
-- [ ] Screenshots for UI changes
+- [ ] Screenshots for visual changes
 
-### PR Title Format
+### 3. PR Title Format
+
 ```
-type(scope): description
-
-Examples:
-feat(button): add loading state
-fix(dialog): resolve focus trap issue
-docs(select): update usage examples
-perf(data-grid): optimize rendering
+feat(component): add new YourComponent
+fix(button): resolve hover state issue
+docs(readme): update installation instructions
+perf(lazy): optimize lazy loading strategy
 ```
 
-### Review Process
-1. Automated checks must pass
-2. Code review by maintainer
-3. Design review for UI changes
-4. Accessibility review if applicable
-5. Performance review for large changes
+## 🎨 Design Tokens
 
-## 🎨 Style Guide
+Always use design tokens from `tokens.ts`:
 
-### Code Style
-- TypeScript strict mode
-- ESLint configuration
-- Prettier formatting
-- Import sorting
+```tsx
+// Good ✅
+className="text-foreground bg-background"
 
-### Git Commit Messages
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
+// Bad ❌
+className="text-gray-900 bg-white"
 ```
 
-Types:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation
-- `style`: Formatting
-- `refactor`: Code restructuring
-- `perf`: Performance
-- `test`: Testing
-- `chore`: Maintenance
+## 📦 Bundle Size
 
-### Component Naming
-- PascalCase for components
-- camelCase for utilities
-- kebab-case for files
-- SCREAMING_SNAKE_CASE for constants
+Keep bundle size under control:
 
-### File Organization
-```
-ComponentName/
-├── index.ts                    # Exports
-├── ComponentName.tsx           # Implementation
-├── ComponentName.types.ts      # TypeScript types
-├── ComponentName.stories.tsx   # Storybook
-├── ComponentName.test.tsx      # Tests
-├── ComponentName.mdx          # Documentation
-└── ComponentName.module.css   # Styles (if needed)
+```bash
+# Check component size
+pnpm size
+
+# If adding new dependency
+# 1. Consider if it's really needed
+# 2. Check its size impact
+# 3. Consider making it a peer dependency
+# 4. Implement lazy loading if >5KB
 ```
 
-## 🏆 Recognition
+## 🐛 Reporting Issues
 
-Contributors are recognized in:
-- README.md contributors section
-- GitHub contributors page
-- Release notes
-- Component documentation
+### Bug Reports
+Include:
+- Component name and version
+- Reproduction steps
+- Expected vs actual behavior
+- Code sandbox link if possible
+
+### Feature Requests
+Include:
+- Use case description
+- Proposed API
+- Examples from other libraries
+- Mockups if applicable
+
+## 📚 Resources
+
+- [Storybook](https://dainabase.github.io/directus-unified-platform/)
+- [Design Tokens](./tokens.ts)
+- [Tailwind Config](./tailwind.config.ts)
+- [Component Guidelines](./COMPONENT_GUIDELINES.md)
 
 ## 💬 Getting Help
 
-- **Discord**: [Join our community](https://discord.gg/dainabase)
-- **GitHub Issues**: For bugs and features
-- **GitHub Discussions**: For questions
-- **Email**: dev@dainabase.com
+- GitHub Issues: [Bug Reports & Features](https://github.com/dainabase/directus-unified-platform/issues)
+- Email: support@dainamics.ch
+- Discord: [Join our community](https://discord.gg/dainamics)
 
 ## 📄 License
 
@@ -381,6 +283,4 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
-Thank you for contributing to @dainabase/ui! 🙏
-
-Your efforts help make our Design System better for everyone.
+Thank you for contributing to @dainabase/ui! 🎉

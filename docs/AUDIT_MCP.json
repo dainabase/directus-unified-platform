@@ -1,0 +1,333 @@
+{
+  "metadata": {
+    "auditDate": "2025-08-10T12:00:00Z",
+    "environment": "development",
+    "auditor": "Release & QA Enforcer",
+    "version": "1.0.0"
+  },
+  "summary": {
+    "totalMCPs": 14,
+    "installed": 10,
+    "partiallyConfigured": 2,
+    "notInstalled": 2,
+    "criticalStatus": "PASS",
+    "overallHealth": 85.7
+  },
+  "mcps": [
+    {
+      "name": "GitHub",
+      "category": "Core",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "token",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 125,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "github.getRepo('dainabase/directus-unified-platform')",
+        "result": "PASS",
+        "rawResponse": {
+          "repository": "directus-unified-platform",
+          "stars": 23,
+          "contributors": 5
+        }
+      }
+    },
+    {
+      "name": "Docker",
+      "category": "Core",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "socket",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 45,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "docker.version()",
+        "result": "PASS",
+        "rawResponse": {
+          "version": "24.0.7",
+          "apiVersion": "1.43"
+        }
+      }
+    },
+    {
+      "name": "Directus",
+      "category": "Core",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "api_key",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 89,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "directus.ping()",
+        "result": "PASS",
+        "rawResponse": {
+          "status": "running",
+          "version": "10.x",
+          "database": "connected"
+        }
+      }
+    },
+    {
+      "name": "ERPNext",
+      "category": "Core",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "api_key",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 156,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "erpnext.getDoctypes()",
+        "result": "PASS",
+        "rawResponse": {
+          "doctypes": 245,
+          "sample": ["Customer", "Item", "Sales Invoice"]
+        }
+      }
+    },
+    {
+      "name": "Chromatic",
+      "category": "Core",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "FAIL",
+        "method": "token",
+        "error": "Missing CHROMATIC_PROJECT_TOKEN"
+      },
+      "performance": {
+        "latencyMs": null,
+        "successRate": 0,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "chromatic.getProject()",
+        "result": "FAIL",
+        "error": "Authentication required"
+      }
+    },
+    {
+      "name": "Desktop Commander",
+      "category": "Development",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 23,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "desktop.getConfig()",
+        "result": "PASS",
+        "rawResponse": {
+          "allowedDirectories": ["/Users", "/tmp"],
+          "fileReadLineLimit": 1000
+        }
+      }
+    },
+    {
+      "name": "Playwright",
+      "category": "Development",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 67,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "playwright.browser_snapshot()",
+        "result": "PASS",
+        "rawResponse": "Browser ready"
+      }
+    },
+    {
+      "name": "Puppeteer",
+      "category": "Development",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 78,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "puppeteer.puppeteer_navigate('about:blank')",
+        "result": "PASS",
+        "rawResponse": "Navigation successful"
+      }
+    },
+    {
+      "name": "Filesystem",
+      "category": "Development",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 12,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "filesystem.list_allowed_directories()",
+        "result": "PASS",
+        "rawResponse": ["/Users", "/tmp", "/var"]
+      }
+    },
+    {
+      "name": "MCP Finder",
+      "category": "Development",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 34,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "mcp.find_mcp('github')",
+        "result": "PASS",
+        "rawResponse": {
+          "found": 10,
+          "topResult": "@smithery-ai/github"
+        }
+      }
+    },
+    {
+      "name": "Vercel",
+      "category": "Optional",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "FAIL",
+        "method": "token",
+        "error": "Token expired"
+      },
+      "performance": {
+        "latencyMs": null,
+        "successRate": 0,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "vercel.projects.list()",
+        "result": "FAIL",
+        "error": "Authentication failed: Token expired"
+      }
+    },
+    {
+      "name": "Slack",
+      "category": "Optional",
+      "installed": false,
+      "version": null,
+      "auth": null,
+      "performance": null,
+      "test": {
+        "command": null,
+        "result": "NOT_INSTALLED",
+        "error": "MCP not configured"
+      }
+    },
+    {
+      "name": "Linear",
+      "category": "Optional",
+      "installed": false,
+      "version": null,
+      "auth": null,
+      "performance": null,
+      "test": {
+        "command": null,
+        "result": "NOT_INSTALLED",
+        "error": "MCP not configured"
+      }
+    },
+    {
+      "name": "Memory",
+      "category": "Testing",
+      "installed": true,
+      "version": "1.0.0",
+      "auth": {
+        "status": "OK",
+        "method": "local",
+        "expires": null
+      },
+      "performance": {
+        "latencyMs": 5,
+        "successRate": 100,
+        "lastChecked": "2025-08-10T12:00:00Z"
+      },
+      "test": {
+        "command": "memory.read_graph()",
+        "result": "PASS",
+        "rawResponse": {
+          "entities": 0,
+          "relations": 0
+        }
+      }
+    }
+  ],
+  "remediations": [
+    {
+      "priority": "CRITICAL",
+      "mcp": "Chromatic",
+      "action": "Add CHROMATIC_PROJECT_TOKEN to GitHub Secrets",
+      "documentation": "/docs/CHROMATIC_SETUP.md"
+    },
+    {
+      "priority": "IMPORTANT",
+      "mcp": "Vercel",
+      "action": "Refresh authentication token",
+      "command": "vercel login && vercel token"
+    }
+  ]
+}

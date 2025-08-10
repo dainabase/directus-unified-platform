@@ -45,5 +45,12 @@ export * from "./components/theme-toggle";
 // Charts
 export * from "./components/charts";
 
+// UI Elements (Reconciled from feat/design-system-apple)
+export * from "./components/avatar";
+export * from "./components/badge";
+export * from "./components/progress";
+export * from "./components/skeleton";
+export * from "./components/tooltip";
+
 // Export Tailwind config for external usage (si nécessaire)
 // export { default as tailwindConfig } from "../tailwind.config";

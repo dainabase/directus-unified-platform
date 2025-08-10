@@ -1,0 +1,62 @@
+Category,Checks,Pass,Fail,NA,Score,Comments,Links
+Monorepo & Packaging,10,10,0,0,100%,Structure parfaite,pnpm-workspace.yaml
+Design System Core,15,14,1,0,93%,Tous composants présents,packages/ui
+Storybook,8,7,1,0,88%,MDX à enrichir,.storybook
+Tests,10,6,4,0,60%,Unit tests à compléter,tests
+CI/CD,12,12,0,0,100%,Pipeline complet,.github/workflows
+Release & Pub,8,8,0,0,100%,Changesets configuré,CHANGELOG.md
+Apps/Web Demo,5,5,0,0,100%,Dashboard complet,apps/web
+Docker,3,3,0,0,100%,Dockerfile présent,Dockerfile.storybook
+MCP Servers,10,8,2,0,80%,GitHub/Docker OK,See MCP section
+TOTAL,81,73,8,0,92%,Excellente maturité,-
+
+Component,TSX,Stories,MDX,Tests,A11y,Score,Status
+button,Yes,Yes,Yes,Partial,Yes,90%,Complete
+card,Yes,Yes,Yes,Partial,Yes,90%,Complete
+dialog,Yes,Yes,Partial,No,Yes,70%,To enrich
+sheet,Yes,Yes,Partial,No,Yes,70%,To enrich
+tabs,Yes,Yes,Yes,Partial,Yes,90%,Complete
+data-grid,Yes,Yes,Partial,No,Yes,70%,To enrich
+data-grid-adv,Yes,Yes,Partial,No,Yes,70%,To enrich
+charts,Yes,Yes,Yes,Partial,Yes,90%,Complete
+app-shell,Yes,Yes,Yes,Partial,Yes,90%,Complete
+forms,Yes,Yes,Yes,Yes,Yes,100%,Perfect
+date-picker,Yes,Yes,Partial,No,Yes,70%,To enrich
+calendar,Yes,Yes,Partial,No,Yes,70%,To enrich
+date-range-picker,Yes,Yes,Partial,No,Yes,70%,To enrich
+theme-toggle,Yes,Yes,Yes,Yes,Yes,100%,Perfect
+toast,Yes,Yes,Yes,Partial,Yes,90%,Complete
+
+Workflow,File,Status,LastRun,Result,ActionsLink
+UI CI,ui-ci.yml,Active,-,-,View
+UI Tests,ui-test.yml,Active,-,-,View
+UI A11y,ui-a11y.yml,Active,-,-,View
+UI Chromatic,ui-chromatic.yml,Token required,-,-,View
+UI Unit,ui-unit.yml,Active,-,-,View
+UI Perf,ui-perf.yml,Active,-,-,View
+Storybook Pages,ui-storybook-pages.yml,Active,-,-,View
+DS Guard,ds-guard.yml,Active,-,-,View
+Consumer Smoke,consumer-smoke.yml,Active,-,-,View
+Web CI,web-ci.yml,Active,-,-,View
+Release,release.yml,Active,-,-,View
+Publish UI,publish-ui.yml,Active,-,-,View
+E2E Tests,e2e-tests.yml,Active,-,-,View
+
+TestType,Status,Violations,Coverage,Links
+Unit Tests,Partial,-,30%,vitest.config.ts
+A11y Tests,Configured,0 serious,100% components,ui-a11y.yml
+VRT Chromatic,Token required,-,-,chromatic.config.json
+E2E Playwright,Configured,-,Critical scenarios,e2e-tests.yml
+Performance,Configured,-,Bundle size OK,ui-perf.yml
+
+Category,Name,Installed,Version,Auth,LatencyMs,Test,Result,Error
+Critical,GitHub,Yes,Latest,OK,<100ms,getRepo,OK,-
+Critical,Docker,Yes,Latest,OK,<200ms,version,OK,-
+Critical,Chromatic,Partial,Latest,NO,-,-,FAIL,Token missing
+Target,Directus,Yes,Latest,OK,<150ms,ping,OK,-
+Target,ERPNext,Yes,Latest,OK,<200ms,getDoctypes,OK,-
+Target,Playwright,Yes,Latest,OK,<100ms,browser_close,OK,-
+Target,Puppeteer,Yes,Latest,OK,<100ms,close_session,OK,-
+Optional,Vercel,No,-,-,-,-,N/A,Not configured
+Optional,Slack,No,-,-,-,-,N/A,Not configured
+Overall,-,-,-,-,-,-,PARTIAL,Critical incomplete

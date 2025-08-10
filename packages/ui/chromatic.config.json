@@ -1,0 +1,12 @@
+{
+  "projectId": "Project ID from Chromatic",
+  "onlyChanged": true,
+  "skip": "dependabot/**",
+  "externals": [
+    "packages/ui/public/**"
+  ],
+  "storybookBuildDir": "packages/ui/storybook-static",
+  "autoAcceptChanges": "main",
+  "exitZeroOnChanges": true,
+  "exitOnceUploaded": false
+}

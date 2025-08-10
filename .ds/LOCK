@@ -1,7 +1,7 @@
 {
-  "status": "pack-10-completed",
-  "step": 10,
-  "timestamp": "2025-08-09T19:30:00Z",
+  "status": "chromatic-configured",
+  "step": 11,
+  "timestamp": "2025-08-10T10:42:00Z",
   "workflow_loaded": true,
   "packs_completed": [
     "01-tokens-tailwind-pr",
@@ -13,7 +13,8 @@
     "07-advanced-datagrid",
     "08-charts-recharts",
     "09-nextjs-dashboard-demo",
-    "10-cicd-github-actions"
+    "10-cicd-github-actions",
+    "11-chromatic-configuration"
   ],
   "ci_cd": {
     "pnpm_workspace": true,
@@ -21,14 +22,18 @@
     "storybook_pages": true,
     "web_ci": true,
     "ds_guard": true,
+    "chromatic": true,
+    "chromatic_token_configured": true,
     "workflows": [
       "ui-ci.yml",
       "ui-storybook-pages.yml",
       "web-ci.yml",
-      "ds-guard.yml"
+      "ds-guard.yml",
+      "ui-chromatic.yml"
     ],
     "github_pages_ready": false,
-    "artifacts": ["storybook-static"]
+    "artifacts": ["storybook-static"],
+    "chromatic_project_token": "chpt_b29d02c928a3750"
   },
-  "next_step": "Configure GitHub Pages in Settings + Run workflow manually for first deployment"
+  "next_step": "Run Chromatic workflow manually or wait for next push/PR + Configure GitHub Pages"
 }

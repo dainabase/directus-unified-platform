@@ -1,58 +1,25 @@
-# Dependencies
-node_modules/
-.pnpm-store/
-
 # Build outputs
 dist/
 build/
-*.min.js
-*.min.css
-storybook-static/
 .next/
 out/
+storybook-static/
 
-# Coverage
-coverage/
-.nyc_output/
-
-# Cache
-.cache/
-.turbo/
-.parcel-cache/
-
-# Environment
-.env
-.env.*
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Package manager files
+# Dependencies
+node_modules/
 pnpm-lock.yaml
-package-lock.json
-yarn.lock
 
 # Generated files
 *.generated.*
-CHANGELOG.md
+coverage/
+.turbo/
 
-# Test artifacts
-test-results/
-playwright-report/
+# Git
+.git/
 
-# Documentation that shouldn't be formatted
-docs/assets/
+# Env files
+.env*
+
+# Cache
+.cache/
+.DS_Store

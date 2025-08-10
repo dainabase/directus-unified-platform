@@ -1,11 +1,11 @@
 {
-  "projectToken": "chpt_b29d02c928a3750",
+  "projectToken": "chpt_3606195941442a3",
   "onlyChanged": true,
-  "buildScriptName": "build:sb:static",
   "exitZeroOnChanges": true,
-  "exitOnceUploaded": false,
-  "autoAcceptChanges": "feat/design-system-apple",
-  "skip": ["dependabot/**"],
+  "exitOnceUploaded": true,
+  "buildScriptName": "build:sb:static",
   "storybookBuildDir": "storybook-static",
+  "autoAcceptChanges": "feat/design-system-apple",
+  "skip": ["dependabot/**", "renovate/**"],
   "debug": false
 }

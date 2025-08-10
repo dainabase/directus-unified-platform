@@ -1,28 +1,44 @@
-name: DS Guard (feature branch)
+name: DS Guard
+
 on:
   pull_request:
-    branches: [ feat-design-system-apple ]
+    paths:
+      - 'apps/web/**'
+      - '!apps/web/**/*.stories.*'
+      - '!apps/web/**/*.test.*'
+
 jobs:
-  guard:
+  check-inline-styles:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-            fetch-depth: 0
-      - name: Detect changed files
-        id: changes
+      
+      - name: Check for inline styles
         run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          CHANGED="$(git diff --name-only origin/${{ github.base_ref }}...HEAD)"
-          echo "$CHANGED" > changed.txt
-          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
-      - name: Validate paths
+          echo "🔍 Checking for inline styles in apps/web..."
+          
+          # Check for style= attributes
+          if grep -r "style=" apps/web --include="*.tsx" --include="*.jsx" --exclude-dir=node_modules; then
+            echo "❌ Found inline styles! Use Design System tokens instead."
+            exit 1
+          fi
+          
+          # Check for className with hardcoded values (not from DS)
+          if grep -rE 'className="[^"]*(?:text-\[|bg-\[|w-\[|h-\[)' apps/web --include="*.tsx" --include="*.jsx" --exclude-dir=node_modules; then
+            echo "❌ Found hardcoded Tailwind values! Use Design System tokens."
+            exit 1
+          fi
+          
+          echo "✅ No inline styles found!"
+      
+      - name: Check DS imports
         run: |
-          ALLOWED_REGEX='^(\.changeset/|package\.json|pnpm-workspace\.yaml|\.github/|docs/|packages/ui/|apps/web/)'
-          while IFS= read -r file; do
-            if ! [[ "$file" =~ $ALLOWED_REGEX ]]; then
-              echo "❌ Not allowed in this phase: $file"
-              exit 1
-            fi
-          done < changed.txt
-          echo "✅ Paths OK"
+          echo "🔍 Checking that all UI components come from @dainabase/ui..."
+          
+          # This is a simple check - you might want to make it more sophisticated
+          if grep -r "from '@radix-ui" apps/web --include="*.tsx" --include="*.jsx" --exclude-dir=node_modules; then
+            echo "⚠️  Found direct Radix imports! Import from @dainabase/ui instead."
+            exit 1
+          fi
+          
+          echo "✅ All UI imports look good!"

@@ -1,36 +1,37 @@
-name: UI a11y (Storybook Test Runner)
-
+name: UI Accessibility
 on:
   push:
     branches: [ feat-design-system-apple ]
   pull_request:
     branches: [ feat-design-system-apple, main, master ]
-
 jobs:
   a11y:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/ui
-    
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Node + pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
       
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
       
-      - name: Install
-        run: pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       
-      - name: Build Storybook (static)
-        run: pnpm build:sb:static
+      - name: Install Playwright
+        run: pnpm exec playwright install chromium
       
-      - name: Run Storybook test-runner (a11y)
-        run: pnpm test:stories
+      - name: Build Storybook
+        run: pnpm --filter @dainabase/ui build:sb:static
+      
+      - name: Run a11y tests
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server packages/ui/storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && pnpm --filter @dainabase/ui test:stories"

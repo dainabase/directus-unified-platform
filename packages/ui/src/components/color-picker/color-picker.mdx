@@ -1,0 +1,304 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/blocks';
+import * as ColorPickerStories from './color-picker.stories';
+
+<Meta of={ColorPickerStories} />
+
+# ColorPicker
+
+A comprehensive color picker component with support for multiple color formats (HEX, RGB, HSL, HSV), preset palettes, eyedropper functionality, and alpha channel control.
+
+## Features
+
+- 🎨 **Multiple Formats**: Support for HEX, RGB, HSL, and HSV color formats
+- 🎯 **EyeDropper API**: Native browser eyedropper support (when available)
+- 🎪 **Preset Palettes**: Built-in color palettes (Default, Material, Tailwind, Grayscale)
+- 🔢 **Alpha Channel**: Optional alpha/transparency control
+- 📋 **Copy to Clipboard**: Quick copy functionality for selected colors
+- ♿ **Accessible**: Full keyboard navigation and ARIA labels
+- 📱 **Responsive**: Works on all screen sizes
+- 🎭 **Variants**: Default, compact, and inline display modes
+
+## Usage
+
+```tsx
+import { ColorPicker } from '@dainabase/ui';
+
+function App() {
+  const [color, setColor] = useState('#3B82F6');
+  
+  return (
+    <ColorPicker
+      value={color}
+      onChange={(value, format) => setColor(value)}
+      label="Choose a color"
+      format="hex"
+      showAlpha={true}
+      presetPalette="tailwind"
+    />
+  );
+}
+```
+
+## Examples
+
+### Default
+
+Basic color picker with HEX format and default preset palette.
+
+<Canvas>
+  <Story of={ColorPickerStories.Default} />
+</Canvas>
+
+### Controlled Component
+
+Controlled color picker with real-time preview.
+
+<Canvas>
+  <Story of={ColorPickerStories.Controlled} />
+</Canvas>
+
+### Color Formats
+
+The component supports multiple color format outputs:
+
+#### HEX Format
+<Canvas>
+  <Story of={ColorPickerStories.HexFormat} />
+</Canvas>
+
+#### RGB Format
+<Canvas>
+  <Story of={ColorPickerStories.RgbFormat} />
+</Canvas>
+
+#### HSL Format
+<Canvas>
+  <Story of={ColorPickerStories.HslFormat} />
+</Canvas>
+
+#### HSV Format
+<Canvas>
+  <Story of={ColorPickerStories.HsvFormat} />
+</Canvas>
+
+### With Alpha Channel
+
+Enable alpha channel control for transparency support.
+
+<Canvas>
+  <Story of={ColorPickerStories.WithAlpha} />
+</Canvas>
+
+### Sizes
+
+Available in three sizes: small, medium, and large.
+
+<Canvas>
+  <Story of={ColorPickerStories.SmallSize} />
+  <Story of={ColorPickerStories.MediumSize} />
+  <Story of={ColorPickerStories.LargeSize} />
+</Canvas>
+
+### Variants
+
+Different visual variants for various use cases.
+
+#### Compact Variant
+<Canvas>
+  <Story of={ColorPickerStories.CompactVariant} />
+</Canvas>
+
+#### Inline Variant
+<Canvas>
+  <Story of={ColorPickerStories.InlineVariant} />
+</Canvas>
+
+### Swatch Shapes
+
+Choose between square or circular color swatches.
+
+<Canvas>
+  <Story of={ColorPickerStories.SquareSwatch} />
+  <Story of={ColorPickerStories.CircleSwatch} />
+</Canvas>
+
+### Preset Palettes
+
+Built-in color palettes for quick selection.
+
+#### Material Design Palette
+<Canvas>
+  <Story of={ColorPickerStories.MaterialPalette} />
+</Canvas>
+
+#### Tailwind CSS Palette
+<Canvas>
+  <Story of={ColorPickerStories.TailwindPalette} />
+</Canvas>
+
+#### Grayscale Palette
+<Canvas>
+  <Story of={ColorPickerStories.GrayscalePalette} />
+</Canvas>
+
+### Custom Presets
+
+Provide your own custom color presets.
+
+<Canvas>
+  <Story of={ColorPickerStories.CustomPresets} />
+</Canvas>
+
+### Complete Example
+
+A comprehensive example showing theme color configuration.
+
+<Canvas>
+  <Story of={ColorPickerStories.CompleteExample} />
+</Canvas>
+
+## Props
+
+<Controls />
+
+## API Reference
+
+### ColorPicker Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | `"#000000"` | Current color value in HEX format |
+| `onChange` | `(value: string, format: ColorFormat) => void` | - | Callback when color changes |
+| `format` | `"hex" \| "rgb" \| "hsl" \| "hsv"` | `"hex"` | Output format for the color value |
+| `showAlpha` | `boolean` | `false` | Show alpha channel control |
+| `showEyeDropper` | `boolean` | `true` | Show eyedropper button (if supported) |
+| `showPresets` | `boolean` | `true` | Show preset color swatches |
+| `presetColors` | `string[]` | - | Custom preset colors array |
+| `presetPalette` | `"default" \| "material" \| "tailwind" \| "grayscale"` | `"default"` | Built-in palette to use |
+| `disabled` | `boolean` | `false` | Disable the color picker |
+| `placeholder` | `string` | `"Select color"` | Placeholder text |
+| `label` | `string` | - | Label for the color picker |
+| `className` | `string` | - | Additional CSS classes |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the color picker |
+| `variant` | `"default" \| "compact" \| "inline"` | `"default"` | Visual variant |
+| `swatchShape` | `"square" \| "circle"` | `"square"` | Shape of color swatches |
+| `copyToClipboard` | `boolean` | `true` | Enable copy to clipboard |
+
+### Color Formats
+
+The component converts between different color formats automatically:
+
+```typescript
+type ColorFormat = "hex" | "rgb" | "hsl" | "hsv";
+
+type ColorValue = {
+  hex: string;
+  rgb: { r: number; g: number; b: number; a?: number };
+  hsl: { h: number; s: number; l: number; a?: number };
+  hsv: { h: number; s: number; v: number; a?: number };
+};
+```
+
+### Preset Palettes
+
+Available preset palettes:
+
+```typescript
+const PRESET_PALETTES = {
+  default: [...],   // 10 vibrant colors
+  material: [...],  // Material Design colors
+  tailwind: [...],  // Tailwind CSS colors
+  grayscale: [...], // Black to white gradient
+};
+```
+
+## Accessibility
+
+The ColorPicker component follows WAI-ARIA guidelines:
+
+- ✅ Full keyboard navigation support
+- ✅ ARIA labels for all interactive elements
+- ✅ Color contrast indicators
+- ✅ Screen reader announcements
+- ✅ Focus trap in popover
+- ✅ Escape key to close
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Space` / `Enter` | Open color picker popover |
+| `Tab` | Navigate between controls |
+| `Arrow Keys` | Navigate preset colors |
+| `Escape` | Close popover |
+
+## Browser Support
+
+### EyeDropper API
+
+The EyeDropper functionality requires browser support:
+- ✅ Chrome/Edge 95+
+- ✅ Opera 81+
+- ❌ Firefox (not supported)
+- ❌ Safari (not supported)
+
+The component gracefully degrades when EyeDropper is not available.
+
+## Best Practices
+
+1. **Provide Labels**: Always include a label for better UX
+2. **Use Controlled Mode**: For forms and state management
+3. **Choose Appropriate Format**: Select the format that matches your backend
+4. **Consider Accessibility**: Ensure color choices meet WCAG contrast requirements
+5. **Custom Palettes**: Provide brand-specific colors for consistency
+
+## Examples with Different Use Cases
+
+### Form Integration
+
+```tsx
+<form>
+  <ColorPicker
+    label="Brand Color"
+    value={formData.brandColor}
+    onChange={(value) => updateFormData({ brandColor: value })}
+    format="hex"
+    presetColors={brandColors}
+    required
+  />
+</form>
+```
+
+### Theme Configuration
+
+```tsx
+<div className="theme-settings">
+  <ColorPicker
+    label="Primary"
+    value={theme.primary}
+    onChange={(color) => updateTheme('primary', color)}
+    showAlpha={true}
+    presetPalette="tailwind"
+  />
+</div>
+```
+
+### Inline Color Selection
+
+```tsx
+<span>
+  Text color: 
+  <ColorPicker
+    variant="inline"
+    value={textColor}
+    onChange={setTextColor}
+    swatchShape="circle"
+  />
+</span>
+```
+
+## Related Components
+
+- [Input](/?path=/docs/components-forms-input--docs) - For manual color input
+- [Select](/?path=/docs/components-forms-select--docs) - For predefined color options
+- [Popover](/?path=/docs/components-overlays-popover--docs) - Used internally for the picker

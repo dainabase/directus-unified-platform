@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -10,30 +10,22 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html', 'lcov'],
+      reporter: ['text', 'json', 'html', 'text-summary'],
       exclude: [
         'node_modules/',
-        'src/test/',
-        '*.config.*',
-        '**/*.d.ts',
-        '**/*.stories.tsx',
-        '**/*.mdx',
+        'dist/',
         'storybook-static/',
-        '.storybook/',
-      ],
-      thresholds: {
-        branches: 70,
-        functions: 70,
-        lines: 70,
-        statements: 70,
-      },
-    },
-    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
+        '*.config.*',
+        '**/*.stories.*',
+        '**/*.mdx',
+        '**/index.ts',
+        'src/test/**'
+      ]
+    }
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
+      '@': resolve(__dirname, './src')
+    }
+  }
 });

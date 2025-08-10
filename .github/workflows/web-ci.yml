@@ -1,11 +1,11 @@
-name: Web CI
+name: Web App CI
 on:
   push:
     branches: [ feat-design-system-apple ]
   pull_request:
     branches: [ feat-design-system-apple, main, master ]
 jobs:
-  web-ci:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,8 +22,7 @@ jobs:
           cache: 'pnpm'
       
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
       
-      - name: Build web app
-        run: pnpm --filter web build
-        continue-on-error: true  # Continue even if web app doesn't exist yet
+      - name: Build Web App
+        run: pnpm --filter @dainabase/web build

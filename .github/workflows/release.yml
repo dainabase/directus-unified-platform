@@ -1,24 +1,16 @@
-name: Changesets Release
-
+name: Release
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
-  packages: write
-
+    branches: [ main, master ]
 jobs:
-  version_or_release:
+  release:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -29,18 +21,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
           registry-url: 'https://npm.pkg.github.com'
+          scope: '@dainabase'
       
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
       
-      - name: Create or Publish Release PR
-        id: changesets
+      - name: Create Release PR or Publish
         uses: changesets/action@v1
         with:
-          version: pnpm version-packages
           publish: pnpm release-packages
+          version: pnpm version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

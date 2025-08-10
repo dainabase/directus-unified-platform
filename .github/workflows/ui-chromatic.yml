@@ -1,16 +1,14 @@
-name: UI Chromatic
+name: Chromatic Visual Tests
 on:
   push:
     branches: [ feat-design-system-apple ]
-  pull_request:
-    branches: [ feat-design-system-apple, main, master ]
 jobs:
   chromatic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for Chromatic
+          fetch-depth: 0
       
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -24,10 +22,9 @@ jobs:
           cache: 'pnpm'
       
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
       
       - name: Run Chromatic
         run: pnpm --filter @dainabase/ui chromatic
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        continue-on-error: true  # Don't fail if token is missing

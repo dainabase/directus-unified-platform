@@ -5,74 +5,270 @@ import * as Stories from "./button.stories";
 
 # Button
 
-Bouton principal du Design System. Utilise des **tokens** pour couleurs, radius et ombres. Accessible (focus visible, ARIA, clavier).
+Bouton principal du Design System avec style Apple-like. Utilise exclusivement des **tokens** pour maintenir la cohérence visuelle. Entièrement accessible avec support WCAG 2.1 AA.
+
+## Description
+
+Le composant Button est l'élément d'interaction principal de notre Design System. Il suit les principes de design Apple avec des animations fluides, des états visuels clairs et une accessibilité complète.
 
 <Canvas>
   <Story of={Stories.Primary} />
 </Canvas>
 
+## Props API
+
+<ArgsTable of={Stories.Primary} />
+
+### Props détaillées
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'destructive' \| 'success'` | `'primary'` | Style visuel du bouton |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Taille du bouton |
+| `disabled` | `boolean` | `false` | Désactive le bouton |
+| `loading` | `boolean` | `false` | Affiche un spinner de chargement |
+| `fullWidth` | `boolean` | `false` | Bouton en largeur 100% |
+| `asChild` | `boolean` | `false` | Rend le bouton comme son enfant (Radix Slot) |
+| `onClick` | `(e: MouseEvent) => void` | - | Handler de clic |
+| `children` | `ReactNode` | - | Contenu du bouton |
+| `className` | `string` | - | Classes CSS additionnelles |
+
+## Accessibilité
+
+### Rôles ARIA
+- **Rôle natif** : `button` (implicite)
+- **États ARIA** : `aria-disabled`, `aria-pressed`, `aria-busy` (si loading)
+- **Labels** : Support de `aria-label` et `aria-labelledby`
+
+### Navigation clavier
+| Touche | Action |
+|--------|--------|
+| `Enter` | Active le bouton |
+| `Space` | Active le bouton |
+| `Tab` | Navigue vers le bouton suivant |
+| `Shift + Tab` | Navigue vers le bouton précédent |
+
+### Focus Management
+- **Focus visible** : Anneau de focus avec tokens `focus-visible:ring-2`
+- **Focus trap** : Non applicable (élément simple)
+- **Skip to content** : Compatible avec navigation rapide
+
+### Screen Readers
+- Annonce correctement le libellé et l'état
+- Support des changements d'état dynamiques
+- Compatible NVDA, JAWS, VoiceOver
+
 ## Variants
 
-- `primary` (par défaut)
-- `secondary`
-- `outline`
-- `ghost`
-- `destructive` (usage parcimonieux)
-- `success` (pour les actions positives) ✅
+### Primary (Default)
+Action principale de la page. Utiliser avec parcimonie (1-2 par vue).
 
 <Canvas>
-  <Story of={Stories.Variants} />
+  <Story of={Stories.Primary} />
 </Canvas>
 
-## Tailles
+### Secondary
+Actions secondaires ou alternatives.
 
-- `sm`, `md` (défaut), `lg`
+<Canvas>
+  <Story of={Stories.Secondary} />
+</Canvas>
+
+### Outline
+Actions tertiaires ou navigation.
+
+<Canvas>
+  <Story of={Stories.Outline} />
+</Canvas>
+
+### Ghost
+Actions subtiles ou intégration dans le contenu.
+
+<Canvas>
+  <Story of={Stories.Ghost} />
+</Canvas>
+
+### Destructive
+Actions dangereuses (suppression, annulation). Utiliser avec confirmation.
+
+<Canvas>
+  <Story of={Stories.Destructive} />
+</Canvas>
+
+### Success
+Actions positives confirmées (sauvegarde, validation).
+
+<Canvas>
+  <Story of={Stories.Success} />
+</Canvas>
+
+## Sizes
 
 <Canvas>
   <Story of={Stories.Sizes} />
 </Canvas>
 
-## Icônes
+## États
 
-Utiliser le composant `Icon` (lucide-react) à gauche/droite.
+### Disabled
+<Canvas>
+  <Story of={Stories.Disabled} />
+</Canvas>
 
+### Loading
+<Canvas>
+  <Story of={Stories.Loading} />
+</Canvas>
+
+### With Icons
 <Canvas>
   <Story of={Stories.WithIcon} />
 </Canvas>
 
-## Props
+## Examples
 
-<ArgsTable of={Stories.Primary} />
-
-## Accessibilité
-
-- Rôle natif `button`
-- States `disabled` supportés
-- Focus visible via tokens
-- Utiliser un `<button type="button">` explicite pour éviter le submit implicite
-
-## Bonnes pratiques
-
-**Do**
-- Utiliser `variant` et `size` (aucun style inline)
-- Libellés concis et actionnables
-
-**Don't**
-- Empiler des icônes décoratives sans `aria-hidden`
-- Changer les couleurs hors tokens
-
-## Exemple
-
+### Formulaire de connexion
 <Source
-  code={`import { Button, Icon } from "@dainabase/ui";
+  code={`import { Button, Input, Form } from "@dainabase/ui";
 
-export function CTA() {
+export function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // ... login logic
+  };
+  
   return (
-    <Button onClick={() => {}}>
-      <Icon name="Sparkles" className="mr-2" />
-      Essayer maintenant
-    </Button>
+    <Form onSubmit={handleSubmit}>
+      <Input type="email" placeholder="Email" required />
+      <Input type="password" placeholder="Mot de passe" required />
+      <Button type="submit" loading={loading} fullWidth>
+        Se connecter
+      </Button>
+    </Form>
   );
 }`}
 language="tsx"
 />
+
+### Groupe de boutons
+<Source
+  code={`import { Button } from "@dainabase/ui";
+
+export function ButtonGroup() {
+  return (
+    <div className="flex gap-2">
+      <Button variant="outline">Annuler</Button>
+      <Button variant="primary">Sauvegarder</Button>
+    </div>
+  );
+}`}
+language="tsx"
+/>
+
+### Bouton avec confirmation
+<Source
+  code={`import { Button, Dialog } from "@dainabase/ui";
+
+export function DeleteButton() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <>
+      <Button 
+        variant="destructive" 
+        onClick={() => setOpen(true)}
+      >
+        Supprimer
+      </Button>
+      
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmer la suppression</DialogTitle>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Annuler
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Supprimer définitivement
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}`}
+language="tsx"
+/>
+
+## Do's and Don'ts
+
+### ✅ DO
+- **Utiliser les variants appropriés** pour la hiérarchie visuelle
+- **Limiter à 1-2 boutons primary** par vue
+- **Ajouter aria-label** pour les boutons icon-only
+- **Utiliser les tokens** exclusivement (pas de styles inline)
+- **Grouper les actions** liées visuellement
+- **Indiquer l'état loading** pour les actions async
+- **Confirmer les actions destructives**
+
+### ❌ DON'T
+- **Surcharger avec trop d'icônes** décoratives
+- **Modifier les couleurs** en dehors des tokens
+- **Imbriquer des éléments interactifs** (liens dans boutons)
+- **Utiliser disabled** sans raison claire pour l'utilisateur
+- **Cacher le focus ring** (accessibilité critique)
+- **Mélanger les tailles** dans un même groupe
+- **Utiliser des libellés vagues** ("Cliquez ici", "OK")
+
+## Patterns d'utilisation
+
+### Hiérarchie des actions
+```
+Primary → Action principale (Créer, Sauvegarder)
+Secondary → Actions alternatives (Dupliquer, Exporter)
+Outline → Navigation ou actions tertiaires
+Ghost → Actions contextuelles subtiles
+```
+
+### Placement recommandé
+- **Formulaires** : Primary à droite, Cancel à gauche
+- **Modales** : Actions dans le footer, alignées à droite
+- **Cards** : Actions en bas, justifiées selon le contexte
+- **Tables** : Actions inline avec variant ghost/outline
+
+## Performance
+
+- **Bundle size** : ~2.1kb gzipped
+- **Tree-shakeable** : Import uniquement ce qui est utilisé
+- **Memoization** : Callbacks avec useCallback recommandé
+- **Animations** : CSS transitions GPU-optimisées
+
+## Migration
+
+### Depuis v1.x
+```diff
+- <Button color="blue" size="large">
++ <Button variant="primary" size="lg">
+```
+
+### Depuis HTML natif
+```diff
+- <button className="btn btn-primary">
++ <Button variant="primary">
+```
+
+## Ressources
+
+- [Figma - Button Component](https://figma.com/file/xxx)
+- [Guidelines Apple HIG](https://developer.apple.com/design/human-interface-guidelines/buttons)
+- [WCAG 2.1 - Buttons](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html)
+
+## Changelog
+
+- **v0.2.0** : Ajout variant success, support loading state
+- **v0.1.0** : Version initiale avec 5 variants

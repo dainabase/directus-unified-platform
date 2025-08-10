@@ -23,12 +23,12 @@ export * from "./components/data-grid-adv";
 export * from "./components/dialog";
 export * from "./components/sheet";
 export * from "./components/command-palette";
+export * from "./components/popover"; // Added for DateRangePicker
 
 // Date & Time
 export * from "./components/date-picker";
-// NOTE: Non implémentés → ne pas exporter (bloquait la publication)
-// export * from "./components/calendar";
-// export * from "./components/date-range-picker";
+export * from "./components/calendar"; // ✅ Now implemented!
+export * from "./components/date-range-picker"; // ✅ Now implemented!
 
 // Forms
 export * from "./components/form";

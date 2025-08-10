@@ -60,6 +60,7 @@ export * from "./components/timeline";
 export * from "./components/stepper";
 export * from "./components/pagination";
 export * from "./components/carousel";
+export * from "./components/color-picker";
 
 // Utilities
 export { cn } from "./lib/utils";

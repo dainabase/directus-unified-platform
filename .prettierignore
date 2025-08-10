@@ -1,22 +1,19 @@
 # Dependencies
 node_modules/
-**/node_modules/
+.pnpm-store/
 
 # Build outputs
 dist/
 build/
-out/
-.next/
-*.tsbuildinfo
+*.min.js
+*.min.css
 storybook-static/
+.next/
+out/
 
-# Testing
+# Coverage
 coverage/
 .nyc_output/
-
-# Logs
-*.log
-logs/
 
 # Cache
 .cache/
@@ -27,49 +24,35 @@ logs/
 .env
 .env.*
 
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-.DS_Store
 
-# Package manager
+# Package manager files
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
 # Generated files
-*.generated.ts
-*.generated.js
-*.min.js
-*.min.css
+*.generated.*
+CHANGELOG.md
 
-# Data files
-*.json
-*.csv
-*.tsv
+# Test artifacts
+test-results/
+playwright-report/
 
-# Images and media
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.ico
-*.webp
-*.mp4
-*.webm
-
-# Directus
-directus/
-.directus/
-uploads/
-
-# Docker
-Dockerfile
-docker-compose.yml
-
-# Migrations
-migrations/
-migration/
+# Documentation that shouldn't be formatted
+docs/assets/

@@ -1,0 +1,222 @@
+import { Meta, Story, Canvas, Controls } from '@storybook/blocks';
+import * as DateRangePickerStories from './date-range-picker.stories';
+
+<Meta of={DateRangePickerStories} />
+
+# DateRangePicker
+
+A sophisticated date range selection component that combines calendar functionality with a user-friendly popover interface.
+
+## Features
+
+- **Intuitive Interface** - Click to open calendar, select start and end dates
+- **Quick Presets** - Built-in shortcuts for common date ranges (Last 7 days, Last 30 days)
+- **Multi-month View** - Configure 1-3 months visible at once
+- **Disabled Dates** - Prevent selection of specific dates or date ranges
+- **Fully Accessible** - Keyboard navigation and ARIA support
+- **Responsive Design** - Adapts to different screen sizes
+- **Clear Functionality** - Easy to reset selected range
+
+## Usage
+
+```tsx
+import { DateRangePicker } from '@dainabase/ui';
+import { DateRange } from 'react-day-picker';
+
+function BookingForm() {
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>();
+
+  return (
+    <DateRangePicker
+      dateRange={dateRange}
+      onDateRangeChange={setDateRange}
+      placeholder="Select date range"
+      numberOfMonths={2}
+    />
+  );
+}
+```
+
+## Examples
+
+### Default DateRangePicker
+
+Basic date range picker with two-month view:
+
+<Canvas of={DateRangePickerStories.Default} />
+<Controls of={DateRangePickerStories.Default} />
+
+### With Preselected Range
+
+Initialize with a pre-selected date range:
+
+<Canvas of={DateRangePickerStories.WithPreselectedRange} />
+
+### Single Month View
+
+Compact view showing only one month:
+
+<Canvas of={DateRangePickerStories.SingleMonth} />
+
+### Triple Month View
+
+Extended view showing three months for long-range planning:
+
+<Canvas of={DateRangePickerStories.TripleMonth} />
+
+### With Disabled Dates
+
+Disable specific dates (weekends in this example):
+
+<Canvas of={DateRangePickerStories.WithDisabledDates} />
+
+### In a Form
+
+Integration within a form with validation:
+
+<Canvas of={DateRangePickerStories.InForm} />
+
+### Multiple Range Pickers
+
+Compare two different date ranges:
+
+<Canvas of={DateRangePickerStories.MultipleRangePickers} />
+
+## API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `dateRange` | `DateRange \| undefined` | - | The selected date range |
+| `onDateRangeChange` | `(range: DateRange \| undefined) => void` | - | Callback when range changes |
+| `placeholder` | `string` | `"Pick a date range"` | Placeholder text |
+| `className` | `string` | - | Additional CSS classes |
+| `numberOfMonths` | `number` | `2` | Number of months to display |
+| `disabled` | `Date[] \| ((date: Date) => boolean)` | - | Dates to disable |
+
+### DateRange Type
+
+```tsx
+type DateRange = {
+  from: Date | undefined;
+  to?: Date | undefined;
+}
+```
+
+## Presets
+
+The component includes built-in presets for common date ranges:
+
+- **Clear** - Reset the selection
+- **Last 7 days** - Previous week from today
+- **Last 30 days** - Previous month from today
+
+You can customize these presets by modifying the component's footer section.
+
+## Styling
+
+The DateRangePicker inherits design tokens from your theme and can be customized:
+
+```tsx
+<DateRangePicker
+  className="custom-date-picker"
+  dateRange={dateRange}
+  onDateRangeChange={setDateRange}
+/>
+```
+
+```css
+.custom-date-picker {
+  --radius: 0.5rem;
+  --primary: #0A84FF;
+}
+```
+
+## Accessibility
+
+- **Keyboard Navigation**
+  - `Tab` - Move between interactive elements
+  - `Arrow Keys` - Navigate calendar dates
+  - `Enter/Space` - Select dates
+  - `Escape` - Close the popover
+
+- **ARIA Support**
+  - Proper ARIA labels for all interactive elements
+  - Role and state announcements
+  - Focus management
+
+## Advanced Usage
+
+### Custom Validation
+
+```tsx
+function ValidatedDateRange() {
+  const [dateRange, setDateRange] = React.useState<DateRange>();
+  const [error, setError] = React.useState<string>();
+
+  const handleDateChange = (range: DateRange | undefined) => {
+    setDateRange(range);
+    
+    if (range?.from && range?.to) {
+      const days = Math.ceil(
+        (range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      
+      if (days > 30) {
+        setError("Maximum range is 30 days");
+      } else {
+        setError(undefined);
+      }
+    }
+  };
+
+  return (
+    <div>
+      <DateRangePicker
+        dateRange={dateRange}
+        onDateRangeChange={handleDateChange}
+      />
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+    </div>
+  );
+}
+```
+
+### Dynamic Disabled Dates
+
+```tsx
+function BookingCalendar() {
+  const [bookedDates] = React.useState([
+    new Date(2025, 7, 15),
+    new Date(2025, 7, 16),
+    new Date(2025, 7, 20),
+  ]);
+
+  const isDateBooked = (date: Date) => {
+    return bookedDates.some(
+      booked => booked.toDateString() === date.toDateString()
+    );
+  };
+
+  return (
+    <DateRangePicker
+      disabled={isDateBooked}
+      placeholder="Select available dates"
+    />
+  );
+}
+```
+
+## Best Practices
+
+1. **Clear Labels** - Always provide context for what date range is being selected
+2. **Validation Feedback** - Show clear error messages for invalid selections
+3. **Preset Options** - Consider adding relevant presets for your use case
+4. **Mobile Considerations** - Test touch interactions on mobile devices
+5. **Timezone Handling** - Be explicit about timezone expectations
+
+## Related Components
+
+- [Calendar](/docs/components-calendar--docs) - Standalone calendar component
+- [DatePicker](/docs/components-datepicker--docs) - Single date selection

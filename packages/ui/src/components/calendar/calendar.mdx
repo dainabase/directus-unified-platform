@@ -1,0 +1,147 @@
+import { Meta, Story, Canvas, Controls } from '@storybook/blocks';
+import * as CalendarStories from './calendar.stories';
+
+<Meta of={CalendarStories} />
+
+# Calendar
+
+A date picker component built on top of `react-day-picker` that allows users to select dates with various selection modes.
+
+## Features
+
+- **Single date selection** - Pick one date
+- **Multiple dates selection** - Pick multiple dates
+- **Date range selection** - Pick a start and end date
+- **Disabled dates** - Prevent selection of specific dates
+- **Customizable styling** - Fully themeable with Tailwind CSS
+- **Keyboard navigation** - Full keyboard support
+- **Accessible** - ARIA labels and keyboard navigation
+
+## Usage
+
+```tsx
+import { Calendar } from '@dainabase/ui';
+
+function DatePickerExample() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+
+  return (
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      className="rounded-md border"
+    />
+  );
+}
+```
+
+## Examples
+
+### Default Calendar
+
+The basic calendar with single date selection:
+
+<Canvas of={CalendarStories.Default} />
+<Controls of={CalendarStories.Default} />
+
+### Single Selection
+
+Select a single date with visual feedback:
+
+<Canvas of={CalendarStories.SingleSelection} />
+
+### Multiple Selection
+
+Allow users to select multiple dates:
+
+<Canvas of={CalendarStories.MultipleSelection} />
+
+### Range Selection
+
+Select a date range with start and end dates:
+
+<Canvas of={CalendarStories.RangeSelection} />
+
+### Disabled Dates
+
+Prevent selection of specific dates or date ranges:
+
+<Canvas of={CalendarStories.DisabledDates} />
+
+### With Footer
+
+Add custom footer actions like "Clear" and "Today":
+
+<Canvas of={CalendarStories.WithFooter} />
+
+## API Reference
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | `"single"` | Selection mode |
+| `selected` | `Date \| Date[] \| DateRange \| undefined` | - | Currently selected date(s) |
+| `onSelect` | `(date: Date \| Date[] \| DateRange \| undefined) => void` | - | Callback when date is selected |
+| `disabled` | `Matcher \| Matcher[]` | - | Dates that cannot be selected |
+| `showOutsideDays` | `boolean` | `true` | Show days from previous/next months |
+| `className` | `string` | - | Additional CSS classes |
+| `classNames` | `DayPickerClassNames` | - | Custom class names for calendar parts |
+
+### Date Range Type
+
+```tsx
+type DateRange = {
+  from: Date | undefined;
+  to?: Date | undefined;
+}
+```
+
+### Matcher Type
+
+```tsx
+type Matcher = 
+  | Date 
+  | { from: Date; to: Date }
+  | { before: Date }
+  | { after: Date }
+  | { dayOfWeek: number[] }
+  | ((date: Date) => boolean)
+```
+
+## Styling
+
+The Calendar component uses our design system tokens and can be customized with Tailwind CSS classes:
+
+```tsx
+<Calendar
+  className="rounded-lg border-2 border-primary"
+  classNames={{
+    day_selected: "bg-primary text-white",
+    day_today: "bg-accent text-accent-foreground"
+  }}
+/>
+```
+
+## Accessibility
+
+- Full keyboard navigation support
+- Arrow keys to navigate between dates
+- Enter/Space to select dates
+- Tab to move between months
+- ARIA labels for all interactive elements
+- Screen reader announcements for selected dates
+
+## Best Practices
+
+1. **Provide clear labels** - Always label your calendar with descriptive text
+2. **Handle edge cases** - Consider timezone differences and date formatting
+3. **Validate selections** - Ensure selected dates are valid for your use case
+4. **Provide feedback** - Show the selected date(s) clearly to users
+5. **Consider mobile** - Test touch interactions on mobile devices
+
+## Related Components
+
+- [DatePicker](/docs/components-datepicker--docs) - Input field with calendar popup
+- [DateRangePicker](/docs/components-daterangepicker--docs) - Dedicated range selection

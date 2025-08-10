@@ -23,12 +23,12 @@ export * from "./components/data-grid-adv";
 export * from "./components/dialog";
 export * from "./components/sheet";
 export * from "./components/command-palette";
+export * from "./components/tooltip";
 
 // Date & Time
 export * from "./components/date-picker";
-// NOTE: Non implémentés → ne pas exporter (bloquait la publication)
-// export * from "./components/calendar";
-// export * from "./components/date-range-picker";
+export * from "./components/calendar";
+export * from "./components/date-range-picker";
 
 // Forms
 export * from "./components/form";
@@ -37,6 +37,12 @@ export * from "./components/textarea";
 export * from "./components/select";
 export * from "./components/switch";
 export * from "./components/checkbox";
+
+// Feedback & Display
+export * from "./components/skeleton";
+export * from "./components/progress";
+export * from "./components/badge";
+export * from "./components/avatar";
 
 // Theming
 export * from "./theme/ThemeProvider";

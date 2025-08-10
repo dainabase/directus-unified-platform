@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: write  # IMPORTANT: Required for GitHub Packages
   id-token: write
 
 jobs:
@@ -28,9 +29,13 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          registry-url: 'https://npm.pkg.github.com'  # Configure for GitHub Packages
       
       - name: Install
         run: pnpm install
+      
+      - name: Build UI Package
+        run: pnpm -C packages/ui build
       
       - name: Create or Publish Release PR
         id: changesets
@@ -40,5 +45,4 @@ jobs:
           publish: pnpm release-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Dé-commente si publication npm (Option 2):
-          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # For GitHub Packages auth

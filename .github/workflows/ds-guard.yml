@@ -18,7 +18,7 @@ jobs:
           echo "changed=$CHANGED" >> $GITHUB_OUTPUT
       - name: Validate paths
         run: |
-          ALLOWED_REGEX='^(packages/ui/|apps/web/|\.github/|pnpm-workspace\.yaml|docs/WORKFLOW_CLAUDE\.md)'
+          ALLOWED_REGEX='^(\.changeset/|package\.json|pnpm-workspace\.yaml|\.github/|docs/|packages/ui/|apps/web/)'
           while IFS= read -r file; do
             if ! [[ "$file" =~ $ALLOWED_REGEX ]]; then
               echo "❌ Not allowed in this phase: $file"

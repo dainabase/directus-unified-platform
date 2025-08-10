@@ -1,9 +1,9 @@
 name: UI CI
 on:
   push:
-    branches: [ feat-design-system-apple ]
+    branches: [ feat/design-system-apple ]
   pull_request:
-    branches: [ feat-design-system-apple, main, master ]
+    branches: [ feat/design-system-apple, main, master ]
 jobs:
   ui-ci:
     runs-on: ubuntu-latest

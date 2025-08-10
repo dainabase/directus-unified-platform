@@ -1,7 +1,7 @@
 {
-  "status": "chromatic-configured",
-  "step": 11,
-  "timestamp": "2025-08-10T10:42:00Z",
+  "status": "playwright-e2e-configured",
+  "step": 12,
+  "timestamp": "2025-08-10T10:54:00Z",
   "workflow_loaded": true,
   "packs_completed": [
     "01-tokens-tailwind-pr",
@@ -14,7 +14,8 @@
     "08-charts-recharts",
     "09-nextjs-dashboard-demo",
     "10-cicd-github-actions",
-    "11-chromatic-configuration"
+    "11-chromatic-configuration",
+    "12-playwright-e2e-setup"
   ],
   "ci_cd": {
     "pnpm_workspace": true,
@@ -24,16 +25,27 @@
     "ds_guard": true,
     "chromatic": true,
     "chromatic_token_configured": true,
+    "playwright_e2e": true,
     "workflows": [
       "ui-ci.yml",
       "ui-storybook-pages.yml",
       "web-ci.yml",
       "ds-guard.yml",
-      "ui-chromatic.yml"
+      "ui-chromatic.yml",
+      "e2e-tests.yml"
     ],
     "github_pages_ready": false,
-    "artifacts": ["storybook-static"],
+    "artifacts": ["storybook-static", "playwright-report"],
     "chromatic_project_token": "chpt_b29d02c928a3750"
   },
-  "next_step": "Run Chromatic workflow manually or wait for next push/PR + Configure GitHub Pages"
+  "e2e_testing": {
+    "playwright_configured": true,
+    "test_files": [
+      "e2e/storybook.spec.ts",
+      "e2e/dashboard.spec.ts"
+    ],
+    "browsers": ["chromium", "firefox", "webkit"],
+    "ci_workflow": "e2e-tests.yml"
+  },
+  "next_step": "Deploy Storybook to GitHub Pages + Open PR to main branch"
 }

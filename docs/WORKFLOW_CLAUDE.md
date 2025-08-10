@@ -1,5 +1,5 @@
 # WORKFLOW_CLAUDE.md
-> **Objectif** : Décrire la procédure complète pour le développement Frontend Design System-First du projet `dainabase/directus-unified-platform` (branche `feat-design-system-apple`) avec Claude Desktop / Cloud Code.
+> **Objectif** : Décrire la procédure complète pour le développement Frontend Design System-First du projet `dainabase/directus-unified-platform` (branche `feat/design-system-apple`) avec Claude Desktop / Cloud Code.
 ---
 ## 1. Contexte du projet
 Ce projet vise à créer un **Design System Apple-style** pour un dashboard d'entreprise moderne, sobre, haut de gamme.  
@@ -44,7 +44,7 @@ Police : **Montserrat** via `--font-sans`.
 ## 5. Workflow avec Claude
 1. Claude doit **vérifier** qu'il travaille sur :
    - Repo : `dainabase/directus-unified-platform`
-   - Branche : `feat-design-system-apple`
+   - Branche : `feat/design-system-apple`
 2. Claude doit **lire ce fichier** avant toute action.
 3. Claude applique uniquement **le pack fourni** (code + chemins + commit message).  
    Aucun autre fichier n'est modifié.

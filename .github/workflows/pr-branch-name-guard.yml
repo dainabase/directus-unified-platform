@@ -1,0 +1,23 @@
+name: PR Branch Name Guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited, reopened]
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure branches follow convention
+        run: |
+          HEAD_BRANCH="${{ github.head_ref }}"
+          echo "Head branch: ${HEAD_BRANCH}"
+          
+          # Autorise feat/*, fix/*, chore/*, docs/*, ci/*, refactor/*, test/*, hotfix/*
+          if ! echo "$HEAD_BRANCH" | grep -E -q '^(feat|fix|chore|docs|ci|refactor|test|hotfix)/[a-z0-9._-]+$'; then
+            echo "::error::Invalid branch name '$HEAD_BRANCH'. Use format: type/description (e.g., feat/design-system)"
+            echo "::error::Allowed prefixes: feat, fix, chore, docs, ci, refactor, test, hotfix"
+            exit 1
+          fi
+          
+          echo "✅ Branch name follows convention"

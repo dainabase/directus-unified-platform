@@ -1,0 +1,75 @@
+name: Simple Publish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://npm.pkg.github.com'
+      
+      - name: Check if package exists
+        run: |
+          echo "🔍 Checking if @dainabase/ui exists on GitHub Packages..."
+          npm view @dainabase/ui --registry https://npm.pkg.github.com 2>/dev/null || echo "Package does not exist yet"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create minimal package
+        run: |
+          cd packages/ui
+          
+          # Ensure dist exists
+          mkdir -p dist
+          
+          # Create minimal index.js
+          echo "module.exports = { Button: () => null };" > dist/index.js
+          
+          # Create minimal index.d.ts
+          echo "export declare const Button: any;" > dist/index.d.ts
+          
+          # Update version to avoid conflicts
+          TIMESTAMP=$(date +%s)
+          
+          # Create minimal package.json
+          cat > package.json << EOF
+          {
+            "name": "@dainabase/ui",
+            "version": "0.3.${TIMESTAMP}",
+            "main": "dist/index.js",
+            "types": "dist/index.d.ts",
+            "files": ["dist"],
+            "publishConfig": {
+              "registry": "https://npm.pkg.github.com/"
+            }
+          }
+          EOF
+          
+          echo "📦 Package.json created:"
+          cat package.json
+      
+      - name: Authenticate to npm
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "@dainabase:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          cat ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Publish
+        run: |
+          cd packages/ui
+          npm publish --registry https://npm.pkg.github.com/ --access public --verbose
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

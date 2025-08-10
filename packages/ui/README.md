@@ -2,6 +2,44 @@
 
 Apple-style Design System for modern React applications.
 
+[![Version](https://img.shields.io/npm/v/@dainabase/ui?registry_uri=https://npm.pkg.github.com)](https://github.com/dainabase/directus-unified-platform/packages)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-ci.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-ci.yml)
+[![Chromatic](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml)
+[![A11y](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml)
+[![Storybook](https://img.shields.io/badge/Storybook-Pages-FF4785?logo=storybook)](https://dainabase.github.io/directus-unified-platform/)
+
+## 📋 Quick Links
+
+- 📚 [Storybook Documentation](https://dainabase.github.io/directus-unified-platform/)
+- 🎨 [Chromatic Visual Tests](https://www.chromatic.com/builds?appId=66b75b7c34b967e64b8b8e09)
+- 🔍 [GitHub Actions](https://github.com/dainabase/directus-unified-platform/actions)
+- 📦 [Package on GitHub](https://github.com/dainabase/directus-unified-platform/packages)
+
+## 🎨 Visual Testing (Chromatic)
+
+This Design System uses Chromatic for visual regression testing. Every component change is automatically captured and compared against baselines.
+
+### Status
+- **Build Status**: ![Chromatic Status](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml/badge.svg)
+- **Latest Build**: [View on Chromatic](https://www.chromatic.com/builds?appId=66b75b7c34b967e64b8b8e09)
+- **Coverage**: 23 components with visual tests
+
+### Visual Testing Features
+- ✅ Automatic screenshot capture on every push
+- ✅ Visual diff detection for UI changes
+- ✅ PR comments with change summary
+- ✅ Blocking CI on visual regressions
+- ✅ Component library hosting
+
+## ♿ Accessibility
+
+All components are tested for WCAG 2.1 AA compliance using automated tools:
+
+- **Status**: ![A11y Status](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml/badge.svg)
+- **Coverage**: 100% of interactive components
+- **Testing**: Axe-core integration with Storybook
+
 ## Installation
 
 First, configure npm to use GitHub Packages for the @dainabase scope:
@@ -142,10 +180,42 @@ import type { ButtonProps, CardProps } from "@dainabase/ui";
 - 🚀 Tree-shakeable
 - 📘 Full TypeScript support
 - 📖 Comprehensive Storybook docs
+- 🎭 Visual regression testing
+- 🔍 Automated accessibility testing
+
+## Quality Assurance
+
+### CI/CD Pipeline
+- **Build & Type Check**: Every commit
+- **Linting**: ESLint with strict rules
+- **Visual Testing**: Chromatic on every PR
+- **Accessibility**: Automated a11y testing
+- **Unit Tests**: Component testing suite
+- **Consumer Build**: Integration smoke tests
+
+### Test Coverage
+- **Visual Tests**: 100% component coverage
+- **A11y Tests**: WCAG 2.1 AA compliance
+- **Unit Tests**: Core functionality coverage
 
 ## Development
 
-See [Storybook](https://sb.dainabase.com) for interactive documentation.
+See [Storybook](https://dainabase.github.io/directus-unified-platform/) for interactive documentation.
+
+### Local Development
+```bash
+# Install dependencies
+pnpm install
+
+# Run Storybook
+pnpm --filter @dainabase/ui sb
+
+# Build package
+pnpm --filter @dainabase/ui build
+
+# Run tests
+pnpm --filter @dainabase/ui test
+```
 
 ## License
 

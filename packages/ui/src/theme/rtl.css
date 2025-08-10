@@ -1,0 +1,186 @@
+/* RTL Support for @dainabase/ui Design System */
+
+/* RTL Direction Variables */
+[dir="rtl"] {
+  --direction-factor: -1;
+  --text-align-start: right;
+  --text-align-end: left;
+  --margin-inline-start: margin-right;
+  --margin-inline-end: margin-left;
+  --padding-inline-start: padding-right;
+  --padding-inline-end: padding-left;
+}
+
+[dir="ltr"] {
+  --direction-factor: 1;
+  --text-align-start: left;
+  --text-align-end: right;
+  --margin-inline-start: margin-left;
+  --margin-inline-end: margin-right;
+  --padding-inline-start: padding-left;
+  --padding-inline-end: padding-right;
+}
+
+/* RTL Overrides */
+[dir="rtl"] {
+  /* Flexbox adjustments */
+  .flex-row {
+    flex-direction: row-reverse;
+  }
+
+  /* Grid adjustments */
+  .grid {
+    direction: rtl;
+  }
+
+  /* Text alignment */
+  .text-left {
+    text-align: right;
+  }
+
+  .text-right {
+    text-align: left;
+  }
+
+  /* Margin adjustments */
+  .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  /* Padding adjustments */
+  .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+
+  .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+
+  /* Border radius adjustments */
+  .rounded-l-md {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+
+  .rounded-r-md {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+  }
+
+  /* Icon positioning */
+  .icon-left {
+    order: 2;
+    margin-left: 0.5rem;
+    margin-right: 0;
+  }
+
+  .icon-right {
+    order: -1;
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+
+  /* Dropdown and popover positioning */
+  [data-side="left"] {
+    right: auto;
+    left: 100%;
+  }
+
+  [data-side="right"] {
+    left: auto;
+    right: 100%;
+  }
+
+  /* Progress bar direction */
+  .progress-bar {
+    transform: scaleX(var(--direction-factor));
+  }
+
+  /* Breadcrumb separator */
+  .breadcrumb-separator::before {
+    content: "\\";
+    transform: scaleX(-1);
+  }
+
+  /* Chevron icons */
+  .chevron-left,
+  .chevron-right {
+    transform: scaleX(-1);
+  }
+}
+
+/* Logical properties for better RTL support */
+.start-0 {
+  inset-inline-start: 0;
+}
+
+.end-0 {
+  inset-inline-end: 0;
+}
+
+.ms-2 {
+  margin-inline-start: 0.5rem;
+}
+
+.me-2 {
+  margin-inline-end: 0.5rem;
+}
+
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.pe-4 {
+  padding-inline-end: 1rem;
+}
+
+/* Animation direction adjustments */
+[dir="rtl"] {
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out-to-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes slide-out-to-right {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+}

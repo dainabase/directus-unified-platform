@@ -1,3 +1,8 @@
 # Storybook
 storybook-static/
 *.log
+
+# Chromatic
+build-storybook.log
+chromatic.log
+.chromatic/

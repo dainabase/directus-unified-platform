@@ -1,0 +1,41 @@
+name: UI Tests
+on:
+  push:
+    branches: [ main, 'feat/**', 'fix/**' ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/ui-test.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run linting
+        run: pnpm --filter @dainabase/ui lint
+      
+      - name: Run type checking
+        run: pnpm --filter @dainabase/ui typecheck
+      
+      - name: Build package
+        run: pnpm --filter @dainabase/ui build
+      
+      - name: Test Storybook build
+        run: pnpm --filter @dainabase/ui build:sb:static

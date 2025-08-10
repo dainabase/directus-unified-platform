@@ -4,143 +4,201 @@ import { resolve } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import compression from 'vite-plugin-compression';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     // Gzip compression
     compression({
       algorithm: 'gzip',
       ext: '.gz',
+      threshold: 10240, // Only compress files > 10KB
     }),
     // Brotli compression
     compression({
       algorithm: 'brotliCompress',
       ext: '.br',
+      threshold: 10240,
     }),
-    // Bundle analyzer
-    visualizer({
+    // Bundle analyzer in analyze mode
+    mode === 'analyze' && visualizer({
       filename: './dist/stats.html',
-      open: false,
+      open: true,
       gzipSize: true,
       brotliSize: true,
+      template: 'treemap', // Better visualization
     }),
-  ],
+  ].filter(Boolean),
+  
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: '@dainabase/ui',
+      entry: {
+        // Main entry with core components only
+        index: resolve(__dirname, 'src/index.ts'),
+        // Lazy loaded heavy components
+        'components-lazy': resolve(__dirname, 'src/components-lazy.ts'),
+      },
       formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
+      fileName: (format, entryName) => 
+        `${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
     },
+    
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      // Externalize ALL heavy dependencies
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        // Externalize heavy deps to reduce bundle
+        'recharts',
+        '@tanstack/react-table',
+        'date-fns',
+        'framer-motion',
+        // Keep only core Radix components internal
+        /^@radix-ui\/(?!react-(slot|primitive))/,
+      ],
+      
       output: {
-        // Manual chunks for better code splitting
-        manualChunks: {
-          // Core components (always loaded)
-          'core': [
-            './src/components/button/index.ts',
-            './src/components/card/index.ts',
-            './src/components/icon/index.ts',
-            './src/components/badge/index.ts',
-            './src/components/avatar/index.ts',
-          ],
-          // Layout components
-          'layout': [
-            './src/components/app-shell/index.ts',
-            './src/components/tabs/index.ts',
-            './src/components/breadcrumbs/index.ts',
-            './src/components/dropdown-menu/index.ts',
-          ],
-          // Form components
-          'forms': [
-            './src/components/form/index.ts',
-            './src/components/input/index.ts',
-            './src/components/textarea/index.ts',
-            './src/components/select/index.ts',
-            './src/components/checkbox/index.ts',
-            './src/components/switch/index.ts',
-          ],
-          // Data components (heavy)
-          'data': [
-            './src/components/data-grid/index.ts',
-            './src/components/data-grid-adv/index.ts',
-          ],
-          // Date components
-          'date': [
-            './src/components/calendar/index.ts',
-            './src/components/date-picker/index.ts',
-            './src/components/date-range-picker/index.ts',
-          ],
-          // Overlay components
-          'overlays': [
-            './src/components/dialog/index.ts',
-            './src/components/sheet/index.ts',
-            './src/components/popover/index.ts',
-            './src/components/tooltip/index.ts',
-            './src/components/toast/index.ts',
-          ],
-          // Visualization
-          'viz': [
-            './src/components/charts/index.ts',
-            './src/components/progress/index.ts',
-            './src/components/skeleton/index.ts',
-          ],
-          // Theme
-          'theme': [
-            './src/components/theme-provider/index.ts',
-            './src/components/theme-toggle/index.ts',
-          ],
-          // Utils
-          'utils': [
-            './src/lib/utils.ts',
-            './src/lib/cn.ts',
-          ],
-        },
+        // Preserve modules for tree-shaking
+        preserveModules: mode !== 'production',
+        preserveModulesRoot: 'src',
+        
+        // Manual chunks for production only
+        ...(mode === 'production' && {
+          manualChunks(id) {
+            // Core utilities - always bundled
+            if (id.includes('/lib/')) {
+              return 'utils';
+            }
+            
+            // Heavy components - separate chunks
+            if (id.includes('data-grid')) {
+              return 'data-grid';
+            }
+            if (id.includes('charts')) {
+              return 'charts';
+            }
+            if (id.includes('calendar') || id.includes('date')) {
+              return 'date';
+            }
+            if (id.includes('form')) {
+              return 'forms';
+            }
+            
+            // Core components - main bundle
+            const coreComponents = [
+              'button', 'card', 'icon', 'badge', 
+              'avatar', 'tooltip', 'skeleton'
+            ];
+            if (coreComponents.some(comp => id.includes(comp))) {
+              return 'core';
+            }
+            
+            // Everything else in vendors
+            if (id.includes('node_modules')) {
+              // Radix components grouped
+              if (id.includes('@radix-ui')) {
+                return 'radix';
+              }
+              // Other vendors
+              return 'vendor';
+            }
+          },
+        }),
+        
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'recharts': 'Recharts',
+          '@tanstack/react-table': 'ReactTable',
+          'date-fns': 'DateFns',
+          'framer-motion': 'FramerMotion',
+        },
+        
+        // Optimize chunk names
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId ? 
+            chunkInfo.facadeModuleId.split('/').pop()?.split('.')[0] : 
+            'chunk';
+          return `chunks/${facadeModuleId}-[hash].js`;
         },
       },
     },
-    // Optimize
+    
+    // Aggressive minification
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log'],
+        pure_funcs: ['console.log', 'console.info'],
+        passes: 2, // Multiple passes for better compression
+        unsafe: true, // Enable unsafe optimizations
+        unsafe_comps: true,
+        unsafe_proto: true,
+        unsafe_regexp: true,
+        conditionals: true,
+        comparisons: true,
+        if_return: true,
+        join_vars: true,
+        reduce_vars: true,
+        collapse_vars: true,
+        dead_code: true,
       },
       mangle: {
         safari10: true,
+        properties: {
+          regex: /^_/, // Mangle properties starting with _
+        },
       },
       format: {
         comments: false,
+        ecma: 2020,
       },
     },
+    
     // Target modern browsers for smaller bundle
     target: 'es2020',
-    // Source maps for debugging
-    sourcemap: true,
+    
+    // Source maps only in dev
+    sourcemap: mode === 'development',
+    
     // Report compressed size
     reportCompressedSize: true,
+    
     // Chunk size warnings
-    chunkSizeWarningLimit: 50, // 50kb per chunk max
+    chunkSizeWarningLimit: 25, // 25kb per chunk max
+    
+    // Asset inlining threshold
+    assetsInlineLimit: 4096, // 4kb
   },
+  
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      // Use production builds of libraries
+      'react': mode === 'production' ? 
+        'react/cjs/react.production.min.js' : 'react',
+      'react-dom': mode === 'production' ? 
+        'react-dom/cjs/react-dom.production.min.js' : 'react-dom',
     },
   },
+  
   // Optimize deps
   optimizeDeps: {
     include: [
-      'react',
-      'react-dom',
       'lucide-react',
       'class-variance-authority',
       'tailwind-merge',
+      'cmdk',
+      'zod',
     ],
-    exclude: ['@dainabase/ui'],
+    exclude: [
+      '@dainabase/ui',
+      // Exclude heavy deps from optimization
+      'recharts',
+      '@tanstack/react-table',
+      'date-fns',
+      'framer-motion',
+    ],
   },
-});
+}));

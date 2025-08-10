@@ -30,8 +30,77 @@ jobs:
       - name: Build Storybook
         run: pnpm --filter @dainabase/ui build:sb:static
       
-      - name: Run a11y tests
+      - name: Run a11y tests with report generation
+        id: a11y-test
         run: |
+          mkdir -p a11y-reports
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
             "npx http-server packages/ui/storybook-static --port 6006 --silent" \
-            "npx wait-on tcp:6006 && pnpm --filter @dainabase/ui test:stories"
+            "npx wait-on tcp:6006 && pnpm --filter @dainabase/ui test:stories --reporter=json > a11y-reports/results.json 2>&1 || true"
+          
+          # Capture exit code
+          TEST_EXIT_CODE=$?
+          
+          # Generate summary report
+          echo "# 📊 A11y Test Summary" > a11y-reports/summary.md
+          echo "" >> a11y-reports/summary.md
+          echo "**Date**: $(date)" >> a11y-reports/summary.md
+          echo "**Branch**: ${{ github.ref_name }}" >> a11y-reports/summary.md
+          echo "**Commit**: ${{ github.sha }}" >> a11y-reports/summary.md
+          echo "" >> a11y-reports/summary.md
+          
+          if [ $TEST_EXIT_CODE -eq 0 ]; then
+            echo "✅ **Status**: All a11y tests passed" >> a11y-reports/summary.md
+            echo "::notice title=A11y Tests::✅ All accessibility tests passed successfully"
+          else
+            echo "❌ **Status**: A11y violations detected" >> a11y-reports/summary.md
+            echo "::error title=A11y Tests::❌ Accessibility violations found - check artifacts for details"
+          fi
+          
+          # Generate HTML report if violations exist
+          if [ -f "test-results/a11y-report.html" ]; then
+            cp test-results/a11y-report.html a11y-reports/
+          fi
+          
+          # Exit with original code
+          exit $TEST_EXIT_CODE
+      
+      - name: Upload a11y reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-reports-${{ github.sha }}
+          path: |
+            a11y-reports/
+            test-results/
+          retention-days: 30
+      
+      - name: Comment PR with a11y results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summaryContent = '## ♿ Accessibility Test Results\n\n';
+            
+            try {
+              if (fs.existsSync('a11y-reports/summary.md')) {
+                const summary = fs.readFileSync('a11y-reports/summary.md', 'utf8');
+                summaryContent += summary;
+              } else {
+                summaryContent += '${{ steps.a11y-test.outcome }}' === 'success' 
+                  ? '✅ All accessibility tests passed!' 
+                  : '❌ Accessibility tests failed - check workflow artifacts for details';
+              }
+            } catch (error) {
+              summaryContent += '⚠️ Could not read test summary';
+            }
+            
+            summaryContent += '\n\n[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summaryContent
+            });

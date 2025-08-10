@@ -1,33 +1,38 @@
 name: UI CI
 on:
   push:
-    branches: [ feat-design-system-apple ]
+    branches: [ feat/design-system-apple ]
   pull_request:
-    branches: [ feat-design-system-apple, main, master ]
+    branches: [ feat/design-system-apple, main, master ]
 jobs:
   ui-ci:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/ui
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node + pnpm
+      
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      - name: Install
-        run: pnpm install
-      - name: Lint
-        run: pnpm lint
-      - name: Typecheck
-        run: pnpm typecheck
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Lint UI package
+        run: pnpm --filter @dainabase/ui lint
+      
+      - name: Typecheck UI package
+        run: pnpm --filter @dainabase/ui typecheck
+      
       - name: Build Storybook (static)
-        run: pnpm build:sb:static
+        run: pnpm --filter @dainabase/ui build:sb:static
+      
       - name: Upload Storybook artifact
         uses: actions/upload-artifact@v4
         with:

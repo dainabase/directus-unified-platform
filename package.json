@@ -29,7 +29,10 @@
     "migrate:status": "node migration/reports/status/check-status.js || echo 'Status disponible'",
     "backup": "npm run backup:db && npm run backup:files",
     "backup:db": "node scripts/maintenance/backup-db.js || echo 'Script backup à créer'",
-    "backup:files": "node scripts/maintenance/backup-files.js || echo 'Script backup à créer'"
+    "backup:files": "node scripts/maintenance/backup-files.js || echo 'Script backup à créer'",
+    "changeset": "changeset",
+    "version-packages": "changeset version && pnpm install",
+    "release-packages": "pnpm -r --filter @dainabase/ui run prepublish && pnpm -r --filter @dainabase/ui publish --no-git-checks"
   },
   "dependencies": {
     "@directus/sdk": "^10.3.5",
@@ -51,6 +54,7 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "concurrently": "^8.0.1",
     "eslint": "^8.39.0",
     "jest": "^29.5.0",

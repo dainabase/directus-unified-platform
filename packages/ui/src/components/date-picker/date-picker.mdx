@@ -1,0 +1,13 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./date-picker.stories";
+<Meta of={Stories} />
+
+# DatePicker & DateRangePicker
+Sélecteurs de date (simple et plage) basés sur **react-day-picker** + **Radix Popover**.
+
+<Canvas><Story of={Stories.Single} /></Canvas>
+<Canvas><Story of={Stories.Range} /></Canvas>
+
+## Conseils
+- Utiliser `numberOfMonths={2}` pour les périodes.
+- Accessibilité: labels clairs.

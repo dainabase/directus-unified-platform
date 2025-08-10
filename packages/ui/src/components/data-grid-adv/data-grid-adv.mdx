@@ -1,0 +1,11 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./data-grid-adv.stories";
+<Meta of={Stories} />
+# DataGrid – Avancée
+Tableau **virtualisé** (1 500+ lignes) avec sélection, tri, filtres, visibilité de colonnes, densité et **actions par ligne**.
+<Canvas><Story of={Stories.Basic} /></Canvas>
+<Canvas><Story of={Stories.WithRowActions} /></Canvas>
+## Conseils
+- Utiliser la virtualisation pour >1k lignes.
+- Éviter >10 colonnes visibles par défaut.
+- Préparer des filtres colonne par colonne si besoin métier.

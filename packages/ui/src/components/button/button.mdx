@@ -1,0 +1,17 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./button.stories";
+<Meta of={Stories} />
+
+# Button
+Bouton principal du DS. Utilise les **tokens** (pas de valeurs en dur).
+
+## Variants & Sizes
+- Variants: `default | ghost | outline | link | destructive`  
+- Sizes: `sm | md | lg | icon`
+
+<Canvas><Story of={Stories.Default} /></Canvas>
+
+## A11y
+- Focus visible (`focus-visible:ring-2`)
+- Rôle natif `button`
+- Éviter les icônes seules sans `aria-label`

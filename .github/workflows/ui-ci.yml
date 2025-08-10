@@ -1,0 +1,36 @@
+name: UI CI
+on:
+  push:
+    branches: [ feat-design-system-apple ]
+  pull_request:
+    branches: [ feat-design-system-apple, main, master ]
+jobs:
+  ui-ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node + pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install
+        run: pnpm install
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Build Storybook (static)
+        run: pnpm build:sb:static
+      - name: Upload Storybook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+          if-no-files-found: error

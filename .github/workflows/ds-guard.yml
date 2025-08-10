@@ -1,0 +1,28 @@
+name: DS Guard (feature branch)
+on:
+  pull_request:
+    branches: [ feat-design-system-apple ]
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+            fetch-depth: 0
+      - name: Detect changed files
+        id: changes
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          CHANGED="$(git diff --name-only origin/${{ github.base_ref }}...HEAD)"
+          echo "$CHANGED" > changed.txt
+          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
+      - name: Validate paths
+        run: |
+          ALLOWED_REGEX='^(\.changeset/|package\.json|pnpm-workspace\.yaml|\.github/|docs/|packages/ui/|apps/web/)'
+          while IFS= read -r file; do
+            if ! [[ "$file" =~ $ALLOWED_REGEX ]]; then
+              echo "❌ Not allowed in this phase: $file"
+              exit 1
+            fi
+          done < changed.txt
+          echo "✅ Paths OK"

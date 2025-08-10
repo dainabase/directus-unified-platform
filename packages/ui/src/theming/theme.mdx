@@ -1,0 +1,13 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./theme.stories";
+<Meta of={Stories} />
+
+# Theming & Dark Mode
+ThemeProvider `class`-based (adds `.dark` to `<html>`) + `ThemeToggle`.
+
+<Canvas><Story of={Stories.Basic} /></Canvas>
+
+## Notes
+- Persistence via `localStorage('ui-theme')`.
+- `system` follows `prefers-color-scheme`.
+- Components expose `dark:*` classes (see below).

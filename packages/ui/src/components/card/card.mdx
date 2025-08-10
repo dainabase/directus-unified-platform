@@ -1,0 +1,12 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./card.stories";
+<Meta of={Stories} />
+
+# Card
+Conteneur avec **élévation douce** et séparateurs.
+
+<Canvas><Story of={Stories.Example} /></Canvas>
+
+## A11y
+- Titres (`h3`) descriptifs
+- Contrastes conformes (tokens)

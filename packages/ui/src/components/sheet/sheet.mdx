@@ -1,0 +1,13 @@
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import * as Stories from "./sheet.stories";
+<Meta of={Stories} />
+
+# Sheet
+Panneau latéral/vertical basé sur **Radix Dialog**.
+
+<Canvas><Story of={Stories.Right} /></Canvas>
+<Canvas><Story of={Stories.Left} /></Canvas>
+
+## Bonnes pratiques
+- Utiliser `SheetHeader/Title/Description` pour le contexte.
+- Actions dans `SheetFooter`.

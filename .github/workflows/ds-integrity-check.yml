@@ -1,0 +1,118 @@
+name: 🛡️ Design System Integrity Check
+
+on:
+  pull_request:
+    paths:
+      - 'packages/ui/**'
+      - '.ds/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/ui/**'
+  workflow_dispatch:
+    inputs:
+      verbose:
+        description: 'Enable verbose logging'
+        required: false
+        default: 'false'
+
+jobs:
+  integrity-check:
+    name: Verify DS Integrity
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check current version
+        id: version
+        run: |
+          VERSION=$(cat packages/ui/package.json | jq -r '.version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Current version: $VERSION"
+
+      - name: 📊 Count components
+        id: components
+        run: |
+          COMPONENT_COUNT=$(ls -la packages/ui/src/components | grep "^d" | wc -l)
+          echo "count=$COMPONENT_COUNT" >> $GITHUB_OUTPUT
+          echo "🎨 Component count: $COMPONENT_COUNT"
+
+      - name: 🎯 Verify minimum requirements
+        run: |
+          MIN_COMPONENTS=31
+          CURRENT_VERSION="${{ steps.version.outputs.version }}"
+          CURRENT_COUNT="${{ steps.components.outputs.count }}"
+          
+          echo "==================================="
+          echo "🔒 DESIGN SYSTEM INTEGRITY CHECK"
+          echo "==================================="
+          echo "Version: $CURRENT_VERSION"
+          echo "Components: $CURRENT_COUNT/$MIN_COMPONENTS"
+          echo "==================================="
+          
+          if [ "$CURRENT_COUNT" -lt "$MIN_COMPONENTS" ]; then
+            echo "❌ ERROR: Component count dropped below minimum!"
+            echo "Expected at least $MIN_COMPONENTS components, found only $CURRENT_COUNT"
+            exit 1
+          fi
+          
+          echo "✅ All integrity checks passed!"
+
+      - name: 📝 Generate integrity report
+        if: always()
+        run: |
+          cat > integrity-report.json << EOF
+          {
+            "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "version": "${{ steps.version.outputs.version }}",
+            "component_count": ${{ steps.components.outputs.count }},
+            "minimum_required": 31,
+            "status": "passed",
+            "branch": "${{ github.ref_name }}",
+            "commit": "${{ github.sha }}"
+          }
+          EOF
+          
+          echo "📋 Integrity Report:"
+          cat integrity-report.json | jq .
+
+      - name: 🚨 Alert on component loss
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 CRITICAL: Design System Component Loss Detected',
+              body: `## ⚠️ Component Loss Alert
+              
+              A loss of Design System components has been detected!
+              
+              **Current Status:**
+              - Version: ${{ steps.version.outputs.version }}
+              - Components: ${{ steps.components.outputs.count }}
+              - Expected: 31+
+              
+              **Action Required:**
+              1. Check the PR for missing components
+              2. Restore any accidentally removed components
+              3. Update the version if this is intentional
+              
+              cc @dainabase`,
+              labels: ['critical', 'design-system', 'component-loss']
+            };
+            
+            await github.rest.issues.create(issue);
+
+      - name: 💾 Save integrity checkpoint
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p .ds/checkpoints
+          cp integrity-report.json .ds/checkpoints/checkpoint-$(date +%Y%m%d-%H%M%S).json
+          echo "✅ Checkpoint saved"

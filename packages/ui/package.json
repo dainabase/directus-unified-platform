@@ -4,6 +4,18 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dainabase/directus-unified-platform",
+    "directory": "packages/ui"
+  },
+  "files": [
+    "src",
+    "tailwind.config.ts",
+    "tokens.ts",
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
@@ -12,7 +24,8 @@
     "sb": "storybook dev -p 6006",
     "build:sb:static": "storybook build -o storybook-static",
     "test:stories": "storybook test --ci",
-    "chromatic": "chromatic --exit-zero-on-changes"
+    "chromatic": "chromatic --exit-zero-on-changes",
+    "prepublish": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",

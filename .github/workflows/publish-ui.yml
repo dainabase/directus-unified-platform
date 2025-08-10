@@ -1,0 +1,85 @@
+name: Publish UI Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (test without publishing)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@dainabase'
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Check package.json
+        run: |
+          echo "📦 Package info:"
+          cat packages/ui/package.json | grep -E '"name"|"version"|"private"'
+      
+      - name: Build UI package
+        run: |
+          cd packages/ui
+          echo "🔨 Building package..."
+          pnpm build
+          echo "✅ Build complete. Contents of dist:"
+          ls -la dist/ || echo "❌ No dist directory found!"
+      
+      - name: Test npm authentication
+        run: |
+          echo "🔐 Testing npm authentication..."
+          npm whoami --registry https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Dry run publish
+        if: ${{ inputs.dry_run }}
+        run: |
+          cd packages/ui
+          echo "🧪 Dry run - checking what would be published:"
+          npm publish --dry-run --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Publish to GitHub Packages
+        if: ${{ !inputs.dry_run }}
+        run: |
+          cd packages/ui
+          echo "📦 Publishing @dainabase/ui to GitHub Packages..."
+          npm publish --access public
+          echo "✅ Published successfully!"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Verify publication
+        if: ${{ !inputs.dry_run }}
+        run: |
+          echo "🔍 Verifying package was published..."
+          sleep 5
+          npm view @dainabase/ui@0.2.0 --registry https://npm.pkg.github.com || echo "Package not yet visible"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

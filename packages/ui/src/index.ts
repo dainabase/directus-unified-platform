@@ -23,12 +23,12 @@ export * from "./components/data-grid-adv";
 export * from "./components/dialog";
 export * from "./components/sheet";
 export * from "./components/command-palette";
-export * from "./components/popover"; // Added for DateRangePicker
+export * from "./components/popover";
 
 // Date & Time
 export * from "./components/date-picker";
-export * from "./components/calendar"; // ✅ Now implemented!
-export * from "./components/date-range-picker"; // ✅ Now implemented!
+export * from "./components/calendar";
+export * from "./components/date-range-picker";
 
 // Forms
 export * from "./components/form";
@@ -45,12 +45,23 @@ export * from "./components/theme-toggle";
 // Charts
 export * from "./components/charts";
 
-// UI Elements (Reconciled from feat/design-system-apple)
+// UI Elements (v0.4.0)
 export * from "./components/avatar";
 export * from "./components/badge";
 export * from "./components/progress";
 export * from "./components/skeleton";
 export * from "./components/tooltip";
 
-// Export Tailwind config for external usage (si nécessaire)
+// New Components (v1.0.0)
+export * from "./components/accordion";
+export * from "./components/slider";
+export * from "./components/rating";
+export * from "./components/timeline";
+export * from "./components/stepper";
+export * from "./components/pagination";
+
+// Utilities
+export { cn } from "./lib/utils";
+
+// Export Tailwind config for external usage
 // export { default as tailwindConfig } from "../tailwind.config";

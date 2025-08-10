@@ -1,12 +1,48 @@
-import { Meta, Canvas, Story } from "@storybook/blocks";
+import { Meta, Canvas, Story, Source, ArgsTable } from "@storybook/blocks";
 import * as Stories from "./data-grid.stories";
-<Meta of={Stories} />
 
-# DataGrid (base)
-Tableau **entreprise** avec tri, filtre global, pagination, et export **CSV**.
+<Meta of={Stories} title="Data/DataGrid (Base)" />
 
-<Canvas><Story of={Stories.Basic} /></Canvas>
+# DataGrid (Base)
 
-## Conseils
-- Préparer les colonnes avec `accessorKey` cohérents.
-- Pour 1k+ lignes, préférer la version **DataGrid avancée** (virtualized).
+Tableau standard basé sur `@tanstack/react-table`. Pour des jeux de données > 1 000 lignes, utiliser **DataGridAdv** (virtualisé).
+
+## Fonctions
+
+- Tri par colonne
+- Filtre global simple
+- Pagination de base
+- Sélection de lignes (optionnel)
+
+<Canvas>
+  <Story of={Stories.Basic} />
+</Canvas>
+
+## Quand utiliser DataGridAdv ?
+
+- > 1 500 lignes
+- Colonnes reconfigurables à chaud
+- Export CSV, densité, visibilité de colonnes
+
+Voir `Data/DataGridAdv` dans Storybook.
+
+## Accessibilité
+
+- Navigation clavier (flèches, tab, shift+tab)
+- Focus visible
+- `aria-sort` sur en-têtes triables
+
+## Props
+
+<ArgsTable of={Stories.Basic} />
+
+## Exemple
+
+<Source
+  code={`import { DataGrid } from "@dainabase/ui";
+
+export function UsersTable({ data }) {
+  return <DataGrid data={data} pageSize={20} />;
+}`}
+language="tsx"
+/>

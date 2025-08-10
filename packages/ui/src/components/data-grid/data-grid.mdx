@@ -1,48 +1,264 @@
-import { Meta, Canvas, Story, Source, ArgsTable } from "@storybook/blocks";
-import * as Stories from "./data-grid.stories";
+# DataGrid
 
-<Meta of={Stories} title="Data/DataGrid (Base)" />
+A powerful data table component built on @tanstack/react-table with sorting, filtering, pagination, and selection features.
 
-# DataGrid (Base)
+## Overview
 
-Tableau standard basé sur `@tanstack/react-table`. Pour des jeux de données > 1 000 lignes, utiliser **DataGridAdv** (virtualisé).
+DataGrid is the standard table component for displaying and interacting with structured data. For datasets larger than 1,000 rows, consider using **DataGridAdv** which provides virtualization.
 
-## Fonctions
+## Features
 
-- Tri par colonne
-- Filtre global simple
-- Pagination de base
-- Sélection de lignes (optionnel)
+- **Sorting**: Click column headers to sort ascending/descending
+- **Filtering**: Global search across all columns
+- **Pagination**: Navigate through pages of data
+- **Selection**: Optional row selection with checkboxes
+- **Responsive**: Adapts to container width
+- **Accessible**: Full keyboard navigation and ARIA support
 
-<Canvas>
-  <Story of={Stories.Basic} />
-</Canvas>
+## Usage
 
-## Quand utiliser DataGridAdv ?
+```tsx
+import { DataGrid } from '@dainabase/ui';
 
-- > 1 500 lignes
-- Colonnes reconfigurables à chaud
-- Export CSV, densité, visibilité de colonnes
+const columns = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    cell: ({ row }) => row.getValue('id'),
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ row }) => row.getValue('name'),
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => row.getValue('email'),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.getValue('status');
+      return (
+        <Badge variant={status === 'active' ? 'success' : 'secondary'}>
+          {status}
+        </Badge>
+      );
+    },
+  },
+];
 
-Voir `Data/DataGridAdv` dans Storybook.
+const data = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', status: 'active' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', status: 'inactive' },
+  // ... more data
+];
 
-## Accessibilité
+function UsersTable() {
+  return (
+    <DataGrid
+      columns={columns}
+      data={data}
+      pageSize={10}
+      enableSorting
+      enableFiltering
+      enableSelection
+    />
+  );
+}
+```
 
-- Navigation clavier (flèches, tab, shift+tab)
-- Focus visible
-- `aria-sort` sur en-têtes triables
+## Column Definition
+
+Columns are defined using the TanStack Table column definition format:
+
+```tsx
+const columns = [
+  {
+    accessorKey: 'propertyName', // Key in your data object
+    header: 'Display Name',      // Column header text
+    cell: ({ row }) => {         // Custom cell renderer
+      const value = row.getValue('propertyName');
+      return <CustomComponent value={value} />;
+    },
+    size: 150,                    // Optional: column width
+    enableSorting: true,          // Optional: enable sorting for this column
+    enableFiltering: true,        // Optional: include in global filter
+  },
+];
+```
 
 ## Props
 
-<ArgsTable of={Stories.Basic} />
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `ColumnDef[]` | Required | Column definitions |
+| `data` | `T[]` | Required | Array of data objects |
+| `pageSize` | `number` | 10 | Number of rows per page |
+| `enableSorting` | `boolean` | true | Enable column sorting |
+| `enableFiltering` | `boolean` | true | Enable global filtering |
+| `enableSelection` | `boolean` | false | Enable row selection |
+| `onSelectionChange` | `(rows: T[]) => void` | - | Callback when selection changes |
+| `initialSorting` | `SortingState` | [] | Initial sort configuration |
 
-## Exemple
+## Advanced Features
 
-<Source
-  code={`import { DataGrid } from "@dainabase/ui";
+### Custom Cell Renderers
 
-export function UsersTable({ data }) {
-  return <DataGrid data={data} pageSize={20} />;
-}`}
-language="tsx"
-/>
+```tsx
+{
+  accessorKey: 'avatar',
+  header: 'User',
+  cell: ({ row }) => (
+    <div className="flex items-center gap-2">
+      <Avatar src={row.original.avatar} />
+      <span>{row.original.name}</span>
+    </div>
+  ),
+}
+```
+
+### Row Actions
+
+```tsx
+{
+  id: 'actions',
+  header: 'Actions',
+  cell: ({ row }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={() => handleEdit(row.original)}>
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleDelete(row.original)}>
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+}
+```
+
+### Handling Selection
+
+```tsx
+function SelectableTable() {
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  return (
+    <>
+      <DataGrid
+        columns={columns}
+        data={data}
+        enableSelection
+        onSelectionChange={setSelectedRows}
+      />
+      <div>Selected: {selectedRows.length} rows</div>
+    </>
+  );
+}
+```
+
+## When to Use DataGridAdv?
+
+Use **DataGridAdv** instead of DataGrid when:
+
+- Dataset contains **more than 1,500 rows**
+- Need **virtualization** for performance
+- Require **column visibility** controls
+- Need **CSV export** functionality
+- Want **density options** (compact/comfortable/spacious)
+- Need **advanced filtering** per column
+- Require **column reordering**
+
+## Accessibility
+
+DataGrid is fully accessible with:
+
+- **Keyboard Navigation**: Arrow keys, Tab, Shift+Tab
+- **Screen Reader Support**: Proper ARIA labels and roles
+- **Focus Management**: Visible focus indicators
+- **Sort Announcements**: `aria-sort` on sortable headers
+- **Selection State**: `aria-selected` on selectable rows
+
+### Keyboard Shortcuts
+
+- `Tab` / `Shift+Tab`: Navigate between interactive elements
+- `Space`: Toggle row selection (when enabled)
+- `Enter`: Activate sort on column header
+- `Arrow Keys`: Navigate cells (when in cell navigation mode)
+
+## Performance Considerations
+
+- DataGrid renders all rows in the viewport
+- For large datasets (>1,500 rows), use DataGridAdv
+- Implement pagination to limit rendered rows
+- Use `React.memo` for custom cell components
+- Avoid expensive calculations in cell renderers
+
+## Examples
+
+### With Status Badges
+
+```tsx
+{
+  accessorKey: 'status',
+  header: 'Status',
+  cell: ({ row }) => {
+    const status = row.getValue('status');
+    const variant = {
+      active: 'success',
+      pending: 'warning',
+      inactive: 'secondary',
+    }[status] || 'default';
+    
+    return <Badge variant={variant}>{status}</Badge>;
+  },
+}
+```
+
+### With Date Formatting
+
+```tsx
+{
+  accessorKey: 'createdAt',
+  header: 'Created',
+  cell: ({ row }) => {
+    const date = new Date(row.getValue('createdAt'));
+    return format(date, 'MMM dd, yyyy');
+  },
+}
+```
+
+### With Progress Bars
+
+```tsx
+{
+  accessorKey: 'progress',
+  header: 'Progress',
+  cell: ({ row }) => {
+    const progress = row.getValue('progress');
+    return (
+      <div className="flex items-center gap-2">
+        <Progress value={progress} className="w-20" />
+        <span className="text-sm text-muted-foreground">{progress}%</span>
+      </div>
+    );
+  },
+}
+```
+
+## Related Components
+
+- [DataGridAdv](./data-grid-adv) - Advanced grid with virtualization
+- [Table](./table) - Basic table component
+- [Pagination](./pagination) - Standalone pagination component
+- [Badge](./badge) - Status indicators
+- [DropdownMenu](./dropdown-menu) - Row actions menu

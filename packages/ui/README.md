@@ -1,222 +1,272 @@
-# @dainabase/ui
+# @dainabase/ui - Design System
 
-Apple-style Design System for modern React applications.
+![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
+![React](https://img.shields.io/badge/React-18.2-61dafb)
+![Storybook](https://img.shields.io/badge/Storybook-7.6-ff4785)
 
-[![Version](https://img.shields.io/npm/v/@dainabase/ui?registry_uri=https://npm.pkg.github.com)](https://github.com/dainabase/directus-unified-platform/packages)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-ci.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-ci.yml)
-[![Chromatic](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml)
-[![A11y](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml/badge.svg?branch=feat/design-system-apple)](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml)
-[![Storybook](https://img.shields.io/badge/Storybook-Pages-FF4785?logo=storybook)](https://dainabase.github.io/directus-unified-platform/)
+A modern, accessible, and performant Design System built with React, TypeScript, and Tailwind CSS, inspired by Apple's Human Interface Guidelines.
 
-## 📋 Quick Links
+## 🎯 Features
 
-- 📚 [Storybook Documentation](https://dainabase.github.io/directus-unified-platform/)
-- 🎨 [Chromatic Visual Tests](https://www.chromatic.com/builds?appId=66b75b7c34b967e64b8b8e09)
-- 🔍 [GitHub Actions](https://github.com/dainabase/directus-unified-platform/actions)
-- 📦 [Package on GitHub](https://github.com/dainabase/directus-unified-platform/packages)
+- **30+ Production-Ready Components**: Buttons, Forms, Data Grids, Charts, and more
+- **Design Tokens**: Consistent spacing, colors, typography with Montserrat font
+- **Accessibility First**: WCAG 2.1 AA compliant with full keyboard navigation
+- **Dark Mode Support**: Built-in theme switching with system preference detection
+- **TypeScript Native**: Full type safety and IntelliSense support
+- **Tree-Shakeable**: Import only what you need
+- **Storybook Documentation**: Interactive component playground
 
-## 🎨 Visual Testing (Chromatic)
+## 📦 Installation
 
-This Design System uses Chromatic for visual regression testing. Every component change is automatically captured and compared against baselines.
-
-### Status
-- **Build Status**: ![Chromatic Status](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-chromatic.yml/badge.svg)
-- **Latest Build**: [View on Chromatic](https://www.chromatic.com/builds?appId=66b75b7c34b967e64b8b8e09)
-- **Coverage**: 23 components with visual tests
-
-### Visual Testing Features
-- ✅ Automatic screenshot capture on every push
-- ✅ Visual diff detection for UI changes
-- ✅ PR comments with change summary
-- ✅ Blocking CI on visual regressions
-- ✅ Component library hosting
-
-## ♿ Accessibility
-
-All components are tested for WCAG 2.1 AA compliance using automated tools:
-
-- **Status**: ![A11y Status](https://github.com/dainabase/directus-unified-platform/actions/workflows/ui-a11y.yml/badge.svg)
-- **Coverage**: 100% of interactive components
-- **Testing**: Axe-core integration with Storybook
-
-## Installation
-
-First, configure npm to use GitHub Packages for the @dainabase scope:
+### Using GitHub Packages
 
 ```bash
-echo "@dainabase:registry=https://npm.pkg.github.com/" >> .npmrc
-echo "//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN" >> .npmrc
-```
+# Configure npm to use GitHub Packages
+echo "@dainabase:registry=https://npm.pkg.github.com" >> .npmrc
 
-Then install the package:
-
-```bash
-pnpm add @dainabase/ui
-# or
+# Install the package
 npm install @dainabase/ui
-# or
+
+# Or with pnpm
+pnpm add @dainabase/ui
+
+# Or with yarn
 yarn add @dainabase/ui
 ```
 
-## Setup
+### Peer Dependencies
 
-### 1. Configure Tailwind
+```bash
+npm install react react-dom
+```
 
-Use the design system tokens in your `tailwind.config.ts`:
+## 🚀 Quick Start
+
+### 1. Import the CSS
+
+```tsx
+// In your app's entry point (e.g., _app.tsx or main.tsx)
+import "@dainabase/ui/dist/index.css";
+```
+
+### 2. Setup Tailwind Config
 
 ```ts
-import type { Config } from "tailwindcss";
-import { tokens } from "@dainabase/ui/tokens";
+// tailwind.config.ts
+import { tailwindConfig } from "@dainabase/ui/tailwind.config";
 
 export default {
+  ...tailwindConfig,
   content: [
     "./src/**/*.{ts,tsx}",
-    "./node_modules/@dainabase/ui/dist/**/*.{js,ts}"
+    "./node_modules/@dainabase/ui/dist/**/*.js",
   ],
-  theme: {
-    extend: {
-      colors: tokens.colors,
-      borderRadius: tokens.radius,
-      spacing: tokens.spacing,
-      boxShadow: tokens.shadow,
-      fontFamily: { 
-        sans: [tokens.font.sans, "sans-serif"] 
-      }
-    }
-  },
-  plugins: []
-} satisfies Config;
+};
 ```
 
-### 2. Setup Font (Next.js example)
+### 3. Use Components
 
 ```tsx
-// app/layout.tsx
-import { Montserrat } from "next/font/google";
-
-const montserrat = Montserrat({ 
-  subsets: ["latin"],
-  variable: "--font-sans"
-});
-
-export default function RootLayout({ children }) {
-  return (
-    <html className={montserrat.variable}>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
-For other frameworks, load Montserrat and set the CSS variable `--font-sans`.
-
-### 3. Setup Theme Provider
-
-Wrap your app with the ThemeProvider:
-
-```tsx
-import { ThemeProvider } from "@dainabase/ui";
+import { Button, Card, Input } from "@dainabase/ui";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system">
-      {/* Your app */}
-    </ThemeProvider>
-  );
-}
-```
-
-### 4. Import base styles
-
-Add to your global CSS:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Optional: Add any custom global styles */
-```
-
-## Usage
-
-```tsx
-import { Button, Card, Dialog } from "@dainabase/ui";
-
-function MyComponent() {
-  return (
     <Card>
-      <Button variant="primary">Click me</Button>
+      <Card.Header>
+        <Card.Title>Welcome</Card.Title>
+      </Card.Header>
+      <Card.Content>
+        <Input placeholder="Enter your name" />
+        <Button variant="primary">Get Started</Button>
+      </Card.Content>
     </Card>
   );
 }
 ```
 
-## Components
+## 🎨 Design Tokens
 
-- **Layout**: AppShell
-- **Core**: Button, Card, Dialog, Sheet, Tabs, DropdownMenu, Toast
-- **Forms**: Input, Textarea, Select, Switch, Checkbox
-- **Data**: DataGrid, DataGridAdv (virtualized)
-- **Date**: Calendar, DatePicker, DateRangePicker
-- **Charts**: LineChart, BarChart, AreaChart, DonutChart, RadialGauge
-- **Utils**: CommandPalette, ThemeToggle, Icon
+Access design tokens for custom implementations:
 
-## TypeScript
+```ts
+import { tokens } from "@dainabase/ui/tokens";
 
-Full TypeScript support with exported types:
-
-```tsx
-import type { ButtonProps, CardProps } from "@dainabase/ui";
+// Use in your custom components
+const customStyles = {
+  color: tokens.colors.primary,
+  fontFamily: tokens.font.sans,
+  borderRadius: tokens.radius.md,
+};
 ```
 
-## Features
+## 📚 Documentation
 
-- 🎨 Apple-inspired design language
-- 🌗 Dark/light theme support
-- ♿ Accessibility-first (WCAG 2.1 AA)
-- 📱 Responsive by default
-- 🚀 Tree-shakeable
-- 📘 Full TypeScript support
-- 📖 Comprehensive Storybook docs
-- 🎭 Visual regression testing
-- 🔍 Automated accessibility testing
+### Storybook
 
-## Quality Assurance
+View the interactive component documentation:
 
-### CI/CD Pipeline
-- **Build & Type Check**: Every commit
-- **Linting**: ESLint with strict rules
-- **Visual Testing**: Chromatic on every PR
-- **Accessibility**: Automated a11y testing
-- **Unit Tests**: Component testing suite
-- **Consumer Build**: Integration smoke tests
-
-### Test Coverage
-- **Visual Tests**: 100% component coverage
-- **A11y Tests**: WCAG 2.1 AA compliance
-- **Unit Tests**: Core functionality coverage
-
-## Development
-
-See [Storybook](https://dainabase.github.io/directus-unified-platform/) for interactive documentation.
-
-### Local Development
 ```bash
+# Clone the repository
+git clone https://github.com/dainabase/directus-unified-platform.git
+cd directus-unified-platform
+
 # Install dependencies
 pnpm install
 
 # Run Storybook
-pnpm --filter @dainabase/ui sb
-
-# Build package
-pnpm --filter @dainabase/ui build
-
-# Run tests
-pnpm --filter @dainabase/ui test
+pnpm -C packages/ui sb
 ```
 
-## License
+Or visit our [online Storybook](https://dainabase.github.io/directus-unified-platform) (coming soon).
 
-MIT © Dainabase
+## 🧩 Components
+
+### Layout
+- `AppShell` - Application layout wrapper
+- `Card` - Content container
+- `Tabs` - Tabbed navigation
+
+### Forms
+- `Form` - Form wrapper with validation
+- `Input` - Text input field
+- `Textarea` - Multi-line text input
+- `Select` - Dropdown selection
+- `Checkbox` - Checkbox input
+- `Switch` - Toggle switch
+- `DatePicker` - Date selection
+
+### Data Display
+- `DataGrid` - Basic data table
+- `DataGridAdv` - Advanced data table with sorting/filtering
+- `Charts` - Data visualization components
+
+### Feedback
+- `Button` - Interactive buttons
+- `Toast` - Notification messages
+- `Dialog` - Modal dialogs
+- `Sheet` - Slide-out panels
+- `Tooltip` - Contextual tooltips
+
+### Navigation
+- `Breadcrumbs` - Navigation trail
+- `DropdownMenu` - Contextual menus
+- `CommandPalette` - Command search interface
+
+### Display
+- `Avatar` - User avatars
+- `Badge` - Status indicators
+- `Icon` - Icon wrapper
+- `Progress` - Progress indicators
+- `Skeleton` - Loading placeholders
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm 8+
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/dainabase/directus-unified-platform.git
+cd directus-unified-platform
+
+# Install dependencies
+pnpm install
+
+# Navigate to UI package
+cd packages/ui
+```
+
+### Commands
+
+```bash
+# Development
+pnpm dev          # Watch mode for TypeScript
+pnpm sb           # Run Storybook locally
+
+# Building
+pnpm build        # Build the library
+pnpm build:sb:static  # Build Storybook static
+
+# Quality
+pnpm lint         # Run ESLint
+pnpm format       # Format with Prettier
+pnpm typecheck    # Type checking
+pnpm validate     # Run all checks
+
+# Testing
+pnpm test         # Run tests
+pnpm test:watch   # Watch mode
+pnpm test:ci      # CI mode with coverage
+```
+
+## 🔄 Versioning
+
+We use [Changesets](https://github.com/changesets/changesets) for version management:
+
+```bash
+# Create a changeset
+pnpm changeset
+
+# Version packages
+pnpm version-packages
+
+# Publish
+pnpm release-packages
+```
+
+## 📊 Performance
+
+- **Bundle Size**: ~45KB gzipped (core components)
+- **Tree-Shaking**: Full support
+- **CSS**: Optimized with PurgeCSS in production
+- **Runtime**: Zero runtime CSS-in-JS
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Commit Convention
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `style:` Code style
+- `refactor:` Code refactoring
+- `test:` Tests
+- `chore:` Maintenance
+
+## 📄 License
+
+MIT © [Dainabase](https://github.com/dainabase)
+
+## 🙏 Credits
+
+Built with:
+- [Radix UI](https://www.radix-ui.com/) - Unstyled components
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- [React Hook Form](https://react-hook-form.com/) - Form handling
+- [Recharts](https://recharts.org/) - Charts
+- [TanStack Table](https://tanstack.com/table) - Data tables
+- [Lucide Icons](https://lucide.dev/) - Icons
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/dainabase/directus-unified-platform/issues)
+- **Email**: admin@dainamics.ch
+- **Documentation**: [Storybook](https://dainabase.github.io/directus-unified-platform)
+
+---
+
+Made with ❤️ by [Dainabase](https://github.com/dainabase)

@@ -1,44 +1,44 @@
 /**
- * Input Component Tests
- * Auto-generated test suite for input component
+ * Checkbox Component Tests
+ * Auto-generated test suite for checkbox component
  * Category: form
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Input } from './index';
+import { Checkbox } from './index';
 import { vi } from 'vitest';
 
-describe('Input Component', () => {
+describe('Checkbox Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Input />);
-      expect(document.querySelector('[data-testid="input"]')).toBeInTheDocument();
+      renderWithProviders(<Checkbox />);
+      expect(document.querySelector('[data-testid="checkbox"]')).toBeInTheDocument();
     });
 
     it('renders with custom className', () => {
-      renderWithProviders(<Input className="custom-class" />);
+      renderWithProviders(<Checkbox className="custom-class" />);
       expect(document.querySelector('.custom-class')).toBeInTheDocument();
     });
 
     it('renders with label', () => {
-      renderWithProviders(<Input label="Test Label" />);
+      renderWithProviders(<Checkbox label="Test Label" />);
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
   });
 
   describe('Form Integration', () => {
     it('supports controlled value', () => {
-      const { rerender } = renderWithProviders(<Input value="test" />);
+      const { rerender } = renderWithProviders(<Checkbox value="test" />);
       expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
       
-      rerender(<Input value="updated" />);
+      rerender(<Checkbox value="updated" />);
       expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
     });
 
     it('calls onChange when value changes', () => {
       const handleChange = vi.fn();
-      renderWithProviders(<Input onChange={handleChange} />);
+      renderWithProviders(<Checkbox onChange={handleChange} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -48,13 +48,13 @@ describe('Input Component', () => {
     });
 
     it('supports disabled state', () => {
-      renderWithProviders(<Input disabled />);
+      renderWithProviders(<Checkbox disabled />);
       const input = document.querySelector('input, textarea, select, button');
       expect(input).toBeDisabled();
     });
 
     it('supports readonly state', () => {
-      renderWithProviders(<Input readOnly />);
+      renderWithProviders(<Checkbox readOnly />);
       const input = document.querySelector('input, textarea');
       if (input) {
         expect(input).toHaveAttribute('readonly');
@@ -62,12 +62,12 @@ describe('Input Component', () => {
     });
 
     it('shows error state', () => {
-      renderWithProviders(<Input error="Error message" />);
+      renderWithProviders(<Checkbox error="Error message" />);
       expect(screen.getByText('Error message')).toBeInTheDocument();
     });
 
     it('supports required attribute', () => {
-      renderWithProviders(<Input required />);
+      renderWithProviders(<Checkbox required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('required');
@@ -78,7 +78,7 @@ describe('Input Component', () => {
   describe('Validation', () => {
     it('validates on blur', async () => {
       const handleValidate = vi.fn();
-      renderWithProviders(<Input onBlur={handleValidate} />);
+      renderWithProviders(<Checkbox onBlur={handleValidate} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -89,14 +89,14 @@ describe('Input Component', () => {
     });
 
     it('shows validation messages', () => {
-      renderWithProviders(<Input error="Field is required" />);
+      renderWithProviders(<Checkbox error="Field is required" />);
       expect(screen.getByText('Field is required')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<Input aria-label="Test input" required />);
+      renderWithProviders(<Checkbox aria-label="Test input" required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('aria-label', 'Test input');
@@ -105,13 +105,13 @@ describe('Input Component', () => {
     });
 
     it('associates label with input', () => {
-      renderWithProviders(<Input id="test-input" label="Test Label" />);
+      renderWithProviders(<Checkbox id="test-input" label="Test Label" />);
       const label = screen.getByText('Test Label');
       expect(label).toHaveAttribute('for', 'test-input');
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<Input />);
+      renderWithProviders(<Checkbox />);
       const input = document.querySelector('input, textarea, select, button');
       if (input) {
         input.focus();

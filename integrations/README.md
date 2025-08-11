@@ -1,51 +1,19 @@
-# 🔌 Intégrations Directus Unified Platform
+# 🔌 Integrations
 
-## Architecture
+Ce dossier contient toutes les intégrations externes et MCP (Model Context Protocol).
+
+## Structure
 
 ```
 integrations/
-├── invoice-ninja/   # Facturation (Port 8090)
-├── revolut/        # Banking API (Port 3002)
-├── mautic/         # Marketing (Port 8084)
-└── erpnext/        # ERP (Port 8083)
+├── twenty/       # Twenty CRM MCP Server et scripts
+└── [autres intégrations futures...]
 ```
 
-## Quick Start
+## Intégrations disponibles
 
-```bash
-# Démarrer tous les services
-../start-all-services.sh
-
-# Ou individuellement
-cd [service-name]
-docker-compose up -d
-```
-
-## Services
-
-| Service | Port | Docker | Documentation |
-|---------|------|--------|--------------|
-| Invoice Ninja | 8090 | ✅ | [README](invoice-ninja/README.md) |
-| Revolut API | 3002 | N/A | [README](revolut/README.md) |
-| Mautic | 8084 | ✅ | [README](mautic/README.md) |
-| ERPNext | 8083 | ✅ | [README](erpnext/README.md) |
-
-## Troubleshooting
-
-### Container qui crash
-```bash
-docker logs [container-name] --tail 100
-docker-compose down && docker-compose up -d
-```
-
-### Port déjà utilisé
-```bash
-lsof -i :[port]
-kill -9 [PID]
-```
-
-### Reset complet
-```bash
-docker-compose down -v
-docker-compose up -d
-```
+### Twenty CRM MCP
+- **Localisation** : `/integrations/twenty/`
+- **Description** : Serveur MCP pour l'intégration avec Twenty CRM
+- **Installation** : `./integrations/twenty/install-twenty-mcp-server.sh`
+- **Documentation** : Voir `/integrations/twenty/twenty-mcp-manual-install.md`

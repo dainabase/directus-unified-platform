@@ -1,38 +1,38 @@
 /**
- * Mentions Component Tests
- * Auto-generated test suite for mentions component
+ * DragDropGrid Component Tests
+ * Auto-generated test suite for drag-drop-grid component
  * Category: utility
  */
 
 import React from 'react';
-import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Mentions } from './index';
+import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../tests/utils/test-utils';
+import { DragDropGrid } from './drag-drop-grid';
 import { vi } from 'vitest';
 
-describe('Mentions Component', () => {
+describe('DragDropGrid Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Mentions />);
-      expect(document.querySelector('[data-testid="mentions"]')).toBeInTheDocument();
+      renderWithProviders(<DragDropGrid />);
+      expect(document.querySelector('[data-testid="drag-drop-grid"]')).toBeInTheDocument();
     });
 
     it('renders with children', () => {
       renderWithProviders(
-        <Mentions>
+        <DragDropGrid>
           <span>Test content</span>
-        </Mentions>
+        </DragDropGrid>
       );
       expect(screen.getByText('Test content')).toBeInTheDocument();
     });
 
     it('applies custom className', () => {
-      renderWithProviders(<Mentions className="custom-class" />);
+      renderWithProviders(<DragDropGrid className="custom-class" />);
       expect(document.querySelector('.custom-class')).toBeInTheDocument();
     });
 
     it('forwards ref correctly', () => {
       const ref = React.createRef<HTMLDivElement>();
-      renderWithProviders(<Mentions ref={ref} />);
+      renderWithProviders(<DragDropGrid ref={ref} />);
       expect(ref.current).toBeInTheDocument();
     });
   });
@@ -40,15 +40,15 @@ describe('Mentions Component', () => {
   describe('Props', () => {
     it('accepts and applies style prop', () => {
       renderWithProviders(
-        <Mentions style={{ backgroundColor: 'red' }} />
+        <DragDropGrid style={{ backgroundColor: 'red' }} />
       );
-      const element = document.querySelector('[data-testid="mentions"]');
+      const element = document.querySelector('[data-testid="drag-drop-grid"]');
       expect(element).toHaveStyle({ backgroundColor: 'red' });
     });
 
     it('accepts data attributes', () => {
       renderWithProviders(
-        <Mentions data-custom="value" />
+        <DragDropGrid data-custom="value" />
       );
       const element = document.querySelector('[data-custom="value"]');
       expect(element).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('Mentions Component', () => {
 
     it('spreads additional props', () => {
       renderWithProviders(
-        <Mentions title="Tooltip text" role="complementary" />
+        <DragDropGrid title="Tooltip text" role="complementary" />
       );
       const element = document.querySelector('[role="complementary"]');
       expect(element).toHaveAttribute('title', 'Tooltip text');
@@ -66,9 +66,9 @@ describe('Mentions Component', () => {
   describe('Events', () => {
     it('handles onClick events', () => {
       const handleClick = vi.fn();
-      renderWithProviders(<Mentions onClick={handleClick} />);
+      renderWithProviders(<DragDropGrid onClick={handleClick} />);
       
-      const element = document.querySelector('[data-testid="mentions"]');
+      const element = document.querySelector('[data-testid="drag-drop-grid"]');
       fireEvent.click(element);
       
       expect(handleClick).toHaveBeenCalled();
@@ -78,13 +78,13 @@ describe('Mentions Component', () => {
       const handleEnter = vi.fn();
       const handleLeave = vi.fn();
       renderWithProviders(
-        <Mentions 
+        <DragDropGrid 
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         />
       );
       
-      const element = document.querySelector('[data-testid="mentions"]');
+      const element = document.querySelector('[data-testid="drag-drop-grid"]');
       
       fireEvent.mouseEnter(element);
       expect(handleEnter).toHaveBeenCalled();
@@ -97,14 +97,14 @@ describe('Mentions Component', () => {
       const handleFocus = vi.fn();
       const handleBlur = vi.fn();
       renderWithProviders(
-        <Mentions 
+        <DragDropGrid 
           onFocus={handleFocus}
           onBlur={handleBlur}
           tabIndex={0}
         />
       );
       
-      const element = document.querySelector('[data-testid="mentions"]');
+      const element = document.querySelector('[data-testid="drag-drop-grid"]');
       
       fireEvent.focus(element);
       expect(handleFocus).toHaveBeenCalled();
@@ -116,19 +116,19 @@ describe('Mentions Component', () => {
 
   describe('State Management', () => {
     it('maintains internal state correctly', () => {
-      const { rerender } = renderWithProviders(<Mentions />);
+      const { rerender } = renderWithProviders(<DragDropGrid />);
       // Test internal state management
       
-      rerender(<Mentions />);
+      rerender(<DragDropGrid />);
       // Verify state persists across rerenders
     });
 
     it('responds to prop changes', () => {
       const { rerender } = renderWithProviders(
-        <Mentions value="initial" />
+        <DragDropGrid value="initial" />
       );
       
-      rerender(<Mentions value="updated" />);
+      rerender(<DragDropGrid value="updated" />);
       // Verify component updates accordingly
     });
   });
@@ -136,14 +136,14 @@ describe('Mentions Component', () => {
   describe('Accessibility', () => {
     it('has appropriate ARIA attributes', () => {
       renderWithProviders(
-        <Mentions aria-label="Component label" />
+        <DragDropGrid aria-label="Component label" />
       );
       const element = document.querySelector('[aria-label="Component label"]');
       expect(element).toBeInTheDocument();
     });
 
     it('is keyboard accessible', () => {
-      renderWithProviders(<Mentions tabIndex={0} />);
+      renderWithProviders(<DragDropGrid tabIndex={0} />);
       const element = document.querySelector('[tabindex="0"]');
       
       element.focus();
@@ -158,7 +158,7 @@ describe('Mentions Component', () => {
 
     it('supports screen readers', () => {
       renderWithProviders(
-        <Mentions role="region" aria-describedby="description" />
+        <DragDropGrid role="region" aria-describedby="description" />
       );
       
       const element = document.querySelector('[role="region"]');
@@ -169,24 +169,24 @@ describe('Mentions Component', () => {
   describe('Edge Cases', () => {
     it('handles null/undefined props gracefully', () => {
       renderWithProviders(
-        <Mentions value={null} data={undefined} />
+        <DragDropGrid value={null} data={undefined} />
       );
-      expect(document.querySelector('[data-testid="mentions"]')).toBeInTheDocument();
+      expect(document.querySelector('[data-testid="drag-drop-grid"]')).toBeInTheDocument();
     });
 
     it('handles empty arrays/objects', () => {
       renderWithProviders(
-        <Mentions items={[]} config={{}} />
+        <DragDropGrid items={[]} config={{}} />
       );
-      expect(document.querySelector('[data-testid="mentions"]')).toBeInTheDocument();
+      expect(document.querySelector('[data-testid="drag-drop-grid"]')).toBeInTheDocument();
     });
 
     it('handles very long content', () => {
       const longText = 'a'.repeat(10000);
       renderWithProviders(
-        <Mentions text={longText} />
+        <DragDropGrid text={longText} />
       );
-      expect(document.querySelector('[data-testid="mentions"]')).toBeInTheDocument();
+      expect(document.querySelector('[data-testid="drag-drop-grid"]')).toBeInTheDocument();
     });
   });
 });

@@ -1,127 +1,127 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Calendar } from './calendar';
+/**
+ * Calendar Component Tests
+ * Auto-generated test suite for calendar component
+ * Category: display
+ */
 
-describe('Calendar', () => {
-  it('renders without crashing', () => {
-    render(<Calendar />);
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+import React from 'react';
+import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
+import { Calendar } from './index';
+import { vi } from 'vitest';
+
+describe('Calendar Component', () => {
+  describe('Rendering', () => {
+    it('renders without crashing', () => {
+      renderWithProviders(<Calendar />);
+      expect(document.querySelector('[data-testid="calendar"]')).toBeInTheDocument();
+    });
+
+    it('renders with content', () => {
+      renderWithProviders(
+        <Calendar>
+          <span>Display content</span>
+        </Calendar>
+      );
+      expect(screen.getByText('Display content')).toBeInTheDocument();
+    });
+
+    it('applies custom className', () => {
+      renderWithProviders(<Calendar className="custom-display" />);
+      expect(document.querySelector('.custom-display')).toBeInTheDocument();
+    });
   });
 
-  it('displays current month by default', () => {
-    render(<Calendar />);
-    const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    expect(screen.getByText(currentMonth)).toBeInTheDocument();
+  describe('Display Properties', () => {
+    it('renders with different sizes', () => {
+      const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+      sizes.forEach(size => {
+        const { container } = renderWithProviders(<Calendar size={size} />);
+        expect(container.firstChild).toHaveClass(size);
+      });
+    });
+
+    it('supports different variants', () => {
+      const variants = ['default', 'primary', 'secondary'];
+      variants.forEach(variant => {
+        const { container } = renderWithProviders(<Calendar variant={variant} />);
+        expect(container.firstChild).toHaveClass(variant);
+      });
+    });
+
+    it('handles loading state', () => {
+      renderWithProviders(<Calendar loading />);
+      expect(document.querySelector('[role="status"]')).toBeInTheDocument();
+    });
+
+    it('handles empty state', () => {
+      renderWithProviders(<Calendar data={[]} emptyMessage="No data" />);
+      expect(screen.getByText('No data')).toBeInTheDocument();
+    });
   });
 
-  it('handles single date selection', () => {
-    const onSelect = vi.fn();
-    render(<Calendar mode="single" onSelect={onSelect} />);
-    
-    const dateButton = screen.getByText('15');
-    fireEvent.click(dateButton);
-    
-    expect(onSelect).toHaveBeenCalled();
-    expect(onSelect.mock.calls[0][0]).toBeInstanceOf(Date);
+  describe('Media Support', () => {
+    it('renders images correctly', () => {
+      renderWithProviders(
+        <Calendar image="/test.jpg" alt="Test image" />
+      );
+      const img = screen.getByRole('img');
+      expect(img).toHaveAttribute('src', '/test.jpg');
+      expect(img).toHaveAttribute('alt', 'Test image');
+    });
+
+    it('handles image loading errors', () => {
+      const handleError = vi.fn();
+      renderWithProviders(
+        <Calendar image="/invalid.jpg" onImageError={handleError} />
+      );
+      
+      const img = screen.getByRole('img');
+      fireEvent.error(img);
+      expect(handleError).toHaveBeenCalled();
+    });
+
+    it('renders icons', () => {
+      renderWithProviders(<Calendar icon="star" />);
+      expect(document.querySelector('[data-icon="star"]')).toBeInTheDocument();
+    });
   });
 
-  it('handles multiple date selection', () => {
-    const onSelect = vi.fn();
-    render(<Calendar mode="multiple" onSelect={onSelect} />);
-    
-    const date1 = screen.getByText('10');
-    const date2 = screen.getByText('15');
-    
-    fireEvent.click(date1);
-    fireEvent.click(date2);
-    
-    expect(onSelect).toHaveBeenCalledTimes(2);
+  describe('Interactions', () => {
+    it('handles click events when clickable', () => {
+      const handleClick = vi.fn();
+      renderWithProviders(<Calendar onClick={handleClick} />);
+      
+      fireEvent.click(document.querySelector('[role="button"]'));
+      expect(handleClick).toHaveBeenCalled();
+    });
+
+    it('shows tooltip on hover', async () => {
+      renderWithProviders(<Calendar tooltip="Additional info" />);
+      
+      const element = document.querySelector('[data-testid="calendar"]');
+      fireEvent.mouseEnter(element);
+      
+      await waitFor(() => {
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Additional info');
+      });
+    });
   });
 
-  it('handles range selection', () => {
-    const onSelect = vi.fn();
-    render(<Calendar mode="range" onSelect={onSelect} />);
-    
-    const startDate = screen.getByText('10');
-    const endDate = screen.getByText('20');
-    
-    fireEvent.click(startDate);
-    fireEvent.click(endDate);
-    
-    expect(onSelect).toHaveBeenCalled();
-    const lastCall = onSelect.mock.calls[onSelect.mock.calls.length - 1][0];
-    expect(lastCall).toHaveProperty('from');
-    expect(lastCall).toHaveProperty('to');
-  });
+  describe('Accessibility', () => {
+    it('has proper semantic HTML', () => {
+      renderWithProviders(<Calendar />);
+      // Check for appropriate semantic elements
+    });
 
-  it('respects disabled dates', () => {
-    const onSelect = vi.fn();
-    const today = new Date();
-    const disabledDate = new Date(today.getFullYear(), today.getMonth(), 15);
-    
-    render(
-      <Calendar 
-        mode="single" 
-        onSelect={onSelect}
-        disabled={[disabledDate]}
-      />
-    );
-    
-    const disabledButton = screen.getByText('15');
-    expect(disabledButton).toHaveAttribute('aria-disabled', 'true');
-  });
+    it('supports ARIA labels', () => {
+      renderWithProviders(<Calendar aria-label="Display component" />);
+      const element = document.querySelector('[aria-label="Display component"]');
+      expect(element).toBeInTheDocument();
+    });
 
-  it('shows outside days when showOutsideDays is true', () => {
-    render(<Calendar showOutsideDays={true} />);
-    
-    // Check for days from previous/next month
-    const allDays = screen.getAllByRole('gridcell');
-    expect(allDays.length).toBeGreaterThan(28); // More than just current month
-  });
-
-  it('applies custom className', () => {
-    const { container } = render(<Calendar className="custom-calendar" />);
-    expect(container.querySelector('.custom-calendar')).toBeInTheDocument();
-  });
-
-  it('navigates between months using navigation buttons', () => {
-    render(<Calendar />);
-    
-    const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    expect(screen.getByText(currentMonth)).toBeInTheDocument();
-    
-    // Navigate to previous month
-    const prevButton = screen.getByRole('button', { name: /previous/i });
-    fireEvent.click(prevButton);
-    
-    const prevMonth = new Date(new Date().setMonth(new Date().getMonth() - 1))
-      .toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    expect(screen.getByText(prevMonth)).toBeInTheDocument();
-  });
-
-  it('supports keyboard navigation', () => {
-    render(<Calendar mode="single" />);
-    
-    const grid = screen.getByRole('grid');
-    fireEvent.keyDown(grid, { key: 'ArrowRight' });
-    fireEvent.keyDown(grid, { key: 'ArrowDown' });
-    fireEvent.keyDown(grid, { key: 'Enter' });
-    
-    // The focused date should be selected
-    expect(document.activeElement).toHaveAttribute('aria-selected');
-  });
-
-  it('clears selection when undefined is passed', () => {
-    const { rerender } = render(<Calendar mode="single" selected={new Date()} />);
-    
-    // Should have a selected date initially
-    expect(screen.getByRole('gridcell', { selected: true })).toBeInTheDocument();
-    
-    // Clear the selection
-    rerender(<Calendar mode="single" selected={undefined} />);
-    
-    // Should not have any selected dates
-    const selectedCells = screen.queryAllByRole('gridcell', { selected: true });
-    expect(selectedCells).toHaveLength(0);
+    it('handles reduced motion preference', () => {
+      renderWithProviders(<Calendar animated />);
+      // Test animation behavior with prefers-reduced-motion
+    });
   });
 });

@@ -1,0 +1,131 @@
+name: Publish to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.0.2-beta.1)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a prerelease?'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: |
+          pnpm run build --filter=@dainabase/ui
+          pnpm run build --filter=@dainabase/ui-cli
+
+      - name: Run tests
+        run: |
+          pnpm run test --filter=@dainabase/ui
+          pnpm run test:e2e --filter=@dainabase/ui
+
+      - name: Check bundle size
+        run: |
+          cd packages/ui
+          npm run build
+          echo "📦 Bundle size check:"
+          du -sh dist/
+          
+      - name: Set version from input
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          cd packages/ui
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          cd ../ui-cli
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+
+      - name: Publish @dainabase/ui to NPM
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        run: |
+          cd packages/ui
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.prerelease }}" == "true" ]; then
+            npm publish --access public --tag beta
+          else
+            npm publish --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @dainabase/ui-cli to NPM
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        run: |
+          cd packages/ui-cli
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.prerelease }}" == "true" ]; then
+            npm publish --access public --tag beta
+          else
+            npm publish --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create success comment
+        if: success() && github.event_name == 'release'
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.release.id }}
+          body: |
+            ✅ **Packages published successfully to NPM!**
+            
+            📦 **Published packages:**
+            - [@dainabase/ui@${{ github.event.release.tag_name }}](https://www.npmjs.com/package/@dainabase/ui)
+            - [@dainabase/ui-cli@${{ github.event.release.tag_name }}](https://www.npmjs.com/package/@dainabase/ui-cli)
+            
+            **Installation:**
+            ```bash
+            npm install @dainabase/ui@${{ github.event.release.tag_name }}
+            npm install -g @dainabase/ui-cli@${{ github.event.release.tag_name }}
+            ```
+
+      - name: Update documentation
+        if: success()
+        run: |
+          echo "📚 Documentation update triggered"
+          echo "Version: ${{ github.event.release.tag_name || github.event.inputs.version }}"
+          # Add documentation update steps here if needed

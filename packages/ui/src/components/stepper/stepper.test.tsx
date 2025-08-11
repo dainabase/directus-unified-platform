@@ -1,19 +1,19 @@
 /**
- * Pagination Component Tests
- * Auto-generated test suite for pagination component
+ * Stepper Component Tests
+ * Auto-generated test suite for stepper component
  * Category: navigation
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Pagination } from './index';
+import { Stepper } from './index';
 import { vi } from 'vitest';
 
-describe('Pagination Component', () => {
+describe('Stepper Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Pagination />);
-      expect(document.querySelector('[role="navigation"], [data-testid="pagination"]')).toBeInTheDocument();
+      renderWithProviders(<Stepper />);
+      expect(document.querySelector('[role="navigation"], [data-testid="stepper"]')).toBeInTheDocument();
     });
 
     it('renders navigation items', () => {
@@ -22,7 +22,7 @@ describe('Pagination Component', () => {
         { label: 'About', href: '/about' },
         { label: 'Contact', href: '/contact' }
       ];
-      renderWithProviders(<Pagination items={items} />);
+      renderWithProviders(<Stepper items={items} />);
       
       items.forEach(item => {
         expect(screen.getByText(item.label)).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('Pagination Component', () => {
         { label: 'Home', href: '/', active: true },
         { label: 'About', href: '/about' }
       ];
-      renderWithProviders(<Pagination items={items} />);
+      renderWithProviders(<Stepper items={items} />);
       
       const activeItem = screen.getByText('Home').closest('a, button');
       expect(activeItem).toHaveAttribute('aria-current', 'page');
@@ -47,7 +47,7 @@ describe('Pagination Component', () => {
       const items = [
         { label: 'Home', onClick: handleClick }
       ];
-      renderWithProviders(<Pagination items={items} />);
+      renderWithProviders(<Stepper items={items} />);
       
       fireEvent.click(screen.getByText('Home'));
       expect(handleClick).toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe('Pagination Component', () => {
       const items = [
         { label: 'Disabled', disabled: true }
       ];
-      renderWithProviders(<Pagination items={items} />);
+      renderWithProviders(<Stepper items={items} />);
       
       const disabledItem = screen.getByText('Disabled').closest('a, button');
       expect(disabledItem).toBeDisabled();
@@ -71,7 +71,7 @@ describe('Pagination Component', () => {
         { label: 'Banana' },
         { label: 'Cherry' }
       ];
-      renderWithProviders(<Pagination items={items} searchable />);
+      renderWithProviders(<Stepper items={items} searchable />);
       
       const searchInput = screen.getByRole('searchbox');
       fireEvent.change(searchInput, { target: { value: 'app' } });
@@ -83,7 +83,7 @@ describe('Pagination Component', () => {
     });
 
     it('shows no results message', async () => {
-      renderWithProviders(<Pagination items={[]} searchable />);
+      renderWithProviders(<Stepper items={[]} searchable />);
       
       const searchInput = screen.getByRole('searchbox');
       fireEvent.change(searchInput, { target: { value: 'xyz' } });
@@ -101,7 +101,7 @@ describe('Pagination Component', () => {
         { label: 'Item 2' },
         { label: 'Item 3' }
       ];
-      renderWithProviders(<Pagination items={items} />);
+      renderWithProviders(<Stepper items={items} />);
       
       const firstItem = screen.getByText('Item 1');
       firstItem.focus();
@@ -115,7 +115,7 @@ describe('Pagination Component', () => {
 
     it('supports Enter key selection', () => {
       const handleSelect = vi.fn();
-      renderWithProviders(<Pagination onSelect={handleSelect} />);
+      renderWithProviders(<Stepper onSelect={handleSelect} />);
       
       const item = document.querySelector('[role="menuitem"], [role="option"], button');
       if (item) {
@@ -128,7 +128,7 @@ describe('Pagination Component', () => {
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<Pagination aria-label="Main navigation" />);
+      renderWithProviders(<Stepper aria-label="Main navigation" />);
       const nav = document.querySelector('[role="navigation"]');
       if (nav) {
         expect(nav).toHaveAttribute('aria-label', 'Main navigation');
@@ -136,7 +136,7 @@ describe('Pagination Component', () => {
     });
 
     it('supports screen reader announcements', () => {
-      renderWithProviders(<Pagination currentPage={2} totalPages={5} />);
+      renderWithProviders(<Stepper currentPage={2} totalPages={5} />);
       const status = screen.getByRole?.('status');
       if (status) {
         expect(status).toHaveTextContent(/page 2 of 5/i);

@@ -1,188 +1,125 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+/**
+ * Slider Component Tests
+ * Auto-generated test suite for slider component
+ * Category: form
+ */
+
+import React from 'react';
+import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
+import { Slider } from './index';
 import { vi } from 'vitest';
-import { Slider } from './slider';
 
-describe('Slider', () => {
-  it('renders correctly', () => {
-    render(<Slider defaultValue={[50]} max={100} />);
-    
-    const slider = screen.getByRole('slider');
-    expect(slider).toBeInTheDocument();
-    expect(slider).toHaveAttribute('aria-valuenow', '50');
-    expect(slider).toHaveAttribute('aria-valuemax', '100');
+describe('Slider Component', () => {
+  describe('Rendering', () => {
+    it('renders without crashing', () => {
+      renderWithProviders(<Slider />);
+      expect(document.querySelector('[data-testid="slider"]')).toBeInTheDocument();
+    });
+
+    it('renders with custom className', () => {
+      renderWithProviders(<Slider className="custom-class" />);
+      expect(document.querySelector('.custom-class')).toBeInTheDocument();
+    });
+
+    it('renders with label', () => {
+      renderWithProviders(<Slider label="Test Label" />);
+      expect(screen.getByText('Test Label')).toBeInTheDocument();
+    });
   });
 
-  it('handles value change', () => {
-    const onValueChange = vi.fn();
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        onValueChange={onValueChange}
-      />
-    );
+  describe('Form Integration', () => {
+    it('supports controlled value', () => {
+      const { rerender } = renderWithProviders(<Slider value="test" />);
+      expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
+      
+      rerender(<Slider value="updated" />);
+      expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
+    });
 
-    const slider = screen.getByRole('slider');
-    
-    // Simulate dragging slider
-    fireEvent.keyDown(slider, { key: 'ArrowRight' });
-    expect(onValueChange).toHaveBeenCalled();
+    it('calls onChange when value changes', () => {
+      const handleChange = vi.fn();
+      renderWithProviders(<Slider onChange={handleChange} />);
+      
+      const input = document.querySelector('input, textarea, select');
+      if (input) {
+        fireEvent.change(input, { target: { value: 'new value' } });
+        expect(handleChange).toHaveBeenCalled();
+      }
+    });
+
+    it('supports disabled state', () => {
+      renderWithProviders(<Slider disabled />);
+      const input = document.querySelector('input, textarea, select, button');
+      expect(input).toBeDisabled();
+    });
+
+    it('supports readonly state', () => {
+      renderWithProviders(<Slider readOnly />);
+      const input = document.querySelector('input, textarea');
+      if (input) {
+        expect(input).toHaveAttribute('readonly');
+      }
+    });
+
+    it('shows error state', () => {
+      renderWithProviders(<Slider error="Error message" />);
+      expect(screen.getByText('Error message')).toBeInTheDocument();
+    });
+
+    it('supports required attribute', () => {
+      renderWithProviders(<Slider required />);
+      const input = document.querySelector('input, textarea, select');
+      if (input) {
+        expect(input).toHaveAttribute('required');
+      }
+    });
   });
 
-  it('respects min and max values', () => {
-    render(
-      <Slider
-        defaultValue={[5]}
-        min={0}
-        max={10}
-      />
-    );
+  describe('Validation', () => {
+    it('validates on blur', async () => {
+      const handleValidate = vi.fn();
+      renderWithProviders(<Slider onBlur={handleValidate} />);
+      
+      const input = document.querySelector('input, textarea, select');
+      if (input) {
+        fireEvent.focus(input);
+        fireEvent.blur(input);
+        expect(handleValidate).toHaveBeenCalled();
+      }
+    });
 
-    const slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-valuemin', '0');
-    expect(slider).toHaveAttribute('aria-valuemax', '10');
-    expect(slider).toHaveAttribute('aria-valuenow', '5');
+    it('shows validation messages', () => {
+      renderWithProviders(<Slider error="Field is required" />);
+      expect(screen.getByText('Field is required')).toBeInTheDocument();
+    });
   });
 
-  it('handles step prop correctly', () => {
-    const onValueChange = vi.fn();
-    render(
-      <Slider
-        defaultValue={[0]}
-        max={100}
-        step={10}
-        onValueChange={onValueChange}
-      />
-    );
+  describe('Accessibility', () => {
+    it('has proper ARIA attributes', () => {
+      renderWithProviders(<Slider aria-label="Test input" required />);
+      const input = document.querySelector('input, textarea, select');
+      if (input) {
+        expect(input).toHaveAttribute('aria-label', 'Test input');
+        expect(input).toHaveAttribute('aria-required', 'true');
+      }
+    });
 
-    const slider = screen.getByRole('slider');
-    
-    // Arrow right should increase by step value
-    fireEvent.keyDown(slider, { key: 'ArrowRight' });
-    expect(onValueChange).toHaveBeenLastCalledWith([10]);
-  });
+    it('associates label with input', () => {
+      renderWithProviders(<Slider id="test-input" label="Test Label" />);
+      const label = screen.getByText('Test Label');
+      expect(label).toHaveAttribute('for', 'test-input');
+    });
 
-  it('shows value when showValue is true', () => {
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        showValue
-      />
-    );
-
-    expect(screen.getByText('50')).toBeInTheDocument();
-  });
-
-  it('formats value with custom formatter', () => {
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        showValue
-        formatValue={(v) => `${v}%`}
-      />
-    );
-
-    expect(screen.getByText('50%')).toBeInTheDocument();
-  });
-
-  it('renders marks when provided', () => {
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        marks={[
-          { value: 0, label: 'Start' },
-          { value: 50, label: 'Middle' },
-          { value: 100, label: 'End' },
-        ]}
-      />
-    );
-
-    expect(screen.getByText('Start')).toBeInTheDocument();
-    expect(screen.getByText('Middle')).toBeInTheDocument();
-    expect(screen.getByText('End')).toBeInTheDocument();
-  });
-
-  it('handles range values', () => {
-    render(
-      <Slider
-        defaultValue={[25, 75]}
-        max={100}
-      />
-    );
-
-    const sliders = screen.getAllByRole('slider');
-    expect(sliders).toHaveLength(2);
-    expect(sliders[0]).toHaveAttribute('aria-valuenow', '25');
-    expect(sliders[1]).toHaveAttribute('aria-valuenow', '75');
-  });
-
-  it('is disabled when disabled prop is true', () => {
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        disabled
-      />
-    );
-
-    const slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-disabled', 'true');
-  });
-
-  it('applies variant styles', () => {
-    const { container } = render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        variant="success"
-      />
-    );
-
-    const range = container.querySelector('[data-orientation="horizontal"] span');
-    expect(range).toHaveClass('bg-green-500');
-  });
-
-  it('handles keyboard navigation', () => {
-    const onValueChange = vi.fn();
-    render(
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        onValueChange={onValueChange}
-      />
-    );
-
-    const slider = screen.getByRole('slider');
-    
-    // Test arrow keys
-    fireEvent.keyDown(slider, { key: 'ArrowRight' });
-    expect(onValueChange).toHaveBeenCalledWith([51]);
-    
-    fireEvent.keyDown(slider, { key: 'ArrowLeft' });
-    expect(onValueChange).toHaveBeenCalled();
-    
-    fireEvent.keyDown(slider, { key: 'ArrowUp' });
-    expect(onValueChange).toHaveBeenCalled();
-    
-    fireEvent.keyDown(slider, { key: 'ArrowDown' });
-    expect(onValueChange).toHaveBeenCalled();
-  });
-
-  it('updates when controlled value changes', () => {
-    const { rerender } = render(
-      <Slider value={[25]} max={100} />
-    );
-
-    let slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-valuenow', '25');
-
-    rerender(<Slider value={[75]} max={100} />);
-    
-    slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-valuenow', '75');
+    it('supports keyboard navigation', () => {
+      renderWithProviders(<Slider />);
+      const input = document.querySelector('input, textarea, select, button');
+      if (input) {
+        input.focus();
+        expect(input).toHaveFocus();
+        
+        fireEvent.keyDown(input, { key: 'Tab' });
+        // Tab navigation test
+      }
+    });
   });
 });

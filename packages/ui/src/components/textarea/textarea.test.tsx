@@ -1,44 +1,44 @@
 /**
- * Rating Component Tests
- * Auto-generated test suite for rating component
+ * Textarea Component Tests
+ * Auto-generated test suite for textarea component
  * Category: form
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Rating } from './index';
+import { Textarea } from './index';
 import { vi } from 'vitest';
 
-describe('Rating Component', () => {
+describe('Textarea Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Rating />);
-      expect(document.querySelector('[data-testid="rating"]')).toBeInTheDocument();
+      renderWithProviders(<Textarea />);
+      expect(document.querySelector('[data-testid="textarea"]')).toBeInTheDocument();
     });
 
     it('renders with custom className', () => {
-      renderWithProviders(<Rating className="custom-class" />);
+      renderWithProviders(<Textarea className="custom-class" />);
       expect(document.querySelector('.custom-class')).toBeInTheDocument();
     });
 
     it('renders with label', () => {
-      renderWithProviders(<Rating label="Test Label" />);
+      renderWithProviders(<Textarea label="Test Label" />);
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
   });
 
   describe('Form Integration', () => {
     it('supports controlled value', () => {
-      const { rerender } = renderWithProviders(<Rating value="test" />);
+      const { rerender } = renderWithProviders(<Textarea value="test" />);
       expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
       
-      rerender(<Rating value="updated" />);
+      rerender(<Textarea value="updated" />);
       expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
     });
 
     it('calls onChange when value changes', () => {
       const handleChange = vi.fn();
-      renderWithProviders(<Rating onChange={handleChange} />);
+      renderWithProviders(<Textarea onChange={handleChange} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -48,13 +48,13 @@ describe('Rating Component', () => {
     });
 
     it('supports disabled state', () => {
-      renderWithProviders(<Rating disabled />);
+      renderWithProviders(<Textarea disabled />);
       const input = document.querySelector('input, textarea, select, button');
       expect(input).toBeDisabled();
     });
 
     it('supports readonly state', () => {
-      renderWithProviders(<Rating readOnly />);
+      renderWithProviders(<Textarea readOnly />);
       const input = document.querySelector('input, textarea');
       if (input) {
         expect(input).toHaveAttribute('readonly');
@@ -62,12 +62,12 @@ describe('Rating Component', () => {
     });
 
     it('shows error state', () => {
-      renderWithProviders(<Rating error="Error message" />);
+      renderWithProviders(<Textarea error="Error message" />);
       expect(screen.getByText('Error message')).toBeInTheDocument();
     });
 
     it('supports required attribute', () => {
-      renderWithProviders(<Rating required />);
+      renderWithProviders(<Textarea required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('required');
@@ -78,7 +78,7 @@ describe('Rating Component', () => {
   describe('Validation', () => {
     it('validates on blur', async () => {
       const handleValidate = vi.fn();
-      renderWithProviders(<Rating onBlur={handleValidate} />);
+      renderWithProviders(<Textarea onBlur={handleValidate} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -89,14 +89,14 @@ describe('Rating Component', () => {
     });
 
     it('shows validation messages', () => {
-      renderWithProviders(<Rating error="Field is required" />);
+      renderWithProviders(<Textarea error="Field is required" />);
       expect(screen.getByText('Field is required')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<Rating aria-label="Test input" required />);
+      renderWithProviders(<Textarea aria-label="Test input" required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('aria-label', 'Test input');
@@ -105,13 +105,13 @@ describe('Rating Component', () => {
     });
 
     it('associates label with input', () => {
-      renderWithProviders(<Rating id="test-input" label="Test Label" />);
+      renderWithProviders(<Textarea id="test-input" label="Test Label" />);
       const label = screen.getByText('Test Label');
       expect(label).toHaveAttribute('for', 'test-input');
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<Rating />);
+      renderWithProviders(<Textarea />);
       const input = document.querySelector('input, textarea, select, button');
       if (input) {
         input.focus();

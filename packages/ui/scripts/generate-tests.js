@@ -19,47 +19,48 @@ const COMPONENTS = {
   'checkbox': { type: 'dir', tested: true }, // Batch #1
   'switch': { type: 'dir', tested: true }, // Batch #1
   'select': { type: 'dir', tested: true }, // Batch #1
+  'accordion': { type: 'dir', tested: true }, // Batch #2
+  'tabs': { type: 'dir', tested: true }, // Batch #2
+  'dialog': { type: 'dir', tested: true }, // Batch #2
+  'drawer': { type: 'dir', tested: true }, // Batch #2
+  'sheet': { type: 'dir', tested: true }, // Batch #2
+  'toast': { type: 'dir', tested: true }, // Batch #2
+  'popover': { type: 'dir', tested: true }, // Batch #2
+  'tooltip': { type: 'dir', tested: true }, // Batch #2
+  'progress': { type: 'dir', tested: true }, // Batch #2
+  'skeleton': { type: 'dir', tested: true }, // Batch #2
+  'breadcrumbs': { type: 'dir', tested: true }, // Batch #3
+  'pagination': { type: 'dir', tested: true }, // Batch #3
+  'stepper': { type: 'dir', tested: true }, // Batch #3
+  'textarea': { type: 'dir', tested: true }, // Batch #3
+  'date-picker': { type: 'dir', tested: true }, // Batch #3
+  'file-upload': { type: 'dir', tested: true }, // Batch #3
+  'slider': { type: 'dir', tested: true }, // Batch #3
+  'rating': { type: 'dir', tested: true }, // Batch #3
+  'avatar': { type: 'dir', tested: true }, // Batch #3
+  'badge': { type: 'dir', tested: true }, // Batch #4
+  'carousel': { type: 'dir', tested: true }, // Batch #4
+  'data-grid': { type: 'dir', tested: true }, // Batch #4
+  'dropdown-menu': { type: 'dir', tested: true }, // Batch #4
+  'theme-toggle': { type: 'dir', tested: true }, // Batch #4
+  'alert-dialog': { type: 'dir', tested: true }, // Batch #4
+  'search-bar': { type: 'dir', tested: true }, // Batch #4
+  'kanban': { type: 'file', tested: true }, // Batch #4
   
   // Directory-based components (need tests)
-  'accordion': { type: 'dir', tested: false },
-  'alert-dialog': { type: 'dir', tested: false },
   'app-shell': { type: 'dir', tested: false },
-  'avatar': { type: 'dir', tested: false },
-  'badge': { type: 'dir', tested: false },
-  'breadcrumbs': { type: 'dir', tested: false },
   'calendar': { type: 'dir', tested: false },
-  'carousel': { type: 'dir', tested: false },
   'charts': { type: 'dir', tested: false },
   'color-picker': { type: 'dir', tested: false },
   'command-palette': { type: 'dir', tested: false },
-  'data-grid': { type: 'dir', tested: false },
   'data-grid-adv': { type: 'dir', tested: false },
-  'date-picker': { type: 'dir', tested: false },
   'date-range-picker': { type: 'dir', tested: false },
-  'dialog': { type: 'dir', tested: false },
-  'drawer': { type: 'dir', tested: false },
-  'dropdown-menu': { type: 'dir', tested: false },
-  'file-upload': { type: 'dir', tested: false },
   'form': { type: 'dir', tested: false },
   'forms-demo': { type: 'dir', tested: false, skip: true },
   'mentions': { type: 'dir', tested: false },
-  'pagination': { type: 'dir', tested: false },
-  'popover': { type: 'dir', tested: false },
-  'progress': { type: 'dir', tested: false },
-  'rating': { type: 'dir', tested: false },
-  'search-bar': { type: 'dir', tested: false },
-  'sheet': { type: 'dir', tested: false },
-  'skeleton': { type: 'dir', tested: false },
-  'slider': { type: 'dir', tested: false },
-  'stepper': { type: 'dir', tested: false },
-  'tabs': { type: 'dir', tested: false },
   'tag-input': { type: 'dir', tested: false },
-  'textarea': { type: 'dir', tested: false },
-  'theme-toggle': { type: 'dir', tested: false },
   'timeline': { type: 'dir', tested: false },
   'timeline-enhanced': { type: 'dir', tested: false },
-  'toast': { type: 'dir', tested: false },
-  'tooltip': { type: 'dir', tested: false },
   'tree-view': { type: 'dir', tested: false },
   
   // Standalone components (file-based)
@@ -68,7 +69,6 @@ const COMPONENTS = {
   'drag-drop-grid': { type: 'file', tested: false },
   'image-cropper': { type: 'file', tested: false },
   'infinite-scroll': { type: 'file', tested: false },
-  'kanban': { type: 'file', tested: false },
   'pdf-viewer': { type: 'file', tested: false },
   'rich-text-editor': { type: 'file', tested: false },
   'video-player': { type: 'file', tested: false },
@@ -77,11 +77,11 @@ const COMPONENTS = {
 
 // Component categories for intelligent test generation
 const COMPONENT_CATEGORIES = {
-  form: ['input', 'textarea', 'checkbox', 'switch', 'select', 'date-picker', 'date-range-picker', 'color-picker', 'file-upload', 'tag-input', 'rating', 'slider'],
+  form: ['input', 'textarea', 'checkbox', 'switch', 'select', 'date-picker', 'date-range-picker', 'color-picker', 'file-upload', 'tag-input', 'rating', 'slider', 'form'],
   layout: ['accordion', 'tabs', 'drawer', 'sheet', 'app-shell', 'timeline', 'timeline-enhanced'],
   feedback: ['alert', 'alert-dialog', 'dialog', 'toast', 'popover', 'tooltip', 'progress', 'skeleton'],
   navigation: ['breadcrumbs', 'pagination', 'stepper', 'search-bar', 'command-palette'],
-  display: ['avatar', 'badge', 'card', 'carousel', 'charts', 'icon', 'tree-view'],
+  display: ['avatar', 'badge', 'card', 'carousel', 'charts', 'icon', 'tree-view', 'calendar'],
   interactive: ['button', 'dropdown-menu', 'theme-toggle'],
   complex: ['data-grid', 'data-grid-adv', 'kanban', 'audio-recorder', 'video-player', 'pdf-viewer', 'code-editor', 'rich-text-editor', 'image-cropper'],
   utility: ['infinite-scroll', 'virtual-list', 'drag-drop-grid', 'mentions']
@@ -964,7 +964,7 @@ function generateComplexTests(ComponentName, componentName) {
     });
 
     it('supports pagination', async () => {
-      const data = Array.from({ length: 50 }, (_, i) => ({ id: i, name: \`Item \${i}\` }));
+      const data = Array.from({ length: 50 }, (_, i) => ({ id: i, name: `Item ${i}` }));
       renderWithProviders(<${ComponentName} data={data} pageSize={10} />);
       
       // Check first page
@@ -1087,7 +1087,7 @@ function generateComplexTests(ComponentName, componentName) {
 
   describe('Performance', () => {
     it('virtualizes long lists', () => {
-      const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: \`Item \${i}\` }));
+      const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: `Item ${i}` }));
       renderWithProviders(<${ComponentName} data={data} virtualize />);
       
       // Only visible items should be rendered
@@ -1344,8 +1344,8 @@ function generateGenericTests(ComponentName, componentName) {
 
 // Get statistics
 function getStatistics() {
-  const total = Object.keys(COMPONENTS).length;
-  const tested = Object.values(COMPONENTS).filter(c => c.tested).length;
+  const total = Object.keys(COMPONENTS).filter(k => !COMPONENTS[k].skip).length;
+  const tested = Object.values(COMPONENTS).filter(c => c.tested && !c.skip).length;
   const remaining = total - tested;
   const percentage = ((tested / total) * 100).toFixed(1);
   

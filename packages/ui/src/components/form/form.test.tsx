@@ -1,44 +1,44 @@
 /**
- * ColorPicker Component Tests
- * Auto-generated test suite for color-picker component
+ * Form Component Tests
+ * Auto-generated test suite for form component
  * Category: form
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { ColorPicker } from './index';
+import { Form } from './index';
 import { vi } from 'vitest';
 
-describe('ColorPicker Component', () => {
+describe('Form Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<ColorPicker />);
-      expect(document.querySelector('[data-testid="color-picker"]')).toBeInTheDocument();
+      renderWithProviders(<Form />);
+      expect(document.querySelector('[data-testid="form"]')).toBeInTheDocument();
     });
 
     it('renders with custom className', () => {
-      renderWithProviders(<ColorPicker className="custom-class" />);
+      renderWithProviders(<Form className="custom-class" />);
       expect(document.querySelector('.custom-class')).toBeInTheDocument();
     });
 
     it('renders with label', () => {
-      renderWithProviders(<ColorPicker label="Test Label" />);
+      renderWithProviders(<Form label="Test Label" />);
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
   });
 
   describe('Form Integration', () => {
     it('supports controlled value', () => {
-      const { rerender } = renderWithProviders(<ColorPicker value="test" />);
+      const { rerender } = renderWithProviders(<Form value="test" />);
       expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
       
-      rerender(<ColorPicker value="updated" />);
+      rerender(<Form value="updated" />);
       expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
     });
 
     it('calls onChange when value changes', () => {
       const handleChange = vi.fn();
-      renderWithProviders(<ColorPicker onChange={handleChange} />);
+      renderWithProviders(<Form onChange={handleChange} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -48,13 +48,13 @@ describe('ColorPicker Component', () => {
     });
 
     it('supports disabled state', () => {
-      renderWithProviders(<ColorPicker disabled />);
+      renderWithProviders(<Form disabled />);
       const input = document.querySelector('input, textarea, select, button');
       expect(input).toBeDisabled();
     });
 
     it('supports readonly state', () => {
-      renderWithProviders(<ColorPicker readOnly />);
+      renderWithProviders(<Form readOnly />);
       const input = document.querySelector('input, textarea');
       if (input) {
         expect(input).toHaveAttribute('readonly');
@@ -62,12 +62,12 @@ describe('ColorPicker Component', () => {
     });
 
     it('shows error state', () => {
-      renderWithProviders(<ColorPicker error="Error message" />);
+      renderWithProviders(<Form error="Error message" />);
       expect(screen.getByText('Error message')).toBeInTheDocument();
     });
 
     it('supports required attribute', () => {
-      renderWithProviders(<ColorPicker required />);
+      renderWithProviders(<Form required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('required');
@@ -78,7 +78,7 @@ describe('ColorPicker Component', () => {
   describe('Validation', () => {
     it('validates on blur', async () => {
       const handleValidate = vi.fn();
-      renderWithProviders(<ColorPicker onBlur={handleValidate} />);
+      renderWithProviders(<Form onBlur={handleValidate} />);
       
       const input = document.querySelector('input, textarea, select');
       if (input) {
@@ -89,14 +89,14 @@ describe('ColorPicker Component', () => {
     });
 
     it('shows validation messages', () => {
-      renderWithProviders(<ColorPicker error="Field is required" />);
+      renderWithProviders(<Form error="Field is required" />);
       expect(screen.getByText('Field is required')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<ColorPicker aria-label="Test input" required />);
+      renderWithProviders(<Form aria-label="Test input" required />);
       const input = document.querySelector('input, textarea, select');
       if (input) {
         expect(input).toHaveAttribute('aria-label', 'Test input');
@@ -105,13 +105,13 @@ describe('ColorPicker Component', () => {
     });
 
     it('associates label with input', () => {
-      renderWithProviders(<ColorPicker id="test-input" label="Test Label" />);
+      renderWithProviders(<Form id="test-input" label="Test Label" />);
       const label = screen.getByText('Test Label');
       expect(label).toHaveAttribute('for', 'test-input');
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<ColorPicker />);
+      renderWithProviders(<Form />);
       const input = document.querySelector('input, textarea, select, button');
       if (input) {
         input.focus();

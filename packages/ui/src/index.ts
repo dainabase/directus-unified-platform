@@ -70,6 +70,16 @@ export * from "./components/alert";
 export * from "./components/alert-dialog";
 export * from "./components/tag-input";
 
+// New Components (v1.0.2 - Sprint 2 Additions)
+export * from "./components/drawer";
+export * from "./components/tree-view";
+export * from "./components/mentions";
+export * from "./components/search-bar";
+export * from "./components/timeline-enhanced";
+
+// i18n Provider (Sprint 2)
+export * from "./providers/i18n-provider";
+
 // Utilities
 export { cn } from "./lib/utils";
 

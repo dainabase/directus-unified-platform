@@ -1,0 +1,135 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Information",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "finish": "Terminer",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "clear": "Effacer",
+    "select": "Sélectionner",
+    "selectAll": "Tout sélectionner",
+    "unselectAll": "Tout désélectionner",
+    "expand": "Développer",
+    "collapse": "Réduire",
+    "more": "Plus",
+    "less": "Moins"
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "email": "Veuillez entrer une adresse email valide",
+    "minLength": "La longueur minimale est de {{min}} caractères",
+    "maxLength": "La longueur maximale est de {{max}} caractères",
+    "min": "La valeur minimale est {{min}}",
+    "max": "La valeur maximale est {{max}}",
+    "pattern": "Veuillez respecter le format requis",
+    "number": "Veuillez entrer un nombre valide",
+    "integer": "Veuillez entrer un nombre entier valide",
+    "url": "Veuillez entrer une URL valide",
+    "date": "Veuillez entrer une date valide"
+  },
+  "components": {
+    "dataGrid": {
+      "noData": "Aucune donnée disponible",
+      "loading": "Chargement des données...",
+      "rowsPerPage": "Lignes par page",
+      "showingResults": "Affichage de {{from}} à {{to}} sur {{total}} résultats",
+      "selectedRows": "{{count}} ligne(s) sélectionnée(s)",
+      "columns": "Colonnes",
+      "filters": "Filtres",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "close": "Fermer la boîte de dialogue",
+      "title": "Titre de la boîte de dialogue"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "error": "Erreur"
+    },
+    "pagination": {
+      "first": "Première page",
+      "last": "Dernière page",
+      "next": "Page suivante",
+      "previous": "Page précédente",
+      "page": "Page {{page}} sur {{total}}"
+    },
+    "calendar": {
+      "today": "Aujourd'hui",
+      "month": "Mois",
+      "week": "Semaine",
+      "day": "Jour",
+      "months": {
+        "january": "Janvier",
+        "february": "Février",
+        "march": "Mars",
+        "april": "Avril",
+        "may": "Mai",
+        "june": "Juin",
+        "july": "Juillet",
+        "august": "Août",
+        "september": "Septembre",
+        "october": "Octobre",
+        "november": "Novembre",
+        "december": "Décembre"
+      },
+      "weekdays": {
+        "sunday": "Dimanche",
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi"
+      }
+    },
+    "fileUpload": {
+      "dropzone": "Déposez les fichiers ici ou cliquez pour parcourir",
+      "uploading": "Téléchargement...",
+      "uploaded": "Téléchargé avec succès",
+      "error": "Échec du téléchargement",
+      "maxSize": "Taille maximale du fichier : {{size}}",
+      "allowedTypes": "Types autorisés : {{types}}"
+    },
+    "treeView": {
+      "expand": "Développer le nœud",
+      "collapse": "Réduire le nœud",
+      "noData": "Aucune donnée disponible"
+    },
+    "tagInput": {
+      "placeholder": "Ajouter des tags...",
+      "maxTags": "Maximum {{max}} tags autorisés",
+      "duplicate": "Ce tag existe déjà"
+    },
+    "drawer": {
+      "close": "Fermer le tiroir"
+    }
+  },
+  "messages": {
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+    "deleteSuccess": "Élément supprimé avec succès",
+    "saveSuccess": "Modifications enregistrées avec succès",
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion."
+  }
+}

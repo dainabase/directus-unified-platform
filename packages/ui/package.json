@@ -1,253 +1,125 @@
 {
   "name": "@dainabase/ui",
-  "version": "1.0.0-beta.1",
-  "private": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dainabase/directus-unified-platform",
-    "directory": "packages/ui"
-  },
+  "version": "1.0.1-beta.1",
+  "description": "Dainabase UI Design System - A modern, accessible, and performant component library",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "tokens.ts",
-    "tailwind.config.ts",
-    "README.md",
-    "CHANGELOG.md",
-    "CONTRIBUTING.md"
+    "dist"
   ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./tokens": "./tokens.ts",
-    "./tailwind.config": "./tailwind.config.ts",
-    "./lazy": {
-      "types": "./dist/components-lazy.d.ts",
-      "import": "./dist/components-lazy.js",
-      "require": "./dist/components-lazy.cjs"
-    },
-    "./core": {
-      "types": "./dist/chunks/core.d.ts",
-      "import": "./dist/chunks/core.js"
-    },
-    "./charts": {
-      "types": "./dist/chunks/charts.d.ts",
-      "import": "./dist/chunks/charts.js"
-    },
-    "./data-grid": {
-      "types": "./dist/chunks/data-grid.d.ts",
-      "import": "./dist/chunks/data-grid.js"
-    }
-  },
   "scripts": {
-    "dev": "vite build --watch",
-    "build": "pnpm build:clean && pnpm build:lib && pnpm build:types && pnpm build:size",
-    "build:clean": "rm -rf dist",
-    "build:lib": "vite build --mode production",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist",
-    "build:analyze": "vite build --mode analyze",
-    "build:size": "size-limit",
-    "build:optimize": "pnpm build:clean && vite build --mode production && pnpm build:size",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "typecheck": "tsc --noEmit",
-    "sb": "storybook dev -p 6006",
-    "build:sb": "storybook build -o storybook-static",
+    "dev": "vite",
+    "build": "tsup",
     "test": "vitest",
-    "test:ci": "vitest run --coverage",
-    "test:watch": "vitest watch",
     "test:ui": "vitest --ui",
-    "test:stories": "storybook test --ci",
-    "chromatic": "chromatic --exit-zero-on-changes",
-    "prepublishOnly": "pnpm build:optimize",
-    "size": "size-limit",
-    "perf": "lighthouse --output html --output-path ./perf-report.html"
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "sb": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.3.4",
-    "@radix-ui/react-primitive": "^1.0.3",
-    "@radix-ui/react-slot": "^1.0.2",
-    "class-variance-authority": "^0.7.0",
-    "lucide-react": "^0.309.0",
-    "tailwind-merge": "^2.2.0"
-  },
-  "peerDependencies": {
     "@radix-ui/react-accordion": "^1.1.2",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slider": "^1.1.2",
+    "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
-    "@tanstack/react-table": "^8.10.0",
-    "@tanstack/react-virtual": "^3.0.0",
+    "@tanstack/react-table": "^8.10.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
-    "date-fns": "^3.6.0",
-    "framer-motion": "^11.0.0",
+    "date-fns": "^2.30.0",
+    "embla-carousel-react": "^8.0.0-rc14",
+    "i18next": "^23.7.16",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
-    "react-day-picker": "^8.9.0",
+    "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.48.2",
+    "react-i18next": "^14.0.0",
     "recharts": "^2.10.3",
+    "tailwind-merge": "^2.1.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^0.8.0",
     "zod": "^3.22.4"
   },
-  "peerDependenciesMeta": {
-    "@tanstack/react-table": {
-      "optional": true
-    },
-    "recharts": {
-      "optional": true
-    },
-    "date-fns": {
-      "optional": true
-    },
-    "framer-motion": {
-      "optional": true
-    },
-    "react-hook-form": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
-    },
-    "cmdk": {
-      "optional": true
-    },
-    "react-day-picker": {
-      "optional": true
-    }
-  },
   "devDependencies": {
-    "@axe-core/playwright": "^4.8.0",
-    "@changesets/cli": "^2.27.1",
-    "@playwright/test": "^1.40.0",
-    "@radix-ui/react-accordion": "^1.1.2",
-    "@radix-ui/react-avatar": "^1.0.4",
-    "@radix-ui/react-checkbox": "^1.0.4",
-    "@radix-ui/react-dialog": "^1.0.5",
-    "@radix-ui/react-dropdown-menu": "^2.0.6",
-    "@radix-ui/react-popover": "^1.0.7",
-    "@radix-ui/react-progress": "^1.0.3",
-    "@radix-ui/react-select": "^2.0.0",
-    "@radix-ui/react-slider": "^1.1.2",
-    "@radix-ui/react-switch": "^1.0.3",
-    "@radix-ui/react-tabs": "^1.0.4",
-    "@radix-ui/react-toast": "^1.1.5",
-    "@radix-ui/react-tooltip": "^1.0.7",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@size-limit/preset-small-lib": "^11.0.1",
-    "@storybook/addon-a11y": "^7.6.0",
-    "@storybook/addon-essentials": "^7.6.0",
-    "@storybook/addon-interactions": "^7.6.0",
-    "@storybook/blocks": "^7.6.0",
-    "@storybook/react": "^7.6.0",
-    "@storybook/react-vite": "^7.6.0",
-    "@storybook/test-runner": "^0.16.0",
-    "@storybook/testing-library": "^0.2.2",
-    "@tanstack/react-table": "^8.10.0",
-    "@tanstack/react-virtual": "^3.0.0",
+    "@chromatic-com/storybook": "^1.2.25",
+    "@playwright/test": "^1.40.1",
+    "@storybook/addon-essentials": "^8.1.11",
+    "@storybook/addon-interactions": "^8.1.11",
+    "@storybook/addon-links": "^8.1.11",
+    "@storybook/addon-onboarding": "^8.1.11",
+    "@storybook/blocks": "^8.1.11",
+    "@storybook/react": "^8.1.11",
+    "@storybook/react-vite": "^8.1.11",
+    "@storybook/test": "^8.1.11",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/coverage-v8": "^1.1.0",
-    "@vitest/ui": "^1.1.0",
-    "autoprefixer": "^10.4.19",
-    "chromatic": "^10.0.0",
-    "cmdk": "^0.2.0",
-    "date-fns": "^3.6.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-storybook": "^0.6.15",
-    "framer-motion": "^11.0.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "eslint-plugin-storybook": "^0.8.0",
     "jsdom": "^23.0.1",
-    "lighthouse": "^11.4.0",
-    "postcss": "^8.4.38",
-    "prettier": "^3.2.4",
-    "react": "^18.2.0",
-    "react-day-picker": "^8.9.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.48.2",
-    "recharts": "^2.10.3",
-    "rollup": "^4.9.0",
-    "rollup-plugin-analyzer": "^4.0.0",
-    "rollup-plugin-gzip": "^3.1.0",
-    "rollup-plugin-sizes": "^1.0.6",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-visualizer": "^5.12.0",
-    "semantic-release": "^22.0.12",
-    "size-limit": "^11.0.1",
-    "storybook": "^7.6.0",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.0",
-    "vite-plugin-compression": "^0.5.1",
-    "vitest": "^1.1.0",
-    "zod": "^3.22.4"
+    "playwright": "^1.40.1",
+    "postcss": "^8.4.32",
+    "storybook": "^8.1.11",
+    "tailwindcss": "^3.3.6",
+    "tsup": "^8.0.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vitest": "^1.0.4"
   },
-  "size-limit": [
-    {
-      "name": "Core bundle",
-      "path": "dist/index.js",
-      "limit": "45 KB",
-      "gzip": true
-    },
-    {
-      "name": "Core + React",
-      "path": "dist/index.js",
-      "import": "{ Button, Card, Badge }",
-      "limit": "48 KB"
-    },
-    {
-      "name": "Lazy components",
-      "path": "dist/components-lazy.js",
-      "limit": "5 KB"
-    },
-    {
-      "name": "Core utilities",
-      "path": "dist/chunks/utils.js",
-      "limit": "3 KB"
-    }
-  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   "keywords": [
-    "react",
+    "ui",
     "design-system",
-    "component-library",
-    "ui-components",
-    "tailwind",
+    "components",
+    "react",
     "typescript",
-    "accessibility",
-    "wcag",
+    "tailwind",
     "radix-ui",
-    "storybook"
+    "accessible",
+    "i18n",
+    "enterprise"
   ],
   "author": "Dainabase",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dainabase/directus-unified-platform.git",
+    "directory": "packages/ui"
+  },
   "bugs": {
     "url": "https://github.com/dainabase/directus-unified-platform/issues"
   },
-  "homepage": "https://dainabase.github.io/directus-unified-platform"
+  "homepage": "https://github.com/dainabase/directus-unified-platform/tree/main/packages/ui#readme"
 }

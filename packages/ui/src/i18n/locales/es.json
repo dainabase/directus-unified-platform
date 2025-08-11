@@ -1,0 +1,135 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "ok": "OK",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "finish": "Finalizar",
+    "submit": "Enviar",
+    "reset": "Restablecer",
+    "clear": "Limpiar",
+    "select": "Seleccionar",
+    "selectAll": "Seleccionar todo",
+    "unselectAll": "Deseleccionar todo",
+    "expand": "Expandir",
+    "collapse": "Contraer",
+    "more": "Más",
+    "less": "Menos"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": "Por favor, introduzca una dirección de correo válida",
+    "minLength": "La longitud mínima es de {{min}} caracteres",
+    "maxLength": "La longitud máxima es de {{max}} caracteres",
+    "min": "El valor mínimo es {{min}}",
+    "max": "El valor máximo es {{max}}",
+    "pattern": "Por favor, coincida con el formato requerido",
+    "number": "Por favor, introduzca un número válido",
+    "integer": "Por favor, introduzca un número entero válido",
+    "url": "Por favor, introduzca una URL válida",
+    "date": "Por favor, introduzca una fecha válida"
+  },
+  "components": {
+    "dataGrid": {
+      "noData": "No hay datos disponibles",
+      "loading": "Cargando datos...",
+      "rowsPerPage": "Filas por página",
+      "showingResults": "Mostrando {{from}} a {{to}} de {{total}} resultados",
+      "selectedRows": "{{count}} fila(s) seleccionada(s)",
+      "columns": "Columnas",
+      "filters": "Filtros",
+      "actions": "Acciones"
+    },
+    "dialog": {
+      "close": "Cerrar diálogo",
+      "title": "Título del diálogo"
+    },
+    "alert": {
+      "info": "Información",
+      "success": "Éxito",
+      "warning": "Advertencia",
+      "error": "Error"
+    },
+    "pagination": {
+      "first": "Primera página",
+      "last": "Última página",
+      "next": "Página siguiente",
+      "previous": "Página anterior",
+      "page": "Página {{page}} de {{total}}"
+    },
+    "calendar": {
+      "today": "Hoy",
+      "month": "Mes",
+      "week": "Semana",
+      "day": "Día",
+      "months": {
+        "january": "Enero",
+        "february": "Febrero",
+        "march": "Marzo",
+        "april": "Abril",
+        "may": "Mayo",
+        "june": "Junio",
+        "july": "Julio",
+        "august": "Agosto",
+        "september": "Septiembre",
+        "october": "Octubre",
+        "november": "Noviembre",
+        "december": "Diciembre"
+      },
+      "weekdays": {
+        "sunday": "Domingo",
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado"
+      }
+    },
+    "fileUpload": {
+      "dropzone": "Suelte los archivos aquí o haga clic para explorar",
+      "uploading": "Subiendo...",
+      "uploaded": "Subido con éxito",
+      "error": "Error al subir",
+      "maxSize": "Tamaño máximo del archivo: {{size}}",
+      "allowedTypes": "Tipos permitidos: {{types}}"
+    },
+    "treeView": {
+      "expand": "Expandir nodo",
+      "collapse": "Contraer nodo",
+      "noData": "No hay datos disponibles"
+    },
+    "tagInput": {
+      "placeholder": "Añadir etiquetas...",
+      "maxTags": "Máximo {{max}} etiquetas permitidas",
+      "duplicate": "La etiqueta ya existe"
+    },
+    "drawer": {
+      "close": "Cerrar cajón"
+    }
+  },
+  "messages": {
+    "confirmDelete": "¿Está seguro de que desea eliminar este elemento?",
+    "deleteSuccess": "Elemento eliminado con éxito",
+    "saveSuccess": "Cambios guardados con éxito",
+    "errorOccurred": "Se produjo un error. Por favor, inténtelo de nuevo.",
+    "networkError": "Error de red. Por favor, compruebe su conexión."
+  }
+}

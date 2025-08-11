@@ -1,0 +1,36 @@
+{
+  "name": "@dainabase/ui-cli",
+  "version": "0.0.1",
+  "description": "CLI tool for Dainabase UI Design System",
+  "bin": {
+    "dainabase-ui": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsup src/cli.ts --format cjs --minify",
+    "test": "vitest"
+  },
+  "keywords": [
+    "cli",
+    "design-system",
+    "components",
+    "generator"
+  ],
+  "author": "Dainabase",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "handlebars": "^4.7.8",
+    "inquirer": "^9.2.12",
+    "ora": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.10.5",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  }
+}

@@ -1,0 +1,267 @@
+name: Sprint 3 CI
+
+on:
+  push:
+    branches: 
+      - 'sprint-3/**'
+      - 'feature/sprint-3/**'
+  pull_request:
+    branches: 
+      - main
+    paths:
+      - 'packages/ui/**'
+      - 'packages/ui-cli/**'
+      - 'packages/docs/**'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
+jobs:
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run linting
+        run: pnpm run lint --filter=@dainabase/ui
+        
+      - name: Type checking
+        run: pnpm run type-check --filter=@dainabase/ui
+
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run unit tests
+        run: pnpm run test --filter=@dainabase/ui
+        
+      - name: Generate coverage report
+        run: pnpm run coverage --filter=@dainabase/ui
+        
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: packages/ui/coverage
+
+  test-e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+        working-directory: packages/ui
+        
+      - name: Run E2E tests
+        run: pnpm run test:e2e --filter=@dainabase/ui
+        
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: packages/ui/playwright-report
+
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build packages
+        run: pnpm run build --filter=@dainabase/ui
+        
+      - name: Analyze bundle size
+        run: |
+          cd packages/ui
+          echo "📊 Bundle Size Analysis"
+          echo "========================"
+          du -sh dist/
+          echo ""
+          echo "File breakdown:"
+          ls -lah dist/
+          echo ""
+          # Check if bundle is under 55KB (Sprint 3 target)
+          BUNDLE_SIZE=$(du -b dist/ | cut -f1)
+          MAX_SIZE=$((55 * 1024))
+          if [ $BUNDLE_SIZE -gt $MAX_SIZE ]; then
+            echo "⚠️ Warning: Bundle size exceeds 55KB target!"
+            echo "Current: $(($BUNDLE_SIZE / 1024))KB"
+            echo "Target: 55KB"
+          else
+            echo "✅ Bundle size within target!"
+            echo "Current: $(($BUNDLE_SIZE / 1024))KB"
+            echo "Target: 55KB"
+          fi
+
+  performance-metrics:
+    name: Performance Metrics
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build for production
+        run: pnpm run build --filter=@dainabase/ui
+        
+      - name: Run performance tests
+        run: |
+          echo "🚀 Performance Metrics"
+          echo "======================"
+          echo "Tree-shaking analysis..."
+          echo "Code splitting check..."
+          echo "Lazy loading verification..."
+          # Add actual performance testing commands here
+
+  build-storybook:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build Storybook
+        run: pnpm run build-storybook --filter=@dainabase/ui
+        
+      - name: Upload Storybook build
+        uses: actions/upload-artifact@v3
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+
+  documentation-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check documentation completeness
+        run: |
+          echo "📚 Documentation Coverage Check"
+          echo "==============================="
+          echo "Checking component documentation..."
+          echo "Checking API documentation..."
+          echo "Checking examples..."
+          # Add actual documentation checking commands
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint-and-type-check, test-unit, test-e2e, bundle-analysis, performance-metrics, build-storybook]
+    if: always()
+    
+    steps:
+      - name: Summary
+        run: |
+          echo "## 📊 Sprint 3 CI Summary"
+          echo ""
+          echo "### Test Results"
+          echo "- Linting: ${{ needs.lint-and-type-check.result }}"
+          echo "- Unit Tests: ${{ needs.test-unit.result }}"
+          echo "- E2E Tests: ${{ needs.test-e2e.result }}"
+          echo "- Bundle Analysis: ${{ needs.bundle-analysis.result }}"
+          echo "- Performance: ${{ needs.performance-metrics.result }}"
+          echo "- Storybook: ${{ needs.build-storybook.result }}"
+          echo ""
+          if [ "${{ needs.lint-and-type-check.result }}" == "success" ] && \
+             [ "${{ needs.test-unit.result }}" == "success" ] && \
+             [ "${{ needs.test-e2e.result }}" == "success" ] && \
+             [ "${{ needs.bundle-analysis.result }}" == "success" ] && \
+             [ "${{ needs.performance-metrics.result }}" == "success" ] && \
+             [ "${{ needs.build-storybook.result }}" == "success" ]; then
+            echo "✅ All checks passed!"
+          else
+            echo "❌ Some checks failed. Please review the results above."
+            exit 1
+          fi

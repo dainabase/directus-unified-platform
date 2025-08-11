@@ -57,11 +57,11 @@ export * from './virtual-list';
 export * from './infinite-scroll';
 export * from './drag-drop-grid';
 export * from './kanban';
-// export * from './rich-text-editor';
+export * from './rich-text-editor';
 // export * from './video-player';
 // export * from './audio-recorder';
 // export * from './code-editor';
 // export * from './image-cropper';
 // export * from './pdf-viewer';
 
-// Total: 52/58 components (4 Sprint 3 components added)
+// Total: 53/58 components (5 Sprint 3 components added)

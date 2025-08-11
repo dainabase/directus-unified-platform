@@ -1,44 +1,44 @@
 /**
- * TimelineEnhanced Component Tests
- * Auto-generated test suite for timeline-enhanced component
+ * Timeline Component Tests
+ * Auto-generated test suite for timeline component
  * Category: layout
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { TimelineEnhanced } from './index';
+import { Timeline } from './index';
 import { vi } from 'vitest';
 
-describe('TimelineEnhanced Component', () => {
+describe('Timeline Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<TimelineEnhanced />);
-      expect(document.querySelector('[data-testid="timeline-enhanced"]')).toBeInTheDocument();
+      renderWithProviders(<Timeline />);
+      expect(document.querySelector('[data-testid="timeline"]')).toBeInTheDocument();
     });
 
     it('renders children correctly', () => {
       renderWithProviders(
-        <TimelineEnhanced>
+        <Timeline>
           <div>Child content</div>
-        </TimelineEnhanced>
+        </Timeline>
       );
       expect(screen.getByText('Child content')).toBeInTheDocument();
     });
 
     it('applies custom className', () => {
-      renderWithProviders(<TimelineEnhanced className="custom-layout" />);
+      renderWithProviders(<Timeline className="custom-layout" />);
       expect(document.querySelector('.custom-layout')).toBeInTheDocument();
     });
   });
 
   describe('Layout Behavior', () => {
     it('handles responsive breakpoints', () => {
-      renderWithProviders(<TimelineEnhanced responsive />);
+      renderWithProviders(<Timeline responsive />);
       // Test responsive behavior
     });
 
     it('manages collapse/expand state', () => {
-      const { container } = renderWithProviders(<TimelineEnhanced collapsible />);
+      const { container } = renderWithProviders(<Timeline collapsible />);
       const trigger = container.querySelector('[data-state]');
       if (trigger) {
         expect(trigger).toHaveAttribute('data-state', 'closed');
@@ -49,11 +49,11 @@ describe('TimelineEnhanced Component', () => {
 
     it('supports multiple items/panels', () => {
       renderWithProviders(
-        <TimelineEnhanced>
+        <Timeline>
           <div>Panel 1</div>
           <div>Panel 2</div>
           <div>Panel 3</div>
-        </TimelineEnhanced>
+        </Timeline>
       );
       expect(screen.getByText('Panel 1')).toBeInTheDocument();
       expect(screen.getByText('Panel 2')).toBeInTheDocument();
@@ -66,23 +66,23 @@ describe('TimelineEnhanced Component', () => {
       const handleOpen = vi.fn();
       const handleClose = vi.fn();
       renderWithProviders(
-        <TimelineEnhanced onOpen={handleOpen} onClose={handleClose} />
+        <Timeline onOpen={handleOpen} onClose={handleClose} />
       );
       // Test open/close interactions
     });
 
     it('supports controlled state', () => {
-      const { rerender } = renderWithProviders(<TimelineEnhanced open={false} />);
+      const { rerender } = renderWithProviders(<Timeline open={false} />);
       expect(document.querySelector('[data-state="closed"]')).toBeInTheDocument();
       
-      rerender(<TimelineEnhanced open={true} />);
+      rerender(<Timeline open={true} />);
       expect(document.querySelector('[data-state="open"]')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<TimelineEnhanced aria-label="Layout component" />);
+      renderWithProviders(<Timeline aria-label="Layout component" />);
       const container = document.querySelector('[role="region"], [role="tablist"], [role="navigation"]');
       if (container) {
         expect(container).toHaveAttribute('aria-label', 'Layout component');
@@ -90,7 +90,7 @@ describe('TimelineEnhanced Component', () => {
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<TimelineEnhanced />);
+      renderWithProviders(<Timeline />);
       const focusable = document.querySelector('button, [tabindex="0"]');
       if (focusable) {
         focusable.focus();
@@ -103,7 +103,7 @@ describe('TimelineEnhanced Component', () => {
     });
 
     it('manages focus correctly', () => {
-      renderWithProviders(<TimelineEnhanced />);
+      renderWithProviders(<Timeline />);
       // Test focus management
     });
   });

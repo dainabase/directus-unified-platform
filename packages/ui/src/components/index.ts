@@ -55,7 +55,7 @@ export * from './timeline-enhanced';
 // Sprint 3 Components (10) - In Development
 export * from './virtual-list';
 export * from './infinite-scroll';
-// export * from './drag-drop-grid';
+export * from './drag-drop-grid';
 // export * from './kanban';
 // export * from './rich-text-editor';
 // export * from './video-player';
@@ -64,4 +64,4 @@ export * from './infinite-scroll';
 // export * from './image-cropper';
 // export * from './pdf-viewer';
 
-// Total: 50/58 components (2 Sprint 3 components added)
+// Total: 51/58 components (3 Sprint 3 components added)

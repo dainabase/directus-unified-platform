@@ -46,24 +46,24 @@ const COMPONENTS = {
   'alert-dialog': { type: 'dir', tested: true }, // Batch #4
   'search-bar': { type: 'dir', tested: true }, // Batch #4
   'kanban': { type: 'file', tested: true }, // Batch #4
+  'app-shell': { type: 'dir', tested: true }, // Batch #5
+  'charts': { type: 'dir', tested: true }, // Batch #5
+  'color-picker': { type: 'dir', tested: true }, // Batch #5
+  'command-palette': { type: 'dir', tested: true }, // Batch #5
+  'date-range-picker': { type: 'dir', tested: true }, // Batch #5
+  'form': { type: 'dir', tested: true }, // Batch #5
+  'tag-input': { type: 'dir', tested: true }, // Batch #5
+  'timeline': { type: 'dir', tested: true }, // Batch #5
+  'timeline-enhanced': { type: 'dir', tested: true }, // Batch #5
+  'tree-view': { type: 'dir', tested: true }, // Batch #5
   
   // Directory-based components (need tests)
-  'app-shell': { type: 'dir', tested: false },
   'calendar': { type: 'dir', tested: false },
-  'charts': { type: 'dir', tested: false },
-  'color-picker': { type: 'dir', tested: false },
-  'command-palette': { type: 'dir', tested: false },
   'data-grid-adv': { type: 'dir', tested: false },
-  'date-range-picker': { type: 'dir', tested: false },
-  'form': { type: 'dir', tested: false },
-  'forms-demo': { type: 'dir', tested: false, skip: true },
   'mentions': { type: 'dir', tested: false },
-  'tag-input': { type: 'dir', tested: false },
-  'timeline': { type: 'dir', tested: false },
-  'timeline-enhanced': { type: 'dir', tested: false },
-  'tree-view': { type: 'dir', tested: false },
+  'forms-demo': { type: 'dir', tested: false, skip: true },
   
-  // Standalone components (file-based)
+  // Standalone components (file-based) - need tests
   'audio-recorder': { type: 'file', tested: false },
   'code-editor': { type: 'file', tested: false },
   'drag-drop-grid': { type: 'file', tested: false },
@@ -964,7 +964,7 @@ function generateComplexTests(ComponentName, componentName) {
     });
 
     it('supports pagination', async () => {
-      const data = Array.from({ length: 50 }, (_, i) => ({ id: i, name: `Item ${i}` }));
+      const data = Array.from({ length: 50 }, (_, i) => ({ id: i, name: \`Item \${i}\` }));
       renderWithProviders(<${ComponentName} data={data} pageSize={10} />);
       
       // Check first page
@@ -1087,7 +1087,7 @@ function generateComplexTests(ComponentName, componentName) {
 
   describe('Performance', () => {
     it('virtualizes long lists', () => {
-      const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: `Item ${i}` }));
+      const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: \`Item \${i}\` }));
       renderWithProviders(<${ComponentName} data={data} virtualize />);
       
       // Only visible items should be rendered

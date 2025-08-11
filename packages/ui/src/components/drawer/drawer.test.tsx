@@ -1,44 +1,44 @@
 /**
- * Accordion Component Tests
- * Auto-generated test suite for accordion component
+ * Drawer Component Tests
+ * Auto-generated test suite for drawer component
  * Category: layout
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Accordion } from './index';
+import { Drawer } from './index';
 import { vi } from 'vitest';
 
-describe('Accordion Component', () => {
+describe('Drawer Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Accordion />);
-      expect(document.querySelector('[data-testid="accordion"]')).toBeInTheDocument();
+      renderWithProviders(<Drawer />);
+      expect(document.querySelector('[data-testid="drawer"]')).toBeInTheDocument();
     });
 
     it('renders children correctly', () => {
       renderWithProviders(
-        <Accordion>
+        <Drawer>
           <div>Child content</div>
-        </Accordion>
+        </Drawer>
       );
       expect(screen.getByText('Child content')).toBeInTheDocument();
     });
 
     it('applies custom className', () => {
-      renderWithProviders(<Accordion className="custom-layout" />);
+      renderWithProviders(<Drawer className="custom-layout" />);
       expect(document.querySelector('.custom-layout')).toBeInTheDocument();
     });
   });
 
   describe('Layout Behavior', () => {
     it('handles responsive breakpoints', () => {
-      renderWithProviders(<Accordion responsive />);
+      renderWithProviders(<Drawer responsive />);
       // Test responsive behavior
     });
 
     it('manages collapse/expand state', () => {
-      const { container } = renderWithProviders(<Accordion collapsible />);
+      const { container } = renderWithProviders(<Drawer collapsible />);
       const trigger = container.querySelector('[data-state]');
       if (trigger) {
         expect(trigger).toHaveAttribute('data-state', 'closed');
@@ -49,11 +49,11 @@ describe('Accordion Component', () => {
 
     it('supports multiple items/panels', () => {
       renderWithProviders(
-        <Accordion>
+        <Drawer>
           <div>Panel 1</div>
           <div>Panel 2</div>
           <div>Panel 3</div>
-        </Accordion>
+        </Drawer>
       );
       expect(screen.getByText('Panel 1')).toBeInTheDocument();
       expect(screen.getByText('Panel 2')).toBeInTheDocument();
@@ -66,23 +66,23 @@ describe('Accordion Component', () => {
       const handleOpen = vi.fn();
       const handleClose = vi.fn();
       renderWithProviders(
-        <Accordion onOpen={handleOpen} onClose={handleClose} />
+        <Drawer onOpen={handleOpen} onClose={handleClose} />
       );
       // Test open/close interactions
     });
 
     it('supports controlled state', () => {
-      const { rerender } = renderWithProviders(<Accordion open={false} />);
+      const { rerender } = renderWithProviders(<Drawer open={false} />);
       expect(document.querySelector('[data-state="closed"]')).toBeInTheDocument();
       
-      rerender(<Accordion open={true} />);
+      rerender(<Drawer open={true} />);
       expect(document.querySelector('[data-state="open"]')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<Accordion aria-label="Layout component" />);
+      renderWithProviders(<Drawer aria-label="Layout component" />);
       const container = document.querySelector('[role="region"], [role="tablist"], [role="navigation"]');
       if (container) {
         expect(container).toHaveAttribute('aria-label', 'Layout component');
@@ -90,7 +90,7 @@ describe('Accordion Component', () => {
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<Accordion />);
+      renderWithProviders(<Drawer />);
       const focusable = document.querySelector('button, [tabindex="0"]');
       if (focusable) {
         focusable.focus();
@@ -103,7 +103,7 @@ describe('Accordion Component', () => {
     });
 
     it('manages focus correctly', () => {
-      renderWithProviders(<Accordion />);
+      renderWithProviders(<Drawer />);
       // Test focus management
     });
   });

@@ -1,44 +1,44 @@
 /**
- * Accordion Component Tests
- * Auto-generated test suite for accordion component
+ * Sheet Component Tests
+ * Auto-generated test suite for sheet component
  * Category: layout
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Accordion } from './index';
+import { Sheet } from './index';
 import { vi } from 'vitest';
 
-describe('Accordion Component', () => {
+describe('Sheet Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Accordion />);
-      expect(document.querySelector('[data-testid="accordion"]')).toBeInTheDocument();
+      renderWithProviders(<Sheet />);
+      expect(document.querySelector('[data-testid="sheet"]')).toBeInTheDocument();
     });
 
     it('renders children correctly', () => {
       renderWithProviders(
-        <Accordion>
+        <Sheet>
           <div>Child content</div>
-        </Accordion>
+        </Sheet>
       );
       expect(screen.getByText('Child content')).toBeInTheDocument();
     });
 
     it('applies custom className', () => {
-      renderWithProviders(<Accordion className="custom-layout" />);
+      renderWithProviders(<Sheet className="custom-layout" />);
       expect(document.querySelector('.custom-layout')).toBeInTheDocument();
     });
   });
 
   describe('Layout Behavior', () => {
     it('handles responsive breakpoints', () => {
-      renderWithProviders(<Accordion responsive />);
+      renderWithProviders(<Sheet responsive />);
       // Test responsive behavior
     });
 
     it('manages collapse/expand state', () => {
-      const { container } = renderWithProviders(<Accordion collapsible />);
+      const { container } = renderWithProviders(<Sheet collapsible />);
       const trigger = container.querySelector('[data-state]');
       if (trigger) {
         expect(trigger).toHaveAttribute('data-state', 'closed');
@@ -49,11 +49,11 @@ describe('Accordion Component', () => {
 
     it('supports multiple items/panels', () => {
       renderWithProviders(
-        <Accordion>
+        <Sheet>
           <div>Panel 1</div>
           <div>Panel 2</div>
           <div>Panel 3</div>
-        </Accordion>
+        </Sheet>
       );
       expect(screen.getByText('Panel 1')).toBeInTheDocument();
       expect(screen.getByText('Panel 2')).toBeInTheDocument();
@@ -66,23 +66,23 @@ describe('Accordion Component', () => {
       const handleOpen = vi.fn();
       const handleClose = vi.fn();
       renderWithProviders(
-        <Accordion onOpen={handleOpen} onClose={handleClose} />
+        <Sheet onOpen={handleOpen} onClose={handleClose} />
       );
       // Test open/close interactions
     });
 
     it('supports controlled state', () => {
-      const { rerender } = renderWithProviders(<Accordion open={false} />);
+      const { rerender } = renderWithProviders(<Sheet open={false} />);
       expect(document.querySelector('[data-state="closed"]')).toBeInTheDocument();
       
-      rerender(<Accordion open={true} />);
+      rerender(<Sheet open={true} />);
       expect(document.querySelector('[data-state="open"]')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<Accordion aria-label="Layout component" />);
+      renderWithProviders(<Sheet aria-label="Layout component" />);
       const container = document.querySelector('[role="region"], [role="tablist"], [role="navigation"]');
       if (container) {
         expect(container).toHaveAttribute('aria-label', 'Layout component');
@@ -90,7 +90,7 @@ describe('Accordion Component', () => {
     });
 
     it('supports keyboard navigation', () => {
-      renderWithProviders(<Accordion />);
+      renderWithProviders(<Sheet />);
       const focusable = document.querySelector('button, [tabindex="0"]');
       if (focusable) {
         focusable.focus();
@@ -103,7 +103,7 @@ describe('Accordion Component', () => {
     });
 
     it('manages focus correctly', () => {
-      renderWithProviders(<Accordion />);
+      renderWithProviders(<Sheet />);
       // Test focus management
     });
   });

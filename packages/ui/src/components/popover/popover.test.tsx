@@ -1,29 +1,29 @@
 /**
- * Dialog Component Tests
- * Auto-generated test suite for dialog component
+ * Popover Component Tests
+ * Auto-generated test suite for popover component
  * Category: feedback
  */
 
 import React from 'react';
 import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Dialog } from './index';
+import { Popover } from './index';
 import { vi } from 'vitest';
 
-describe('Dialog Component', () => {
+describe('Popover Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Dialog />);
+      renderWithProviders(<Popover />);
       expect(document.querySelector('[role="alert"], [role="dialog"], [role="status"]')).toBeInTheDocument();
     });
 
     it('renders with message content', () => {
-      renderWithProviders(<Dialog message="Test message" />);
+      renderWithProviders(<Popover message="Test message" />);
       expect(screen.getByText('Test message')).toBeInTheDocument();
     });
 
     it('renders with title and description', () => {
       renderWithProviders(
-        <Dialog title="Title" description="Description" />
+        <Popover title="Title" description="Description" />
       );
       expect(screen.getByText('Title')).toBeInTheDocument();
       expect(screen.getByText('Description')).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('Dialog Component', () => {
     
     variants.forEach(variant => {
       it(`renders ${variant} variant`, () => {
-        renderWithProviders(<Dialog variant={variant} />);
+        renderWithProviders(<Popover variant={variant} />);
         const element = document.querySelector('[data-variant], [class*="' + variant + '"]');
         expect(element).toBeInTheDocument();
       });
@@ -44,17 +44,17 @@ describe('Dialog Component', () => {
 
   describe('Visibility Control', () => {
     it('shows and hides correctly', async () => {
-      const { rerender } = renderWithProviders(<Dialog open={true} />);
+      const { rerender } = renderWithProviders(<Popover open={true} />);
       expect(screen.getByRole?.('dialog') || document.querySelector('[data-state="open"]')).toBeInTheDocument();
       
-      rerender(<Dialog open={false} />);
+      rerender(<Popover open={false} />);
       await waitFor(() => {
         expect(screen.queryByRole?.('dialog') || document.querySelector('[data-state="closed"]')).not.toBeInTheDocument();
       });
     });
 
     it('auto-dismisses after timeout', async () => {
-      renderWithProviders(<Dialog autoClose duration={1000} />);
+      renderWithProviders(<Popover autoClose duration={1000} />);
       await waitFor(() => {
         expect(document.querySelector('[data-state="closed"]')).toBeInTheDocument();
       }, { timeout: 1500 });
@@ -62,7 +62,7 @@ describe('Dialog Component', () => {
 
     it('handles close button click', () => {
       const handleClose = vi.fn();
-      renderWithProviders(<Dialog onClose={handleClose} />);
+      renderWithProviders(<Popover onClose={handleClose} />);
       
       const closeButton = screen.getByRole('button', { name: /close/i });
       fireEvent.click(closeButton);
@@ -73,7 +73,7 @@ describe('Dialog Component', () => {
   describe('Actions', () => {
     it('renders action buttons', () => {
       renderWithProviders(
-        <Dialog 
+        <Popover 
           primaryAction={{ label: 'Confirm', onClick: vi.fn() }}
           secondaryAction={{ label: 'Cancel', onClick: vi.fn() }}
         />
@@ -86,7 +86,7 @@ describe('Dialog Component', () => {
       const handleConfirm = vi.fn();
       const handleCancel = vi.fn();
       renderWithProviders(
-        <Dialog 
+        <Popover 
           primaryAction={{ label: 'Confirm', onClick: handleConfirm }}
           secondaryAction={{ label: 'Cancel', onClick: handleCancel }}
         />
@@ -102,13 +102,13 @@ describe('Dialog Component', () => {
 
   describe('Accessibility', () => {
     it('has proper ARIA role', () => {
-      renderWithProviders(<Dialog />);
+      renderWithProviders(<Popover />);
       const element = document.querySelector('[role="alert"], [role="dialog"], [role="status"]');
       expect(element).toBeInTheDocument();
     });
 
     it('manages focus for modals', () => {
-      renderWithProviders(<Dialog modal />);
+      renderWithProviders(<Popover modal />);
       const dialog = screen.getByRole?.('dialog');
       if (dialog) {
         expect(dialog).toHaveAttribute('aria-modal', 'true');
@@ -117,7 +117,7 @@ describe('Dialog Component', () => {
 
     it('supports keyboard dismissal', () => {
       const handleClose = vi.fn();
-      renderWithProviders(<Dialog onClose={handleClose} />);
+      renderWithProviders(<Popover onClose={handleClose} />);
       
       fireEvent.keyDown(document.body, { key: 'Escape' });
       expect(handleClose).toHaveBeenCalled();

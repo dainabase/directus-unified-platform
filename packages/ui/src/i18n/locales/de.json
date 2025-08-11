@@ -1,0 +1,135 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "add": "Hinzufügen",
+    "close": "Schließen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "warning": "Warnung",
+    "info": "Information",
+    "confirm": "Bestätigen",
+    "yes": "Ja",
+    "no": "Nein",
+    "ok": "OK",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "finish": "Fertigstellen",
+    "submit": "Absenden",
+    "reset": "Zurücksetzen",
+    "clear": "Löschen",
+    "select": "Auswählen",
+    "selectAll": "Alle auswählen",
+    "unselectAll": "Alle abwählen",
+    "expand": "Erweitern",
+    "collapse": "Einklappen",
+    "more": "Mehr",
+    "less": "Weniger"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "minLength": "Die Mindestlänge beträgt {{min}} Zeichen",
+    "maxLength": "Die maximale Länge beträgt {{max}} Zeichen",
+    "min": "Der Mindestwert ist {{min}}",
+    "max": "Der Maximalwert ist {{max}}",
+    "pattern": "Bitte entsprechen Sie dem erforderlichen Format",
+    "number": "Bitte geben Sie eine gültige Zahl ein",
+    "integer": "Bitte geben Sie eine gültige Ganzzahl ein",
+    "url": "Bitte geben Sie eine gültige URL ein",
+    "date": "Bitte geben Sie ein gültiges Datum ein"
+  },
+  "components": {
+    "dataGrid": {
+      "noData": "Keine Daten verfügbar",
+      "loading": "Daten werden geladen...",
+      "rowsPerPage": "Zeilen pro Seite",
+      "showingResults": "Zeige {{from}} bis {{to}} von {{total}} Ergebnissen",
+      "selectedRows": "{{count}} Zeile(n) ausgewählt",
+      "columns": "Spalten",
+      "filters": "Filter",
+      "actions": "Aktionen"
+    },
+    "dialog": {
+      "close": "Dialog schließen",
+      "title": "Dialogtitel"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Erfolg",
+      "warning": "Warnung",
+      "error": "Fehler"
+    },
+    "pagination": {
+      "first": "Erste Seite",
+      "last": "Letzte Seite",
+      "next": "Nächste Seite",
+      "previous": "Vorherige Seite",
+      "page": "Seite {{page}} von {{total}}"
+    },
+    "calendar": {
+      "today": "Heute",
+      "month": "Monat",
+      "week": "Woche",
+      "day": "Tag",
+      "months": {
+        "january": "Januar",
+        "february": "Februar",
+        "march": "März",
+        "april": "April",
+        "may": "Mai",
+        "june": "Juni",
+        "july": "Juli",
+        "august": "August",
+        "september": "September",
+        "october": "Oktober",
+        "november": "November",
+        "december": "Dezember"
+      },
+      "weekdays": {
+        "sunday": "Sonntag",
+        "monday": "Montag",
+        "tuesday": "Dienstag",
+        "wednesday": "Mittwoch",
+        "thursday": "Donnerstag",
+        "friday": "Freitag",
+        "saturday": "Samstag"
+      }
+    },
+    "fileUpload": {
+      "dropzone": "Dateien hier ablegen oder zum Durchsuchen klicken",
+      "uploading": "Wird hochgeladen...",
+      "uploaded": "Erfolgreich hochgeladen",
+      "error": "Upload fehlgeschlagen",
+      "maxSize": "Maximale Dateigröße: {{size}}",
+      "allowedTypes": "Erlaubte Typen: {{types}}"
+    },
+    "treeView": {
+      "expand": "Knoten erweitern",
+      "collapse": "Knoten einklappen",
+      "noData": "Keine Daten verfügbar"
+    },
+    "tagInput": {
+      "placeholder": "Tags hinzufügen...",
+      "maxTags": "Maximal {{max}} Tags erlaubt",
+      "duplicate": "Tag existiert bereits"
+    },
+    "drawer": {
+      "close": "Schublade schließen"
+    }
+  },
+  "messages": {
+    "confirmDelete": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+    "deleteSuccess": "Element erfolgreich gelöscht",
+    "saveSuccess": "Änderungen erfolgreich gespeichert",
+    "errorOccurred": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung."
+  }
+}

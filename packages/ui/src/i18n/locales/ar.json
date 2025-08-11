@@ -1,0 +1,135 @@
+{
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "close": "إغلاق",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "warning": "تحذير",
+    "info": "معلومات",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا",
+    "ok": "موافق",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "finish": "إنهاء",
+    "submit": "إرسال",
+    "reset": "إعادة تعيين",
+    "clear": "مسح",
+    "select": "اختيار",
+    "selectAll": "اختيار الكل",
+    "unselectAll": "إلغاء اختيار الكل",
+    "expand": "توسيع",
+    "collapse": "طي",
+    "more": "المزيد",
+    "less": "أقل"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "email": "الرجاء إدخال عنوان بريد إلكتروني صالح",
+    "minLength": "الحد الأدنى للطول هو {{min}} حرف",
+    "maxLength": "الحد الأقصى للطول هو {{max}} حرف",
+    "min": "القيمة الدنيا هي {{min}}",
+    "max": "القيمة القصوى هي {{max}}",
+    "pattern": "الرجاء مطابقة التنسيق المطلوب",
+    "number": "الرجاء إدخال رقم صالح",
+    "integer": "الرجاء إدخال عدد صحيح صالح",
+    "url": "الرجاء إدخال رابط صالح",
+    "date": "الرجاء إدخال تاريخ صالح"
+  },
+  "components": {
+    "dataGrid": {
+      "noData": "لا توجد بيانات متاحة",
+      "loading": "جاري تحميل البيانات...",
+      "rowsPerPage": "عدد الصفوف في الصفحة",
+      "showingResults": "عرض {{from}} إلى {{to}} من {{total}} نتيجة",
+      "selectedRows": "{{count}} صف(وف) محدد",
+      "columns": "الأعمدة",
+      "filters": "المرشحات",
+      "actions": "الإجراءات"
+    },
+    "dialog": {
+      "close": "إغلاق الحوار",
+      "title": "عنوان الحوار"
+    },
+    "alert": {
+      "info": "معلومات",
+      "success": "نجاح",
+      "warning": "تحذير",
+      "error": "خطأ"
+    },
+    "pagination": {
+      "first": "الصفحة الأولى",
+      "last": "الصفحة الأخيرة",
+      "next": "الصفحة التالية",
+      "previous": "الصفحة السابقة",
+      "page": "صفحة {{page}} من {{total}}"
+    },
+    "calendar": {
+      "today": "اليوم",
+      "month": "شهر",
+      "week": "أسبوع",
+      "day": "يوم",
+      "months": {
+        "january": "يناير",
+        "february": "فبراير",
+        "march": "مارس",
+        "april": "أبريل",
+        "may": "مايو",
+        "june": "يونيو",
+        "july": "يوليو",
+        "august": "أغسطس",
+        "september": "سبتمبر",
+        "october": "أكتوبر",
+        "november": "نوفمبر",
+        "december": "ديسمبر"
+      },
+      "weekdays": {
+        "sunday": "الأحد",
+        "monday": "الإثنين",
+        "tuesday": "الثلاثاء",
+        "wednesday": "الأربعاء",
+        "thursday": "الخميس",
+        "friday": "الجمعة",
+        "saturday": "السبت"
+      }
+    },
+    "fileUpload": {
+      "dropzone": "قم بإسقاط الملفات هنا أو انقر للاستعراض",
+      "uploading": "جاري الرفع...",
+      "uploaded": "تم الرفع بنجاح",
+      "error": "فشل الرفع",
+      "maxSize": "الحد الأقصى لحجم الملف: {{size}}",
+      "allowedTypes": "الأنواع المسموحة: {{types}}"
+    },
+    "treeView": {
+      "expand": "توسيع العقدة",
+      "collapse": "طي العقدة",
+      "noData": "لا توجد بيانات متاحة"
+    },
+    "tagInput": {
+      "placeholder": "إضافة علامات...",
+      "maxTags": "الحد الأقصى {{max}} علامة مسموحة",
+      "duplicate": "العلامة موجودة بالفعل"
+    },
+    "drawer": {
+      "close": "إغلاق الدرج"
+    }
+  },
+  "messages": {
+    "confirmDelete": "هل أنت متأكد من رغبتك في حذف هذا العنصر؟",
+    "deleteSuccess": "تم حذف العنصر بنجاح",
+    "saveSuccess": "تم حفظ التغييرات بنجاح",
+    "errorOccurred": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك."
+  }
+}

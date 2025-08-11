@@ -14,6 +14,11 @@ const COMPONENTS = {
   'button': { type: 'dir', tested: true },
   'card': { type: 'dir', tested: true },
   'alert': { type: 'dir', tested: true },
+  'icon': { type: 'dir', tested: true }, // Batch #1
+  'input': { type: 'dir', tested: true }, // Batch #1
+  'checkbox': { type: 'dir', tested: true }, // Batch #1
+  'switch': { type: 'dir', tested: true }, // Batch #1
+  'select': { type: 'dir', tested: true }, // Batch #1
   
   // Directory-based components (need tests)
   'accordion': { type: 'dir', tested: false },
@@ -25,7 +30,6 @@ const COMPONENTS = {
   'calendar': { type: 'dir', tested: false },
   'carousel': { type: 'dir', tested: false },
   'charts': { type: 'dir', tested: false },
-  'checkbox': { type: 'dir', tested: false },
   'color-picker': { type: 'dir', tested: false },
   'command-palette': { type: 'dir', tested: false },
   'data-grid': { type: 'dir', tested: false },
@@ -38,20 +42,16 @@ const COMPONENTS = {
   'file-upload': { type: 'dir', tested: false },
   'form': { type: 'dir', tested: false },
   'forms-demo': { type: 'dir', tested: false, skip: true },
-  'icon': { type: 'dir', tested: false },
-  'input': { type: 'dir', tested: false },
   'mentions': { type: 'dir', tested: false },
   'pagination': { type: 'dir', tested: false },
   'popover': { type: 'dir', tested: false },
   'progress': { type: 'dir', tested: false },
   'rating': { type: 'dir', tested: false },
   'search-bar': { type: 'dir', tested: false },
-  'select': { type: 'dir', tested: false },
   'sheet': { type: 'dir', tested: false },
   'skeleton': { type: 'dir', tested: false },
   'slider': { type: 'dir', tested: false },
   'stepper': { type: 'dir', tested: false },
-  'switch': { type: 'dir', tested: false },
   'tabs': { type: 'dir', tested: false },
   'tag-input': { type: 'dir', tested: false },
   'textarea': { type: 'dir', tested: false },

@@ -59,9 +59,9 @@ export * from './drag-drop-grid';
 export * from './kanban';
 export * from './rich-text-editor';
 export * from './video-player';
-// export * from './audio-recorder';
+export * from './audio-recorder';
 // export * from './code-editor';
 // export * from './image-cropper';
 // export * from './pdf-viewer';
 
-// Total: 54/58 components (6 Sprint 3 components added - 60% complete)
+// Total: 55/58 components (7 Sprint 3 components added - 70% complete)

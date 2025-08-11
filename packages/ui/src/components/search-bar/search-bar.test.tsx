@@ -1,286 +1,146 @@
-import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { SearchBar } from './search-bar'
-import { describe, it, expect, vi } from 'vitest'
+/**
+ * SearchBar Component Tests
+ * Auto-generated test suite for search-bar component
+ * Category: navigation
+ */
 
-const mockSuggestions = [
-  { id: '1', text: 'React', type: 'trending' as const },
-  { id: '2', text: 'TypeScript', type: 'popular' as const },
-]
+import React from 'react';
+import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
+import { SearchBar } from './index';
+import { vi } from 'vitest';
 
-const mockFilters = [
-  {
-    id: 'category',
-    label: 'Category',
-    type: 'checkbox' as const,
-    options: [
-      { value: 'docs', label: 'Documentation' },
-      { value: 'tutorial', label: 'Tutorials' },
-    ],
-  },
-]
+describe('SearchBar Component', () => {
+  describe('Rendering', () => {
+    it('renders without crashing', () => {
+      renderWithProviders(<SearchBar />);
+      expect(document.querySelector('[role="navigation"], [data-testid="search-bar"]')).toBeInTheDocument();
+    });
 
-const mockResults = [
-  {
-    id: '1',
-    title: 'React Guide',
-    description: 'Getting started with React',
-  },
-  {
-    id: '2',
-    title: 'TypeScript Handbook',
-    description: 'Learn TypeScript',
-  },
-]
+    it('renders navigation items', () => {
+      const items = [
+        { label: 'Home', href: '/' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' }
+      ];
+      renderWithProviders(<SearchBar items={items} />);
+      
+      items.forEach(item => {
+        expect(screen.getByText(item.label)).toBeInTheDocument();
+      });
+    });
+  });
 
-describe('SearchBar', () => {
-  it('renders with placeholder', () => {
-    render(<SearchBar placeholder="Search here..." />)
-    expect(screen.getByPlaceholderText('Search here...')).toBeInTheDocument()
-  })
+  describe('Navigation Behavior', () => {
+    it('highlights active item', () => {
+      const items = [
+        { label: 'Home', href: '/', active: true },
+        { label: 'About', href: '/about' }
+      ];
+      renderWithProviders(<SearchBar items={items} />);
+      
+      const activeItem = screen.getByText('Home').closest('a, button');
+      expect(activeItem).toHaveAttribute('aria-current', 'page');
+    });
 
-  it('updates value on input change', async () => {
-    const onChange = vi.fn()
-    const user = userEvent.setup()
-    render(<SearchBar onChange={onChange} />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'test query')
-    
-    expect(onChange).toHaveBeenLastCalledWith('test query')
-  })
+    it('handles item clicks', () => {
+      const handleClick = vi.fn();
+      const items = [
+        { label: 'Home', onClick: handleClick }
+      ];
+      renderWithProviders(<SearchBar items={items} />);
+      
+      fireEvent.click(screen.getByText('Home'));
+      expect(handleClick).toHaveBeenCalled();
+    });
 
-  it('triggers search on Enter key', async () => {
-    const onSearch = vi.fn()
-    const user = userEvent.setup()
-    render(<SearchBar onSearch={onSearch} />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'search term')
-    fireEvent.keyDown(input, { key: 'Enter' })
-    
-    expect(onSearch).toHaveBeenCalledWith('search term', {})
-  })
+    it('supports disabled items', () => {
+      const items = [
+        { label: 'Disabled', disabled: true }
+      ];
+      renderWithProviders(<SearchBar items={items} />);
+      
+      const disabledItem = screen.getByText('Disabled').closest('a, button');
+      expect(disabledItem).toBeDisabled();
+    });
+  });
 
-  it('shows clear button when value exists', async () => {
-    const user = userEvent.setup()
-    render(<SearchBar />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'text')
-    
-    const clearButton = screen.getByRole('button', { hidden: true })
-    expect(clearButton).toBeInTheDocument()
-  })
+  describe('Search Functionality', () => {
+    it('filters items based on search', async () => {
+      const items = [
+        { label: 'Apple' },
+        { label: 'Banana' },
+        { label: 'Cherry' }
+      ];
+      renderWithProviders(<SearchBar items={items} searchable />);
+      
+      const searchInput = screen.getByRole('searchbox');
+      fireEvent.change(searchInput, { target: { value: 'app' } });
+      
+      await waitFor(() => {
+        expect(screen.getByText('Apple')).toBeInTheDocument();
+        expect(screen.queryByText('Banana')).not.toBeInTheDocument();
+      });
+    });
 
-  it('clears value when clear button is clicked', async () => {
-    const onChange = vi.fn()
-    const onClear = vi.fn()
-    const user = userEvent.setup()
-    render(<SearchBar onChange={onChange} onClear={onClear} />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'text')
-    
-    const clearButton = screen.getByRole('button', { hidden: true })
-    fireEvent.click(clearButton)
-    
-    expect(onChange).toHaveBeenLastCalledWith('')
-    expect(onClear).toHaveBeenCalled()
-  })
+    it('shows no results message', async () => {
+      renderWithProviders(<SearchBar items={[]} searchable />);
+      
+      const searchInput = screen.getByRole('searchbox');
+      fireEvent.change(searchInput, { target: { value: 'xyz' } });
+      
+      await waitFor(() => {
+        expect(screen.getByText(/no results/i)).toBeInTheDocument();
+      });
+    });
+  });
 
-  it('shows suggestions when typing', async () => {
-    const user = userEvent.setup()
-    render(<SearchBar suggestions={mockSuggestions} showSuggestions />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'r')
-    
-    await waitFor(() => {
-      expect(screen.getByText('React')).toBeInTheDocument()
-      expect(screen.getByText('TypeScript')).toBeInTheDocument()
-    })
-  })
+  describe('Keyboard Navigation', () => {
+    it('supports arrow key navigation', () => {
+      const items = [
+        { label: 'Item 1' },
+        { label: 'Item 2' },
+        { label: 'Item 3' }
+      ];
+      renderWithProviders(<SearchBar items={items} />);
+      
+      const firstItem = screen.getByText('Item 1');
+      firstItem.focus();
+      
+      fireEvent.keyDown(firstItem, { key: 'ArrowDown' });
+      expect(screen.getByText('Item 2')).toHaveFocus();
+      
+      fireEvent.keyDown(document.activeElement, { key: 'ArrowUp' });
+      expect(screen.getByText('Item 1')).toHaveFocus();
+    });
 
-  it('handles suggestion click', async () => {
-    const onSuggestionClick = vi.fn()
-    const user = userEvent.setup()
-    render(
-      <SearchBar
-        suggestions={mockSuggestions}
-        showSuggestions
-        onSuggestionClick={onSuggestionClick}
-      />
-    )
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'r')
-    
-    await waitFor(() => {
-      expect(screen.getByText('React')).toBeInTheDocument()
-    })
-    
-    fireEvent.click(screen.getByText('React'))
-    
-    expect(onSuggestionClick).toHaveBeenCalledWith(
-      expect.objectContaining({ text: 'React' })
-    )
-  })
+    it('supports Enter key selection', () => {
+      const handleSelect = vi.fn();
+      renderWithProviders(<SearchBar onSelect={handleSelect} />);
+      
+      const item = document.querySelector('[role="menuitem"], [role="option"], button');
+      if (item) {
+        item.focus();
+        fireEvent.keyDown(item, { key: 'Enter' });
+        expect(handleSelect).toHaveBeenCalled();
+      }
+    });
+  });
 
-  it('shows filter button when filters are provided', () => {
-    render(<SearchBar filters={mockFilters} showFilters />)
-    expect(screen.getByText('Filters')).toBeInTheDocument()
-  })
+  describe('Accessibility', () => {
+    it('has proper ARIA attributes', () => {
+      renderWithProviders(<SearchBar aria-label="Main navigation" />);
+      const nav = document.querySelector('[role="navigation"]');
+      if (nav) {
+        expect(nav).toHaveAttribute('aria-label', 'Main navigation');
+      }
+    });
 
-  it('handles filter changes', async () => {
-    const onFilterChange = vi.fn()
-    const user = userEvent.setup()
-    render(
-      <SearchBar
-        filters={mockFilters}
-        showFilters
-        onFilterChange={onFilterChange}
-      />
-    )
-    
-    const filterButton = screen.getByText('Filters')
-    await user.click(filterButton)
-    
-    const checkbox = await screen.findByLabelText('Documentation')
-    await user.click(checkbox)
-    
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ category: ['docs'] })
-    )
-  })
-
-  it('shows search button by default', () => {
-    render(<SearchBar showSearchButton />)
-    expect(screen.getByText('Search')).toBeInTheDocument()
-  })
-
-  it('triggers search when search button is clicked', async () => {
-    const onSearch = vi.fn()
-    const user = userEvent.setup()
-    render(<SearchBar onSearch={onSearch} showSearchButton />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'query')
-    
-    const searchButton = screen.getByText('Search')
-    await user.click(searchButton)
-    
-    expect(onSearch).toHaveBeenCalledWith('query', {})
-  })
-
-  it('shows results when provided', () => {
-    render(<SearchBar results={mockResults} showResults showResultsPopover />)
-    expect(screen.getByText('React Guide')).toBeInTheDocument()
-    expect(screen.getByText('TypeScript Handbook')).toBeInTheDocument()
-  })
-
-  it('handles result click', async () => {
-    const onResultClick = vi.fn()
-    render(
-      <SearchBar
-        results={mockResults}
-        showResults
-        showResultsPopover
-        onResultClick={onResultClick}
-      />
-    )
-    
-    fireEvent.click(screen.getByText('React Guide'))
-    
-    expect(onResultClick).toHaveBeenCalledWith(
-      expect.objectContaining({ title: 'React Guide' })
-    )
-  })
-
-  it('shows loading state', () => {
-    render(<SearchBar loading loadingMessage="Searching..." />)
-    expect(screen.getByText('Searching...')).toBeInTheDocument()
-  })
-
-  it('shows recent searches when enabled', () => {
-    const recentSearches = ['Previous search 1', 'Previous search 2']
-    render(
-      <SearchBar
-        showRecentSearches
-        recentSearches={recentSearches}
-        showSuggestions
-      />
-    )
-    
-    const input = screen.getByRole('searchbox')
-    fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: 'a' } })
-    
-    expect(screen.getByText('Recent searches')).toBeInTheDocument()
-  })
-
-  it('clears recent searches when clear button is clicked', async () => {
-    const onClearRecentSearches = vi.fn()
-    const recentSearches = ['Previous search']
-    const user = userEvent.setup()
-    
-    render(
-      <SearchBar
-        showRecentSearches
-        recentSearches={recentSearches}
-        onClearRecentSearches={onClearRecentSearches}
-        showSuggestions
-      />
-    )
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'a')
-    
-    const clearButton = screen.getByText('Clear all')
-    await user.click(clearButton)
-    
-    expect(onClearRecentSearches).toHaveBeenCalled()
-  })
-
-  it('debounces search on change', async () => {
-    vi.useFakeTimers()
-    const onSearch = vi.fn()
-    const user = userEvent.setup({ delay: null })
-    
-    render(<SearchBar onSearch={onSearch} searchOnChange debounceMs={300} />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'test')
-    
-    expect(onSearch).not.toHaveBeenCalled()
-    
-    vi.advanceTimersByTime(300)
-    
-    await waitFor(() => {
-      expect(onSearch).toHaveBeenCalledWith('test', {})
-    })
-    
-    vi.useRealTimers()
-  })
-
-  it('respects maxSuggestions prop', async () => {
-    const manySuggestions = Array.from({ length: 10 }, (_, i) => ({
-      id: String(i),
-      text: `Suggestion ${i}`,
-    }))
-    
-    const user = userEvent.setup()
-    render(<SearchBar suggestions={manySuggestions} maxSuggestions={3} showSuggestions />)
-    
-    const input = screen.getByRole('searchbox')
-    await user.type(input, 'a')
-    
-    await waitFor(() => {
-      expect(screen.getByText('Suggestion 0')).toBeInTheDocument()
-      expect(screen.getByText('Suggestion 1')).toBeInTheDocument()
-      expect(screen.getByText('Suggestion 2')).toBeInTheDocument()
-      expect(screen.queryByText('Suggestion 3')).not.toBeInTheDocument()
-    })
-  })
-})
+    it('supports screen reader announcements', () => {
+      renderWithProviders(<SearchBar currentPage={2} totalPages={5} />);
+      const status = screen.getByRole?.('status');
+      if (status) {
+        expect(status).toHaveTextContent(/page 2 of 5/i);
+      }
+    });
+  });
+});

@@ -1,35 +1,35 @@
 /**
- * DataGrid Component Tests
- * Auto-generated test suite for data-grid component
+ * Kanban Component Tests
+ * Auto-generated test suite for kanban component
  * Category: complex
  */
 
 import React from 'react';
-import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { DataGrid } from './index';
+import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../tests/utils/test-utils';
+import { Kanban } from './kanban';
 import { vi } from 'vitest';
 
-describe('DataGrid Component', () => {
+describe('Kanban Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<DataGrid />);
-      expect(document.querySelector('[data-testid="data-grid"]')).toBeInTheDocument();
+      renderWithProviders(<Kanban />);
+      expect(document.querySelector('[data-testid="kanban"]')).toBeInTheDocument();
     });
 
     it('renders with initial data', () => {
       const data = { /* mock data */ };
-      renderWithProviders(<DataGrid data={data} />);
+      renderWithProviders(<Kanban data={data} />);
       // Verify data is rendered
     });
 
     it('handles loading state', () => {
-      renderWithProviders(<DataGrid loading />);
+      renderWithProviders(<Kanban loading />);
       expect(screen.getByRole('status')).toBeInTheDocument();
       expect(screen.getByText(/loading/i)).toBeInTheDocument();
     });
 
     it('handles error state', () => {
-      renderWithProviders(<DataGrid error="Failed to load" />);
+      renderWithProviders(<Kanban error="Failed to load" />);
       expect(screen.getByRole('alert')).toBeInTheDocument();
       expect(screen.getByText('Failed to load')).toBeInTheDocument();
     });
@@ -38,7 +38,7 @@ describe('DataGrid Component', () => {
   describe('Data Management', () => {
     it('loads data on mount', async () => {
       const fetchData = vi.fn().mockResolvedValue({ /* mock data */ });
-      renderWithProviders(<DataGrid onLoad={fetchData} />);
+      renderWithProviders(<Kanban onLoad={fetchData} />);
       
       await waitFor(() => {
         expect(fetchData).toHaveBeenCalled();
@@ -46,11 +46,11 @@ describe('DataGrid Component', () => {
     });
 
     it('handles data updates', async () => {
-      const { rerender } = renderWithProviders(<DataGrid data={[]} />);
+      const { rerender } = renderWithProviders(<Kanban data={[]} />);
       expect(screen.getByText(/no data/i)).toBeInTheDocument();
       
       const newData = [{ id: 1, name: 'Item 1' }];
-      rerender(<DataGrid data={newData} />);
+      rerender(<Kanban data={newData} />);
       
       await waitFor(() => {
         expect(screen.getByText('Item 1')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('DataGrid Component', () => {
 
     it('supports pagination', async () => {
       const data = Array.from({ length: 50 }, (_, i) => ({ id: i, name: `Item ${i}` }));
-      renderWithProviders(<DataGrid data={data} pageSize={10} />);
+      renderWithProviders(<Kanban data={data} pageSize={10} />);
       
       // Check first page
       expect(screen.getByText('Item 0')).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('DataGrid Component', () => {
         { id: 2, name: 'Apple' },
         { id: 3, name: 'Mango' }
       ];
-      renderWithProviders(<DataGrid data={data} sortable />);
+      renderWithProviders(<Kanban data={data} sortable />);
       
       const sortButton = screen.getByRole('button', { name: /sort/i });
       fireEvent.click(sortButton);
@@ -100,7 +100,7 @@ describe('DataGrid Component', () => {
         { id: 2, name: 'Banana' },
         { id: 3, name: 'Cherry' }
       ];
-      renderWithProviders(<DataGrid data={data} filterable />);
+      renderWithProviders(<Kanban data={data} filterable />);
       
       const filterInput = screen.getByRole('textbox', { name: /filter/i });
       fireEvent.change(filterInput, { target: { value: 'app' } });
@@ -117,7 +117,7 @@ describe('DataGrid Component', () => {
     it('handles item selection', () => {
       const handleSelect = vi.fn();
       const data = [{ id: 1, name: 'Item 1' }];
-      renderWithProviders(<DataGrid data={data} onSelect={handleSelect} />);
+      renderWithProviders(<Kanban data={data} onSelect={handleSelect} />);
       
       const item = screen.getByText('Item 1');
       fireEvent.click(item);
@@ -131,7 +131,7 @@ describe('DataGrid Component', () => {
         { id: 1, name: 'Item 1' },
         { id: 2, name: 'Item 2' }
       ];
-      renderWithProviders(<DataGrid data={data} multiSelect onSelect={handleSelect} />);
+      renderWithProviders(<Kanban data={data} multiSelect onSelect={handleSelect} />);
       
       const item1 = screen.getByText('Item 1');
       const item2 = screen.getByText('Item 2');
@@ -148,7 +148,7 @@ describe('DataGrid Component', () => {
         { id: 1, name: 'Item 1' },
         { id: 2, name: 'Item 2' }
       ];
-      renderWithProviders(<DataGrid data={data} draggable onReorder={handleReorder} />);
+      renderWithProviders(<Kanban data={data} draggable onReorder={handleReorder} />);
       
       const item1 = screen.getByText('Item 1');
       const item2 = screen.getByText('Item 2');
@@ -166,7 +166,7 @@ describe('DataGrid Component', () => {
     it('supports inline editing', async () => {
       const handleEdit = vi.fn();
       const data = [{ id: 1, name: 'Item 1' }];
-      renderWithProviders(<DataGrid data={data} editable onEdit={handleEdit} />);
+      renderWithProviders(<Kanban data={data} editable onEdit={handleEdit} />);
       
       const item = screen.getByText('Item 1');
       fireEvent.doubleClick(item);
@@ -182,7 +182,7 @@ describe('DataGrid Component', () => {
   describe('Performance', () => {
     it('virtualizes long lists', () => {
       const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: `Item ${i}` }));
-      renderWithProviders(<DataGrid data={data} virtualize />);
+      renderWithProviders(<Kanban data={data} virtualize />);
       
       // Only visible items should be rendered
       const renderedItems = screen.getAllByTestId('data-item');
@@ -191,7 +191,7 @@ describe('DataGrid Component', () => {
 
     it('debounces search input', async () => {
       const handleSearch = vi.fn();
-      renderWithProviders(<DataGrid onSearch={handleSearch} />);
+      renderWithProviders(<Kanban onSearch={handleSearch} />);
       
       const searchInput = screen.getByRole('textbox', { name: /search/i });
       
@@ -211,13 +211,13 @@ describe('DataGrid Component', () => {
 
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
-      renderWithProviders(<DataGrid aria-label="Complex component" />);
-      const container = document.querySelector('[data-testid="data-grid"]');
+      renderWithProviders(<Kanban aria-label="Complex component" />);
+      const container = document.querySelector('[data-testid="kanban"]');
       expect(container).toHaveAttribute('aria-label', 'Complex component');
     });
 
     it('announces updates to screen readers', async () => {
-      renderWithProviders(<DataGrid />);
+      renderWithProviders(<Kanban />);
       const liveRegion = screen.getByRole('status', { live: 'polite' });
       
       // Trigger an update
@@ -230,7 +230,7 @@ describe('DataGrid Component', () => {
     });
 
     it('supports keyboard navigation throughout', () => {
-      renderWithProviders(<DataGrid />);
+      renderWithProviders(<Kanban />);
       
       // Test Tab navigation
       const focusableElements = document.querySelectorAll(

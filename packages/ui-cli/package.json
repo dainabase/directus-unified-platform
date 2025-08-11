@@ -1,6 +1,6 @@
 {
   "name": "@dainabase/ui-cli",
-  "version": "0.1.0-beta.1",
+  "version": "0.0.1",
   "description": "CLI tool for Dainabase UI Design System",
   "bin": {
     "dainabase-ui": "./dist/cli.js"

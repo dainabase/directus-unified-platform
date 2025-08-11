@@ -11,6 +11,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsup",
+    "build:vite": "vite build",
+    "build:analyze": "vite build --mode analyze",
+    "build:size": "npm run build && node -e \"const fs=require('fs');const path=require('path');const dir='./dist';if(fs.existsSync(dir)){const files=fs.readdirSync(dir);let total=0;files.forEach(f=>{if(f.endsWith('.js')||f.endsWith('.mjs')){const s=fs.statSync(path.join(dir,f)).size;total+=s;console.log(f+': '+(s/1024).toFixed(2)+'KB')}});console.log('Total: '+(total/1024).toFixed(2)+'KB')}\"",
+    "build:clean": "rm -rf dist && npm run build",
+    "build:watch": "tsup --watch",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
@@ -88,11 +93,13 @@
     "jsdom": "^23.0.1",
     "playwright": "^1.40.1",
     "postcss": "^8.4.32",
+    "rollup-plugin-visualizer": "^5.12.0",
     "storybook": "^8.1.11",
     "tailwindcss": "^3.3.6",
     "tsup": "^8.0.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
+    "vite-plugin-compression": "^0.5.1",
     "vitest": "^1.0.4"
   },
   "peerDependencies": {

@@ -18,6 +18,8 @@ export * from "./components/icon";
 // Data
 export * from "./components/data-grid";
 export * from "./components/data-grid-adv";
+export { DataGridOptimized } from "./components/data-grid/data-grid-optimized";
+export type { DataGridOptimizedProps } from "./components/data-grid/data-grid-optimized";
 
 // Overlays & Interactions
 export * from "./components/dialog";
@@ -62,6 +64,11 @@ export * from "./components/pagination";
 export * from "./components/carousel";
 export * from "./components/color-picker";
 export * from "./components/file-upload";
+
+// New Components (v1.0.1 - Sprint 1 Improvements)
+export * from "./components/alert";
+export * from "./components/alert-dialog";
+export * from "./components/tag-input";
 
 // Utilities
 export { cn } from "./lib/utils";

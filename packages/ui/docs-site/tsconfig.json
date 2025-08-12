@@ -1,0 +1,28 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "strict": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM"],
+    "types": ["node", "@docusaurus/module-type-aliases", "@docusaurus/theme-classic"],
+    "paths": {
+      "@site/*": ["./src/*"],
+      "@dainabase/ui": ["../src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "docs/**/*",
+    "*.js",
+    "*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".docusaurus",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

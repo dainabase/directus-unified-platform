@@ -24,6 +24,8 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:verify": "node scripts/verify-tests.js",
+    "test:generate": "node scripts/generate-tests.js",
     "coverage": "jest --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",

@@ -1,0 +1,279 @@
+name: Bundle Size Monitor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/ui/**'
+      - '!packages/ui/**/*.md'
+      - '!packages/ui/**/*.test.*'
+      - '!packages/ui/**/*.stories.*'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/ui/**'
+      - '!packages/ui/**/*.md'
+      - '!packages/ui/**/*.test.*'
+      - '!packages/ui/**/*.stories.*'
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      alertThreshold:
+        description: 'Alert threshold in KB (default: 400)'
+        required: false
+        default: '400'
+
+jobs:
+  monitor:
+    name: Monitor Bundle Size
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for comparisons
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build UI package
+        run: |
+          cd packages/ui
+          pnpm build
+          
+      - name: Calculate bundle size
+        id: bundle_size
+        run: |
+          cd packages/ui
+          
+          # Get main bundle size
+          MAIN_SIZE=$(find dist -name "*.js" -type f -exec du -b {} \; | awk '{sum += $1} END {print sum}')
+          MAIN_SIZE_KB=$((MAIN_SIZE / 1024))
+          
+          # Get CSS size
+          CSS_SIZE=$(find dist -name "*.css" -type f -exec du -b {} \; | awk '{sum += $1} END {print sum}' 2>/dev/null || echo 0)
+          CSS_SIZE_KB=$((CSS_SIZE / 1024))
+          
+          # Total size
+          TOTAL_SIZE_KB=$((MAIN_SIZE_KB + CSS_SIZE_KB))
+          
+          echo "main_size=$MAIN_SIZE_KB" >> $GITHUB_OUTPUT
+          echo "css_size=$CSS_SIZE_KB" >> $GITHUB_OUTPUT
+          echo "total_size=$TOTAL_SIZE_KB" >> $GITHUB_OUTPUT
+          
+          # Get threshold (from input or default)
+          THRESHOLD="${{ github.event.inputs.alertThreshold || '400' }}"
+          
+          # Check if over threshold
+          if [ $TOTAL_SIZE_KB -gt $THRESHOLD ]; then
+            echo "warning=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Bundle size ($TOTAL_SIZE_KB KB) exceeds threshold ($THRESHOLD KB)"
+          else
+            echo "warning=false" >> $GITHUB_OUTPUT
+            echo "✅ Bundle size ($TOTAL_SIZE_KB KB) is within threshold ($THRESHOLD KB)"
+          fi
+          
+          # Save detailed report
+          echo "# Bundle Size Report" > bundle-report.md
+          echo "Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> bundle-report.md
+          echo "" >> bundle-report.md
+          echo "## Sizes" >> bundle-report.md
+          echo "- JavaScript: ${MAIN_SIZE_KB}KB" >> bundle-report.md
+          echo "- CSS: ${CSS_SIZE_KB}KB" >> bundle-report.md
+          echo "- **Total: ${TOTAL_SIZE_KB}KB**" >> bundle-report.md
+          echo "" >> bundle-report.md
+          echo "## Threshold" >> bundle-report.md
+          echo "- Limit: ${THRESHOLD}KB" >> bundle-report.md
+          echo "- Margin: $((THRESHOLD - TOTAL_SIZE_KB))KB" >> bundle-report.md
+          echo "" >> bundle-report.md
+          
+          # List all chunks
+          echo "## Chunks Breakdown" >> bundle-report.md
+          echo '```' >> bundle-report.md
+          find dist -type f \( -name "*.js" -o -name "*.css" \) -exec ls -lh {} \; | awk '{print $9, $5}'
+          echo '```' >> bundle-report.md
+
+      - name: Compare with main branch
+        if: github.event_name == 'pull_request'
+        run: |
+          # Checkout main branch
+          git checkout main
+          cd packages/ui
+          
+          # Build main branch
+          pnpm build
+          
+          # Get main branch size
+          MAIN_BRANCH_SIZE=$(find dist -name "*.js" -type f -exec du -b {} \; | awk '{sum += $1} END {print sum}')
+          MAIN_BRANCH_SIZE_KB=$((MAIN_BRANCH_SIZE / 1024))
+          
+          # Checkout PR branch again
+          git checkout ${{ github.head_ref }}
+          
+          # Calculate difference
+          DIFF=$((TOTAL_SIZE_KB - MAIN_BRANCH_SIZE_KB))
+          
+          if [ $DIFF -gt 0 ]; then
+            echo "📈 Bundle size increased by ${DIFF}KB compared to main branch"
+          elif [ $DIFF -lt 0 ]; then
+            echo "📉 Bundle size decreased by ${DIFF#-}KB compared to main branch"
+          else
+            echo "📊 Bundle size unchanged compared to main branch"
+          fi
+
+      - name: Create issue comment (PR only)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const mainSize = ${{ steps.bundle_size.outputs.main_size }};
+            const cssSize = ${{ steps.bundle_size.outputs.css_size }};
+            const totalSize = ${{ steps.bundle_size.outputs.total_size }};
+            const warning = ${{ steps.bundle_size.outputs.warning }};
+            
+            const body = `## 📦 Bundle Size Report
+            
+            | Type | Size |
+            |------|------|
+            | JavaScript | ${mainSize}KB |
+            | CSS | ${cssSize}KB |
+            | **Total** | **${totalSize}KB** |
+            
+            ### Status: ${warning ? '⚠️ Warning' : '✅ Passed'}
+            
+            ${warning ? 
+              `Bundle size exceeds the ${process.env.THRESHOLD || 400}KB threshold!
+              
+              Consider:
+              - Moving heavy components to lazy loading
+              - Reviewing dependencies
+              - Checking for duplicate code` 
+              : 
+              `Bundle size is within acceptable limits (< ${process.env.THRESHOLD || 400}KB)`
+            }
+            
+            <details>
+            <summary>Optimization Tips</summary>
+            
+            - Use dynamic imports for heavy components
+            - Review and remove unused dependencies
+            - Enable tree-shaking in build config
+            - Consider code splitting strategies
+            
+            </details>`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Upload bundle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-size-report
+          path: packages/ui/bundle-report.md
+          retention-days: 30
+
+      - name: Store metrics in repository
+        if: github.ref == 'refs/heads/main'
+        run: |
+          # Create metrics directory if not exists
+          mkdir -p .github/metrics
+          
+          # Append to metrics history
+          echo "$(date -u '+%Y-%m-%d %H:%M:%S'),${{ steps.bundle_size.outputs.total_size }},${{ github.sha }}" >> .github/metrics/bundle-size-history.csv
+          
+          # Keep only last 90 days of data
+          tail -n 2160 .github/metrics/bundle-size-history.csv > .github/metrics/bundle-size-history.tmp
+          mv .github/metrics/bundle-size-history.tmp .github/metrics/bundle-size-history.csv
+
+      - name: Create warning issue if needed
+        if: steps.bundle_size.outputs.warning == 'true' && github.ref == 'refs/heads/main'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const totalSize = ${{ steps.bundle_size.outputs.total_size }};
+            const threshold = ${{ github.event.inputs.alertThreshold || '400' }};
+            
+            // Check if similar issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'bundle-size-warning',
+              state: 'open'
+            });
+            
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `⚠️ Bundle Size Alert: ${totalSize}KB exceeds ${threshold}KB threshold`,
+                body: `## Bundle Size Warning
+                
+The UI package bundle size has exceeded the configured threshold.
+
+### Current Status
+- **Current Size**: ${totalSize}KB
+- **Threshold**: ${threshold}KB
+- **Overage**: ${totalSize - threshold}KB
+- **Commit**: ${context.sha}
+
+### Recommended Actions
+1. Review recent changes for unnecessary dependencies
+2. Consider moving heavy components to lazy loading
+3. Run \`pnpm analyze\` to identify large modules
+4. Review the bundle report in the workflow artifacts
+
+### Lazy Loading Candidates
+Based on our architecture, consider lazy loading:
+- DataGrid components
+- Chart components
+- Rich text editors
+- Date pickers with locales
+
+### Resources
+- [Bundle Optimization Guide](./BUNDLE_OPTIMIZATION_GUIDE.md)
+- [Performance Best Practices](./packages/ui/OPTIMIZATION_GUIDE.md)
+
+---
+*This issue was automatically created by the Bundle Size Monitor workflow*`,
+                labels: ['bundle-size-warning', 'performance', 'priority-high']
+              });
+            }
+
+      - name: Update status badge
+        if: github.ref == 'refs/heads/main'
+        run: |
+          TOTAL_SIZE="${{ steps.bundle_size.outputs.total_size }}"
+          THRESHOLD="${{ github.event.inputs.alertThreshold || '400' }}"
+          
+          if [ $TOTAL_SIZE -lt 100 ]; then
+            COLOR="brightgreen"
+          elif [ $TOTAL_SIZE -lt 200 ]; then
+            COLOR="green"
+          elif [ $TOTAL_SIZE -lt 300 ]; then
+            COLOR="yellow"
+          elif [ $TOTAL_SIZE -lt 400 ]; then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+          
+          # This would typically update a badge service or create a badge file
+          echo "Bundle size badge would show: ${TOTAL_SIZE}KB in $COLOR"

@@ -4,6 +4,14 @@ on:
     branches: [ feat/design-system-apple ]
   pull_request:
     branches: [ feat/design-system-apple, main, master ]
+  workflow_dispatch:  # Permet le déclenchement manuel
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+        type: boolean
+
 jobs:
   a11y:
     runs-on: ubuntu-latest

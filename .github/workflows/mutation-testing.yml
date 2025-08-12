@@ -1,0 +1,135 @@
+name: Mutation Testing
+
+on:
+  schedule:
+    # Run weekly on Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      component:
+        description: 'Specific component to test (leave empty for all)'
+        required: false
+        default: ''
+
+jobs:
+  mutation-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Install Stryker
+        run: |
+          pnpm add -D @stryker-mutator/core \
+            @stryker-mutator/vitest-runner \
+            @stryker-mutator/typescript-checker \
+            @stryker-mutator/html-reporter \
+            @stryker-mutator/json-reporter
+      
+      - name: Run mutation testing
+        id: mutation
+        run: |
+          cd packages/ui
+          
+          if [ "${{ github.event.inputs.component }}" != "" ]; then
+            echo "Testing specific component: ${{ github.event.inputs.component }}"
+            npx stryker run --mutate "src/components/${{ github.event.inputs.component }}/**/*.{ts,tsx}"
+          else
+            echo "Testing all components"
+            npx stryker run
+          fi
+        continue-on-error: true
+      
+      - name: Parse mutation results
+        id: parse
+        run: |
+          cd packages/ui
+          
+          if [ -f "reports/mutation/report.json" ]; then
+            SCORE=$(cat reports/mutation/report.json | jq '.mutationScore')
+            KILLED=$(cat reports/mutation/report.json | jq '.killed')
+            SURVIVED=$(cat reports/mutation/report.json | jq '.survived')
+            TIMEOUT=$(cat reports/mutation/report.json | jq '.timeout')
+            
+            echo "score=$SCORE" >> $GITHUB_OUTPUT
+            echo "killed=$KILLED" >> $GITHUB_OUTPUT
+            echo "survived=$SURVIVED" >> $GITHUB_OUTPUT
+            echo "timeout=$TIMEOUT" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Upload mutation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: |
+            packages/ui/reports/mutation/
+            packages/ui/.stryker-tmp/
+      
+      - name: Comment results
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = '${{ steps.parse.outputs.score }}' || 'N/A';
+            const killed = '${{ steps.parse.outputs.killed }}' || '0';
+            const survived = '${{ steps.parse.outputs.survived }}' || '0';
+            const timeout = '${{ steps.parse.outputs.timeout }}' || '0';
+            
+            const emoji = score >= 90 ? '🏆' : score >= 80 ? '✅' : score >= 75 ? '⚠️' : '🔴';
+            
+            const comment = `## 🧬 Mutation Testing Results
+            
+            ### Score: ${emoji} ${score}%
+            
+            | Metric | Value | Description |
+            |--------|-------|-------------|
+            | **Killed** | ${killed} | Mutants detected by tests |
+            | **Survived** | ${survived} | Mutants not detected ⚠️ |
+            | **Timeout** | ${timeout} | Mutants that timed out |
+            | **Total** | ${parseInt(killed) + parseInt(survived) + parseInt(timeout)} | Total mutants generated |
+            
+            ### Thresholds
+            - 🏆 High: ≥ 90%
+            - ✅ Good: ≥ 80%
+            - ⚠️ Low: ≥ 75%
+            - 🔴 Break: < 75%
+            
+            ${survived > 0 ? '### ⚠️ Action Required\nSome mutants survived! This indicates potential gaps in test coverage or test quality. Review the detailed report to identify which mutations were not caught.' : '### ✅ Excellent Test Quality\nAll mutants were successfully detected by the test suite!'}
+            
+            [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            // Create an issue with results
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Mutation Testing Report - Score: ${score}%`,
+              body: comment,
+              labels: ['testing', 'quality']
+            });
+      
+      - name: Check mutation score threshold
+        run: |
+          SCORE=${{ steps.parse.outputs.score }}
+          THRESHOLD=75
+          
+          if [ "$SCORE" != "" ] && [ $(echo "$SCORE < $THRESHOLD" | bc -l) -eq 1 ]; then
+            echo "❌ Mutation score ($SCORE%) is below threshold ($THRESHOLD%)"
+            exit 1
+          else
+            echo "✅ Mutation score ($SCORE%) meets threshold ($THRESHOLD%)"
+          fi

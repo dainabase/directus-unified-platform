@@ -30,7 +30,12 @@
     "test:mutation:component": "stryker run --mutate",
     "test:verify": "node scripts/verify-tests.js",
     "test:generate": "node scripts/generate-tests.js",
-    "analyze:bundle": "node scripts/bundle-analyzer.js",
+    "analyze": "node ../../scripts/analyze-bundle.js",
+    "analyze:bundle": "npm run build && npm run analyze",
+    "analyze:dependencies": "npm ls --depth=0 --prod",
+    "analyze:size": "npm run build:size && npm run analyze",
+    "monitor:bundle": "npm run build && node scripts/monitor-bundle.js",
+    "monitor:performance": "node scripts/performance-monitor.js",
     "check:size": "npm run build && npm run analyze:bundle",
     "update:metrics": "node scripts/update-metrics.js",
     "coverage": "jest --coverage",
@@ -43,6 +48,10 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist coverage .stryker-tmp reports playwright-report test-results",
     "ci:test": "npm run test:ci && npm run test:e2e && npm run check:size",
+    "ci:monitor": "npm run monitor:bundle && npm run monitor:performance",
+    "report:bundle": "npm run analyze > bundle-report.txt",
+    "report:performance": "node scripts/generate-performance-report.js",
+    "optimize:check": "npm run analyze:size && npm run monitor:performance",
     "prepare": "npm run build"
   },
   "dependencies": {
@@ -149,7 +158,10 @@
     "radix-ui",
     "accessible",
     "i18n",
-    "enterprise"
+    "enterprise",
+    "lazy-loading",
+    "optimized",
+    "performance"
   ],
   "author": "Dainabase",
   "license": "MIT",

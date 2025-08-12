@@ -1,0 +1,250 @@
+name: UI Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/ui-test-suite.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/ui/**'
+
+jobs:
+  test:
+    name: Test UI Components
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: 📦 Install dependencies
+        run: |
+          cd packages/ui
+          npm ci
+      
+      - name: 🧪 Run tests with coverage
+        run: |
+          cd packages/ui
+          npm run test:coverage
+      
+      - name: 📊 Generate coverage report
+        if: matrix.node-version == '20.x'
+        run: |
+          cd packages/ui
+          npm run test:coverage -- --reporter=json --outputFile=coverage.json
+      
+      - name: 📈 Upload coverage to Codecov
+        if: matrix.node-version == '20.x'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./packages/ui/coverage/lcov.info
+          flags: unittests
+          name: UI Components Coverage
+          fail_ci_if_error: false
+      
+      - name: 💬 Comment PR with coverage
+        if: github.event_name == 'pull_request' && matrix.node-version == '20.x'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read coverage summary
+            const coveragePath = path.join(process.env.GITHUB_WORKSPACE, 'packages/ui/coverage/coverage-summary.json');
+            
+            if (fs.existsSync(coveragePath)) {
+              const coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
+              const total = coverage.total;
+              
+              const comment = `## 📊 Test Coverage Report
+              
+              | Metric | Coverage | Status |
+              |--------|----------|--------|
+              | **Lines** | ${total.lines.pct}% | ${total.lines.pct >= 80 ? '✅' : '🔴'} |
+              | **Statements** | ${total.statements.pct}% | ${total.statements.pct >= 80 ? '✅' : '🔴'} |
+              | **Functions** | ${total.functions.pct}% | ${total.functions.pct >= 80 ? '✅' : '🔴'} |
+              | **Branches** | ${total.branches.pct}% | ${total.branches.pct >= 80 ? '✅' : '🔴'} |
+              
+              ${total.lines.pct >= 80 ? '✅ **Coverage meets requirements!**' : '⚠️ **Coverage is below 80% threshold**'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+      
+      - name: 🎯 Check coverage thresholds
+        if: matrix.node-version == '20.x'
+        run: |
+          cd packages/ui
+          COVERAGE=$(npm run test:coverage --silent | grep "All files" | awk '{print $10}' | sed 's/%//')
+          echo "Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "❌ Coverage is below 80%"
+            exit 1
+          fi
+          echo "✅ Coverage meets requirements"
+      
+      - name: 📁 Upload test results
+        if: always() && matrix.node-version == '20.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            packages/ui/coverage/
+            packages/ui/test-results/
+          retention-days: 7
+      
+      - name: 🏷️ Create coverage badge
+        if: matrix.node-version == '20.x' && github.ref == 'refs/heads/main'
+        run: |
+          cd packages/ui
+          COVERAGE=$(npm run test:coverage --silent | grep "All files" | awk '{print $10}')
+          echo "Coverage: $COVERAGE"
+          
+          # Create badge JSON
+          echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE\", \"color\": \"brightgreen\"}" > coverage-badge.json
+
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: 📦 Install dependencies
+        run: |
+          cd packages/ui
+          npm ci
+      
+      - name: 🔍 Run ESLint
+        run: |
+          cd packages/ui
+          npm run lint
+      
+      - name: 📝 Run TypeScript check
+        run: |
+          cd packages/ui
+          npm run type-check
+
+  mutation-testing:
+    name: Mutation Testing
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: 📦 Install dependencies
+        run: |
+          cd packages/ui
+          npm ci
+      
+      - name: 🧬 Run Stryker mutation testing
+        continue-on-error: true
+        run: |
+          cd packages/ui
+          npm run test:mutation || true
+      
+      - name: 📁 Upload mutation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: packages/ui/reports/mutation/
+          retention-days: 30
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: 📦 Install dependencies
+        run: |
+          cd packages/ui
+          npm ci
+      
+      - name: 🎭 Install Playwright
+        run: |
+          cd packages/ui
+          npx playwright install --with-deps
+      
+      - name: 🧪 Run E2E tests
+        run: |
+          cd packages/ui
+          npm run test:e2e
+      
+      - name: 📁 Upload E2E results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: |
+            packages/ui/test-results/
+            packages/ui/playwright-report/
+          retention-days: 7
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [test, lint, mutation-testing, e2e-tests]
+    if: always()
+    
+    steps:
+      - name: 📊 Generate summary
+        run: |
+          echo "## 🎯 UI Test Suite Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Unit Tests: ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Lint & Type Check: ${{ needs.lint.result == 'success' && '✅ Passed' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Mutation Testing: ${{ needs.mutation-testing.result == 'success' && '✅ Passed' || '⚠️ Check Results' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E Tests: ${{ needs.e2e-tests.result == 'success' && '✅ Passed' || '❌ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📅 Run Date: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

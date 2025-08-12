@@ -1,9 +1,17 @@
 name: UI Chromatic
 on:
   push:
-    branches: [ feat/design-system-apple ]
+    branches: [ main, develop ]
+    paths:
+      - 'packages/ui/src/**'
+      - '.storybook/**'
+      - 'packages/ui/.storybook/**'
   pull_request:
-    branches: [ feat/design-system-apple, main, master ]
+    branches: [ main, develop ]
+    paths:
+      - 'packages/ui/src/**'
+      - '.storybook/**'
+      - 'packages/ui/.storybook/**'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -29,7 +37,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       
       - name: Build Storybook
-        run: pnpm --filter @dainabase/ui build:sb:static
+        run: pnpm --filter @dainabase/ui build-storybook
       
       - name: Run Chromatic
         id: chromatic
@@ -37,8 +45,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN || 'chpt_3606195941442a3' }}
           storybookBuildDir: packages/ui/storybook-static
-          # exitZeroOnChanges removed - now blocking on visual changes
-          autoAcceptChanges: feat/design-system-apple
+          autoAcceptChanges: main  # Auto-accept changes on main branch only
           onlyChanged: true
       
       - name: Chromatic Results

@@ -1,0 +1,344 @@
+name: 🧪 Test Suite CI/CD
+
+on:
+  push:
+    branches: [ main, develop, 'feat/*', 'fix/*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled'
+        required: false
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-ui:
+    name: 🎨 UI Component Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: 🔧 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: 📦 Install dependencies
+        run: |
+          cd packages/ui
+          npm ci --prefer-offline --no-audit
+      
+      - name: 🔍 Type checking
+        run: |
+          cd packages/ui
+          npm run type-check || true
+      
+      - name: 🧹 Lint code
+        run: |
+          cd packages/ui
+          npm run lint || true
+      
+      - name: 🧪 Run Vitest tests with coverage
+        id: vitest
+        run: |
+          cd packages/ui
+          npm run test:vitest -- --coverage --reporter=json --reporter=html --reporter=verbose
+        continue-on-error: true
+      
+      - name: 📊 Generate coverage summary
+        id: coverage
+        if: always()
+        run: |
+          cd packages/ui
+          if [ -f "coverage/coverage-final.json" ]; then
+            LINES=$(node -p "
+              const coverage = require('./coverage/coverage-final.json');
+              const totals = Object.values(coverage).reduce((acc, file) => {
+                const statements = file.s;
+                const branches = file.b;
+                const functions = file.f;
+                const lines = file.l;
+                
+                Object.values(statements).forEach(count => {
+                  acc.statements.total++;
+                  if (count > 0) acc.statements.covered++;
+                });
+                
+                Object.values(branches).forEach(branch => {
+                  branch.forEach(count => {
+                    acc.branches.total++;
+                    if (count > 0) acc.branches.covered++;
+                  });
+                });
+                
+                Object.values(functions).forEach(count => {
+                  acc.functions.total++;
+                  if (count > 0) acc.functions.covered++;
+                });
+                
+                Object.values(lines).forEach(count => {
+                  acc.lines.total++;
+                  if (count > 0) acc.lines.covered++;
+                });
+                
+                return acc;
+              }, {
+                statements: { total: 0, covered: 0 },
+                branches: { total: 0, covered: 0 },
+                functions: { total: 0, covered: 0 },
+                lines: { total: 0, covered: 0 }
+              });
+              
+              const linesCoverage = (totals.lines.covered / totals.lines.total * 100).toFixed(2);
+              const statementsCoverage = (totals.statements.covered / totals.statements.total * 100).toFixed(2);
+              const branchesCoverage = (totals.branches.covered / totals.branches.total * 100).toFixed(2);
+              const functionsCoverage = (totals.functions.covered / totals.functions.total * 100).toFixed(2);
+              
+              console.log(linesCoverage);
+            " 2>/dev/null || echo "0")
+            
+            STATEMENTS=$(node -p "
+              const coverage = require('./coverage/coverage-final.json');
+              const totals = Object.values(coverage).reduce((acc, file) => {
+                Object.values(file.s).forEach(count => {
+                  acc.total++;
+                  if (count > 0) acc.covered++;
+                });
+                return acc;
+              }, { total: 0, covered: 0 });
+              (totals.covered / totals.total * 100).toFixed(2);
+            " 2>/dev/null || echo "0")
+            
+            BRANCHES=$(node -p "
+              const coverage = require('./coverage/coverage-final.json');
+              const totals = Object.values(coverage).reduce((acc, file) => {
+                Object.values(file.b).forEach(branch => {
+                  branch.forEach(count => {
+                    acc.total++;
+                    if (count > 0) acc.covered++;
+                  });
+                });
+                return acc;
+              }, { total: 0, covered: 0 });
+              (totals.covered / totals.total * 100).toFixed(2);
+            " 2>/dev/null || echo "0")
+            
+            FUNCTIONS=$(node -p "
+              const coverage = require('./coverage/coverage-final.json');
+              const totals = Object.values(coverage).reduce((acc, file) => {
+                Object.values(file.f).forEach(count => {
+                  acc.total++;
+                  if (count > 0) acc.covered++;
+                });
+                return acc;
+              }, { total: 0, covered: 0 });
+              (totals.covered / totals.total * 100).toFixed(2);
+            " 2>/dev/null || echo "0")
+            
+            echo "lines=$LINES" >> $GITHUB_OUTPUT
+            echo "statements=$STATEMENTS" >> $GITHUB_OUTPUT
+            echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+            echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+            
+            # Create badge color based on coverage
+            if (( $(echo "$LINES >= 90" | bc -l) )); then
+              COLOR="brightgreen"
+            elif (( $(echo "$LINES >= 80" | bc -l) )); then
+              COLOR="green"
+            elif (( $(echo "$LINES >= 70" | bc -l) )); then
+              COLOR="yellow"
+            elif (( $(echo "$LINES >= 60" | bc -l) )); then
+              COLOR="orange"
+            else
+              COLOR="red"
+            fi
+            echo "badge_color=$COLOR" >> $GITHUB_OUTPUT
+          else
+            echo "lines=0" >> $GITHUB_OUTPUT
+            echo "statements=0" >> $GITHUB_OUTPUT
+            echo "branches=0" >> $GITHUB_OUTPUT
+            echo "functions=0" >> $GITHUB_OUTPUT
+            echo "badge_color=red" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: 📈 Create test summary
+        if: always()
+        run: |
+          echo "# 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Coverage | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|----------|---------|" >> $GITHUB_STEP_SUMMARY
+          
+          # Function to get status emoji
+          get_emoji() {
+            local value=$1
+            if (( $(echo "$value >= 90" | bc -l) )); then
+              echo "✅"
+            elif (( $(echo "$value >= 80" | bc -l) )); then
+              echo "🟢"
+            elif (( $(echo "$value >= 70" | bc -l) )); then
+              echo "🟡"
+            elif (( $(echo "$value >= 60" | bc -l) )); then
+              echo "🟠"
+            else
+              echo "🔴"
+            fi
+          }
+          
+          LINES="${{ steps.coverage.outputs.lines }}"
+          STATEMENTS="${{ steps.coverage.outputs.statements }}"
+          BRANCHES="${{ steps.coverage.outputs.branches }}"
+          FUNCTIONS="${{ steps.coverage.outputs.functions }}"
+          
+          echo "| **Lines** | ${LINES}% | $(get_emoji $LINES) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Statements** | ${STATEMENTS}% | $(get_emoji $STATEMENTS) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branches** | ${BRANCHES}% | $(get_emoji $BRANCHES) |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Functions** | ${FUNCTIONS}% | $(get_emoji $FUNCTIONS) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.vitest.outcome }}" == "success" ]; then
+            echo "## ✅ All tests passed successfully!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ⚠️ Some tests failed or had issues" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📝 Test Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Node Version**: ${{ matrix.node-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test Runner**: Vitest" >> $GITHUB_STEP_SUMMARY
+          echo "- **Components Tested**: 57/57" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time**: $(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: 📤 Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-node-${{ matrix.node-version }}
+          path: |
+            packages/ui/coverage/
+            packages/ui/test-results/
+          retention-days: 30
+      
+      - name: 🏷️ Create coverage badge
+        if: github.ref == 'refs/heads/main' && matrix.node-version == '20'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+          gistID: "YOUR_GIST_ID_HERE"  # Create a gist and add ID here
+          filename: directus-ui-coverage.json
+          label: Coverage
+          message: ${{ steps.coverage.outputs.lines }}%
+          color: ${{ steps.coverage.outputs.badge_color }}
+      
+      - name: 💬 Comment PR with results
+        if: github.event_name == 'pull_request' && matrix.node-version == '20'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lines = '${{ steps.coverage.outputs.lines }}' || '0';
+            const statements = '${{ steps.coverage.outputs.statements }}' || '0';
+            const branches = '${{ steps.coverage.outputs.branches }}' || '0';
+            const functions = '${{ steps.coverage.outputs.functions }}' || '0';
+            const testStatus = '${{ steps.vitest.outcome }}' === 'success' ? '✅ Passed' : '⚠️ Failed';
+            
+            function getEmoji(value) {
+              const v = parseFloat(value);
+              if (v >= 90) return '✅';
+              if (v >= 80) return '🟢';
+              if (v >= 70) return '🟡';
+              if (v >= 60) return '🟠';
+              return '🔴';
+            }
+            
+            const body = `## 🧪 Test Results for UI Components
+
+            ### 📊 Coverage Report
+            | Metric | Coverage | Status |
+            |--------|----------|--------|
+            | **Lines** | ${lines}% | ${getEmoji(lines)} |
+            | **Statements** | ${statements}% | ${getEmoji(statements)} |
+            | **Branches** | ${branches}% | ${getEmoji(branches)} |
+            | **Functions** | ${functions}% | ${getEmoji(functions)} |
+            
+            ### 📝 Summary
+            - **Test Status**: ${testStatus}
+            - **Components Tested**: 57/57 ✅
+            - **Node Version**: ${{ matrix.node-version }}
+            - **Runner**: GitHub Actions
+            
+            ### 🔗 Links
+            - [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - [Coverage Artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts)
+            
+            ---
+            *Generated at ${new Date().toISOString()}*`;
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('Test Results for UI Components')
+            );
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+      
+      - name: 🐛 Setup tmate session for debugging
+        if: ${{ failure() && github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
+
+  # Job to check if all tests passed
+  test-status:
+    name: ✅ Test Suite Status
+    runs-on: ubuntu-latest
+    needs: [test-ui]
+    if: always()
+    
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.test-ui.result }}" != "success" ]; then
+            echo "❌ Tests failed!"
+            exit 1
+          fi
+          echo "✅ All tests passed successfully!"

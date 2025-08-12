@@ -22,6 +22,24 @@
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-95+-brightgreen.svg)
 ![Load Time](https://img.shields.io/badge/Load%20Time-0.8s-brightgreen.svg)
 
+## 🎯 Development Roadmap
+
+📍 **[View Complete Development Roadmap 2025](./DEVELOPMENT_ROADMAP_2025.md)** - Our comprehensive Q3-Q4 development plan with 10 priority steps
+
+### Quick Overview
+1. **Testing Suite** - 80%+ coverage (Issue #30)
+2. **Interactive Documentation** - Docusaurus/Nextra
+3. **NPM Publication** - @dainabase/ui v1.1.0
+4. **Performance Optimizations** - < 40KB bundle
+5. **Design Tokens System** - Standardized tokens
+6. **Advanced CI/CD** - 12+ workflows
+7. **Analytics & Monitoring** - Full observability
+8. **Internationalization** - 5+ languages
+9. **Accessibility Platinum** - WCAG 2.1 AAA
+10. **Quick Wins** - Repository organization
+
+Track progress: [Issue #33](https://github.com/dainabase/directus-unified-platform/issues/33)
+
 ## 🎉 Latest Achievement: Bundle Size Optimization (v1.0.1-beta.2)
 
 ### ⚡ Critical Performance Victory - 90% Bundle Reduction!
@@ -143,6 +161,7 @@ directus-unified-platform/
 │       └── tsup.config.ts       # ✅ Ultra-optimized build
 ├── docker-compose.yml           # Configuration Docker
 ├── .env.example                 # Variables d'environnement
+├── DEVELOPMENT_ROADMAP_2025.md # 🎯 Roadmap Q3-Q4 2025
 ├── BUNDLE_OPTIMIZATION_GUIDE.md # ✅ Migration guide
 ├── CHANGELOG.md                 # ✅ Version history
 └── README.md                    # Ce fichier
@@ -277,6 +296,7 @@ pm2 start npm --name "frontend-dev" -- run dev
 **Documentation**: Voir [DEVELOPER_WORKFLOW_GUIDE.md](./DEVELOPER_WORKFLOW_GUIDE.md)
 
 ### 📚 Documentation Complète
+- **[DEVELOPMENT_ROADMAP_2025.md](./DEVELOPMENT_ROADMAP_2025.md)** - 🎯 Roadmap Q3-Q4 2025 complète
 - **[BUNDLE_OPTIMIZATION_GUIDE.md](./BUNDLE_OPTIMIZATION_GUIDE.md)** - 🎯 Guide de migration v1.0.1-beta.2
 - **[CLAUDE_CODE_ANALYSIS.md](./CLAUDE_CODE_ANALYSIS.md)** - Analyse complète pour Claude Code
 - **[TROUBLESHOOTING_GUIDE.md](./TROUBLESHOOTING_GUIDE.md)** - Guide de dépannage détaillé
@@ -325,6 +345,7 @@ pm2 start npm --name "frontend-dev" -- run dev
 - ✅ CHANGELOG mis à jour avec v1.0.1-beta.2
 - ✅ Issue #32 résolue et documentée
 - ✅ 6/6 workflows CI/CD validés
+- ✅ Development Roadmap 2025 créée
 
 ## 🧪 Tests
 
@@ -374,6 +395,7 @@ npm run test:coverage
 - 🎯 Lighthouse score: 72 → 95+
 - 📦 Breaking change: New import pattern for components
 - ✅ 100% test coverage maintained
+- 📋 Development Roadmap 2025 created
 
 ### v2.0.0 (2025-08-06)
 - 🎉 Migration complète vers React 18

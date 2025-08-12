@@ -1,4 +1,4 @@
-# 🚀 DEVELOPMENT ROADMAP 2025 - Directus Unified Platform
+# 🚀 DEVELOPMENT ROADMAP 2025 - Design System (@dainabase/ui)
 
 > **État actuel**: Production-Ready ✅ | **Bundle**: 50KB | **Coverage**: 100% | **Performance**: 0.8s  
 > **Dernière mise à jour**: 12 Août 2025, 10:30 UTC
@@ -24,6 +24,129 @@
 
 ---
 
+## 🔴 MÉTHODE DE TRAVAIL OBLIGATOIRE - ESSENTIEL
+
+### ⚠️ RÈGLES ABSOLUES - À LIRE AVANT TOUT DÉVELOPPEMENT
+
+```markdown
+🚨 CES RÈGLES SONT NON-NÉGOCIABLES ET S'APPLIQUENT À 100% DU DÉVELOPPEMENT
+```
+
+### 📍 Environnement de Travail
+- **Repository**: `github.com/dainabase/directus-unified-platform`
+- **Owner**: `dainabase`
+- **Branche**: `main`
+- **Méthode**: **100% via API GitHub**
+
+### ✅ CE QU'IL FAUT FAIRE - TOUJOURS
+
+1. **Lecture de fichiers**
+   ```javascript
+   // Utiliser UNIQUEMENT
+   github:get_file_contents
+   owner: "dainabase"
+   repo: "directus-unified-platform"
+   path: "chemin/du/fichier"
+   branch: "main"
+   ```
+
+2. **Création/Modification de fichiers**
+   ```javascript
+   // TOUJOURS récupérer le SHA d'abord
+   github:get_file_contents (pour obtenir le SHA)
+   // Puis modifier
+   github:create_or_update_file
+   sha: "SHA_REQUIS_POUR_UPDATE"
+   ```
+
+3. **Tests et CI/CD**
+   ```javascript
+   // Les tests s'exécutent via GitHub Actions
+   // Créer les fichiers de test via API
+   // Surveiller les workflows dans Actions tab
+   ```
+
+4. **Issues et Tracking**
+   ```javascript
+   github:create_issue
+   github:update_issue
+   github:list_issues
+   ```
+
+### ❌ CE QU'IL NE FAUT JAMAIS FAIRE
+
+```bash
+# INTERDIT - Ces commandes NE DOIVENT JAMAIS être utilisées :
+git clone
+git pull
+git push
+npm install
+npm run dev
+npm test
+yarn
+pnpm
+node
+npx
+```
+
+### 🎯 Workflow Type pour une Tâche
+
+```markdown
+1. ANALYSER - Lire les fichiers existants via API
+   └─> github:get_file_contents
+
+2. PLANIFIER - Créer/mettre à jour une issue
+   └─> github:create_issue
+
+3. DÉVELOPPER - Modifier les fichiers via API
+   └─> github:create_or_update_file (avec SHA)
+
+4. VALIDER - Les GitHub Actions testent automatiquement
+   └─> Surveiller dans l'onglet Actions
+
+5. DOCUMENTER - Mettre à jour la doc via API
+   └─> github:create_or_update_file
+```
+
+### 💡 Exemples Concrets
+
+#### ❌ MAUVAIS (Travail local)
+```bash
+git clone https://github.com/dainabase/directus-unified-platform
+cd directus-unified-platform
+npm install
+npm test
+```
+
+#### ✅ BON (Via API GitHub)
+```javascript
+// 1. Lire package.json
+github:get_file_contents path="package.json"
+
+// 2. Modifier package.json
+github:create_or_update_file path="package.json" sha="xxx"
+
+// 3. GitHub Actions exécute les tests automatiquement
+```
+
+### 🔧 Outils Disponibles
+- `github:get_file_contents` - Lire des fichiers
+- `github:create_or_update_file` - Créer/modifier des fichiers
+- `github:list_directory` - Lister un répertoire
+- `github:create_issue` - Créer une issue
+- `github:update_issue` - Mettre à jour une issue
+- `github:create_pull_request` - Créer une PR
+- `github:search_code` - Rechercher dans le code
+- `github:list_commits` - Voir l'historique
+
+### 📝 Notes Importantes
+- **Pas d'environnement local** = Pas de problèmes de configuration
+- **Tout est versionné** = Traçabilité complète
+- **CI/CD automatique** = Tests sur chaque commit
+- **Collaboration facilitée** = Tout est sur GitHub
+
+---
+
 ## 🎯 10 ÉTAPES PRIORITAIRES DE DÉVELOPPEMENT
 
 ### **Phase 1: Fondations** (Semaines 33-34, Août 2025)
@@ -31,16 +154,15 @@
 #### 1️⃣ **Testing Suite Complète** 🧪 `PRIORITÉ CRITIQUE`
 **Objectif**: Atteindre 80%+ de coverage sur les 58 composants
 
-**Actions**:
-```bash
-# Setup testing framework
-- [ ] Configurer Jest/Vitest avec TypeScript
-- [ ] Créer les test utilities et helpers
-- [ ] Implémenter tests unitaires pour chaque composant
-- [ ] Ajouter tests d'intégration pour workflows critiques
-- [ ] Tests de performance (maintenir < 50KB)
-- [ ] Tests d'accessibilité WCAG 2.1 AA
-- [ ] Visual regression avec Chromatic (token: chroma_l03nxe2lqne)
+**Actions** (via API GitHub uniquement):
+```javascript
+// Configuration des tests
+- [ ] Modifier package.json pour ajouter Jest/Vitest
+- [ ] Créer jest.config.js via github:create_or_update_file
+- [ ] Créer dossier __tests__ pour chaque composant
+- [ ] Implémenter tests unitaires via API
+- [ ] Configurer GitHub Actions pour exécuter les tests
+- [ ] Ajouter badge de coverage dans README
 ```
 
 **Livrable**: Coverage report > 80%, tous les tests passent
@@ -53,15 +175,14 @@
 #### 2️⃣ **Documentation Interactive** 📚
 **Objectif**: Site de documentation de classe mondiale
 
-**Actions**:
+**Actions** (via API GitHub uniquement):
 ```javascript
-- [ ] Setup Docusaurus 3.0 ou Nextra
-- [ ] Auto-génération API docs depuis TypeScript
-- [ ] Storybook public sur Chromatic
-- [ ] Playground interactif (CodeSandbox embeds)
-- [ ] Guides de migration détaillés
-- [ ] Vidéos tutoriels intégrés
-- [ ] Search avec Algolia DocSearch
+- [ ] Créer structure Docusaurus via API
+- [ ] Auto-générer docs depuis JSDoc comments
+- [ ] Configurer GitHub Pages deployment
+- [ ] Intégrer Storybook existant
+- [ ] Créer exemples interactifs
+- [ ] Setup search avec Algolia
 ```
 
 **Livrable**: docs.dainabase.dev en production
@@ -76,15 +197,15 @@
 #### 3️⃣ **Publication NPM** 📦
 **Objectif**: Publier @dainabase/ui sur NPM
 
-**Actions**:
-```bash
-- [ ] Finaliser tests (minimum 80% coverage requis)
-- [ ] CHANGELOG détaillé avec breaking changes
-- [ ] npm publish avec tags (latest, beta, next)
-- [ ] Templates starter (Next.js, Vite, Remix, Astro)
-- [ ] CDN via unpkg.com et jsdelivr.net
-- [ ] README avec badges et exemples
-- [ ] Migration guide depuis v1.0.0
+**Actions** (via GitHub Actions):
+```yaml
+# Workflow NPM publish
+- [ ] Finaliser tests (via GitHub Actions)
+- [ ] Créer workflow de release automatique
+- [ ] Configurer semantic-release
+- [ ] Créer templates via API
+- [ ] Setup CDN auto-deploy
+- [ ] Badges NPM dans README
 ```
 
 **Livrable**: Package disponible sur NPM
@@ -97,15 +218,13 @@
 #### 4️⃣ **Micro-optimisations Performance** ⚡
 **Objectif**: Atteindre 98+ Lighthouse, < 40KB core
 
-**Actions**:
+**Actions** (modifications via API):
 ```javascript
-- [ ] CSS-in-JS tree-shaking (vanilla-extract)
-- [ ] Partytown pour scripts tiers
-- [ ] Resource Hints (preconnect, dns-prefetch)
-- [ ] Islands Architecture pattern
-- [ ] Edge caching Cloudflare Workers
-- [ ] Compression Brotli niveau 11
-- [ ] Critical CSS inlining
+- [ ] Configurer vite.config.js pour optimisations
+- [ ] Implémenter CSS-in-JS tree-shaking
+- [ ] Ajouter compression dans build workflow
+- [ ] Créer performance budget workflow
+- [ ] Setup monitoring dashboard
 ```
 
 **Livrable**: Bundle < 40KB, Lighthouse 98+
@@ -120,7 +239,7 @@
 #### 5️⃣ **Design Tokens System** 🎨
 **Objectif**: Système de tokens standardisé et extensible
 
-**Structure**:
+**Structure** (à créer via API):
 ```typescript
 packages/design-tokens/
 ├── src/
@@ -146,15 +265,15 @@ packages/design-tokens/
 #### 6️⃣ **CI/CD Automatisation Avancée** 🤖
 **Objectif**: Pipeline DevOps enterprise-grade
 
-**Nouveaux Workflows**:
+**Nouveaux Workflows** (créer via API):
 ```yaml
-- [ ] Renovate Bot (dependency updates)
-- [ ] Snyk security scanning
-- [ ] Semantic release (auto changelog)
-- [ ] Preview deployments (Vercel/Netlify)
-- [ ] Performance budgets (size-limit)
-- [ ] Code quality gates (SonarCloud)
-- [ ] Cross-browser testing (BrowserStack)
+- [ ] .github/workflows/renovate.yml
+- [ ] .github/workflows/security.yml
+- [ ] .github/workflows/release.yml
+- [ ] .github/workflows/preview.yml
+- [ ] .github/workflows/performance.yml
+- [ ] .github/workflows/quality.yml
+- [ ] .github/workflows/cross-browser.yml
 ```
 
 **Livrable**: 12+ workflows actifs
@@ -169,15 +288,14 @@ packages/design-tokens/
 #### 7️⃣ **Analytics & Monitoring** 📈
 **Objectif**: Observabilité complète en production
 
-**Stack de Monitoring**:
+**Stack de Monitoring** (config via API):
 ```javascript
-- [ ] Sentry (error tracking + performance)
-- [ ] LogRocket (session replay)
-- [ ] Datadog APM (métriques custom)
-- [ ] Bundle size tracking dashboard
-- [ ] Real User Monitoring (Core Web Vitals)
-- [ ] Custom analytics dashboard
-- [ ] Alerting avec PagerDuty
+- [ ] Sentry config dans les workflows
+- [ ] LogRocket script integration
+- [ ] Datadog metrics setup
+- [ ] Bundle tracking workflow
+- [ ] RUM implementation
+- [ ] Custom dashboard config
 ```
 
 **Livrable**: Dashboard monitoring unifié
@@ -190,15 +308,15 @@ packages/design-tokens/
 #### 8️⃣ **Internationalisation (i18n)** 🌍
 **Objectif**: Support multi-langues complet
 
-**Implementation**:
+**Implementation** (fichiers via API):
 ```typescript
-- [ ] react-i18next configuration
-- [ ] Traductions: EN, FR, DE, ES, IT
-- [ ] RTL support (AR, HE)
-- [ ] Number/Date formatting (Intl API)
-- [ ] Content management via Directus
-- [ ] Language switcher component
-- [ ] SEO hreflang tags
+- [ ] Créer locales/en.json
+- [ ] Créer locales/fr.json
+- [ ] Créer locales/de.json
+- [ ] Créer locales/es.json
+- [ ] Créer locales/it.json
+- [ ] Configurer i18n provider
+- [ ] Ajouter language switcher
 ```
 
 **Livrable**: 5+ langues supportées
@@ -213,15 +331,14 @@ packages/design-tokens/
 #### 9️⃣ **Accessibilité Niveau Platine** ♿
 **Objectif**: Dépasser WCAG 2.1 AA → AAA
 
-**Améliorations**:
+**Améliorations** (code via API):
 ```javascript
-- [ ] Focus management avancé (focus-trap)
-- [ ] Live regions pour screen readers
-- [ ] Keyboard shortcuts customisables
-- [ ] High contrast mode natif
-- [ ] Reduced motion (@media queries)
-- [ ] Voice control support
-- [ ] Audit avec axe DevTools
+- [ ] Implémenter focus-trap dans composants
+- [ ] Ajouter ARIA live regions
+- [ ] Créer keyboard shortcuts config
+- [ ] Implémenter high contrast CSS
+- [ ] Ajouter reduced motion queries
+- [ ] Configurer a11y testing workflow
 ```
 
 **Livrable**: Score accessibilité 100/100
@@ -234,18 +351,18 @@ packages/design-tokens/
 #### 🔟 **Quick Wins & Clean-up** 🧹
 **Objectif**: Organisation et optimisation rapides
 
-**Actions Immédiates**:
+**Actions Immédiates** (via API):
 ```bash
 - [ ] Supprimer TEST_TRIGGER.md
 - [ ] Organiser /docs par catégorie
-- [ ] Créer CONTRIBUTING.md détaillé
-- [ ] GitHub issue/PR templates
-- [ ] Code of Conduct
-- [ ] Security Policy
-- [ ] Funding.yml pour sponsors
-- [ ] Dependabot configuration
-- [ ] VS Code workspace settings
-- [ ] EditorConfig standardisé
+- [ ] Créer CONTRIBUTING.md
+- [ ] Créer .github/ISSUE_TEMPLATE/
+- [ ] Créer CODE_OF_CONDUCT.md
+- [ ] Créer SECURITY.md
+- [ ] Créer .github/FUNDING.yml
+- [ ] Créer .github/dependabot.yml
+- [ ] Créer .vscode/settings.json
+- [ ] Créer .editorconfig
 ```
 
 **Livrable**: Repository professionnel
@@ -323,14 +440,21 @@ gantt
 
 ---
 
-## 🤝 Comment Contribuer
+## 🤝 Comment Contribuer (Via API GitHub)
 
-1. **Choisir une tâche** dans les issues ouvertes
-2. **Créer une branche** feat/nom-feature
-3. **Suivre les conventions** de commit
-4. **Ajouter des tests** (obligatoire)
-5. **Ouvrir une PR** avec description détaillée
-6. **Attendre la review** (max 48h)
+### Workflow de Contribution
+1. **Créer une issue** via `github:create_issue`
+2. **Développer** via `github:create_or_update_file`
+3. **Tester** automatiquement via GitHub Actions
+4. **Créer une PR** via `github:create_pull_request`
+5. **Review** dans GitHub interface
+6. **Merge** après approbation
+
+### ⚠️ Rappel Important
+- **AUCUN** développement local
+- **TOUT** passe par l'API GitHub
+- **Tests** exécutés par GitHub Actions
+- **Déploiements** automatisés
 
 ---
 
@@ -352,9 +476,11 @@ gantt
 
 <div align="center">
 
-**[⬆ Retour en haut](#-development-roadmap-2025---directus-unified-platform)**
+**[⬆ Retour en haut](#-development-roadmap-2025---design-system-dainabaseui)**
 
 *Document maintenu par l'équipe Dainabase*  
 *Dernière mise à jour: 12 Août 2025*
+
+⚠️ **RAPPEL**: Tout développement DOIT se faire via l'API GitHub
 
 </div>

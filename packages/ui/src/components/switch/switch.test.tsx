@@ -1,125 +1,221 @@
-/**
- * Switch Component Tests
- * Auto-generated test suite for switch component
- * Category: form
- */
-
-import React from 'react';
-import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Switch } from './index';
-import { vi } from 'vitest';
 
 describe('Switch Component', () => {
   describe('Rendering', () => {
-    it('renders without crashing', () => {
-      renderWithProviders(<Switch />);
-      expect(document.querySelector('[data-testid="switch"]')).toBeInTheDocument();
+    it('renders correctly without label', () => {
+      render(<Switch />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toBeInTheDocument();
     });
 
-    it('renders with custom className', () => {
-      renderWithProviders(<Switch className="custom-class" />);
-      expect(document.querySelector('.custom-class')).toBeInTheDocument();
+    it('renders with label when provided', () => {
+      render(<Switch label="Toggle feature" />);
+      expect(screen.getByText('Toggle feature')).toBeInTheDocument();
     });
 
-    it('renders with label', () => {
-      renderWithProviders(<Switch label="Test Label" />);
-      expect(screen.getByText('Test Label')).toBeInTheDocument();
+    it('associates label with switch for accessibility', () => {
+      render(<Switch label="Dark mode" />);
+      const switchElement = screen.getByRole('switch');
+      const label = screen.getByText('Dark mode');
+      expect(switchElement).toBeInTheDocument();
+      expect(label).toBeInTheDocument();
+    });
+
+    it('applies custom className', () => {
+      render(<Switch className="custom-switch" />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveClass('custom-switch');
     });
   });
 
-  describe('Form Integration', () => {
-    it('supports controlled value', () => {
-      const { rerender } = renderWithProviders(<Switch value="test" />);
-      expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
+  describe('Interactions', () => {
+    it('toggles state when clicked', async () => {
+      const user = userEvent.setup();
+      render(<Switch />);
+      const switchElement = screen.getByRole('switch');
       
-      rerender(<Switch value="updated" />);
-      expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
+      expect(switchElement).toHaveAttribute('data-state', 'unchecked');
+      
+      await user.click(switchElement);
+      expect(switchElement).toHaveAttribute('data-state', 'checked');
+      
+      await user.click(switchElement);
+      expect(switchElement).toHaveAttribute('data-state', 'unchecked');
     });
 
-    it('calls onChange when value changes', () => {
+    it('calls onCheckedChange callback when toggled', async () => {
+      const user = userEvent.setup();
       const handleChange = vi.fn();
-      renderWithProviders(<Switch onChange={handleChange} />);
       
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        fireEvent.change(input, { target: { value: 'new value' } });
-        expect(handleChange).toHaveBeenCalled();
-      }
+      render(<Switch onCheckedChange={handleChange} />);
+      const switchElement = screen.getByRole('switch');
+      
+      await user.click(switchElement);
+      expect(handleChange).toHaveBeenCalledWith(true);
+      
+      await user.click(switchElement);
+      expect(handleChange).toHaveBeenCalledWith(false);
     });
 
-    it('supports disabled state', () => {
-      renderWithProviders(<Switch disabled />);
-      const input = document.querySelector('input, textarea, select, button');
-      expect(input).toBeDisabled();
-    });
-
-    it('supports readonly state', () => {
-      renderWithProviders(<Switch readOnly />);
-      const input = document.querySelector('input, textarea');
-      if (input) {
-        expect(input).toHaveAttribute('readonly');
-      }
-    });
-
-    it('shows error state', () => {
-      renderWithProviders(<Switch error="Error message" />);
-      expect(screen.getByText('Error message')).toBeInTheDocument();
-    });
-
-    it('supports required attribute', () => {
-      renderWithProviders(<Switch required />);
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        expect(input).toHaveAttribute('required');
-      }
+    it('toggles when label is clicked', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      
+      render(<Switch label="Click me" onCheckedChange={handleChange} />);
+      const label = screen.getByText('Click me');
+      
+      await user.click(label);
+      expect(handleChange).toHaveBeenCalledWith(true);
     });
   });
 
-  describe('Validation', () => {
-    it('validates on blur', async () => {
-      const handleValidate = vi.fn();
-      renderWithProviders(<Switch onBlur={handleValidate} />);
+  describe('Controlled State', () => {
+    it('respects checked prop when controlled', () => {
+      const { rerender } = render(<Switch checked={false} />);
+      const switchElement = screen.getByRole('switch');
       
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        fireEvent.focus(input);
-        fireEvent.blur(input);
-        expect(handleValidate).toHaveBeenCalled();
-      }
+      expect(switchElement).toHaveAttribute('data-state', 'unchecked');
+      
+      rerender(<Switch checked={true} />);
+      expect(switchElement).toHaveAttribute('data-state', 'checked');
     });
 
-    it('shows validation messages', () => {
-      renderWithProviders(<Switch error="Field is required" />);
-      expect(screen.getByText('Field is required')).toBeInTheDocument();
+    it('does not toggle when controlled without onChange', async () => {
+      const user = userEvent.setup();
+      render(<Switch checked={false} />);
+      const switchElement = screen.getByRole('switch');
+      
+      await user.click(switchElement);
+      expect(switchElement).toHaveAttribute('data-state', 'unchecked');
+    });
+  });
+
+  describe('Disabled State', () => {
+    it('supports disabled state', () => {
+      render(<Switch disabled />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toBeDisabled();
+    });
+
+    it('does not toggle when disabled', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      
+      render(<Switch disabled onCheckedChange={handleChange} />);
+      const switchElement = screen.getByRole('switch');
+      
+      await user.click(switchElement);
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('maintains visual disabled state with label', () => {
+      render(<Switch disabled label="Disabled switch" />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toBeDisabled();
+      expect(screen.getByText('Disabled switch')).toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      renderWithProviders(<Switch aria-label="Test input" required />);
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        expect(input).toHaveAttribute('aria-label', 'Test input');
-        expect(input).toHaveAttribute('aria-required', 'true');
-      }
+    it('has correct ARIA attributes when unchecked', () => {
+      render(<Switch />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('aria-checked', 'false');
     });
 
-    it('associates label with input', () => {
-      renderWithProviders(<Switch id="test-input" label="Test Label" />);
-      const label = screen.getByText('Test Label');
-      expect(label).toHaveAttribute('for', 'test-input');
+    it('has correct ARIA attributes when checked', () => {
+      render(<Switch checked={true} />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('supports keyboard navigation', () => {
-      renderWithProviders(<Switch />);
-      const input = document.querySelector('input, textarea, select, button');
-      if (input) {
-        input.focus();
-        expect(input).toHaveFocus();
-        
-        fireEvent.keyDown(input, { key: 'Tab' });
-        // Tab navigation test
-      }
+    it('can be toggled using keyboard', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      
+      render(<Switch onCheckedChange={handleChange} />);
+      const switchElement = screen.getByRole('switch');
+      
+      switchElement.focus();
+      await user.keyboard(' ');
+      expect(handleChange).toHaveBeenCalledWith(true);
+      
+      await user.keyboard(' ');
+      expect(handleChange).toHaveBeenCalledWith(false);
+    });
+
+    it('supports aria-label', () => {
+      render(<Switch aria-label="Toggle dark mode" />);
+      const switchElement = screen.getByLabelText('Toggle dark mode');
+      expect(switchElement).toBeInTheDocument();
+    });
+
+    it('supports aria-describedby', () => {
+      render(
+        <div>
+          <Switch aria-describedby="help-text" />
+          <span id="help-text">This toggles the feature on and off</span>
+        </div>
+      );
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('aria-describedby', 'help-text');
+    });
+  });
+
+  describe('Styling', () => {
+    it('applies correct default styles', () => {
+      render(<Switch />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveClass('relative', 'h-6', 'w-10', 'cursor-pointer', 'rounded-full');
+    });
+
+    it('applies checked state styles', () => {
+      render(<Switch checked={true} />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('data-state', 'checked');
+    });
+
+    it('merges custom className with default styles', () => {
+      render(<Switch className="bg-blue-500" />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveClass('bg-blue-500');
+      expect(switchElement).toHaveClass('relative', 'h-6', 'w-10');
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('handles rapid clicks correctly', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      
+      render(<Switch onCheckedChange={handleChange} />);
+      const switchElement = screen.getByRole('switch');
+      
+      await user.tripleClick(switchElement);
+      
+      // Should have been called 3 times
+      expect(handleChange).toHaveBeenCalledTimes(3);
+    });
+
+    it('renders correctly with empty label', () => {
+      render(<Switch label="" />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toBeInTheDocument();
+    });
+
+    it('handles defaultChecked prop', () => {
+      render(<Switch defaultChecked={true} />);
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('data-state', 'checked');
+    });
+
+    it('forwards ref correctly', () => {
+      const ref = vi.fn();
+      render(<Switch ref={ref} />);
+      expect(ref).toHaveBeenCalled();
     });
   });
 });

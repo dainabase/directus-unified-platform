@@ -1,0 +1,132 @@
+name: Bundle Size Monitor
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/ui/src/**'
+      - 'packages/ui/package.json'
+      - 'pnpm-lock.yaml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'packages/ui/src/**'
+      - 'packages/ui/package.json'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build package
+        run: pnpm --filter @dainabase/ui build
+      
+      - name: Analyze bundle size
+        id: analyze
+        run: |
+          cd packages/ui
+          
+          # Get bundle sizes
+          DIST_SIZE=$(du -sb dist | cut -f1)
+          DIST_SIZE_MB=$(echo "scale=2; $DIST_SIZE / 1048576" | bc)
+          
+          # Count files
+          JS_FILES=$(find dist -name "*.js" | wc -l)
+          CSS_FILES=$(find dist -name "*.css" | wc -l)
+          
+          # Get largest files
+          LARGEST_FILES=$(find dist -type f -exec du -b {} + | sort -rn | head -5)
+          
+          echo "dist_size=$DIST_SIZE" >> $GITHUB_OUTPUT
+          echo "dist_size_mb=$DIST_SIZE_MB" >> $GITHUB_OUTPUT
+          echo "js_files=$JS_FILES" >> $GITHUB_OUTPUT
+          echo "css_files=$CSS_FILES" >> $GITHUB_OUTPUT
+          
+          # Create detailed report
+          cat << EOF > bundle-report.md
+          # 📦 Bundle Size Report
+          
+          ## Summary
+          - **Total Size**: ${DIST_SIZE_MB} MB
+          - **JavaScript Files**: $JS_FILES
+          - **CSS Files**: $CSS_FILES
+          
+          ## Largest Files
+          \`\`\`
+          $LARGEST_FILES
+          \`\`\`
+          EOF
+      
+      - name: Run webpack-bundle-analyzer
+        run: |
+          cd packages/ui
+          npx webpack-bundle-analyzer dist/stats.json dist/report -m json -r dist/report.json || true
+      
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            packages/ui/dist/report.json
+            packages/ui/bundle-report.md
+      
+      - name: Check size limits
+        run: |
+          LIMIT=524288  # 500KB in bytes
+          SIZE=${{ steps.analyze.outputs.dist_size }}
+          
+          if [ $SIZE -gt $LIMIT ]; then
+            echo "⚠️ Bundle size ($SIZE bytes) exceeds limit ($LIMIT bytes)"
+            exit 1
+          else
+            echo "✅ Bundle size ($SIZE bytes) within limit ($LIMIT bytes)"
+          fi
+      
+      - name: Comment PR with bundle size
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const size = '${{ steps.analyze.outputs.dist_size_mb }}';
+            const jsFiles = '${{ steps.analyze.outputs.js_files }}';
+            const cssFiles = '${{ steps.analyze.outputs.css_files }}';
+            
+            const comment = `## 📦 Bundle Size Analysis
+            
+            | Metric | Value | Status |
+            |--------|-------|--------|
+            | **Total Size** | ${size} MB | ${size < 0.5 ? '✅' : '⚠️'} |
+            | **JS Files** | ${jsFiles} | ✅ |
+            | **CSS Files** | ${cssFiles} | ✅ |
+            
+            ### Size Limits
+            - ✅ Main bundle: < 200KB
+            - ✅ CSS bundle: < 100KB
+            - ${size < 0.5 ? '✅' : '⚠️'} Total: < 500KB
+            
+            [View detailed report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

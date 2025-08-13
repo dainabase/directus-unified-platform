@@ -1,0 +1,37 @@
+name: Auto NPM Publish on Release
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'ui-v*'
+      - 'v*'
+
+jobs:
+  auto-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Publish UI Package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd packages/ui
+          npm ci
+          npm run build
+          npm publish --access public
+      
+      - name: Report Success
+        run: |
+          echo "✅ Published @dainabase/ui to NPM!"
+          echo "📦 https://www.npmjs.com/package/@dainabase/ui"

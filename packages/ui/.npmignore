@@ -1,0 +1,95 @@
+# Development files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+*.stories.tsx
+*.stories.ts
+__tests__/
+__mocks__/
+coverage/
+.coverage/
+
+# Source files (we only ship dist)
+src/
+!dist/
+
+# Config files
+.eslintrc*
+.prettierrc*
+jest.config.*
+vitest.config.*
+tsconfig.json
+tsconfig.*.json
+vite.config.*
+tsup.config.*
+playwright.config.*
+stryker.config.*
+rollup.config.*
+
+# Storybook
+.storybook/
+storybook-static/
+
+# Testing
+e2e/
+tests/
+test-results/
+playwright-report/
+.stryker-tmp/
+
+# Documentation source
+docs/
+
+# Scripts
+scripts/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts we don't want
+*.map
+*.tgz
+
+# Reports
+reports/
+bundle-report.txt
+performance-report.json
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.cache/
+
+# Development environment
+.env
+.env.local
+.env.*.local
+
+# Misc
+.gitignore
+.gitattributes
+.editorconfig
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+.npmrc

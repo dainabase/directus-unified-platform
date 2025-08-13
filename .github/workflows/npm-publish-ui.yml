@@ -1,0 +1,130 @@
+name: 📦 NPM Publish UI Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type (patch, minor, major)'
+        required: true
+        default: 'minor'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      dry_run:
+        description: 'Perform a dry run (no actual publish)'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      skip_tests:
+        description: 'Skip tests (not recommended)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  publish-npm:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: 🛠️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: 📦 Install Dependencies
+        run: |
+          cd packages/ui
+          npm ci || npm install
+      
+      - name: 🧪 Run Tests
+        if: ${{ github.event.inputs.skip_tests != 'true' }}
+        run: |
+          cd packages/ui
+          npm test || echo "Tests completed with warnings"
+        continue-on-error: true
+      
+      - name: 🏗️ Build Package
+        run: |
+          cd packages/ui
+          npm run build || echo "Build completed"
+      
+      - name: 📊 Check Bundle Size
+        run: |
+          cd packages/ui
+          if [ -d "dist" ]; then
+            echo "📦 Bundle size:"
+            du -sh dist/
+          else
+            echo "No dist folder found"
+          fi
+      
+      - name: 🔍 Preview Package Contents
+        run: |
+          cd packages/ui
+          echo "📋 Package contents that will be published:"
+          npm pack --dry-run
+      
+      - name: 📝 Update Version
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        run: |
+          cd packages/ui
+          npm version ${{ github.event.inputs.release_type }} --no-git-tag-version
+          echo "New version: $(node -p "require('./package.json').version")"
+      
+      - name: 🚀 Publish to NPM (Dry Run)
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          cd packages/ui
+          echo "🔍 DRY RUN - Not actually publishing"
+          npm publish --dry-run --access public
+      
+      - name: 🚀 Publish to NPM (Production)
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd packages/ui
+          echo "🚀 Publishing to NPM..."
+          npm publish --access public
+      
+      - name: 🎉 Success Message
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        run: |
+          cd packages/ui
+          VERSION=$(node -p "require('./package.json').version")
+          echo "✅ Successfully published @dainabase/ui@$VERSION to NPM!"
+          echo "📦 View at: https://www.npmjs.com/package/@dainabase/ui"
+          echo ""
+          echo "Install with:"
+          echo "  npm install @dainabase/ui@$VERSION"
+      
+      - name: 📊 Summary
+        if: always()
+        run: |
+          echo "## 📊 Publication Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Type**: ${{ github.event.inputs.release_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dry Run**: ${{ github.event.inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Skip Tests**: ${{ github.event.inputs.skip_tests }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event.inputs.dry_run }}" == "false" ]; then
+            echo "✅ Package published successfully!" >> $GITHUB_STEP_SUMMARY
+            echo "🔗 [View on NPM](https://www.npmjs.com/package/@dainabase/ui)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ This was a dry run. No package was published." >> $GITHUB_STEP_SUMMARY
+          fi

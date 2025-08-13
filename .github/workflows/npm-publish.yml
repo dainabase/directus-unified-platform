@@ -1,19 +1,23 @@
-name: Publish to NPM
+name: NPM Publish
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to publish (e.g., 1.0.2-beta.1)'
+      release_type:
+        description: 'Release type'
         required: true
-        type: string
-      prerelease:
-        description: 'Is this a prerelease?'
-        required: false
-        type: boolean
-        default: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prepatch
+          - preminor
+          - premajor
+          - prerelease
+  release:
+    types: [created]
 
 jobs:
   publish:
@@ -21,111 +25,98 @@ jobs:
     permissions:
       contents: read
       packages: write
-      
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+      
+      - name: Install Dependencies
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build packages
+          cd packages/ui
+          npm ci
+      
+      - name: Run Tests
         run: |
-          pnpm run build --filter=@dainabase/ui
-          pnpm run build --filter=@dainabase/ui-cli
-
-      - name: Run tests
-        run: |
-          pnpm run test --filter=@dainabase/ui
-          pnpm run test:e2e --filter=@dainabase/ui
-
-      - name: Check bundle size
+          cd packages/ui
+          npm run test:ci
+      
+      - name: Build Package
         run: |
           cd packages/ui
           npm run build
-          echo "📦 Bundle size check:"
-          du -sh dist/
-          
-      - name: Set version from input
+      
+      - name: Check Bundle Size
+        run: |
+          cd packages/ui
+          npm run check:size
+      
+      - name: Verify Package Contents
+        run: |
+          cd packages/ui
+          npm pack --dry-run
+      
+      - name: Configure NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      
+      - name: Publish to NPM (Dry Run)
         if: github.event_name == 'workflow_dispatch'
         run: |
           cd packages/ui
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
-          cd ../ui-cli
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
-
-      - name: Publish @dainabase/ui to NPM
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+          npm publish --dry-run
+      
+      - name: Publish to NPM (Production)
+        if: github.event_name == 'release'
         run: |
           cd packages/ui
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.prerelease }}" == "true" ]; then
-            npm publish --access public --tag beta
-          else
-            npm publish --access public
-          fi
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish @dainabase/ui-cli to NPM
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+      
+      - name: Create GitHub Release Assets
+        if: github.event_name == 'release'
         run: |
-          cd packages/ui-cli
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.prerelease }}" == "true" ]; then
-            npm publish --access public --tag beta
-          else
-            npm publish --access public
-          fi
+          cd packages/ui
+          npm pack
+          mv *.tgz dainabase-ui-${{ github.event.release.tag_name }}.tgz
+      
+      - name: Upload Release Assets
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create success comment
-        if: success() && github.event_name == 'release'
-        uses: peter-evans/create-or-update-comment@v3
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          issue-number: ${{ github.event.release.id }}
-          body: |
-            ✅ **Packages published successfully to NPM!**
-            
-            📦 **Published packages:**
-            - [@dainabase/ui@${{ github.event.release.tag_name }}](https://www.npmjs.com/package/@dainabase/ui)
-            - [@dainabase/ui-cli@${{ github.event.release.tag_name }}](https://www.npmjs.com/package/@dainabase/ui-cli)
-            
-            **Installation:**
-            ```bash
-            npm install @dainabase/ui@${{ github.event.release.tag_name }}
-            npm install -g @dainabase/ui-cli@${{ github.event.release.tag_name }}
-            ```
-
-      - name: Update documentation
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: packages/ui/dainabase-ui-${{ github.event.release.tag_name }}.tgz
+          asset_name: dainabase-ui-${{ github.event.release.tag_name }}.tgz
+          asset_content_type: application/gzip
+      
+      - name: Update Documentation
+        if: github.event_name == 'release'
+        run: |
+          echo "📦 Version ${{ github.event.release.tag_name }} published to NPM"
+          echo "View package: https://www.npmjs.com/package/@dainabase/ui"
+      
+      - name: Notify Success
         if: success()
         run: |
-          echo "📚 Documentation update triggered"
-          echo "Version: ${{ github.event.release.tag_name || github.event.inputs.version }}"
-          # Add documentation update steps here if needed
+          echo "✅ NPM publish workflow completed successfully!"
+          echo "Package: @dainabase/ui"
+          echo "Version: $(cd packages/ui && node -p "require('./package.json').version")"
+      
+      - name: Report Bundle Metrics
+        if: always()
+        run: |
+          cd packages/ui
+          echo "📊 Bundle Metrics Report"
+          npm run report:bundle || true

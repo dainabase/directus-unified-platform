@@ -1,62 +1,73 @@
 name: Deploy Storybook to GitHub Pages
 
 on:
+  # Runs on pushes to main branch
   push:
-    branches:
-      - main
+    branches: ["main"]
     paths:
       - 'packages/ui/**'
       - '.github/workflows/deploy-storybook.yml'
+  
+  # Allows manual trigger from GitHub Actions tab
   workflow_dispatch:
 
+# Sets permissions for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  build:
+  # Build job
+  build-storybook:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: 'npm'
           
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
+        run: |
+          cd packages/ui
+          npm ci
+          
       - name: Build Storybook
-        run: pnpm --filter @dainabase/ui build:sb:static
-        
+        run: |
+          cd packages/ui
+          npm run build-storybook
+          
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v4
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './packages/ui/storybook-static'
-          
+
+  # Deployment job
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-storybook
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+      - name: Display Storybook URL
+        run: |
+          echo "🎉 Storybook deployed successfully!"
+          echo "📚 View your Storybook at: ${{ steps.deployment.outputs.page_url }}"
+          echo "🔗 Direct link: https://dainabase.github.io/directus-unified-platform/"

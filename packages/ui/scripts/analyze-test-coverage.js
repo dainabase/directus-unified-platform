@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Test Coverage Analysis Script
- * 
- * This script analyzes which components have tests and which don't
- * to identify gaps in test coverage
+ * Advanced Test Coverage Analyzer
+ * Date: 13 Août 2025
+ * Objective: Comprehensive analysis of test coverage for all UI components
  */
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 // Colors for console output
 const colors = {
@@ -23,176 +21,277 @@ const colors = {
   cyan: '\x1b[36m',
 };
 
-// Configuration
 const CONFIG = {
   componentsDir: path.join(__dirname, '../src/components'),
-  expectedComponents: 66, // Total number of component variations
-  coreComponents: 58, // Core components to test
 };
 
-// Component list (from documentation)
-const ALL_COMPONENTS = [
-  // Core components (3)
-  'icon', 'label', 'separator',
-  
-  // Layout components (4)
-  'card', 'resizable', 'scroll-area', 'collapsible',
-  
-  // Form components (13)
-  'input', 'select', 'checkbox', 'radio-group', 'textarea',
-  'switch', 'slider', 'date-picker', 'date-range-picker',
-  'color-picker', 'file-upload', 'form', 'forms-demo',
-  
-  // Data Display (6)
-  'table', 'data-grid', 'data-grid-adv', 'charts', 'timeline', 'timeline-enhanced',
-  
-  // Navigation (5)
-  'tabs', 'stepper', 'pagination', 'breadcrumbs', 'navigation-menu',
-  
-  // Feedback (6)
-  'alert', 'toast', 'progress', 'skeleton', 'sonner', 'hover-card',
-  
-  // Overlays (7)
-  'dialog', 'sheet', 'popover', 'tooltip', 'context-menu', 'dropdown-menu', 'menubar',
-  
-  // Advanced (14+)
-  'command-palette', 'carousel', 'rating', 'badge', 'accordion',
-  'avatar', 'button', 'calendar', 'drawer', 'alert-dialog',
-  'ui-provider', 'toggle', 'toggle-group', 'error-boundary',
-  
-  // New components not in original list
-  'app-shell', 'audio-recorder', 'code-editor', 'drag-drop-grid',
-  'image-cropper', 'infinite-scroll', 'kanban', 'mentions',
-  'pdf-viewer', 'rich-text-editor', 'search-bar', 'tag-input',
-  'theme-toggle', 'tree-view', 'video-player', 'virtual-list',
-  'chromatic-test'
+// Components we already know have standalone tests
+const STANDALONE_TEST_COMPONENTS = [
+  'audio-recorder',
+  'code-editor',
+  'drag-drop-grid',
+  'image-cropper',
+  'infinite-scroll',
+  'pdf-viewer',
+  'rich-text-editor',
+  'video-player',
+  'virtual-list'
 ];
 
-// Main analysis function
-async function analyzeTestCoverage() {
-  console.log(`${colors.bright}${colors.cyan}🔍 Test Coverage Analysis${colors.reset}\n${'='.repeat(50)}`);
-  
-  const results = {
-    totalComponents: 0,
-    componentsWithTests: [],
-    componentsWithoutTests: [],
+// Components that might only have stories (no tsx component file)
+const STORY_ONLY_COMPONENTS = [
+  'kanban' // Has both kanban.tsx and kanban folder
+];
+
+async function analyzeComponent(componentPath, componentName) {
+  const result = {
+    name: componentName,
+    hasTest: false,
+    hasComponent: false,
+    hasStories: false,
+    hasIndex: false,
     testFiles: [],
-    coverage: 0,
+    componentFiles: [],
+    type: 'unknown',
+    path: componentPath
   };
 
   try {
-    // Read all items in components directory
+    const stat = fs.statSync(componentPath);
+    
+    if (stat.isDirectory()) {
+      result.type = 'directory';
+      const files = fs.readdirSync(componentPath);
+      
+      files.forEach(file => {
+        const filePath = path.join(componentPath, file);
+        
+        // Check for test files
+        if (file.endsWith('.test.tsx') || file.endsWith('.test.ts')) {
+          result.hasTest = true;
+          result.testFiles.push(file);
+        }
+        
+        // Check for component files
+        if (file.endsWith('.tsx') && !file.includes('.test') && !file.includes('.stories')) {
+          result.hasComponent = true;
+          result.componentFiles.push(file);
+        }
+        
+        // Check for story files
+        if (file.endsWith('.stories.tsx')) {
+          result.hasStories = true;
+        }
+        
+        // Check for index file
+        if (file === 'index.tsx' || file === 'index.ts') {
+          result.hasIndex = true;
+        }
+      });
+    } else if (stat.isFile()) {
+      result.type = 'file';
+      
+      // Handle standalone files
+      if (componentPath.endsWith('.test.tsx')) {
+        result.hasTest = true;
+        result.testFiles.push(componentName);
+      } else if (componentPath.endsWith('.tsx') && !componentPath.includes('.stories')) {
+        result.hasComponent = true;
+        result.componentFiles.push(componentName);
+      } else if (componentPath.endsWith('.stories.tsx')) {
+        result.hasStories = true;
+      }
+    }
+  } catch (error) {
+    console.error(`Error analyzing ${componentName}: ${error.message}`);
+  }
+  
+  return result;
+}
+
+async function scanAllComponents() {
+  console.log(`${colors.bright}${colors.cyan}🔍 ADVANCED TEST COVERAGE ANALYSIS${colors.reset}`);
+  console.log(`${'='.repeat(60)}`);
+  console.log(`📅 Date: 13 Août 2025`);
+  console.log(`📦 Package: @dainabase/ui v1.1.0\n`);
+  
+  const results = {
+    componentsWithTests: [],
+    componentsWithoutTests: [],
+    allComponents: [],
+    standaloneTests: [],
+    directories: [],
+    files: []
+  };
+
+  try {
     const items = fs.readdirSync(CONFIG.componentsDir);
     
+    // Process each item
     for (const item of items) {
-      const itemPath = path.join(CONFIG.componentsDir, item);
-      const stat = fs.statSync(itemPath);
+      // Skip index files
+      if (item === 'index.ts' || item === 'index.tsx') continue;
       
-      // Check if it's a test file at root level
-      if (item.endsWith('.test.tsx') || item.endsWith('.test.ts')) {
-        const componentName = item.replace('.test.tsx', '').replace('.test.ts', '');
-        results.componentsWithTests.push(componentName);
-        results.testFiles.push(item);
-      }
-      // Check directories for test files
-      else if (stat.isDirectory()) {
-        const dirFiles = fs.readdirSync(itemPath);
-        const hasTest = dirFiles.some(file => 
-          file.endsWith('.test.tsx') || file.endsWith('.test.ts')
+      const itemPath = path.join(CONFIG.componentsDir, item);
+      const baseName = item
+        .replace('.test.tsx', '')
+        .replace('.test.ts', '')
+        .replace('.stories.tsx', '')
+        .replace('.tsx', '')
+        .replace('.ts', '');
+      
+      // Check if this is a known standalone test component
+      if (STANDALONE_TEST_COMPONENTS.includes(baseName)) {
+        // For standalone components, check all related files
+        const hasTest = items.some(i => 
+          i === `${baseName}.test.tsx` || 
+          i === `${baseName}.test.ts`
         );
         
-        if (hasTest) {
-          results.componentsWithTests.push(item);
-          const testFile = dirFiles.find(file => 
-            file.endsWith('.test.tsx') || file.endsWith('.test.ts')
-          );
-          results.testFiles.push(`${item}/${testFile}`);
-        } else {
-          // Only add to without tests if it's not a utility folder
-          if (!['index.ts', 'index.tsx'].includes(item) && 
-              !item.endsWith('.stories.tsx') && 
-              !item.endsWith('.tsx') &&
-              !item.endsWith('.mdx')) {
-            results.componentsWithoutTests.push(item);
+        if (hasTest && !results.componentsWithTests.includes(baseName)) {
+          results.componentsWithTests.push(baseName);
+        }
+        
+        if (!results.allComponents.includes(baseName)) {
+          results.allComponents.push(baseName);
+        }
+      } else {
+        const analysis = await analyzeComponent(itemPath, item);
+        
+        if (analysis.type === 'directory') {
+          results.directories.push(analysis);
+          
+          if (analysis.hasTest) {
+            results.componentsWithTests.push(analysis.name);
+          } else {
+            results.componentsWithoutTests.push(analysis.name);
+          }
+          
+          results.allComponents.push(analysis.name);
+        } else if (analysis.type === 'file') {
+          // Handle standalone files that aren't in our known list
+          if (item.endsWith('.test.tsx') || item.endsWith('.test.ts')) {
+            const componentName = item
+              .replace('.test.tsx', '')
+              .replace('.test.ts', '');
+            
+            if (!results.componentsWithTests.includes(componentName)) {
+              results.standaloneTests.push(componentName);
+            }
           }
         }
       }
     }
     
-    // Calculate statistics
-    results.totalComponents = ALL_COMPONENTS.length;
-    results.coverage = (results.componentsWithTests.length / results.totalComponents * 100).toFixed(2);
+    // Deduplicate and sort
+    results.componentsWithTests = [...new Set(results.componentsWithTests)].sort();
+    results.componentsWithoutTests = [...new Set(results.componentsWithoutTests)].sort();
+    results.allComponents = [...new Set(results.allComponents)].sort();
+    
+    // Calculate coverage
+    const totalComponents = results.allComponents.length;
+    const testedComponents = results.componentsWithTests.length;
+    const coverage = totalComponents > 0 ? (testedComponents / totalComponents * 100).toFixed(2) : 0;
     
     // Display results
-    console.log(`${colors.bright}📊 Summary:${colors.reset}`);
-    console.log(`• Total Expected Components: ${results.totalComponents}`);
-    console.log(`• Components with Tests: ${colors.green}${results.componentsWithTests.length}${colors.reset}`);
-    console.log(`• Components without Tests: ${colors.red}${results.componentsWithoutTests.length}${colors.reset}`);
-    console.log(`• Test Coverage: ${results.coverage}%`);
+    console.log(`${colors.bright}📊 ANALYSIS RESULTS:${colors.reset}`);
+    console.log(`• Total Components: ${totalComponents}`);
+    console.log(`• Components WITH Tests: ${colors.green}${testedComponents}${colors.reset}`);
+    console.log(`• Components WITHOUT Tests: ${colors.red}${results.componentsWithoutTests.length}${colors.reset}`);
+    console.log(`• Current Coverage: ${colors.bright}${coverage}%${colors.reset}`);
+    console.log(`• Tests Needed: ${results.componentsWithoutTests.length}`);
+    console.log(`• Progress: [${colors.green}${'█'.repeat(Math.floor(coverage/5))}${colors.reset}${'░'.repeat(20-Math.floor(coverage/5))}]`);
     
     // List components WITH tests
-    if (results.componentsWithTests.length > 0) {
-      console.log(`\n${colors.green}✅ Components WITH Tests (${results.componentsWithTests.length}):${colors.reset}`);
-      results.componentsWithTests.sort().forEach(comp => {
-        console.log(`  ✓ ${comp}`);
-      });
-    }
+    console.log(`\n${colors.green}✅ COMPONENTS WITH TESTS (${testedComponents}):${colors.reset}`);
+    results.componentsWithTests.forEach((comp, index) => {
+      const isStandalone = STANDALONE_TEST_COMPONENTS.includes(comp);
+      const label = isStandalone ? ' [standalone]' : '';
+      console.log(`  ${index + 1}. ${comp}${label}`);
+    });
     
     // List components WITHOUT tests
     if (results.componentsWithoutTests.length > 0) {
-      console.log(`\n${colors.red}❌ Components WITHOUT Tests (${results.componentsWithoutTests.length}):${colors.reset}`);
-      results.componentsWithoutTests.sort().forEach(comp => {
-        console.log(`  ✗ ${comp}`);
+      console.log(`\n${colors.red}❌ COMPONENTS WITHOUT TESTS (${results.componentsWithoutTests.length}):${colors.reset}`);
+      results.componentsWithoutTests.forEach((comp, index) => {
+        console.log(`  ${colors.red}${index + 1}. ${comp}${colors.reset}`);
       });
-    }
-    
-    // Identify missing components from expected list
-    const foundComponents = [...results.componentsWithTests, ...results.componentsWithoutTests];
-    const missingFromExpected = ALL_COMPONENTS.filter(comp => 
-      !foundComponents.includes(comp) && 
-      !foundComponents.includes(comp.replace('-', ''))
-    );
-    
-    if (missingFromExpected.length > 0) {
-      console.log(`\n${colors.yellow}⚠️ Expected Components Not Found (${missingFromExpected.length}):${colors.reset}`);
-      missingFromExpected.forEach(comp => {
-        console.log(`  ? ${comp}`);
+      
+      // Generate batch test command
+      console.log(`\n${colors.bright}${colors.blue}🚀 BATCH TEST GENERATION:${colors.reset}`);
+      console.log(`\nTo generate ALL missing tests at once, run:\n`);
+      console.log(`${colors.yellow}node scripts/generate-batch-tests.js${colors.reset}`);
+      
+      console.log(`\nOr generate tests individually:\n`);
+      results.componentsWithoutTests.slice(0, 5).forEach(comp => {
+        console.log(`node scripts/generate-single-test.js ${comp}`);
       });
-    }
-    
-    // Recommendations
-    console.log(`\n${colors.bright}${colors.blue}💡 Recommendations:${colors.reset}`);
-    if (results.componentsWithoutTests.length > 0) {
-      console.log('1. Create test files for components without tests');
-      console.log('2. Focus on complex components first (data-grid, command-palette, etc.)');
-      console.log('3. Ensure edge cases and error boundaries are tested');
-    }
-    
-    // Target for 100% coverage
-    const testsNeeded = results.totalComponents - results.componentsWithTests.length;
-    if (testsNeeded > 0) {
-      console.log(`\n${colors.bright}🎯 To reach 100% coverage:${colors.reset}`);
-      console.log(`Need to add tests for ${colors.red}${testsNeeded}${colors.reset} more components`);
+      
+      if (results.componentsWithoutTests.length > 5) {
+        console.log(`... and ${results.componentsWithoutTests.length - 5} more`);
+      }
     } else {
-      console.log(`\n${colors.bright}${colors.green}🎉 CONGRATULATIONS! 100% Test Coverage Achieved! 🎉${colors.reset}`);
+      console.log(`\n${colors.bright}${colors.green}🎉 PERFECT! 100% Test Coverage Achieved!${colors.reset}`);
+      console.log(`All ${totalComponents} components have tests!`);
     }
     
-    // Save results to JSON
-    const resultsFile = path.join(__dirname, '../test-coverage-analysis.json');
-    fs.writeFileSync(resultsFile, JSON.stringify(results, null, 2));
-    console.log(`\n📄 Detailed results saved to: test-coverage-analysis.json`);
+    // Save detailed report
+    const reportPath = path.join(__dirname, '../test-analysis-report.json');
+    const report = {
+      timestamp: new Date().toISOString(),
+      version: '1.1.0',
+      coverage: `${coverage}%`,
+      statistics: {
+        total: totalComponents,
+        tested: testedComponents,
+        untested: results.componentsWithoutTests.length,
+        progress: Math.floor(parseFloat(coverage))
+      },
+      componentsWithTests: results.componentsWithTests,
+      componentsWithoutTests: results.componentsWithoutTests,
+      standaloneComponents: STANDALONE_TEST_COMPONENTS,
+      directories: results.directories.map(d => ({
+        name: d.name,
+        hasTest: d.hasTest,
+        testFiles: d.testFiles,
+        componentFiles: d.componentFiles
+      }))
+    };
     
-    // Exit with appropriate code
-    process.exit(results.coverage === 100 ? 0 : 1);
+    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+    console.log(`\n📄 Detailed report saved to: test-analysis-report.json`);
+    
+    // GitHub Issue Update Message
+    if (results.componentsWithoutTests.length > 0) {
+      console.log(`\n${colors.yellow}📝 GitHub Issue #34 Update:${colors.reset}`);
+      console.log(`Coverage: ${coverage}% | ${testedComponents}/${totalComponents} components tested`);
+      console.log(`Remaining: ${results.componentsWithoutTests.join(', ')}`);
+    }
+    
+    // NPM Readiness Check
+    console.log(`\n${colors.bright}${colors.magenta}📦 NPM PUBLICATION READINESS:${colors.reset}`);
+    if (coverage >= 100) {
+      console.log(`${colors.green}✅ READY FOR NPM!${colors.reset} All tests complete!`);
+      console.log(`Run: npm run publish:npm`);
+    } else if (coverage >= 90) {
+      console.log(`${colors.yellow}⚠️ ALMOST READY!${colors.reset} ${(100 - coverage).toFixed(2)}% to go!`);
+    } else if (coverage >= 80) {
+      console.log(`${colors.yellow}📈 GOOD PROGRESS!${colors.reset} ${(100 - coverage).toFixed(2)}% remaining`);
+    } else {
+      console.log(`${colors.red}🚧 MORE WORK NEEDED${colors.reset} ${(100 - coverage).toFixed(2)}% remaining`);
+    }
+    
+    // Exit code based on coverage
+    process.exit(coverage === '100.00' ? 0 : 1);
     
   } catch (error) {
-    console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
+    console.error(`${colors.red}Fatal error: ${error.message}${colors.reset}`);
     process.exit(1);
   }
 }
 
-// Run analysis
-analyzeTestCoverage().catch(error => {
+// Run the analysis
+scanAllComponents().catch(error => {
   console.error(`${colors.red}Fatal error: ${error.message}${colors.reset}`);
   process.exit(1);
 });

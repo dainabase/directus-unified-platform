@@ -1,18 +1,20 @@
 name: Sprint 3 CI
 
+# TEMPORARILY DISABLED - Manual trigger only to stop error flood
 on:
-  push:
-    branches: 
-      - 'sprint-3/**'
-      - 'feature/sprint-3/**'
-  pull_request:
-    branches: 
-      - main
-    paths:
-      - 'packages/ui/**'
-      - 'packages/ui-cli/**'
-      - 'packages/docs/**'
   workflow_dispatch:
+  # DISABLED AUTOMATIC TRIGGERS
+  # push:
+  #   branches: 
+  #     - 'sprint-3/**'
+  #     - 'feature/sprint-3/**'
+  # pull_request:
+  #   branches: 
+  #     - main
+  #   paths:
+  #     - 'packages/ui/**'
+  #     - 'packages/ui-cli/**'
+  #     - 'packages/docs/**'
 
 env:
   NODE_VERSION: '20'

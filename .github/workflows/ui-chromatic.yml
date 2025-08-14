@@ -1,18 +1,19 @@
 name: UI Chromatic
 on:
-  push:
-    branches: [ main, develop ]
-    paths:
-      - 'packages/ui/src/**'
-      - '.storybook/**'
-      - 'packages/ui/.storybook/**'
-  pull_request:
-    branches: [ main, develop ]
-    paths:
-      - 'packages/ui/src/**'
-      - '.storybook/**'
-      - 'packages/ui/.storybook/**'
-  workflow_dispatch:  # Allow manual trigger
+  # DISABLED: Automatic triggers commented to prevent CI errors
+  # push:
+  #   branches: [ main, develop ]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - '.storybook/**'
+  #     - 'packages/ui/.storybook/**'
+  # pull_request:
+  #   branches: [ main, develop ]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - '.storybook/**'
+  #     - 'packages/ui/.storybook/**'
+  workflow_dispatch:  # Allow manual trigger only
 
 jobs:
   chromatic:

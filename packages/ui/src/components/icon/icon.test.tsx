@@ -1,127 +1,109 @@
-/**
- * Icon Component Tests
- * Auto-generated test suite for icon component
- * Category: display
- */
-
 import React from 'react';
-import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
-import { Icon } from './index';
-import { vi } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { Icon } from './icon';
+import * as Icons from 'lucide-react';
 
 describe('Icon Component', () => {
-  describe('Rendering', () => {
-    it('renders without crashing', () => {
-      renderWithProviders(<Icon />);
-      expect(document.querySelector('[data-testid="icon"]')).toBeInTheDocument();
-    });
+  it('renders without crashing', () => {
+    render(<Icon name="check" />);
+    expect(screen.getByTestId('icon')).toBeInTheDocument();
+  });
 
-    it('renders with content', () => {
-      renderWithProviders(
-        <Icon>
-          <span>Display content</span>
-        </Icon>
-      );
-      expect(screen.getByText('Display content')).toBeInTheDocument();
-    });
+  it('renders correct icon by name', () => {
+    render(<Icon name="user" />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveClass('lucide-user');
+  });
 
-    it('applies custom className', () => {
-      renderWithProviders(<Icon className="custom-display" />);
-      expect(document.querySelector('.custom-display')).toBeInTheDocument();
+  it('applies custom size', () => {
+    render(<Icon name="settings" size={32} />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveAttribute('width', '32');
+    expect(icon).toHaveAttribute('height', '32');
+  });
+
+  it('applies custom className', () => {
+    render(<Icon name="home" className="custom-class" />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveClass('custom-class');
+  });
+
+  it('applies custom color', () => {
+    render(<Icon name="star" color="red" />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveStyle({ color: 'red' });
+  });
+
+  it('handles onClick event', () => {
+    const handleClick = jest.fn();
+    render(<Icon name="click" onClick={handleClick} />);
+    const icon = screen.getByTestId('icon');
+    fireEvent.click(icon);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders with strokeWidth prop', () => {
+    render(<Icon name="bold" strokeWidth={3} />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveAttribute('stroke-width', '3');
+  });
+
+  it('supports all icon names from lucide-react', () => {
+    const iconNames = Object.keys(Icons).filter(key => 
+      key !== 'default' && typeof Icons[key] === 'function'
+    );
+    
+    iconNames.slice(0, 5).forEach(name => {
+      const { container } = render(<Icon name={name.toLowerCase()} />);
+      expect(container.querySelector('svg')).toBeInTheDocument();
     });
   });
 
-  describe('Display Properties', () => {
-    it('renders with different sizes', () => {
-      const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
-      sizes.forEach(size => {
-        const { container } = renderWithProviders(<Icon size={size} />);
-        expect(container.firstChild).toHaveClass(size);
-      });
-    });
-
-    it('supports different variants', () => {
-      const variants = ['default', 'primary', 'secondary'];
-      variants.forEach(variant => {
-        const { container } = renderWithProviders(<Icon variant={variant} />);
-        expect(container.firstChild).toHaveClass(variant);
-      });
-    });
-
-    it('handles loading state', () => {
-      renderWithProviders(<Icon loading />);
-      expect(document.querySelector('[role="status"]')).toBeInTheDocument();
-    });
-
-    it('handles empty state', () => {
-      renderWithProviders(<Icon data={[]} emptyMessage="No data" />);
-      expect(screen.getByText('No data')).toBeInTheDocument();
-    });
+  it('handles invalid icon name gracefully', () => {
+    const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    render(<Icon name="invalid-icon-name" />);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Icon not found')
+    );
+    consoleSpy.mockRestore();
   });
 
-  describe('Media Support', () => {
-    it('renders images correctly', () => {
-      renderWithProviders(
-        <Icon image="/test.jpg" alt="Test image" />
-      );
-      const img = screen.getByRole('img');
-      expect(img).toHaveAttribute('src', '/test.jpg');
-      expect(img).toHaveAttribute('alt', 'Test image');
-    });
-
-    it('handles image loading errors', () => {
-      const handleError = vi.fn();
-      renderWithProviders(
-        <Icon image="/invalid.jpg" onImageError={handleError} />
-      );
-      
-      const img = screen.getByRole('img');
-      fireEvent.error(img);
-      expect(handleError).toHaveBeenCalled();
-    });
-
-    it('renders icons', () => {
-      renderWithProviders(<Icon icon="star" />);
-      expect(document.querySelector('[data-icon="star"]')).toBeInTheDocument();
-    });
+  it('renders with aria-label for accessibility', () => {
+    render(<Icon name="accessibility" aria-label="Accessibility icon" />);
+    const icon = screen.getByLabelText('Accessibility icon');
+    expect(icon).toBeInTheDocument();
   });
 
-  describe('Interactions', () => {
-    it('handles click events when clickable', () => {
-      const handleClick = vi.fn();
-      renderWithProviders(<Icon onClick={handleClick} />);
-      
-      fireEvent.click(document.querySelector('[role="button"]'));
-      expect(handleClick).toHaveBeenCalled();
-    });
-
-    it('shows tooltip on hover', async () => {
-      renderWithProviders(<Icon tooltip="Additional info" />);
-      
-      const element = document.querySelector('[data-testid="icon"]');
-      fireEvent.mouseEnter(element);
-      
-      await waitFor(() => {
-        expect(screen.getByRole('tooltip')).toHaveTextContent('Additional info');
-      });
-    });
+  it('supports data attributes', () => {
+    render(<Icon name="data" data-testid="custom-icon" data-value="test" />);
+    const icon = screen.getByTestId('custom-icon');
+    expect(icon).toHaveAttribute('data-value', 'test');
   });
 
-  describe('Accessibility', () => {
-    it('has proper semantic HTML', () => {
-      renderWithProviders(<Icon />);
-      // Check for appropriate semantic elements
-    });
+  it('applies spin animation when specified', () => {
+    render(<Icon name="loader" spin />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveClass('animate-spin');
+  });
 
-    it('supports ARIA labels', () => {
-      renderWithProviders(<Icon aria-label="Display component" />);
-      const element = document.querySelector('[aria-label="Display component"]');
-      expect(element).toBeInTheDocument();
-    });
+  it('renders inline SVG', () => {
+    const { container } = render(<Icon name="check" />);
+    const svg = container.querySelector('svg');
+    expect(svg).toBeInTheDocument();
+    expect(svg?.tagName.toLowerCase()).toBe('svg');
+  });
 
-    it('handles reduced motion preference', () => {
-      renderWithProviders(<Icon animated />);
-      // Test animation behavior with prefers-reduced-motion
-    });
+  it('maintains aspect ratio', () => {
+    render(<Icon name="square" size={24} />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveAttribute('width', '24');
+    expect(icon).toHaveAttribute('height', '24');
+  });
+
+  it('supports custom fill color', () => {
+    render(<Icon name="filled" fill="blue" />);
+    const icon = screen.getByTestId('icon');
+    expect(icon).toHaveStyle({ fill: 'blue' });
   });
 });

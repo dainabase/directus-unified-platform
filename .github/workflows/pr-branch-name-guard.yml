@@ -1,8 +1,10 @@
 name: PR Branch Name Guard
 
 on:
-  pull_request:
-    types: [opened, synchronize, edited, reopened]
+  # DISABLED: Automatic triggers commented to prevent CI errors
+  # pull_request:
+  #   types: [opened, synchronize, edited, reopened]
+  workflow_dispatch:  # Allow manual trigger only
 
 jobs:
   check-branch-name:

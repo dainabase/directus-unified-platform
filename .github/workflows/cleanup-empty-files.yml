@@ -1,0 +1,87 @@
+name: Clean Empty Workflows
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cleanup-empty-files.yml'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Remove empty workflow files
+        run: |
+          echo "🧹 Removing empty workflow files..."
+          
+          # List of empty files to remove
+          files=(
+            ".github/workflows/auto-fix-deps.yml"
+            ".github/workflows/auto-publish-v040.yml"
+            ".github/workflows/fix-and-publish.yml"
+            ".github/workflows/force-publish.yml"
+            ".github/workflows/manual-publish.yml"
+            ".github/workflows/npm-auto-publish.yml"
+            ".github/workflows/npm-monitor.yml"
+            ".github/workflows/npm-publish-beta.yml"
+            ".github/workflows/npm-publish-ui.yml"
+            ".github/workflows/publish-manual.yml"
+            ".github/workflows/publish-ui.yml"
+            ".github/workflows/quick-npm-publish.yml"
+            ".github/workflows/simple-publish.yml"
+            ".github/workflows/ui-100-coverage-publish.yml"
+          )
+          
+          # Remove each file
+          for file in "${files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "Removing: $file"
+              git rm "$file"
+            else
+              echo "File not found: $file"
+            fi
+          done
+          
+          # Commit and push if there are changes
+          if git diff --staged --quiet; then
+            echo "✅ No files to remove"
+          else
+            git commit -m "chore: Remove 14 empty workflow files - CI/CD cleanup complete"
+            git push
+            echo "✅ Successfully removed empty workflow files"
+          fi
+          
+      - name: Summary
+        run: |
+          echo "## 🎉 Cleanup Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Successfully removed 14 empty workflow files from .github/workflows/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Files removed:" >> $GITHUB_STEP_SUMMARY
+          echo "- auto-fix-deps.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- auto-publish-v040.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- fix-and-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- force-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- manual-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- npm-auto-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- npm-monitor.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- npm-publish-beta.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- npm-publish-ui.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- publish-manual.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- publish-ui.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- quick-npm-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- simple-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- ui-100-coverage-publish.yml" >> $GITHUB_STEP_SUMMARY

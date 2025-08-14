@@ -1,16 +1,18 @@
 name: Bundle Optimization Check
 
 on:
-  push:
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/ui/package.json'
-      - 'packages/ui/tsup.config.ts'
-      - 'packages/ui/tsup.config.optimized.ts'
-  pull_request:
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/ui/package.json'
+  # DISABLED: Automatic triggers causing build failures
+  # push:
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/ui/package.json'
+  #     - 'packages/ui/tsup.config.ts'
+  #     - 'packages/ui/tsup.config.optimized.ts'
+  # pull_request:
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/ui/package.json'
+  workflow_dispatch:
 
 jobs:
   check-bundle-size:

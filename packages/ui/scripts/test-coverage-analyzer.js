@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Component Test Coverage Analyzer
- * 
- * This script analyzes test coverage across all UI components
- * and generates a detailed report of missing tests.
+ * Test Coverage Gap Analyzer
+ * Identifies components without tests and generates a report
  */
 
 const fs = require('fs');
@@ -12,202 +10,182 @@ const path = require('path');
 const chalk = require('chalk');
 
 const COMPONENTS_DIR = path.join(__dirname, '../src/components');
-const COVERAGE_GOAL = 100;
+const COVERAGE_REPORT = path.join(__dirname, '../coverage-gaps-report.md');
 
-class TestCoverageAnalyzer {
-  constructor() {
-    this.stats = {
-      totalComponents: 0,
-      componentsWithTests: 0,
-      componentsWithStories: 0,
-      componentsFullyTested: 0,
-      missingTests: [],
-      missingStories: [],
-      partialCoverage: []
-    };
-  }
+// List of all 58 components in the Design System
+const ALL_COMPONENTS = [
+  'accordion', 'alert', 'avatar', 'badge', 'breadcrumb',
+  'button', 'calendar', 'card', 'carousel', 'chart',
+  'checkbox', 'collapsible', 'color-picker', 'command-palette', 'context-menu',
+  'data-grid', 'data-grid-advanced', 'date-picker', 'date-range-picker', 'dialog',
+  'dropdown-menu', 'error-boundary', 'file-upload', 'form', 'forms-demo',
+  'hover-card', 'icon', 'input', 'label', 'menubar',
+  'navigation-menu', 'pagination', 'popover', 'progress', 'radio-group',
+  'rating', 'resizable', 'scroll-area', 'select', 'separator',
+  'sheet', 'skeleton', 'slider', 'sonner', 'stepper',
+  'switch', 'table', 'tabs', 'text-animations', 'textarea',
+  'timeline', 'toast', 'toggle', 'toggle-group', 'tooltip',
+  'ui-provider'
+];
 
-  analyzeComponent(componentPath, componentName) {
-    const files = fs.readdirSync(componentPath);
-    
-    const hasComponent = files.some(f => 
-      f.endsWith('.tsx') && !f.includes('.test') && !f.includes('.stories')
-    );
-    
-    if (!hasComponent) return;
-    
-    this.stats.totalComponents++;
-    
-    const hasTest = files.some(f => f.includes('.test.'));
-    const hasStories = files.some(f => f.includes('.stories.'));
-    const hasIndex = files.some(f => f === 'index.tsx' || f === 'index.ts');
-    
-    if (hasTest) {
-      this.stats.componentsWithTests++;
+function analyzeTestCoverage() {
+  console.log(chalk.cyan('\n📊 Analyzing Test Coverage Gaps...\n'));
+  
+  const results = {
+    tested: [],
+    untested: [],
+    missing: [],
+    testFiles: [],
+    coverage: {}
+  };
+
+  // Check each component
+  ALL_COMPONENTS.forEach(component => {
+    const componentPath = path.join(COMPONENTS_DIR, component);
+    const testPath = path.join(componentPath, `${component}.test.tsx`);
+    const altTestPath = path.join(componentPath, `${component}.test.ts`);
+    const indexPath = path.join(componentPath, 'index.tsx');
+    const altIndexPath = path.join(componentPath, 'index.ts');
+
+    // Check if component exists
+    if (!fs.existsSync(componentPath)) {
+      results.missing.push(component);
+      return;
+    }
+
+    // Check if test file exists
+    if (fs.existsSync(testPath) || fs.existsSync(altTestPath)) {
+      results.tested.push(component);
+      const testFile = fs.existsSync(testPath) ? testPath : altTestPath;
+      const stats = fs.statSync(testFile);
+      results.testFiles.push({
+        component,
+        file: path.relative(process.cwd(), testFile),
+        size: (stats.size / 1024).toFixed(2) + 'KB'
+      });
     } else {
-      this.stats.missingTests.push(componentName);
+      results.untested.push(component);
     }
-    
-    if (hasStories) {
-      this.stats.componentsWithStories++;
-    } else {
-      this.stats.missingStories.push(componentName);
-    }
-    
-    if (hasTest && hasStories && hasIndex) {
-      this.stats.componentsFullyTested++;
-    } else if (hasTest || hasStories) {
-      this.stats.partialCoverage.push({
-        name: componentName,
-        hasTest,
-        hasStories,
-        hasIndex
-      });
-    }
-  }
+  });
 
-  analyze() {
-    console.log(chalk.cyan.bold('🔍 Analyzing Test Coverage for UI Components\n'));
-    
-    // Get all component directories
-    const items = fs.readdirSync(COMPONENTS_DIR);
-    
-    items.forEach(item => {
-      const itemPath = path.join(COMPONENTS_DIR, item);
-      const stat = fs.statSync(itemPath);
-      
-      if (stat.isDirectory()) {
-        this.analyzeComponent(itemPath, item);
-      } else if (item.endsWith('.tsx') || item.endsWith('.ts')) {
-        // Handle standalone component files
-        const componentName = item.replace(/\.(tsx?|test\.tsx?|stories\.tsx?)$/, '');
-        if (!item.includes('.test') && !item.includes('.stories') && item !== 'index.ts') {
-          this.stats.totalComponents++;
-          
-          // Check for corresponding test and story files
-          const hasTest = items.includes(`${componentName}.test.tsx`) || 
-                         items.includes(`${componentName}.test.ts`);
-          const hasStories = items.includes(`${componentName}.stories.tsx`) || 
-                           items.includes(`${componentName}.stories.ts`);
-          
-          if (hasTest) {
-            this.stats.componentsWithTests++;
-          } else {
-            this.stats.missingTests.push(componentName);
-          }
-          
-          if (hasStories) {
-            this.stats.componentsWithStories++;
-          } else {
-            this.stats.missingStories.push(componentName);
-          }
-          
-          if (hasTest && hasStories) {
-            this.stats.componentsFullyTested++;
-          } else if (hasTest || hasStories) {
-            this.stats.partialCoverage.push({
-              name: componentName,
-              hasTest,
-              hasStories,
-              hasIndex: false
-            });
-          }
-        }
-      }
-    });
-    
-    this.generateReport();
-  }
+  // Calculate statistics
+  const totalComponents = ALL_COMPONENTS.length;
+  const testedCount = results.tested.length;
+  const untestedCount = results.untested.length;
+  const missingCount = results.missing.length;
+  const coveragePercent = ((testedCount / totalComponents) * 100).toFixed(2);
 
-  generateReport() {
-    const testCoverage = ((this.stats.componentsWithTests / this.stats.totalComponents) * 100).toFixed(1);
-    const storyCoverage = ((this.stats.componentsWithStories / this.stats.totalComponents) * 100).toFixed(1);
-    const fullCoverage = ((this.stats.componentsFullyTested / this.stats.totalComponents) * 100).toFixed(1);
-    
-    // Summary
-    console.log(chalk.green.bold('📊 Coverage Summary'));
-    console.log(chalk.white('═'.repeat(50)));
-    console.log(`Total Components:        ${chalk.cyan(this.stats.totalComponents)}`);
-    console.log(`Components with Tests:   ${chalk.green(this.stats.componentsWithTests)} (${testCoverage}%)`);
-    console.log(`Components with Stories: ${chalk.blue(this.stats.componentsWithStories)} (${storyCoverage}%)`);
-    console.log(`Fully Tested:           ${chalk.magenta(this.stats.componentsFullyTested)} (${fullCoverage}%)`);
-    console.log();
-    
-    // Progress Bar
-    const progressBar = this.createProgressBar(parseFloat(testCoverage));
-    console.log(`Test Coverage: ${progressBar} ${testCoverage}%`);
-    console.log();
-    
-    // Missing Tests
-    if (this.stats.missingTests.length > 0) {
-      console.log(chalk.red.bold('❌ Components Missing Tests:'));
-      this.stats.missingTests.forEach(comp => {
-        console.log(`  - ${comp}`);
-      });
-      console.log();
-    }
-    
-    // Missing Stories
-    if (this.stats.missingStories.length > 0) {
-      console.log(chalk.yellow.bold('📖 Components Missing Stories:'));
-      this.stats.missingStories.forEach(comp => {
-        console.log(`  - ${comp}`);
-      });
-      console.log();
-    }
-    
-    // Partial Coverage
-    if (this.stats.partialCoverage.length > 0) {
-      console.log(chalk.orange.bold('⚠️ Components with Partial Coverage:'));
-      this.stats.partialCoverage.forEach(comp => {
-        const missing = [];
-        if (!comp.hasTest) missing.push('test');
-        if (!comp.hasStories) missing.push('stories');
-        if (!comp.hasIndex) missing.push('index');
-        console.log(`  - ${comp.name} (missing: ${missing.join(', ')})`);
-      });
-      console.log();
-    }
-    
-    // Goal Status
-    if (parseFloat(testCoverage) >= COVERAGE_GOAL) {
-      console.log(chalk.green.bold(`✅ GOAL ACHIEVED! Test coverage is ${testCoverage}%`));
-    } else {
-      const remaining = COVERAGE_GOAL - parseFloat(testCoverage);
-      console.log(chalk.yellow(`📈 ${remaining.toFixed(1)}% more coverage needed to reach ${COVERAGE_GOAL}% goal`));
-    }
-    
-    // Save Report
-    this.saveReport({
-      timestamp: new Date().toISOString(),
-      coverage: {
-        tests: testCoverage,
-        stories: storyCoverage,
-        full: fullCoverage
-      },
-      stats: this.stats
+  // Display results
+  console.log(chalk.green(`✅ Components with tests: ${testedCount}/${totalComponents} (${coveragePercent}%)`));
+  console.log(chalk.red(`❌ Components without tests: ${untestedCount}`));
+  console.log(chalk.yellow(`⚠️  Missing components: ${missingCount}`));
+
+  console.log('\n' + chalk.cyan('📋 Tested Components:'));
+  results.tested.forEach(comp => {
+    const testFile = results.testFiles.find(tf => tf.component === comp);
+    console.log(chalk.green(`  ✓ ${comp}`) + (testFile ? chalk.gray(` (${testFile.size})`) : ''));
+  });
+
+  if (results.untested.length > 0) {
+    console.log('\n' + chalk.red('🔴 Components needing tests:'));
+    results.untested.forEach(comp => {
+      console.log(chalk.red(`  ✗ ${comp}`));
     });
   }
-  
-  createProgressBar(percentage) {
-    const width = 30;
-    const filled = Math.round((percentage / 100) * width);
-    const empty = width - filled;
-    
-    let bar = '█'.repeat(filled) + '░'.repeat(empty);
-    
-    if (percentage >= 90) return chalk.green(bar);
-    if (percentage >= 70) return chalk.yellow(bar);
-    return chalk.red(bar);
+
+  if (results.missing.length > 0) {
+    console.log('\n' + chalk.yellow('⚠️  Missing components:'));
+    results.missing.forEach(comp => {
+      console.log(chalk.yellow(`  ? ${comp}`));
+    });
   }
+
+  // Generate markdown report
+  const report = generateMarkdownReport(results, coveragePercent, totalComponents, testedCount, untestedCount);
+  fs.writeFileSync(COVERAGE_REPORT, report);
+  console.log(chalk.blue(`\n📄 Report saved to: ${path.relative(process.cwd(), COVERAGE_REPORT)}`));
+
+  // Priority list for testing
+  const priorityComponents = ['select', 'dialog', 'form', 'table', 'tabs', 'toast', 'tooltip'];
+  const priorityUntested = results.untested.filter(comp => priorityComponents.includes(comp));
   
-  saveReport(report) {
-    const reportPath = path.join(__dirname, '../coverage-report.json');
-    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-    console.log(chalk.gray(`\n📄 Report saved to: coverage-report.json`));
+  if (priorityUntested.length > 0) {
+    console.log('\n' + chalk.magenta('🎯 Priority Components to Test:'));
+    priorityUntested.forEach(comp => {
+      console.log(chalk.magenta(`  ⭐ ${comp}`));
+    });
   }
+
+  return results;
+}
+
+function generateMarkdownReport(results, coveragePercent, total, tested, untested) {
+  const timestamp = new Date().toISOString();
+  
+  return `# Test Coverage Gap Analysis Report
+
+Generated: ${timestamp}
+
+## 📊 Summary
+
+| Metric | Value |
+|--------|-------|
+| **Total Components** | ${total} |
+| **Tested** | ${tested} (${coveragePercent}%) |
+| **Untested** | ${untested} |
+| **Missing** | ${results.missing.length} |
+
+## ✅ Components with Tests (${tested})
+
+| Component | Test File | Size |
+|-----------|-----------|------|
+${results.testFiles.map(tf => `| ${tf.component} | ${tf.file} | ${tf.size} |`).join('\n')}
+
+## ❌ Components Without Tests (${untested})
+
+${results.untested.length > 0 ? results.untested.map(comp => `- [ ] ${comp}`).join('\n') : 'All components have tests! 🎉'}
+
+## 🎯 Testing Priority
+
+### High Priority (Core Components)
+${['button', 'input', 'select', 'form', 'dialog'].map(comp => 
+  `- [${results.tested.includes(comp) ? 'x' : ' '}] ${comp}`
+).join('\n')}
+
+### Medium Priority (Layout & Navigation)
+${['card', 'table', 'tabs', 'navigation-menu', 'pagination'].map(comp => 
+  `- [${results.tested.includes(comp) ? 'x' : ' '}] ${comp}`
+).join('\n')}
+
+### Low Priority (Advanced Features)
+${['command-palette', 'color-picker', 'data-grid-advanced', 'text-animations'].map(comp => 
+  `- [${results.tested.includes(comp) ? 'x' : ' '}] ${comp}`
+).join('\n')}
+
+## 📝 Next Steps
+
+1. Run \`npm run test:coverage\` to generate detailed coverage report
+2. Focus on high-priority untested components
+3. Aim for minimum 80% coverage per component
+4. Update this report regularly
+
+## 🚀 Commands
+
+\`\`\`bash
+# Run all tests
+npm run test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
+# Generate this report
+npm run test:gaps
+\`\`\`
+`;
 }
 
 // Run the analyzer
-const analyzer = new TestCoverageAnalyzer();
-analyzer.analyze();
+analyzeTestCoverage();

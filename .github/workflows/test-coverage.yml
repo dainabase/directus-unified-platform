@@ -1,0 +1,149 @@
+name: Test Coverage Report
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'packages/ui/**'
+      - '.github/workflows/test-coverage.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'packages/ui/**'
+  workflow_dispatch:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run tests with coverage
+        run: |
+          cd packages/ui
+          pnpm test:coverage || true
+      
+      - name: Generate coverage summary
+        id: coverage
+        run: |
+          cd packages/ui
+          if [ -f coverage/coverage-summary.json ]; then
+            LINES=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+            STATEMENTS=$(cat coverage/coverage-summary.json | jq -r '.total.statements.pct')
+            FUNCTIONS=$(cat coverage/coverage-summary.json | jq -r '.total.functions.pct')
+            BRANCHES=$(cat coverage/coverage-summary.json | jq -r '.total.branches.pct')
+            
+            echo "lines=$LINES" >> $GITHUB_OUTPUT
+            echo "statements=$STATEMENTS" >> $GITHUB_OUTPUT
+            echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+            echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
+            
+            # Calculate average coverage
+            AVERAGE=$(echo "scale=2; ($LINES + $STATEMENTS + $FUNCTIONS + $BRANCHES) / 4" | bc)
+            echo "average=$AVERAGE" >> $GITHUB_OUTPUT
+            
+            # Determine color based on coverage
+            if (( $(echo "$AVERAGE >= 80" | bc -l) )); then
+              COLOR="brightgreen"
+            elif (( $(echo "$AVERAGE >= 60" | bc -l) )); then
+              COLOR="yellow"
+            else
+              COLOR="red"
+            fi
+            echo "color=$COLOR" >> $GITHUB_OUTPUT
+            
+            # Generate detailed report
+            echo "## 📊 Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+            echo "| **Lines** | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Statements** | ${STATEMENTS}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Functions** | ${FUNCTIONS}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Branches** | ${BRANCHES}% |" >> $GITHUB_STEP_SUMMARY
+            echo "| **Average** | ${AVERAGE}% |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "average=0" >> $GITHUB_OUTPUT
+            echo "color=red" >> $GITHUB_OUTPUT
+            echo "## ⚠️ No coverage data found" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Create coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        if: github.ref == 'refs/heads/main'
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+          gistID: "coverage-badge-gist-id"  # You'll need to create a gist and add the ID
+          filename: dainabase-ui-coverage.json
+          label: Coverage
+          message: ${{ steps.coverage.outputs.average }}%
+          color: ${{ steps.coverage.outputs.color }}
+          style: flat-square
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: packages/ui/coverage
+          flags: ui-tests
+          name: dainabase-ui
+          fail_ci_if_error: false
+      
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-${{ github.sha }}
+          path: |
+            packages/ui/coverage/
+            packages/ui/coverage-gaps-report.md
+          retention-days: 30
+      
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lines = '${{ steps.coverage.outputs.lines }}' || '0';
+            const statements = '${{ steps.coverage.outputs.statements }}' || '0';
+            const functions = '${{ steps.coverage.outputs.functions }}' || '0';
+            const branches = '${{ steps.coverage.outputs.branches }}' || '0';
+            const average = '${{ steps.coverage.outputs.average }}' || '0';
+            
+            const body = `## 📊 Test Coverage Report
+            
+            | Metric | Coverage |
+            |--------|----------|
+            | **Lines** | ${lines}% |
+            | **Statements** | ${statements}% |
+            | **Functions** | ${functions}% |
+            | **Branches** | ${branches}% |
+            | **Average** | ${average}% |
+            
+            ### Coverage Threshold
+            ✅ Required: 80% | Current: ${average}%
+            
+            [View Detailed Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

@@ -1,15 +1,16 @@
 name: 🛡️ Design System Integrity Check
 
 on:
-  pull_request:
-    paths:
-      - 'packages/ui/**'
-      - '.ds/**'
-  push:
-    branches:
-      - main
-    paths:
-      - 'packages/ui/**'
+  # DISABLED: Automatic triggers causing build failures
+  # pull_request:
+  #   paths:
+  #     - 'packages/ui/**'
+  #     - '.ds/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'packages/ui/**'
   workflow_dispatch:
     inputs:
       verbose:

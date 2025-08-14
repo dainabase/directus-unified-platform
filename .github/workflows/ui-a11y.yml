@@ -1,9 +1,10 @@
 name: UI Accessibility
 on:
-  push:
-    branches: [ feat/design-system-apple ]
-  pull_request:
-    branches: [ feat/design-system-apple, main, master ]
+  # DISABLED: Automatic triggers causing build failures
+  # push:
+  #   branches: [ feat/design-system-apple ]
+  # pull_request:
+  #   branches: [ feat/design-system-apple, main, master ]
   workflow_dispatch:  # Permet le déclenchement manuel
     inputs:
       debug:

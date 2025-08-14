@@ -1,111 +1,115 @@
 /**
- * Custom Testing Utilities
- * Provides enhanced render methods and test helpers
+ * Test utilities for React Testing Library
+ * Provides custom render methods with providers
  */
 
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UIProvider } from '../../src/components/ui-provider';
 
-// Custom render options
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  theme?: 'light' | 'dark';
-  locale?: string;
+// Re-export everything from @testing-library/react
+export * from '@testing-library/react';
+
+// Add user-event to exports
+export { userEvent };
+
+/**
+ * Providers wrapper for tests
+ * Add any global providers here (Theme, Router, etc.)
+ */
+interface ProvidersProps {
+  children: React.ReactNode;
 }
 
-// Wrapper component with providers
-function AllTheProviders({ 
-  children,
-  theme = 'light'
-}: { 
-  children: ReactNode;
-  theme?: 'light' | 'dark';
-}) {
-  return (
-    <UIProvider theme={theme}>
-      {children}
-    </UIProvider>
-  );
+function Providers({ children }: ProvidersProps) {
+  // Add any providers needed for tests here
+  // For now, just return children
+  return <>{children}</>;
 }
 
 /**
- * Custom render function with providers
+ * Custom render method that includes providers
  */
 export function renderWithProviders(
   ui: ReactElement,
-  options?: CustomRenderOptions
+  options?: Omit<RenderOptions, 'wrapper'>
 ): RenderResult {
-  const { theme = 'light', ...renderOptions } = options || {};
-
-  return render(ui, {
-    wrapper: ({ children }) => (
-      <AllTheProviders theme={theme}>{children}</AllTheProviders>
-    ),
-    ...renderOptions,
-  });
+  return render(ui, { wrapper: Providers, ...options });
 }
 
 /**
- * Setup user event with custom options
+ * Custom render hook with providers
  */
-export function setupUser() {
-  return userEvent.setup({
-    advanceTimers: jest.advanceTimersByTime,
-  });
+export { renderHook } from '@testing-library/react';
+
+/**
+ * Utility to wait for async operations
+ */
+export async function waitForAsync(ms: number = 100): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
- * Wait for animation to complete
+ * Utility to create mock functions with TypeScript support
  */
-export async function waitForAnimation(duration = 300) {
-  return new Promise(resolve => setTimeout(resolve, duration));
+export function createMockFn<T extends (...args: any[]) => any>(): jest.MockedFunction<T> {
+  return jest.fn() as jest.MockedFunction<T>;
 }
 
 /**
- * Fire accessible click event
+ * Test ID helpers
  */
-export async function fireAccessibleClick(element: HTMLElement) {
-  const user = setupUser();
-  await user.click(element);
+export const testIds = {
+  button: (variant?: string) => `button${variant ? `-${variant}` : ''}`,
+  input: (name?: string) => `input${name ? `-${name}` : ''}`,
+  modal: (id?: string) => `modal${id ? `-${id}` : ''}`,
+  // Add more as needed
+};
+
+/**
+ * Accessibility testing helpers
+ */
+export const a11y = {
+  /**
+   * Check if element is accessible
+   */
+  isAccessible: (element: HTMLElement): boolean => {
+    const hasRole = element.hasAttribute('role');
+    const hasAriaLabel = element.hasAttribute('aria-label');
+    const hasAriaLabelledBy = element.hasAttribute('aria-labelledby');
+    const hasTextContent = element.textContent !== '';
+    
+    return hasRole || hasAriaLabel || hasAriaLabelledBy || hasTextContent;
+  },
   
-  // Also test keyboard activation
-  element.focus();
-  await user.keyboard('{Enter}');
-}
+  /**
+   * Check if element is keyboard navigable
+   */
+  isKeyboardNavigable: (element: HTMLElement): boolean => {
+    const tabIndex = element.getAttribute('tabindex');
+    const isNaturallyFocusable = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(
+      element.tagName
+    );
+    
+    return isNaturallyFocusable || (tabIndex !== null && parseInt(tabIndex) >= 0);
+  },
+};
 
 /**
- * Create mock form data
+ * Mock data generators
  */
-export function createMockFormData(overrides = {}) {
-  return {
-    name: 'John Doe',
-    email: 'john@example.com',
-    age: 30,
-    bio: 'Test bio',
-    agree: true,
+export const mockData = {
+  user: (overrides = {}) => ({
+    id: '1',
+    name: 'Test User',
+    email: 'test@example.com',
     ...overrides,
-  };
-}
-
-/**
- * Mock API response helper
- */
-export function mockApiResponse<T>(data: T, delay = 100): Promise<T> {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(data), delay);
-  });
-}
-
-/**
- * Test accessibility with axe-core
- */
-export async function testA11y(container: HTMLElement) {
-  // This would use jest-axe in a real implementation
-  // For now, just a placeholder
-  return Promise.resolve();
-}
-
-// Re-export everything from Testing Library
-export * from '@testing-library/react';
-export { userEvent };
+  }),
+  
+  item: (overrides = {}) => ({
+    id: '1',
+    title: 'Test Item',
+    description: 'Test Description',
+    ...overrides,
+  }),
+};

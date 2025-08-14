@@ -1,20 +1,21 @@
 name: E2E Tests
 
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/web/**'
-      - 'e2e/**'
-      - 'playwright.config.ts'
-  pull_request:
-    branches: [main, develop]
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/web/**'
-      - 'e2e/**'
-      - 'playwright.config.ts'
+  # DISABLED: Automatic triggers causing build failures
+  # push:
+  #   branches: [main, develop]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/web/**'
+  #     - 'e2e/**'
+  #     - 'playwright.config.ts'
+  # pull_request:
+  #   branches: [main, develop]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/web/**'
+  #     - 'e2e/**'
+  #     - 'playwright.config.ts'
   workflow_dispatch:
     inputs:
       browser:

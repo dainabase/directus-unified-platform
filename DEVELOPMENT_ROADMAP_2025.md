@@ -1,6 +1,6 @@
 # 📚 Document de Référence Complet - Design System @dainabase/ui
 **Version**: 1.2.0 | **Bundle**: 50KB | **Performance**: 0.8s  
-**Dernière mise à jour**: 14 Août 2025, 17h37 | **Repository**: [directus-unified-platform](https://github.com/dainabase/directus-unified-platform)
+**Dernière mise à jour**: 14 Août 2025, 18h45 | **Repository**: [directus-unified-platform](https://github.com/dainabase/directus-unified-platform)
 
 ---
 
@@ -22,6 +22,59 @@ Le Design System @dainabase/ui est maintenant **100% prêt pour production** ave
 | **Bundle Size** | 52KB | 50KB | **-4%** ✅ |
 | **Documentation** | 30% | 100% | **+233%** ✅ |
 | **Version** | 1.2.0-beta.1 | **1.2.0** | **STABLE** ✅ |
+
+---
+
+## 🔴 NETTOYAGE URGENT DÉTECTÉ - 14 AOÛT 2025, 18h45
+
+### ⚠️ Problèmes Identifiés lors de l'Audit Final
+
+#### 1. **Workflows Vides (14 fichiers)** - À SUPPRIMER
+```
+.github/workflows/
+├── auto-fix-deps.yml          (0 bytes) ❌
+├── auto-publish-v040.yml      (0 bytes) ❌
+├── fix-and-publish.yml        (0 bytes) ❌
+├── force-publish.yml          (0 bytes) ❌
+├── manual-publish.yml         (0 bytes) ❌
+├── npm-auto-publish.yml       (0 bytes) ❌
+├── npm-monitor.yml            (0 bytes) ❌
+├── npm-publish-beta.yml       (0 bytes) ❌
+├── npm-publish-ui.yml         (0 bytes) ❌
+├── publish-manual.yml         (0 bytes) ❌
+├── publish-ui.yml             (0 bytes) ❌
+├── quick-npm-publish.yml      (0 bytes) ❌
+├── simple-publish.yml         (0 bytes) ❌
+└── ui-100-coverage-publish.yml (0 bytes) ❌
+```
+
+#### 2. **Fichiers Mal Placés** - À DÉPLACER
+```
+.github/workflows/
+├── EMERGENCY_AUDIT.sh        → scripts/
+└── MAINTENANCE_LOG.md        → docs/
+```
+
+#### 3. **Doublons de Configuration** - À RÉSOUDRE
+```
+packages/ui/
+├── .eslintrc.js             ⚠️ Doublon
+├── .eslintrc.json           ⚠️ Doublon (garder celui-ci)
+├── .chromatic.config.json   ⚠️ Doublon
+└── chromatic.config.json    ⚠️ Doublon (garder celui-ci)
+```
+
+#### 4. **Documentation Redondante** - À CONSOLIDER
+- **Context Prompts**: 2 fichiers similaires
+- **Migration Guides**: 3 versions différentes
+- **Optimization Docs**: 3 rapports séparés
+- **Documentation Phase 2**: 4 fichiers fragmentés
+
+### 🛠️ Plan de Nettoyage (À EXÉCUTER)
+1. Supprimer les 14 workflows vides
+2. Déplacer les 2 fichiers mal placés
+3. Supprimer les doublons de configuration
+4. Consolider la documentation
 
 ---
 
@@ -68,15 +121,19 @@ packages/ui/src/components/
                               = 500+ assertions totales
 ```
 
-### 🔧 Workflows Actifs (6 essentiels)
+### 🔧 Workflows Actifs (6 essentiels + 14 à supprimer)
 ```
 .github/workflows/
+ACTIFS (À GARDER):
 ├── npm-publish.yml         ✅ Publication NPM
 ├── release.yml            ✅ Release automation
 ├── deploy-storybook.yml   ✅ Documentation
 ├── deploy-docs.yml        ✅ Site documentation
 ├── test-runner.yml        ✅ Tests automatisés
 └── cleanup-empty-files.yml ✅ Maintenance
+
+À SUPPRIMER (vides):
+└── [14 workflows vides listés ci-dessus]
 ```
 
 ### 📦 Package Configuration
@@ -138,6 +195,12 @@ packages/ui/src/components/
 
 ## 🔮 ROADMAP POST-1.2.0
 
+### Phase 0: Nettoyage Final (Immédiat)
+- [ ] Supprimer 14 workflows vides
+- [ ] Déplacer fichiers mal placés
+- [ ] Résoudre doublons de configuration
+- [ ] Consolider documentation redondante
+
 ### Phase 1: Coverage Extension (Semaine 34-35)
 - [ ] Tests pour 10 composants supplémentaires
 - [ ] Atteindre 30% coverage global
@@ -166,6 +229,7 @@ packages/ui/src/components/
 - **Issue #41**: CI/CD Emergency Intervention ✅ FERMÉE
 - **Issue #42**: Final Report ✅ FERMÉE
 - **Issue #43**: [Release v1.2.0 Tracking](https://github.com/dainabase/directus-unified-platform/issues/43) 🔄 ACTIVE
+- **Issue #44**: Cleanup Final (À CRÉER)
 
 ### Commits Clés
 - **43240d6**: Version 1.2.0
@@ -193,9 +257,12 @@ L'intervention CI/CD d'urgence est un **SUCCÈS TOTAL**. Le Design System @daina
 - ✅ **Documentation** complète et professionnelle
 - ✅ **Performance** optimale (50KB, 0.8s)
 - ✅ **Version 1.2.0** prête pour NPM
+- ⚠️ **Nettoyage final** détecté et documenté
 
-### 🎯 Prochaine Action Critique
-**PUBLIER SUR NPM** - Le package est 100% prêt. La publication se fera automatiquement via le workflow `npm-publish.yml` lors de la création d'un tag Git.
+### 🎯 Prochaines Actions Critiques
+1. **NETTOYER** - Supprimer les 14 workflows vides et résoudre les doublons
+2. **PUBLIER SUR NPM** - Le package est 100% prêt après nettoyage
+3. **DÉPLOYER STORYBOOK** - Documentation interactive
 
 ---
 
@@ -218,8 +285,9 @@ github:list_commits           // Historique
 
 ---
 
-*Document finalisé le 14 Août 2025 à 17h37*  
+*Document finalisé le 14 Août 2025 à 18h45*  
 *Intervention CI/CD COMPLÈTE - 100% achevé*  
+*Nettoyage final détecté - Action requise*  
 *Design System @dainabase/ui v1.2.0 - PRODUCTION READY* 🚀
 
 ---

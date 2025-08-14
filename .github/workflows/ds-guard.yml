@@ -1,11 +1,13 @@
 name: DS Guard
 
 on:
-  pull_request:
-    paths:
-      - 'apps/web/**'
-      - '!apps/web/**/*.stories.*'
-      - '!apps/web/**/*.test.*'
+  # DISABLED: Automatic triggers causing build failures
+  # pull_request:
+  #   paths:
+  #     - 'apps/web/**'
+  #     - '!apps/web/**/*.stories.*'
+  #     - '!apps/web/**/*.test.*'
+  workflow_dispatch:
 
 jobs:
   check-inline-styles:

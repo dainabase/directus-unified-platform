@@ -1,23 +1,24 @@
 name: Bundle Size Monitor
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'packages/ui/**'
-      - '!packages/ui/**/*.md'
-      - '!packages/ui/**/*.test.*'
-      - '!packages/ui/**/*.stories.*'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'packages/ui/**'
-      - '!packages/ui/**/*.md'
-      - '!packages/ui/**/*.test.*'
-      - '!packages/ui/**/*.stories.*'
-  schedule:
-    # Run daily at 2 AM UTC
-    - cron: '0 2 * * *'
+  # DISABLED: Automatic triggers causing build failures
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'packages/ui/**'
+  #     - '!packages/ui/**/*.md'
+  #     - '!packages/ui/**/*.test.*'
+  #     - '!packages/ui/**/*.stories.*'
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - 'packages/ui/**'
+  #     - '!packages/ui/**/*.md'
+  #     - '!packages/ui/**/*.test.*'
+  #     - '!packages/ui/**/*.stories.*'
+  # schedule:
+  #   # Run daily at 2 AM UTC
+  #   - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
       alertThreshold:

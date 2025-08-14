@@ -77,16 +77,13 @@ npx
 │       ├── ui-chromatic.yml              # Tests visuels Chromatic
 │       ├── ui-unit.yml                   # Tests unitaires UI
 │       ├── ui-a11y.yml                   # Tests accessibilité
-│       ├── ui-e2e-tests.yml              # Tests E2E Playwright
-│       ├── storybook-deploy.yml          # Déploiement Storybook
-│       ├── ui-bundle-optimization.yml    # Optimisation bundle
-│       └── npm-publish-beta.yml          # Publication NPM
+│       └── e2e-tests.yml                 # Tests end-to-end
 │
 ├── 📁 packages/
 │   └── 📁 ui/                           # 🎯 DESIGN SYSTEM ICI
 │       │
 │       ├── 📁 src/                      # Code source principal
-│       │   ├── 📁 components/           # 70+ composants
+│       │   ├── 📁 components/           # 58 composants
 │       │   │   ├── accordion/
 │       │   │   ├── alert/
 │       │   │   ├── avatar/
@@ -98,27 +95,111 @@ npx
 │       │   │   │   ├── button.test.tsx  # Tests
 │       │   │   │   ├── button.stories.tsx # Storybook
 │       │   │   │   └── types.ts         # Types
-│       │   │   ├── [... 65+ autres composants]
-│       │   │   └── virtualized-table/   # Nouveau v1.2.0
+│       │   │   ├── calendar/
+│       │   │   ├── card/
+│       │   │   ├── carousel/
+│       │   │   ├── chart/
+│       │   │   ├── checkbox/
+│       │   │   ├── collapsible/
+│       │   │   ├── color-picker/
+│       │   │   ├── command-palette/
+│       │   │   ├── context-menu/
+│       │   │   ├── data-grid/
+│       │   │   ├── data-grid-advanced/
+│       │   │   ├── date-picker/
+│       │   │   ├── date-range-picker/
+│       │   │   ├── dialog/
+│       │   │   ├── dropdown-menu/
+│       │   │   ├── error-boundary/
+│       │   │   ├── file-upload/
+│       │   │   ├── form/
+│       │   │   ├── forms-demo/
+│       │   │   ├── hover-card/
+│       │   │   ├── icon/
+│       │   │   ├── input/
+│       │   │   ├── label/
+│       │   │   ├── menubar/
+│       │   │   ├── navigation-menu/
+│       │   │   ├── pagination/
+│       │   │   ├── popover/
+│       │   │   ├── progress/
+│       │   │   ├── radio-group/
+│       │   │   ├── rating/
+│       │   │   ├── resizable/
+│       │   │   ├── scroll-area/
+│       │   │   ├── select/
+│       │   │   ├── separator/
+│       │   │   ├── sheet/
+│       │   │   ├── skeleton/
+│       │   │   ├── slider/
+│       │   │   ├── sonner/
+│       │   │   ├── stepper/
+│       │   │   ├── switch/
+│       │   │   ├── table/
+│       │   │   ├── tabs/
+│       │   │   ├── text-animations/
+│       │   │   ├── textarea/
+│       │   │   ├── timeline/
+│       │   │   ├── toast/
+│       │   │   ├── toggle/
+│       │   │   ├── toggle-group/
+│       │   │   ├── tooltip/
+│       │   │   └── ui-provider/
 │       │   │
 │       │   ├── 📁 lib/                  # Utilitaires
+│       │   │   ├── utils.ts             # Helper functions
+│       │   │   └── cn.ts                # Class names utility
+│       │   │
 │       │   ├── 📁 providers/            # Contextes React
 │       │   ├── 📁 styles/               # Styles globaux
 │       │   ├── 📁 theme/                # Configuration thème
+│       │   ├── 📁 theming/              # Système de theming
 │       │   ├── 📁 i18n/                 # Internationalisation
-│       │   ├── index.ts                 # Export principal
+│       │   │   ├── locales/
+│       │   │   │   ├── en.json
+│       │   │   │   ├── fr.json
+│       │   │   │   └── ...
+│       │   │   └── index.ts
+│       │   │
+│       │   ├── 📁 test/                 # Test helpers
+│       │   ├── 📁 tests/                # Tests unitaires
+│       │   │
+│       │   ├── index.ts                 # Export principal (50KB)
 │       │   └── components-lazy.ts       # Lazy loading exports
 │       │
-│       ├── 📁 tests/                    # Tests globaux (98% coverage)
-│       ├── 📁 e2e/                      # Tests E2E Playwright
-│       ├── 📁 docs/                     # Documentation
-│       ├── 📁 scripts/                  # 19 scripts utilitaires
-│       ├── 📁 .storybook/               # Config Storybook
+│       ├── 📁 tests/                    # Tests globaux
+│       │   ├── setup.ts
+│       │   ├── utils/
+│       │   └── integration/
 │       │
-│       ├── 📄 package.json              # v1.2.0-beta.1
+│       ├── 📁 e2e/                      # Tests E2E Playwright
+│       │   ├── components/
+│       │   └── scenarios/
+│       │
+│       ├── 📁 docs/                     # Documentation
+│       │   ├── components/              # Doc par composant
+│       │   ├── guides/                  # Guides d'utilisation
+│       │   └── api/                     # API reference
+│       │
+│       ├── 📁 scripts/                  # Scripts utilitaires
+│       │   ├── build.js
+│       │   ├── analyze-bundle.js
+│       │   └── generate-tests.js
+│       │
+│       ├── 📁 .storybook/               # Config Storybook
+│       │   ├── main.js
+│       │   └── preview.js
+│       │
+│       ├── 📄 package.json              # v1.0.1-beta.2
 │       ├── 📄 tsup.config.ts            # Build optimisé
-│       └── [autres configs]
+│       ├── 📄 jest.config.js            # Tests unitaires
+│       ├── 📄 playwright.config.ts      # Tests E2E
+│       ├── 📄 vite.config.ts            # Dev server
+│       ├── 📄 vitest.config.ts          # Alternative tests
+│       └── 📄 stryker.config.mjs        # Mutation testing
 │
+├── 📁 apps/                             # Applications (hors scope)
+├── 📁 src/                              # Backend/Frontend (hors scope)
 └── 📄 DEVELOPMENT_ROADMAP_2025.md       # Ce document
 ```
 
@@ -128,23 +209,25 @@ npx
 
 ### Métriques de Production
 
-| Métrique | v1.1.0 (LIVE) | v1.2.0-beta.1 (READY) | Status |
-|----------|---------------|------------------------|--------|
-| **Bundle Size** | 50KB | < 45KB | ✅ Optimisé |
-| **Test Coverage** | 95% | 98% | ✅ Excellent |
-| **Components** | 60 | 70+ | ✅ 108% objectif |
-| **NPM Downloads** | 0 | - | 🚀 À venir |
-| **GitHub Stars** | 12 | - | 📈 Growing |
-| **Performance** | 0.8s | 0.8s | ✅ Optimal |
-| **Documentation** | 100% | 100% | ✅ Complète |
+| Métrique | Actuel | Objectif | Status |
+|----------|--------|----------|--------|
+| **Bundle Size** | 50KB | < 100KB | ✅ |
+| **Test Coverage** | 0% | 80%+ | 🔴 |
+| **Documentation** | 60% | 100% | 🟡 |
+| **NPM Downloads** | 0 | 1000+ | ⏳ |
+| **Lighthouse** | 95 | 98+ | 🟡 |
+| **Components Tested** | 0/58 | 58/58 | 🔴 |
 
-### Infrastructure CI/CD
+### Composants (58 total)
 
-- **9 Workflows GitHub Actions** actifs et fonctionnels
-- **19 Scripts d'automatisation** en place
-- **320+ Tests unitaires** écrits
-- **70+ Cas de tests E2E** implémentés
-- **5 Nouveaux composants avancés** prêts en v1.2.0
+- **Core**: 3 (Icon, Label, Separator)
+- **Layout**: 4 (Card, Resizable, ScrollArea, Collapsible)
+- **Forms**: 13 (Input, Select, Checkbox, etc.)
+- **Data Display**: 6 (Table, DataGrid, Charts, etc.)
+- **Navigation**: 5 (Tabs, Stepper, Pagination, etc.)
+- **Feedback**: 6 (Alert, Toast, Progress, etc.)
+- **Overlays**: 7 (Dialog, Sheet, Popover, etc.)
+- **Advanced**: 14 (CommandPalette, Carousel, etc.)
 
 ---
 
@@ -162,6 +245,8 @@ npx
 | Workflow CI | `.github/workflows/` | `ui-tests.yml` |
 | Script | `packages/ui/scripts/` | `analyze.js` |
 | Config | `packages/ui/` | `jest.config.js` |
+| Types globaux | `packages/ui/src/types/` | `global.d.ts` |
+| Utilitaires | `packages/ui/src/lib/` | `utils.ts` |
 
 ### EXEMPLES D'UTILISATION CORRECTS
 
@@ -207,45 +292,243 @@ content: "// Updated config"
 message: "chore: Update Jest configuration"
 ```
 
----
-
-## 🎯 ROADMAP - PRIORITÉS IMMÉDIATES
-
-### 🚀 Phase Actuelle: Publication NPM v1.2.0-beta.1
-
-**Status**: ✅ PRÊT À PUBLIER - Workflow configuré et testé
-
-#### Actions Immédiates (Par Ordre)
-
-1. **Publication NPM Beta** ⏳
-   - Déclencher workflow `npm-publish-beta.yml`
-   - Vérifier logs GitHub Actions
-   - Confirmer sur npmjs.com
-
-2. **Monitoring Post-Publication**
-   - Exécuter `npm run monitor:npm`
-   - Vérifier métriques bundle
-   - Suivre downloads
-
-3. **Community Testing** (14-21 Août)
-   - Collecter feedback
-   - Créer issues pour bugs
-   - Préparer v1.2.0-rc.1
-
-### 📅 Timeline des Prochaines Releases
-
-| Date | Version | Status | Actions |
-|------|---------|--------|---------|
-| 14 Août | v1.2.0-beta.1 | ✅ Ready | Publication NPM |
-| 14-21 Août | Beta Testing | 📅 Planifié | Community feedback |
-| 22 Août | v1.2.0-rc.1 | 📅 Planifié | Release Candidate |
-| 29 Août | v1.2.0 Stable | 🎯 Target | Production Release |
+#### ✅ Ajouter un workflow CI/CD
+```javascript
+github:create_or_update_file
+path: ".github/workflows/test-coverage.yml"
+content: `
+name: Test Coverage
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm test -- --coverage`
+message: "ci: Add test coverage workflow"
+```
 
 ---
 
-## 📊 KPIs et Objectifs Q3-Q4 2025
+## 🎯 ROADMAP - 10 ÉTAPES PRIORITAIRES
 
-### Objectifs Trimestriels
+### Phase 1: Fondations (Semaines 33-34, Août 2025)
+
+#### 1️⃣ Testing Suite Complète 🧪 **PRIORITÉ CRITIQUE**
+**Objectif**: Atteindre 80%+ de coverage sur les 58 composants
+
+**Actions (via API GitHub uniquement)**:
+- [ ] Modifier package.json pour ajouter Jest/Vitest
+- [ ] Créer jest.config.js via github:create_or_update_file
+- [ ] Créer dossier __tests__ pour chaque composant
+- [ ] Implémenter tests unitaires via API
+- [ ] Configurer GitHub Actions pour exécuter les tests
+- [ ] Ajouter badge de coverage dans README
+
+**Livrable**: Coverage report > 80%, tous les tests passent  
+**Issue**: #30 (Testing Progress - Phase 4/7)  
+**Effort**: 1 semaine  
+**Impact**: 🔥🔥🔥🔥🔥
+
+#### 2️⃣ Documentation Interactive 📚
+**Objectif**: Site de documentation de classe mondiale
+
+**Actions (via API GitHub uniquement)**:
+- [ ] Créer structure Docusaurus via API
+- [ ] Auto-générer docs depuis JSDoc comments
+- [ ] Configurer GitHub Pages deployment
+- [ ] Intégrer Storybook existant
+- [ ] Créer exemples interactifs
+- [ ] Setup search avec Algolia
+
+**Livrable**: docs.dainabase.dev en production  
+**Issue**: #25 (Sprint 3)  
+**Effort**: 1 semaine  
+**Impact**: 🔥🔥🔥🔥🔥
+
+### Phase 2: Distribution (Semaines 35-36, Août-Septembre 2025)
+
+#### 3️⃣ Publication NPM 📦
+**Objectif**: Publier @dainabase/ui sur NPM
+
+**Actions (via GitHub Actions)**:
+- [ ] Finaliser tests (via GitHub Actions)
+- [ ] Créer workflow de release automatique
+- [ ] Configurer semantic-release
+- [ ] Créer templates via API
+- [ ] Setup CDN auto-deploy
+- [ ] Badges NPM dans README
+
+**Livrable**: Package disponible sur NPM  
+**Version**: 1.0.1-beta.2 → 1.1.0  
+**Effort**: 3 jours  
+**Impact**: 🔥🔥🔥🔥
+
+#### 4️⃣ Micro-optimisations Performance ⚡
+**Objectif**: Atteindre 98+ Lighthouse, < 40KB core
+
+**Actions (modifications via API)**:
+- [ ] Configurer vite.config.js pour optimisations
+- [ ] Implémenter CSS-in-JS tree-shaking
+- [ ] Ajouter compression dans build workflow
+- [ ] Créer performance budget workflow
+- [ ] Setup monitoring dashboard
+
+**Livrable**: Bundle < 40KB, Lighthouse 98+  
+**Monitoring**: Bundle size check automatique  
+**Effort**: 4 jours  
+**Impact**: 🔥🔥🔥
+
+### Phase 3: Design System (Semaines 37-38, Septembre 2025)
+
+#### 5️⃣ Design Tokens System 🎨
+**Objectif**: Système de tokens standardisé et extensible
+
+**Structure (à créer via API)**:
+```
+packages/design-tokens/
+├── src/
+│   ├── colors/          # Palette + dark mode
+│   ├── typography/      # Font scales
+│   ├── spacing/         # 4px grid system
+│   ├── animations/      # Timing & easing
+│   ├── shadows/         # Elevation system
+│   ├── breakpoints/     # Responsive tokens
+│   └── themes/
+│       ├── default.ts
+│       ├── dark.ts
+│       └── high-contrast.ts
+```
+
+**Livrable**: @dainabase/design-tokens package  
+**Format**: CSS vars + JS/TS + JSON  
+**Effort**: 1 semaine  
+**Impact**: 🔥🔥🔥🔥
+
+#### 6️⃣ CI/CD Automatisation Avancée 🤖
+**Objectif**: Pipeline DevOps enterprise-grade
+
+**Nouveaux Workflows (créer via API)**:
+- [ ] .github/workflows/renovate.yml
+- [ ] .github/workflows/security.yml
+- [ ] .github/workflows/release.yml
+- [ ] .github/workflows/preview.yml
+- [ ] .github/workflows/performance.yml
+- [ ] .github/workflows/quality.yml
+- [ ] .github/workflows/cross-browser.yml
+
+**Livrable**: 12+ workflows actifs  
+**Dashboard**: GitHub Actions insights  
+**Effort**: 3 jours  
+**Impact**: 🔥🔥🔥
+
+### Phase 4: Production Excellence (Semaines 39-40, Septembre 2025)
+
+#### 7️⃣ Analytics & Monitoring 📈
+**Objectif**: Observabilité complète en production
+
+**Stack de Monitoring (config via API)**:
+- [ ] Sentry config dans les workflows
+- [ ] LogRocket script integration
+- [ ] Datadog metrics setup
+- [ ] Bundle tracking workflow
+- [ ] RUM implementation
+- [ ] Custom dashboard config
+
+**Livrable**: Dashboard monitoring unifié  
+**SLA**: 99.9% uptime  
+**Effort**: 1 semaine  
+**Impact**: 🔥🔥🔥🔥
+
+#### 8️⃣ Internationalisation (i18n) 🌍
+**Objectif**: Support multi-langues complet
+
+**Implementation (fichiers via API)**:
+- [ ] Créer locales/en.json
+- [ ] Créer locales/fr.json
+- [ ] Créer locales/de.json
+- [ ] Créer locales/es.json
+- [ ] Créer locales/it.json
+- [ ] Configurer i18n provider
+- [ ] Ajouter language switcher
+
+**Livrable**: 5+ langues supportées  
+**Coverage**: 100% des strings  
+**Effort**: 1 semaine  
+**Impact**: 🔥🔥🔥
+
+### Phase 5: Excellence (Semaines 41-42, Octobre 2025)
+
+#### 9️⃣ Accessibilité Niveau Platine ♿
+**Objectif**: Dépasser WCAG 2.1 AA → AAA
+
+**Améliorations (code via API)**:
+- [ ] Implémenter focus-trap dans composants
+- [ ] Ajouter ARIA live regions
+- [ ] Créer keyboard shortcuts config
+- [ ] Implémenter high contrast CSS
+- [ ] Ajouter reduced motion queries
+- [ ] Configurer a11y testing workflow
+
+**Livrable**: Score accessibilité 100/100  
+**Certification**: WCAG 2.1 AAA ready  
+**Effort**: 4 jours  
+**Impact**: 🔥🔥🔥🔥🔥
+
+#### 🔟 Quick Wins & Clean-up 🧹
+**Objectif**: Organisation et optimisation rapides
+
+**Actions Immédiates (via API)**:
+- [ ] Supprimer TEST_TRIGGER.md
+- [ ] Organiser /docs par catégorie
+- [ ] Créer CONTRIBUTING.md
+- [ ] Créer .github/ISSUE_TEMPLATE/
+- [ ] Créer CODE_OF_CONDUCT.md
+- [ ] Créer SECURITY.md
+- [ ] Créer .github/FUNDING.yml
+- [ ] Créer .github/dependabot.yml
+- [ ] Créer .vscode/settings.json
+- [ ] Créer .editorconfig
+
+**Livrable**: Repository professionnel  
+**Effort**: 1 jour  
+**Impact**: 🔥🔥
+
+---
+
+## 📅 Timeline Globale
+
+```mermaid
+gantt
+    title Roadmap Q3-Q4 2025
+    dateFormat YYYY-MM-DD
+    
+    section Phase 1
+    Testing Suite       :2025-08-12, 7d
+    Documentation       :2025-08-19, 7d
+    
+    section Phase 2
+    NPM Publication     :2025-08-26, 3d
+    Performance         :2025-08-29, 4d
+    
+    section Phase 3
+    Design Tokens       :2025-09-02, 7d
+    CI/CD               :2025-09-09, 3d
+    
+    section Phase 4
+    Monitoring          :2025-09-16, 7d
+    i18n                :2025-09-23, 7d
+    
+    section Phase 5
+    Accessibility       :2025-09-30, 4d
+    Clean-up            :2025-10-04, 1d
+```
+
+---
+
+## 📊 KPIs par Trimestre
 
 | KPI | Q3 2025 | Q4 2025 | Q1 2026 |
 |-----|---------|---------|---------|
@@ -255,26 +538,6 @@ message: "chore: Update Jest configuration"
 | **GitHub Stars** | 100 | 250 | 500 |
 | **Contributors** | 5 | 15 | 30 |
 | **Enterprise Users** | 3 | 10 | 25 |
-
-### Phases de Développement Futures
-
-#### Phase 3: Excellence Technique (Septembre 2025)
-- [ ] WebAssembly pour composants critiques
-- [ ] Module Federation setup
-- [ ] Micro-frontends architecture
-- [ ] GraphQL schema generation
-
-#### Phase 4: Intelligence Artificielle (Octobre 2025)
-- [ ] AI-powered component suggestions
-- [ ] Automatic accessibility fixes
-- [ ] Smart form validation
-- [ ] Predictive UI patterns
-
-#### Phase 5: Écosystème (Novembre-Décembre 2025)
-- [ ] Figma plugin
-- [ ] VS Code extension
-- [ ] CLI tooling avancé
-- [ ] Template marketplace
 
 ---
 
@@ -324,9 +587,9 @@ graph LR
 ## 📞 SUPPORT & RESSOURCES
 
 - **Repository**: [github.com/dainabase/directus-unified-platform](https://github.com/dainabase/directus-unified-platform)
-- **NPM Package**: [@dainabase/ui](https://www.npmjs.com/package/@dainabase/ui)
-- **Documentation**: [Storybook](https://dainabase.github.io/directus-unified-platform)
+- **Package**: packages/ui/
 - **Issues**: [GitHub Issues](https://github.com/dainabase/directus-unified-platform/issues)
+- **Issue Tracking**: #33 (Master Roadmap)
 - **Discord**: [discord.gg/dainabase](https://discord.gg/dainabase)
 - **Email**: dev@dainabase.com
 
@@ -334,30 +597,43 @@ graph LR
 
 ## ⚠️ RAPPELS CRITIQUES
 
-> 🔴 **JAMAIS** de commandes locales (git, npm, yarn)  
-> 🔴 **TOUJOURS** utiliser l'API GitHub  
+> 🔴 **TOUT** développement via API GitHub  
+> 🔴 **JAMAIS** de commandes locales  
+> 🔴 **TOUJOURS** dans packages/ui/ pour le Design System  
 > 🔴 **SHA obligatoire** pour modifier un fichier existant  
+> 🔴 **Tests** exécutés automatiquement par GitHub Actions  
 > 🔴 **Chemins complets** depuis la racine du repo  
-> 🔴 **Tests automatiques** via GitHub Actions  
 
 ---
 
-## 🏆 Accomplissements à Date
+## 🤝 Comment Contribuer (Via API GitHub)
 
-- ✅ **70+ composants** production-ready
-- ✅ **98% test coverage** avec 320+ tests
-- ✅ **9 workflows CI/CD** opérationnels
-- ✅ **19 scripts** d'automatisation
-- ✅ **Bundle < 45KB** optimisé
-- ✅ **v1.1.0 publié** sur NPM
-- ✅ **v1.2.0-beta.1** prêt à publier
-- ✅ **Documentation 100%** complète
-- ✅ **TypeScript natif** avec types stricts
-- ✅ **Accessibility WCAG 2.1 AA** validé
+### Workflow de Contribution
+
+1. Créer une issue via `github:create_issue`
+2. Développer via `github:create_or_update_file`
+3. Tester automatiquement via GitHub Actions
+4. Créer une PR via `github:create_pull_request`
+5. Review dans GitHub interface
+6. Merge après approbation
+
+---
+
+## 💡 Innovations Futures (2026)
+
+### Technologies Émergentes à Explorer
+
+- **React Server Components** - Rendering optimisé
+- **Module Federation** - Micro-frontends
+- **WebAssembly** - Composants haute performance
+- **AI-powered DX** - Suggestions intelligentes
+- **Figma-to-Code** - Pipeline automatique
+- **Web Components** - Framework agnostic
+- **Signals** - State management nouvelle génération
 
 ---
 
 *Document maintenu par l'équipe Dainabase*  
 *Dernière mise à jour: 14 Août 2025*  
-*Version actuelle: v1.1.0 (Production) | v1.2.0-beta.1 (Ready)*  
+*Version: 1.0.1-beta.2*  
 *Contact: dev@dainabase.com*

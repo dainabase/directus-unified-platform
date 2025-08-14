@@ -1,19 +1,21 @@
 name: Bundle Size Monitor
 
+# TEMPORARILY DISABLED - Manual trigger only to stop error flood
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/ui/package.json'
-      - 'pnpm-lock.yaml'
-  pull_request:
-    branches: [main, develop]
-    paths:
-      - 'packages/ui/src/**'
-      - 'packages/ui/package.json'
-      - 'pnpm-lock.yaml'
   workflow_dispatch:
+  # DISABLED AUTOMATIC TRIGGERS
+  # push:
+  #   branches: [main, develop]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/ui/package.json'
+  #     - 'pnpm-lock.yaml'
+  # pull_request:
+  #   branches: [main, develop]
+  #   paths:
+  #     - 'packages/ui/src/**'
+  #     - 'packages/ui/package.json'
+  #     - 'pnpm-lock.yaml'
 
 jobs:
   analyze:

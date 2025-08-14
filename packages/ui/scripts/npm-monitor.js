@@ -1,320 +1,253 @@
 #!/usr/bin/env node
-
 /**
- * NPM Package Analytics Monitor
- * Tracks downloads, version adoption, and other metrics for @dainabase/ui
+ * NPM Package Monitor for @dainabase/ui
+ * Tracks downloads, versions, and package metrics
  */
 
 const https = require('https');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const chalk = require('chalk');
 
 const PACKAGE_NAME = '@dainabase/ui';
-const METRICS_FILE = path.join(__dirname, '..', 'metrics', 'npm-stats.json');
-const REPORT_FILE = path.join(__dirname, '..', 'metrics', 'npm-report.md');
+const NPM_API = 'https://api.npmjs.org';
+const REGISTRY_API = 'https://registry.npmjs.org';
 
-// Ensure metrics directory exists
-const metricsDir = path.join(__dirname, '..', 'metrics');
-if (!fs.existsSync(metricsDir)) {
-  fs.mkdirSync(metricsDir, { recursive: true });
-}
-
-/**
- * Fetch data from NPM registry
- */
-function fetchNpmData(endpoint) {
+// Helper function for API requests
+function fetchData(url) {
   return new Promise((resolve, reject) => {
-    https.get(`https://api.npmjs.org/${endpoint}`, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (error) {
-          reject(error);
-        }
-      });
-    }).on('error', reject);
-  });
-}
-
-/**
- * Fetch download stats from NPM
- */
-function fetchDownloadStats(period = 'last-week') {
-  return new Promise((resolve, reject) => {
-    const url = `https://api.npmjs.org/downloads/point/${period}/${PACKAGE_NAME}`;
     https.get(url, (res) => {
       let data = '';
-      res.on('data', chunk => data += chunk);
+      res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
         try {
           resolve(JSON.parse(data));
-        } catch (error) {
-          reject(error);
+        } catch (e) {
+          resolve(data);
         }
       });
     }).on('error', reject);
   });
 }
 
-/**
- * Fetch package metadata
- */
-async function fetchPackageInfo() {
-  return new Promise((resolve, reject) => {
-    https.get(`https://registry.npmjs.org/${PACKAGE_NAME}`, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          resolve(parsed);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    }).on('error', reject);
-  });
-}
-
-/**
- * Calculate growth rate
- */
-function calculateGrowth(current, previous) {
-  if (!previous || previous === 0) return 100;
-  return ((current - previous) / previous * 100).toFixed(2);
-}
-
-/**
- * Format number with commas
- */
+// Format number with commas
 function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-/**
- * Main monitoring function
- */
-async function monitor() {
-  console.log(chalk.blue.bold('\n📊 NPM Package Analytics Monitor'));
-  console.log(chalk.gray('Package: ') + chalk.yellow(PACKAGE_NAME));
-  console.log(chalk.gray('Timestamp: ') + new Date().toISOString());
-  console.log(chalk.gray('─'.repeat(50)));
+// Calculate time ago
+function timeAgo(date) {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60
+  };
+
+  for (const [name, secondsInInterval] of Object.entries(intervals)) {
+    const interval = Math.floor(seconds / secondsInInterval);
+    if (interval >= 1) {
+      return `${interval} ${name}${interval > 1 ? 's' : ''} ago`;
+    }
+  }
+  return 'just now';
+}
+
+async function monitorPackage() {
+  console.log(chalk.cyan('\n📊 NPM Package Monitor'));
+  console.log(chalk.gray('='.repeat(50)));
+  console.log(chalk.yellow(`Package: ${PACKAGE_NAME}`));
+  console.log(chalk.gray('='.repeat(50)));
 
   try {
-    // Fetch all data
-    const [lastDay, lastWeek, lastMonth, packageInfo] = await Promise.all([
-      fetchDownloadStats('last-day'),
-      fetchDownloadStats('last-week'),
-      fetchDownloadStats('last-month'),
-      fetchPackageInfo()
-    ]);
-
-    // Extract key metrics
-    const latestVersion = packageInfo['dist-tags'].latest;
-    const publishTime = packageInfo.time[latestVersion];
-    const versions = Object.keys(packageInfo.versions).length;
-    const keywords = packageInfo.keywords || [];
-    const maintainers = packageInfo.maintainers || [];
+    // 1. Fetch package metadata
+    console.log(chalk.blue('\n📦 Fetching package information...'));
+    const packageData = await fetchData(`${REGISTRY_API}/${PACKAGE_NAME}`);
     
-    // Calculate additional metrics
-    const daysSincePublish = Math.floor((new Date() - new Date(publishTime)) / (1000 * 60 * 60 * 24));
-    const avgDailyDownloads = Math.floor(lastMonth.downloads / 30);
-
-    // Load previous metrics
-    let previousMetrics = {};
-    if (fs.existsSync(METRICS_FILE)) {
-      previousMetrics = JSON.parse(fs.readFileSync(METRICS_FILE, 'utf8'));
+    if (!packageData || packageData.error) {
+      console.log(chalk.red('❌ Package not found on NPM registry'));
+      console.log(chalk.yellow('📝 Make sure to publish the package first!'));
+      return;
     }
 
-    // Current metrics
-    const currentMetrics = {
+    // 2. Display current version info
+    const latestVersion = packageData['dist-tags']?.latest || 'none';
+    const betaVersion = packageData['dist-tags']?.beta || 'none';
+    const versions = Object.keys(packageData.versions || {});
+    
+    console.log(chalk.green('\n✅ Package Found!'));
+    console.log(chalk.white(`├─ Latest: ${chalk.bold(latestVersion)}`));
+    console.log(chalk.white(`├─ Beta: ${chalk.bold(betaVersion)}`));
+    console.log(chalk.white(`├─ Total Versions: ${chalk.bold(versions.length)}`));
+    console.log(chalk.white(`└─ License: ${chalk.bold(packageData.license || 'N/A')}`));
+
+    // 3. Display version history
+    if (versions.length > 0) {
+      console.log(chalk.blue('\n📝 Recent Versions:'));
+      const recentVersions = versions.slice(-5).reverse();
+      recentVersions.forEach((v, i) => {
+        const versionData = packageData.versions[v];
+        const publishTime = versionData._time || packageData.time[v];
+        const isLast = i === recentVersions.length - 1;
+        const prefix = isLast ? '└─' : '├─';
+        
+        let versionLabel = v;
+        if (v === latestVersion) versionLabel += chalk.green(' (latest)');
+        if (v === betaVersion) versionLabel += chalk.yellow(' (beta)');
+        
+        console.log(chalk.white(`${prefix} ${versionLabel} - ${timeAgo(publishTime)}`));
+      });
+    }
+
+    // 4. Fetch download stats
+    console.log(chalk.blue('\n📈 Download Statistics:'));
+    
+    // Last day
+    const dayStats = await fetchData(`${NPM_API}/downloads/point/last-day/${PACKAGE_NAME}`);
+    // Last week  
+    const weekStats = await fetchData(`${NPM_API}/downloads/point/last-week/${PACKAGE_NAME}`);
+    // Last month
+    const monthStats = await fetchData(`${NPM_API}/downloads/point/last-month/${PACKAGE_NAME}`);
+    
+    console.log(chalk.white(`├─ Last Day: ${chalk.bold(formatNumber(dayStats.downloads || 0))}`));
+    console.log(chalk.white(`├─ Last Week: ${chalk.bold(formatNumber(weekStats.downloads || 0))}`));
+    console.log(chalk.white(`└─ Last Month: ${chalk.bold(formatNumber(monthStats.downloads || 0))}`));
+
+    // 5. Package details
+    const latest = packageData.versions[latestVersion] || packageData.versions[betaVersion];
+    if (latest) {
+      console.log(chalk.blue('\n📋 Package Details:'));
+      
+      // Calculate unpacked size
+      const unpackedSize = latest.dist?.unpackedSize;
+      if (unpackedSize) {
+        const sizeKB = (unpackedSize / 1024).toFixed(2);
+        const sizeMB = (unpackedSize / 1024 / 1024).toFixed(2);
+        const sizeStr = unpackedSize > 1024 * 1024 
+          ? `${sizeMB} MB` 
+          : `${sizeKB} KB`;
+        console.log(chalk.white(`├─ Unpacked Size: ${chalk.bold(sizeStr)}`));
+      }
+      
+      // File count
+      const fileCount = latest.dist?.fileCount;
+      if (fileCount) {
+        console.log(chalk.white(`├─ File Count: ${chalk.bold(fileCount)}`));
+      }
+      
+      // Dependencies
+      const deps = Object.keys(latest.dependencies || {}).length;
+      const devDeps = Object.keys(latest.devDependencies || {}).length;
+      const peerDeps = Object.keys(latest.peerDependencies || {}).length;
+      const optDeps = Object.keys(latest.optionalDependencies || {}).length;
+      
+      console.log(chalk.white(`├─ Dependencies: ${chalk.bold(deps)}`));
+      console.log(chalk.white(`├─ Dev Dependencies: ${chalk.bold(devDeps)}`));
+      console.log(chalk.white(`├─ Peer Dependencies: ${chalk.bold(peerDeps)}`));
+      console.log(chalk.white(`└─ Optional Dependencies: ${chalk.bold(optDeps)}`));
+    }
+
+    // 6. Repository info
+    if (packageData.repository) {
+      console.log(chalk.blue('\n🔗 Links:'));
+      console.log(chalk.white(`├─ NPM: ${chalk.cyan(`https://npmjs.com/package/${PACKAGE_NAME}`)}`));
+      
+      const repoUrl = typeof packageData.repository === 'string' 
+        ? packageData.repository 
+        : packageData.repository.url;
+      if (repoUrl) {
+        const cleanUrl = repoUrl.replace(/^git\+/, '').replace(/\.git$/, '');
+        console.log(chalk.white(`├─ GitHub: ${chalk.cyan(cleanUrl)}`));
+      }
+      
+      if (packageData.homepage) {
+        console.log(chalk.white(`└─ Homepage: ${chalk.cyan(packageData.homepage)}`));
+      }
+    }
+
+    // 7. Health check
+    console.log(chalk.blue('\n💚 Package Health:'));
+    const hasReadme = !!packageData.readme;
+    const hasLicense = !!packageData.license;
+    const hasRepository = !!packageData.repository;
+    const hasKeywords = packageData.keywords && packageData.keywords.length > 0;
+    
+    console.log(chalk.white(`├─ README: ${hasReadme ? chalk.green('✓') : chalk.red('✗')}`));
+    console.log(chalk.white(`├─ License: ${hasLicense ? chalk.green('✓') : chalk.red('✗')}`));
+    console.log(chalk.white(`├─ Repository: ${hasRepository ? chalk.green('✓') : chalk.red('✗')}`));
+    console.log(chalk.white(`└─ Keywords: ${hasKeywords ? chalk.green('✓') : chalk.red('✗')}`));
+
+    // 8. Installation commands
+    console.log(chalk.blue('\n📥 Installation Commands:'));
+    const installVersion = betaVersion !== 'none' ? betaVersion : latestVersion;
+    const tag = betaVersion !== 'none' ? 'beta' : 'latest';
+    
+    console.log(chalk.gray('# NPM'));
+    console.log(chalk.white(`npm install ${PACKAGE_NAME}@${tag}`));
+    console.log(chalk.gray('\n# Yarn'));
+    console.log(chalk.white(`yarn add ${PACKAGE_NAME}@${tag}`));
+    console.log(chalk.gray('\n# PNPM'));
+    console.log(chalk.white(`pnpm add ${PACKAGE_NAME}@${tag}`));
+
+    // 9. Save report
+    const reportDir = path.join(process.cwd(), 'metrics');
+    await fs.mkdir(reportDir, { recursive: true });
+    
+    const report = {
       timestamp: new Date().toISOString(),
       package: PACKAGE_NAME,
-      version: latestVersion,
+      versions: {
+        latest: latestVersion,
+        beta: betaVersion,
+        total: versions.length
+      },
       downloads: {
-        lastDay: lastDay.downloads,
-        lastWeek: lastWeek.downloads,
-        lastMonth: lastMonth.downloads,
-        avgDaily: avgDailyDownloads
+        day: dayStats.downloads || 0,
+        week: weekStats.downloads || 0,
+        month: monthStats.downloads || 0
       },
-      growth: {
-        daily: calculateGrowth(lastDay.downloads, previousMetrics.downloads?.lastDay),
-        weekly: calculateGrowth(lastWeek.downloads, previousMetrics.downloads?.lastWeek),
-        monthly: calculateGrowth(lastMonth.downloads, previousMetrics.downloads?.lastMonth)
-      },
-      package: {
-        versions: versions,
-        keywords: keywords.length,
-        maintainers: maintainers.length,
-        daysSincePublish: daysSincePublish,
-        publishDate: publishTime
-      },
-      history: previousMetrics.history || []
+      health: {
+        hasReadme,
+        hasLicense,
+        hasRepository,
+        hasKeywords
+      }
     };
-
-    // Add to history (keep last 30 records)
-    currentMetrics.history.unshift({
-      date: new Date().toISOString(),
-      downloads: lastDay.downloads
-    });
-    currentMetrics.history = currentMetrics.history.slice(0, 30);
-
-    // Display results
-    console.log(chalk.green.bold('\n📈 Download Statistics:'));
-    console.log(`  Last Day:   ${chalk.cyan(formatNumber(lastDay.downloads))} ${chalk.gray(`(${currentMetrics.growth.daily > 0 ? '+' : ''}${currentMetrics.growth.daily}%)`)}`);
-    console.log(`  Last Week:  ${chalk.cyan(formatNumber(lastWeek.downloads))} ${chalk.gray(`(${currentMetrics.growth.weekly > 0 ? '+' : ''}${currentMetrics.growth.weekly}%)`)}`);
-    console.log(`  Last Month: ${chalk.cyan(formatNumber(lastMonth.downloads))} ${chalk.gray(`(${currentMetrics.growth.monthly > 0 ? '+' : ''}${currentMetrics.growth.monthly}%)`)}`);
-    console.log(`  Avg Daily:  ${chalk.cyan(formatNumber(avgDailyDownloads))}`);
-
-    console.log(chalk.green.bold('\n📦 Package Info:'));
-    console.log(`  Latest Version: ${chalk.yellow(latestVersion)}`);
-    console.log(`  Total Versions: ${chalk.yellow(versions)}`);
-    console.log(`  Published: ${chalk.gray(daysSincePublish + ' days ago')}`);
-    console.log(`  Maintainers: ${chalk.yellow(maintainers.length)}`);
-
-    // Performance indicators
-    console.log(chalk.green.bold('\n🎯 Performance Indicators:'));
-    const performanceScore = calculatePerformanceScore(currentMetrics);
-    console.log(`  Overall Score: ${getScoreEmoji(performanceScore)} ${chalk.cyan(performanceScore + '/100')}`);
-    console.log(`  Trend: ${getTrendIndicator(currentMetrics.growth.weekly)}`);
-    console.log(`  Health: ${getHealthStatus(currentMetrics)}`);
-
-    // Save metrics
-    fs.writeFileSync(METRICS_FILE, JSON.stringify(currentMetrics, null, 2));
-    console.log(chalk.gray(`\n✅ Metrics saved to ${METRICS_FILE}`));
-
-    // Generate markdown report
-    generateMarkdownReport(currentMetrics);
-    console.log(chalk.gray(`📄 Report generated at ${REPORT_FILE}`));
-
-    return currentMetrics;
+    
+    const reportPath = path.join(reportDir, 'npm-monitor.json');
+    await fs.writeFile(reportPath, JSON.stringify(report, null, 2));
+    
+    console.log(chalk.green(`\n✅ Report saved to: ${reportPath}`));
+    
+    // 10. Summary
+    console.log(chalk.cyan('\n📊 Summary'));
+    console.log(chalk.gray('='.repeat(50)));
+    
+    if (betaVersion !== 'none') {
+      console.log(chalk.green('✅ Beta version is published and available!'));
+      console.log(chalk.yellow(`🚀 Version ${betaVersion} is ready for testing`));
+    } else if (latestVersion !== 'none') {
+      console.log(chalk.green('✅ Package is published and available!'));
+      console.log(chalk.yellow(`📦 Latest version: ${latestVersion}`));
+    } else {
+      console.log(chalk.yellow('⚠️ Package needs to be published to NPM'));
+      console.log(chalk.white('Run the GitHub Actions workflow to publish'));
+    }
 
   } catch (error) {
-    console.error(chalk.red('\n❌ Error fetching NPM data:'), error.message);
-    process.exit(1);
+    console.error(chalk.red('\n❌ Error monitoring package:'), error.message);
+    console.log(chalk.yellow('\n💡 Tips:'));
+    console.log(chalk.white('1. Make sure the package is published to NPM'));
+    console.log(chalk.white('2. Check your internet connection'));
+    console.log(chalk.white('3. Verify the package name is correct'));
   }
 }
 
-/**
- * Calculate performance score (0-100)
- */
-function calculatePerformanceScore(metrics) {
-  let score = 50; // Base score
-
-  // Downloads scoring (max 30 points)
-  if (metrics.downloads.lastDay > 100) score += 10;
-  if (metrics.downloads.lastWeek > 500) score += 10;
-  if (metrics.downloads.lastMonth > 2000) score += 10;
-
-  // Growth scoring (max 20 points)
-  if (metrics.growth.daily > 0) score += 5;
-  if (metrics.growth.weekly > 0) score += 5;
-  if (metrics.growth.weekly > 10) score += 5;
-  if (metrics.growth.weekly > 50) score += 5;
-
-  return Math.min(100, score);
-}
-
-/**
- * Get emoji for score
- */
-function getScoreEmoji(score) {
-  if (score >= 90) return '🏆';
-  if (score >= 70) return '⭐';
-  if (score >= 50) return '✅';
-  return '📊';
-}
-
-/**
- * Get trend indicator
- */
-function getTrendIndicator(growth) {
-  const g = parseFloat(growth);
-  if (g > 50) return chalk.green('📈 Rapid Growth');
-  if (g > 10) return chalk.green('↗️ Growing');
-  if (g > 0) return chalk.yellow('→ Stable');
-  if (g > -10) return chalk.yellow('↘️ Slight Decline');
-  return chalk.red('📉 Declining');
-}
-
-/**
- * Get health status
- */
-function getHealthStatus(metrics) {
-  const score = calculatePerformanceScore(metrics);
-  if (score >= 80) return chalk.green('💚 Excellent');
-  if (score >= 60) return chalk.green('✅ Good');
-  if (score >= 40) return chalk.yellow('⚠️ Fair');
-  return chalk.red('🔴 Needs Attention');
-}
-
-/**
- * Generate markdown report
- */
-function generateMarkdownReport(metrics) {
-  const report = `# NPM Package Analytics Report
-
-**Package:** ${PACKAGE_NAME}  
-**Version:** ${metrics.version}  
-**Generated:** ${new Date().toISOString()}
-
-## 📊 Download Statistics
-
-| Period | Downloads | Growth |
-|--------|-----------|--------|
-| Last Day | ${formatNumber(metrics.downloads.lastDay)} | ${metrics.growth.daily}% |
-| Last Week | ${formatNumber(metrics.downloads.lastWeek)} | ${metrics.growth.weekly}% |
-| Last Month | ${formatNumber(metrics.downloads.lastMonth)} | ${metrics.growth.monthly}% |
-| Daily Average | ${formatNumber(metrics.downloads.avgDaily)} | - |
-
-## 📈 Performance Score
-
-**Overall Score:** ${calculatePerformanceScore(metrics)}/100  
-**Health Status:** ${getHealthStatus(metrics).replace(/\x1b\[[0-9;]*m/g, '')}  
-**Trend:** ${getTrendIndicator(metrics.growth.weekly).replace(/\x1b\[[0-9;]*m/g, '')}
-
-## 📅 Historical Data (Last 7 Days)
-
-\`\`\`
-${metrics.history.slice(0, 7).map(h => 
-  `${new Date(h.date).toLocaleDateString()}: ${formatNumber(h.downloads)} downloads`
-).join('\n')}
-\`\`\`
-
-## 🎯 Key Metrics
-
-- **Days Since Latest Release:** ${metrics.package.daysSincePublish}
-- **Total Versions Published:** ${metrics.package.versions}
-- **Number of Keywords:** ${metrics.package.keywords}
-- **Maintainers:** ${metrics.package.maintainers}
-
-## 🔗 Links
-
-- [NPM Package](https://www.npmjs.com/package/${PACKAGE_NAME})
-- [Unpkg CDN](https://unpkg.com/${PACKAGE_NAME})
-- [jsDelivr CDN](https://cdn.jsdelivr.net/npm/${PACKAGE_NAME})
-- [Package Phobia](https://packagephobia.com/result?p=${PACKAGE_NAME})
-- [Bundlephobia](https://bundlephobia.com/package/${PACKAGE_NAME})
-
----
-
-*Report generated automatically by npm-monitor.js*
-`;
-
-  fs.writeFileSync(REPORT_FILE, report);
-}
-
 // Run monitor
-if (require.main === module) {
-  monitor().then(() => {
-    console.log(chalk.green.bold('\n✨ Monitoring complete!\n'));
-  }).catch(error => {
-    console.error(chalk.red('Failed:'), error);
-    process.exit(1);
-  });
-}
-
-module.exports = { monitor, fetchDownloadStats, fetchPackageInfo };
+monitorPackage().then(() => {
+  console.log(chalk.gray('\n' + '='.repeat(50)));
+  console.log(chalk.cyan('Monitor completed at:', new Date().toLocaleString()));
+}).catch(console.error);

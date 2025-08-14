@@ -1,125 +1,203 @@
-/**
- * Input Component Tests
- * Auto-generated test suite for input component
- * Category: form
- */
-
 import React from 'react';
-import { renderWithProviders, screen, fireEvent, waitFor, within } from '../../../tests/utils/test-utils';
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Input } from './index';
-import { vi } from 'vitest';
 
 describe('Input Component', () => {
   describe('Rendering', () => {
     it('renders without crashing', () => {
-      renderWithProviders(<Input />);
-      expect(document.querySelector('[data-testid="input"]')).toBeInTheDocument();
+      render(<Input />);
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
     });
 
     it('renders with custom className', () => {
-      renderWithProviders(<Input className="custom-class" />);
-      expect(document.querySelector('.custom-class')).toBeInTheDocument();
+      render(<Input className="custom-class" />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveClass('custom-class');
     });
 
-    it('renders with label', () => {
-      renderWithProviders(<Input label="Test Label" />);
-      expect(screen.getByText('Test Label')).toBeInTheDocument();
+    it('renders with placeholder', () => {
+      render(<Input placeholder="Enter text here" />);
+      const input = screen.getByPlaceholderText('Enter text here');
+      expect(input).toBeInTheDocument();
+    });
+
+    it('renders with different input types', () => {
+      const { rerender } = render(<Input type="email" />);
+      let input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('type', 'email');
+
+      rerender(<Input type="password" />);
+      input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('type', 'password');
+
+      rerender(<Input type="tel" />);
+      input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('type', 'tel');
     });
   });
 
-  describe('Form Integration', () => {
-    it('supports controlled value', () => {
-      const { rerender } = renderWithProviders(<Input value="test" />);
-      expect(screen.getByDisplayValue?.('test') || screen.getByText('test')).toBeInTheDocument();
+  describe('Functionality', () => {
+    it('handles value changes', async () => {
+      const handleChange = jest.fn();
+      render(<Input onChange={handleChange} />);
+      const input = screen.getByRole('textbox');
       
-      rerender(<Input value="updated" />);
-      expect(screen.getByDisplayValue?.('updated') || screen.getByText('updated')).toBeInTheDocument();
+      await userEvent.type(input, 'Hello World');
+      expect(handleChange).toHaveBeenCalledTimes(11); // Once for each character
+      expect(input).toHaveValue('Hello World');
     });
 
-    it('calls onChange when value changes', () => {
-      const handleChange = vi.fn();
-      renderWithProviders(<Input onChange={handleChange} />);
-      
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        fireEvent.change(input, { target: { value: 'new value' } });
-        expect(handleChange).toHaveBeenCalled();
-      }
+    it('supports controlled input', () => {
+      const { rerender } = render(<Input value="initial" onChange={() => {}} />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveValue('initial');
+
+      rerender(<Input value="updated" onChange={() => {}} />);
+      expect(input).toHaveValue('updated');
     });
 
-    it('supports disabled state', () => {
-      renderWithProviders(<Input disabled />);
-      const input = document.querySelector('input, textarea, select, button');
+    it('supports uncontrolled input with defaultValue', () => {
+      render(<Input defaultValue="default text" />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveValue('default text');
+    });
+
+    it('handles focus and blur events', () => {
+      const handleFocus = jest.fn();
+      const handleBlur = jest.fn();
+      
+      render(<Input onFocus={handleFocus} onBlur={handleBlur} />);
+      const input = screen.getByRole('textbox');
+      
+      fireEvent.focus(input);
+      expect(handleFocus).toHaveBeenCalledTimes(1);
+      
+      fireEvent.blur(input);
+      expect(handleBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles key press events', () => {
+      const handleKeyPress = jest.fn();
+      const handleKeyDown = jest.fn();
+      const handleKeyUp = jest.fn();
+      
+      render(
+        <Input 
+          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+        />
+      );
+      const input = screen.getByRole('textbox');
+      
+      fireEvent.keyPress(input, { key: 'Enter' });
+      expect(handleKeyPress).toHaveBeenCalledTimes(1);
+      
+      fireEvent.keyDown(input, { key: 'Enter' });
+      expect(handleKeyDown).toHaveBeenCalledTimes(1);
+      
+      fireEvent.keyUp(input, { key: 'Enter' });
+      expect(handleKeyUp).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('States', () => {
+    it('handles disabled state', () => {
+      render(<Input disabled />);
+      const input = screen.getByRole('textbox');
       expect(input).toBeDisabled();
+      expect(input).toHaveClass('disabled:cursor-not-allowed');
+      expect(input).toHaveClass('disabled:opacity-50');
     });
 
-    it('supports readonly state', () => {
-      renderWithProviders(<Input readOnly />);
-      const input = document.querySelector('input, textarea');
-      if (input) {
-        expect(input).toHaveAttribute('readonly');
-      }
+    it('handles readonly state', () => {
+      render(<Input readOnly value="readonly text" />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('readonly');
+      expect(input).toHaveValue('readonly text');
     });
 
-    it('shows error state', () => {
-      renderWithProviders(<Input error="Error message" />);
-      expect(screen.getByText('Error message')).toBeInTheDocument();
+    it('handles required state', () => {
+      render(<Input required />);
+      const input = screen.getByRole('textbox');
+      expect(input).toBeRequired();
     });
 
-    it('supports required attribute', () => {
-      renderWithProviders(<Input required />);
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        expect(input).toHaveAttribute('required');
-      }
-    });
-  });
-
-  describe('Validation', () => {
-    it('validates on blur', async () => {
-      const handleValidate = vi.fn();
-      renderWithProviders(<Input onBlur={handleValidate} />);
-      
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        fireEvent.focus(input);
-        fireEvent.blur(input);
-        expect(handleValidate).toHaveBeenCalled();
-      }
-    });
-
-    it('shows validation messages', () => {
-      renderWithProviders(<Input error="Field is required" />);
-      expect(screen.getByText('Field is required')).toBeInTheDocument();
+    it('handles autoFocus', () => {
+      render(<Input autoFocus />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveFocus();
     });
   });
 
   describe('Accessibility', () => {
-    it('has proper ARIA attributes', () => {
-      renderWithProviders(<Input aria-label="Test input" required />);
-      const input = document.querySelector('input, textarea, select');
-      if (input) {
-        expect(input).toHaveAttribute('aria-label', 'Test input');
-        expect(input).toHaveAttribute('aria-required', 'true');
-      }
+    it('supports aria-label', () => {
+      render(<Input aria-label="Email input" />);
+      const input = screen.getByLabelText('Email input');
+      expect(input).toBeInTheDocument();
     });
 
-    it('associates label with input', () => {
-      renderWithProviders(<Input id="test-input" label="Test Label" />);
-      const label = screen.getByText('Test Label');
-      expect(label).toHaveAttribute('for', 'test-input');
+    it('supports aria-describedby', () => {
+      render(
+        <>
+          <Input aria-describedby="help-text" />
+          <span id="help-text">Enter your email address</span>
+        </>
+      );
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-describedby', 'help-text');
     });
 
-    it('supports keyboard navigation', () => {
-      renderWithProviders(<Input />);
-      const input = document.querySelector('input, textarea, select, button');
-      if (input) {
-        input.focus();
-        expect(input).toHaveFocus();
-        
-        fireEvent.keyDown(input, { key: 'Tab' });
-        // Tab navigation test
-      }
+    it('supports aria-invalid', () => {
+      render(<Input aria-invalid="true" />);
+      const input = screen.getByRole('textbox');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+    });
+  });
+
+  describe('Ref forwarding', () => {
+    it('forwards ref correctly', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Input ref={ref} />);
+      
+      expect(ref.current).toBeInstanceOf(HTMLInputElement);
+      expect(ref.current?.tagName).toBe('INPUT');
+    });
+
+    it('ref can be used to focus the input', () => {
+      const ref = React.createRef<HTMLInputElement>();
+      render(<Input ref={ref} />);
+      
+      ref.current?.focus();
+      expect(ref.current).toHaveFocus();
+    });
+  });
+
+  describe('Styling', () => {
+    it('applies default styles', () => {
+      render(<Input />);
+      const input = screen.getByRole('textbox');
+      
+      expect(input).toHaveClass('flex');
+      expect(input).toHaveClass('h-9');
+      expect(input).toHaveClass('w-full');
+      expect(input).toHaveClass('rounded-lg');
+      expect(input).toHaveClass('border');
+      expect(input).toHaveClass('border-border');
+    });
+
+    it('merges custom styles with default styles', () => {
+      render(<Input className="bg-red-500 text-white" />);
+      const input = screen.getByRole('textbox');
+      
+      // Custom classes
+      expect(input).toHaveClass('bg-red-500');
+      expect(input).toHaveClass('text-white');
+      // Default classes still present
+      expect(input).toHaveClass('flex');
+      expect(input).toHaveClass('h-9');
     });
   });
 });

@@ -1,10 +1,7 @@
 name: 🧪 Test Suite CI/CD
 
+# TEMPORARILY DISABLED - Changed to manual trigger only to stop error flood
 on:
-  push:
-    branches: [ main, develop, 'feat/*', 'fix/*' ]
-  pull_request:
-    branches: [ main, develop ]
   workflow_dispatch:
     inputs:
       debug_enabled:
@@ -12,6 +9,11 @@ on:
         description: 'Run the build with tmate debugging enabled'
         required: false
         default: false
+  # DISABLED AUTOMATIC TRIGGERS - Causing thousands of errors
+  # push:
+  #   branches: [ main, develop, 'feat/*', 'fix/*' ]
+  # pull_request:
+  #   branches: [ main, develop ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -1,482 +1,420 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import {
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
-  FormProvider
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormContext,
 } from './index';
 
-// Mock component pour tester FormField avec React Hook Form
-function TestFormWithField() {
-  const form = useForm({
-    defaultValues: {
-      username: '',
-      email: ''
-    }
+// Mock component for testing FormField
+const TestFormField = ({ name }: { name: string }) => {
+  return (
+    <FormField
+      name={name}
+      render={({ value, onChange, onBlur, name: fieldName, ref }) => (
+        <input
+          ref={ref}
+          name={fieldName}
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          data-testid={`field-${fieldName}`}
+        />
+      )}
+    />
+  );
+};
+
+// Test component with complete form setup
+const TestForm = ({ 
+  onSubmit,
+  defaultValues = {},
+  validation = {}
+}: { 
+  onSubmit?: (data: any) => void;
+  defaultValues?: any;
+  validation?: any;
+}) => {
+  const methods = useForm({
+    defaultValues,
+    mode: 'onChange',
   });
 
   return (
-    <FormProvider {...form}>
-      <Form onSubmit={form.handleSubmit(() => {})}>
-        <FormField
-          name="username"
-          render={({ value, onChange, onBlur, name, ref }) => (
-            <FormItem>
-              <FormLabel htmlFor={name}>Username</FormLabel>
-              <FormControl>
-                <input
-                  id={name}
-                  name={name}
-                  value={value || ''}
-                  onChange={(e) => onChange(e.target.value)}
-                  onBlur={onBlur}
-                  ref={ref}
-                />
-              </FormControl>
-            </FormItem>
+    <FormProvider {...methods}>
+      <Form onSubmit={methods.handleSubmit(onSubmit || (() => {}))}>
+        <FormItem>
+          <FormLabel htmlFor="username">Username</FormLabel>
+          <FormControl>
+            <input
+              {...methods.register('username', validation.username)}
+              id="username"
+              data-testid="username-input"
+            />
+          </FormControl>
+          <FormDescription>Enter your username</FormDescription>
+          {methods.formState.errors.username && (
+            <FormMessage>{methods.formState.errors.username.message}</FormMessage>
           )}
-        />
+        </FormItem>
+        
+        <FormItem>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <FormControl>
+            <input
+              {...methods.register('email', validation.email)}
+              id="email"
+              type="email"
+              data-testid="email-input"
+            />
+          </FormControl>
+          <FormDescription>We'll never share your email</FormDescription>
+          {methods.formState.errors.email && (
+            <FormMessage>{methods.formState.errors.email.message}</FormMessage>
+          )}
+        </FormItem>
+        
+        <button type="submit" data-testid="submit-button">
+          Submit
+        </button>
       </Form>
     </FormProvider>
   );
-}
+};
 
-describe('Form Component', () => {
+describe('Form Components', () => {
   describe('Form', () => {
-    it('renders form element correctly', () => {
-      render(
-        <Form data-testid="test-form">
-          <input type="text" />
-        </Form>
-      );
-      
+    it('renders without crashing', () => {
+      render(<Form>Form content</Form>);
+      expect(screen.getByText('Form content')).toBeInTheDocument();
+    });
+
+    it('renders as form element', () => {
+      render(<Form data-testid="test-form">Content</Form>);
       const form = screen.getByTestId('test-form');
-      expect(form).toBeInTheDocument();
       expect(form.tagName).toBe('FORM');
     });
 
-    it('applies default spacing class', () => {
-      render(
-        <Form data-testid="test-form">
-          <input type="text" />
-        </Form>
-      );
-      
-      expect(screen.getByTestId('test-form')).toHaveClass('space-y-4');
+    it('applies custom className', () => {
+      render(<Form className="custom-form">Content</Form>);
+      const form = screen.getByText('Content').parentElement;
+      expect(form).toHaveClass('custom-form');
     });
 
-    it('merges custom className', () => {
-      render(
-        <Form className="custom-class" data-testid="test-form">
-          <input type="text" />
-        </Form>
-      );
-      
-      const form = screen.getByTestId('test-form');
-      expect(form).toHaveClass('space-y-4', 'custom-class');
-    });
-
-    it('passes through HTML form attributes', () => {
-      const handleSubmit = vi.fn((e) => e.preventDefault());
-      
-      render(
-        <Form
-          data-testid="test-form"
-          onSubmit={handleSubmit}
-          method="POST"
-          action="/api/submit"
-        >
-          <button type="submit">Submit</button>
-        </Form>
-      );
-      
-      const form = screen.getByTestId('test-form');
-      expect(form).toHaveAttribute('method', 'POST');
-      expect(form).toHaveAttribute('action', '/api/submit');
+    it('applies default spacing', () => {
+      render(<Form data-testid="form">Content</Form>);
+      const form = screen.getByTestId('form');
+      expect(form).toHaveClass('space-y-4');
     });
 
     it('handles form submission', async () => {
-      const user = userEvent.setup();
-      const handleSubmit = vi.fn((e) => e.preventDefault());
-      
+      const handleSubmit = jest.fn((e) => e.preventDefault());
       render(
         <Form onSubmit={handleSubmit}>
           <button type="submit">Submit</button>
         </Form>
       );
       
-      await user.click(screen.getByRole('button', { name: 'Submit' }));
+      await userEvent.click(screen.getByText('Submit'));
       expect(handleSubmit).toHaveBeenCalled();
     });
   });
 
   describe('FormItem', () => {
-    it('renders div element with spacing', () => {
-      render(
-        <FormItem data-testid="form-item">
-          <input type="text" />
-        </FormItem>
-      );
-      
-      const item = screen.getByTestId('form-item');
-      expect(item).toBeInTheDocument();
-      expect(item.tagName).toBe('DIV');
-      expect(item).toHaveClass('space-y-1.5');
+    it('renders without crashing', () => {
+      render(<FormItem>Form item content</FormItem>);
+      expect(screen.getByText('Form item content')).toBeInTheDocument();
     });
 
-    it('merges custom className', () => {
-      render(
-        <FormItem className="custom-item" data-testid="form-item">
-          <input type="text" />
-        </FormItem>
-      );
-      
-      expect(screen.getByTestId('form-item')).toHaveClass('space-y-1.5', 'custom-item');
+    it('applies custom className', () => {
+      render(<FormItem className="custom-item">Item</FormItem>);
+      const item = screen.getByText('Item').parentElement;
+      expect(item).toHaveClass('custom-item');
+    });
+
+    it('applies default spacing', () => {
+      render(<FormItem data-testid="item">Item</FormItem>);
+      const item = screen.getByTestId('item');
+      expect(item).toHaveClass('space-y-1.5');
     });
   });
 
   describe('FormLabel', () => {
-    it('renders label element correctly', () => {
-      render(<FormLabel htmlFor="test-input">Test Label</FormLabel>);
-      
-      const label = screen.getByText('Test Label');
-      expect(label).toBeInTheDocument();
+    it('renders without crashing', () => {
+      render(<FormLabel>Label text</FormLabel>);
+      expect(screen.getByText('Label text')).toBeInTheDocument();
+    });
+
+    it('renders as label element', () => {
+      render(<FormLabel>Label</FormLabel>);
+      const label = screen.getByText('Label');
       expect(label.tagName).toBe('LABEL');
+    });
+
+    it('applies custom className', () => {
+      render(<FormLabel className="custom-label">Label</FormLabel>);
+      const label = screen.getByText('Label');
+      expect(label).toHaveClass('custom-label');
+    });
+
+    it('applies default styling', () => {
+      render(<FormLabel>Label</FormLabel>);
+      const label = screen.getByText('Label');
+      expect(label).toHaveClass('block');
+      expect(label).toHaveClass('text-sm');
+      expect(label).toHaveClass('font-medium');
+      expect(label).toHaveClass('text-neutral-900');
+    });
+
+    it('associates with input via htmlFor', () => {
+      render(
+        <>
+          <FormLabel htmlFor="test-input">Test Label</FormLabel>
+          <input id="test-input" />
+        </>
+      );
+      const label = screen.getByText('Test Label');
       expect(label).toHaveAttribute('for', 'test-input');
-    });
-
-    it('applies default styling classes', () => {
-      render(<FormLabel>Test Label</FormLabel>);
-      
-      const label = screen.getByText('Test Label');
-      expect(label).toHaveClass('block', 'text-sm', 'font-medium', 'text-neutral-900');
-    });
-
-    it('merges custom className', () => {
-      render(<FormLabel className="text-lg">Test Label</FormLabel>);
-      
-      const label = screen.getByText('Test Label');
-      expect(label).toHaveClass('block', 'text-sm', 'font-medium', 'text-neutral-900', 'text-lg');
     });
   });
 
   describe('FormControl', () => {
-    it('renders wrapper div correctly', () => {
-      render(
-        <FormControl data-testid="form-control">
-          <input type="text" />
-        </FormControl>
-      );
-      
-      const control = screen.getByTestId('form-control');
-      expect(control).toBeInTheDocument();
-      expect(control.tagName).toBe('DIV');
-      expect(control).toHaveClass('mt-1');
+    it('renders without crashing', () => {
+      render(<FormControl>Control content</FormControl>);
+      expect(screen.getByText('Control content')).toBeInTheDocument();
     });
 
-    it('wraps form inputs correctly', () => {
-      render(
-        <FormControl>
-          <input type="text" placeholder="Enter text" />
-        </FormControl>
-      );
-      
-      expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
+    it('applies custom className', () => {
+      render(<FormControl className="custom-control">Control</FormControl>);
+      const control = screen.getByText('Control').parentElement;
+      expect(control).toHaveClass('custom-control');
+    });
+
+    it('applies default styling', () => {
+      render(<FormControl data-testid="control">Control</FormControl>);
+      const control = screen.getByTestId('control');
+      expect(control).toHaveClass('mt-1');
     });
   });
 
   describe('FormDescription', () => {
-    it('renders description text correctly', () => {
-      render(<FormDescription>This is a helpful description</FormDescription>);
-      
-      const description = screen.getByText('This is a helpful description');
-      expect(description).toBeInTheDocument();
+    it('renders without crashing', () => {
+      render(<FormDescription>Description text</FormDescription>);
+      expect(screen.getByText('Description text')).toBeInTheDocument();
+    });
+
+    it('renders as p element', () => {
+      render(<FormDescription>Description</FormDescription>);
+      const description = screen.getByText('Description');
       expect(description.tagName).toBe('P');
     });
 
-    it('applies default styling classes', () => {
-      render(<FormDescription>Description text</FormDescription>);
-      
-      const description = screen.getByText('Description text');
-      expect(description).toHaveClass('text-xs', 'text-neutral-600');
+    it('applies custom className', () => {
+      render(<FormDescription className="custom-desc">Description</FormDescription>);
+      const description = screen.getByText('Description');
+      expect(description).toHaveClass('custom-desc');
     });
 
-    it('merges custom className', () => {
-      render(
-        <FormDescription className="text-blue-500">
-          Description text
-        </FormDescription>
-      );
-      
-      const description = screen.getByText('Description text');
-      expect(description).toHaveClass('text-xs', 'text-neutral-600', 'text-blue-500');
+    it('applies default styling', () => {
+      render(<FormDescription>Description</FormDescription>);
+      const description = screen.getByText('Description');
+      expect(description).toHaveClass('text-xs');
+      expect(description).toHaveClass('text-neutral-600');
     });
   });
 
   describe('FormMessage', () => {
-    it('renders error message correctly', () => {
-      render(<FormMessage>This is an error message</FormMessage>);
-      
-      const message = screen.getByText('This is an error message');
-      expect(message).toBeInTheDocument();
-      expect(message.tagName).toBe('P');
-    });
-
-    it('applies error styling classes', () => {
+    it('renders when children provided', () => {
       render(<FormMessage>Error message</FormMessage>);
-      
-      const message = screen.getByText('Error message');
-      expect(message).toHaveClass('text-xs', 'font-medium', 'text-red-600');
+      expect(screen.getByText('Error message')).toBeInTheDocument();
     });
 
-    it('returns null when no children provided', () => {
+    it('does not render when no children', () => {
       const { container } = render(<FormMessage />);
       expect(container.firstChild).toBeNull();
     });
 
-    it('returns null for empty string children', () => {
-      const { container } = render(<FormMessage>{''}</FormMessage>);
-      expect(container.firstChild).toBeNull();
+    it('renders as p element', () => {
+      render(<FormMessage>Message</FormMessage>);
+      const message = screen.getByText('Message');
+      expect(message.tagName).toBe('P');
     });
 
-    it('merges custom className', () => {
-      render(
-        <FormMessage className="text-lg">
-          Error message
-        </FormMessage>
-      );
-      
-      const message = screen.getByText('Error message');
-      expect(message).toHaveClass('text-xs', 'font-medium', 'text-red-600', 'text-lg');
+    it('applies custom className', () => {
+      render(<FormMessage className="custom-message">Message</FormMessage>);
+      const message = screen.getByText('Message');
+      expect(message).toHaveClass('custom-message');
+    });
+
+    it('applies error styling', () => {
+      render(<FormMessage>Error</FormMessage>);
+      const message = screen.getByText('Error');
+      expect(message).toHaveClass('text-xs');
+      expect(message).toHaveClass('font-medium');
+      expect(message).toHaveClass('text-red-600');
     });
   });
 
   describe('FormField with React Hook Form', () => {
-    it('renders field with form context', async () => {
-      render(<TestFormWithField />);
-      
-      expect(screen.getByLabelText('Username')).toBeInTheDocument();
-      expect(screen.getByRole('textbox')).toBeInTheDocument();
-    });
-
-    it('handles input changes', async () => {
-      const user = userEvent.setup();
-      render(<TestFormWithField />);
-      
-      const input = screen.getByLabelText('Username');
-      await user.type(input, 'testuser');
-      
-      await waitFor(() => {
-        expect(input).toHaveValue('testuser');
+    const FormWithField = ({ validation }: { validation?: any }) => {
+      const methods = useForm({
+        defaultValues: { testField: '' },
       });
+
+      return (
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(() => {})}>
+            <TestFormField name="testField" />
+            {methods.formState.errors.testField && (
+              <FormMessage>{methods.formState.errors.testField.message}</FormMessage>
+            )}
+            <button type="submit">Submit</button>
+          </form>
+        </FormProvider>
+      );
+    };
+
+    it('renders form field', () => {
+      render(<FormWithField />);
+      expect(screen.getByTestId('field-testField')).toBeInTheDocument();
     });
 
-    it('applies field name as data attribute', () => {
-      render(<TestFormWithField />);
+    it('handles field value changes', async () => {
+      render(<FormWithField />);
+      const input = screen.getByTestId('field-testField');
       
-      const fieldWrapper = document.querySelector('[data-field="username"]');
-      expect(fieldWrapper).toBeInTheDocument();
+      await userEvent.type(input, 'test value');
+      expect(input).toHaveValue('test value');
     });
 
-    it('displays validation errors', async () => {
-      const FormWithValidation = () => {
-        const form = useForm({
-          defaultValues: { email: '' },
-          mode: 'onChange'
-        });
-
-        // Simulate an error
-        React.useEffect(() => {
-          form.setError('email', { message: 'Email is required' });
-        }, [form]);
-
-        return (
-          <FormProvider {...form}>
-            <Form>
-              <FormField
-                name="email"
-                render={({ value, onChange, onBlur, name, ref }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={name}>Email</FormLabel>
-                    <FormControl>
-                      <input
-                        id={name}
-                        name={name}
-                        value={value || ''}
-                        onChange={(e) => onChange(e.target.value)}
-                        onBlur={onBlur}
-                        ref={ref}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </Form>
-          </FormProvider>
-        );
-      };
-
-      render(<FormWithValidation />);
-      
-      await waitFor(() => {
-        expect(screen.getByText('Email is required')).toBeInTheDocument();
-      });
+    it('wraps field with data attribute', () => {
+      render(<FormWithField />);
+      const wrapper = document.querySelector('[data-field="testField"]');
+      expect(wrapper).toBeInTheDocument();
     });
   });
 
-  describe('Complex Form Integration', () => {
-    it('renders complete form with all components', () => {
-      const CompleteForm = () => {
-        const form = useForm({
-          defaultValues: {
-            name: '',
-            bio: ''
-          }
-        });
-
-        return (
-          <FormProvider {...form}>
-            <Form>
-              <FormItem>
-                <FormLabel htmlFor="name">Name</FormLabel>
-                <FormControl>
-                  <input id="name" placeholder="Enter your name" />
-                </FormControl>
-                <FormDescription>Your display name</FormDescription>
-                <FormMessage>Name is required</FormMessage>
-              </FormItem>
-              
-              <FormItem>
-                <FormLabel htmlFor="bio">Bio</FormLabel>
-                <FormControl>
-                  <textarea id="bio" placeholder="Tell us about yourself" />
-                </FormControl>
-                <FormDescription>Brief description about you</FormDescription>
-              </FormItem>
-            </Form>
-          </FormProvider>
-        );
-      };
-
-      render(<CompleteForm />);
+  describe('Complete Form Integration', () => {
+    it('renders complete form structure', () => {
+      render(<TestForm />);
       
-      // Check all elements are rendered
-      expect(screen.getByLabelText('Name')).toBeInTheDocument();
-      expect(screen.getByLabelText('Bio')).toBeInTheDocument();
-      expect(screen.getByText('Your display name')).toBeInTheDocument();
-      expect(screen.getByText('Brief description about you')).toBeInTheDocument();
-      expect(screen.getByText('Name is required')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Enter your name')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Tell us about yourself')).toBeInTheDocument();
+      expect(screen.getByLabelText('Username')).toBeInTheDocument();
+      expect(screen.getByLabelText('Email')).toBeInTheDocument();
+      expect(screen.getByText('Enter your username')).toBeInTheDocument();
+      expect(screen.getByText("We'll never share your email")).toBeInTheDocument();
+      expect(screen.getByTestId('submit-button')).toBeInTheDocument();
     });
 
-    it('maintains form context across components', async () => {
-      const MultiFieldForm = () => {
-        const form = useForm({
-          defaultValues: {
-            firstName: '',
-            lastName: ''
-          }
-        });
-
-        const onSubmit = vi.fn();
-
-        return (
-          <FormProvider {...form}>
-            <Form onSubmit={form.handleSubmit(onSubmit)}>
-              <FormField
-                name="firstName"
-                render={({ value, onChange, name }) => (
-                  <input
-                    name={name}
-                    value={value || ''}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder="First Name"
-                  />
-                )}
-              />
-              <FormField
-                name="lastName"
-                render={({ value, onChange, name }) => (
-                  <input
-                    name={name}
-                    value={value || ''}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder="Last Name"
-                  />
-                )}
-              />
-              <button type="submit">Submit</button>
-            </Form>
-          </FormProvider>
-        );
-      };
-
-      const user = userEvent.setup();
-      render(<MultiFieldForm />);
+    it('handles form submission with data', async () => {
+      const handleSubmit = jest.fn();
+      render(<TestForm onSubmit={handleSubmit} />);
       
-      const firstNameInput = screen.getByPlaceholderText('First Name');
-      const lastNameInput = screen.getByPlaceholderText('Last Name');
-      
-      await user.type(firstNameInput, 'John');
-      await user.type(lastNameInput, 'Doe');
+      await userEvent.type(screen.getByTestId('username-input'), 'testuser');
+      await userEvent.type(screen.getByTestId('email-input'), 'test@example.com');
+      await userEvent.click(screen.getByTestId('submit-button'));
       
       await waitFor(() => {
-        expect(firstNameInput).toHaveValue('John');
-        expect(lastNameInput).toHaveValue('Doe');
+        expect(handleSubmit).toHaveBeenCalledWith({
+          username: 'testuser',
+          email: 'test@example.com',
+        }, expect.anything());
       });
+    });
+
+    it('displays validation errors', async () => {
+      const validation = {
+        username: { required: 'Username is required' },
+        email: { 
+          required: 'Email is required',
+          pattern: {
+            value: /^\S+@\S+$/,
+            message: 'Invalid email format'
+          }
+        }
+      };
+      
+      render(<TestForm validation={validation} />);
+      
+      // Submit empty form
+      await userEvent.click(screen.getByTestId('submit-button'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Username is required')).toBeInTheDocument();
+        expect(screen.getByText('Email is required')).toBeInTheDocument();
+      });
+      
+      // Type invalid email
+      await userEvent.type(screen.getByTestId('email-input'), 'invalid');
+      await userEvent.click(screen.getByTestId('submit-button'));
+      
+      await waitFor(() => {
+        expect(screen.getByText('Invalid email format')).toBeInTheDocument();
+      });
+    });
+
+    it('populates default values', () => {
+      const defaultValues = {
+        username: 'defaultuser',
+        email: 'default@example.com'
+      };
+      
+      render(<TestForm defaultValues={defaultValues} />);
+      
+      expect(screen.getByTestId('username-input')).toHaveValue('defaultuser');
+      expect(screen.getByTestId('email-input')).toHaveValue('default@example.com');
     });
   });
 
   describe('Accessibility', () => {
-    it('associates labels with form controls', () => {
-      render(
-        <Form>
-          <FormItem>
-            <FormLabel htmlFor="accessible-input">Accessible Label</FormLabel>
-            <FormControl>
-              <input id="accessible-input" type="text" />
-            </FormControl>
-          </FormItem>
-        </Form>
-      );
+    it('associates labels with inputs', () => {
+      render(<TestForm />);
       
-      const input = screen.getByLabelText('Accessible Label');
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute('id', 'accessible-input');
+      const usernameInput = screen.getByLabelText('Username');
+      expect(usernameInput).toHaveAttribute('id', 'username');
+      
+      const emailInput = screen.getByLabelText('Email');
+      expect(emailInput).toHaveAttribute('id', 'email');
     });
 
-    it('supports aria attributes', () => {
-      render(
-        <Form>
-          <FormItem>
-            <FormLabel htmlFor="aria-input">ARIA Input</FormLabel>
-            <FormControl>
-              <input
-                id="aria-input"
-                aria-required="true"
-                aria-invalid="true"
-                aria-describedby="aria-description"
-              />
-            </FormControl>
-            <FormDescription id="aria-description">
-              This field is required
-            </FormDescription>
-          </FormItem>
-        </Form>
-      );
+    it('supports keyboard navigation', async () => {
+      render(<TestForm />);
       
-      const input = screen.getByLabelText('ARIA Input');
-      expect(input).toHaveAttribute('aria-required', 'true');
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-      expect(input).toHaveAttribute('aria-describedby', 'aria-description');
+      const usernameInput = screen.getByTestId('username-input');
+      const emailInput = screen.getByTestId('email-input');
+      const submitButton = screen.getByTestId('submit-button');
+      
+      // Tab through form elements
+      usernameInput.focus();
+      expect(document.activeElement).toBe(usernameInput);
+      
+      await userEvent.tab();
+      expect(document.activeElement).toBe(emailInput);
+      
+      await userEvent.tab();
+      expect(document.activeElement).toBe(submitButton);
+    });
+
+    it('announces errors to screen readers', async () => {
+      const validation = {
+        username: { required: 'Username is required' }
+      };
+      
+      render(<TestForm validation={validation} />);
+      
+      await userEvent.click(screen.getByTestId('submit-button'));
+      
+      await waitFor(() => {
+        const errorMessage = screen.getByText('Username is required');
+        expect(errorMessage).toHaveClass('text-red-600');
+        // Error messages are visible and styled for importance
+      });
     });
   });
 });

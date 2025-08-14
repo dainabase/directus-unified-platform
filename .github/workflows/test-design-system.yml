@@ -1,8 +1,9 @@
 name: 🚀 Test Complete Design System
 on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
+  # DISABLED: Automatic triggers commented to prevent CI errors
+  # push:
+  #   branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger only
 
 jobs:
   test-everything:

@@ -170,7 +170,7 @@ export default defineConfig({
       'console.warn',
       'console.error',
     ];
-    options.reserveProps = /^($$|__)/, // Reserve only critical props
+    options.reserveProps = /^($$|__)/; // FIX: Point-virgule au lieu de virgule !
   },
   
   // Custom esbuild plugins

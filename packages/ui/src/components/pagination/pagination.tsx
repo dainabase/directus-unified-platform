@@ -3,8 +3,8 @@
 import * as React from 'react'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '../../lib/utils'
-import { Button, ButtonProps } from '../button/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select/select'
+import { Button, ButtonProps } from '../button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../select'
 
 export interface PaginationProps extends React.ComponentPropsWithoutRef<'nav'> {
   /** Current page number (1-indexed) */

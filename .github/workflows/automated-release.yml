@@ -1,0 +1,282 @@
+name: 🚀 Automated Release & Publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/ui/**'
+      - '!packages/ui/**.md'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version type (patch, minor, major)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  quality-checks:
+    name: ✅ Quality Assurance
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🏗 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests with coverage
+        run: npm run test:ci
+        
+      - name: 📊 Check coverage threshold
+        run: |
+          COVERAGE=$(npx jest --coverage --coverageReporters=json-summary | grep -oP '"pct":\K[0-9.]+' | head -1)
+          echo "Coverage: ${COVERAGE}%"
+          if (( $(echo "$COVERAGE < 70" | bc -l) )); then
+            echo "❌ Coverage ${COVERAGE}% is below 70% threshold"
+            exit 1
+          fi
+          echo "✅ Coverage ${COVERAGE}% meets threshold"
+
+      - name: 🎨 Lint code
+        run: npm run lint
+
+      - name: 🔍 Type check
+        run: npm run type-check
+
+      - name: 🏗️ Build package
+        run: npm run build
+
+      - name: 📏 Check bundle size
+        run: |
+          SIZE=$(du -sb dist | cut -f1)
+          SIZE_KB=$((SIZE / 1024))
+          echo "Bundle size: ${SIZE_KB}KB"
+          if [ $SIZE_KB -gt 100 ]; then
+            echo "⚠️ Warning: Bundle size ${SIZE_KB}KB exceeds 100KB target"
+          fi
+
+      - name: 💾 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: packages/ui/dist
+
+  release:
+    name: 🎯 Create Release
+    needs: quality-checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: packages/ui
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏗 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔧 Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: 📈 Determine version bump
+        id: version
+        run: |
+          # Check commit messages for version hints
+          if git log -1 --pretty=%B | grep -q "BREAKING CHANGE\|!:"; then
+            VERSION_TYPE="major"
+          elif git log -1 --pretty=%B | grep -q "^feat"; then
+            VERSION_TYPE="minor"
+          else
+            VERSION_TYPE="patch"
+          fi
+          
+          # Override with manual input if workflow_dispatch
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION_TYPE="${{ github.event.inputs.version }}"
+          fi
+          
+          echo "Version type: $VERSION_TYPE"
+          echo "version_type=$VERSION_TYPE" >> $GITHUB_OUTPUT
+          
+          # Get new version
+          NEW_VERSION=$(npm version $VERSION_TYPE --no-git-tag-version | sed 's/v//')
+          echo "New version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: 📝 Generate changelog
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          echo "## Version $VERSION - $(date +'%Y-%m-%d')" > CHANGELOG_ENTRY.md
+          echo "" >> CHANGELOG_ENTRY.md
+          
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            git log --pretty=format:"- %s (%h)" >> CHANGELOG_ENTRY.md
+          else
+            git log $LAST_TAG..HEAD --pretty=format:"- %s (%h)" >> CHANGELOG_ENTRY.md
+          fi
+          
+          # Prepend to CHANGELOG.md
+          if [ -f CHANGELOG.md ]; then
+            cat CHANGELOG.md >> CHANGELOG_ENTRY.md
+            mv CHANGELOG_ENTRY.md CHANGELOG.md
+          else
+            mv CHANGELOG_ENTRY.md CHANGELOG.md
+          fi
+
+      - name: 💾 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: packages/ui/dist
+
+      - name: 📤 Commit version bump
+        run: |
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "chore(release): v${{ steps.version.outputs.version }} [skip ci]"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+          git push origin main --follow-tags
+
+      - name: 🎉 Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: "@dainabase/ui v${{ steps.version.outputs.version }}"
+          body_path: packages/ui/CHANGELOG_ENTRY.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-npm:
+    name: 📦 Publish to NPM
+    needs: release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/ui
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 🏗 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build package
+        run: npm run build
+
+      - name: 🚀 Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: 📢 Notify success
+        if: success()
+        run: |
+          echo "✅ Successfully published @dainabase/ui v${{ needs.release.outputs.version }} to NPM!"
+          echo "View at: https://www.npmjs.com/package/@dainabase/ui"
+
+  deploy-docs:
+    name: 📚 Deploy Documentation
+    needs: [release, publish-npm]
+    runs-on: ubuntu-latest
+    if: success()
+    defaults:
+      run:
+        working-directory: packages/ui
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 🏗 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 📖 Build Storybook
+        run: npm run build-storybook
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: packages/ui/storybook-static
+          cname: ui.dainabase.dev
+
+  notification:
+    name: 📢 Send Notifications
+    needs: [release, publish-npm, deploy-docs]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📊 Release Summary
+        run: |
+          echo "# 🎉 Release Summary"
+          echo ""
+          echo "## Version: v${{ needs.release.outputs.version }}"
+          echo ""
+          echo "### Status:"
+          echo "- Quality Checks: ✅"
+          echo "- Release Created: ${{ needs.release.result == 'success' && '✅' || '❌' }}"
+          echo "- NPM Published: ${{ needs.publish-npm.result == 'success' && '✅' || '❌' }}"
+          echo "- Docs Deployed: ${{ needs.deploy-docs.result == 'success' && '✅' || '❌' }}"
+          echo ""
+          echo "### Links:"
+          echo "- [NPM Package](https://www.npmjs.com/package/@dainabase/ui)"
+          echo "- [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/v${{ needs.release.outputs.version }})"
+          echo "- [Documentation](https://ui.dainabase.dev)"

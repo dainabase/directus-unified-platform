@@ -1,195 +1,354 @@
-# Contributing to @dainabase/ui Design System
+# Contributing to @dainabase/ui
 
-Thank you for your interest in contributing to the Dainabase UI Design System! We're excited to have you help us build a world-class component library.
+First off, thank you for considering contributing to @dainabase/ui! 🎉
 
 ## 📋 Table of Contents
 
 - [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
+- [How Can I Contribute?](#how-can-i-contribute)
+- [Development Setup](#development-setup)
 - [Development Workflow](#development-workflow)
 - [Testing Guidelines](#testing-guidelines)
-- [Component Guidelines](#component-guidelines)
+- [Style Guidelines](#style-guidelines)
+- [Commit Guidelines](#commit-guidelines)
 - [Pull Request Process](#pull-request-process)
-- [Commit Convention](#commit-convention)
+- [Component Guidelines](#component-guidelines)
 
-## Code of Conduct
+## 📜 Code of Conduct
 
-Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welcoming environment for all contributors.
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-## Getting Started
+## 🤝 How Can I Contribute?
+
+### Reporting Bugs
+
+Before creating bug reports, please check existing issues to avoid duplicates. When creating a bug report, include:
+
+- **Clear title and description**
+- **Steps to reproduce**
+- **Expected behavior**
+- **Actual behavior**
+- **Screenshots** (if applicable)
+- **System information** (OS, browser, Node version)
+- **Package version**
+
+### Suggesting Enhancements
+
+Enhancement suggestions are tracked as GitHub issues. When creating an enhancement suggestion, include:
+
+- **Use case** - Why is this needed?
+- **Proposed solution** - How should it work?
+- **Alternative solutions** - What else did you consider?
+- **Additional context** - Mockups, examples, etc.
+
+### Contributing Code
+
+1. **Find an issue** - Look for issues labeled `good first issue` or `help wanted`
+2. **Comment on the issue** - Let us know you're working on it
+3. **Fork the repository** - Create your own copy
+4. **Create a branch** - Use a descriptive name
+5. **Make your changes** - Follow our guidelines
+6. **Test thoroughly** - Ensure 95%+ coverage
+7. **Submit a PR** - Link to the issue
+
+## 🛠️ Development Setup
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+- Node.js 18+ 
+- pnpm 8+
 - Git
 
-### Setup
+### Setup Steps
 
-1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/directus-unified-platform.git
-   cd directus-unified-platform/packages/ui
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/dainabase/directus-unified-platform.git
+cd directus-unified-platform
 
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+# Install dependencies
+pnpm install
 
-4. Run tests to ensure everything works:
-   ```bash
-   npm test
-   ```
+# Navigate to UI package
+cd packages/ui
 
-5. Start the development environment:
-   ```bash
-   npm run dev
-   npm run storybook
-   ```
+# Start development
+pnpm dev
 
-## Development Workflow
+# Run tests
+pnpm test
+
+# Build package
+pnpm build
+```
+
+## 💻 Development Workflow
 
 ### Directory Structure
 
 ```
 packages/ui/
 ├── src/
-│   └── components/
-│       └── [component-name]/
-│           ├── index.ts           # Exports
-│           ├── [component].tsx    # Component implementation
-│           ├── [component].test.tsx # Tests (REQUIRED)
-│           ├── [component].stories.tsx # Storybook stories
-│           └── types.ts          # TypeScript types
+│   ├── components/     # Component source files
+│   │   └── [name]/
+│   │       ├── index.tsx
+│   │       ├── [name].tsx
+│   │       ├── [name].test.tsx
+│   │       ├── [name].stories.tsx
+│   │       └── types.ts
+│   ├── lib/            # Utilities
+│   ├── styles/         # Global styles
+│   └── types/          # TypeScript types
+├── tests/              # Integration tests
+└── docs/               # Documentation
 ```
 
 ### Creating a New Component
 
-1. Create the component directory:
-   ```bash
-   mkdir -p src/components/my-component
-   ```
-
-2. Implement the component following our patterns
-3. Write comprehensive tests (minimum 80% coverage)
-4. Create Storybook stories
-5. Update the main export in `src/index.ts`
-
-### Component Requirements
-
-Every component MUST have:
-- ✅ TypeScript types
-- ✅ Unit tests (>80% coverage)
-- ✅ Storybook stories
-- ✅ JSDoc documentation
-- ✅ Accessibility compliance (WCAG 2.1 AA)
-- ✅ Responsive design
-- ✅ Dark mode support
-
-## Testing Guidelines
-
-### Test Coverage Requirements
-
-- **Minimum**: 80% per component
-- **Target**: 95% overall
-- **Required for**: All new components and modifications
-
-### Running Tests
-
+1. **Create component directory**
 ```bash
-# Run all tests
-npm test
-
-# Run with coverage
-npm run test:coverage
-
-# Run specific component tests
-npm test button
-
-# Run E2E tests
-npm run test:e2e
-
-# Analyze coverage
-npm run test:analyze
+mkdir src/components/my-component
 ```
 
-### Writing Tests
+2. **Create component files**
+```tsx
+// src/components/my-component/my-component.tsx
+import React from 'react';
+import { cn } from '../../lib/utils';
 
-Use our test template from `test-utils/test-template.tsx`:
+export interface MyComponentProps {
+  children?: React.ReactNode;
+  className?: string;
+}
 
-```typescript
+export const MyComponent = React.forwardRef<
+  HTMLDivElement,
+  MyComponentProps
+>(({ children, className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={cn('my-component', className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+});
+
+MyComponent.displayName = 'MyComponent';
+```
+
+3. **Create tests** (REQUIRED - maintain 95% coverage)
+```tsx
+// src/components/my-component/my-component.test.tsx
 import { render, screen } from '@testing-library/react';
 import { MyComponent } from './my-component';
 
 describe('MyComponent', () => {
-  it('renders correctly', () => {
-    render(<MyComponent />);
-    expect(screen.getByRole('...')).toBeInTheDocument();
+  it('renders children correctly', () => {
+    render(<MyComponent>Test Content</MyComponent>);
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('handles interactions', () => {
-    // Test user interactions
+  it('applies custom className', () => {
+    const { container } = render(
+      <MyComponent className="custom">Test</MyComponent>
+    );
+    expect(container.firstChild).toHaveClass('my-component', 'custom');
   });
 
-  it('supports accessibility', () => {
-    // Test ARIA attributes and keyboard navigation
+  it('forwards ref correctly', () => {
+    const ref = React.createRef<HTMLDivElement>();
+    render(<MyComponent ref={ref}>Test</MyComponent>);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 });
 ```
 
-## Component Guidelines
+4. **Create Storybook story**
+```tsx
+// src/components/my-component/my-component.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { MyComponent } from './my-component';
 
-### Naming Conventions
+const meta: Meta<typeof MyComponent> = {
+  title: 'Components/MyComponent',
+  component: MyComponent,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
 
-- **Components**: PascalCase (`Button`, `DatePicker`)
-- **Files**: kebab-case (`date-picker.tsx`)
-- **CSS classes**: Use our `cn()` utility
-- **Props interfaces**: `ComponentNameProps`
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-### Performance
+export const Default: Story = {
+  args: {
+    children: 'Default MyComponent',
+  },
+};
 
-- Use `React.memo()` for expensive components
-- Implement lazy loading where appropriate
-- Keep bundle size minimal (<1KB per simple component)
-- Optimize re-renders
+export const WithCustomClass: Story = {
+  args: {
+    children: 'Styled MyComponent',
+    className: 'bg-blue-500 text-white p-4',
+  },
+};
+```
+
+5. **Export from index**
+```tsx
+// src/components/my-component/index.tsx
+export * from './my-component';
+```
+
+6. **Add to main exports**
+```tsx
+// src/index.ts
+export * from './components/my-component';
+```
+
+## 🧪 Testing Guidelines
+
+### Test Requirements
+
+- **Minimum 95% coverage** required
+- All components must have tests
+- Test all props and states
+- Test accessibility features
+- Test keyboard navigation
+
+### Testing Patterns
+
+```tsx
+// Component rendering
+it('renders without crashing', () => {
+  render(<Component />);
+});
+
+// Props testing
+it('handles all props correctly', () => {
+  const props = {
+    variant: 'primary',
+    size: 'lg',
+    disabled: true,
+  };
+  render(<Component {...props} />);
+  // Assert prop effects
+});
+
+// Event handling
+it('calls onClick when clicked', () => {
+  const handleClick = jest.fn();
+  render(<Button onClick={handleClick}>Click</Button>);
+  fireEvent.click(screen.getByText('Click'));
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
+
+// Accessibility
+it('is keyboard navigable', () => {
+  render(<Component />);
+  const element = screen.getByRole('button');
+  element.focus();
+  expect(element).toHaveFocus();
+});
+
+// Edge cases
+it('handles edge cases gracefully', () => {
+  render(<Component value={null} />);
+  // Should not crash
+});
+```
+
+## 🎨 Style Guidelines
+
+### TypeScript
+
+- Use TypeScript for all new code
+- Provide complete type definitions
+- Use interfaces over types when possible
+- Export all public types
+
+### React
+
+- Use functional components with hooks
+- Use `React.forwardRef` for components that need ref
+- Implement proper display names
+- Handle all edge cases
+
+### CSS
+
+- Use Tailwind CSS classes
+- Follow mobile-first approach
+- Ensure dark mode support
+- Maintain consistent spacing
 
 ### Accessibility
 
-All components must:
-- Have proper ARIA labels
-- Support keyboard navigation
-- Work with screen readers
-- Meet color contrast requirements
-- Include focus indicators
+- WCAG 2.1 AAA compliance required
+- Proper ARIA attributes
+- Keyboard navigation support
+- Screen reader compatibility
 
-## Pull Request Process
+## 📝 Commit Guidelines
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+### Format
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation only
+- **style**: Code style changes
+- **refactor**: Code refactoring
+- **perf**: Performance improvements
+- **test**: Adding tests
+- **chore**: Maintenance tasks
+- **ci**: CI/CD changes
+
+### Examples
+
+```bash
+feat(button): add loading state prop
+
+fix(dialog): correct focus trap behavior
+
+docs: update migration guide for v1.3
+
+test(datagrid): add virtualization tests
+
+perf(bundle): reduce size by 10KB
+```
+
+## 🚀 Pull Request Process
 
 ### Before Submitting
 
-1. **Test your changes**:
-   ```bash
-   npm test
-   npm run type-check
-   npm run lint
-   ```
-
-2. **Check bundle size**:
-   ```bash
-   npm run build:size
-   ```
-
-3. **Update documentation** if needed
+1. **Test coverage** - Ensure 95%+ coverage
+2. **Lint** - Run `pnpm lint`
+3. **Build** - Run `pnpm build`
+4. **Tests** - Run `pnpm test`
+5. **Bundle size** - Check with `pnpm analyze`
 
 ### PR Guidelines
 
-- **Title**: Use conventional commits format
-- **Description**: Explain what and why
-- **Size**: Keep PRs small and focused
-- **Screenshots**: Include for UI changes
-- **Tests**: All tests must pass
-- **Reviews**: Requires 1 approval
+1. **Link to issue** - Reference the issue being fixed
+2. **Clear description** - Explain what and why
+3. **Screenshots** - For UI changes
+4. **Breaking changes** - Clearly marked
+5. **Tests included** - All new code must be tested
+6. **Documentation** - Update if needed
 
 ### PR Template
 
@@ -205,76 +364,79 @@ Brief description of changes
 
 ## Testing
 - [ ] Tests pass locally
-- [ ] Coverage maintained/improved
-- [ ] E2E tests updated
-
-## Screenshots
-(if applicable)
+- [ ] Coverage maintained at 95%+
+- [ ] Tested in multiple browsers
 
 ## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
-- [ ] No bundle size regression
+- [ ] No console errors
+- [ ] Bundle size checked
+
+## Screenshots
+(if applicable)
+
+Fixes #(issue number)
 ```
 
-## Commit Convention
+## 🏗️ Component Guidelines
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+### Component Checklist
 
-### Format
-```
-<type>(<scope>): <subject>
+- [ ] TypeScript definitions complete
+- [ ] Props documented with JSDoc
+- [ ] Ref forwarding implemented
+- [ ] Display name set
+- [ ] Memoization where appropriate
+- [ ] Error boundaries considered
+- [ ] Loading states handled
+- [ ] Empty states handled
+- [ ] Accessibility complete
+- [ ] Dark mode supported
+- [ ] RTL supported
+- [ ] Tests written (95%+ coverage)
+- [ ] Storybook story created
+- [ ] Documentation added
 
-<body>
+### Performance Considerations
 
-<footer>
-```
+- Use `React.memo` for expensive components
+- Implement `useMemo` and `useCallback` appropriately
+- Consider virtualization for lists
+- Lazy load heavy components
+- Optimize re-renders
 
-### Types
+## 🎯 Acceptance Criteria
 
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Test additions/changes
-- `chore`: Maintenance tasks
-- `ci`: CI/CD changes
+For a PR to be merged, it must:
 
-### Examples
+1. **Pass all CI checks**
+2. **Maintain 95% test coverage**
+3. **Have no linting errors**
+4. **Be reviewed by maintainer**
+5. **Include tests for new code**
+6. **Update documentation if needed**
+7. **Not increase bundle size significantly**
+8. **Follow all guidelines above**
 
-```bash
-feat(button): add loading state
-fix(dialog): resolve focus trap issue
-docs: update contributing guidelines
-test(card): improve coverage to 95%
-chore: bump version to 1.3.0
-```
+## 📞 Getting Help
 
-## Release Process
+- **Discord**: [Join our community](https://discord.gg/dainabase)
+- **Issues**: [GitHub Issues](https://github.com/dainabase/directus-unified-platform/issues)
+- **Email**: dev@dainabase.com
+- **Documentation**: [Read the docs](https://dainabase.github.io/ui)
 
-We use semantic versioning (MAJOR.MINOR.PATCH):
+## 🙏 Recognition
 
-- **MAJOR**: Breaking changes
-- **MINOR**: New features (backwards compatible)
-- **PATCH**: Bug fixes
+Contributors will be:
+- Listed in our README
+- Mentioned in release notes
+- Given credit in the changelog
+- Invited to our contributors Discord channel
 
-Releases are automated via GitHub Actions when changes are merged to `main`.
+Thank you for contributing to @dainabase/ui! 🚀
 
-## Getting Help
+---
 
-- 📖 [Documentation](https://github.com/dainabase/directus-unified-platform/wiki)
-- 💬 [Discord](https://discord.gg/dainabase)
-- 🐛 [Issue Tracker](https://github.com/dainabase/directus-unified-platform/issues)
-- 📧 [Email](mailto:dev@dainabase.com)
-
-## Recognition
-
-Contributors are recognized in:
-- [CONTRIBUTORS.md](CONTRIBUTORS.md)
-- Release notes
-- Project README
-
-Thank you for contributing to @dainabase/ui! 🎉
+*Last updated: August 17, 2025*

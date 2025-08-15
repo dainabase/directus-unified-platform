@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { ChevronLeft, ChevronRight, Circle, Pause, Play } from 'lucide-react'
 import { cn } from '../../lib/utils'
-import { Button } from '../button/button'
+import { Button } from '../button'
 
 export interface CarouselItem {
   id: string | number

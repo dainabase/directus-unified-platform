@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Star, Heart, ThumbsUp, Circle, Square, Triangle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 export interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Current rating value */

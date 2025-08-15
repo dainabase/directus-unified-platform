@@ -6,7 +6,7 @@ import { Input } from "../input";
 import { Button } from "../button";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
-import { Label } from "../form";
+import { Label } from "../label";
 import { Palette, Pipette, Copy, Check } from "lucide-react";
 
 // Color format types

@@ -1,0 +1,129 @@
+name: Fix Empty Workflows
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight
+  workflow_dispatch:
+
+jobs:
+  fix-empty-workflows:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Check and fix empty workflows
+        id: fix
+        run: |
+          echo "## 🔧 Fixing Empty Workflows" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          FIXED_COUNT=0
+          EMPTY_FILES=""
+          
+          # Define minimal workflow templates
+          create_minimal_workflow() {
+            local file=$1
+            local name=$2
+            cat > "$file" << 'EOF'
+name: WORKFLOW_NAME
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for running this workflow'
+        required: false
+        type: string
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Placeholder step
+        run: |
+          echo "This is a placeholder workflow that needs to be implemented"
+          echo "Workflow: WORKFLOW_NAME"
+          echo "File: WORKFLOW_FILE"
+          echo "Reason: ${{ github.event.inputs.reason }}"
+          
+      - name: Create TODO
+        run: |
+          echo "## ⚠️ TODO: Implement this workflow" >> $GITHUB_STEP_SUMMARY
+          echo "This workflow needs proper implementation" >> $GITHUB_STEP_SUMMARY
+EOF
+            sed -i "s/WORKFLOW_NAME/$name/g" "$file"
+            sed -i "s/WORKFLOW_FILE/$(basename $file)/g" "$file"
+          }
+          
+          # Check each workflow file
+          for file in .github/workflows/*.yml; do
+            if [ ! -s "$file" ] && [ "$(basename $file)" != ".gitkeep" ]; then
+              FILENAME=$(basename $file .yml)
+              NAME=$(echo $FILENAME | sed 's/-/ /g' | sed 's/\b\(.\)/\u\1/g')
+              
+              echo "Fixing empty workflow: $file" >> $GITHUB_STEP_SUMMARY
+              create_minimal_workflow "$file" "$NAME"
+              
+              FIXED_COUNT=$((FIXED_COUNT + 1))
+              EMPTY_FILES="$EMPTY_FILES $file"
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Fixed workflows: $FIXED_COUNT" >> $GITHUB_STEP_SUMMARY
+          
+          echo "fixed-count=$FIXED_COUNT" >> $GITHUB_OUTPUT
+          echo "files=$EMPTY_FILES" >> $GITHUB_OUTPUT
+      
+      - name: Create Pull Request
+        if: steps.fix.outputs.fixed-count > 0
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "fix: Add placeholder content to empty workflow files"
+          title: "🔧 Fix Empty Workflow Files"
+          body: |
+            ## 🤖 Automated Fix for Empty Workflows
+            
+            This PR adds minimal placeholder content to empty workflow files to prevent CI/CD issues.
+            
+            ### Changes
+            - Fixed ${{ steps.fix.outputs.fixed-count }} empty workflow files
+            - Added placeholder jobs that can be implemented later
+            - Each workflow now has `workflow_dispatch` trigger for manual testing
+            
+            ### Files Modified
+            ${{ steps.fix.outputs.files }}
+            
+            ### Next Steps
+            1. Review the placeholder workflows
+            2. Implement proper functionality as needed
+            3. Or delete workflows that are no longer needed
+            
+            ---
+            *This is an automated PR created by the Fix Empty Workflows action*
+          branch: fix/empty-workflows-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            ci/cd
+            automated
+            fix
+      
+      - name: Summary
+        run: |
+          if [ "${{ steps.fix.outputs.fixed-count }}" -gt 0 ]; then
+            echo "## ✅ Fixed ${{ steps.fix.outputs.fixed-count }} workflows" >> $GITHUB_STEP_SUMMARY
+            echo "A pull request has been created with the fixes" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ✅ All workflows have content!" >> $GITHUB_STEP_SUMMARY
+            echo "No fixes needed" >> $GITHUB_STEP_SUMMARY
+          fi

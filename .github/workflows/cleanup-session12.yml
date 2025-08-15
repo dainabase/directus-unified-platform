@@ -1,0 +1,53 @@
+name: Cleanup Empty Workflows - Session 12
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cleanup/remove-empty-workflows-session12
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    name: Remove Empty Workflows and Non-Workflow Files
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+      
+      - name: Make script executable
+        run: chmod +x packages/ui/scripts/cleanup-empty-workflows-session12.sh
+      
+      - name: Run cleanup script
+        run: ./packages/ui/scripts/cleanup-empty-workflows-session12.sh
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      - name: Commit and push changes
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "cleanup: Remove 11 empty workflows and 3 non-workflow files (Session 12)"
+            git push origin ${{ github.ref }}
+          fi
+      
+      - name: List remaining workflows
+        run: |
+          echo "📊 Remaining workflow files:"
+          ls -la .github/workflows/ | grep ".yml$" | wc -l
+          echo "workflow files remaining"
+          echo ""
+          echo "Files list:"
+          ls -la .github/workflows/

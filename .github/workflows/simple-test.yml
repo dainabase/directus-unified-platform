@@ -1,0 +1,73 @@
+name: Simple Test Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  simple-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          pnpm install --frozen-lockfile
+          echo "✅ Dependencies installed"
+      
+      - name: Build UI package
+        run: |
+          echo "Building @dainabase/ui package..."
+          pnpm --filter @dainabase/ui build || {
+            echo "⚠️ Build failed - checking what's wrong..."
+            echo "Listing packages/ui contents:"
+            ls -la packages/ui/
+            echo ""
+            echo "Checking if tsup is installed:"
+            pnpm --filter @dainabase/ui list tsup
+            exit 1
+          }
+          echo "✅ Build successful"
+      
+      - name: Check build output
+        run: |
+          echo "Checking build output..."
+          if [ -d "packages/ui/dist" ]; then
+            echo "✅ dist folder exists"
+            echo "Contents:"
+            ls -la packages/ui/dist/ | head -20
+            echo ""
+            echo "Size:"
+            du -sh packages/ui/dist/
+          else
+            echo "❌ No dist folder found"
+            exit 1
+          fi
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "# 📊 Simple Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Checkout | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| pnpm Setup | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node Setup | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependencies | ${{ steps.*.outcome[3] == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ steps.*.outcome[4] == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Job Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

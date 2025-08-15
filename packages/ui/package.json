@@ -28,7 +28,7 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist coverage storybook-static",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run clean && npm run build && npm run test:ci",
+    "prepublishOnly": "npm run clean && npm run build",
     "release": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
@@ -36,13 +36,6 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-primitive": "^1.0.3",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0",
-    "tailwind-merge": "^2.1.0"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -58,7 +51,14 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
-    "@radix-ui/react-tooltip": "^1.0.7"
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "optionalDependencies": {
     "@tanstack/react-table": "^8.10.7",

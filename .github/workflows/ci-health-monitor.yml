@@ -1,0 +1,188 @@
+name: CI/CD Health Monitor
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  monitor-workflows:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+      issues: write
+      
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check workflow files
+        id: check-files
+        run: |
+          echo "## 🔍 Workflow Files Audit" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          EMPTY_COUNT=0
+          VALID_COUNT=0
+          TOTAL_COUNT=0
+          
+          echo "### Empty Workflows (Need Fixing)" >> $GITHUB_STEP_SUMMARY
+          for file in .github/workflows/*.yml; do
+            TOTAL_COUNT=$((TOTAL_COUNT + 1))
+            if [ ! -s "$file" ]; then
+              EMPTY_COUNT=$((EMPTY_COUNT + 1))
+              echo "- ❌ $(basename $file)" >> $GITHUB_STEP_SUMMARY
+            else
+              VALID_COUNT=$((VALID_COUNT + 1))
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "- Total workflows: $TOTAL_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- Valid workflows: $VALID_COUNT ✅" >> $GITHUB_STEP_SUMMARY
+          echo "- Empty workflows: $EMPTY_COUNT ❌" >> $GITHUB_STEP_SUMMARY
+          
+          echo "empty-count=$EMPTY_COUNT" >> $GITHUB_OUTPUT
+          echo "valid-count=$VALID_COUNT" >> $GITHUB_OUTPUT
+          echo "total-count=$TOTAL_COUNT" >> $GITHUB_OUTPUT
+      
+      - name: Check recent workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 50
+            });
+            
+            const summary = {
+              total: runs.data.workflow_runs.length,
+              success: 0,
+              failure: 0,
+              cancelled: 0,
+              in_progress: 0
+            };
+            
+            const failedWorkflows = new Set();
+            
+            runs.data.workflow_runs.forEach(run => {
+              switch(run.status) {
+                case 'completed':
+                  if (run.conclusion === 'success') summary.success++;
+                  else if (run.conclusion === 'failure') {
+                    summary.failure++;
+                    failedWorkflows.add(run.name);
+                  }
+                  else if (run.conclusion === 'cancelled') summary.cancelled++;
+                  break;
+                case 'in_progress':
+                case 'queued':
+                  summary.in_progress++;
+                  break;
+              }
+            });
+            
+            const successRate = summary.total > 0 
+              ? ((summary.success / summary.total) * 100).toFixed(1)
+              : 0;
+            
+            // Add to summary
+            const summaryTable = `
+            ## 📊 Recent Workflow Runs (Last 50)
+            
+            | Status | Count | Percentage |
+            |--------|-------|------------|
+            | ✅ Success | ${summary.success} | ${((summary.success/summary.total)*100).toFixed(1)}% |
+            | ❌ Failure | ${summary.failure} | ${((summary.failure/summary.total)*100).toFixed(1)}% |
+            | ⚪ Cancelled | ${summary.cancelled} | ${((summary.cancelled/summary.total)*100).toFixed(1)}% |
+            | 🔄 In Progress | ${summary.in_progress} | ${((summary.in_progress/summary.total)*100).toFixed(1)}% |
+            
+            **Overall Success Rate: ${successRate}%**
+            
+            ${failedWorkflows.size > 0 ? `### ⚠️ Failed Workflows\n${Array.from(failedWorkflows).map(w => `- ${w}`).join('\n')}` : '### ✅ All workflows passing!'}
+            `;
+            
+            await core.summary.addRaw(summaryTable).write();
+            
+            // Set outputs for badge
+            core.setOutput('success-rate', successRate);
+            core.setOutput('failed-count', summary.failure);
+      
+      - name: Monitor critical workflows
+        id: critical-check
+        run: |
+          echo "## 🎯 Critical Workflows Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          CRITICAL_WORKFLOWS=(
+            "ui-unit.yml"
+            "test-coverage.yml"
+            "bundle-size.yml"
+            "npm-publish-ui.yml"
+            "ui-test-suite.yml"
+          )
+          
+          ALL_GOOD=true
+          for workflow in "${CRITICAL_WORKFLOWS[@]}"; do
+            if [ -s ".github/workflows/$workflow" ]; then
+              echo "- ✅ $workflow" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- ❌ $workflow (empty or missing)" >> $GITHUB_STEP_SUMMARY
+              ALL_GOOD=false
+            fi
+          done
+          
+          if [ "$ALL_GOOD" = true ]; then
+            echo "critical-status=passing" >> $GITHUB_OUTPUT
+          else
+            echo "critical-status=failing" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create status badge
+        run: |
+          SUCCESS_RATE="${{ steps.check-files.outputs.success-rate }}"
+          EMPTY_COUNT="${{ steps.check-files.outputs.empty-count }}"
+          
+          echo "## 📛 Status Badges" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "![Workflows](https://img.shields.io/badge/Workflows-${{ steps.check-files.outputs.valid-count }}%2F${{ steps.check-files.outputs.total-count }}-blue)" >> $GITHUB_STEP_SUMMARY
+          echo "![Empty](https://img.shields.io/badge/Empty_Workflows-${EMPTY_COUNT}-red)" >> $GITHUB_STEP_SUMMARY
+          echo "![Critical](https://img.shields.io/badge/Critical_Workflows-${{ steps.critical-check.outputs.critical-status }}-${{ steps.critical-check.outputs.critical-status == 'passing' && 'green' || 'red' }})" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Update monitoring issue
+        if: steps.check-files.outputs.empty-count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = 46; // Our monitoring issue
+            const emptyCount = ${{ steps.check-files.outputs.empty-count }};
+            const validCount = ${{ steps.check-files.outputs.valid-count }};
+            const criticalStatus = '${{ steps.critical-check.outputs.critical-status }}';
+            
+            const comment = `## 🤖 Automated Health Check - ${new Date().toISOString()}
+            
+            ### Workflow Status
+            - **Valid workflows**: ${validCount} ✅
+            - **Empty workflows**: ${emptyCount} ❌
+            - **Critical workflows**: ${criticalStatus === 'passing' ? '✅ All passing' : '❌ Some failing'}
+            
+            ### Actions Required
+            ${emptyCount > 0 ? '⚠️ There are empty workflow files that need to be fixed!' : '✅ All workflow files are valid!'}
+            
+            [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            ---
+            *This is an automated health check that runs every 6 hours.*`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });

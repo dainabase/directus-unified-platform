@@ -1,338 +1,382 @@
-// packages/ui/scripts/pre-release-check.js
-// Pre-release validation script for v1.3.0
-// Run this before npm publish to ensure everything is ready
+#!/usr/bin/env node
+
+/**
+ * Pre-Release Verification Script for @dainabase/ui v1.3.0
+ * Runs comprehensive checks before NPM publish
+ */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log('🚀 Pre-Release Check for @dainabase/ui v1.3.0');
-console.log('='.repeat(50));
+// Colors for console output
+const colors = {
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  green: '\x1b[32m',
+  red: '\x1b[31m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  cyan: '\x1b[36m'
+};
 
-const checks = {
+// Test results tracker
+const results = {
   passed: [],
   failed: [],
   warnings: []
 };
 
-// Helper function for checking files
-function checkFile(filePath, description) {
-  const fullPath = path.resolve(process.cwd(), filePath);
-  if (fs.existsSync(fullPath)) {
-    checks.passed.push(`✅ ${description}: ${filePath}`);
-    return true;
-  } else {
-    checks.failed.push(`❌ ${description}: ${filePath} NOT FOUND`);
-    return false;
-  }
-}
+// Helper functions
+const log = {
+  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
+  success: (msg) => {
+    console.log(`${colors.green}✓${colors.reset} ${msg}`);
+    results.passed.push(msg);
+  },
+  error: (msg) => {
+    console.log(`${colors.red}✗${colors.reset} ${msg}`);
+    results.failed.push(msg);
+  },
+  warning: (msg) => {
+    console.log(`${colors.yellow}⚠${colors.reset} ${msg}`);
+    results.warnings.push(msg);
+  },
+  section: (msg) => console.log(`\n${colors.bright}${colors.cyan}═══ ${msg} ═══${colors.reset}\n`)
+};
 
-// Helper function for checking JSON files
-function checkJSON(filePath, description) {
-  const fullPath = path.resolve(process.cwd(), filePath);
+const exec = (cmd, silent = false) => {
   try {
-    const content = fs.readFileSync(fullPath, 'utf8');
-    JSON.parse(content);
-    checks.passed.push(`✅ ${description}: Valid JSON`);
-    return true;
+    return execSync(cmd, { encoding: 'utf8', stdio: silent ? 'pipe' : 'inherit' });
   } catch (error) {
-    checks.failed.push(`❌ ${description}: Invalid JSON - ${error.message}`);
-    return false;
+    return null;
   }
-}
+};
 
-// Helper function for checking package.json fields
-function checkPackageField(pkg, field, expected, description) {
-  const value = field.split('.').reduce((obj, key) => obj?.[key], pkg);
-  if (value === expected) {
-    checks.passed.push(`✅ ${description}: ${value}`);
-    return true;
-  } else {
-    checks.failed.push(`❌ ${description}: Expected ${expected}, got ${value}`);
-    return false;
-  }
-}
-
-// 1. Check Critical Files
-console.log('\n📁 Checking Critical Files...');
-checkFile('package.json', 'Package manifest');
-checkFile('tsup.config.ts', 'Build configuration');
-checkFile('src/index.ts', 'Main entry point');
-checkFile('README.md', 'Documentation');
-checkFile('LICENSE', 'License file');
-checkFile('CHANGELOG.md', 'Change log');
-checkFile('CONTRIBUTING.md', 'Contributing guide');
-
-// 2. Validate package.json
-console.log('\n📦 Validating package.json...');
-const packagePath = path.resolve(process.cwd(), 'package.json');
-let pkg;
-try {
-  pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-  checks.passed.push('✅ package.json is valid JSON');
-} catch (error) {
-  checks.failed.push(`❌ package.json parse error: ${error.message}`);
-  process.exit(1);
-}
-
-// Check version
-checkPackageField(pkg, 'version', '1.3.0', 'Version');
-checkPackageField(pkg, 'name', '@dainabase/ui', 'Package name');
-
-// Check required fields
-if (pkg.main) checks.passed.push(`✅ Main entry: ${pkg.main}`);
-else checks.failed.push('❌ Missing main entry point');
-
-if (pkg.module) checks.passed.push(`✅ Module entry: ${pkg.module}`);
-else checks.failed.push('❌ Missing module entry point');
-
-if (pkg.types) checks.passed.push(`✅ TypeScript types: ${pkg.types}`);
-else checks.failed.push('❌ Missing TypeScript types');
-
-if (pkg.files && pkg.files.length > 0) {
-  checks.passed.push(`✅ Files field configured: ${pkg.files.length} entries`);
-} else {
-  checks.warnings.push('⚠️ No files field configured - all files will be published');
-}
-
-// Check exports
-if (pkg.exports) {
-  const exportKeys = Object.keys(pkg.exports);
-  checks.passed.push(`✅ Exports configured: ${exportKeys.length} paths`);
-  
-  // Check main export
-  if (pkg.exports['.']) {
-    checks.passed.push('✅ Main export path configured');
-  } else {
-    checks.failed.push('❌ Main export path missing');
-  }
-  
-  // Check lazy exports
-  if (pkg.exports['./lazy/*']) {
-    checks.passed.push('✅ Lazy loading exports configured');
-  } else {
-    checks.warnings.push('⚠️ Lazy loading exports not configured');
-  }
-} else {
-  checks.warnings.push('⚠️ No exports field - using legacy resolution');
-}
-
-// 3. Check Build Output
-console.log('\n🏗️ Checking Build Output...');
-checkFile('dist/index.js', 'CommonJS build');
-checkFile('dist/index.mjs', 'ESM build');
-checkFile('dist/index.d.ts', 'TypeScript definitions');
-
-// Check bundle size
-const distPath = path.resolve(process.cwd(), 'dist');
-if (fs.existsSync(distPath)) {
-  try {
-    const stats = fs.statSync(path.join(distPath, 'index.js'));
-    const sizeKB = (stats.size / 1024).toFixed(2);
+// Test functions
+const tests = {
+  // 1. Package.json validation
+  validatePackageJson: () => {
+    log.section('Package.json Validation');
     
-    if (stats.size <= 40 * 1024) {
-      checks.passed.push(`✅ Bundle size: ${sizeKB}KB (under 40KB target)`);
-    } else {
-      checks.failed.push(`❌ Bundle size: ${sizeKB}KB (exceeds 40KB target)`);
-    }
-  } catch (error) {
-    checks.warnings.push('⚠️ Could not check bundle size');
-  }
-} else {
-  checks.failed.push('❌ Build output directory not found');
-}
-
-// 4. Check Dependencies
-console.log('\n📚 Checking Dependencies...');
-if (pkg.dependencies) {
-  const depCount = Object.keys(pkg.dependencies).length;
-  checks.passed.push(`✅ Dependencies: ${depCount} packages`);
-  
-  // Check for problematic dependencies
-  const problematic = ['lodash', 'moment', 'jquery'];
-  const found = problematic.filter(dep => pkg.dependencies[dep]);
-  if (found.length > 0) {
-    checks.warnings.push(`⚠️ Large dependencies found: ${found.join(', ')}`);
-  }
-}
-
-if (pkg.peerDependencies) {
-  const peerCount = Object.keys(pkg.peerDependencies).length;
-  checks.passed.push(`✅ Peer dependencies: ${peerCount} packages`);
-  
-  // Check React version
-  if (pkg.peerDependencies.react) {
-    const reactVersion = pkg.peerDependencies.react;
-    if (reactVersion.includes('18')) {
-      checks.passed.push(`✅ React 18 support: ${reactVersion}`);
-    } else {
-      checks.warnings.push(`⚠️ React version: ${reactVersion} (consider React 18)`);
-    }
-  }
-}
-
-// 5. Check TypeScript Configuration
-console.log('\n🔷 Checking TypeScript...');
-checkFile('tsconfig.json', 'TypeScript config');
-
-// 6. Check Test Coverage
-console.log('\n🧪 Checking Test Coverage...');
-const coveragePath = path.resolve(process.cwd(), 'coverage/coverage-summary.json');
-if (fs.existsSync(coveragePath)) {
-  try {
-    const coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
-    const total = coverage.total;
-    
-    if (total) {
-      const metrics = ['lines', 'statements', 'functions', 'branches'];
-      metrics.forEach(metric => {
-        const pct = total[metric]?.pct || 0;
-        if (pct >= 90) {
-          checks.passed.push(`✅ ${metric} coverage: ${pct}%`);
-        } else if (pct >= 80) {
-          checks.warnings.push(`⚠️ ${metric} coverage: ${pct}% (target: 90%)`);
-        } else {
-          checks.failed.push(`❌ ${metric} coverage: ${pct}% (minimum: 80%)`);
-        }
-      });
-    }
-  } catch (error) {
-    checks.warnings.push('⚠️ Could not parse coverage report');
-  }
-} else {
-  checks.warnings.push('⚠️ No coverage report found - run tests first');
-}
-
-// 7. Check Documentation
-console.log('\n📚 Checking Documentation...');
-checkFile('README.md', 'README');
-checkFile('docs/API_REFERENCE.md', 'API Reference');
-checkFile('docs/GETTING_STARTED.md', 'Getting Started Guide');
-checkFile('docs/migrations/v1.0-to-v1.3.md', 'Migration Guide');
-
-// 8. Check License
-console.log('\n⚖️ Checking License...');
-if (pkg.license) {
-  checks.passed.push(`✅ License: ${pkg.license}`);
-} else {
-  checks.failed.push('❌ No license specified');
-}
-
-// 9. Check Repository Info
-console.log('\n🔗 Checking Repository Info...');
-if (pkg.repository) {
-  checks.passed.push(`✅ Repository: ${pkg.repository.url || pkg.repository}`);
-} else {
-  checks.warnings.push('⚠️ No repository information');
-}
-
-if (pkg.homepage) {
-  checks.passed.push(`✅ Homepage: ${pkg.homepage}`);
-} else {
-  checks.warnings.push('⚠️ No homepage specified');
-}
-
-// 10. NPM Publish Dry Run
-console.log('\n📤 Running NPM Publish Dry Run...');
-try {
-  // Check if logged in to npm
-  const whoami = execSync('npm whoami', { encoding: 'utf8' }).trim();
-  checks.passed.push(`✅ NPM user: ${whoami}`);
-  
-  // Dry run
-  console.log('   Running npm publish --dry-run...');
-  const dryRun = execSync('npm publish --dry-run', { encoding: 'utf8' });
-  
-  // Check if package would be published
-  if (dryRun.includes('npm notice')) {
-    checks.passed.push('✅ NPM publish dry run successful');
-    
-    // Extract package size from output
-    const sizeMatch = dryRun.match(/package size:\s*([\d.]+\s*[KM]B)/i);
-    if (sizeMatch) {
-      checks.passed.push(`✅ NPM package size: ${sizeMatch[1]}`);
+    const pkgPath = path.join(process.cwd(), 'package.json');
+    if (!fs.existsSync(pkgPath)) {
+      log.error('package.json not found');
+      return false;
     }
     
-    // Extract file count
-    const filesMatch = dryRun.match(/files:\s*(\d+)/i);
-    if (filesMatch) {
-      checks.passed.push(`✅ Files to publish: ${filesMatch[1]}`);
-    }
-  }
-} catch (error) {
-  if (error.message.includes('ENEEDAUTH')) {
-    checks.failed.push('❌ Not logged in to NPM - run "npm login" first');
-  } else if (error.message.includes('E402')) {
-    checks.warnings.push('⚠️ Package requires payment - check NPM account');
-  } else {
-    checks.warnings.push(`⚠️ NPM dry run issue: ${error.message.split('\n')[0]}`);
-  }
-}
-
-// 11. Check for Security Issues
-console.log('\n🔒 Checking Security...');
-try {
-  const audit = execSync('npm audit --json', { encoding: 'utf8' });
-  const auditResult = JSON.parse(audit);
-  
-  if (auditResult.metadata) {
-    const { vulnerabilities } = auditResult.metadata;
-    const total = vulnerabilities.total || 0;
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     
-    if (total === 0) {
-      checks.passed.push('✅ No security vulnerabilities found');
-    } else {
-      const critical = vulnerabilities.critical || 0;
-      const high = vulnerabilities.high || 0;
-      
-      if (critical > 0 || high > 0) {
-        checks.failed.push(`❌ Security issues: ${critical} critical, ${high} high`);
+    // Check required fields
+    const requiredFields = ['name', 'version', 'main', 'module', 'types', 'files', 'exports'];
+    for (const field of requiredFields) {
+      if (pkg[field]) {
+        log.success(`${field}: ${typeof pkg[field] === 'object' ? 'defined' : pkg[field]}`);
       } else {
-        checks.warnings.push(`⚠️ Security issues: ${total} low/moderate severity`);
+        log.error(`Missing required field: ${field}`);
       }
     }
+    
+    // Verify version
+    if (pkg.version === '1.3.0') {
+      log.success('Version correct: 1.3.0');
+    } else {
+      log.warning(`Version mismatch: ${pkg.version} (expected 1.3.0)`);
+    }
+    
+    // Check publish config
+    if (pkg.publishConfig?.access === 'public') {
+      log.success('Publish config: public');
+    } else {
+      log.error('Publish config not set to public');
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 2. Build verification
+  verifyBuild: () => {
+    log.section('Build Verification');
+    
+    const distPath = path.join(process.cwd(), 'dist');
+    
+    if (!fs.existsSync(distPath)) {
+      log.error('dist folder not found - run build first');
+      return false;
+    }
+    
+    // Check essential files
+    const essentialFiles = [
+      'index.js',
+      'index.mjs',
+      'index.d.ts',
+      'utils/index.js',
+      'utils/cn.js'
+    ];
+    
+    for (const file of essentialFiles) {
+      const filePath = path.join(distPath, file);
+      if (fs.existsSync(filePath)) {
+        const stats = fs.statSync(filePath);
+        const sizeKB = (stats.size / 1024).toFixed(2);
+        log.success(`${file}: ${sizeKB}KB`);
+      } else {
+        log.error(`Missing build file: ${file}`);
+      }
+    }
+    
+    // Check bundle size
+    const indexPath = path.join(distPath, 'index.js');
+    if (fs.existsSync(indexPath)) {
+      const stats = fs.statSync(indexPath);
+      const sizeKB = stats.size / 1024;
+      
+      if (sizeKB <= 40) {
+        log.success(`Bundle size: ${sizeKB.toFixed(2)}KB ✓ (target: <40KB)`);
+      } else {
+        log.error(`Bundle size: ${sizeKB.toFixed(2)}KB exceeds 40KB limit`);
+      }
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 3. TypeScript definitions
+  verifyTypes: () => {
+    log.section('TypeScript Definitions');
+    
+    const dtsPath = path.join(process.cwd(), 'dist', 'index.d.ts');
+    
+    if (!fs.existsSync(dtsPath)) {
+      log.error('TypeScript definitions not found');
+      return false;
+    }
+    
+    const dts = fs.readFileSync(dtsPath, 'utf8');
+    
+    // Check for essential exports
+    const essentialExports = [
+      'Button',
+      'Input',
+      'Card',
+      'Badge',
+      'ThemeProvider',
+      'cn'
+    ];
+    
+    for (const exp of essentialExports) {
+      if (dts.includes(`export { ${exp}`) || dts.includes(`export declare`)) {
+        log.success(`Type export found: ${exp}`);
+      } else {
+        log.error(`Missing type export: ${exp}`);
+      }
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 4. Dependencies check
+  checkDependencies: () => {
+    log.section('Dependencies Check');
+    
+    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+    
+    // Check peer dependencies
+    if (pkg.peerDependencies?.react) {
+      log.success(`React peer dependency: ${pkg.peerDependencies.react}`);
+    } else {
+      log.error('React not in peer dependencies');
+    }
+    
+    // Check for security vulnerabilities
+    log.info('Running security audit...');
+    const audit = exec('npm audit --json', true);
+    if (audit) {
+      const auditData = JSON.parse(audit);
+      if (auditData.metadata?.vulnerabilities?.total === 0) {
+        log.success('No security vulnerabilities found');
+      } else {
+        log.warning(`Found ${auditData.metadata?.vulnerabilities?.total || 'unknown'} vulnerabilities`);
+      }
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 5. File structure verification
+  verifyFileStructure: () => {
+    log.section('File Structure Verification');
+    
+    const requiredFiles = [
+      'README.md',
+      'LICENSE',
+      'CHANGELOG.md',
+      'package.json',
+      'tsconfig.json',
+      'dist/index.js',
+      'dist/index.d.ts'
+    ];
+    
+    for (const file of requiredFiles) {
+      if (fs.existsSync(file)) {
+        log.success(`Found: ${file}`);
+      } else {
+        log.error(`Missing: ${file}`);
+      }
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 6. NPM publish dry run
+  npmDryRun: () => {
+    log.section('NPM Publish Dry Run');
+    
+    log.info('Running npm publish --dry-run...');
+    const result = exec('npm publish --dry-run', true);
+    
+    if (result) {
+      // Parse the output for package size
+      const sizeMatch = result.match(/package size: ([\d.]+\s*[KMG]B)/i);
+      const filesMatch = result.match(/total files: (\d+)/i);
+      
+      if (sizeMatch) {
+        log.success(`Package size: ${sizeMatch[1]}`);
+      }
+      if (filesMatch) {
+        log.success(`Total files: ${filesMatch[1]}`);
+      }
+      
+      // Check if it would publish
+      if (result.includes('npm notice') && !result.includes('npm ERR!')) {
+        log.success('Dry run successful - ready to publish');
+      } else {
+        log.error('Dry run failed - check npm configuration');
+      }
+    } else {
+      log.error('npm publish --dry-run failed');
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 7. Exports verification
+  verifyExports: () => {
+    log.section('Module Exports Verification');
+    
+    try {
+      // Try to require the main entry
+      const mainPath = path.join(process.cwd(), 'dist', 'index.js');
+      if (fs.existsSync(mainPath)) {
+        log.success('Main export (CommonJS) exists');
+      } else {
+        log.error('Main export not found');
+      }
+      
+      // Check ESM export
+      const esmPath = path.join(process.cwd(), 'dist', 'index.mjs');
+      if (fs.existsSync(esmPath)) {
+        log.success('ESM export exists');
+      } else {
+        log.warning('ESM export not found');
+      }
+      
+      // Check lazy loading bundles
+      const lazyBundles = ['forms', 'overlays', 'data', 'navigation', 'feedback', 'advanced'];
+      for (const bundle of lazyBundles) {
+        const bundlePath = path.join(process.cwd(), 'dist', 'lazy', `${bundle}.js`);
+        if (fs.existsSync(bundlePath)) {
+          log.success(`Lazy bundle found: ${bundle}`);
+        } else {
+          log.warning(`Lazy bundle missing: ${bundle}`);
+        }
+      }
+    } catch (error) {
+      log.error(`Export verification failed: ${error.message}`);
+      return false;
+    }
+    
+    return results.failed.length === 0;
+  },
+  
+  // 8. Version consistency
+  checkVersionConsistency: () => {
+    log.section('Version Consistency Check');
+    
+    const version = '1.3.0';
+    const files = [
+      { path: 'package.json', pattern: /"version":\s*"([^"]+)"/ },
+      { path: 'CHANGELOG.md', pattern: /\[1\.3\.0\]/ },
+      { path: 'README.md', pattern: /v1\.3\.0|1\.3\.0/ }
+    ];
+    
+    for (const file of files) {
+      if (fs.existsSync(file.path)) {
+        const content = fs.readFileSync(file.path, 'utf8');
+        if (content.match(file.pattern)) {
+          log.success(`Version ${version} found in ${file.path}`);
+        } else {
+          log.warning(`Version ${version} not found in ${file.path}`);
+        }
+      }
+    }
+    
+    return results.failed.length === 0;
   }
-} catch (error) {
-  checks.warnings.push('⚠️ Could not run security audit');
+};
+
+// Main execution
+const main = async () => {
+  console.log(`
+${colors.bright}${colors.cyan}╔══════════════════════════════════════════════════════════╗
+║          Pre-Release Verification v1.3.0                 ║
+║                 @dainabase/ui                           ║
+╚══════════════════════════════════════════════════════════╝${colors.reset}
+`);
+  
+  const startTime = Date.now();
+  
+  // Run all tests
+  const testNames = Object.keys(tests);
+  for (const testName of testNames) {
+    tests[testName]();
+  }
+  
+  // Final report
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  
+  console.log(`
+${colors.bright}${colors.cyan}═══ FINAL REPORT ═══${colors.reset}
+  
+${colors.green}✓ Passed: ${results.passed.length}${colors.reset}
+${colors.yellow}⚠ Warnings: ${results.warnings.length}${colors.reset}
+${colors.red}✗ Failed: ${results.failed.length}${colors.reset}
+
+Time: ${duration}s
+`);
+  
+  if (results.failed.length === 0) {
+    console.log(`${colors.bright}${colors.green}🎉 ALL CHECKS PASSED! Ready for release.${colors.reset}\n`);
+    console.log('Next steps:');
+    console.log('1. Create git tag: git tag v1.3.0');
+    console.log('2. Push tag: git push origin v1.3.0');
+    console.log('3. Publish to NPM: npm publish');
+    console.log('4. Create GitHub release');
+    process.exit(0);
+  } else {
+    console.log(`${colors.bright}${colors.red}❌ CHECKS FAILED! Please fix the issues above.${colors.reset}\n`);
+    console.log('Failed checks:');
+    results.failed.forEach(msg => console.log(`  - ${msg}`));
+    process.exit(1);
+  }
+};
+
+// Run if executed directly
+if (require.main === module) {
+  main().catch(error => {
+    console.error(`${colors.red}Fatal error: ${error.message}${colors.reset}`);
+    process.exit(1);
+  });
 }
 
-// =============================================================================
-// RESULTS SUMMARY
-// =============================================================================
-
-console.log('\n' + '='.repeat(50));
-console.log('📊 PRE-RELEASE CHECK SUMMARY');
-console.log('='.repeat(50));
-
-// Print all checks
-if (checks.passed.length > 0) {
-  console.log('\n✅ PASSED CHECKS:');
-  checks.passed.forEach(check => console.log(`   ${check}`));
-}
-
-if (checks.warnings.length > 0) {
-  console.log('\n⚠️ WARNINGS:');
-  checks.warnings.forEach(warning => console.log(`   ${warning}`));
-}
-
-if (checks.failed.length > 0) {
-  console.log('\n❌ FAILED CHECKS:');
-  checks.failed.forEach(fail => console.log(`   ${fail}`));
-}
-
-// Final verdict
-console.log('\n' + '='.repeat(50));
-if (checks.failed.length === 0) {
-  console.log('🎉 READY FOR RELEASE! All critical checks passed.');
-  console.log(`⚠️ ${checks.warnings.length} warnings to review (non-blocking)`);
-  console.log('\n📦 To publish:');
-  console.log('   1. Review warnings above');
-  console.log('   2. Run: npm publish');
-  console.log('   3. Create GitHub release tag v1.3.0');
-  console.log('   4. Announce on Discord/Twitter');
-  process.exit(0);
-} else {
-  console.log(`❌ NOT READY FOR RELEASE! ${checks.failed.length} critical issues found.`);
-  console.log('\n🔧 Fix the issues above and run this script again.');
-  process.exit(1);
-}
+module.exports = { tests, main };

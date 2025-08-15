@@ -71,17 +71,13 @@ export const version = '1.3.0';
 export const componentCount = 58;
 export const testCoverage = '95%';
 
-// Export types
+// Export types - ONLY the ones that actually exist
 export type { ButtonProps } from "./components/button";
 export type { InputProps } from "./components/input";
-export type { CardProps } from "./components/card";
 export type { BadgeProps } from "./components/badge";
 export type { IconProps } from "./components/icon";
 export type { LabelProps } from "./components/label";
 export type { SeparatorProps } from "./components/separator";
-export type { AccordionProps } from "./components/accordion";
-export type { AlertProps } from "./components/alert";
-export type { AvatarProps } from "./components/avatar";
 export type { BreadcrumbProps } from "./components/breadcrumb";
 export type { CalendarProps } from "./components/calendar";
 export type { CarouselProps } from "./components/carousel";
@@ -94,22 +90,16 @@ export type { ContextMenuProps } from "./components/context-menu";
 export type { DataGridProps } from "./components/data-grid";
 export type { DatePickerProps } from "./components/date-picker";
 export type { DateRangePickerProps } from "./components/date-range-picker";
-export type { DialogProps } from "./components/dialog";
-export type { DropdownMenuProps } from "./components/dropdown-menu";
 export type { ErrorBoundaryProps } from "./components/error-boundary";
 export type { FileUploadProps } from "./components/file-upload";
-export type { FormProps } from "./components/form";
 export type { HoverCardProps } from "./components/hover-card";
 export type { MenubarProps } from "./components/menubar";
 export type { NavigationMenuProps } from "./components/navigation-menu";
 export type { PaginationProps } from "./components/pagination";
-export type { PopoverProps } from "./components/popover";
-export type { ProgressProps } from "./components/progress";
 export type { RadioGroupProps } from "./components/radio-group";
 export type { RatingProps } from "./components/rating";
 export type { ResizableProps } from "./components/resizable";
 export type { ScrollAreaProps } from "./components/scroll-area";
-export type { SelectProps } from "./components/select";
 export type { SheetProps } from "./components/sheet";
 export type { SkeletonProps } from "./components/skeleton";
 export type { SliderProps } from "./components/slider";
@@ -123,6 +113,18 @@ export type { ToastProps } from "./components/toast";
 export type { ToggleProps } from "./components/toggle";
 export type { ToggleGroupProps } from "./components/toggle-group";
 export type { TooltipProps } from "./components/tooltip";
+
+// Ces types n'existent pas, on les commente pour éviter les erreurs
+// export type { CardProps } from "./components/card";
+// export type { AccordionProps } from "./components/accordion";
+// export type { AlertProps } from "./components/alert";
+// export type { AvatarProps } from "./components/avatar";
+// export type { DialogProps } from "./components/dialog";
+// export type { DropdownMenuProps } from "./components/dropdown-menu";
+// export type { FormProps } from "./components/form";
+// export type { PopoverProps } from "./components/popover";
+// export type { ProgressProps } from "./components/progress";
+// export type { SelectProps } from "./components/select";
 
 // Package info
 export default {

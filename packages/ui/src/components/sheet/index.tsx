@@ -28,6 +28,9 @@ interface SheetContentProps
   side?: "top" | "right" | "bottom" | "left";
 }
 
+// Export SheetProps as an alias for SheetContentProps for consistency
+export type SheetProps = SheetContentProps;
+
 const sheetVariants = {
   top: "inset-x-0 top-0 data-[state=open]:slide-in-from-top data-[state=closed]:slide-out-to-top",
   bottom:

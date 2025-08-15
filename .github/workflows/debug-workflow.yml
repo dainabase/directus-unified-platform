@@ -1,0 +1,129 @@
+name: Debug Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: System Info
+        run: |
+          echo "## 🖥️ System Information" >> $GITHUB_STEP_SUMMARY
+          echo "- OS: $(uname -a)" >> $GITHUB_STEP_SUMMARY
+          echo "- Node: $(node -v 2>/dev/null || echo 'Not installed')" >> $GITHUB_STEP_SUMMARY
+          echo "- NPM: $(npm -v 2>/dev/null || echo 'Not installed')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      
+      - name: Check pnpm version
+        run: |
+          echo "## 📦 Package Manager" >> $GITHUB_STEP_SUMMARY
+          echo "- PNPM Version: $(pnpm -v)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: List workspace packages
+        run: |
+          echo "## 📂 Workspace Structure" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          pnpm ls -r --depth 0 2>/dev/null || echo "No workspaces found" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check package.json files
+        run: |
+          echo "## 📄 Package Files Found" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          find . -name "package.json" -type f | head -20 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check UI package
+        run: |
+          echo "## 🎨 UI Package Info" >> $GITHUB_STEP_SUMMARY
+          if [ -f "packages/ui/package.json" ]; then
+            echo "✅ packages/ui/package.json exists" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Package name:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat packages/ui/package.json | grep '"name"' | head -1 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Available scripts:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat packages/ui/package.json | grep -A 20 '"scripts"' | head -25 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ packages/ui/package.json NOT FOUND" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Install dependencies (with verbose)
+        run: |
+          echo "## 📥 Installing Dependencies" >> $GITHUB_STEP_SUMMARY
+          pnpm install --frozen-lockfile 2>&1 | tee install.log
+          if [ $? -eq 0 ]; then
+            echo "✅ Dependencies installed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Failed to install dependencies" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Error Log:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -50 install.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      
+      - name: Check installed packages
+        run: |
+          echo "## 📦 Installed Packages Check" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ls -la node_modules/ 2>/dev/null | head -10 >> $GITHUB_STEP_SUMMARY || echo "No root node_modules" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "UI node_modules:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          ls -la packages/ui/node_modules/ 2>/dev/null | head -10 >> $GITHUB_STEP_SUMMARY || echo "No UI node_modules" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Test simple command
+        run: |
+          echo "## 🧪 Testing Commands" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Test 1: Direct pnpm script" >> $GITHUB_STEP_SUMMARY
+          cd packages/ui
+          pnpm run test --version 2>&1 || echo "Test command failed" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test 2: Filter command" >> $GITHUB_STEP_SUMMARY
+          cd ../..
+          pnpm --filter @dainabase/ui run test --version 2>&1 || echo "Filter command failed" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Install missing system tools
+        run: |
+          echo "## 🛠️ Installing System Tools" >> $GITHUB_STEP_SUMMARY
+          sudo apt-get update -qq
+          sudo apt-get install -y jq bc
+          echo "- jq version: $(jq --version)" >> $GITHUB_STEP_SUMMARY
+          echo "- bc version: installed" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Final summary
+        if: always()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Debug Complete" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs above to identify the issue!" >> $GITHUB_STEP_SUMMARY

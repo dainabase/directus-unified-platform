@@ -5,6 +5,10 @@ import * as RTabs from "@radix-ui/react-tabs";
 import { twMerge } from "tailwind-merge";
 
 export const Tabs = RTabs.Root;
+
+// Export TabsProps type
+export type TabsProps = React.ComponentPropsWithoutRef<typeof RTabs.Root>;
+
 export const TabsList = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof RTabs.List>) => (
   <RTabs.List className={twMerge("inline-flex items-center gap-1 rounded-lg border border-border bg-white p-1", className)} {...props} />
 );

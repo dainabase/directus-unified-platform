@@ -1,0 +1,75 @@
+name: Cleanup Disabled Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "DELETE" to confirm deletion of disabled workflows'
+        required: true
+        type: string
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'DELETE'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Delete disabled workflows
+        run: |
+          echo "🧹 Starting cleanup of disabled workflows..."
+          
+          # List of workflows to delete
+          WORKFLOWS=(
+            ".github/workflows/auto-fix-deps.yml"
+            ".github/workflows/auto-publish-v040.yml"
+            ".github/workflows/fix-and-publish.yml"
+            ".github/workflows/force-publish.yml"
+            ".github/workflows/manual-publish.yml"
+            ".github/workflows/npm-monitor.yml"
+            ".github/workflows/publish-manual.yml"
+            ".github/workflows/publish-ui.yml"
+            ".github/workflows/quick-npm-publish.yml"
+            ".github/workflows/simple-publish.yml"
+            ".github/workflows/ui-100-coverage-publish.yml"
+          )
+          
+          # Delete each workflow
+          for workflow in "${WORKFLOWS[@]}"; do
+            if [ -f "$workflow" ]; then
+              rm -f "$workflow"
+              echo "✅ Deleted: $(basename $workflow)"
+            else
+              echo "⚠️ Not found: $(basename $workflow)"
+            fi
+          done
+          
+          # Commit changes
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "cleanup: Remove disabled workflows"
+          git push
+          
+      - name: Summary
+        run: |
+          echo "## 📊 Cleanup Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Successfully removed disabled workflows" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Workflows Removed:" >> $GITHUB_STEP_SUMMARY
+          echo "- auto-fix-deps.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- auto-publish-v040.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- fix-and-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- force-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- manual-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- npm-monitor.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- publish-manual.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- publish-ui.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- quick-npm-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- simple-publish.yml" >> $GITHUB_STEP_SUMMARY
+          echo "- ui-100-coverage-publish.yml" >> $GITHUB_STEP_SUMMARY

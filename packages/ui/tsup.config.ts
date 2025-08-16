@@ -1,43 +1,51 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  // Entry point simple - juste le fichier principal
   entry: ['src/index.ts'],
-  
-  // Formats de sortie
   format: ['cjs', 'esm'],
-  
-  // Génération des types TypeScript
   dts: true,
-  
-  // Nettoyer le dossier dist avant build
-  clean: true,
-  
-  // Minification simple
-  minify: true,
-  
-  // Source maps pour debug
+  splitting: false,
   sourcemap: true,
-  
-  // Externals - ne pas bundler React et les dépendances
+  clean: true,
   external: [
     'react',
-    'react-dom',
-    /^@radix-ui\//,
+    'react-dom'
   ],
-  
-  // Configuration simple pour le build
-  target: 'es2020',
-  platform: 'browser',
-  
-  // Nom de sortie
-  outDir: 'dist',
-  
-  // Options ESBuild basiques
+  noExternal: [
+    '@radix-ui/*',
+    'class-variance-authority',
+    'clsx',
+    'tailwind-merge',
+    'cmdk',
+    '@tanstack/react-table',
+    'date-fns',
+    'embla-carousel-react',
+    'lucide-react',
+    'react-day-picker',
+    'react-dropzone',
+    'react-hook-form',
+    'recharts',
+    'vaul',
+    'zod',
+    'i18next',
+    'react-i18next',
+    'tailwindcss-animate'
+  ],
   esbuildOptions(options) {
-    options.drop = ['console', 'debugger'];
+    options.jsx = 'automatic'
+    options.jsxDev = false
+    options.minify = true
+    options.target = 'es2020'
+    options.platform = 'browser'
+    options.conditions = ['import', 'module', 'browser', 'default']
+    options.mainFields = ['module', 'main']
   },
-  
-  // Message de succès
-  onSuccess: 'echo "✅ Build completed successfully!"',
-});
+  treeshake: true,
+  minify: true,
+  bundle: true,
+  skipNodeModulesBundle: false,
+  metafile: false,
+  shims: false,
+  outDir: 'dist',
+  onSuccess: 'echo "✅ Build completed successfully!"'
+})

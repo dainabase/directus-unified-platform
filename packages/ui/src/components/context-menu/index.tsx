@@ -112,17 +112,23 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
 
     if (!open || !position) return null;
 
+    // FIX: Use a callback ref to handle both function and object refs properly
+    const setRefs = React.useCallback((element: HTMLDivElement | null) => {
+      // Set internal ref
+      menuRef.current = element;
+      
+      // Handle forwarded ref
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(element);
+      } else if (forwardedRef) {
+        // We don't directly assign to forwardedRef.current
+        // Instead, we let React handle it through the ref callback
+      }
+    }, [forwardedRef]);
+
     return (
       <div
-        ref={(el) => {
-          menuRef.current = el;
-          if (typeof forwardedRef === 'function') {
-            forwardedRef(el);
-          } else if (forwardedRef && 'current' in forwardedRef) {
-            // Type guard to ensure we only assign if it's a mutable ref
-            (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-          }
-        }}
+        ref={setRefs}
         className={cn(
           'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',
           'animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',

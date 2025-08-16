@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
-import { Button } from "../button";
 
 export interface Column<T> {
   key: keyof T | string;

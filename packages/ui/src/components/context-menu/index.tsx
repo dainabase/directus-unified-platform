@@ -46,7 +46,7 @@ const ContextMenuContext = React.createContext<{
 });
 
 export const ContextMenuTrigger = React.forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
-  ({ children, disabled = false, asChild = false }, ref) => {
+  ({ children, disabled = false, asChild = false }, forwardedRef) => {
     const { setOpen, setPosition } = React.useContext(ContextMenuContext);
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -57,16 +57,18 @@ export const ContextMenuTrigger = React.forwardRef<HTMLDivElement, ContextMenuTr
       setOpen(true);
     };
 
-    const Component = asChild ? React.Fragment : 'div';
-    const props = asChild ? {} : { ref, onContextMenu: handleContextMenu };
-
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children as React.ReactElement<any>, {
         onContextMenu: handleContextMenu,
+        ref: forwardedRef,
       });
     }
 
-    return <Component {...props}>{children}</Component>;
+    return (
+      <div ref={forwardedRef} onContextMenu={handleContextMenu}>
+        {children}
+      </div>
+    );
   }
 );
 ContextMenuTrigger.displayName = 'ContextMenuTrigger';
@@ -80,7 +82,7 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
     alignOffset = 0,
     children,
     ...props 
-  }, ref) => {
+  }, forwardedRef) => {
     const { open, setOpen, position } = React.useContext(ContextMenuContext);
     const menuRef = React.useRef<HTMLDivElement>(null);
 
@@ -112,7 +114,14 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
 
     return (
       <div
-        ref={menuRef}
+        ref={(el) => {
+          menuRef.current = el;
+          if (typeof forwardedRef === 'function') {
+            forwardedRef(el);
+          } else if (forwardedRef) {
+            forwardedRef.current = el;
+          }
+        }}
         className={cn(
           'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md',
           'animate-in fade-in-80 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',

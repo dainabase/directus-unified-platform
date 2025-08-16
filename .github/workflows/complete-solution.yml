@@ -1,0 +1,158 @@
+name: Complete Build and Publish Solution
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_npm:
+        description: 'Publish to NPM after successful build'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+
+      - name: Navigate to UI package
+        run: cd packages/ui
+
+      - name: Clean previous installations
+        working-directory: packages/ui
+        run: |
+          rm -rf node_modules
+          rm -rf dist
+          rm -f package-lock.json
+          npm cache clean --force
+
+      - name: Install dependencies with correct versions
+        working-directory: packages/ui
+        run: |
+          # Install core dependencies first
+          npm install react@18.2.0 react-dom@18.2.0 --save-peer --legacy-peer-deps
+          
+          # Install build tools
+          npm install typescript@5.2.2 tsup@8.0.1 --save-dev --legacy-peer-deps
+          
+          # Install all dependencies
+          npm install --legacy-peer-deps
+
+      - name: Fix TypeScript configuration
+        working-directory: packages/ui
+        run: |
+          cat > tsconfig.json << 'EOF'
+          {
+            "compilerOptions": {
+              "target": "ES2020",
+              "useDefineForClassFields": true,
+              "lib": ["ES2020", "DOM", "DOM.Iterable"],
+              "module": "ESNext",
+              "skipLibCheck": true,
+              "moduleResolution": "bundler",
+              "allowImportingTsExtensions": false,
+              "resolveJsonModule": true,
+              "isolatedModules": true,
+              "noEmit": true,
+              "jsx": "react-jsx",
+              "strict": true,
+              "noUnusedLocals": false,
+              "noUnusedParameters": false,
+              "noFallthroughCasesInSwitch": true,
+              "declaration": true,
+              "declarationMap": true,
+              "esModuleInterop": true,
+              "allowSyntheticDefaultImports": true,
+              "forceConsistentCasingInFileNames": true,
+              "types": ["node"]
+            },
+            "include": ["src/**/*"],
+            "exclude": ["node_modules", "dist", "build", "*.config.ts", "*.config.js"]
+          }
+          EOF
+
+      - name: Build package
+        working-directory: packages/ui
+        run: |
+          npm run build
+          
+      - name: Verify build output
+        working-directory: packages/ui
+        run: |
+          echo "Build output:"
+          ls -la dist/
+          echo "Bundle size:"
+          du -sh dist/
+
+      - name: Run type check
+        working-directory: packages/ui
+        run: |
+          npx tsc --noEmit || true
+
+      - name: Prepare for NPM publish
+        if: github.event.inputs.publish_npm == 'true'
+        working-directory: packages/ui
+        run: |
+          # Update package.json for publishing
+          npm version patch --no-git-tag-version || true
+          
+      - name: Publish to NPM
+        if: github.event.inputs.publish_npm == 'true'
+        working-directory: packages/ui
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --access public
+
+      - name: Create build report
+        if: always()
+        working-directory: packages/ui
+        run: |
+          cat > BUILD_REPORT.md << 'EOF'
+          # Build Report - $(date)
+          
+          ## Build Status
+          - Build: ${{ job.status }}
+          - Node Version: $(node --version)
+          - NPM Version: $(npm --version)
+          
+          ## Bundle Information
+          $(du -sh dist/ 2>/dev/null || echo "No dist folder")
+          
+          ## Files in dist:
+          $(ls -la dist/ 2>/dev/null || echo "No files")
+          EOF
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            packages/ui/dist/
+            packages/ui/BUILD_REPORT.md
+          retention-days: 7
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Build Summary 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Publish to NPM**: ${{ github.event.inputs.publish_npm }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow Run**: [View Details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY

@@ -118,8 +118,9 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
           menuRef.current = el;
           if (typeof forwardedRef === 'function') {
             forwardedRef(el);
-          } else if (forwardedRef) {
-            forwardedRef.current = el;
+          } else if (forwardedRef && 'current' in forwardedRef) {
+            // Type guard to ensure we only assign if it's a mutable ref
+            (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
           }
         }}
         className={cn(

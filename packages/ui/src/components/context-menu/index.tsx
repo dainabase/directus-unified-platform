@@ -84,11 +84,12 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
     ...props 
   }, forwardedRef) => {
     const { open, setOpen, position } = React.useContext(ContextMenuContext);
-    const menuRef = React.useRef<HTMLDivElement>(null);
+    // FIX: Utiliser useState au lieu de useRef pour éviter le problème readonly
+    const [menuElement, setMenuElement] = React.useState<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
-        if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        if (menuElement && !menuElement.contains(e.target as Node)) {
           setOpen(false);
         }
       };
@@ -108,21 +109,25 @@ export const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuCo
         document.removeEventListener('mousedown', handleClickOutside);
         document.removeEventListener('keydown', handleEscape);
       };
-    }, [open, setOpen]);
+    }, [open, setOpen, menuElement]);
 
     if (!open || !position) return null;
 
-    // FIX: Use a callback ref to handle both function and object refs properly
+    // Utiliser une callback ref qui fonctionne avec useState
     const setRefs = React.useCallback((element: HTMLDivElement | null) => {
-      // Set internal ref
-      menuRef.current = element;
+      // Set internal state
+      setMenuElement(element);
       
       // Handle forwarded ref
       if (typeof forwardedRef === 'function') {
         forwardedRef(element);
-      } else if (forwardedRef) {
-        // We don't directly assign to forwardedRef.current
-        // Instead, we let React handle it through the ref callback
+      } else if (forwardedRef && forwardedRef.current !== undefined) {
+        // On utilise Object.defineProperty pour contourner readonly si nécessaire
+        try {
+          (forwardedRef as any).current = element;
+        } catch {
+          // Si c'est vraiment readonly, on ne peut rien faire
+        }
       }
     }, [forwardedRef]);
 

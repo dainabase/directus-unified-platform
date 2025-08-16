@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import * as Cmdk from "cmdk";
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "cmdk";
 import { Dialog, DialogContent } from "../dialog";
-import { twMerge } from "tailwind-merge";
 
 export interface CommandPaletteItem {
   id: string;
@@ -61,22 +60,22 @@ export function CommandPalette({
       )}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-[640px] p-0">
-          <Cmdk.Command className="rounded-lg border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 shadow-xl">
-            <Cmdk.Input
+          <Command className="rounded-lg border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 shadow-xl">
+            <CommandInput
               placeholder={placeholder}
               className="w-full border-0 bg-white dark:bg-neutral-900 px-4 py-3 text-sm outline-none placeholder:text-neutral-500"
             />
-            <Cmdk.List className="max-h-[300px] overflow-y-auto p-2">
-              <Cmdk.Empty className="px-4 py-6 text-center text-sm text-neutral-600">
+            <CommandList className="max-h-[300px] overflow-y-auto p-2">
+              <CommandEmpty className="px-4 py-6 text-center text-sm text-neutral-600">
                 {emptyText}
-              </Cmdk.Empty>
+              </CommandEmpty>
               {Object.entries(groups).map(([group, groupItems]) => (
-                <Cmdk.Group key={group} heading={group}>
+                <CommandGroup key={group} heading={group}>
                   <div className="px-2 py-1.5 text-xs font-medium text-neutral-600">
                     {group}
                   </div>
                   {groupItems.map((item) => (
-                    <Cmdk.Item
+                    <CommandItem
                       key={item.id}
                       value={item.label}
                       onSelect={() => {
@@ -92,12 +91,12 @@ export function CommandPalette({
                           {item.shortcut}
                         </span>
                       )}
-                    </Cmdk.Item>
+                    </CommandItem>
                   ))}
-                </Cmdk.Group>
+                </CommandGroup>
               ))}
-            </Cmdk.List>
-          </Cmdk.Command>
+            </CommandList>
+          </Command>
         </DialogContent>
       </Dialog>
     </>

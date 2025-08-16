@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "cmdk";
+import { Command } from "cmdk";
 import { Dialog, DialogContent } from "../dialog";
 
 export interface CommandPaletteItem {
@@ -61,21 +61,21 @@ export function CommandPalette({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-[640px] p-0">
           <Command className="rounded-lg border border-border bg-white dark:bg-neutral-900 dark:border-neutral-800 shadow-xl">
-            <CommandInput
+            <Command.Input
               placeholder={placeholder}
               className="w-full border-0 bg-white dark:bg-neutral-900 px-4 py-3 text-sm outline-none placeholder:text-neutral-500"
             />
-            <CommandList className="max-h-[300px] overflow-y-auto p-2">
-              <CommandEmpty className="px-4 py-6 text-center text-sm text-neutral-600">
+            <Command.List className="max-h-[300px] overflow-y-auto p-2">
+              <Command.Empty className="px-4 py-6 text-center text-sm text-neutral-600">
                 {emptyText}
-              </CommandEmpty>
+              </Command.Empty>
               {Object.entries(groups).map(([group, groupItems]) => (
-                <CommandGroup key={group} heading={group}>
+                <Command.Group key={group} heading={group}>
                   <div className="px-2 py-1.5 text-xs font-medium text-neutral-600">
                     {group}
                   </div>
                   {groupItems.map((item) => (
-                    <CommandItem
+                    <Command.Item
                       key={item.id}
                       value={item.label}
                       onSelect={() => {
@@ -91,11 +91,11 @@ export function CommandPalette({
                           {item.shortcut}
                         </span>
                       )}
-                    </CommandItem>
+                    </Command.Item>
                   ))}
-                </CommandGroup>
+                </Command.Group>
               ))}
-            </CommandList>
+            </Command.List>
           </Command>
         </DialogContent>
       </Dialog>

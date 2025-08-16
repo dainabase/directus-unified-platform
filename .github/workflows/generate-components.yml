@@ -1,0 +1,149 @@
+name: 🚀 Auto-Generate Missing Components
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Generation mode'
+        required: true
+        default: 'verify-only'
+        type: choice
+        options:
+          - verify-only
+          - generate-all
+          - generate-missing
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/ui/scripts/generate-components.js'
+      - 'packages/ui/scripts/verify-components.js'
+
+jobs:
+  generate-components:
+    name: 🔧 Generate Missing Components
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: packages/ui/package-lock.json
+          
+      - name: 📦 Install dependencies
+        working-directory: packages/ui
+        run: |
+          npm ci --prefer-offline --no-audit
+          
+      - name: 🔍 Verify component status
+        working-directory: packages/ui
+        run: |
+          echo "📊 Checking status of all 75 components..."
+          npm run verify:components
+          
+      - name: 🚀 Generate missing components
+        if: github.event.inputs.mode == 'generate-all' || github.event.inputs.mode == 'generate-missing'
+        working-directory: packages/ui
+        run: |
+          echo "🔧 Generating missing components..."
+          npm run generate:components
+          
+      - name: 📊 Generate report
+        working-directory: packages/ui
+        run: |
+          echo "📄 Generating component status report..."
+          npm run components:status
+          cat component-status.log || true
+          
+      - name: 🧪 Run tests on generated components
+        if: github.event.inputs.mode == 'generate-all' || github.event.inputs.mode == 'generate-missing'
+        working-directory: packages/ui
+        run: |
+          echo "🧪 Testing generated components..."
+          npm test -- --passWithNoTests
+          
+      - name: 📦 Build Design System
+        if: github.event.inputs.mode == 'generate-all' || github.event.inputs.mode == 'generate-missing'
+        working-directory: packages/ui
+        run: |
+          echo "📦 Building Design System..."
+          npm run build
+          echo "📏 Bundle size:"
+          du -sh dist/
+          
+      - name: 💾 Commit generated components
+        if: github.event.inputs.mode == 'generate-all' || github.event.inputs.mode == 'generate-missing'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add packages/ui/src/components/
+          git diff --staged --quiet || git commit -m "🚀 Auto-generate missing components [skip ci]"
+          
+      - name: 📤 Push changes
+        if: github.event.inputs.mode == 'generate-all' || github.event.inputs.mode == 'generate-missing'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          
+      - name: 📊 Upload component report
+        uses: actions/upload-artifact@v4
+        with:
+          name: component-report
+          path: |
+            packages/ui/component-report.json
+            packages/ui/component-status.log
+          retention-days: 30
+          
+      - name: 💬 Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('packages/ui/component-report.json', 'utf8'));
+            
+            const body = `## 🚀 Component Generation Report
+            
+            - ✅ **Complete Components**: ${report.complete.length}/75
+            - ⚠️ **Incomplete Components**: ${report.incomplete.length}/75
+            - 📊 **Completion Rate**: ${Math.round((report.complete.length / 75) * 100)}%
+            
+            ### Missing Files:
+            - 📝 Components without code: ${report.missing.index.length}
+            - 🧪 Components without tests: ${report.missing.test.length}
+            - 📖 Components without stories: ${report.missing.stories.length}
+            
+            View full report in the artifacts.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  notify-completion:
+    name: 📢 Notify Completion
+    needs: generate-components
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 🎉 Success notification
+        if: needs.generate-components.result == 'success'
+        run: |
+          echo "✅ Component generation completed successfully!"
+          echo "All 75 components are now available in the Design System."
+          
+      - name: ❌ Failure notification
+        if: needs.generate-components.result == 'failure'
+        run: |
+          echo "❌ Component generation failed. Please check the logs."

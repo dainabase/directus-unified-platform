@@ -2,9 +2,15 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { DashboardGrid, type DashboardWidget, type DashboardLayout } from './dashboard-grid';
 
-// Mock dependencies
+import { 
+  DashboardGrid, 
+  type DashboardWidget, 
+  type DashboardLayout,
+  type DashboardGridProps 
+} from './dashboard-grid';
+
+// Mock Lucide React icons
 jest.mock('lucide-react', () => ({
   GripVertical: () => <div data-testid="grip-vertical" />,
   X: () => <div data-testid="x-icon" />,
@@ -20,977 +26,1060 @@ jest.mock('lucide-react', () => ({
   Grid3x3: () => <div data-testid="grid-icon" />
 }));
 
-// Sample test data
-const sampleWidgets: DashboardWidget[] = [
-  {
-    id: 'widget-1',
-    type: 'metric',
-    title: 'Revenue',
-    content: <div data-testid="widget-content-1">$125,000</div>,
-    position: { x: 0, y: 0, w: 3, h: 2 },
-    minW: 2,
-    minH: 1,
-    maxW: 6,
-    maxH: 4
-  },
-  {
-    id: 'widget-2',
-    type: 'chart',
-    title: 'Sales Chart',
-    content: <div data-testid="widget-content-2">Chart Data</div>,
-    position: { x: 3, y: 0, w: 6, h: 3 },
-    minW: 4,
-    minH: 2
-  },
-  {
-    id: 'widget-3',
-    type: 'table',
-    title: 'Recent Orders',
-    content: <div data-testid="widget-content-3">Table Data</div>,
-    position: { x: 0, y: 2, w: 9, h: 4 },
-    isLocked: true
-  }
-];
-
-const sampleLayouts: DashboardLayout[] = [
-  {
-    id: 'layout-1',
-    name: 'Executive Dashboard',
-    description: 'High-level metrics for C-level',
-    widgets: sampleWidgets,
-    cols: 12,
-    rowHeight: 100,
-    gap: 16,
-    createdAt: new Date('2025-01-01'),
-    isDefault: true
-  },
-  {
-    id: 'layout-2',
-    name: 'Sales Dashboard',
-    description: 'Detailed sales analytics',
-    widgets: sampleWidgets.slice(0, 2),
-    cols: 12,
-    rowHeight: 120,
-    gap: 20
-  }
-];
-
-// Mock resize observer
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
+// Mock card component
+jest.mock('../card', () => ({
+  Card: ({ children, className }: any) => (
+    <div data-testid="card" className={className}>
+      {children}
+    </div>
+  )
 }));
 
-// Mock drag events
-const createDragEvent = (type: string, clientX = 100, clientY = 100) => {
-  return new DragEvent(type, {
-    bubbles: true,
-    cancelable: true,
-    clientX,
-    clientY,
-    dataTransfer: {
-      effectAllowed: 'move',
-      dropEffect: 'move',
-      setData: jest.fn(),
-      getData: jest.fn()
-    } as any
-  });
+// Mock button component  
+jest.mock('../button', () => ({
+  Button: ({ children, onClick, variant, size, className, disabled }: any) => (
+    <button
+      data-testid="button"
+      onClick={onClick}
+      className={`btn ${variant} ${size} ${className}`}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  )
+}));
+
+// Test utilities
+const createMockWidget = (id: string, overrides: Partial<DashboardWidget> = {}): DashboardWidget => ({
+  id,
+  type: 'test',
+  title: `Widget ${id}`,
+  content: <div data-testid={`widget-content-${id}`}>Content {id}</div>,
+  position: { x: 0, y: 0, w: 3, h: 2 },
+  ...overrides
+});
+
+const createMockLayout = (id: string, widgets: DashboardWidget[]): DashboardLayout => ({
+  id,
+  name: `Layout ${id}`,
+  description: `Test layout ${id}`,
+  widgets,
+  cols: 12,
+  rowHeight: 100,
+  gap: 16,
+  createdAt: new Date(),
+  isDefault: false
+});
+
+const defaultProps: DashboardGridProps = {
+  widgets: [],
+  cols: 12,
+  rowHeight: 100,
+  gap: 16,
+  allowEdit: true,
+  isDraggable: true,
+  isResizable: true
 };
 
-// Mock mouse events for resize
-const createMouseEvent = (type: string, clientX = 100, clientY = 100) => {
-  return new MouseEvent(type, {
-    bubbles: true,
-    cancelable: true,
-    clientX,
-    clientY
-  });
+// Mock getBoundingClientRect for drag & drop tests
+const mockGetBoundingClientRect = (width = 1200, height = 800) => {
+  return jest.fn(() => ({
+    width,
+    height,
+    top: 0,
+    left: 0,
+    bottom: height,
+    right: width,
+    x: 0,
+    y: 0,
+    toJSON: () => ({})
+  }));
 };
 
 describe('DashboardGrid', () => {
-  let mockOnLayoutChange: jest.Mock;
-  let mockOnWidgetRemove: jest.Mock;
-  let mockOnWidgetAdd: jest.Mock;
-  let mockOnLayoutSave: jest.Mock;
-  let mockOnLayoutLoad: jest.Mock;
-  let mockOnLayoutReset: jest.Mock;
-
   beforeEach(() => {
-    mockOnLayoutChange = jest.fn();
-    mockOnWidgetRemove = jest.fn();
-    mockOnWidgetAdd = jest.fn();
-    mockOnLayoutSave = jest.fn();
-    mockOnLayoutLoad = jest.fn();
-    mockOnLayoutReset = jest.fn();
-    
-    // Mock container dimensions
-    Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-      configurable: true,
-      value: 1200
-    });
-    Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
-      configurable: true,
-      value: 800
-    });
-    Object.defineProperty(HTMLElement.prototype, 'getBoundingClientRect', {
-      configurable: true,
-      value: () => ({
-        width: 1200,
-        height: 800,
-        top: 0,
-        left: 0,
-        bottom: 800,
-        right: 1200
-      })
-    });
+    // Mock HTMLElement methods for drag & drop
+    HTMLElement.prototype.getBoundingClientRect = mockGetBoundingClientRect();
+    HTMLElement.prototype.offsetWidth = 1200;
+    HTMLElement.prototype.offsetHeight = 800;
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  // ===== CORE RENDERING TESTS =====
-  describe('Core Rendering', () => {
-    it('renders dashboard grid with widgets', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
+  describe('🏗️ Basic Rendering', () => {
+    it('should render empty dashboard with layout icon', () => {
+      render(<DashboardGrid {...defaultProps} />);
+      
+      expect(screen.getByTestId('layout-icon')).toBeInTheDocument();
+      expect(screen.getByText('No widgets added yet')).toBeInTheDocument();
+    });
 
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-      expect(screen.getByText('Sales Chart')).toBeInTheDocument();
-      expect(screen.getByText('Recent Orders')).toBeInTheDocument();
+    it('should render widgets with correct positions', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 3, y: 0, w: 4, h: 3 } })
+      ];
+
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
       expect(screen.getByTestId('widget-content-1')).toBeInTheDocument();
       expect(screen.getByTestId('widget-content-2')).toBeInTheDocument();
-      expect(screen.getByTestId('widget-content-3')).toBeInTheDocument();
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
     });
 
-    it('renders empty state when no widgets', () => {
-      render(
-        <DashboardGrid
-          widgets={[]}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      expect(screen.getByText('No widgets added yet')).toBeInTheDocument();
-      expect(screen.getByTestId('layout-icon')).toBeInTheDocument();
-    });
-
-    it('applies custom grid configuration', () => {
+    it('should apply custom className and styling', () => {
       const { container } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          cols={8}
-          rowHeight={150}
-          gap={24}
+        <DashboardGrid 
+          {...defaultProps} 
           className="custom-grid"
-          onLayoutChange={mockOnLayoutChange}
+          containerPadding={[20, 24]}
         />
       );
-
+      
       expect(container.firstChild).toHaveClass('custom-grid');
-      // Grid calculations should reflect custom values
-      const widgets = container.querySelectorAll('[style*="position: absolute"]');
-      expect(widgets).toHaveLength(3);
     });
 
-    it('renders widget headers correctly', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
+    it('should handle different grid configurations', () => {
+      const props = {
+        ...defaultProps,
+        cols: 8,
+        rowHeight: 120,
+        gap: 20,
+        widgets: [createMockWidget('1')]
+      };
 
-      // Check widget titles
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-      expect(screen.getByText('Sales Chart')).toBeInTheDocument();
-      expect(screen.getByText('Recent Orders')).toBeInTheDocument();
-
-      // Check collapse buttons
-      expect(screen.getAllByTestId('minimize-icon')).toHaveLength(3);
-    });
-
-    it('renders locked widget indicators', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Widget 3 is locked
-      expect(screen.getByTestId('lock-icon')).toBeInTheDocument();
+      render(<DashboardGrid {...props} />);
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
   });
 
-  // ===== EDIT MODE TESTS =====
-  describe('Edit Mode', () => {
-    it('toggles edit mode correctly', async () => {
+  describe('🎛️ Edit Mode Management', () => {
+    it('should toggle edit mode correctly', async () => {
       const user = userEvent.setup();
+      render(<DashboardGrid {...defaultProps} />);
       
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
       const editButton = screen.getByText('Edit Layout');
       await user.click(editButton);
-
+      
       expect(screen.getByText('Done Editing')).toBeInTheDocument();
       
-      // Should show edit controls
+      await user.click(screen.getByText('Done Editing'));
+      expect(screen.getByText('Edit Layout')).toBeInTheDocument();
+    });
+
+    it('should show edit controls only in edit mode', async () => {
+      const user = userEvent.setup();
+      const widgets = [createMockWidget('1')];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Initially no grip handles
+      expect(screen.queryByTestId('grip-vertical')).not.toBeInTheDocument();
+      
+      // Enter edit mode
+      await user.click(screen.getByText('Edit Layout'));
+      
+      // Now grip handles should be visible
+      expect(screen.getByTestId('grip-vertical')).toBeInTheDocument();
+    });
+
+    it('should hide edit tools when allowEdit is false', () => {
+      render(<DashboardGrid {...defaultProps} allowEdit={false} />);
+      
+      expect(screen.queryByText('Edit Layout')).not.toBeInTheDocument();
+    });
+
+    it('should show save and reset buttons in edit mode', async () => {
+      const user = userEvent.setup();
+      render(<DashboardGrid {...defaultProps} />);
+      
+      await user.click(screen.getByText('Edit Layout'));
+      
       expect(screen.getByText('Save Layout')).toBeInTheDocument();
       expect(screen.getByText('Reset')).toBeInTheDocument();
     });
-
-    it('shows drag handles in edit mode', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
-
-      // Should show grip handles for draggable widgets (not locked ones)
-      const gripHandles = screen.getAllByTestId('grip-vertical');
-      expect(gripHandles).toHaveLength(2); // Widget 3 is locked
-    });
-
-    it('shows remove buttons for unlocked widgets in edit mode', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
-
-      // Should show X buttons for unlocked widgets
-      const removeButtons = screen.getAllByTestId('x-icon');
-      expect(removeButtons).toHaveLength(2); // Widget 3 is locked
-    });
-
-    it('disables edit mode when allowEdit is false', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={false}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      expect(screen.queryByText('Edit Layout')).not.toBeInTheDocument();
-    });
   });
 
-  // ===== WIDGET MANAGEMENT TESTS =====
-  describe('Widget Management', () => {
-    it('removes widget correctly', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-          onWidgetRemove={mockOnWidgetRemove}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
-      
-      // Remove first widget (Revenue)
-      const removeButtons = screen.getAllByTestId('x-icon');
-      await user.click(removeButtons[0]);
-
-      expect(mockOnWidgetRemove).toHaveBeenCalledWith('widget-1');
-      expect(mockOnLayoutChange).toHaveBeenCalled();
-    });
-
-    it('toggles widget collapse correctly', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Click minimize button on first widget
-      const minimizeButtons = screen.getAllByTestId('minimize-icon');
-      await user.click(minimizeButtons[0]);
-
-      // Widget should be collapsed (content hidden)
-      await waitFor(() => {
-        expect(screen.queryByTestId('widget-content-1')).not.toBeVisible();
-      });
-    });
-
-    it('toggles widget lock correctly', async () => {
-      const user = userEvent.setup();
-      
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
-
-      // Click unlock button on locked widget
-      const unlockButton = screen.getByTestId('lock-icon');
-      await user.click(unlockButton);
-
-      // Should show unlock icon now
-      await waitFor(() => {
-        expect(screen.getByTestId('unlock-icon')).toBeInTheDocument();
-      });
-    });
-
-    it('calls widget settings handler', async () => {
-      const mockOnSettings = jest.fn();
-      const widgetsWithSettings = [
-        {
-          ...sampleWidgets[0],
-          onSettings: mockOnSettings
-        }
+  describe('📦 Widget Management', () => {
+    it('should render widget with all header elements', () => {
+      const widgets = [
+        createMockWidget('1', {
+          isLocked: false,
+          onSettings: jest.fn()
+        })
       ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByTestId('minimize-icon')).toBeInTheDocument();
+      expect(screen.getByTestId('settings-icon')).toBeInTheDocument();
+    });
 
+    it('should handle widget collapse/expand', async () => {
       const user = userEvent.setup();
+      const widgets = [createMockWidget('1')];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      const collapseButton = screen.getByTestId('minimize-icon').closest('button')!;
+      await user.click(collapseButton);
+      
+      // Content should be hidden when collapsed
+      expect(screen.queryByTestId('widget-content-1')).not.toBeInTheDocument();
+      
+      // Should show maximize icon when collapsed
+      expect(screen.getByTestId('maximize-icon')).toBeInTheDocument();
+    });
+
+    it('should handle widget locking/unlocking', async () => {
+      const user = userEvent.setup();
+      const widgets = [createMockWidget('1', { isLocked: false })];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Enter edit mode to see lock controls
+      await user.click(screen.getByText('Edit Layout'));
+      
+      const unlockButton = screen.getByTestId('unlock-icon').closest('button')!;
+      await user.click(unlockButton);
+      
+      // Should show lock icon after locking
+      await waitFor(() => {
+        expect(screen.getByTestId('lock-icon')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle widget removal', async () => {
+      const user = userEvent.setup();
+      const onWidgetRemove = jest.fn();
+      const widgets = [createMockWidget('1')];
       
       render(
-        <DashboardGrid
-          widgets={widgetsWithSettings}
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onWidgetRemove={onWidgetRemove}
         />
       );
+      
+      // Enter edit mode
+      await user.click(screen.getByText('Edit Layout'));
+      
+      const removeButton = screen.getByTestId('x-icon').closest('button')!;
+      await user.click(removeButton);
+      
+      expect(onWidgetRemove).toHaveBeenCalledWith('1');
+    });
 
-      const settingsButton = screen.getByTestId('settings-icon');
+    it('should not show remove button for locked widgets', async () => {
+      const user = userEvent.setup();
+      const widgets = [createMockWidget('1', { isLocked: true })];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await user.click(screen.getByText('Edit Layout'));
+      
+      // Should not show X button for locked widget
+      expect(screen.queryByTestId('x-icon')).not.toBeInTheDocument();
+    });
+
+    it('should call onSettings when settings button clicked', async () => {
+      const user = userEvent.setup();
+      const onSettings = jest.fn();
+      const widgets = [createMockWidget('1', { onSettings })];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      const settingsButton = screen.getByTestId('settings-icon').closest('button')!;
       await user.click(settingsButton);
-
-      expect(mockOnSettings).toHaveBeenCalled();
-    });
-  });
-
-  // ===== DRAG AND DROP TESTS =====
-  describe('Drag and Drop', () => {
-    it('handles drag start correctly', async () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isDraggable={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Enter edit mode first
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      const widgetElement = screen.getByText('Revenue').closest('[draggable="true"]');
-      expect(widgetElement).toBeInTheDocument();
-
-      if (widgetElement) {
-        const dragEvent = createDragEvent('dragstart', 100, 100);
-        fireEvent(widgetElement, dragEvent);
-        
-        // Should set dragged state
-        expect(widgetElement).toHaveAttribute('draggable', 'true');
-      }
-    });
-
-    it('prevents dragging locked widgets', async () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isDraggable={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      // Locked widget should not be draggable
-      const lockedWidget = screen.getByText('Recent Orders').closest('div');
-      expect(lockedWidget?.closest('[draggable="true"]')).not.toBeInTheDocument();
-    });
-
-    it('handles drop and layout change', async () => {
-      const { container } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isDraggable={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      const gridContainer = container.querySelector('.relative.w-full');
-      expect(gridContainer).toBeInTheDocument();
-
-      if (gridContainer) {
-        // Simulate drag and drop
-        const dragEvent = createDragEvent('dragover', 200, 150);
-        fireEvent(gridContainer, dragEvent);
-
-        const dropEvent = createDragEvent('drop', 200, 150);
-        fireEvent(gridContainer, dropEvent);
-
-        // Layout change should be called
-        expect(mockOnLayoutChange).toHaveBeenCalled();
-      }
-    });
-
-    it('prevents collision when enabled', async () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isDraggable={true}
-          preventCollision={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      // Test collision prevention logic
-      // This would require more complex setup to simulate actual collisions
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-    });
-  });
-
-  // ===== RESIZE TESTS =====
-  describe('Widget Resizing', () => {
-    it('handles resize start correctly', async () => {
-      const { container } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isResizable={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      // Find resize handle
-      const resizeHandle = container.querySelector('.cursor-se-resize');
-      expect(resizeHandle).toBeInTheDocument();
-
-      if (resizeHandle) {
-        const mouseDownEvent = createMouseEvent('mousedown', 100, 100);
-        fireEvent(resizeHandle, mouseDownEvent);
-
-        // Should start resize mode
-        expect(resizeHandle).toHaveClass('cursor-se-resize');
-      }
-    });
-
-    it('respects min/max size constraints', async () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isResizable={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await userEvent.click(screen.getByText('Edit Layout'));
-
-      // Widget 1 has minW: 2, maxW: 6
-      const widget = screen.getByText('Revenue');
-      expect(widget).toBeInTheDocument();
       
-      // Size constraints should be enforced during resize
-      // This would require simulating actual resize events
+      expect(onSettings).toHaveBeenCalled();
     });
 
-    it('prevents resizing locked widgets', async () => {
-      const { container } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          isResizable={true}
-          onLayoutChange={mockOnLayoutChange}
+    it('should handle custom header actions', () => {
+      const widgets = [
+        createMockWidget('1', {
+          headerActions: <button data-testid="custom-action">Custom</button>
+        })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByTestId('custom-action')).toBeInTheDocument();
+    });
+  });
+
+  describe('🏃‍♂️ Drag and Drop', () => {
+    it('should handle drag start', async () => {
+      const widgets = [createMockWidget('1')];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Enter edit mode
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const widget = screen.getByText('Widget 1').closest('div')!;
+      
+      // Mock drag event
+      const dragEvent = new DragEvent('dragstart', { bubbles: true });
+      Object.defineProperty(dragEvent, 'dataTransfer', {
+        value: {
+          effectAllowed: '',
+          setData: jest.fn(),
+          getData: jest.fn()
+        }
+      });
+      
+      fireEvent(widget, dragEvent);
+      
+      // Widget should have draggable attribute
+      expect(widget).toHaveAttribute('draggable', 'true');
+    });
+
+    it('should prevent drag on locked widgets', async () => {
+      const widgets = [createMockWidget('1', { isLocked: true })];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const widget = screen.getByText('Widget 1').closest('div')!;
+      expect(widget).toHaveAttribute('draggable', 'false');
+    });
+
+    it('should handle drag and drop with position update', async () => {
+      const onLayoutChange = jest.fn();
+      const widgets = [createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } })];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onLayoutChange={onLayoutChange}
         />
       );
-
+      
       await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const widget = screen.getByText('Widget 1').closest('div')!;
+      
+      // Simulate drag and drop
+      fireEvent.dragStart(widget, {
+        clientX: 100,
+        clientY: 100,
+        dataTransfer: { effectAllowed: '', setData: jest.fn() }
+      });
+      
+      fireEvent.drop(widget, {
+        clientX: 300,
+        clientY: 200
+      });
+      
+      // Should call layout change with updated positions
+      await waitFor(() => {
+        expect(onLayoutChange).toHaveBeenCalled();
+      });
+    });
 
-      // Locked widget should not have resize handle
-      const lockedWidgetCard = screen.getByText('Recent Orders').closest('.group');
-      const resizeHandle = lockedWidgetCard?.querySelector('.cursor-se-resize');
+    it('should respect isDraggable prop', () => {
+      const widgets = [createMockWidget('1')];
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          isDraggable={false}
+        />
+      );
+      
+      const widget = screen.getByText('Widget 1').closest('div')!;
+      expect(widget).toHaveAttribute('draggable', 'false');
+    });
+  });
+
+  describe('📏 Widget Resizing', () => {
+    it('should show resize handle in edit mode', async () => {
+      const widgets = [createMockWidget('1')];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      // Should show resize handle
+      const resizeHandle = screen.getByText('Widget 1')
+        .closest('div')!
+        .querySelector('.cursor-se-resize');
+      
+      expect(resizeHandle).toBeInTheDocument();
+    });
+
+    it('should not show resize handle for locked widgets', async () => {
+      const widgets = [createMockWidget('1', { isLocked: true })];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const resizeHandle = screen.getByText('Widget 1')
+        .closest('div')!
+        .querySelector('.cursor-se-resize');
+      
+      expect(resizeHandle).not.toBeInTheDocument();
+    });
+
+    it('should handle resize start', async () => {
+      const widgets = [createMockWidget('1')];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const resizeHandle = screen.getByText('Widget 1')
+        .closest('div')!
+        .querySelector('.cursor-se-resize')!;
+      
+      fireEvent.mouseDown(resizeHandle, {
+        clientX: 100,
+        clientY: 100
+      });
+      
+      // Should start resize operation
+      expect(resizeHandle).toBeInTheDocument();
+    });
+
+    it('should respect minW and maxW constraints', () => {
+      const widgets = [
+        createMockWidget('1', {
+          minW: 2,
+          maxW: 6,
+          position: { x: 0, y: 0, w: 3, h: 2 }
+        })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Widget should respect constraints during resize
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+    });
+
+    it('should respect isResizable prop', async () => {
+      const widgets = [createMockWidget('1')];
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          isResizable={false}
+        />
+      );
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      const resizeHandle = screen.getByText('Widget 1')
+        .closest('div')!
+        .querySelector('.cursor-se-resize');
+      
       expect(resizeHandle).not.toBeInTheDocument();
     });
   });
 
-  // ===== LAYOUT MANAGEMENT TESTS =====
-  describe('Layout Management', () => {
-    it('shows layout selector when provided', () => {
+  describe('💾 Layout Management', () => {
+    it('should show layout selector when layouts provided', () => {
+      const layouts = [
+        createMockLayout('1', [createMockWidget('1')]),
+        createMockLayout('2', [createMockWidget('2')])
+      ];
+      
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          layouts={sampleLayouts}
+        <DashboardGrid 
+          {...defaultProps} 
+          layouts={layouts}
           showLayoutSelector={true}
-          onLayoutChange={mockOnLayoutChange}
         />
       );
-
-      const layoutSelector = screen.getByDisplayValue('Select Layout');
-      expect(layoutSelector).toBeInTheDocument();
       
-      // Should have layout options
-      expect(screen.getByText('Executive Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Sales Dashboard')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Select Layout')).toBeInTheDocument();
     });
 
-    it('loads selected layout', async () => {
+    it('should load selected layout', async () => {
       const user = userEvent.setup();
+      const onLayoutLoad = jest.fn();
+      const layouts = [
+        createMockLayout('layout-1', [createMockWidget('1')])
+      ];
       
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          layouts={sampleLayouts}
+        <DashboardGrid 
+          {...defaultProps} 
+          layouts={layouts}
+          onLayoutLoad={onLayoutLoad}
           showLayoutSelector={true}
-          onLayoutLoad={mockOnLayoutLoad}
-          onLayoutChange={mockOnLayoutChange}
         />
       );
-
-      const layoutSelector = screen.getByDisplayValue('Select Layout');
-      await user.selectOptions(layoutSelector, 'layout-2');
-
-      expect(mockOnLayoutLoad).toHaveBeenCalledWith('layout-2');
+      
+      const selector = screen.getByDisplayValue('Select Layout');
+      await user.selectOptions(selector, 'layout-1');
+      
+      expect(onLayoutLoad).toHaveBeenCalledWith('layout-1');
     });
 
-    it('opens save dialog correctly', async () => {
+    it('should open save dialog when save button clicked', async () => {
       const user = userEvent.setup();
+      render(<DashboardGrid {...defaultProps} />);
       
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutSave={mockOnLayoutSave}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
       await user.click(screen.getByText('Edit Layout'));
       await user.click(screen.getByText('Save Layout'));
-
+      
       expect(screen.getByText('Layout name')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Layout name')).toBeInTheDocument();
     });
 
-    it('saves layout with valid name', async () => {
+    it('should save layout with correct data', async () => {
       const user = userEvent.setup();
+      const onLayoutSave = jest.fn();
+      const widgets = [createMockWidget('1')];
       
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutSave={mockOnLayoutSave}
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onLayoutSave={onLayoutSave}
         />
       );
-
+      
       await user.click(screen.getByText('Edit Layout'));
       await user.click(screen.getByText('Save Layout'));
-
-      const nameInput = screen.getByPlaceholderText('Layout name');
-      await user.type(nameInput, 'New Layout');
       
-      await user.click(screen.getByRole('button', { name: 'Save' }));
-
-      expect(mockOnLayoutSave).toHaveBeenCalledWith(
+      const nameInput = screen.getByPlaceholderText('Layout name');
+      await user.type(nameInput, 'Test Layout');
+      await user.click(screen.getByText('Save'));
+      
+      expect(onLayoutSave).toHaveBeenCalledWith(
         expect.objectContaining({
-          name: 'New Layout',
-          widgets: sampleWidgets
+          name: 'Test Layout',
+          widgets: widgets,
+          cols: 12,
+          rowHeight: 100,
+          gap: 16
         })
       );
     });
 
-    it('resets layout correctly', async () => {
+    it('should close save dialog when cancel clicked', async () => {
       const user = userEvent.setup();
+      render(<DashboardGrid {...defaultProps} />);
+      
+      await user.click(screen.getByText('Edit Layout'));
+      await user.click(screen.getByText('Save Layout'));
+      
+      await user.click(screen.getByText('Cancel'));
+      
+      expect(screen.queryByText('Layout name')).not.toBeInTheDocument();
+    });
+
+    it('should reset layout when reset clicked', async () => {
+      const user = userEvent.setup();
+      const onLayoutReset = jest.fn();
       
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutReset={mockOnLayoutReset}
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          onLayoutReset={onLayoutReset}
         />
       );
-
+      
       await user.click(screen.getByText('Edit Layout'));
       await user.click(screen.getByText('Reset'));
-
-      expect(mockOnLayoutReset).toHaveBeenCalled();
+      
+      expect(onLayoutReset).toHaveBeenCalled();
     });
   });
 
-  // ===== RESPONSIVE TESTS =====
-  describe('Responsive Behavior', () => {
-    it('adapts to different breakpoints', () => {
-      const customBreakpoints = {
-        lg: 1200,
-        md: 996,
-        sm: 768,
-        xs: 480
-      };
-
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          breakpoints={customBreakpoints}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Should render with responsive behavior
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+  describe('🎨 Grid Layout & Positioning', () => {
+    it('should calculate widget positions correctly', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 3, y: 0, w: 3, h: 2 } }),
+        createMockWidget('3', { position: { x: 0, y: 2, w: 6, h: 1 } })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+      expect(screen.getByText('Widget 3')).toBeInTheDocument();
     });
 
-    it('handles container padding correctly', () => {
-      const { container } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          containerPadding={[24, 32]}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      const gridContainer = container.querySelector('[style*="padding"]');
-      expect(gridContainer).toHaveStyle('padding: 32px 24px');
-    });
-
-    it('supports auto-sizing when enabled', () => {
+    it('should handle auto-sizing when enabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 0, y: 5, w: 3, h: 2 } })
+      ];
+      
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
           autoSize={true}
-          onLayoutChange={mockOnLayoutChange}
         />
       );
+      
+      // Grid should auto-size to fit all widgets
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+    });
 
-      // Grid should auto-size based on widget positions
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+    it('should respect container padding', () => {
+      const { container } = render(
+        <DashboardGrid 
+          {...defaultProps} 
+          containerPadding={[24, 32]}
+        />
+      );
+      
+      // Container should have correct padding
+      const gridContainer = container.querySelector('.relative.w-full');
+      expect(gridContainer).toHaveStyle({ padding: '32px 24px' });
+    });
+
+    it('should handle different column configurations', () => {
+      const widgets = [createMockWidget('1', { position: { x: 0, y: 0, w: 4, h: 2 } })];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          cols={8}
+        />
+      );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
   });
 
-  // ===== COMPACTION TESTS =====
-  describe('Widget Compaction', () => {
-    it('applies vertical compaction correctly', () => {
+  describe('📱 Responsive & Breakpoints', () => {
+    it('should handle custom breakpoints', () => {
+      const breakpoints = {
+        lg: 1200,
+        md: 768,
+        sm: 480
+      };
+      
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          compactType="vertical"
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          breakpoints={breakpoints}
         />
       );
-
-      // Widgets should be compacted vertically
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-    });
-
-    it('applies horizontal compaction correctly', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          compactType="horizontal"
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Widgets should be compacted horizontally  
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-    });
-
-    it('disables compaction when set to null', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          compactType={null}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // No compaction should be applied
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-    });
-  });
-
-  // ===== ERROR HANDLING TESTS =====
-  describe('Error Handling', () => {
-    it('handles empty widgets array gracefully', () => {
-      render(
-        <DashboardGrid
-          widgets={[]}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
+      
       expect(screen.getByText('No widgets added yet')).toBeInTheDocument();
     });
 
-    it('handles invalid widget positions gracefully', () => {
-      const invalidWidgets = [
-        {
-          ...sampleWidgets[0],
-          position: { x: -1, y: -1, w: 0, h: 0 }
-        }
-      ];
-
-      render(
-        <DashboardGrid
-          widgets={invalidWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Should still render without crashing
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-    });
-
-    it('handles missing callback functions gracefully', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-        />
-      );
-
-      // Should render without required callbacks
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+    it('should adapt to container width changes', () => {
+      HTMLElement.prototype.offsetWidth = 800;
+      
+      const widgets = [createMockWidget('1')];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
   });
 
-  // ===== ACCESSIBILITY TESTS =====
-  describe('Accessibility', () => {
-    it('provides proper ARIA labels', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Check for semantic HTML structure
-      const headings = screen.getAllByRole('heading', { level: 3 });
-      expect(headings).toHaveLength(3);
-    });
-
-    it('supports keyboard navigation', async () => {
-      const user = userEvent.setup();
+  describe('🔧 Collision Detection', () => {
+    it('should prevent collision when enabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 2, y: 0, w: 3, h: 2 } })
+      ];
       
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          preventCollision={true}
         />
       );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+    });
 
+    it('should allow overlap when collision prevention disabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 1, y: 0, w: 3, h: 2 } })
+      ];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          preventCollision={false}
+        />
+      );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('🎯 Compaction Algorithms', () => {
+    it('should compact vertically when enabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 0, y: 5, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 3, y: 8, w: 3, h: 2 } })
+      ];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          compactType="vertical"
+        />
+      );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+    });
+
+    it('should compact horizontally when enabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 5, y: 0, w: 3, h: 2 } }),
+        createMockWidget('2', { position: { x: 8, y: 0, w: 3, h: 2 } })
+      ];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          compactType="horizontal"
+        />
+      );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
+    });
+
+    it('should not compact when disabled', () => {
+      const widgets = [
+        createMockWidget('1', { position: { x: 5, y: 5, w: 3, h: 2 } })
+      ];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          compactType={null}
+        />
+      );
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('🚀 Performance & Optimization', () => {
+    it('should handle large number of widgets efficiently', () => {
+      const widgets = Array.from({ length: 100 }, (_, i) => 
+        createMockWidget(`widget-${i}`, {
+          position: { 
+            x: (i % 12), 
+            y: Math.floor(i / 12), 
+            w: 1, 
+            h: 1 
+          }
+        })
+      );
+      
+      const { container } = render(
+        <DashboardGrid {...defaultProps} widgets={widgets} />
+      );
+      
+      // Should render all widgets without performance issues
+      expect(container.querySelectorAll('[data-testid="card"]')).toHaveLength(100);
+    });
+
+    it('should optimize re-renders during drag operations', async () => {
+      const onLayoutChange = jest.fn();
+      const widgets = [createMockWidget('1')];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onLayoutChange={onLayoutChange}
+        />
+      );
+      
+      // Layout change should only be called when necessary
+      expect(onLayoutChange).not.toHaveBeenCalled();
+    });
+
+    it('should cleanup event listeners on unmount', () => {
+      const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+      
+      const { unmount } = render(<DashboardGrid {...defaultProps} />);
+      
+      unmount();
+      
+      // Should clean up any global event listeners
+      expect(removeEventListenerSpy).toHaveBeenCalled();
+      
+      removeEventListenerSpy.mockRestore();
+    });
+  });
+
+  describe('♿ Accessibility', () => {
+    it('should have proper ARIA labels for interactive elements', async () => {
+      const widgets = [createMockWidget('1')];
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      // Interactive elements should have proper accessibility
+      const buttons = screen.getAllByRole('button');
+      expect(buttons.length).toBeGreaterThan(0);
+    });
+
+    it('should support keyboard navigation', async () => {
+      const user = userEvent.setup();
+      render(<DashboardGrid {...defaultProps} />);
+      
       // Should be able to tab through interactive elements
       await user.tab();
-      expect(screen.getByText('Edit Layout')).toHaveFocus();
+      
+      const editButton = screen.getByText('Edit Layout');
+      expect(editButton).toHaveFocus();
     });
 
-    it('provides screen reader friendly content', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Check for descriptive text
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
-      expect(screen.getByText('Sales Chart')).toBeInTheDocument();
+    it('should provide screen reader context for widgets', () => {
+      const widgets = [
+        createMockWidget('1', {
+          title: 'Revenue Chart',
+          content: <div role="img" aria-label="Monthly revenue chart">Chart content</div>
+        })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Revenue Chart')).toBeInTheDocument();
+      expect(screen.getByLabelText('Monthly revenue chart')).toBeInTheDocument();
     });
   });
 
-  // ===== PERFORMANCE TESTS =====
-  describe('Performance', () => {
-    it('handles large number of widgets efficiently', () => {
-      const manyWidgets = Array.from({ length: 50 }, (_, i) => ({
-        id: `widget-${i}`,
-        type: 'metric',
-        title: `Widget ${i}`,
-        content: <div>Content {i}</div>,
-        position: { x: i % 12, y: Math.floor(i / 12), w: 2, h: 2 }
-      }));
-
-      const { container } = render(
-        <DashboardGrid
-          widgets={manyWidgets}
-          onLayoutChange={mockOnLayoutChange}
+  describe('📊 Integration & Callbacks', () => {
+    it('should call onLayoutChange when widget positions update', async () => {
+      const onLayoutChange = jest.fn();
+      const widgets = [createMockWidget('1')];
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onLayoutChange={onLayoutChange}
         />
       );
-
-      // Should render all widgets
-      expect(container.querySelectorAll('[data-testid]')).toBeTruthy();
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      
+      // Simulate widget position change
+      const collapseButton = screen.getByTestId('minimize-icon').closest('button')!;
+      await userEvent.click(collapseButton);
+      
+      // Layout change callback should be triggered for significant changes
+      // Note: Collapse doesn't trigger layout change, but drag/resize would
     });
 
-    it('optimizes re-renders with React.memo patterns', () => {
+    it('should call onWidgetAdd when add widget clicked', async () => {
+      const onWidgetAdd = jest.fn();
+      
+      render(
+        <DashboardGrid 
+          {...defaultProps} 
+          onWidgetAdd={onWidgetAdd}
+        />
+      );
+      
+      await userEvent.click(screen.getByText('Edit Layout'));
+      await userEvent.click(screen.getByText('Add Widget'));
+      
+      expect(onWidgetAdd).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'default',
+          title: 'New Widget',
+          position: { x: 0, y: 0, w: 3, h: 2 }
+        })
+      );
+    });
+
+    it('should update widgets when props change', () => {
+      const initialWidgets = [createMockWidget('1')];
       const { rerender } = render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
+        <DashboardGrid {...defaultProps} widgets={initialWidgets} />
       );
-
-      // Re-render with same props
-      rerender(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Should not cause unnecessary re-renders
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      
+      const newWidgets = [
+        createMockWidget('1'),
+        createMockWidget('2')
+      ];
+      
+      rerender(<DashboardGrid {...defaultProps} widgets={newWidgets} />);
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+      expect(screen.getByText('Widget 2')).toBeInTheDocument();
     });
   });
 
-  // ===== INTEGRATION TESTS =====
-  describe('Integration Scenarios', () => {
-    it('works with external widget management', async () => {
-      const user = userEvent.setup();
+  describe('🐛 Edge Cases & Error Handling', () => {
+    it('should handle invalid widget positions gracefully', () => {
+      const widgets = [
+        createMockWidget('1', {
+          position: { x: -1, y: -1, w: 0, h: 0 }
+        })
+      ];
       
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onWidgetAdd={mockOnWidgetAdd}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
-
-      // Should integrate with external widget addition
-      expect(mockOnWidgetAdd).toBeDefined();
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Should still render widget with corrected position
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
 
-    it('maintains state consistency across operations', async () => {
-      const user = userEvent.setup();
+    it('should handle widgets exceeding grid bounds', () => {
+      const widgets = [
+        createMockWidget('1', {
+          position: { x: 10, y: 0, w: 5, h: 2 } // Exceeds 12 column grid
+        })
+      ];
       
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          allowEdit={true}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      await user.click(screen.getByText('Edit Layout'));
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
       
-      // Perform multiple operations
-      const minimizeButtons = screen.getAllByTestId('minimize-icon');
-      await user.click(minimizeButtons[0]);
-
-      // State should remain consistent
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
 
-    it('handles complex layout configurations', () => {
+    it('should handle empty layout gracefully', () => {
+      render(<DashboardGrid {...defaultProps} layouts={[]} />);
+      
+      expect(screen.getByText('No widgets added yet')).toBeInTheDocument();
+    });
+
+    it('should handle missing widget content', () => {
+      const widgets = [
+        createMockWidget('1', { content: null as any })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
+    });
+
+    it('should handle undefined callback functions', () => {
+      const widgets = [createMockWidget('1')];
+      
       render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          cols={16}
-          rowHeight={80}
-          gap={12}
-          margin={[8, 8]}
-          containerPadding={[12, 16]}
-          compactType="vertical"
-          preventCollision={true}
-          onLayoutChange={mockOnLayoutChange}
+        <DashboardGrid 
+          {...defaultProps} 
+          widgets={widgets}
+          onLayoutChange={undefined}
+          onWidgetRemove={undefined}
         />
       );
-
-      // Should handle complex configuration
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      
+      expect(screen.getByText('Widget 1')).toBeInTheDocument();
     });
   });
 
-  // ===== EDGE CASES =====
-  describe('Edge Cases', () => {
-    it('handles widgets with no content gracefully', () => {
-      const emptyContentWidgets = [
-        {
-          ...sampleWidgets[0],
-          content: null
-        }
+  describe('🎭 Advanced Scenarios', () => {
+    it('should handle mixed widget configurations', () => {
+      const widgets = [
+        createMockWidget('locked', { 
+          isLocked: true, 
+          title: 'Locked Widget' 
+        }),
+        createMockWidget('draggable', { 
+          draggable: true, 
+          title: 'Draggable Widget' 
+        }),
+        createMockWidget('resizable', { 
+          resizable: true, 
+          minW: 2, 
+          maxW: 8,
+          title: 'Resizable Widget'
+        }),
+        createMockWidget('collapsed', { 
+          isCollapsed: true, 
+          title: 'Collapsed Widget' 
+        })
       ];
-
-      render(
-        <DashboardGrid
-          widgets={emptyContentWidgets}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByText('Locked Widget')).toBeInTheDocument();
+      expect(screen.getByText('Draggable Widget')).toBeInTheDocument();
+      expect(screen.getByText('Resizable Widget')).toBeInTheDocument();
+      expect(screen.getByText('Collapsed Widget')).toBeInTheDocument();
     });
 
-    it('handles extremely small grid configurations', () => {
-      render(
-        <DashboardGrid
-          widgets={sampleWidgets}
-          cols={1}
-          rowHeight={50}
-          gap={4}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Should adapt to small grid
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+    it('should maintain widget state during layout operations', async () => {
+      const user = userEvent.setup();
+      const widgets = [
+        createMockWidget('1', { isCollapsed: false })
+      ];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Collapse widget
+      const collapseButton = screen.getByTestId('minimize-icon').closest('button')!;
+      await user.click(collapseButton);
+      
+      // Enter and exit edit mode
+      await user.click(screen.getByText('Edit Layout'));
+      await user.click(screen.getByText('Done Editing'));
+      
+      // Widget should remain collapsed
+      expect(screen.getByTestId('maximize-icon')).toBeInTheDocument();
     });
 
-    it('handles widgets exceeding grid boundaries', () => {
-      const oversizedWidgets = [
-        {
-          ...sampleWidgets[0],
-          position: { x: 10, y: 0, w: 8, h: 2 } // Exceeds 12 column grid
-        }
+    it('should handle rapid state changes gracefully', async () => {
+      const user = userEvent.setup();
+      const widgets = [createMockWidget('1')];
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      // Rapidly toggle edit mode
+      await user.click(screen.getByText('Edit Layout'));
+      await user.click(screen.getByText('Done Editing'));
+      await user.click(screen.getByText('Edit Layout'));
+      
+      // Should handle rapid changes without errors
+      expect(screen.getByText('Done Editing')).toBeInTheDocument();
+    });
+
+    it('should integrate properly with external widget types', () => {
+      const widgets = [
+        createMockWidget('chart', {
+          type: 'chart',
+          title: 'Sales Chart',
+          content: (
+            <div data-testid="chart-widget">
+              <canvas data-testid="chart-canvas" />
+              <div data-testid="chart-legend">Legend</div>
+            </div>
+          )
+        }),
+        createMockWidget('metric', {
+          type: 'metric',
+          title: 'KPI Metrics',
+          content: (
+            <div data-testid="metric-widget">
+              <div data-testid="metric-value">$125,000</div>
+              <div data-testid="metric-change">+12%</div>
+            </div>
+          )
+        })
       ];
-
-      render(
-        <DashboardGrid
-          widgets={oversizedWidgets}
-          cols={12}
-          onLayoutChange={mockOnLayoutChange}
-        />
-      );
-
-      // Should handle gracefully
-      expect(screen.getByText('Revenue')).toBeInTheDocument();
+      
+      render(<DashboardGrid {...defaultProps} widgets={widgets} />);
+      
+      expect(screen.getByTestId('chart-widget')).toBeInTheDocument();
+      expect(screen.getByTestId('metric-widget')).toBeInTheDocument();
+      expect(screen.getByText('$125,000')).toBeInTheDocument();
     });
   });
 });

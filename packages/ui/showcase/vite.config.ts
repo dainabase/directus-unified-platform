@@ -7,13 +7,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@/components': path.resolve(__dirname, '../../ui/src/components'),
-      '@/lib': path.resolve(__dirname, '../../ui/src/lib'),
-      '@/styles': path.resolve(__dirname, '../../ui/src/styles'),
-      '@/hooks': path.resolve(__dirname, '../../ui/src/hooks'),
-      '@/providers': path.resolve(__dirname, '../../ui/src/providers'),
-      '@/types': path.resolve(__dirname, '../../ui/src/types'),
-      '@dainabase/ui': path.resolve(__dirname, '../../ui/src'),
+      '@/components': path.resolve(__dirname, '../src/components'),
+      '@/lib': path.resolve(__dirname, '../src/lib'),
+      '@/styles': path.resolve(__dirname, '../src/styles'),
+      '@/hooks': path.resolve(__dirname, '../src/hooks'),
+      '@/providers': path.resolve(__dirname, '../src/providers'),
+      '@/types': path.resolve(__dirname, '../src/types'),
+      '@dainabase/ui': path.resolve(__dirname, '../src'),
     },
   },
   server: {

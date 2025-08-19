@@ -27,7 +27,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious
-} from '../../../src/components';
+} from '../components';
 import { 
   Home,
   ChevronRight,

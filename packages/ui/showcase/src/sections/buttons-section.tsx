@@ -2,8 +2,8 @@
 // Demonstrates all 132+ button variants, themes, and specialized components
 
 import React, { useState } from 'react';
-// ✅ FIXED: Using consistent import pattern with other sections
-import { Button } from '../../../src/components';
+// ✅ FIXED: Using direct import from button component
+import { Button } from '../../../src/components/button';
 import { 
   Zap, 
   Palette, 
@@ -456,7 +456,7 @@ export const ButtonsSection = () => {
           <div>
             <h4 className="text-sm font-medium text-slate-300 mb-2">Basic Usage</h4>
             <pre className="text-xs text-slate-300 bg-slate-800 p-3 rounded overflow-x-auto">
-{`import { Button } from '../../../src/components';
+{`import { Button } from '../../../src/components/button';
 
 <Button variant="primary">
   Executive Action

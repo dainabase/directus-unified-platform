@@ -70,7 +70,7 @@ export {
   AlertDescription,
   AlertTitle
 } from '../../src/components/alert';
-export { Toast } from '../../src/components/toast';
+export { Toast, toast } from '../../src/components/toast';
 export { Progress } from '../../src/components/progress';
 export { Skeleton } from '../../src/components/skeleton';
 export { Badge } from '../../src/components/badge';
@@ -193,7 +193,7 @@ export const Chart = () => <div>Chart Component</div>;
 export const FileUpload = () => <div>FileUpload Component</div>;
 export const Sonner = () => <div>Sonner Component</div>;
 export const DataGridAdvanced = () => <div>DataGridAdvanced Component</div>;
-export const ErrorBoundary = () => <div>ErrorBoundary Component</div>;
+export const ErrorBoundary = ({ children }: any) => <div>{children}</div>;
 export const FormsDemo = () => <div>FormsDemo Component</div>;
 export const Icon = () => <div>Icon Component</div>;
 export const Form = () => <div>Form Component</div>;

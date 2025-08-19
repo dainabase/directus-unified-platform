@@ -20,7 +20,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '../../../src/components';
+} from '../components';
 import {
   ChevronDown,
   ChevronRight,

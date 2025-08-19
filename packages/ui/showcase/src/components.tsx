@@ -69,15 +69,35 @@ export { Progress } from '../../src/components/progress';
 export { Skeleton } from '../../src/components/skeleton';
 export { Badge } from '../../src/components/badge';
 
-// Layout components
-export { Card } from '../../src/components/card';
+// Layout components with sub-components
+export { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '../../src/components/card';
 export { ScrollArea } from '../../src/components/scroll-area';
-export { Resizable } from '../../src/components/resizable';
-export { Collapsible } from '../../src/components/collapsible';
+export { 
+  Resizable,
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup
+} from '../../src/components/resizable';
+export { 
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from '../../src/components/collapsible';
 export { Separator } from '../../src/components/separator';
 
-// Media components
-export { Avatar } from '../../src/components/avatar';
+// Media components with sub-components
+export { 
+  Avatar,
+  AvatarFallback,
+  AvatarImage
+} from '../../src/components/avatar';
 export { Carousel } from '../../src/components/carousel';
 
 // Advanced components

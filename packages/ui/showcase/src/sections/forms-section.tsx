@@ -17,7 +17,7 @@ import {
   DatePicker,
   ColorPicker,
   Rating
-} from '../../../src/components';
+} from '../components';
 import { 
   FileText, 
   Palette, 

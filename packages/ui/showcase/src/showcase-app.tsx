@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { ButtonsSection } from './sections/buttons-section';
+import { FormsSection } from './sections/forms-section';
 
 export const ShowcaseApp = () => {
   return (
@@ -15,6 +16,22 @@ export const ShowcaseApp = () => {
           <p className="text-gray-600 mt-2 text-lg">
             132+ Enterprise Components • Interactive Showcase • Live Examples
           </p>
+          
+          {/* Progress Indicator */}
+          <div className="mt-4 flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-700 font-medium">Buttons Complete</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-700 font-medium">Forms Complete</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
+              <span className="text-sm text-gray-500">6 more sections in progress...</span>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -25,64 +42,103 @@ export const ShowcaseApp = () => {
             <div className="bg-white rounded-xl shadow-md p-6 sticky top-8">
               <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
               <nav className="space-y-2">
-                <a href="#buttons" className="block text-blue-600 font-medium">
-                  Buttons & Actions
+                <a href="#buttons" className="block text-blue-600 font-medium bg-blue-50 px-3 py-2 rounded-lg">
+                  ✅ Buttons & Actions
                 </a>
-                <a href="#forms" className="block text-gray-600 hover:text-blue-600">
-                  Forms & Inputs
+                <a href="#forms" className="block text-emerald-600 font-medium bg-emerald-50 px-3 py-2 rounded-lg">
+                  ✅ Forms & Inputs
                 </a>
-                <a href="#data" className="block text-gray-600 hover:text-blue-600">
-                  Data Display
+                <a href="#data" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Data Display
                 </a>
-                <a href="#navigation" className="block text-gray-600 hover:text-blue-600">
-                  Navigation
+                <a href="#navigation" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Navigation
                 </a>
-                <a href="#feedback" className="block text-gray-600 hover:text-blue-600">
-                  Feedback
+                <a href="#feedback" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Feedback
                 </a>
-                <a href="#media" className="block text-gray-600 hover:text-blue-600">
-                  Media & Content
+                <a href="#media" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Media & Content
                 </a>
-                <a href="#layout" className="block text-gray-600 hover:text-blue-600">
-                  Layout & Structure
+                <a href="#layout" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Layout & Structure
                 </a>
-                <a href="#advanced" className="block text-gray-600 hover:text-blue-600">
-                  Advanced Components
+                <a href="#advanced" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
+                  🔄 Advanced Components
                 </a>
               </nav>
+              
+              {/* Stats */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="font-medium text-gray-800 mb-3">Progress</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Completed</span>
+                    <span className="font-medium text-green-600">2/8</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Components</span>
+                    <span className="font-medium">45+ showcased</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-blue-600 to-emerald-600 h-2 rounded-full w-1/4"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <div className="space-y-12">
+            <div className="space-y-16">
               {/* Welcome Section */}
               <section className="bg-white rounded-xl shadow-md p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Welcome to the Showcase
+                  🚀 Welcome to the Showcase
                 </h2>
-                <p className="text-gray-600 text-lg leading-relaxed">
+                <p className="text-gray-600 text-lg leading-relaxed mb-6">
                   Explore our comprehensive design system with live, interactive examples. 
                   Each component is production-ready and comes with multiple variants, 
                   themes, and customization options.
                 </p>
-                <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                
+                {/* Key Metrics */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-blue-600">132+</div>
-                    <div className="text-sm text-gray-500">Components</div>
+                    <div className="text-sm text-gray-500">Total Components</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">8</div>
-                    <div className="text-sm text-gray-500">Categories</div>
+                    <div className="text-3xl font-bold text-emerald-600">45+</div>
+                    <div className="text-sm text-gray-500">Showcased</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-purple-600">6</div>
-                    <div className="text-sm text-gray-500">Themes</div>
+                    <div className="text-sm text-gray-500">Premium Themes</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-orange-600">100%</div>
                     <div className="text-sm text-gray-500">Interactive</div>
                   </div>
+                </div>
+
+                {/* What's New */}
+                <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">🔥 Latest Updates</h3>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Complete ButtonsSection with 13 variants and 6 themes
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Full FormsSection with 18+ components and validation
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
+                      Data Display section coming next...
+                    </li>
+                  </ul>
                 </div>
               </section>
 
@@ -91,21 +147,71 @@ export const ShowcaseApp = () => {
                 <ButtonsSection />
               </section>
 
-              {/* More sections will be added by Claude Code */}
-              <section className="bg-white rounded-xl shadow-md p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  🚀 Ready for Development
-                </h2>
-                <p className="text-gray-600">
-                  This is the foundation structure. Claude Code will expand this into a 
-                  complete, interactive showcase with all 132+ components, live examples, 
-                  code snippets, and beautiful animations.
-                </p>
+              {/* Forms Section */}
+              <section id="forms" className="bg-white rounded-xl shadow-md p-8">
+                <FormsSection />
+              </section>
+
+              {/* Coming Soon Sections */}
+              <section className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-md p-8 border-2 border-dashed border-gray-200">
+                <div className="text-center py-12">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full mb-4">
+                    <div className="text-2xl">🚧</div>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    More Sections Coming Soon
+                  </h2>
+                  <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
+                    We're rapidly developing the remaining 6 sections of the design system. 
+                    Each will showcase dozens of production-ready components with the same 
+                    level of detail and interactivity.
+                  </p>
+                  
+                  {/* Preview Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                    {[
+                      { name: 'Data Display', icon: '📊', count: '20+', desc: 'Tables, Charts, KPIs' },
+                      { name: 'Navigation', icon: '🧭', count: '15+', desc: 'Menus, Tabs, Breadcrumbs' },
+                      { name: 'Feedback', icon: '💬', count: '12+', desc: 'Alerts, Dialogs, Toasts' },
+                      { name: 'Media', icon: '🎬', count: '10+', desc: 'Images, Videos, Carousels' },
+                      { name: 'Layout', icon: '📐', count: '18+', desc: 'Grids, Cards, Containers' },
+                      { name: 'Advanced', icon: '⚡', count: '25+', desc: 'Kanban, Workflows, AI' },
+                    ].map((section) => (
+                      <div key={section.name} className="bg-white rounded-lg p-4 border border-gray-200">
+                        <div className="text-2xl mb-2">{section.icon}</div>
+                        <h3 className="font-semibold text-gray-900 text-sm">{section.name}</h3>
+                        <div className="text-blue-600 font-medium text-xs">{section.count} components</div>
+                        <p className="text-gray-500 text-xs mt-1">{section.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </section>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-16">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <h3 className="font-semibold text-gray-900 mb-2">Dainabase Design System</h3>
+            <p className="text-gray-600 text-sm mb-4">
+              Enterprise-grade components for modern applications
+            </p>
+            <div className="flex justify-center space-x-6 text-sm text-gray-500">
+              <span>v1.0.1-beta.2</span>
+              <span>•</span>
+              <span>132+ Components</span>
+              <span>•</span>
+              <span>Bundle: 50KB</span>
+              <span>•</span>
+              <span>TypeScript</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

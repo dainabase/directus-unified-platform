@@ -11,7 +11,7 @@ import {
   Badge,
   Card,
   Progress
-} from '../../../src/components';
+} from '../components';
 import { 
   BarChart3, 
   TrendingUp, 

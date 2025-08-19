@@ -15,10 +15,22 @@ export default defineConfig({
       '@/types': path.resolve(__dirname, '../src/types'),
       '@dainabase/ui': path.resolve(__dirname, '../src'),
     },
+    // Ajout des extensions pour la résolution
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+    // Forcer la résolution des index files
+    mainFields: ['module', 'main', 'index'],
+  },
+  optimizeDeps: {
+    // Inclure explicitement les dépendances à pré-bundler
+    include: ['react', 'react-dom', 'lucide-react', 'framer-motion', 'prism-react-renderer'],
   },
   server: {
     port: 3001,
     open: true,
+    // Forcer le rafraîchissement complet
+    hmr: {
+      overlay: true,
+    },
   },
   build: {
     outDir: 'dist',

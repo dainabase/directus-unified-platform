@@ -2,16 +2,7 @@
 // Demonstrates all 132+ button variants, themes, and specialized components
 
 import React, { useState } from 'react';
-import { 
-  Button, 
-  ExecutiveButton, 
-  ActionButton, 
-  AnalyticsButton, 
-  FinanceButton,
-  type ButtonTheme,
-  type ButtonVariant,
-  type ButtonSize 
-} from '../../../src/components/button';
+import { Button } from '@dainabase/ui';
 import { 
   Zap, 
   Palette, 
@@ -30,6 +21,11 @@ import {
   Shield,
   Clock
 } from 'lucide-react';
+
+// =================== TYPES ===================
+type ButtonTheme = 'executive' | 'analytics' | 'finance' | 'dashboard' | 'minimal' | 'default';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'outline' | 'link';
+type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 // =================== INTERACTIVE DEMO COMPONENTS ===================
 
@@ -79,6 +75,49 @@ const ThemeDemo = ({ theme, children }: { theme: ButtonTheme, children: React.Re
   </div>
 );
 
+// =================== SPECIALIZED COMPONENTS (Using Button base) ===================
+
+const ExecutiveButton = ({ children, metric, trend, priority, ...props }: any) => (
+  <Button 
+    {...props}
+    className={`relative overflow-hidden ${
+      trend === 'up' ? 'bg-emerald-600 hover:bg-emerald-700' : 
+      trend === 'down' ? 'bg-red-600 hover:bg-red-700' : 
+      'bg-blue-600 hover:bg-blue-700'
+    } text-white`}
+  >
+    <div className="flex items-center">
+      {trend === 'up' && <TrendingUp className="w-4 h-4 mr-2" />}
+      {children}
+    </div>
+  </Button>
+);
+
+const AnalyticsButton = ({ children, dataType, ...props }: any) => (
+  <Button 
+    {...props}
+    className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700"
+  >
+    {children}
+  </Button>
+);
+
+const FinanceButton = ({ children, financialAction, amount, ...props }: any) => (
+  <Button 
+    {...props}
+    className="bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700"
+  >
+    <DollarSign className="w-4 h-4 mr-2" />
+    {children}
+  </Button>
+);
+
+const ActionButton = ({ children, actionType, ...props }: any) => (
+  <Button {...props} variant="outline">
+    {children}
+  </Button>
+);
+
 // =================== MAIN BUTTONS SECTION ===================
 
 export const ButtonsSection = () => {
@@ -94,7 +133,7 @@ export const ButtonsSection = () => {
   };
 
   const themes: ButtonTheme[] = ['executive', 'analytics', 'finance', 'dashboard', 'minimal', 'default'];
-  const variants: ButtonVariant[] = ['primary', 'secondary', 'executive', 'action', 'analytics', 'finance', 'danger', 'success', 'ghost', 'outline', 'link'];
+  const variants: ButtonVariant[] = ['primary', 'secondary', 'danger', 'success', 'ghost', 'outline', 'link'];
   const sizes: ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 
   return (
@@ -152,13 +191,13 @@ export const ButtonsSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               {themes.map((theme) => (
                 <ThemeDemo key={theme} theme={theme}>
-                  <Button theme={theme} variant="primary" size="md">
+                  <Button variant="primary" size="md">
                     Primary
                   </Button>
-                  <Button theme={theme} variant="secondary" size="md">
+                  <Button variant="secondary" size="md">
                     Secondary
                   </Button>
-                  <Button theme={theme} variant="ghost" size="md">
+                  <Button variant="ghost" size="md">
                     Ghost
                   </Button>
                 </ThemeDemo>
@@ -218,9 +257,9 @@ export const ButtonsSection = () => {
             <ComponentDemo
               title="Analytics Buttons"
               description="Data visualization and business intelligence actions"
-              code="<AnalyticsButton dataType='chart' visualizationType='line'>Generate Report</AnalyticsButton>"
+              code="<AnalyticsButton dataType='chart'>Generate Report</AnalyticsButton>"
             >
-              <AnalyticsButton dataType="chart" visualizationType="line">
+              <AnalyticsButton dataType="chart">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Generate Report
               </AnalyticsButton>
@@ -269,65 +308,71 @@ export const ButtonsSection = () => {
             <ComponentDemo
               title="Loading States & Animations"
               description="Advanced loading states with custom animations and feedback"
-              code="<Button loading loadingText='Processing...'>Submit</Button>"
+              code="<Button loading>Submit</Button>"
             >
               <Button 
-                loading={loadingStates.submit} 
-                loadingText="Processing..."
+                disabled={loadingStates.submit}
                 onClick={() => handleLoadingDemo('submit')}
               >
-                Submit Form
+                {loadingStates.submit ? 'Processing...' : 'Submit Form'}
               </Button>
               <Button 
-                loading={loadingStates.save} 
-                loadingText="Saving..."
+                disabled={loadingStates.save}
                 variant="secondary"
                 onClick={() => handleLoadingDemo('save')}
               >
-                Save Draft
+                {loadingStates.save ? 'Saving...' : 'Save Draft'}
               </Button>
               <Button 
-                loading={loadingStates.upload} 
-                loadingText="Uploading..."
+                disabled={loadingStates.upload}
                 variant="success"
                 onClick={() => handleLoadingDemo('upload')}
               >
-                Upload File
+                {loadingStates.upload ? 'Uploading...' : 'Upload File'}
               </Button>
             </ComponentDemo>
 
             <ComponentDemo
               title="Icons & Badges"
               description="Rich icon system with notification badges and indicators"
-              code="<Button icon='bell' badge={3} badgeVariant='error'>Notifications</Button>"
+              code="<Button>Notifications</Button>"
             >
-              <Button icon="bell" badge={3} badgeVariant="error">
+              <Button className="relative">
+                <Bell className="w-4 h-4 mr-2" />
                 Notifications
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
               </Button>
-              <Button icon="users" badge="New" badgeVariant="success">
+              <Button className="relative" variant="outline">
+                <Users className="w-4 h-4 mr-2" />
                 Team Members
+                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full px-2 py-1">New</span>
               </Button>
-              <Button icon="download" badge={12} badgeVariant="warning">
+              <Button className="relative" variant="ghost">
+                <Download className="w-4 h-4 mr-2" />
                 Downloads
-              </Button>
-              <Button icon="shield" badge="Pro" badgeVariant="default">
-                Security
+                <span className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">12</span>
               </Button>
             </ComponentDemo>
 
             <ComponentDemo
               title="Keyboard Shortcuts"
               description="Built-in keyboard shortcuts for power users"
-              code="<Button shortcut='Ctrl+S' icon='download'>Save Report</Button>"
+              code="<Button>Save Report</Button>"
             >
-              <Button shortcut="Ctrl+S" icon="download">
+              <Button className="flex items-center">
+                <Download className="w-4 h-4 mr-2" />
                 Save Report
+                <kbd className="ml-2 px-2 py-1 bg-gray-100 text-xs rounded border">Ctrl+S</kbd>
               </Button>
-              <Button shortcut="Ctrl+N" icon="zap">
+              <Button className="flex items-center" variant="outline">
+                <Zap className="w-4 h-4 mr-2" />
                 New Project
+                <kbd className="ml-2 px-2 py-1 bg-gray-100 text-xs rounded border">Ctrl+N</kbd>
               </Button>
-              <Button shortcut="Ctrl+E" icon="settings">
+              <Button className="flex items-center" variant="ghost">
+                <Settings className="w-4 h-4 mr-2" />
                 Edit Settings
+                <kbd className="ml-2 px-2 py-1 bg-gray-100 text-xs rounded border">Ctrl+E</kbd>
               </Button>
             </ComponentDemo>
           </>
@@ -339,36 +384,20 @@ export const ButtonsSection = () => {
             <ComponentDemo
               title="Glassmorphism & Modern Effects"
               description="Premium visual effects with glassmorphism and gradients"
-              code="<Button glassmorphism gradient animateOnHover>Premium Action</Button>"
+              code="<Button className='backdrop-blur-lg'>Premium Action</Button>"
             >
-              <Button glassmorphism theme="executive" className="backdrop-blur-lg">
+              <Button className="backdrop-blur-lg bg-white/20 border border-white/30">
                 Glassmorphism
               </Button>
-              <Button gradient theme="analytics">
+              <Button className="bg-gradient-to-r from-purple-500 to-pink-500">
                 Gradient Theme
               </Button>
-              <Button animateOnHover theme="finance" className="hover:scale-105">
+              <Button className="hover:scale-105 transition-transform">
                 Hover Animation
               </Button>
-              <Button pulseOnMount theme="dashboard">
+              <Button className="animate-pulse">
                 Pulse Effect
               </Button>
-            </ComponentDemo>
-
-            <ComponentDemo
-              title="Floating Action Buttons"
-              description="Modern FAB design for primary actions"
-              code="<Button variant='floating' icon='zap'>FAB</Button>"
-            >
-              <div className="relative h-20 w-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                <p className="text-gray-600 mb-8">Floating buttons appear fixed</p>
-                <Button 
-                  variant="floating" 
-                  icon="zap" 
-                  className="relative bottom-0 right-0"
-                  size="fab"
-                />
-              </div>
             </ComponentDemo>
 
             <ComponentDemo
@@ -403,10 +432,12 @@ export const ButtonsSection = () => {
                 <div className="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg">
                   <h4 className="font-semibold text-emerald-900 mb-4">Operations</h4>
                   <div className="space-y-3">
-                    <Button theme="minimal" icon="users" className="w-full">
+                    <Button variant="outline" className="w-full">
+                      <Users className="w-4 h-4 mr-2" />
                       Team Management
                     </Button>
-                    <Button theme="minimal" icon="settings" className="w-full">
+                    <Button variant="outline" className="w-full">
+                      <Settings className="w-4 h-4 mr-2" />
                       System Config
                     </Button>
                   </div>
@@ -426,7 +457,7 @@ export const ButtonsSection = () => {
             <pre className="text-xs text-slate-300 bg-slate-800 p-3 rounded overflow-x-auto">
 {`import { Button } from '@dainabase/ui';
 
-<Button variant="primary" theme="executive">
+<Button variant="primary">
   Executive Action
 </Button>`}
             </pre>
@@ -434,15 +465,9 @@ export const ButtonsSection = () => {
           <div>
             <h4 className="text-sm font-medium text-slate-300 mb-2">Advanced Features</h4>
             <pre className="text-xs text-slate-300 bg-slate-800 p-3 rounded overflow-x-auto">
-{`<ExecutiveButton 
-  metric="Q4 Revenue" 
-  trend="up" 
-  priority="high"
-  shortcut="Ctrl+R"
-  badge={2}
->
-  $2.4M Growth
-</ExecutiveButton>`}
+{`<Button className="bg-gradient-to-r from-blue-500 to-purple-500">
+  Gradient Button
+</Button>`}
             </pre>
           </div>
         </div>

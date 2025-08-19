@@ -31,7 +31,7 @@ import {
   Input,
   Toggle,
   Slider,
-} from '../../../src/components';
+} from '../components';
 import {
   Image as ImageIcon,
   Video,
@@ -80,6 +80,7 @@ import {
   Eye,
   EyeOff,
   Settings,
+  Mail,
 } from 'lucide-react';
 
 export const MediaSection: React.FC = () => {

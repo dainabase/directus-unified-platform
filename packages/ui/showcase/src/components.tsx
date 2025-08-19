@@ -58,8 +58,12 @@ export {
 
 export { Stepper } from '../../src/components/stepper';
 
-// Feedback components
-export { Alert } from '../../src/components/alert';
+// Feedback components with sub-components
+export { 
+  Alert,
+  AlertDescription,
+  AlertTitle
+} from '../../src/components/alert';
 export { Toast } from '../../src/components/toast';
 export { Progress } from '../../src/components/progress';
 export { Skeleton } from '../../src/components/skeleton';

@@ -4,6 +4,7 @@
 import React from 'react';
 import { ButtonsSection } from './sections/buttons-section';
 import { FormsSection } from './sections/forms-section';
+import { DataSection } from './sections/data-section';
 
 export const ShowcaseApp = () => {
   return (
@@ -28,8 +29,12 @@ export const ShowcaseApp = () => {
               <span className="text-sm text-green-700 font-medium">Forms Complete</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
-              <span className="text-sm text-gray-500">6 more sections in progress...</span>
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-700 font-medium">Data Complete</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <span className="text-sm text-yellow-600">5 more sections in progress...</span>
             </div>
           </div>
         </div>
@@ -48,8 +53,8 @@ export const ShowcaseApp = () => {
                 <a href="#forms" className="block text-emerald-600 font-medium bg-emerald-50 px-3 py-2 rounded-lg">
                   ✅ Forms & Inputs
                 </a>
-                <a href="#data" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
-                  🔄 Data Display
+                <a href="#data" className="block text-purple-600 font-medium bg-purple-50 px-3 py-2 rounded-lg">
+                  ✅ Data Display
                 </a>
                 <a href="#navigation" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
                   🔄 Navigation
@@ -74,14 +79,17 @@ export const ShowcaseApp = () => {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Completed</span>
-                    <span className="font-medium text-green-600">2/8</span>
+                    <span className="font-medium text-green-600">3/8</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Components</span>
-                    <span className="font-medium">45+ showcased</span>
+                    <span className="font-medium">65+ showcased</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-600 to-emerald-600 h-2 rounded-full w-1/4"></div>
+                    <div className="bg-gradient-to-r from-blue-600 via-emerald-600 to-purple-600 h-2 rounded-full w-3/8"></div>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-2">
+                    🔥 37.5% Complete
                   </div>
                 </div>
               </div>
@@ -109,7 +117,7 @@ export const ShowcaseApp = () => {
                     <div className="text-sm text-gray-500">Total Components</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-emerald-600">45+</div>
+                    <div className="text-3xl font-bold text-emerald-600">65+</div>
                     <div className="text-sm text-gray-500">Showcased</div>
                   </div>
                   <div className="text-center">
@@ -123,7 +131,7 @@ export const ShowcaseApp = () => {
                 </div>
 
                 {/* What's New */}
-                <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg p-6">
+                <div className="bg-gradient-to-r from-blue-50 via-emerald-50 to-purple-50 rounded-lg p-6">
                   <h3 className="font-semibold text-gray-900 mb-3">🔥 Latest Updates</h3>
                   <ul className="space-y-2 text-sm text-gray-700">
                     <li className="flex items-center">
@@ -135,8 +143,12 @@ export const ShowcaseApp = () => {
                       Full FormsSection with 18+ components and validation
                     </li>
                     <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Data Display section with charts, tables, and BI components
+                    </li>
+                    <li className="flex items-center">
                       <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
-                      Data Display section coming next...
+                      Navigation section coming next...
                     </li>
                   </ul>
                 </div>
@@ -152,38 +164,66 @@ export const ShowcaseApp = () => {
                 <FormsSection />
               </section>
 
+              {/* Data Section */}
+              <section id="data" className="bg-white rounded-xl shadow-md p-8">
+                <DataSection />
+              </section>
+
               {/* Coming Soon Sections */}
               <section className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-md p-8 border-2 border-dashed border-gray-200">
                 <div className="text-center py-12">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full mb-4">
-                    <div className="text-2xl">🚧</div>
+                    <div className="text-2xl">🚀</div>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    More Sections Coming Soon
+                    5 More Sections Coming Soon
                   </h2>
                   <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
-                    We're rapidly developing the remaining 6 sections of the design system. 
+                    We're rapidly developing the remaining sections of the design system. 
                     Each will showcase dozens of production-ready components with the same 
-                    level of detail and interactivity.
+                    level of detail and interactivity as the first three.
                   </p>
                   
                   {/* Preview Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-4xl mx-auto">
                     {[
-                      { name: 'Data Display', icon: '📊', count: '20+', desc: 'Tables, Charts, KPIs' },
-                      { name: 'Navigation', icon: '🧭', count: '15+', desc: 'Menus, Tabs, Breadcrumbs' },
-                      { name: 'Feedback', icon: '💬', count: '12+', desc: 'Alerts, Dialogs, Toasts' },
-                      { name: 'Media', icon: '🎬', count: '10+', desc: 'Images, Videos, Carousels' },
-                      { name: 'Layout', icon: '📐', count: '18+', desc: 'Grids, Cards, Containers' },
-                      { name: 'Advanced', icon: '⚡', count: '25+', desc: 'Kanban, Workflows, AI' },
+                      { name: 'Navigation', icon: '🧭', count: '15+', desc: 'Menus, Tabs, Breadcrumbs', priority: 'next' },
+                      { name: 'Feedback', icon: '💬', count: '12+', desc: 'Alerts, Dialogs, Toasts', priority: 'soon' },
+                      { name: 'Media', icon: '🎬', count: '10+', desc: 'Images, Videos, Carousels', priority: 'soon' },
+                      { name: 'Layout', icon: '📐', count: '18+', desc: 'Grids, Cards, Containers', priority: 'soon' },
+                      { name: 'Advanced', icon: '⚡', count: '25+', desc: 'Kanban, Workflows, AI', priority: 'soon' },
                     ].map((section) => (
-                      <div key={section.name} className="bg-white rounded-lg p-4 border border-gray-200">
+                      <div key={section.name} className={`bg-white rounded-lg p-4 border-2 ${
+                        section.priority === 'next' ? 'border-yellow-200 bg-yellow-50' : 'border-gray-200'
+                      }`}>
                         <div className="text-2xl mb-2">{section.icon}</div>
                         <h3 className="font-semibold text-gray-900 text-sm">{section.name}</h3>
-                        <div className="text-blue-600 font-medium text-xs">{section.count} components</div>
+                        <div className={`font-medium text-xs ${
+                          section.priority === 'next' ? 'text-yellow-600' : 'text-blue-600'
+                        }`}>
+                          {section.count} components
+                        </div>
                         <p className="text-gray-500 text-xs mt-1">{section.desc}</p>
+                        {section.priority === 'next' && (
+                          <div className="mt-2 text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-1 rounded">
+                            Next in Queue
+                          </div>
+                        )}
                       </div>
                     ))}
+                  </div>
+
+                  {/* Achievement Badges */}
+                  <div className="mt-8 flex justify-center space-x-4">
+                    <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                      🏆 3 Sections Complete
+                    </div>
+                    <div className="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium">
+                      📊 65+ Components Showcased
+                    </div>
+                    <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
+                      ⚡ 37.5% Coverage
+                    </div>
                   </div>
                 </div>
               </section>
@@ -208,6 +248,8 @@ export const ShowcaseApp = () => {
               <span>Bundle: 50KB</span>
               <span>•</span>
               <span>TypeScript</span>
+              <span>•</span>
+              <span className="text-green-600 font-medium">3/8 Sections Live</span>
             </div>
           </div>
         </div>

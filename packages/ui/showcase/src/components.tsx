@@ -8,7 +8,13 @@ export { Button, ExecutiveButton, ActionButton, AnalyticsButton, FinanceButton }
 export { Input } from '../../src/components/input';
 export { Label } from '../../src/components/label';
 export { Textarea } from '../../src/components/textarea';
-export { Select } from '../../src/components/select';
+export { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../../src/components/select';
 export { Checkbox } from '../../src/components/checkbox';
 export { RadioGroup } from '../../src/components/radio-group';
 export { Switch } from '../../src/components/switch';
@@ -98,7 +104,13 @@ export {
   AvatarFallback,
   AvatarImage
 } from '../../src/components/avatar';
-export { Carousel } from '../../src/components/carousel';
+export { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from '../../src/components/carousel';
 
 // Advanced components
 export { Calendar } from '../../src/components/calendar';
@@ -186,6 +198,7 @@ export const FormsDemo = () => <div>FormsDemo Component</div>;
 export const Icon = () => <div>Icon Component</div>;
 export const Form = () => <div>Form Component</div>;
 export const UIProvider = () => <div>UIProvider Component</div>;
+export const Mail = () => <div>Mail Component</div>;
 
 // Export all as a namespace for convenience
 import * as AllComponents from '../../src/components';

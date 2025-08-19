@@ -18,6 +18,7 @@ export { ToggleGroup } from '../../src/components/toggle-group';
 
 // Data components
 export { Table } from '../../src/components/table';
+export { Timeline } from '../../src/components/timeline';
 
 // Navigation components
 export { Tabs } from '../../src/components/tabs';

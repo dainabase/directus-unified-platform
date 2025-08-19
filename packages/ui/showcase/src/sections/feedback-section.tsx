@@ -11,7 +11,7 @@ import {
   Skeleton,
   Button,
   Badge
-} from '../../../src/components';
+} from '../components';
 import { toast } from 'sonner';
 import { 
   CheckCircle,

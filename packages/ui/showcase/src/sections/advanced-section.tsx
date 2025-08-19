@@ -15,6 +15,11 @@ import {
   Button,
   Badge,
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -47,7 +52,7 @@ import {
   Alert,
   AlertDescription,
   toast,
-} from '../../src';
+} from '../components';
 
 export const AdvancedSection = () => {
   // States for interactive demos
@@ -122,7 +127,7 @@ export const AdvancedSection = () => {
 
   // Keyboard shortcut handler
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setCommandOpen(true);

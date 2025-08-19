@@ -5,6 +5,8 @@ import React from 'react';
 import { ButtonsSection } from './sections/buttons-section';
 import { FormsSection } from './sections/forms-section';
 import { DataSection } from './sections/data-section';
+import { NavigationSection } from './sections/navigation-section';
+import { FeedbackSection } from './sections/feedback-section';
 
 export const ShowcaseApp = () => {
   return (
@@ -33,8 +35,16 @@ export const ShowcaseApp = () => {
               <span className="text-sm text-green-700 font-medium">Data Complete</span>
             </div>
             <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-700 font-medium">Navigation Complete</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-green-700 font-medium">Feedback Complete</span>
+            </div>
+            <div className="flex items-center space-x-2">
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <span className="text-sm text-yellow-600">5 more sections in progress...</span>
+              <span className="text-sm text-yellow-600">3 more sections in progress...</span>
             </div>
           </div>
         </div>
@@ -56,11 +66,11 @@ export const ShowcaseApp = () => {
                 <a href="#data" className="block text-purple-600 font-medium bg-purple-50 px-3 py-2 rounded-lg">
                   ✅ Data Display
                 </a>
-                <a href="#navigation" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
-                  🔄 Navigation
+                <a href="#navigation" className="block text-indigo-600 font-medium bg-indigo-50 px-3 py-2 rounded-lg">
+                  ✅ Navigation
                 </a>
-                <a href="#feedback" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
-                  🔄 Feedback
+                <a href="#feedback" className="block text-amber-600 font-medium bg-amber-50 px-3 py-2 rounded-lg">
+                  ✅ Feedback
                 </a>
                 <a href="#media" className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50">
                   🔄 Media & Content
@@ -79,17 +89,17 @@ export const ShowcaseApp = () => {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Completed</span>
-                    <span className="font-medium text-green-600">3/8</span>
+                    <span className="font-medium text-green-600">5/8</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Components</span>
-                    <span className="font-medium">65+ showcased</span>
+                    <span className="font-medium">85+ showcased</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-blue-600 via-emerald-600 to-purple-600 h-2 rounded-full w-3/8"></div>
+                    <div className="bg-gradient-to-r from-blue-600 via-emerald-600 to-purple-600 h-2 rounded-full" style={{ width: '62.5%' }}></div>
                   </div>
                   <div className="text-xs text-gray-500 mt-2">
-                    🔥 37.5% Complete
+                    🔥 62.5% Complete
                   </div>
                 </div>
               </div>
@@ -117,7 +127,7 @@ export const ShowcaseApp = () => {
                     <div className="text-sm text-gray-500">Total Components</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-emerald-600">65+</div>
+                    <div className="text-3xl font-bold text-emerald-600">85+</div>
                     <div className="text-sm text-gray-500">Showcased</div>
                   </div>
                   <div className="text-center">
@@ -147,8 +157,16 @@ export const ShowcaseApp = () => {
                       Data Display section with charts, tables, and BI components
                     </li>
                     <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      NavigationSection with tabs, menus, steppers, and pagination
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      FeedbackSection with alerts, toasts, and progress indicators
+                    </li>
+                    <li className="flex items-center">
                       <span className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></span>
-                      Navigation section coming next...
+                      Layout, Media, and Advanced sections coming next...
                     </li>
                   </ul>
                 </div>
@@ -169,6 +187,16 @@ export const ShowcaseApp = () => {
                 <DataSection />
               </section>
 
+              {/* Navigation Section */}
+              <section id="navigation" className="bg-white rounded-xl shadow-md p-8">
+                <NavigationSection />
+              </section>
+
+              {/* Feedback Section */}
+              <section id="feedback" className="bg-white rounded-xl shadow-md p-8">
+                <FeedbackSection />
+              </section>
+
               {/* Coming Soon Sections */}
               <section className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-md p-8 border-2 border-dashed border-gray-200">
                 <div className="text-center py-12">
@@ -176,20 +204,18 @@ export const ShowcaseApp = () => {
                     <div className="text-2xl">🚀</div>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    5 More Sections Coming Soon
+                    3 More Sections Coming Soon
                   </h2>
                   <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">
                     We're rapidly developing the remaining sections of the design system. 
                     Each will showcase dozens of production-ready components with the same 
-                    level of detail and interactivity as the first three.
+                    level of detail and interactivity as the first five.
                   </p>
                   
                   {/* Preview Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-4xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
                     {[
-                      { name: 'Navigation', icon: '🧭', count: '15+', desc: 'Menus, Tabs, Breadcrumbs', priority: 'next' },
-                      { name: 'Feedback', icon: '💬', count: '12+', desc: 'Alerts, Dialogs, Toasts', priority: 'soon' },
-                      { name: 'Media', icon: '🎬', count: '10+', desc: 'Images, Videos, Carousels', priority: 'soon' },
+                      { name: 'Media', icon: '🎬', count: '10+', desc: 'Images, Videos, Carousels', priority: 'next' },
                       { name: 'Layout', icon: '📐', count: '18+', desc: 'Grids, Cards, Containers', priority: 'soon' },
                       { name: 'Advanced', icon: '⚡', count: '25+', desc: 'Kanban, Workflows, AI', priority: 'soon' },
                     ].map((section) => (
@@ -216,13 +242,13 @@ export const ShowcaseApp = () => {
                   {/* Achievement Badges */}
                   <div className="mt-8 flex justify-center space-x-4">
                     <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
-                      🏆 3 Sections Complete
+                      🏆 5 Sections Complete
                     </div>
                     <div className="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium">
-                      📊 65+ Components Showcased
+                      📊 85+ Components Showcased
                     </div>
                     <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
-                      ⚡ 37.5% Coverage
+                      ⚡ 62.5% Coverage
                     </div>
                   </div>
                 </div>
@@ -249,7 +275,7 @@ export const ShowcaseApp = () => {
               <span>•</span>
               <span>TypeScript</span>
               <span>•</span>
-              <span className="text-green-600 font-medium">3/8 Sections Live</span>
+              <span className="text-green-600 font-medium">5/8 Sections Live</span>
             </div>
           </div>
         </div>

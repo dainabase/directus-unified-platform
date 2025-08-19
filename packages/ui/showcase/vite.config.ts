@@ -7,13 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@/components': path.resolve(__dirname, '../src/components'),
-      '@/lib': path.resolve(__dirname, '../src/lib'),
-      '@/styles': path.resolve(__dirname, '../src/styles'),
-      '@/hooks': path.resolve(__dirname, '../src/hooks'),
-      '@/providers': path.resolve(__dirname, '../src/providers'),
-      '@/types': path.resolve(__dirname, '../src/types'),
       '@dainabase/ui': path.resolve(__dirname, '../src'),
+      // Ne pas utiliser d'alias pour @/components mais utiliser les chemins relatifs directs
     },
     // Ajout des extensions pour la résolution
     extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],

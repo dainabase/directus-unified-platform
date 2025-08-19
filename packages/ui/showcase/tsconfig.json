@@ -20,7 +20,12 @@
       "@/*": ["./src/*"],
       "@/components/*": ["../src/components/*"],
       "@/lib/*": ["../src/lib/*"],
-      "@/styles/*": ["../src/styles/*"]
+      "@/styles/*": ["../src/styles/*"],
+      "@/hooks/*": ["../src/hooks/*"],
+      "@/providers/*": ["../src/providers/*"],
+      "@/types/*": ["../src/types/*"],
+      "@dainabase/ui": ["../src"],
+      "@dainabase/ui/*": ["../src/*"]
     }
   },
   "include": [

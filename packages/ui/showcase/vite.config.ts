@@ -2,8 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  // GitHub Pages deployment path
+  base: command === 'build' ? '/directus-unified-platform/' : '/',
+  
   plugins: [react()],
+  
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -12,10 +16,12 @@ export default defineConfig({
       '@lib': path.resolve(__dirname, '../src/lib'),
     },
   },
+  
   server: {
     port: 3001,
     open: true,
   },
+  
   build: {
     outDir: 'dist',
     sourcemap: true,
@@ -23,6 +29,7 @@ export default defineConfig({
       external: [],
     },
   },
+  
   optimizeDeps: {
     include: [
       'react',
@@ -71,4 +78,4 @@ export default defineConfig({
       'react-resizable-panels'
     ],
   },
-});
+}));

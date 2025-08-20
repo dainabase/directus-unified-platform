@@ -85,7 +85,7 @@ interface HistoryState {
   timestamp: number;
 }
 
-interface ImageCropperProps {
+export interface ImageCropperProps {
   src?: string;
   defaultCrop?: CropArea;
   defaultTransform?: Partial<Transform>;

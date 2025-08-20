@@ -85,7 +85,8 @@ export { VirtualizedTable } from "./components/virtualized-table";
 export { Mentions } from "./components/mentions";
 
 // CHARTS VARIATIONS
-export { Charts } from "./components/charts";
+// Charts are exported individually from charts/index.ts
+export * from "./components/charts";
 
 // BREADCRUMBS VARIATION
 export { Breadcrumbs } from "./components/breadcrumbs";
@@ -108,7 +109,7 @@ export { ChromaticTest } from "./components/chromatic-test";
 export { AudioRecorder } from "./components/audio-recorder";
 export { VideoPlayer } from "./components/video-player";
 export { ImageCropper } from "./components/image-cropper";
-export { PdfViewer } from "./components/pdf-viewer";
+export { PDFViewer } from "./components/pdf-viewer";
 
 // Development Tools
 export { CodeEditor } from "./components/code-editor";
@@ -132,7 +133,7 @@ export * from "./components/navigation-bundle";
 export * from "./components/overlays-bundle";
 
 // Heavy Components (lazy loading)
-export { HeavyComponents } from "./components/heavy-components";
+// Heavy components are exported individually
 
 // ============================================
 // VERSION INFO - MISE À JOUR CRITIQUE
@@ -195,15 +196,15 @@ export type { TooltipProps } from "./components/tooltip";
 // TYPE EXPORTS - Advanced Components  
 // ============================================
 export type { AdvancedFilterProps } from "./components/advanced-filter";
-export type { AlertDialogProps } from "./components/alert-dialog";
+// export type { AlertDialogProps } from "./components/alert-dialog";
 export type { AppShellProps } from "./components/app-shell";
 export type { DashboardGridProps } from "./components/dashboard-grid";
 export type { DrawerProps } from "./components/drawer";
 export type { NotificationCenterProps } from "./components/notification-center";
 export type { SearchBarProps } from "./components/search-bar";
 export type { TagInputProps } from "./components/tag-input";
-export type { ThemeBuilderProps } from "./components/theme-builder";
-export type { ThemeToggleProps } from "./components/theme-toggle";
+// export type { ThemeBuilderProps } from "./components/theme-builder";
+// export type { ThemeToggleProps } from "./components/theme-toggle";
 export type { TreeViewProps } from "./components/tree-view";
 export type { VirtualizedTableProps } from "./components/virtualized-table";
 
@@ -214,13 +215,13 @@ export type { VirtualizedTableProps } from "./components/virtualized-table";
 export type { AudioRecorderProps } from "./components/audio-recorder";
 export type { CodeEditorProps } from "./components/code-editor";
 export type { DragDropGridProps } from "./components/drag-drop-grid";
-export type { ImageCropperProps } from "./components/image-cropper";
-export type { InfiniteScrollProps } from "./components/infinite-scroll";
+// export type { ImageCropperProps } from "./components/image-cropper";
+// export type { InfiniteScrollProps } from "./components/infinite-scroll";
 export type { KanbanProps } from "./components/kanban";
-export type { PdfViewerProps } from "./components/pdf-viewer";
+export type { PDFViewerProps } from "./components/pdf-viewer";
 export type { RichTextEditorProps } from "./components/rich-text-editor";
 export type { VideoPlayerProps } from "./components/video-player";
-export type { VirtualListProps } from "./components/virtual-list";
+// export type { VirtualListProps } from "./components/virtual-list";
 
 // ============================================
 // PACKAGE INFO - MISE À JOUR CRITIQUE

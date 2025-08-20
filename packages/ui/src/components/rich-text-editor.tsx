@@ -48,8 +48,8 @@ import {
   Heading2,
   Heading3,
   ListChecks,
-  IndentDecrease,
-  IndentIncrease,
+  Indent,
+  Outdent,
   Subscript,
   Superscript,
   RemoveFormatting,
@@ -150,8 +150,8 @@ const defaultToolbarGroups = {
     { id: 'justify', icon: <AlignJustify className="h-4 w-4" />, label: 'Justify', command: 'justifyFull' },
   ],
   indent: [
-    { id: 'outdent', icon: <IndentDecrease className="h-4 w-4" />, label: 'Decrease Indent', command: 'outdent' },
-    { id: 'indent', icon: <IndentIncrease className="h-4 w-4" />, label: 'Increase Indent', command: 'indent' },
+    { id: 'outdent', icon: <Outdent className="h-4 w-4" />, label: 'Decrease Indent', command: 'outdent' },
+    { id: 'indent', icon: <Indent className="h-4 w-4" />, label: 'Increase Indent', command: 'indent' },
   ],
   insert: [
     { id: 'link', icon: <Link2 className="h-4 w-4" />, label: 'Insert Link', command: 'createLink' },

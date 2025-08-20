@@ -1,7 +1,7 @@
 import * as React from "react"
 import { X } from "lucide-react"
 import { cn } from "../../lib/utils"
-import { Badge } from "../badge/badge"
+import { Badge } from "../badge"
 
 export interface TagInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   value?: string[]

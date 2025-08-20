@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { twMerge } from "tailwind-merge";
-import { useVirtual } from "@tanstack/react-virtual";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { Button } from "../button";
 import { Input } from "../input";
 import {
@@ -77,7 +77,7 @@ export function DataGridAdv<T extends Record<string, any>>({
 
   const parentRef = React.useRef<HTMLDivElement>(null);
 
-  const rowVirtualizer = useVirtual({
+  const rowVirtualizer = useVirtualizer({
     size: data.length,
     parentRef,
     estimateSize: React.useCallback(() => rowHeight, [rowHeight]),

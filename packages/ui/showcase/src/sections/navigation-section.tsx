@@ -1,61 +1,38 @@
-// 🧭 NAVIGATION SECTION - COMPLETE NAVIGATION COMPONENTS SHOWCASE
-// Demonstrates Tabs, Breadcrumb, NavigationMenu, Stepper, and Pagination components
+// 🎯 NAVIGATION SECTION - MENUS, TABS & BREADCRUMBS SHOWCASE
+// Demonstrates navigation components for app structure and user flow
 
 import React, { useState } from 'react';
 import { 
   Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  Stepper,
+  Breadcrumb,
   Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
+  Stepper,
+  Menubar,
+  CommandPalette
 } from '../components';
 import { 
-  Home,
+  Navigation,
+  Menu,
   ChevronRight,
-  FileText,
+  Command,
+  Home,
+  Package,
   Settings,
   Users,
-  BarChart,
-  Package,
-  CreditCard,
-  Bell,
-  Mail,
-  Calendar,
-  Search,
-  Globe,
-  Zap,
-  ShoppingCart,
-  Heart,
-  BookOpen,
-  Database,
-  Cloud,
-  Shield
+  FileText,
+  Grid3x3,
+  Activity,
+  ArrowLeft,
+  ArrowRight,
+  Search
 } from 'lucide-react';
 
-// =================== HELPER COMPONENTS ===================
+// =================== DEMO COMPONENTS ===================
 
 const StatCard = ({ icon: Icon, value, label }: { icon: any, value: string, label: string }) => (
   <div className="text-center">
-    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl mb-2">
+    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl mb-2">
       <Icon className="w-6 h-6 text-white" />
     </div>
     <div className="text-2xl font-bold text-gray-900">{value}</div>
@@ -67,26 +44,21 @@ const ComponentDemo = ({
   title, 
   description, 
   children, 
-  code 
+  fullWidth = false 
 }: { 
   title: string, 
   description: string, 
   children: React.ReactNode,
-  code?: string 
+  fullWidth?: boolean
 }) => (
   <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div className="p-6">
       <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4">{description}</p>
-      <div className="flex flex-col gap-4">
+      <div className={fullWidth ? "w-full" : "flex flex-wrap gap-4"}>
         {children}
       </div>
     </div>
-    {code && (
-      <div className="border-t border-gray-100 bg-gray-50 px-6 py-4">
-        <code className="text-xs text-gray-700 font-mono">{code}</code>
-      </div>
-    )}
   </div>
 );
 
@@ -94,539 +66,256 @@ const ComponentDemo = ({
 
 export const NavigationSection = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [activePage, setActivePage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [currentStep, setCurrentStep] = useState(2);
-  const [activeDemo, setActiveDemo] = useState<string>('tabs');
 
-  const steps = [
-    { id: 1, title: 'Account', description: 'Create your account', icon: Users },
-    { id: 2, title: 'Profile', description: 'Setup your profile', icon: FileText },
-    { id: 3, title: 'Billing', description: 'Add payment method', icon: CreditCard },
-    { id: 4, title: 'Confirm', description: 'Review and confirm', icon: Shield }
+  const breadcrumbItems = [
+    { label: 'Home', href: '#' },
+    { label: 'Products', href: '#' },
+    { label: 'Electronics', href: '#' },
+    { label: 'Laptops' }
+  ];
+
+  const menuItems = [
+    { label: 'Dashboard', icon: Home },
+    { label: 'Products', icon: Package },
+    { label: 'Users', icon: Users },
+    { label: 'Settings', icon: Settings }
+  ];
+
+  const stepperItems = [
+    { label: 'Account Info', status: 'completed' },
+    { label: 'Personal Details', status: 'current' },
+    { label: 'Payment Method', status: 'upcoming' },
+    { label: 'Review & Submit', status: 'upcoming' }
   ];
 
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="text-center bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-xl p-8">
+      <div className="text-center bg-gradient-to-r from-violet-50 via-purple-50 to-indigo-50 rounded-xl p-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          Navigation Components Showcase
+          Navigation Components
         </h2>
         <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-6">
-          Professional navigation patterns including tabs, breadcrumbs, menus, steppers, 
-          and pagination. Built for complex enterprise applications with accessibility in mind.
+          Complete navigation system with tabs, menus, breadcrumbs, steppers,
+          and pagination for intuitive user experiences.
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
-          <StatCard icon={Globe} value="5" label="Components" />
-          <StatCard icon={Zap} value="100%" label="Accessible" />
-          <StatCard icon={Shield} value="WCAG" label="Compliant" />
-          <StatCard icon={Heart} value="A11Y" label="Ready" />
+          <StatCard icon={Navigation} value="7+" label="Components" />
+          <StatCard icon={Menu} value="Responsive" label="Design" />
+          <StatCard icon={Command} value="Keyboard" label="Navigation" />
+          <StatCard icon={Grid3x3} value="A11Y" label="Compliant" />
         </div>
       </div>
 
-      {/* Demo Navigation */}
-      <div className="flex flex-wrap gap-2 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-        {[
-          { id: 'tabs', label: 'Tabs', icon: FileText },
-          { id: 'breadcrumb', label: 'Breadcrumb', icon: ChevronRight },
-          { id: 'menu', label: 'Navigation Menu', icon: Globe },
-          { id: 'stepper', label: 'Stepper', icon: Zap },
-          { id: 'pagination', label: 'Pagination', icon: BookOpen }
-        ].map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActiveDemo(id)}
-            className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeDemo === id
-                ? 'bg-indigo-600 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
-            }`}
-          >
-            <Icon className="w-4 h-4 mr-2" />
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Demo Content */}
+      {/* Components Grid */}
       <div className="grid grid-cols-1 gap-6">
         
-        {/* Tabs Demo */}
-        {activeDemo === 'tabs' && (
-          <>
-            <ComponentDemo
-              title="Modern Tab Navigation"
-              description="Flexible tab system with icons, badges, and different styles"
-              code={`<Tabs defaultValue="overview">
-  <TabsList>
-    <TabsTrigger value="overview">Overview</TabsTrigger>
-    <TabsTrigger value="analytics">Analytics</TabsTrigger>
-  </TabsList>
-  <TabsContent value="overview">Content</TabsContent>
-</Tabs>`}
-            >
-              <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="overview" className="flex items-center gap-2">
-                    <Home className="w-4 h-4" />
-                    Overview
-                  </TabsTrigger>
-                  <TabsTrigger value="analytics" className="flex items-center gap-2">
-                    <BarChart className="w-4 h-4" />
-                    Analytics
-                  </TabsTrigger>
-                  <TabsTrigger value="reports" className="flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    Reports
-                  </TabsTrigger>
-                  <TabsTrigger value="settings" className="flex items-center gap-2">
-                    <Settings className="w-4 h-4" />
-                    Settings
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="overview" className="mt-4 p-6 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Dashboard Overview</h4>
-                  <p className="text-gray-600">Welcome to your dashboard. Here you can view all your important metrics and KPIs at a glance.</p>
-                </TabsContent>
-                <TabsContent value="analytics" className="mt-4 p-6 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Analytics Dashboard</h4>
-                  <p className="text-gray-600">Deep dive into your data with advanced analytics and custom reports.</p>
-                </TabsContent>
-                <TabsContent value="reports" className="mt-4 p-6 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Reports Center</h4>
-                  <p className="text-gray-600">Generate and download comprehensive reports for your team.</p>
-                </TabsContent>
-                <TabsContent value="settings" className="mt-4 p-6 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Settings & Configuration</h4>
-                  <p className="text-gray-600">Customize your dashboard experience and manage preferences.</p>
-                </TabsContent>
-              </Tabs>
-            </ComponentDemo>
-
-            <ComponentDemo
-              title="Vertical Tabs Layout"
-              description="Side navigation tabs for complex interfaces"
-            >
-              <div className="flex gap-4">
-                <Tabs defaultValue="profile" orientation="vertical" className="flex gap-4">
-                  <TabsList className="flex-col h-fit">
-                    <TabsTrigger value="profile" className="w-full justify-start">Profile</TabsTrigger>
-                    <TabsTrigger value="security" className="w-full justify-start">Security</TabsTrigger>
-                    <TabsTrigger value="notifications" className="w-full justify-start">Notifications</TabsTrigger>
-                    <TabsTrigger value="billing" className="w-full justify-start">Billing</TabsTrigger>
-                  </TabsList>
-                  <div className="flex-1">
-                    <TabsContent value="profile" className="p-6 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold mb-2">Profile Settings</h4>
-                      <p className="text-gray-600">Manage your personal information and preferences.</p>
-                    </TabsContent>
-                    <TabsContent value="security" className="p-6 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold mb-2">Security Settings</h4>
-                      <p className="text-gray-600">Configure two-factor authentication and password policies.</p>
-                    </TabsContent>
-                    <TabsContent value="notifications" className="p-6 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold mb-2">Notification Preferences</h4>
-                      <p className="text-gray-600">Choose how and when you receive notifications.</p>
-                    </TabsContent>
-                    <TabsContent value="billing" className="p-6 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold mb-2">Billing Information</h4>
-                      <p className="text-gray-600">Manage payment methods and view invoices.</p>
-                    </TabsContent>
-                  </div>
-                </Tabs>
+        {/* Tabs Component */}
+        <ComponentDemo
+          title="Tab Navigation"
+          description="Modern tab component with smooth transitions and keyboard navigation"
+          fullWidth
+        >
+          <div className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="flex space-x-1 border-b border-gray-200">
+                {['overview', 'analytics', 'reports', 'settings'].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-2 font-medium text-sm capitalize transition-all ${
+                      activeTab === tab
+                        ? 'text-violet-600 border-b-2 border-violet-600'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
               </div>
-            </ComponentDemo>
-          </>
-        )}
+              <div className="py-4">
+                <div className="text-sm text-gray-600">
+                  Active tab: <span className="font-semibold text-gray-900">{activeTab}</span>
+                </div>
+              </div>
+            </Tabs>
+          </div>
+        </ComponentDemo>
 
-        {/* Breadcrumb Demo */}
-        {activeDemo === 'breadcrumb' && (
-          <>
-            <ComponentDemo
-              title="Breadcrumb Navigation"
-              description="Hierarchical navigation showing the current page location"
-              code={`<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink>Home</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbPage>Current Page</BreadcrumbPage>
-    </BreadcrumbItem>
-  </BreadcrumbList>
-</Breadcrumb>`}
-            >
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#" className="flex items-center gap-2">
-                      <Home className="w-4 h-4" />
-                      Home
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>
-                    <ChevronRight className="w-4 h-4" />
-                  </BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">Products</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>
-                    <ChevronRight className="w-4 h-4" />
-                  </BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">Electronics</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>
-                    <ChevronRight className="w-4 h-4" />
-                  </BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Smartphones</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
+        {/* Breadcrumb Component */}
+        <ComponentDemo
+          title="Breadcrumb Navigation"
+          description="Clear path indication with interactive breadcrumb trails"
+          fullWidth
+        >
+          <div className="w-full">
+            <nav className="flex" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                {breadcrumbItems.map((item, index) => (
+                  <li key={index} className="inline-flex items-center">
+                    {index > 0 && (
+                      <ChevronRight className="w-5 h-5 text-gray-400 mx-1" />
+                    )}
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        className="text-sm font-medium text-gray-700 hover:text-violet-600"
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <span className="text-sm font-medium text-gray-500">
+                        {item.label}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          </div>
+        </ComponentDemo>
 
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#" className="flex items-center gap-2">
-                      <Database className="w-4 h-4" />
-                      Dashboard
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">Analytics</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Revenue Report</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">Documentation</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>→</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">API Reference</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>→</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="#">Authentication</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator>→</BreadcrumbSeparator>
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>OAuth 2.0</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
-            </ComponentDemo>
-          </>
-        )}
-
-        {/* Navigation Menu Demo */}
-        {activeDemo === 'menu' && (
-          <ComponentDemo
-            title="Navigation Menu"
-            description="Dropdown navigation menu with rich content support"
-            code={`<NavigationMenu>
-  <NavigationMenuList>
-    <NavigationMenuItem>
-      <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-      <NavigationMenuContent>
-        <NavigationMenuLink>Analytics</NavigationMenuLink>
-      </NavigationMenuContent>
-    </NavigationMenuItem>
-  </NavigationMenuList>
-</NavigationMenu>`}
-          >
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="flex items-center gap-2">
-                    <Package className="w-4 h-4" />
-                    Products
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                      <li className="row-span-3">
-                        <NavigationMenuLink asChild>
-                          <a
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-indigo-500 to-purple-600 p-6 no-underline outline-none focus:shadow-md"
-                            href="#"
-                          >
-                            <Package className="h-6 w-6 text-white" />
-                            <div className="mb-2 mt-4 text-lg font-medium text-white">
-                              Product Suite
-                            </div>
-                            <p className="text-sm leading-tight text-white/90">
-                              Explore our comprehensive product offerings designed for enterprise scale.
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <a href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100">
-                            <div className="text-sm font-medium leading-none">Analytics Platform</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-gray-600">
-                              Real-time business intelligence and data visualization
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <a href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100">
-                            <div className="text-sm font-medium leading-none">Cloud Infrastructure</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-gray-600">
-                              Scalable and secure cloud solutions
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                      <li>
-                        <NavigationMenuLink asChild>
-                          <a href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100">
-                            <div className="text-sm font-medium leading-none">Security Suite</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-gray-600">
-                              Enterprise-grade security and compliance
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="flex items-center gap-2">
-                    <Globe className="w-4 h-4" />
-                    Solutions
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {[
-                        { title: "Enterprise", description: "Complete solutions for large organizations", icon: Shield },
-                        { title: "Startups", description: "Agile tools for growing companies", icon: Zap },
-                        { title: "Government", description: "Secure and compliant solutions", icon: Database },
-                        { title: "Education", description: "Tools for educational institutions", icon: BookOpen },
-                        { title: "Healthcare", description: "HIPAA-compliant platforms", icon: Heart },
-                        { title: "Finance", description: "Banking and fintech solutions", icon: CreditCard }
-                      ].map((item) => (
-                        <li key={item.title}>
-                          <NavigationMenuLink asChild>
-                            <a href="#" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100">
-                              <div className="flex items-center gap-2">
-                                <item.icon className="w-4 h-4 text-indigo-600" />
-                                <div className="text-sm font-medium leading-none">{item.title}</div>
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-gray-600 mt-2">
-                                {item.description}
-                              </p>
-                            </a>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Documentation
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </ComponentDemo>
-        )}
-
-        {/* Stepper Demo */}
-        {activeDemo === 'stepper' && (
-          <ComponentDemo
-            title="Step-by-Step Navigation"
-            description="Multi-step forms and wizards with progress indication"
-            code={`<Stepper currentStep={2}>
-  <Step title="Account" description="Create your account" />
-  <Step title="Profile" description="Setup your profile" />
-  <Step title="Complete" description="You're all set!" />
-</Stepper>`}
-          >
-            <div className="w-full">
-              <div className="flex justify-between mb-8">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isActive = step.id === currentStep;
-                  const isCompleted = step.id < currentStep;
-                  
-                  return (
-                    <div key={step.id} className="flex items-center">
-                      <div className="flex flex-col items-center">
-                        <div
-                          className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
-                            isActive
-                              ? 'bg-indigo-600 border-indigo-600 text-white'
-                              : isCompleted
-                              ? 'bg-green-600 border-green-600 text-white'
-                              : 'bg-white border-gray-300 text-gray-500'
-                          }`}
-                        >
-                          <Icon className="w-6 h-6" />
-                        </div>
-                        <div className="mt-2 text-center">
-                          <div className={`text-sm font-semibold ${isActive ? 'text-indigo-600' : 'text-gray-900'}`}>
-                            {step.title}
-                          </div>
-                          <div className="text-xs text-gray-500">{step.description}</div>
-                        </div>
-                      </div>
-                      {index < steps.length - 1 && (
-                        <div
-                          className={`flex-1 h-0.5 mx-4 ${
-                            step.id < currentStep ? 'bg-green-600' : 'bg-gray-300'
-                          }`}
-                        />
-                      )}
+        {/* Stepper Component */}
+        <ComponentDemo
+          title="Process Stepper"
+          description="Multi-step process indicators for forms and wizards"
+          fullWidth
+        >
+          <div className="w-full">
+            <div className="flex items-center justify-between">
+              {stepperItems.map((step, index) => (
+                <div key={index} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                      step.status === 'completed' ? 'bg-green-500 text-white' :
+                      step.status === 'current' ? 'bg-violet-600 text-white' :
+                      'bg-gray-200 text-gray-600'
+                    }`}>
+                      {step.status === 'completed' ? '✓' : index + 1}
                     </div>
-                  );
-                })}
-              </div>
-              
-              <div className="flex justify-between mt-8">
-                <button
-                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                  disabled={currentStep === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => setCurrentStep(Math.min(steps.length, currentStep + 1))}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                  disabled={currentStep === steps.length}
-                >
-                  {currentStep === steps.length ? 'Complete' : 'Next'}
-                </button>
-              </div>
+                    <span className={`text-xs mt-2 text-center ${
+                      step.status === 'current' ? 'text-violet-600 font-semibold' : 'text-gray-600'
+                    }`}>
+                      {step.label}
+                    </span>
+                  </div>
+                  {index < stepperItems.length - 1 && (
+                    <div className={`flex-1 h-1 mx-2 ${
+                      index < currentStep - 1 ? 'bg-green-500' : 'bg-gray-200'
+                    }`} />
+                  )}
+                </div>
+              ))}
             </div>
-          </ComponentDemo>
-        )}
+          </div>
+        </ComponentDemo>
 
-        {/* Pagination Demo */}
-        {activeDemo === 'pagination' && (
-          <>
-            <ComponentDemo
-              title="Pagination Controls"
-              description="Navigate through large datasets with flexible pagination"
-              code={`<Pagination>
-  <PaginationContent>
-    <PaginationPrevious />
-    <PaginationItem>
-      <PaginationLink>1</PaginationLink>
-    </PaginationItem>
-    <PaginationNext />
-  </PaginationContent>
-</Pagination>`}
+        {/* Navigation Menu */}
+        <ComponentDemo
+          title="Navigation Menu"
+          description="Dropdown navigation menus with sub-items and icons"
+          fullWidth
+        >
+          <div className="w-full">
+            <nav className="flex space-x-4">
+              {menuItems.map((item) => (
+                <button
+                  key={item.label}
+                  className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                >
+                  <item.icon className="w-4 h-4 mr-2" />
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </ComponentDemo>
+
+        {/* Pagination Component */}
+        <ComponentDemo
+          title="Pagination"
+          description="Navigate through large datasets with style"
+          fullWidth
+        >
+          <div className="w-full flex items-center justify-center space-x-2">
+            <button
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
+              disabled={currentPage === 1}
             >
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious href="#" onClick={() => setActivePage(Math.max(1, activePage - 1))} />
-                  </PaginationItem>
-                  {[1, 2, 3, 4, 5].map((page) => (
-                    <PaginationItem key={page}>
-                      <PaginationLink 
-                        href="#"
-                        isActive={page === activePage}
-                        onClick={() => setActivePage(page)}
-                      >
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">20</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext href="#" onClick={() => setActivePage(Math.min(20, activePage + 1))} />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            {[1, 2, 3, 4, 5].map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                  currentPage === page
+                    ? 'bg-violet-600 text-white'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(Math.min(5, currentPage + 1))}
+              className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-50"
+              disabled={currentPage === 5}
+            >
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+        </ComponentDemo>
 
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-600">
-                  Showing {(activePage - 1) * 10 + 1} to {Math.min(activePage * 10, 200)} of 200 results
-                </p>
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        href="#" 
-                        onClick={() => setActivePage(Math.max(1, activePage - 1))}
-                        className={activePage === 1 ? 'pointer-events-none opacity-50' : ''}
-                      />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <select 
-                        value={activePage}
-                        onChange={(e) => setActivePage(Number(e.target.value))}
-                        className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-                      >
-                        {Array.from({ length: 20 }, (_, i) => i + 1).map((page) => (
-                          <option key={page} value={page}>
-                            Page {page}
-                          </option>
-                        ))}
-                      </select>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext 
-                        href="#" 
-                        onClick={() => setActivePage(Math.min(20, activePage + 1))}
-                        className={activePage === 20 ? 'pointer-events-none opacity-50' : ''}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            </ComponentDemo>
-          </>
-        )}
+        {/* Command Palette */}
+        <ComponentDemo
+          title="Command Palette"
+          description="Quick actions and search with keyboard shortcuts"
+          fullWidth
+        >
+          <div className="w-full">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Type a command or search... (⌘K)"
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              />
+            </div>
+            <div className="mt-2 text-xs text-gray-500">
+              Press ⌘K to open the command palette
+            </div>
+          </div>
+        </ComponentDemo>
       </div>
 
-      {/* Feature Highlights */}
+      {/* Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="text-center p-6 bg-gradient-to-br from-violet-50 to-purple-50 rounded-xl">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-violet-600 rounded-xl mb-4">
+            <Navigation className="w-6 h-6 text-white" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2">Intuitive Navigation</h3>
+          <p className="text-gray-600 text-sm">Clear paths and smooth transitions for seamless user journeys.</p>
+        </div>
+        
         <div className="text-center p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-indigo-600 rounded-xl mb-4">
-            <Globe className="w-6 h-6 text-white" />
+            <Command className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Enterprise Navigation</h3>
-          <p className="text-gray-600 text-sm">Complete navigation system for complex applications with multi-level hierarchies.</p>
+          <h3 className="font-semibold text-gray-900 mb-2">Keyboard Shortcuts</h3>
+          <p className="text-gray-600 text-sm">Full keyboard navigation support for power users and accessibility.</p>
         </div>
         
-        <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl">
+        <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-600 rounded-xl mb-4">
-            <Zap className="w-6 h-6 text-white" />
+            <Activity className="w-6 h-6 text-white" />
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Keyboard Navigation</h3>
-          <p className="text-gray-600 text-sm">Full keyboard support with arrow keys, tab navigation, and shortcuts.</p>
-        </div>
-        
-        <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-600 rounded-xl mb-4">
-            <Shield className="w-6 h-6 text-white" />
-          </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Accessibility First</h3>
-          <p className="text-gray-600 text-sm">WCAG 2.1 AA compliant with proper ARIA labels and screen reader support.</p>
+          <h3 className="font-semibold text-gray-900 mb-2">Responsive Design</h3>
+          <p className="text-gray-600 text-sm">Adaptive layouts that work perfectly on all device sizes.</p>
         </div>
       </div>
     </div>

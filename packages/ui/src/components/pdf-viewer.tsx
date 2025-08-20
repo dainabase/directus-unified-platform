@@ -105,7 +105,8 @@ interface PDFSearchResult {
   context: string;
 }
 
-interface PDFViewerProps {
+// ✅ FIXED: Added export keyword to PDFViewerProps
+export interface PDFViewerProps {
   src?: string | ArrayBuffer | Uint8Array;
   defaultPage?: number;
   defaultZoom?: number;

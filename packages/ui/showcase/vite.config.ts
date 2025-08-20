@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -8,40 +8,67 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@dainabase/ui': path.resolve(__dirname, '../src'),
-      // Ne pas utiliser d'alias pour @/components mais utiliser les chemins relatifs directs
+      '@components': path.resolve(__dirname, '../src/components'),
+      '@lib': path.resolve(__dirname, '../src/lib'),
     },
-    // Ajout des extensions pour la résolution
-    extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
-    // Forcer la résolution des index files
-    mainFields: ['module', 'main', 'index'],
-  },
-  optimizeDeps: {
-    // Inclure explicitement les dépendances à pré-bundler
-    include: ['react', 'react-dom', 'lucide-react', 'framer-motion', 'prism-react-renderer'],
   },
   server: {
     port: 3001,
     open: true,
-    // Forcer le rafraîchissement complet
-    hmr: {
-      overlay: true,
-    },
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'ui-components': ['lucide-react'],
-        },
-      },
+      external: [],
     },
   },
-  publicDir: 'public',
-  css: {
-    postcss: './postcss.config.js',
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-primitive',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-alert-dialog',
+      '@radix-ui/react-avatar',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-collapsible',
+      '@radix-ui/react-context-menu',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-hover-card',
+      '@radix-ui/react-label',
+      '@radix-ui/react-menubar',
+      '@radix-ui/react-navigation-menu',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-progress',
+      '@radix-ui/react-radio-group',
+      '@radix-ui/react-scroll-area',
+      '@radix-ui/react-select',
+      '@radix-ui/react-separator',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-switch',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-toast',
+      '@radix-ui/react-toggle',
+      '@radix-ui/react-toggle-group',
+      '@radix-ui/react-tooltip',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge',
+      'lucide-react',
+      'sonner',
+      'framer-motion',
+      '@tanstack/react-virtual',
+      'recharts',
+      'date-fns',
+      'react-day-picker',
+      'cmdk',
+      'vaul',
+      'embla-carousel-react',
+      '@tanstack/react-table',
+      'react-resizable-panels'
+    ],
   },
-})
+});

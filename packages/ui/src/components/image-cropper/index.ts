@@ -1,3 +1,4 @@
 // ImageCropper Component Export
-export { default as ImageCropper } from '../magecropper';
-export type { ImageCropperProps } from '../magecropper';
+export { ImageCropper } from '../image-cropper';
+export type { ImageCropperProps } from '../image-cropper';
+export { default } from '../image-cropper';

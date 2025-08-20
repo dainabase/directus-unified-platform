@@ -8,7 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview --port 3001",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "clean": "rm -rf dist node_modules"
+    "clean": "rm -rf dist node_modules package-lock.json",
+    "diagnose": "node scripts/diagnose-and-fix.js",
+    "fix": "npm run diagnose",
+    "fresh": "npm run clean && npm install && npm run diagnose && npm run dev",
+    "check": "node src/check-components.ts"
   },
   "dependencies": {
     "react": "^18.2.0",

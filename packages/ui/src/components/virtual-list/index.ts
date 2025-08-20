@@ -1,3 +1,4 @@
 // VirtualList Component Export
-export { default as VirtualList } from '../irtuallist';
-export type { VirtualListProps } from '../irtuallist';
+export { VirtualList } from '../virtual-list';
+export type { VirtualListProps } from '../virtual-list';
+export { default } from '../virtual-list';

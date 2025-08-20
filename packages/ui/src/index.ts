@@ -105,21 +105,21 @@ export { ChromaticTest } from "./components/chromatic-test";
 // ============================================
 // 🚨 CES COMPOSANTS EXISTAIENT MAIS ÉTAIENT INUTILISABLES !
 
-// Audio/Video/Media - FIXED: Added .tsx extension
-export { AudioRecorder } from "./components/audio-recorder.tsx";
-export { VideoPlayer } from "./components/video-player.tsx";
-export { ImageCropper } from "./components/image-cropper.tsx";
-export { PDFViewer } from "./components/pdf-viewer.tsx";
+// Audio/Video/Media - FIXED: Removed .tsx extension
+export { AudioRecorder } from "./components/audio-recorder";
+export { VideoPlayer } from "./components/video-player";
+export { ImageCropper } from "./components/image-cropper";
+export { PDFViewer } from "./components/pdf-viewer";
 
-// Development Tools - FIXED: Added .tsx extension
-export { CodeEditor } from "./components/code-editor.tsx";
-export { RichTextEditor } from "./components/rich-text-editor.tsx";
+// Development Tools - FIXED: Removed .tsx extension
+export { CodeEditor } from "./components/code-editor";
+export { RichTextEditor } from "./components/rich-text-editor";
 
-// Interactive Components - FIXED: Added .tsx extension
-export { DragDropGrid } from "./components/drag-drop-grid.tsx";
-export { InfiniteScroll } from "./components/infinite-scroll.tsx";
-export { Kanban } from "./components/kanban.tsx";
-export { VirtualList } from "./components/virtual-list.tsx";
+// Interactive Components - FIXED: Removed .tsx extension
+export { DragDropGrid } from "./components/drag-drop-grid";
+export { InfiniteScroll } from "./components/infinite-scroll";
+export { Kanban } from "./components/kanban";
+export { VirtualList } from "./components/virtual-list";
 
 // ============================================
 // BUNDLES ET UTILITAIRES (5)
@@ -212,17 +212,17 @@ export type { VirtualizedTableProps } from "./components/virtualized-table";
 // TYPE EXPORTS - Components Fichiers (Récupérés)
 // ============================================ 
 // 🚨 CES TYPES ÉTAIENT INUTILISABLES AVANT !
-// FIXED: Added .tsx extension to all imports
-export type { AudioRecorderProps } from "./components/audio-recorder.tsx";
-export type { CodeEditorProps } from "./components/code-editor.tsx";
-export type { DragDropGridProps } from "./components/drag-drop-grid.tsx";
-export type { ImageCropperProps } from "./components/image-cropper.tsx";
-export type { InfiniteScrollProps } from "./components/infinite-scroll.tsx";
-export type { KanbanProps } from "./components/kanban.tsx";
-export type { PDFViewerProps } from "./components/pdf-viewer.tsx";
-export type { RichTextEditorProps } from "./components/rich-text-editor.tsx";
-export type { VideoPlayerProps } from "./components/video-player.tsx";
-export type { VirtualListProps } from "./components/virtual-list.tsx";
+// FIXED: Removed .tsx extension from all imports
+export type { AudioRecorderProps } from "./components/audio-recorder";
+export type { CodeEditorProps } from "./components/code-editor";
+export type { DragDropGridProps } from "./components/drag-drop-grid";
+export type { ImageCropperProps } from "./components/image-cropper";
+export type { InfiniteScrollProps } from "./components/infinite-scroll";
+export type { KanbanProps } from "./components/kanban";
+export type { PDFViewerProps } from "./components/pdf-viewer";
+export type { RichTextEditorProps } from "./components/rich-text-editor";
+export type { VideoPlayerProps } from "./components/video-player";
+export type { VirtualListProps } from "./components/virtual-list";
 
 // ============================================
 // PACKAGE INFO - MISE À JOUR CRITIQUE

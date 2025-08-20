@@ -436,7 +436,7 @@ export const MediaSection: React.FC = () => {
                   className="border-2 border-dashed rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <Plus className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <Upload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                   <p className="text-sm text-muted-foreground mb-2">
                     Drag & drop images here, or click to select
                   </p>

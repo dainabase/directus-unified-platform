@@ -1,4 +1,4 @@
 // InfiniteScroll Component Export
-export { InfiniteScroll } from '../infinite-scroll';
-export type { InfiniteScrollProps } from '../infinite-scroll';
-export { default } from '../infinite-scroll';
+export { InfiniteScroll } from '../infinite-scroll.tsx';
+export type { InfiniteScrollProps } from '../infinite-scroll.tsx';
+export { default } from '../infinite-scroll.tsx';

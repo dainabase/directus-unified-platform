@@ -11,9 +11,10 @@ export default defineConfig(({ command }) => ({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@dainabase/ui': path.resolve(__dirname, '../src'),
-      '@components': path.resolve(__dirname, '../src/components'),
-      '@lib': path.resolve(__dirname, '../src/lib'),
+      '@ui': path.resolve(__dirname, '../../ui/src'),
+      '@components': path.resolve(__dirname, '../../ui/src/components'),
+      '@lib': path.resolve(__dirname, '../../ui/src/lib'),
+      '@dainabase/ui': path.resolve(__dirname, '../../ui/src'),
     },
   },
   

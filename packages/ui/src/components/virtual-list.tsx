@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '../lib/utils';
 
-interface VirtualListProps<T> {
+export interface VirtualListProps<T> {
   items: T[];
   itemHeight: number | ((index: number) => number);
   height: number;

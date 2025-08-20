@@ -2,7 +2,7 @@ import React, { useRef, useCallback, useEffect, useState } from 'react';
 import { cn } from '../lib/utils';
 import { Loader2 } from 'lucide-react';
 
-interface InfiniteScrollProps {
+export interface InfiniteScrollProps {
   children: React.ReactNode;
   loadMore: () => Promise<void>;
   hasMore: boolean;

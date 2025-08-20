@@ -215,13 +215,13 @@ export type { VirtualizedTableProps } from "./components/virtualized-table";
 export type { AudioRecorderProps } from "./components/audio-recorder";
 export type { CodeEditorProps } from "./components/code-editor";
 export type { DragDropGridProps } from "./components/drag-drop-grid";
-// export type { ImageCropperProps } from "./components/image-cropper";
-// export type { InfiniteScrollProps } from "./components/infinite-scroll";
+export type { ImageCropperProps } from "./components/image-cropper";
+export type { InfiniteScrollProps } from "./components/infinite-scroll";
 export type { KanbanProps } from "./components/kanban";
 export type { PDFViewerProps } from "./components/pdf-viewer";
 export type { RichTextEditorProps } from "./components/rich-text-editor";
 export type { VideoPlayerProps } from "./components/video-player";
-// export type { VirtualListProps } from "./components/virtual-list";
+export type { VirtualListProps } from "./components/virtual-list";
 
 // ============================================
 // PACKAGE INFO - MISE À JOUR CRITIQUE

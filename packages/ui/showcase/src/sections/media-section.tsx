@@ -70,10 +70,9 @@ import {
   Headphones,
   Radio,
   Podcast,
-  ImagePlus,
   Plus,
   Check,
-  CloudUpload,
+  Cloud,
   HardDrive,
   Trash2,
   Edit,
@@ -437,7 +436,7 @@ export const MediaSection: React.FC = () => {
                   className="border-2 border-dashed rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <ImagePlus className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <Plus className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                   <p className="text-sm text-muted-foreground mb-2">
                     Drag & drop images here, or click to select
                   </p>
@@ -814,7 +813,7 @@ export const MediaSection: React.FC = () => {
               <div className="space-y-4">
                 {/* Drop Zone */}
                 <div className="border-2 border-dashed rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
-                  <CloudUpload className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <Cloud className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
                   <h4 className="font-semibold mb-2">Drop files here or click to browse</h4>
                   <p className="text-sm text-muted-foreground mb-4">
                     Support for multiple file types • Max 100MB per file

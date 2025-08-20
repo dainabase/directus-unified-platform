@@ -1,247 +1,114 @@
-# 🚀 Dainabase UI Showcase
+# 🎨 Dainabase UI Showcase
 
-> Interactive demonstration of the complete @dainabase/ui Design System featuring 132+ components
+## 📊 État actuel (20 Août 2025)
 
-## 📊 Overview
+### ✅ Corrections appliquées
+1. **Chemins d'imports corrigés** : `../../src` → `../src`
+2. **Components mock créés** : Version simplifiée avec composants locaux
+3. **Configuration Vite mise à jour** : Aliases de chemins configurés
+4. **Dépendances ajoutées** : framer-motion, @tanstack/react-virtual, etc.
 
-The UI Showcase is a comprehensive interactive demo application showcasing all components from the Dainabase Design System. Built with React, TypeScript, and Vite, it provides live examples, code snippets, and interactive demos for developers.
+### 🔴 Problèmes restants
+- **Design System incomplet** : Beaucoup de composants manquent dans le Design System principal
+- **Exports manquants** : Certains composants ne sont pas correctement exportés
+- **Solution temporaire** : Utilisation de composants mock locaux pour permettre le fonctionnement
 
-### Key Features
-- ✅ **132+ Components** - Complete component library showcase
-- 🎨 **8 Themed Sections** - Organized by component category
-- 💻 **Live Code Examples** - Copy-paste ready code snippets
-- 🌙 **Dark Mode** - Full theme switching support
-- 📱 **Responsive** - Mobile-first design approach
-- ⚡ **Fast** - Optimized with Vite for instant HMR
-- 🔍 **Interactive** - Live component state manipulation
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- Git
-
-### Quick Start
+## 🚀 Installation et test
 
 ```bash
-# Clone the repository
-git clone https://github.com/dainabase/directus-unified-platform.git
-cd directus-unified-platform
+# 1. Récupérer les dernières modifications
+cd ~/directus-unified-platform
+git pull origin main
 
-# Navigate to showcase
+# 2. Aller dans le showcase
 cd packages/ui/showcase
 
-# Install dependencies
+# 3. Clean install
+rm -rf node_modules package-lock.json
 npm install
 
-# Start development server
+# 4. Lancer le serveur de développement
 npm run dev
 ```
 
-The showcase will open automatically at `http://localhost:3001`
+Le showcase devrait maintenant démarrer sur http://localhost:3001
 
-## 📁 Project Structure
+## 📁 Structure du projet
 
 ```
 packages/ui/showcase/
 ├── src/
-│   ├── main.tsx                    # Application entry point
-│   ├── showcase-app.tsx            # Main app component
-│   ├── styles.css                  # Global styles
-│   └── sections/                   # Component sections
-│       ├── buttons-section.tsx     # Buttons & Actions
-│       ├── forms-section.tsx       # Forms & Inputs
-│       ├── data-section.tsx        # Data Display
-│       ├── navigation-section.tsx  # Navigation
-│       ├── feedback-section.tsx    # Feedback & Alerts
-│       ├── layout-section.tsx      # Layout Components
-│       ├── media-section.tsx       # Media & Files
-│       └── advanced-section.tsx    # Advanced Components
-├── package.json                    # Dependencies
-├── vite.config.ts                  # Vite configuration
-├── tsconfig.json                   # TypeScript config
-├── tailwind.config.js              # Tailwind CSS config
-└── postcss.config.js               # PostCSS config
+│   ├── components.tsx         # Composants (version simplifiée avec mocks)
+│   ├── showcase-app.tsx       # Application principale
+│   ├── main.tsx               # Point d'entrée
+│   ├── sections/              # 8 sections du showcase
+│   │   ├── buttons-section.tsx
+│   │   ├── forms-section.tsx
+│   │   ├── data-section.tsx
+│   │   ├── navigation-section.tsx
+│   │   ├── feedback-section.tsx
+│   │   ├── layout-section.tsx
+│   │   ├── media-section.tsx
+│   │   └── advanced-section.tsx
+│   └── check-components.ts    # Script de diagnostic
+├── package.json
+├── vite.config.ts
+└── README.md                  # Ce fichier
 ```
 
-## 🎯 Component Categories
+## 🛠️ État des composants
 
-### 1. Buttons & Actions (4 components)
-- Button - 13+ variants with themes
-- ExecutiveButton - C-level dashboard CTAs
-- AnalyticsButton - Data visualization actions
-- FinanceButton - Financial operations
+### Composants fonctionnels (mock)
+Tous les composants utilisent actuellement des versions mock simplifiées pour permettre au showcase de fonctionner :
 
-### 2. Forms & Inputs (18+ components)
-- Input, Textarea, Select
-- Checkbox, Radio, Switch
-- Slider, Rating, Toggle
-- DatePicker, ColorPicker
-- FileUpload, TagInput
-- Form validation & states
+- ✅ **Buttons** : Button, ExecutiveButton, ActionButton, etc.
+- ✅ **Forms** : Input, Select, Checkbox, Switch, etc.
+- ✅ **Layout** : Card, ScrollArea, Resizable, etc.
+- ✅ **Navigation** : Tabs, Breadcrumb, Pagination, etc.
+- ✅ **Feedback** : Alert, Toast, Progress, etc.
+- ✅ **Media** : Avatar, Carousel, etc.
+- ✅ **Overlays** : Dialog, Popover, Tooltip, etc.
 
-### 3. Data Display (4 components)
-- Table - Advanced data tables
-- DataGrid - Interactive grids
-- Charts - Data visualization
-- VirtualizedTable - Performance tables
+### Prochaines étapes
+1. **Corriger le Design System principal** : Créer les composants manquants
+2. **Remplacer les mocks** : Importer les vrais composants une fois disponibles
+3. **Ajouter des tests** : Tests unitaires et E2E
+4. **Documentation** : Documenter chaque composant
 
-### 4. Navigation (8 components)
-- Tabs, Stepper, Pagination
-- NavigationMenu, Breadcrumb
-- CommandPalette, Sidebar
-- ScrollArea
+## 🔍 Diagnostic
 
-### 5. Feedback (11 components)
-- Alert, Toast, Notification
-- Dialog, Modal, Sheet
-- Progress, Skeleton, Loading
-- Badge, Tooltip
-
-### 6. Layout (4 components)
-- Card, Accordion
-- Resizable panels
-- Collapsible sections
-
-### 7. Media (6 components)
-- ImageCropper, VideoPlayer
-- AudioRecorder, FileUpload
-- Avatar, Carousel
-
-### 8. Advanced (5+ components)
-- CodeEditor, RichTextEditor
-- Kanban, Timeline
-- ThemeBuilder
-
-## 🔧 Available Scripts
+Pour vérifier l'état des composants :
 
 ```bash
-# Development
-npm run dev          # Start dev server on port 3001
-npm run build        # Build for production
-npm run preview      # Preview production build
-
-# Testing
-npm run test         # Run unit tests
-npm run test:e2e     # Run E2E tests
-npm run test:watch   # Watch mode for tests
-
-# Utilities
-npm run lint         # Lint code
-npm run format       # Format with Prettier
-npm run analyze      # Analyze bundle size
+# Dans le dossier showcase
+node src/check-components.ts
 ```
 
-## 🎨 Theming
+## 📈 Métriques
 
-The showcase supports multiple themes:
+- **Total de composants** : 132+
+- **Sections** : 8
+- **État** : Fonctionnel avec composants mock
+- **Performance** : < 1s chargement initial
 
-```javascript
-// Available themes
-- executive    // C-level gradients
-- analytics    // Purple data theme
-- finance      // Green financial theme
-- dashboard    // Blue business theme
-- minimal      // Clean modern theme
-- default      // Standard theme
-```
+## 🐛 Problèmes connus
 
-## 🚀 Deployment
+1. **Composants mock** : Les composants actuels sont des versions simplifiées
+2. **Design System incomplet** : Le package @dainabase/ui n'exporte pas tous les composants nécessaires
+3. **Styles basiques** : Les composants mock utilisent des styles Tailwind basiques
 
-### GitHub Pages
+## 📞 Support
 
-The showcase is automatically deployed to GitHub Pages on push to main:
+- **Issue tracking** : GitHub Issue #82
+- **Repository** : github.com/dainabase/directus-unified-platform
+- **Contact** : dev@dainabase.com
 
-```bash
-# Manual deployment
-npm run build
-npm run deploy
-```
+## 📅 Historique des modifications
 
-Live URL: https://dainabase.github.io/directus-unified-platform/
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 3001
-CMD ["npm", "run", "preview"]
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Import Resolution Errors
-```bash
-# Clear Vite cache
-rm -rf node_modules/.vite
-npm run dev
-```
-
-#### Module Not Found
-```bash
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
-
-#### Port Already in Use
-```bash
-# Change port in vite.config.ts
-server: {
-  port: 3002  // or any available port
-}
-```
-
-## 📈 Performance
-
-- **Bundle Size**: ~255KB (gzipped)
-- **Load Time**: < 0.8s
-- **Lighthouse Score**: 98/100
-- **Components**: 132+
-- **Code Coverage**: Building...
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Commit Convention
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation
-- `style:` Formatting
-- `refactor:` Code restructuring
-- `test:` Tests
-- `chore:` Maintenance
-
-## 📄 License
-
-Private - Dainabase Internal Use Only
-
-## 🔗 Links
-
-- [Main Repository](https://github.com/dainabase/directus-unified-platform)
-- [Issue Tracker](https://github.com/dainabase/directus-unified-platform/issues)
-- [Design System Docs](https://docs.dainabase.com/ui)
-- [Component Storybook](https://storybook.dainabase.com)
-
-## 👥 Team
-
-Maintained by the Dainabase Development Team
+- **20 Août 2025** : Création de la version simplifiée avec composants mock
+- **19 Août 2025** : Création initiale du showcase
+- **12 Août 2025** : Début du projet Design System
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: August 19, 2025  
-**Status**: Production Ready 🚀
+*Ce README sera mis à jour au fur et à mesure que les composants réels remplacent les mocks.*

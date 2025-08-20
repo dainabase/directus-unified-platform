@@ -1,3 +1,4 @@
-// PdfViewer Component Export
-export { default as PdfViewer } from '../dfviewer';
-export type { PdfViewerProps } from '../dfviewer';
+// PDFViewer Component Export
+export { PDFViewer } from '../pdf-viewer';
+export type { PDFViewerProps, PDFViewerRef } from '../pdf-viewer';
+export { default } from '../pdf-viewer';

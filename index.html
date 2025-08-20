@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dainabase UI - Design System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 48px;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 16px;
+        }
+        
+        .version {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 24px;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat {
+            padding: 16px;
+            background: #f7f8fa;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f7f8fa;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            margin-top: 32px;
+            padding: 16px;
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            color: #166534;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Dainabase UI</h1>
+        <span class="version">v1.3.0</span>
+        
+        <p>
+            A modern React component library with 132 components built with Radix UI and Tailwind CSS.
+            Currently undergoing active development.
+        </p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">132</div>
+                <div class="stat-label">Components</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">69</div>
+                <div class="stat-label">Implemented</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">52%</div>
+                <div class="stat-label">Progress</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">38KB</div>
+                <div class="stat-label">Bundle Size</div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <a href="https://github.com/dainabase/directus-unified-platform/tree/main/packages/ui" class="btn btn-primary">
+                <span>📦</span> View on GitHub
+            </a>
+            <a href="https://github.com/dainabase/directus-unified-platform/issues/82" class="btn btn-secondary">
+                <span>📊</span> Track Progress
+            </a>
+        </div>
+        
+        <div class="status">
+            <strong>🚧 Showcase Under Construction</strong><br>
+            The interactive showcase is currently being deployed. Check back soon or run locally:
+            <pre style="margin-top: 8px; padding: 8px; background: white; border-radius: 4px; text-align: left; overflow-x: auto;">
+cd packages/ui/showcase
+npm install
+npm run dev</pre>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,8 +2,6 @@
 // Demonstrates all 132+ button variants, themes, and specialized components
 
 import React, { useState } from 'react';
-// ✅ FIXED: Using components re-export file
-import { Button } from '../components';
 import { 
   Zap, 
   Palette, 
@@ -23,13 +21,10 @@ import {
   Clock
 } from 'lucide-react';
 
-// =================== TYPES ===================
-type ButtonTheme = 'executive' | 'analytics' | 'finance' | 'dashboard' | 'minimal' | 'default';
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'outline' | 'link';
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+// ✅ FIXED: Import Button and demo components from local re-export file
+import { Button } from '../components';
 
-// =================== INTERACTIVE DEMO COMPONENTS ===================
-
+// Component Demo utilities
 const StatCard = ({ icon: Icon, value, label }: { icon: any, value: string, label: string }) => (
   <div className="text-center">
     <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-2">
@@ -67,7 +62,7 @@ const ComponentDemo = ({
   </div>
 );
 
-const ThemeDemo = ({ theme, children }: { theme: ButtonTheme, children: React.ReactNode }) => (
+const ThemeDemo = ({ theme, children }: { theme: string, children: React.ReactNode }) => (
   <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg p-4 border border-gray-200">
     <h4 className="font-medium text-gray-800 mb-3 capitalize">{theme} Theme</h4>
     <div className="flex flex-wrap gap-2">
@@ -133,9 +128,9 @@ export const ButtonsSection = () => {
     }, 3000);
   };
 
-  const themes: ButtonTheme[] = ['executive', 'analytics', 'finance', 'dashboard', 'minimal', 'default'];
-  const variants: ButtonVariant[] = ['primary', 'secondary', 'danger', 'success', 'ghost', 'outline', 'link'];
-  const sizes: ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl'];
+  const themes = ['executive', 'analytics', 'finance', 'dashboard', 'minimal', 'default'];
+  const variants = ['primary', 'secondary', 'danger', 'success', 'ghost', 'outline', 'link'];
+  const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
 
   return (
     <div className="space-y-8">
@@ -215,7 +210,7 @@ export const ButtonsSection = () => {
               description="Essential button variants for every business scenario"
               code="<Button variant='primary'>Primary</Button>"
             >
-              {variants.map((variant) => (
+              {variants.map((variant: any) => (
                 <Button key={variant} variant={variant} size="md">
                   {variant.charAt(0).toUpperCase() + variant.slice(1)}
                 </Button>
@@ -227,7 +222,7 @@ export const ButtonsSection = () => {
               description="Consistent sizing system from compact UIs to hero actions"
               code="<Button size='lg'>Large Button</Button>"
             >
-              {sizes.map((size) => (
+              {sizes.map((size: any) => (
                 <Button key={size} size={size}>
                   Size {size.toUpperCase()}
                 </Button>

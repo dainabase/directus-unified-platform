@@ -21,7 +21,7 @@ import {
   Clock
 } from 'lucide-react';
 
-// ✅ FIXED: Import Button and demo components from local re-export file
+// ✅ FIXED: Import Button from the correct re-export file
 import { Button } from '../components';
 
 // Component Demo utilities

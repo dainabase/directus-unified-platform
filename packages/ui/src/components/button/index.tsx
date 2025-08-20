@@ -78,7 +78,7 @@ export type ButtonSize =
 
 // =================== THEME CONFIGURATIONS ===================
 
-const themeStyles = {
+export const themeStyles = {
   executive: {
     primary: "bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-white border-purple-500/20 shadow-xl shadow-purple-500/25 hover:shadow-2xl hover:shadow-purple-500/40 hover:scale-[1.02] transition-all duration-300",
     secondary: "bg-gradient-to-r from-gray-100 to-white text-slate-800 border border-slate-200 shadow-lg hover:shadow-xl hover:bg-gradient-to-r hover:from-slate-50 hover:to-gray-100",
@@ -167,7 +167,7 @@ export const buttonVariants = cva(
 
 // =================== ICON MAPPINGS ===================
 
-const iconMap = {
+export const iconMap = {
   // Actions
   download: Download,
   upload: Upload,
@@ -623,6 +623,7 @@ FinanceButton.displayName = "FinanceButton";
 
 export default Button;
 
+// Export all types individually to avoid double exports
 export {
   type ButtonProps,
   type ExecutiveButtonProps,
@@ -633,9 +634,6 @@ export {
   type ButtonVariant,
   type ButtonSize,
   type IconName,
-  buttonVariants,
-  iconMap,
-  themeStyles,
 };
 
 /**

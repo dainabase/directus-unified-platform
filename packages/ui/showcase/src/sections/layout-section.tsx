@@ -3,647 +3,369 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardFooter,
+  Separator,
   ScrollArea,
+  ScrollBar,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
   Resizable,
-  ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
-  Separator,
-  Badge,
+  ResizableHandle,
   Button,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+  Badge,
+  ChevronDown
 } from '../components';
-import {
-  ChevronDown,
-  ChevronRight,
-  GripVertical,
-  Layout,
-  Layers,
-  Grid3x3,
-  Square,
-  Maximize2,
-  ArrowUpDown,
-  Package,
-  Home,
-  Settings,
-  User,
-  Mail,
-  Calendar,
-  CreditCard,
-  Activity,
-  Download,
-  Share2,
-  Heart,
-  MessageSquare,
-  MoreHorizontal,
-} from 'lucide-react';
 
-export const LayoutSection: React.FC = () => {
+export const LayoutSection = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
 
-  const toggleCard = (cardId: string) => {
-    const newExpanded = new Set(expandedCards);
-    if (newExpanded.has(cardId)) {
-      newExpanded.delete(cardId);
-    } else {
-      newExpanded.add(cardId);
-    }
-    setExpandedCards(newExpanded);
-  };
+  const tags = Array.from({ length: 50 }).map(
+    (_, i, a) => `Tag ${a.length - i}`
+  );
+
+  const frameworks = [
+    { name: 'Next.js', description: 'The React Framework for Production' },
+    { name: 'React', description: 'A JavaScript library for building UIs' },
+    { name: 'Vue', description: 'The Progressive JavaScript Framework' },
+    { name: 'Angular', description: 'Platform for building mobile and desktop apps' },
+    { name: 'Svelte', description: 'Cybernetically enhanced web apps' },
+    { name: 'Solid', description: 'Simple and performant reactivity' }
+  ];
 
   return (
     <div className="space-y-8">
-      {/* Section Header */}
       <div>
-        <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-          <Layout className="w-8 h-8" />
-          Layout Components
-        </h2>
-        <p className="text-muted-foreground mt-2">
-          Components for structuring and organizing content with responsive layouts and containers.
+        <h2 className="text-3xl font-bold mb-6">Layout Components</h2>
+        <p className="text-muted-foreground mb-8">
+          Essential layout components for structuring your application interface with cards, separators, scroll areas, and resizable panels.
         </p>
       </div>
 
-      {/* Cards Section */}
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Square className="w-5 h-5" />
-            Cards
-          </h3>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* Cards */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Cards</CardTitle>
+          <CardDescription>Versatile container components with header, content, and footer sections</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Basic Card */}
             <Card>
               <CardHeader>
                 <CardTitle>Basic Card</CardTitle>
-                <CardDescription>A simple card with header and content</CardDescription>
+                <CardDescription>A simple card with title and description</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Cards are versatile containers perfect for displaying grouped information,
-                  featuring headers, content areas, and optional footers.
-                </p>
+                <p>This is the main content area of the card. You can place any content here.</p>
               </CardContent>
-              <CardFooter>
-                <Button variant="outline" size="sm">Learn More</Button>
+            </Card>
+
+            {/* Card with Footer */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Card with Footer</CardTitle>
+                <CardDescription>Includes action buttons in the footer</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Cards can have footers for actions and additional information.</p>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button variant="outline">Cancel</Button>
+                <Button>Save</Button>
               </CardFooter>
             </Card>
 
             {/* Interactive Card */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Interactive Card</CardTitle>
                   <Badge>New</Badge>
                 </div>
-                <CardDescription>Hover for effect</CardDescription>
+                <CardDescription>Hover me for effect</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">John Doe</p>
-                    <p className="text-sm text-muted-foreground">Software Engineer</p>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button variant="ghost" size="sm">
-                  <Heart className="w-4 h-4 mr-1" />
-                  Like
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <MessageSquare className="w-4 h-4 mr-1" />
-                  Comment
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Stats Card */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">$45,231.89</div>
-                <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
-                </p>
-                <div className="h-[80px] mt-4">
-                  <div className="flex items-end gap-1 h-full">
-                    {[40, 55, 35, 70, 55, 80, 65].map((height, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-primary rounded-t"
-                        style={{ height: `${height}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <p>This card has hover effects and can be clicked.</p>
               </CardContent>
             </Card>
 
-            {/* Feature Card */}
-            <Card className="border-primary">
-              <CardHeader>
-                <Activity className="h-8 w-8 mb-2 text-primary" />
-                <CardTitle>Performance Monitoring</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Real-time insights into your application's performance metrics.
-                </p>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>CPU Usage</span>
-                    <span className="font-medium">45%</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Memory</span>
-                    <span className="font-medium">2.1 GB</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Storage</span>
-                    <span className="font-medium">67%</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Expandable Card */}
-            <Card>
-              <CardHeader 
-                className="cursor-pointer"
-                onClick={() => toggleCard('expand1')}
-              >
-                <div className="flex items-center justify-between">
-                  <CardTitle>Expandable Card</CardTitle>
-                  {expandedCards.has('expand1') ? 
-                    <ChevronDown className="h-4 w-4" /> : 
-                    <ChevronRight className="h-4 w-4" />
-                  }
-                </div>
-              </CardHeader>
-              {expandedCards.has('expand1') && (
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    This content is only visible when the card is expanded.
-                    Click the header to toggle visibility.
-                  </p>
-                  <div className="mt-4 space-y-2">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Report
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share Results
-                    </Button>
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-
-            {/* Complex Card */}
+            {/* Nested Cards */}
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Project Alpha</CardTitle>
-                    <CardDescription>Q4 2025 Initiative</CardDescription>
-                  </div>
-                  <Button variant="ghost" size="icon">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </div>
+                <CardTitle>Nested Cards</CardTitle>
+                <CardDescription>Cards within cards</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Progress</span>
-                    <span className="text-sm font-medium">72%</span>
-                  </div>
-                  <div className="w-full bg-secondary rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '72%' }} />
-                  </div>
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <Avatar key={i} className="border-2 border-background w-8 h-8">
-                        <AvatarFallback>U{i}</AvatarFallback>
-                      </Avatar>
-                    ))}
-                    <div className="w-8 h-8 rounded-full bg-muted border-2 border-background flex items-center justify-center">
-                      <span className="text-xs">+3</span>
-                    </div>
-                  </div>
-                </div>
+              <CardContent className="space-y-2">
+                <Card className="p-3">
+                  <p className="text-sm">Nested content 1</p>
+                </Card>
+                <Card className="p-3">
+                  <p className="text-sm">Nested content 2</p>
+                </Card>
               </CardContent>
-              <CardFooter>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    Dec 31
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MessageSquare className="w-3 h-3" />
-                    12
-                  </div>
-                </div>
-              </CardFooter>
             </Card>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Container Examples */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Package className="w-5 h-5" />
-            Containers & Grids
-          </h3>
-          <div className="space-y-4">
-            {/* Responsive Grid */}
-            <div className="p-6 border rounded-lg">
-              <h4 className="font-medium mb-4">Responsive Grid System</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                  <div
-                    key={item}
-                    className="p-4 bg-muted rounded-lg text-center font-medium"
-                  >
-                    Grid Item {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Flexbox Container */}
-            <div className="p-6 border rounded-lg">
-              <h4 className="font-medium mb-4">Flexible Container</h4>
-              <div className="flex flex-wrap gap-2">
-                {['Home', 'Products', 'Services', 'About', 'Contact', 'Blog', 'Careers'].map((item) => (
-                  <div key={item} className="px-4 py-2 bg-primary/10 rounded-md">
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Masonry-like Layout */}
-            <div className="p-6 border rounded-lg">
-              <h4 className="font-medium mb-4">Dynamic Heights Grid</h4>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-muted rounded-lg p-4 h-24">Short</div>
-                <div className="bg-muted rounded-lg p-4 h-40 row-span-2">Tall</div>
-                <div className="bg-muted rounded-lg p-4 h-24">Short</div>
-                <div className="bg-muted rounded-lg p-4 h-32">Medium</div>
-                <div className="bg-muted rounded-lg p-4 h-32">Medium</div>
+      {/* Separator */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Separator</CardTitle>
+          <CardDescription>Visual dividers for content sections</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Horizontal Separator */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Horizontal</h4>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm">Content above separator</p>
+                <Separator className="my-4" />
+                <p className="text-sm">Content below separator</p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ScrollArea Section */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <ArrowUpDown className="w-5 h-5" />
-            Scroll Areas
-          </h3>
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Vertical ScrollArea */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Vertical Scroll</CardTitle>
-                <CardDescription>Scrollable content with custom scrollbar</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[200px] w-full rounded-md border p-4">
-                  <div className="space-y-4">
-                    {Array.from({ length: 20 }).map((_, i) => (
-                      <div key={i} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                        <p className="text-sm">
-                          Scrollable item {i + 1} - Lorem ipsum dolor sit amet
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-
-            {/* Horizontal ScrollArea */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Horizontal Scroll</CardTitle>
-                <CardDescription>Side-scrolling content area</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-                  <div className="flex w-max space-x-4 p-4">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <Card key={i} className="w-[200px]">
-                        <CardHeader>
-                          <CardTitle className="text-sm">Card {i + 1}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-xs text-muted-foreground">
-                            Horizontally scrollable card content
-                          </p>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
+          {/* Vertical Separator */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Vertical</h4>
+            <div className="flex h-5 items-center space-x-4 text-sm">
+              <div>Blog</div>
+              <Separator orientation="vertical" />
+              <div>Docs</div>
+              <Separator orientation="vertical" />
+              <div>Source</div>
+              <Separator orientation="vertical" />
+              <div>Support</div>
+            </div>
           </div>
-        </div>
 
-        {/* Collapsible Section */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Layers className="w-5 h-5" />
-            Collapsibles
-          </h3>
-          <div className="space-y-4">
-            {/* Basic Collapsible */}
-            <Card>
-              <CardContent className="pt-6">
-                <Collapsible
-                  open={isOpen}
-                  onOpenChange={setIsOpen}
-                  className="w-full space-y-2"
-                >
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold">
-                      Advanced Settings
-                    </h4>
-                    <CollapsibleTrigger asChild>
-                      <Button variant="ghost" size="sm" className="w-9 p-0">
-                        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                        <span className="sr-only">Toggle</span>
-                      </Button>
-                    </CollapsibleTrigger>
-                  </div>
-                  <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                    Basic configuration options
-                  </div>
-                  <CollapsibleContent className="space-y-2">
-                    <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                      Advanced option 1
-                    </div>
-                    <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                      Advanced option 2
-                    </div>
-                    <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                      Advanced option 3
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </CardContent>
-            </Card>
-
-            {/* Multiple Collapsibles (Accordion-like) */}
-            <Card>
-              <CardHeader>
-                <CardTitle>FAQ Section</CardTitle>
-                <CardDescription>Multiple collapsible sections</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[
-                  {
-                    question: "What is a Design System?",
-                    answer: "A design system is a collection of reusable components, guided by clear standards, that can be assembled to build applications."
-                  },
-                  {
-                    question: "Why use TypeScript?",
-                    answer: "TypeScript adds static typing to JavaScript, helping catch errors early and improving code maintainability."
-                  },
-                  {
-                    question: "How to customize themes?",
-                    answer: "Themes can be customized through CSS variables, Tailwind configuration, and component variants."
-                  }
-                ].map((item, index) => (
-                  <Collapsible key={index}>
-                    <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border p-4 text-left hover:bg-muted/50">
-                      <span className="font-medium">{item.question}</span>
-                      <ChevronRight className="h-4 w-4 transition-transform duration-200 [&[data-state=open]]:rotate-90" />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="px-4 pt-2 pb-4 text-muted-foreground">
-                      {item.answer}
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Resizable Panels */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Maximize2 className="w-5 h-5" />
-            Resizable Panels
-          </h3>
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <CardTitle>Resizable Layout</CardTitle>
-              <CardDescription>Drag the handle to resize panels</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="h-[400px]">
-                <ResizablePanelGroup direction="horizontal" className="h-full">
-                  <ResizablePanel defaultSize={25} minSize={15}>
-                    <div className="h-full p-4 bg-muted/30">
-                      <h4 className="font-semibold mb-4">Sidebar</h4>
-                      <div className="space-y-2">
-                        <Button variant="ghost" className="w-full justify-start">
-                          <Home className="w-4 h-4 mr-2" />
-                          Dashboard
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start">
-                          <User className="w-4 h-4 mr-2" />
-                          Profile
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start">
-                          <Settings className="w-4 h-4 mr-2" />
-                          Settings
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start">
-                          <Mail className="w-4 h-4 mr-2" />
-                          Messages
-                        </Button>
-                      </div>
-                    </div>
-                  </ResizablePanel>
-                  <ResizableHandle withHandle />
-                  <ResizablePanel defaultSize={50}>
-                    <ResizablePanelGroup direction="vertical">
-                      <ResizablePanel defaultSize={50}>
-                        <div className="h-full p-4">
-                          <h4 className="font-semibold mb-2">Main Content</h4>
-                          <p className="text-sm text-muted-foreground">
-                            This is the main content area. It can be resized both horizontally
-                            and vertically using the drag handles.
-                          </p>
-                        </div>
-                      </ResizablePanel>
-                      <ResizableHandle withHandle />
-                      <ResizablePanel defaultSize={50}>
-                        <div className="h-full p-4 bg-muted/20">
-                          <h4 className="font-semibold mb-2">Console</h4>
-                          <div className="font-mono text-xs space-y-1">
-                            <div className="text-green-600">✓ Build completed</div>
-                            <div className="text-blue-600">→ Starting development server...</div>
-                            <div className="text-yellow-600">⚠ Warning: Unused variable</div>
-                          </div>
-                        </div>
-                      </ResizablePanel>
-                    </ResizablePanelGroup>
-                  </ResizablePanel>
-                  <ResizableHandle withHandle />
-                  <ResizablePanel defaultSize={25} minSize={15}>
-                    <div className="h-full p-4 bg-muted/30">
-                      <h4 className="font-semibold mb-4">Properties</h4>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="text-xs font-medium">Width</label>
-                          <input
-                            type="text"
-                            className="w-full mt-1 px-2 py-1 text-sm border rounded"
-                            placeholder="auto"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs font-medium">Height</label>
-                          <input
-                            type="text"
-                            className="w-full mt-1 px-2 py-1 text-sm border rounded"
-                            placeholder="100%"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs font-medium">Padding</label>
-                          <input
-                            type="text"
-                            className="w-full mt-1 px-2 py-1 text-sm border rounded"
-                            placeholder="16px"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </ResizablePanel>
-                </ResizablePanelGroup>
+          {/* Separator with Text */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">With Label</h4>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <Separator />
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Complex Layout Example */}
-        <div>
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Grid3x3 className="w-5 h-5" />
-            Complex Layout Example
-          </h3>
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <CardTitle>Dashboard Layout</CardTitle>
-              <CardDescription>Combining multiple layout components</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="h-[500px] flex">
-                {/* Sidebar */}
-                <div className="w-64 border-r bg-muted/10">
-                  <ScrollArea className="h-full">
-                    <div className="p-4 space-y-4">
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Navigation</h4>
-                        <Separator />
-                      </div>
-                      {['Dashboard', 'Analytics', 'Reports', 'Users', 'Settings'].map((item) => (
-                        <Button
-                          key={item}
-                          variant="ghost"
-                          className="w-full justify-start"
-                        >
-                          {item}
-                        </Button>
+      {/* Scroll Area */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Scroll Area</CardTitle>
+          <CardDescription>Customizable scrollable containers with styled scrollbars</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Vertical Scroll */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Vertical Scroll</h4>
+            <ScrollArea className="h-72 w-full rounded-md border p-4">
+              <div className="space-y-4">
+                {frameworks.map((framework, i) => (
+                  <div key={i}>
+                    <h4 className="text-sm font-semibold">{framework.name}</h4>
+                    <p className="text-sm text-muted-foreground">{framework.description}</p>
+                    {i < frameworks.length - 1 && <Separator className="my-2" />}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+
+          {/* Horizontal Scroll */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Horizontal Scroll</h4>
+            <ScrollArea className="w-full whitespace-nowrap rounded-md border">
+              <div className="flex w-max space-x-4 p-4">
+                {tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="rounded-sm px-3 py-1">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+          </div>
+
+          {/* Both Scrollbars */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Both Directions</h4>
+            <ScrollArea className="h-48 w-full rounded-md border">
+              <div className="p-4">
+                <table className="w-max">
+                  <thead>
+                    <tr>
+                      {Array.from({ length: 10 }).map((_, i) => (
+                        <th key={i} className="border px-4 py-2">
+                          Column {i + 1}
+                        </th>
                       ))}
-                      
-                      <Collapsible>
-                        <CollapsibleTrigger className="flex w-full items-center justify-between py-2">
-                          <span className="text-sm font-semibold">Projects</span>
-                          <ChevronRight className="h-4 w-4" />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="pl-4 space-y-1 mt-1">
-                          {['Project Alpha', 'Project Beta', 'Project Gamma'].map((project) => (
-                            <Button
-                              key={project}
-                              variant="ghost"
-                              size="sm"
-                              className="w-full justify-start"
-                            >
-                              {project}
-                            </Button>
-                          ))}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    </div>
-                  </ScrollArea>
-                </div>
-
-                {/* Main Content */}
-                <div className="flex-1 flex flex-col">
-                  {/* Header */}
-                  <div className="border-b p-4">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-semibold">Overview</h2>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">Export</Button>
-                        <Button size="sm">New Report</Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content Area */}
-                  <ScrollArea className="flex-1">
-                    <div className="p-6">
-                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                          <Card key={i}>
-                            <CardHeader className="pb-3">
-                              <CardTitle className="text-sm">Metric {i + 1}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <div className="text-2xl font-bold">{(Math.random() * 1000).toFixed(0)}</div>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                +{(Math.random() * 20).toFixed(1)}% from last period
-                              </p>
-                            </CardContent>
-                          </Card>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.from({ length: 20 }).map((_, row) => (
+                      <tr key={row}>
+                        {Array.from({ length: 10 }).map((_, col) => (
+                          <td key={col} className="border px-4 py-2">
+                            R{row + 1} C{col + 1}
+                          </td>
                         ))}
-                      </div>
-                    </div>
-                  </ScrollArea>
-                </div>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+              <ScrollBar orientation="horizontal" />
+              <ScrollBar orientation="vertical" />
+            </ScrollArea>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Collapsible */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Collapsible</CardTitle>
+          <CardDescription>Expandable and collapsible content sections</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Basic Collapsible */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Basic Collapsible</h4>
+            <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full justify-between">
+                  <span>View more details</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <p>This is the collapsible content that appears when expanded.</p>
+                    <p className="mt-2">You can place any content here including other components.</p>
+                  </CardContent>
+                </Card>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+
+          {/* Nested Collapsible */}
+          <div>
+            <h4 className="text-sm font-medium mb-4">Nested Collapsible</h4>
+            <Collapsible open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" className="w-full justify-between">
+                  <span>Advanced Settings</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-4 space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Performance</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm">Configure performance settings</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Security</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm">Manage security preferences</p>
+                  </CardContent>
+                </Card>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Resizable Panels */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Resizable Panels</CardTitle>
+          <CardDescription>Adjustable panel layouts with drag handles</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-96 w-full">
+            <Resizable defaultSize={{ width: '100%', height: '100%' }}>
+              <ResizablePanel defaultSize={25} minSize={20}>
+                <div className="h-full p-4 bg-muted/50 rounded-l-md">
+                  <h4 className="font-semibold mb-2">Left Panel</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Drag the handle to resize this panel. Min width: 20%
+                  </p>
+                </div>
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={50}>
+                <div className="h-full p-4 bg-muted/30">
+                  <h4 className="font-semibold mb-2">Center Panel</h4>
+                  <p className="text-sm text-muted-foreground">
+                    This is the main content area. It adjusts automatically.
+                  </p>
+                </div>
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={25} minSize={20}>
+                <div className="h-full p-4 bg-muted/50 rounded-r-md">
+                  <h4 className="font-semibold mb-2">Right Panel</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Another resizable panel. Min width: 20%
+                  </p>
+                </div>
+              </ResizablePanel>
+            </Resizable>
+          </div>
+
+          {/* Nested Resizable */}
+          <div className="mt-6">
+            <h4 className="text-sm font-medium mb-4">Nested Layout</h4>
+            <div className="h-96 w-full">
+              <Resizable defaultSize={{ width: '100%', height: '100%' }}>
+                <ResizablePanel defaultSize={30} minSize={25}>
+                  <div className="h-full p-4 bg-muted/50 rounded-l-md">
+                    <h4 className="font-semibold">Sidebar</h4>
+                  </div>
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel defaultSize={70}>
+                  <Resizable direction="vertical" className="h-full">
+                    <ResizablePanel defaultSize={60}>
+                      <div className="h-full p-4 bg-muted/30">
+                        <h4 className="font-semibold">Main Content</h4>
+                      </div>
+                    </ResizablePanel>
+                    <ResizableHandle withHandle />
+                    <ResizablePanel defaultSize={40}>
+                      <div className="h-full p-4 bg-muted/20 rounded-br-md">
+                        <h4 className="font-semibold">Footer Area</h4>
+                      </div>
+                    </ResizablePanel>
+                  </Resizable>
+                </ResizablePanel>
+              </Resizable>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

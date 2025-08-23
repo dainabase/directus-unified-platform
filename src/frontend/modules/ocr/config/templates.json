@@ -1,0 +1,310 @@
+{
+  "templates": {
+    "facture_client": {
+      "name": "Facture Client",
+      "icon": "📄",
+      "color": "#4CAF50",
+      "database": "FACTURES_CLIENTS",
+      "prompts": {
+        "extraction": "Extraire les informations suivantes de cette facture client: numéro de facture, nom du client, date, montant HT, taux de TVA, montant TVA, montant TTC, conditions de paiement, échéance",
+        "validation": "Vérifier que les calculs sont corrects (HT + TVA = TTC) et que tous les champs obligatoires sont présents"
+      },
+      "fields": [
+        {
+          "key": "numero",
+          "label": "Numéro de facture",
+          "type": "text",
+          "required": true,
+          "pattern": "^[A-Z0-9-]+$"
+        },
+        {
+          "key": "client",
+          "label": "Client",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "montant_ht",
+          "label": "Montant HT",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        },
+        {
+          "key": "tva",
+          "label": "TVA",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        },
+        {
+          "key": "montant_ttc",
+          "label": "Montant TTC",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        }
+      ]
+    },
+    "facture_fournisseur": {
+      "name": "Facture Fournisseur",
+      "icon": "📥",
+      "color": "#FF5722",
+      "database": "FACTURES_FOURNISSEURS",
+      "prompts": {
+        "extraction": "Extraire les informations suivantes de cette facture fournisseur: numéro de facture, nom du fournisseur, date, montant HT, taux de TVA, montant TVA, montant TTC, échéance de paiement",
+        "validation": "Vérifier que les calculs sont corrects et que le fournisseur est identifié"
+      },
+      "fields": [
+        {
+          "key": "numero",
+          "label": "Numéro de facture",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "fournisseur",
+          "label": "Fournisseur",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "montant_ht",
+          "label": "Montant HT",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        },
+        {
+          "key": "tva",
+          "label": "TVA",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        },
+        {
+          "key": "montant_ttc",
+          "label": "Montant TTC",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        }
+      ]
+    },
+    "note_frais": {
+      "name": "Note de Frais",
+      "icon": "💳",
+      "color": "#9C27B0",
+      "database": "NOTES_FRAIS",
+      "prompts": {
+        "extraction": "Extraire les informations suivantes de cette note de frais: date, employé, catégorie (transport/repas/hébergement/autre), montant, description, TVA si applicable",
+        "validation": "Vérifier que la catégorie est correcte et que le montant est lisible"
+      },
+      "fields": [
+        {
+          "key": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "employe",
+          "label": "Employé",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "categorie",
+          "label": "Catégorie",
+          "type": "select",
+          "required": true,
+          "options": ["Transport", "Repas", "Hébergement", "Fournitures", "Autre"]
+        },
+        {
+          "key": "montant",
+          "label": "Montant",
+          "type": "number",
+          "required": true,
+          "format": "currency"
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    "contrat": {
+      "name": "Contrat",
+      "icon": "📋",
+      "color": "#2196F3",
+      "database": "CONTRATS",
+      "prompts": {
+        "extraction": "Extraire les informations suivantes de ce contrat: titre, type de contrat, parties contractantes, date de début, date de fin, montant total si applicable, clauses principales",
+        "validation": "Vérifier que les parties sont clairement identifiées et que les dates sont cohérentes"
+      },
+      "fields": [
+        {
+          "key": "titre",
+          "label": "Titre du contrat",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "type": "select",
+          "required": true,
+          "options": ["Service", "Vente", "Location", "Travail", "Partenariat", "Autre"]
+        },
+        {
+          "key": "partie_contractante",
+          "label": "Partie contractante",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "date_debut",
+          "label": "Date de début",
+          "type": "date",
+          "required": true
+        },
+        {
+          "key": "date_fin",
+          "label": "Date de fin",
+          "type": "date",
+          "required": false
+        },
+        {
+          "key": "montant",
+          "label": "Montant",
+          "type": "number",
+          "required": false,
+          "format": "currency"
+        }
+      ]
+    },
+    "releve_bancaire": {
+      "name": "Relevé Bancaire",
+      "icon": "🏦",
+      "color": "#00BCD4",
+      "database": "TRANSACTIONS_BANCAIRES",
+      "prompts": {
+        "extraction": "Extraire toutes les transactions de ce relevé bancaire: date, libellé, débit, crédit, solde. Identifier le compte bancaire et la période",
+        "validation": "Vérifier que le solde final correspond aux calculs des transactions"
+      },
+      "fields": [
+        {
+          "key": "compte",
+          "label": "Compte bancaire",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "periode",
+          "label": "Période",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "transactions",
+          "label": "Transactions",
+          "type": "array",
+          "subfields": [
+            {
+              "key": "date",
+              "label": "Date",
+              "type": "date"
+            },
+            {
+              "key": "libelle",
+              "label": "Libellé",
+              "type": "text"
+            },
+            {
+              "key": "debit",
+              "label": "Débit",
+              "type": "number",
+              "format": "currency"
+            },
+            {
+              "key": "credit",
+              "label": "Crédit",
+              "type": "number",
+              "format": "currency"
+            }
+          ]
+        }
+      ]
+    },
+    "document_general": {
+      "name": "Document Général",
+      "icon": "📎",
+      "color": "#607D8B",
+      "database": "DOCUMENTS_GENERAUX",
+      "prompts": {
+        "extraction": "Extraire les informations principales de ce document: titre, type, date, contenu principal, personnes ou entités mentionnées",
+        "validation": "Identifier le type de document et extraire les informations pertinentes"
+      },
+      "fields": [
+        {
+          "key": "titre",
+          "label": "Titre",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "type",
+          "label": "Type de document",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "key": "tags",
+          "label": "Tags",
+          "type": "tags",
+          "required": false
+        }
+      ]
+    }
+  },
+  "settings": {
+    "defaultTemplate": "document_general",
+    "autoDetect": true,
+    "languages": ["fr", "en", "de", "it"],
+    "currencies": ["CHF", "EUR", "USD"],
+    "dateFormats": {
+      "input": ["DD/MM/YYYY", "DD.MM.YYYY", "YYYY-MM-DD"],
+      "output": "YYYY-MM-DD"
+    },
+    "numberFormats": {
+      "decimal": ",",
+      "thousands": " "
+    }
+  }
+}

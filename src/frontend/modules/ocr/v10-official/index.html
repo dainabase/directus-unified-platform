@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Premium Dashboard v10 - Module Officiel</title>
+    
+    <!-- Configuration du module -->
+    <script>
+        // Configuration globale du module OCR
+        window.OCR_CONFIG = {
+            version: '10.0.0',
+            status: 'production',
+            api: {
+                openai: {
+                    endpoint: 'https://api.openai.com/v1/chat/completions',
+                    model: 'gpt-4o'
+                },
+                notion: {
+                    endpoint: 'https://api.notion.com/v1',
+                    version: '2022-06-28'
+                },
+                directus: {
+                    url: window.location.hostname === 'localhost' 
+                        ? 'http://localhost:8055' 
+                        : 'https://api.directus.dainamics.ch'
+                }
+            },
+            paths: {
+                configs: '../config/',
+                components: './components/',
+                tests: '../tests/',
+                docs: '../docs/'
+            }
+        };
+
+        // Message de bienvenue pour les développeurs
+        console.log('%c🎯 OCR Premium Dashboard v10 - Module Officiel', 
+            'color: #4CAF50; font-size: 16px; font-weight: bold;');
+        console.log('📍 Version officielle unique pour production');
+        console.log('📄 Documentation: ../docs/OCR-DOCUMENTATION.md');
+    </script>
+
+    <!-- Styles Tabler.io -->
+    <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css" rel="stylesheet">
+    
+    <!-- Style de redirection -->
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .loading-container {
+            text-align: center;
+            color: white;
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="info-box">
+            <div class="version-badge">Version 10.0.0 - Production</div>
+            <h1>Module OCR Premium Dashboard</h1>
+            <div class="spinner"></div>
+            <p>Chargement du dashboard OCR...</p>
+            <small>Redirection automatique dans 2 secondes</small>
+        </div>
+    </div>
+
+    <script>
+        // Vérification de la configuration
+        async function checkConfig() {
+            try {
+                // Charger les configurations
+                const [databases, templates] = await Promise.all([
+                    fetch('../config/databases.json').then(r => r.json()),
+                    fetch('../config/templates.json').then(r => r.json())
+                ]);
+                
+                console.log('✅ Configurations chargées:', {
+                    databases: Object.keys(databases.databases).length + ' bases',
+                    templates: Object.keys(templates.templates).length + ' templates'
+                });
+                
+                // Stocker en localStorage pour utilisation dans le dashboard
+                localStorage.setItem('ocr_databases', JSON.stringify(databases));
+                localStorage.setItem('ocr_templates', JSON.stringify(templates));
+                
+            } catch (error) {
+                console.warn('⚠️ Impossible de charger les configurations:', error);
+                console.log('Utilisation des configurations par défaut');
+            }
+        }
+
+        // Redirection vers le dashboard principal
+        async function redirectToDashboard() {
+            await checkConfig();
+            
+            // Construire l'URL de redirection
+            const currentPath = window.location.pathname;
+            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+            
+            // Déterminer où se trouve le fichier original
+            let targetUrl;
+            
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // En développement local - utiliser le chemin relatif
+                targetUrl = '/dashboard/frontend/superadmin/finance/ocr-premium-dashboard-fixed.html';
+            } else {
+                // En production - utiliser l'URL complète
+                targetUrl = 'https://github.com/dainabase/directus-unified-platform/blob/main/dashboard/frontend/superadmin/finance/ocr-premium-dashboard-fixed.html';
+            }
+            
+            // Message pour les développeurs
+            console.log('🚀 Redirection vers:', targetUrl);
+            
+            // Redirection après 2 secondes
+            setTimeout(() => {
+                // Pour le développement, on affiche le chemin
+                if (window.location.hostname === 'localhost') {
+                    // Créer un message informatif au lieu de rediriger
+                    document.body.innerHTML = `
+                        <div class="container mt-5">
+                            <div class="alert alert-info">
+                                <h4 class="alert-title">📍 Module OCR Organisation Complète</h4>
+                                <div class="text-muted">
+                                    <p><strong>Version officielle:</strong></p>
+                                    <code>${targetUrl}</code>
+                                    <hr>
+                                    <p><strong>Structure modulaire créée:</strong></p>
+                                    <pre>
+src/frontend/modules/ocr/
+├── README.md
+├── v10-official/
+│   └── index.html (ce fichier)
+├── config/
+│   ├── databases.json
+│   └── templates.json
+├── tests/
+└── docs/
+                                    </pre>
+                                    <hr>
+                                    <p>✅ Le module OCR est maintenant organisé et prêt pour le développement!</p>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="${targetUrl}" class="btn btn-primary">
+                                    Ouvrir le Dashboard OCR Original
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // En production, rediriger vraiment
+                    window.location.href = targetUrl;
+                }
+            }, 2000);
+        }
+
+        // Lancer la redirection au chargement
+        window.addEventListener('DOMContentLoaded', redirectToDashboard);
+    </script>
+
+    <!-- Tabler.io JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js"></script>
+</body>
+</html>

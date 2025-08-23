@@ -1,0 +1,138 @@
+{
+  "databases": {
+    "FACTURES_CLIENTS": {
+      "id": "226adb95-3c6f-8011-a9bb-ca31f7da8e6a",
+      "name": "Factures Clients",
+      "description": "Base de données pour toutes les factures émises aux clients",
+      "fields": {
+        "numero": "Numéro de facture",
+        "client": "Nom du client",
+        "date": "Date de facture",
+        "montant_ht": "Montant HT",
+        "tva": "TVA",
+        "montant_ttc": "Montant TTC",
+        "statut": "Statut (payée/impayée)",
+        "company": "Entreprise émettrice"
+      }
+    },
+    "FACTURES_FOURNISSEURS": {
+      "id": "237adb95-3c6f-80de-9f92-c795334e5561",
+      "name": "Factures Fournisseurs",
+      "description": "Base de données pour toutes les factures reçues des fournisseurs",
+      "fields": {
+        "numero": "Numéro de facture",
+        "fournisseur": "Nom du fournisseur",
+        "date": "Date de facture",
+        "montant_ht": "Montant HT",
+        "tva": "TVA",
+        "montant_ttc": "Montant TTC",
+        "statut": "Statut (payée/impayée)",
+        "company": "Entreprise destinataire"
+      }
+    },
+    "NOTES_FRAIS": {
+      "id": "237adb95-3c6f-804b-a530-e44d07ac9f7b",
+      "name": "Notes de Frais",
+      "description": "Base de données pour toutes les notes de frais",
+      "fields": {
+        "date": "Date de la dépense",
+        "employe": "Nom de l'employé",
+        "categorie": "Catégorie de dépense",
+        "montant": "Montant",
+        "description": "Description",
+        "justificatif": "Fichier justificatif",
+        "statut": "Statut (approuvée/en attente/rejetée)",
+        "company": "Entreprise"
+      }
+    },
+    "CONTRATS": {
+      "id": "22eadb95-3c6f-8099-81fe-d4890db02d9c",
+      "name": "Contrats",
+      "description": "Base de données pour tous les contrats",
+      "fields": {
+        "titre": "Titre du contrat",
+        "type": "Type de contrat",
+        "partie_contractante": "Partie contractante",
+        "date_debut": "Date de début",
+        "date_fin": "Date de fin",
+        "montant": "Montant total",
+        "statut": "Statut (actif/terminé/en négociation)",
+        "company": "Entreprise"
+      }
+    },
+    "TRANSACTIONS_BANCAIRES": {
+      "id": "237adb95-3c6f-803c-9ead-e6156b991db4",
+      "name": "Transactions Bancaires",
+      "description": "Base de données pour toutes les transactions bancaires",
+      "fields": {
+        "date": "Date de transaction",
+        "libelle": "Libellé",
+        "debit": "Débit",
+        "credit": "Crédit",
+        "solde": "Solde après transaction",
+        "categorie": "Catégorie",
+        "compte": "Compte bancaire",
+        "company": "Entreprise"
+      }
+    },
+    "DOCUMENTS_GENERAUX": {
+      "id": "230adb95-3c6f-80eb-9903-ff117c2a518f",
+      "name": "Documents Généraux",
+      "description": "Base de données pour tous les autres documents",
+      "fields": {
+        "titre": "Titre du document",
+        "type": "Type de document",
+        "date": "Date",
+        "description": "Description",
+        "fichier": "Fichier",
+        "tags": "Tags",
+        "company": "Entreprise"
+      }
+    }
+  },
+  "companies": {
+    "HYPERVISUAL": {
+      "name": "HYPERVISUAL",
+      "id": "hypervisual",
+      "color": "#FF6B6B"
+    },
+    "DAINAMICS": {
+      "name": "DAINAMICS",
+      "id": "dainamics",
+      "color": "#4ECDC4"
+    },
+    "LEXAIA": {
+      "name": "LEXAIA",
+      "id": "lexaia",
+      "color": "#45B7D1"
+    },
+    "ENKI_REALTY": {
+      "name": "ENKI REALTY",
+      "id": "enki_realty",
+      "color": "#96CEB4"
+    },
+    "TAKEOUT": {
+      "name": "TAKEOUT",
+      "id": "takeout",
+      "color": "#FFA07A"
+    }
+  },
+  "api": {
+    "notion": {
+      "version": "2022-06-28",
+      "baseUrl": "https://api.notion.com/v1",
+      "endpoints": {
+        "createPage": "/pages",
+        "getPage": "/pages/{page_id}",
+        "updatePage": "/pages/{page_id}",
+        "queryDatabase": "/databases/{database_id}/query"
+      }
+    },
+    "openai": {
+      "model": "gpt-4o",
+      "maxTokens": 4096,
+      "temperature": 0.2,
+      "endpoint": "https://api.openai.com/v1/chat/completions"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+name: Organize Scripts - Safe Version
+
+on:
+  push:
+    branches: [ organize-scripts-only-clean ]
+  workflow_dispatch:
+
+jobs:
+  organize-scripts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Make script executable
+      run: chmod +x scripts/ORGANIZE_SCRIPTS_SAFE.sh
+    
+    - name: Run organization script
+      run: |
+        cd ${{ github.workspace }}
+        bash scripts/ORGANIZE_SCRIPTS_SAFE.sh
+    
+    - name: Show results
+      run: |
+        echo "📊 Scripts organization complete!"
+        echo ""
+        echo "Files in scripts/migration:"
+        ls -la scripts/migration/ || echo "Empty"
+        echo ""
+        echo "Files in scripts/testing:"
+        ls -la scripts/testing/ || echo "Empty"
+        echo ""
+        echo "Files in scripts/deployment:"
+        ls -la scripts/deployment/ || echo "Empty"
+        echo ""
+        echo "Files remaining at scripts root:"
+        ls -1 scripts/*.{js,sh,ts,py} 2>/dev/null | wc -l
+    
+    - name: Commit changes
+      run: |
+        git config --local user.email "admin@dainamics.ch"
+        git config --local user.name "dainabase"
+        git add .
+        git diff --staged --quiet || git commit -m "✅ Scripts organized - 53 files moved to appropriate directories"
+        git push origin organize-scripts-only-clean

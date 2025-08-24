@@ -107,7 +107,25 @@
       "Bash(npm cache clean:*)",
       "Bash(npx @pixelsock/directus-mcp@latest:*)",
       "Bash(DIRECTUS_URL=\"http://localhost:8055\" DIRECTUS_ACCESS_TOKEN=\"e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW\" timeout 5 node directus-mcp-server-v2.js)",
-      "Bash(./cleanup-design-system.sh:*)"
+      "Bash(./cleanup-design-system.sh:*)",
+      "Bash(npm run fresh:*)",
+      "Bash(npm run analyze:*)",
+      "Bash(npm run fix:components:*)",
+      "Bash(awk:*)",
+      "Bash(npm run clean:*)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(gh repo view:*)",
+      "Bash(gh auth:*)",
+      "Bash(npm run:*)",
+      "Bash(vite build)",
+      "Bash(npx create-vite:*)",
+      "Bash(/dev/null)",
+      "Bash(npx create-react-app:*)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout 10s npm run dev)",
+      "Bash(gtimeout:*)",
+      "WebFetch(domain:orbai-template.framer.website)",
+      "Bash(git mv:*)"
     ],
     "deny": []
   }

@@ -1,483 +1,369 @@
-// 🎯 DATA DISPLAY SECTION - ANALYTICS & BUSINESS INTELLIGENCE SHOWCASE
-// Demonstrates charts, tables, grids, and data visualization components
-
 import React, { useState } from 'react';
-import { 
-  Table,
-  DataGrid,
-  Chart,
-  Calendar,
-  Timeline,
-  Badge,
-  Card,
-  Progress
-} from '../components';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Calendar as CalendarIcon,
-  Table as TableIcon,
-  Activity,
-  PieChart,
+import {
+  Database,
+  BarChart3,
   LineChart,
-  Target,
+  Activity,
+  TrendingUp,
   Users,
-  DollarSign,
-  Clock,
+  Package,
   ArrowUp,
   ArrowDown,
-  Minus
+  Filter,
+  Download,
+  Clock,
+  Target,
+  Grid,
+  List
 } from 'lucide-react';
 
-// =================== DEMO DATA ===================
+export const DataSection: React.FC = () => {
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [selectedMetric, setSelectedMetric] = useState('revenue');
 
-const salesData = [
-  { month: 'Jan', revenue: 42000, growth: 12 },
-  { month: 'Feb', revenue: 47000, growth: 18 },
-  { month: 'Mar', revenue: 53000, growth: 15 },
-  { month: 'Apr', revenue: 61000, growth: 22 },
-  { month: 'May', revenue: 58000, growth: -8 },
-  { month: 'Jun', revenue: 68000, growth: 25 }
-];
+  // Sample data for demonstrations
+  const tableData = [
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active', lastLogin: '2 hours ago' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'Active', lastLogin: '5 minutes ago' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Viewer', status: 'Inactive', lastLogin: '3 days ago' },
+    { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Editor', status: 'Active', lastLogin: '1 hour ago' },
+  ];
 
-const tableData = [
-  { id: 1, customer: 'Acme Corp', revenue: '$125,000', status: 'active', growth: 15.2 },
-  { id: 2, customer: 'TechStart Inc', revenue: '$89,000', status: 'pending', growth: -3.1 },
-  { id: 3, customer: 'Global Dynamics', revenue: '$234,000', status: 'active', growth: 8.7 },
-  { id: 4, customer: 'Innovation Labs', revenue: '$156,000', status: 'inactive', growth: 22.4 },
-  { id: 5, customer: 'Future Systems', revenue: '$98,000', status: 'active', growth: -1.8 }
-];
+  const statsData = [
+    { label: 'Total Revenue', value: '$45,231', change: '+20.1%', trend: 'up' },
+    { label: 'Active Users', value: '2,338', change: '+15.3%', trend: 'up' },
+    { label: 'Orders', value: '1,234', change: '-5.4%', trend: 'down' },
+    { label: 'Conversion', value: '3.2%', change: '+2.1%', trend: 'up' },
+  ];
 
-const timelineData = [
-  { date: '2025-01-15', title: 'Q1 Planning', type: 'milestone', status: 'completed' },
-  { date: '2025-02-01', title: 'Product Launch', type: 'event', status: 'completed' },
-  { date: '2025-02-15', title: 'Marketing Campaign', type: 'task', status: 'in-progress' },
-  { date: '2025-03-01', title: 'Q1 Review', type: 'milestone', status: 'upcoming' },
-  { date: '2025-03-15', title: 'Feature Release', type: 'event', status: 'upcoming' }
-];
-
-// =================== COMPONENTS ===================
-
-const StatCard = ({ icon: Icon, value, label, trend }: { 
-  icon: any, value: string, label: string, trend?: number 
-}) => (
-  <div className="text-center">
-    <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-2">
-      <Icon className="w-6 h-6 text-white" />
-    </div>
-    <div className="text-2xl font-bold text-gray-900">{value}</div>
-    <div className="text-sm text-gray-500">{label}</div>
-    {trend !== undefined && (
-      <div className={`text-xs font-medium mt-1 flex items-center justify-center ${
-        trend > 0 ? 'text-green-600' : trend < 0 ? 'text-red-600' : 'text-gray-600'
-      }`}>
-        {trend > 0 ? <ArrowUp className="w-3 h-3 mr-1" /> : 
-         trend < 0 ? <ArrowDown className="w-3 h-3 mr-1" /> : 
-         <Minus className="w-3 h-3 mr-1" />}
-        {Math.abs(trend)}%
-      </div>
-    )}
-  </div>
-);
-
-const ComponentDemo = ({ 
-  title, 
-  description, 
-  children, 
-  fullWidth = false 
-}: { 
-  title: string, 
-  description: string, 
-  children: React.ReactNode,
-  fullWidth?: boolean
-}) => (
-  <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-    <div className="p-6">
-      <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600 text-sm mb-4">{description}</p>
-      <div className={fullWidth ? "w-full" : "flex flex-wrap gap-4"}>
-        {children}
-      </div>
-    </div>
-  </div>
-);
-
-const KPICard = ({ title, value, change, icon: Icon }: {
-  title: string, value: string, change: number, icon: any
-}) => (
-  <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-lg p-6">
-    <div className="flex items-center justify-between mb-4">
-      <h4 className="font-medium text-gray-600">{title}</h4>
-      <Icon className="w-5 h-5 text-gray-500" />
-    </div>
-    <div className="text-2xl font-bold text-gray-900 mb-2">{value}</div>
-    <div className={`text-sm font-medium flex items-center ${
-      change > 0 ? 'text-green-600' : change < 0 ? 'text-red-600' : 'text-gray-600'
-    }`}>
-      {change > 0 ? <ArrowUp className="w-4 h-4 mr-1" /> : 
-       change < 0 ? <ArrowDown className="w-4 h-4 mr-1" /> : 
-       <Minus className="w-4 h-4 mr-1" />}
-      {Math.abs(change)}% from last month
-    </div>
-  </div>
-);
-
-// =================== MAIN SECTION ===================
-
-export const DataSection = () => {
-  const [activeDemo, setActiveDemo] = useState<string>('charts');
+  const chartData = [65, 78, 85, 92, 88, 95, 98, 102, 96, 105, 110, 108];
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="text-center bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-xl p-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
-          Data Display & Analytics
-        </h2>
-        <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-6">
-          Professional data visualization components for business intelligence, 
-          analytics dashboards, and enterprise reporting with real-time updates.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
-          <StatCard icon={BarChart3} value="6+" label="Components" trend={15} />
-          <StatCard icon={Target} value="Real-time" label="Updates" />
-          <StatCard icon={TrendingUp} value="Interactive" label="Charts" />
-          <StatCard icon={TableIcon} value="Advanced" label="Tables" />
+    <div className="space-y-12">
+      {/* Stats Cards */}
+      <div>
+        <h3 className="modern-subheading mb-2">Stats Cards</h3>
+        <p className="modern-body mb-6">Key metrics and performance indicators</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {statsData.map((stat, index) => (
+            <div key={index} className="modern-card p-6">
+              <div className="flex justify-between items-start mb-3">
+                <p className="text-sm text-gray-600">{stat.label}</p>
+                {stat.trend === 'up' ? (
+                  <ArrowUp className="w-4 h-4 text-gray-600" />
+                ) : (
+                  <ArrowDown className="w-4 h-4 text-gray-600" />
+                )}
+              </div>
+              <div className="flex items-end justify-between">
+                <h4 className="text-2xl font-bold">{stat.value}</h4>
+                <span className={`text-sm font-medium ${
+                  stat.trend === 'up' ? 'text-gray-700' : 'text-gray-500'
+                }`}>
+                  {stat.change}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Demo Navigation */}
-      <div className="flex flex-wrap gap-2 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-        {[
-          { id: 'charts', label: 'Charts & Graphs', icon: BarChart3 },
-          { id: 'tables', label: 'Data Tables', icon: TableIcon },
-          { id: 'grids', label: 'Advanced Grids', icon: Activity },
-          { id: 'timeline', label: 'Timeline & Calendar', icon: CalendarIcon },
-          { id: 'dashboard', label: 'Dashboard Example', icon: Target }
-        ].map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActiveDemo(id)}
-            className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeDemo === id
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
-            }`}
-          >
-            <Icon className="w-4 h-4 mr-2" />
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Demo Content */}
-      <div className="grid grid-cols-1 gap-6">
-        
-        {/* Charts Demo */}
-        {activeDemo === 'charts' && (
-          <>
-            <ComponentDemo
-              title="Interactive Charts"
-              description="Beautiful data visualizations with hover effects and responsive design"
-              fullWidth
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-6">
-                  <h4 className="font-semibold text-blue-900 mb-4 flex items-center">
-                    <LineChart className="w-5 h-5 mr-2" />
-                    Revenue Trend
-                  </h4>
-                  <div className="h-48 bg-white rounded-lg p-4 flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">Interactive Line Chart</p>
-                      <p className="text-xs">Revenue: $68K (+25%)</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gradient-to-br from-emerald-50 to-green-100 rounded-lg p-6">
-                  <h4 className="font-semibold text-emerald-900 mb-4 flex items-center">
-                    <PieChart className="w-5 h-5 mr-2" />
-                    Market Distribution
-                  </h4>
-                  <div className="h-48 bg-white rounded-lg p-4 flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <PieChart className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">Interactive Pie Chart</p>
-                      <p className="text-xs">5 Segments</p>
-                    </div>
-                  </div>
-                </div>
+      {/* Data Table */}
+      <div>
+        <h3 className="modern-subheading mb-2">Data Tables</h3>
+        <p className="modern-body mb-6">Sortable and interactive data display</p>
+        <div className="modern-card p-0 overflow-hidden">
+          <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex justify-between items-center">
+              <h4 className="font-semibold">Users</h4>
+              <div className="flex gap-2">
+                <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+                  <Filter size={16} />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded transition-colors">
+                  <Download size={16} />
+                </button>
               </div>
-            </ComponentDemo>
-
-            <ComponentDemo
-              title="Chart Variants"
-              description="Multiple chart types for different data visualization needs"
-              fullWidth
-            >
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-                {[
-                  { name: 'Area Chart', icon: Activity, color: 'blue' },
-                  { name: 'Bar Chart', icon: BarChart3, color: 'emerald' },
-                  { name: 'Line Chart', icon: LineChart, color: 'purple' },
-                  { name: 'Donut Chart', icon: PieChart, color: 'orange' }
-                ].map((chart) => (
-                  <div key={chart.name} className={`bg-gradient-to-br from-${chart.color}-50 to-${chart.color}-100 rounded-lg p-4 text-center`}>
-                    <chart.icon className={`w-8 h-8 mx-auto mb-2 text-${chart.color}-600`} />
-                    <h5 className={`font-medium text-${chart.color}-900 text-sm`}>{chart.name}</h5>
-                  </div>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Role
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                    Last Login
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {tableData.map((row) => (
+                  <tr key={row.id} className="hover:bg-gray-50 cursor-pointer transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {row.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {row.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {row.role}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        row.status === 'Active' 
+                          ? 'bg-gray-100 text-gray-800' 
+                          : 'bg-gray-50 text-gray-600'
+                      }`}>
+                        {row.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {row.lastLogin}
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </ComponentDemo>
-          </>
-        )}
-
-        {/* Tables Demo */}
-        {activeDemo === 'tables' && (
-          <ComponentDemo
-            title="Professional Data Tables"
-            description="Feature-rich tables with sorting, filtering, and pagination"
-            fullWidth
-          >
-            <div className="w-full">
-              <div className="overflow-x-auto">
-                <table className="w-full bg-white rounded-lg border border-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Customer
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Revenue
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Growth
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {tableData.map((row) => (
-                      <tr key={row.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{row.customer}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{row.revenue}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <Badge 
-                            variant={
-                              row.status === 'active' ? 'success' : 
-                              row.status === 'pending' ? 'warning' : 
-                              'secondary'
-                            }
-                          >
-                            {row.status}
-                          </Badge>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`text-sm font-medium flex items-center ${
-                            row.growth > 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {row.growth > 0 ? <ArrowUp className="w-4 h-4 mr-1" /> : <ArrowDown className="w-4 h-4 mr-1" />}
-                            {Math.abs(row.growth)}%
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </ComponentDemo>
-        )}
-
-        {/* Timeline Demo */}
-        {activeDemo === 'timeline' && (
-          <ComponentDemo
-            title="Timeline & Calendar Components"
-            description="Project timelines, event calendars, and scheduling interfaces"
-            fullWidth
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-              <div className="space-y-4">
-                <h4 className="font-semibold text-gray-800 flex items-center">
-                  <Clock className="w-5 h-5 mr-2" />
-                  Project Timeline
-                </h4>
-                <div className="space-y-4">
-                  {timelineData.map((item, index) => (
-                    <div key={index} className="flex items-start space-x-4">
-                      <div className={`w-3 h-3 rounded-full mt-2 ${
-                        item.status === 'completed' ? 'bg-green-500' :
-                        item.status === 'in-progress' ? 'bg-blue-500' :
-                        'bg-gray-300'
-                      }`}></div>
-                      <div className="flex-1">
-                        <h5 className="font-medium text-gray-900">{item.title}</h5>
-                        <p className="text-sm text-gray-500">{item.date}</p>
-                        <Badge 
-                          variant={
-                            item.status === 'completed' ? 'success' :
-                            item.status === 'in-progress' ? 'default' :
-                            'secondary'
-                          }
-                          className="mt-1"
-                        >
-                          {item.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <h4 className="font-semibold text-gray-800 flex items-center">
-                  <CalendarIcon className="w-5 h-5 mr-2" />
-                  Calendar View
-                </h4>
-                <div className="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center">
-                  <div className="text-center text-gray-500">
-                    <CalendarIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Interactive Calendar</p>
-                    <p className="text-xs">Event scheduling & management</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ComponentDemo>
-        )}
-
-        {/* Dashboard Example */}
-        {activeDemo === 'dashboard' && (
-          <ComponentDemo
-            title="Executive Dashboard Example"
-            description="Real-world dashboard combining multiple data components"
-            fullWidth
-          >
-            <div className="w-full space-y-6">
-              {/* KPI Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <KPICard 
-                  title="Total Revenue" 
-                  value="$847K" 
-                  change={12.5} 
-                  icon={DollarSign} 
-                />
-                <KPICard 
-                  title="Active Users" 
-                  value="24,891" 
-                  change={8.2} 
-                  icon={Users} 
-                />
-                <KPICard 
-                  title="Conversion Rate" 
-                  value="3.24%" 
-                  change={-2.1} 
-                  icon={Target} 
-                />
-                <KPICard 
-                  title="Avg. Session" 
-                  value="4:32" 
-                  change={15.7} 
-                  icon={Clock} 
-                />
-              </div>
-
-              {/* Progress Indicators */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h5 className="font-medium text-gray-800 mb-3">Q1 Goals Progress</h5>
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Revenue Target</span>
-                        <span>87%</span>
-                      </div>
-                      <Progress value={87} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>User Acquisition</span>
-                        <span>64%</span>
-                      </div>
-                      <Progress value={64} className="h-2" />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>Feature Rollout</span>
-                        <span>92%</span>
-                      </div>
-                      <Progress value={92} className="h-2" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h5 className="font-medium text-gray-800 mb-3">Top Performers</h5>
-                  <div className="space-y-3">
-                    {tableData.slice(0, 3).map((item, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">{item.customer}</span>
-                        <span className="text-sm font-medium text-gray-900">{item.revenue}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
-                  <h5 className="font-medium text-gray-800 mb-3">Recent Activities</h5>
-                  <div className="space-y-3">
-                    <div className="text-sm">
-                      <p className="text-gray-900">New user registration</p>
-                      <p className="text-gray-500">2 minutes ago</p>
-                    </div>
-                    <div className="text-sm">
-                      <p className="text-gray-900">Payment received</p>
-                      <p className="text-gray-500">15 minutes ago</p>
-                    </div>
-                    <div className="text-sm">
-                      <p className="text-gray-900">Report generated</p>
-                      <p className="text-gray-500">1 hour ago</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ComponentDemo>
-        )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-600 rounded-xl mb-4">
-            <BarChart3 className="w-6 h-6 text-white" />
+      {/* Charts */}
+      <div>
+        <h3 className="modern-subheading mb-2">Charts & Graphs</h3>
+        <p className="modern-body mb-6">Data visualization components</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Bar Chart */}
+          <div className="modern-card">
+            <div className="flex items-center justify-between mb-6">
+              <h4 className="font-semibold">Monthly Revenue</h4>
+              <BarChart3 className="w-5 h-5 text-gray-400" />
+            </div>
+            <div className="h-48 flex items-end justify-between gap-2">
+              {chartData.map((value, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center">
+                  <div 
+                    className="w-full bg-gray-200 rounded-t"
+                    style={{ height: `${value}%` }}
+                  />
+                  <span className="text-xs text-gray-500 mt-2">{i + 1}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Rich Visualizations</h3>
-          <p className="text-gray-600 text-sm">Interactive charts, graphs, and data displays with real-time updates and smooth animations.</p>
+
+          {/* Line Chart */}
+          <div className="modern-card">
+            <div className="flex items-center justify-between mb-6">
+              <h4 className="font-semibold">Growth Trend</h4>
+              <LineChart className="w-5 h-5 text-gray-400" />
+            </div>
+            <div className="h-48 relative">
+              <svg className="w-full h-full">
+                <polyline
+                  fill="none"
+                  stroke="#737373"
+                  strokeWidth="2"
+                  points={chartData.map((v, i) => 
+                    `${(i / (chartData.length - 1)) * 100}%,${100 - v}%`
+                  ).join(' ')}
+                />
+                {chartData.map((v, i) => (
+                  <circle
+                    key={i}
+                    cx={`${(i / (chartData.length - 1)) * 100}%`}
+                    cy={`${100 - v}%`}
+                    r="3"
+                    fill="#737373"
+                  />
+                ))}
+              </svg>
+            </div>
+          </div>
         </div>
-        
-        <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-600 rounded-xl mb-4">
-            <TableIcon className="w-6 h-6 text-white" />
+      </div>
+
+      {/* Progress Indicators */}
+      <div>
+        <h3 className="modern-subheading mb-2">Progress & Loading</h3>
+        <p className="modern-body mb-6">Visual feedback for ongoing operations</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="modern-card">
+            <h4 className="font-semibold mb-4">Progress Bars</h4>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Upload Progress</span>
+                  <span>75%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-gray-600 h-2 rounded-full" style={{ width: '75%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Processing</span>
+                  <span>45%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-gray-500 h-2 rounded-full" style={{ width: '45%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span>Complete</span>
+                  <span>100%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-gray-700 h-2 rounded-full" style={{ width: '100%' }} />
+                </div>
+              </div>
+            </div>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Advanced Tables</h3>
-          <p className="text-gray-600 text-sm">Feature-rich data tables with sorting, filtering, pagination, and advanced grid capabilities.</p>
+
+          <div className="modern-card">
+            <h4 className="font-semibold mb-4">Activity Timeline</h4>
+            <div className="space-y-4">
+              {['User login', 'File uploaded', 'Task completed', 'Report generated'].map((activity, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mt-1.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{activity}</p>
+                    <p className="text-xs text-gray-500">{i + 1} hours ago</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        
-        <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-600 rounded-xl mb-4">
-            <Target className="w-6 h-6 text-white" />
+      </div>
+
+      {/* Metrics Display */}
+      <div>
+        <h3 className="modern-subheading mb-2">Metrics & KPIs</h3>
+        <p className="modern-body mb-6">Key performance indicators</p>
+        <div className="modern-card">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-3 relative">
+                <svg className="w-20 h-20 transform -rotate-90">
+                  <circle cx="40" cy="40" r="36" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+                  <circle cx="40" cy="40" r="36" stroke="#525252" strokeWidth="8" fill="none"
+                    strokeDasharray={`${2 * Math.PI * 36 * 0.75} ${2 * Math.PI * 36}`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold">75%</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">Completion</p>
+            </div>
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-3 relative">
+                <svg className="w-20 h-20 transform -rotate-90">
+                  <circle cx="40" cy="40" r="36" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+                  <circle cx="40" cy="40" r="36" stroke="#737373" strokeWidth="8" fill="none"
+                    strokeDasharray={`${2 * Math.PI * 36 * 0.92} ${2 * Math.PI * 36}`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold">92%</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">Efficiency</p>
+            </div>
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-3 relative">
+                <svg className="w-20 h-20 transform -rotate-90">
+                  <circle cx="40" cy="40" r="36" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+                  <circle cx="40" cy="40" r="36" stroke="#404040" strokeWidth="8" fill="none"
+                    strokeDasharray={`${2 * Math.PI * 36 * 0.68} ${2 * Math.PI * 36}`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold">68%</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">Performance</p>
+            </div>
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-3 relative">
+                <svg className="w-20 h-20 transform -rotate-90">
+                  <circle cx="40" cy="40" r="36" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+                  <circle cx="40" cy="40" r="36" stroke="#262626" strokeWidth="8" fill="none"
+                    strokeDasharray={`${2 * Math.PI * 36 * 0.85} ${2 * Math.PI * 36}`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-lg font-bold">85%</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">Satisfaction</p>
+            </div>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-2">Business Intelligence</h3>
-          <p className="text-gray-600 text-sm">Executive dashboards, KPI tracking, and comprehensive analytics for data-driven decisions.</p>
+        </div>
+      </div>
+
+      {/* List View Toggle */}
+      <div>
+        <h3 className="modern-subheading mb-2">View Modes</h3>
+        <p className="modern-body mb-6">Switch between different data presentations</p>
+        <div className="modern-card">
+          <div className="flex justify-between items-center mb-4">
+            <h4 className="font-semibold">Products</h4>
+            <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2 rounded ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+              >
+                <List size={16} />
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
+              >
+                <Grid size={16} />
+              </button>
+            </div>
+          </div>
+          
+          {viewMode === 'list' ? (
+            <div className="space-y-2">
+              {['Product A', 'Product B', 'Product C', 'Product D'].map((product, i) => (
+                <div key={i} className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h5 className="font-medium">{product}</h5>
+                      <p className="text-sm text-gray-600">Description of {product}</p>
+                    </div>
+                    <span className="text-sm font-medium">${(i + 1) * 99}.00</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              {['Product A', 'Product B', 'Product C', 'Product D'].map((product, i) => (
+                <div key={i} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                  <div className="h-24 bg-gray-100 rounded mb-3"></div>
+                  <h5 className="font-medium">{product}</h5>
+                  <p className="text-sm text-gray-600 mb-2">Description</p>
+                  <span className="text-sm font-medium">${(i + 1) * 99}.00</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

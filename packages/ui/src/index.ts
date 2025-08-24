@@ -20,9 +20,23 @@ export { Separator } from "./components/separator";
 export { Accordion } from "./components/accordion";
 export { Alert } from "./components/alert";
 export { Avatar } from "./components/avatar";
-export { Breadcrumb } from "./components/breadcrumb";
+export { 
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis
+} from "./components/breadcrumb";
 export { Calendar } from "./components/calendar";
-export { Carousel } from "./components/carousel";
+export { 
+  Carousel,
+  CarouselContent,
+  CarouselItemComponent as CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from "./components/carousel";
 export { Chart } from "./components/chart";
 export { Checkbox } from "./components/checkbox";
 export { Collapsible } from "./components/collapsible";
@@ -42,7 +56,15 @@ export { FormsDemo } from "./components/forms-demo";
 export { HoverCard } from "./components/hover-card";
 export { Menubar } from "./components/menubar";
 export { NavigationMenu } from "./components/navigation-menu";
-export { Pagination } from "./components/pagination";
+export { 
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis
+} from "./components/pagination";
 export { Popover } from "./components/popover";
 export { Progress } from "./components/progress";
 export { RadioGroup } from "./components/radio-group";
@@ -109,7 +131,7 @@ export { ChromaticTest } from "./components/chromatic-test";
 export { AudioRecorder } from "./components/audio-recorder";
 export { VideoPlayer } from "./components/video-player";
 export { ImageCropper } from "./components/image-cropper";
-export { PDFViewer } from "./components/pdf-viewer";
+// export { PDFViewer } from "./components/pdf-viewer"; // Component doesn't exist
 
 // Development Tools
 export { CodeEditor } from "./components/code-editor";
@@ -218,7 +240,7 @@ export type { DragDropGridProps } from "./components/drag-drop-grid";
 // export type { ImageCropperProps } from "./components/image-cropper";
 // export type { InfiniteScrollProps } from "./components/infinite-scroll";
 export type { KanbanProps } from "./components/kanban";
-export type { PDFViewerProps } from "./components/pdf-viewer";
+// export type { PDFViewerProps } from "./components/pdf-viewer"; // Component doesn't exist
 export type { RichTextEditorProps } from "./components/rich-text-editor";
 export type { VideoPlayerProps } from "./components/video-player";
 // export type { VirtualListProps } from "./components/virtual-list";

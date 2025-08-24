@@ -452,4 +452,33 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
 
 Carousel.displayName = 'Carousel'
 
+// Sub-components for showcase compatibility
+export const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    return <div ref={ref} {...props} className={cn('carousel-content', props.className)} />;
+  }
+);
+CarouselContent.displayName = 'CarouselContent';
+
+export const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
+    return <div ref={ref} {...props} className={cn('carousel-item', props.className)} />;
+  }
+);
+CarouselItem.displayName = 'CarouselItem';
+
+export const CarouselNext = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  (props, ref) => {
+    return <button ref={ref} {...props} className={cn('carousel-next', props.className)}>Next</button>;
+  }
+);
+CarouselNext.displayName = 'CarouselNext';
+
+export const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
+  (props, ref) => {
+    return <button ref={ref} {...props} className={cn('carousel-previous', props.className)}>Previous</button>;
+  }
+);
+CarouselPrevious.displayName = 'CarouselPrevious';
+
 export { Carousel }

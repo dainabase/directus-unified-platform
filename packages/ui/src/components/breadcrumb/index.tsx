@@ -84,4 +84,26 @@ export const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
 );
 Breadcrumb.displayName = 'Breadcrumb';
 
+// Additional sub-components for showcase compatibility
+export const BreadcrumbList = React.forwardRef<HTMLOListElement, React.HTMLAttributes<HTMLOListElement>>(
+  ({ className, ...props }, ref) => {
+    return <ol ref={ref} className={cn('flex items-center gap-1.5 text-sm', className)} {...props} />;
+  }
+);
+BreadcrumbList.displayName = 'BreadcrumbList';
+
+export const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+  ({ className, ...props }, ref) => {
+    return <span ref={ref} className={cn('text-slate-600 font-medium', className)} {...props} />;
+  }
+);
+BreadcrumbPage.displayName = 'BreadcrumbPage';
+
+export const BreadcrumbEllipsis = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+  ({ className, children = '...', ...props }, ref) => {
+    return <span ref={ref} className={cn('text-slate-500', className)} {...props}>{children}</span>;
+  }
+);
+BreadcrumbEllipsis.displayName = 'BreadcrumbEllipsis';
+
 export default Breadcrumb;

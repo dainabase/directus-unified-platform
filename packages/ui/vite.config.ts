@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => ({
         // Main entry with core components only
         index: resolve(__dirname, 'src/index.ts'),
         // Lazy loaded heavy components
-        'components-lazy': resolve(__dirname, 'src/components-lazy.ts'),
+        'components-lazy': resolve(__dirname, 'src/components-lazy.tsx'),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => 

@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset Tailwind color overrides that conflict with modern design */
+@layer utilities {
+  .text-gray-900 { color: #171717 !important; }
+  .text-gray-800 { color: #262626 !important; }
+  .text-gray-700 { color: #404040 !important; }
+  .text-gray-600 { color: #525252 !important; }
+  .text-gray-500 { color: #737373 !important; }
+  .text-gray-400 { color: #a3a3a3 !important; }
+  .text-gray-300 { color: #d4d4d8 !important; }
+  .text-gray-200 { color: #e4e4e7 !important; }
+  .text-gray-100 { color: #f4f4f5 !important; }
+  .text-gray-50 { color: #fafafa !important; }
+  
+  .bg-gray-900 { background-color: #171717 !important; }
+  .bg-gray-800 { background-color: #262626 !important; }
+  .bg-gray-700 { background-color: #404040 !important; }
+  .bg-gray-600 { background-color: #525252 !important; }
+  .bg-gray-500 { background-color: #737373 !important; }
+  .bg-gray-400 { background-color: #a3a3a3 !important; }
+  .bg-gray-300 { background-color: #d4d4d8 !important; }
+  .bg-gray-200 { background-color: #e4e4e7 !important; }
+  .bg-gray-100 { background-color: #f4f4f5 !important; }
+  .bg-gray-50 { background-color: #fafafa !important; }
+  
+  .border-gray-900 { border-color: #171717 !important; }
+  .border-gray-800 { border-color: #262626 !important; }
+  .border-gray-700 { border-color: #404040 !important; }
+  .border-gray-600 { border-color: #525252 !important; }
+  .border-gray-500 { border-color: #737373 !important; }
+  .border-gray-400 { border-color: #a3a3a3 !important; }
+  .border-gray-300 { border-color: #d4d4d8 !important; }
+  .border-gray-200 { border-color: #e4e4e7 !important; }
+  .border-gray-100 { border-color: #f4f4f5 !important; }
+  .border-gray-50 { border-color: #fafafa !important; }
+}

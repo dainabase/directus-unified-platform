@@ -1,0 +1,602 @@
+{
+  "total": 84,
+  "existing": [
+    "Button",
+    "Input",
+    "Label",
+    "Card",
+    "Badge",
+    "Icon",
+    "Separator",
+    "Accordion",
+    "Alert",
+    "Avatar",
+    "Breadcrumb",
+    "Calendar",
+    "Carousel",
+    "Chart",
+    "Checkbox",
+    "Collapsible",
+    "ColorPicker",
+    "CommandPalette",
+    "ContextMenu",
+    "DataGrid",
+    "DataGridAdvanced",
+    "DatePicker",
+    "DateRangePicker",
+    "Dialog",
+    "DropdownMenu",
+    "ErrorBoundary",
+    "FileUpload",
+    "Form",
+    "FormsDemo",
+    "HoverCard",
+    "Menubar",
+    "NavigationMenu",
+    "Pagination",
+    "Popover",
+    "Progress",
+    "RadioGroup",
+    "Rating",
+    "Resizable",
+    "ScrollArea",
+    "Select",
+    "Sheet",
+    "Skeleton",
+    "Slider",
+    "Sonner",
+    "Stepper",
+    "Switch",
+    "Table",
+    "Tabs",
+    "TextAnimations",
+    "Textarea",
+    "Timeline",
+    "Toast",
+    "Toggle",
+    "ToggleGroup",
+    "Tooltip",
+    "UIProvider",
+    "AdvancedFilter",
+    "AlertDialog",
+    "AppShell",
+    "DashboardGrid",
+    "Drawer",
+    "NotificationCenter",
+    "SearchBar",
+    "TagInput",
+    "ThemeBuilder",
+    "ThemeToggle",
+    "TreeView",
+    "VirtualizedTable",
+    "Mentions",
+    "Charts",
+    "Breadcrumbs",
+    "DataGridAdv",
+    "TimelineEnhanced",
+    "ChromaticTest",
+    "AudioRecorder",
+    "VideoPlayer",
+    "ImageCropper",
+    "PdfViewer",
+    "CodeEditor",
+    "RichTextEditor",
+    "DragDropGrid",
+    "InfiniteScroll",
+    "Kanban",
+    "VirtualList"
+  ],
+  "missing": [],
+  "fileComponents": [
+    {
+      "name": "AudioRecorder",
+      "path": "audio-recorder.tsx",
+      "size": 33905
+    },
+    {
+      "name": "VideoPlayer",
+      "path": "video-player.tsx",
+      "size": 25849
+    },
+    {
+      "name": "ImageCropper",
+      "path": "image-cropper.tsx",
+      "size": 50690
+    },
+    {
+      "name": "PdfViewer",
+      "path": "pdf-viewer.tsx",
+      "size": 57642
+    },
+    {
+      "name": "CodeEditor",
+      "path": "code-editor.tsx",
+      "size": 49441
+    },
+    {
+      "name": "RichTextEditor",
+      "path": "rich-text-editor.tsx",
+      "size": 29895
+    },
+    {
+      "name": "DragDropGrid",
+      "path": "drag-drop-grid.tsx",
+      "size": 13755
+    },
+    {
+      "name": "InfiniteScroll",
+      "path": "infinite-scroll.tsx",
+      "size": 8574
+    },
+    {
+      "name": "Kanban",
+      "path": "kanban.tsx",
+      "size": 22128
+    },
+    {
+      "name": "VirtualList",
+      "path": "virtual-list.tsx",
+      "size": 4328
+    }
+  ],
+  "folderComponents": [
+    {
+      "name": "Button",
+      "path": "button/",
+      "hasIndex": true
+    },
+    {
+      "name": "Input",
+      "path": "input/",
+      "hasIndex": true
+    },
+    {
+      "name": "Label",
+      "path": "label/",
+      "hasIndex": true
+    },
+    {
+      "name": "Card",
+      "path": "card/",
+      "hasIndex": true
+    },
+    {
+      "name": "Badge",
+      "path": "badge/",
+      "hasIndex": true
+    },
+    {
+      "name": "Icon",
+      "path": "icon/",
+      "hasIndex": true
+    },
+    {
+      "name": "Separator",
+      "path": "separator/",
+      "hasIndex": true
+    },
+    {
+      "name": "Accordion",
+      "path": "accordion/",
+      "hasIndex": true
+    },
+    {
+      "name": "Alert",
+      "path": "alert/",
+      "hasIndex": true
+    },
+    {
+      "name": "Avatar",
+      "path": "avatar/",
+      "hasIndex": true
+    },
+    {
+      "name": "Breadcrumb",
+      "path": "breadcrumb/",
+      "hasIndex": true
+    },
+    {
+      "name": "Calendar",
+      "path": "calendar/",
+      "hasIndex": true
+    },
+    {
+      "name": "Carousel",
+      "path": "carousel/",
+      "hasIndex": true
+    },
+    {
+      "name": "Chart",
+      "path": "chart/",
+      "hasIndex": true
+    },
+    {
+      "name": "Checkbox",
+      "path": "checkbox/",
+      "hasIndex": true
+    },
+    {
+      "name": "Collapsible",
+      "path": "collapsible/",
+      "hasIndex": true
+    },
+    {
+      "name": "ColorPicker",
+      "path": "color-picker/",
+      "hasIndex": true
+    },
+    {
+      "name": "CommandPalette",
+      "path": "command-palette/",
+      "hasIndex": true
+    },
+    {
+      "name": "ContextMenu",
+      "path": "context-menu/",
+      "hasIndex": true
+    },
+    {
+      "name": "DataGrid",
+      "path": "data-grid/",
+      "hasIndex": true
+    },
+    {
+      "name": "DataGridAdvanced",
+      "path": "data-grid-advanced/",
+      "hasIndex": true
+    },
+    {
+      "name": "DatePicker",
+      "path": "date-picker/",
+      "hasIndex": true
+    },
+    {
+      "name": "DateRangePicker",
+      "path": "date-range-picker/",
+      "hasIndex": true
+    },
+    {
+      "name": "Dialog",
+      "path": "dialog/",
+      "hasIndex": true
+    },
+    {
+      "name": "DropdownMenu",
+      "path": "dropdown-menu/",
+      "hasIndex": true
+    },
+    {
+      "name": "ErrorBoundary",
+      "path": "error-boundary/",
+      "hasIndex": true
+    },
+    {
+      "name": "FileUpload",
+      "path": "file-upload/",
+      "hasIndex": true
+    },
+    {
+      "name": "Form",
+      "path": "form/",
+      "hasIndex": true
+    },
+    {
+      "name": "FormsDemo",
+      "path": "forms-demo/",
+      "hasIndex": true
+    },
+    {
+      "name": "HoverCard",
+      "path": "hover-card/",
+      "hasIndex": true
+    },
+    {
+      "name": "Menubar",
+      "path": "menubar/",
+      "hasIndex": true
+    },
+    {
+      "name": "NavigationMenu",
+      "path": "navigation-menu/",
+      "hasIndex": true
+    },
+    {
+      "name": "Pagination",
+      "path": "pagination/",
+      "hasIndex": true
+    },
+    {
+      "name": "Popover",
+      "path": "popover/",
+      "hasIndex": true
+    },
+    {
+      "name": "Progress",
+      "path": "progress/",
+      "hasIndex": true
+    },
+    {
+      "name": "RadioGroup",
+      "path": "radio-group/",
+      "hasIndex": true
+    },
+    {
+      "name": "Rating",
+      "path": "rating/",
+      "hasIndex": true
+    },
+    {
+      "name": "Resizable",
+      "path": "resizable/",
+      "hasIndex": true
+    },
+    {
+      "name": "ScrollArea",
+      "path": "scroll-area/",
+      "hasIndex": true
+    },
+    {
+      "name": "Select",
+      "path": "select/",
+      "hasIndex": true
+    },
+    {
+      "name": "Sheet",
+      "path": "sheet/",
+      "hasIndex": true
+    },
+    {
+      "name": "Skeleton",
+      "path": "skeleton/",
+      "hasIndex": true
+    },
+    {
+      "name": "Slider",
+      "path": "slider/",
+      "hasIndex": true
+    },
+    {
+      "name": "Sonner",
+      "path": "sonner/",
+      "hasIndex": true
+    },
+    {
+      "name": "Stepper",
+      "path": "stepper/",
+      "hasIndex": true
+    },
+    {
+      "name": "Switch",
+      "path": "switch/",
+      "hasIndex": true
+    },
+    {
+      "name": "Table",
+      "path": "table/",
+      "hasIndex": true
+    },
+    {
+      "name": "Tabs",
+      "path": "tabs/",
+      "hasIndex": true
+    },
+    {
+      "name": "TextAnimations",
+      "path": "text-animations/",
+      "hasIndex": true
+    },
+    {
+      "name": "Textarea",
+      "path": "textarea/",
+      "hasIndex": true
+    },
+    {
+      "name": "Timeline",
+      "path": "timeline/",
+      "hasIndex": true
+    },
+    {
+      "name": "Toast",
+      "path": "toast/",
+      "hasIndex": true
+    },
+    {
+      "name": "Toggle",
+      "path": "toggle/",
+      "hasIndex": true
+    },
+    {
+      "name": "ToggleGroup",
+      "path": "toggle-group/",
+      "hasIndex": true
+    },
+    {
+      "name": "Tooltip",
+      "path": "tooltip/",
+      "hasIndex": true
+    },
+    {
+      "name": "UIProvider",
+      "path": "ui-provider/",
+      "hasIndex": true
+    },
+    {
+      "name": "AdvancedFilter",
+      "path": "advanced-filter/",
+      "hasIndex": true
+    },
+    {
+      "name": "AlertDialog",
+      "path": "alert-dialog/",
+      "hasIndex": true
+    },
+    {
+      "name": "AppShell",
+      "path": "app-shell/",
+      "hasIndex": true
+    },
+    {
+      "name": "DashboardGrid",
+      "path": "dashboard-grid/",
+      "hasIndex": true
+    },
+    {
+      "name": "Drawer",
+      "path": "drawer/",
+      "hasIndex": true
+    },
+    {
+      "name": "NotificationCenter",
+      "path": "notification-center/",
+      "hasIndex": true
+    },
+    {
+      "name": "SearchBar",
+      "path": "search-bar/",
+      "hasIndex": true
+    },
+    {
+      "name": "TagInput",
+      "path": "tag-input/",
+      "hasIndex": true
+    },
+    {
+      "name": "ThemeBuilder",
+      "path": "theme-builder/",
+      "hasIndex": true
+    },
+    {
+      "name": "ThemeToggle",
+      "path": "theme-toggle/",
+      "hasIndex": true
+    },
+    {
+      "name": "TreeView",
+      "path": "tree-view/",
+      "hasIndex": true
+    },
+    {
+      "name": "VirtualizedTable",
+      "path": "virtualized-table/",
+      "hasIndex": true
+    },
+    {
+      "name": "Mentions",
+      "path": "mentions/",
+      "hasIndex": true
+    },
+    {
+      "name": "Charts",
+      "path": "charts/",
+      "hasIndex": true
+    },
+    {
+      "name": "Breadcrumbs",
+      "path": "breadcrumbs/",
+      "hasIndex": true
+    },
+    {
+      "name": "DataGridAdv",
+      "path": "data-grid-adv/",
+      "hasIndex": true
+    },
+    {
+      "name": "TimelineEnhanced",
+      "path": "timeline-enhanced/",
+      "hasIndex": true
+    },
+    {
+      "name": "ChromaticTest",
+      "path": "chromatic-test/",
+      "hasIndex": true
+    }
+  ],
+  "emptyFolders": [],
+  "validComponents": [
+    "Button",
+    "Input",
+    "Label",
+    "Card",
+    "Badge",
+    "Icon",
+    "Separator",
+    "Accordion",
+    "Alert",
+    "Avatar",
+    "Breadcrumb",
+    "Calendar",
+    "Carousel",
+    "Chart",
+    "Checkbox",
+    "Collapsible",
+    "ColorPicker",
+    "CommandPalette",
+    "ContextMenu",
+    "DataGrid",
+    "DataGridAdvanced",
+    "DatePicker",
+    "DateRangePicker",
+    "Dialog",
+    "DropdownMenu",
+    "ErrorBoundary",
+    "FileUpload",
+    "Form",
+    "FormsDemo",
+    "HoverCard",
+    "Menubar",
+    "NavigationMenu",
+    "Pagination",
+    "Popover",
+    "Progress",
+    "RadioGroup",
+    "Rating",
+    "Resizable",
+    "ScrollArea",
+    "Select",
+    "Sheet",
+    "Skeleton",
+    "Slider",
+    "Sonner",
+    "Stepper",
+    "Switch",
+    "Table",
+    "Tabs",
+    "TextAnimations",
+    "Textarea",
+    "Timeline",
+    "Toast",
+    "Toggle",
+    "ToggleGroup",
+    "Tooltip",
+    "UIProvider",
+    "AdvancedFilter",
+    "AlertDialog",
+    "AppShell",
+    "DashboardGrid",
+    "Drawer",
+    "NotificationCenter",
+    "SearchBar",
+    "TagInput",
+    "ThemeBuilder",
+    "ThemeToggle",
+    "TreeView",
+    "VirtualizedTable",
+    "Mentions",
+    "Charts",
+    "Breadcrumbs",
+    "DataGridAdv",
+    "TimelineEnhanced",
+    "ChromaticTest",
+    "AudioRecorder",
+    "VideoPlayer",
+    "ImageCropper",
+    "PdfViewer",
+    "CodeEditor",
+    "RichTextEditor",
+    "DragDropGrid",
+    "InfiniteScroll",
+    "Kanban",
+    "VirtualList"
+  ],
+  "invalidComponents": []
+}

@@ -396,4 +396,47 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 
 Pagination.displayName = 'Pagination'
 
+// Sub-components for showcase compatibility
+export const PaginationContent = React.forwardRef<HTMLUListElement, React.HTMLAttributes<HTMLUListElement>>(
+  ({ className, ...props }, ref) => {
+    return <ul ref={ref} className={cn('flex items-center gap-1', className)} {...props} />;
+  }
+);
+PaginationContent.displayName = 'PaginationContent';
+
+export const PaginationItem = React.forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIElement>>(
+  ({ className, ...props }, ref) => {
+    return <li ref={ref} className={cn('pagination-item', className)} {...props} />;
+  }
+);
+PaginationItem.displayName = 'PaginationItem';
+
+export const PaginationLink = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+  ({ className, ...props }, ref) => {
+    return <a ref={ref} className={cn('flex h-9 w-9 items-center justify-center rounded-md border hover:bg-accent hover:text-accent-foreground', className)} {...props} />;
+  }
+);
+PaginationLink.displayName = 'PaginationLink';
+
+export const PaginationNext = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+  ({ className, children = 'Next', ...props }, ref) => {
+    return <a ref={ref} className={cn('flex items-center gap-1 px-2.5 py-2 rounded-md border hover:bg-accent hover:text-accent-foreground', className)} {...props}>{children}</a>;
+  }
+);
+PaginationNext.displayName = 'PaginationNext';
+
+export const PaginationPrevious = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+  ({ className, children = 'Previous', ...props }, ref) => {
+    return <a ref={ref} className={cn('flex items-center gap-1 px-2.5 py-2 rounded-md border hover:bg-accent hover:text-accent-foreground', className)} {...props}>{children}</a>;
+  }
+);
+PaginationPrevious.displayName = 'PaginationPrevious';
+
+export const PaginationEllipsis = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+  ({ className, children = '...', ...props }, ref) => {
+    return <span ref={ref} className={cn('flex h-9 w-9 items-center justify-center', className)} {...props}>{children}</span>;
+  }
+);
+PaginationEllipsis.displayName = 'PaginationEllipsis';
+
 export { Pagination }

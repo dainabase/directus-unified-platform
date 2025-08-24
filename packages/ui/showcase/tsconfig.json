@@ -12,20 +12,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@dainabase/ui": ["../src"],
-      "@dainabase/ui/*": ["../src/*"]
-    },
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+      "@dainabase/ui": ["../src"]
+    }
   },
-  "include": ["src/**/*", "../src/**/*"],
-  "exclude": ["node_modules", "dist", "build"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

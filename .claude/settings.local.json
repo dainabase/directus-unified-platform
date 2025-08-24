@@ -125,7 +125,10 @@
       "Bash(timeout 10s npm run dev)",
       "Bash(gtimeout:*)",
       "WebFetch(domain:orbai-template.framer.website)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(gh api:*)",
+      "Bash(git remote get-url:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": []
   }

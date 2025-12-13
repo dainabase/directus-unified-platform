@@ -42,8 +42,7 @@ class UnifiedInvoiceService {
     const clientData = await this.getClientData(directus, invoiceData.client_id);
     
     // 6. Créer la facture dans Directus
-    const invoice = await directus.request(
-      createItem('client_invoices', {
+    const invoice = await directus.items('client_invoices').createOne({
         invoice_number: invoiceNumber,
         owner_company: invoiceData.owner_company,
         company_id: invoiceData.client_id,
@@ -59,8 +58,7 @@ class UnifiedInvoiceService {
         qr_iban: companyData.qr_iban,
         status: 'draft',
         notes: invoiceData.notes || ''
-      })
-    );
+      });
     
     // 7. Générer les données QR Swiss
     const qrData = this.generateSwissQRData({
@@ -122,7 +120,7 @@ class UnifiedInvoiceService {
     
     try {
       const result = await directus.request(
-        readItems('client_invoices', {
+        directus.items('client_invoices').readMany({
           filter: {
             owner_company: { _eq: companyName },
             invoice_number: { _starts_with: `${prefix}-${year}` }
@@ -229,7 +227,7 @@ class UnifiedInvoiceService {
   async getClientData(directus, clientId) {
     try {
       const client = await directus.request(
-        readItem('companies', clientId)
+        directus.items('companies').readOne(clientId)
       );
       
       return {
@@ -352,7 +350,7 @@ class UnifiedInvoiceService {
     if (status === 'sent') updates.sent_at = new Date().toISOString();
     if (status === 'paid') updates.paid_at = new Date().toISOString();
     
-    return directus.request(updateItem('client_invoices', invoiceId, updates));
+    return directus.items('client_invoices').updateOne(invoiceId, updates);
   }
 
   /**
@@ -362,14 +360,13 @@ class UnifiedInvoiceService {
     const directus = this.getDirectusClient();
     
     // Récupérer la facture
-    const invoice = await directus.request(readItem('client_invoices', invoiceId));
+    const invoice = await directus.items('client_invoices').readOne(invoiceId);
     
     // Mettre à jour le statut
     await this.updateStatus(invoiceId, 'paid');
     
     // Créer le paiement
-    await directus.request(
-      createItem('payments', {
+    await directus.items('payments').createOne({
         owner_company: invoice.owner_company,
         invoice_id: invoiceId,
         amount: paymentData.amount || invoice.amount,
@@ -379,8 +376,7 @@ class UnifiedInvoiceService {
         reference: paymentData.reference || '',
         bank_transaction_id: paymentData.transaction_id || null,
         status: 'completed'
-      })
-    );
+      });
     
     return { success: true, message: 'Facture marquée comme payée' };
   }
@@ -390,7 +386,7 @@ class UnifiedInvoiceService {
    */
   async getInvoiceWithQR(invoiceId) {
     const directus = this.getDirectusClient();
-    const invoice = await directus.request(readItem('client_invoices', invoiceId));
+    const invoice = await directus.items('client_invoices').readOne(invoiceId);
     
     const companyData = this.getCompanyConfig(invoice.owner_company);
     const clientData = await this.getClientData(directus, invoice.company_id);
@@ -408,7 +404,7 @@ class UnifiedInvoiceService {
 }
 
 // Import des fonctions Directus SDK
-import { createItem, readItem, readItems, updateItem } from '@directus/sdk';
+// Imports supprimés - utilisés via Directus client
 
 export const unifiedInvoiceService = new UnifiedInvoiceService();
 export default UnifiedInvoiceService;

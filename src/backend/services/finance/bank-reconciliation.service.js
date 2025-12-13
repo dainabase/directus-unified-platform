@@ -28,16 +28,14 @@ class BankReconciliationService {
     console.log(`🔄 Début du rapprochement automatique pour ${companyName}`);
     
     // 1. Récupérer les transactions non rapprochées
-    const transactions = await directus.request(
-      readItems('bank_transactions', {
-        filter: {
-          owner_company: { _eq: companyName },
-          reconciled: { _eq: false }
-        },
-        sort: ['-date'],
-        limit: 100
-      })
-    );
+    const transactions = await directus.items('bank_transactions').readMany({
+      filter: {
+        owner_company: { _eq: companyName },
+        reconciled: { _eq: false }
+      },
+      sort: ['-date'],
+      limit: 100
+    });
 
     // 2. Récupérer les factures non payées
     const [clientInvoices, supplierInvoices] = await Promise.all([
@@ -193,30 +191,26 @@ class BankReconciliationService {
    * Récupérer les factures clients non payées
    */
   async getUnpaidClientInvoices(directus, companyName) {
-    return directus.request(
-      readItems('client_invoices', {
-        filter: {
-          owner_company: { _eq: companyName },
-          status: { _in: ['sent', 'pending', 'overdue'] }
-        },
-        fields: ['id', 'invoice_number', 'client_name', 'amount', 'currency', 'date', 'due_date', 'status']
-      })
-    );
+    return directus.items('client_invoices').readMany({
+      filter: {
+        owner_company: { _eq: companyName },
+        status: { _in: ['sent', 'pending', 'overdue'] }
+      },
+      fields: ['id', 'invoice_number', 'client_name', 'amount', 'currency', 'date', 'due_date', 'status']
+    });
   }
 
   /**
    * Récupérer les factures fournisseurs non payées
    */
   async getUnpaidSupplierInvoices(directus, companyName) {
-    return directus.request(
-      readItems('supplier_invoices', {
-        filter: {
-          owner_company: { _eq: companyName },
-          status: { _in: ['pending', 'approved', 'overdue'] }
-        },
-        fields: ['id', 'invoice_number', 'supplier_name', 'amount', 'currency', 'date', 'due_date', 'status']
-      })
-    );
+    return directus.items('supplier_invoices').readMany({
+      filter: {
+        owner_company: { _eq: companyName },
+        status: { _in: ['pending', 'approved', 'overdue'] }
+      },
+      fields: ['id', 'invoice_number', 'supplier_name', 'amount', 'currency', 'date', 'due_date', 'status']
+    });
   }
 
   /**
@@ -226,15 +220,13 @@ class BankReconciliationService {
     const now = new Date().toISOString();
     
     // 1. Mettre à jour la transaction
-    await directus.request(
-      updateItem('bank_transactions', transactionId, {
+    await directus.items('bank_transactions').updateOne(transactionId, {
         reconciled: true,
         reconciled_at: now,
         reconciled_invoice_id: invoice.id,
         reconciled_invoice_type: invoiceType,
         reconciliation_type: 'auto'
-      })
-    );
+      });
 
     // 2. Mettre à jour la facture
     const collection = invoiceType === 'client_invoice' ? 'client_invoices' : 'supplier_invoices';
@@ -247,8 +239,7 @@ class BankReconciliationService {
     );
 
     // 3. Créer un enregistrement de paiement
-    await directus.request(
-      createItem('payments', {
+    await directus.items('payments').createOne({
         owner_company: invoice.owner_company || 'HYPERVISUAL',
         invoice_id: invoice.id,
         invoice_type: invoiceType,
@@ -259,8 +250,7 @@ class BankReconciliationService {
         bank_transaction_id: transactionId,
         status: 'completed',
         auto_reconciled: true
-      })
-    );
+      });
 
     console.log(`✅ Rapprochement confirmé: Transaction ${transactionId} ↔ ${invoiceType} ${invoice.id}`);
   }
@@ -322,12 +312,10 @@ class BankReconciliationService {
     await this.confirmReconciliation(directus, transactionId, invoice[0], suggestion.invoice_type);
 
     // Nettoyer la suggestion
-    await directus.request(
-      updateItem('bank_transactions', transactionId, {
+    await directus.items('bank_transactions').updateOne(transactionId, {
         suggested_match: null,
         reconciliation_type: 'manual'
-      })
-    );
+      });
 
     return { success: true, message: 'Rapprochement validé' };
   }
@@ -338,11 +326,9 @@ class BankReconciliationService {
   async rejectSuggestion(transactionId) {
     const directus = this.getDirectus();
     
-    await directus.request(
-      updateItem('bank_transactions', transactionId, {
+    await directus.items('bank_transactions').updateOne(transactionId, {
         suggested_match: null
-      })
-    );
+      });
 
     return { success: true, message: 'Suggestion rejetée' };
   }
@@ -387,22 +373,22 @@ class BankReconciliationService {
 
     // Statistiques des transactions
     const [allTx, reconciledTx, pendingTx] = await Promise.all([
-      directus.request(readItems('bank_transactions', {
+      directus.items('bank_transactions').readMany({
         filter: {
           owner_company: { _eq: companyName },
           date: { _between: [startDate, endDate] }
         },
         aggregate: { count: '*', sum: ['amount'] }
-      })),
-      directus.request(readItems('bank_transactions', {
+      }),
+      directus.items('bank_transactions').readMany({
         filter: {
           owner_company: { _eq: companyName },
           date: { _between: [startDate, endDate] },
           reconciled: { _eq: true }
         },
         aggregate: { count: '*' }
-      })),
-      directus.request(readItems('bank_transactions', {
+      }),
+      directus.items('bank_transactions').readMany({
         filter: {
           owner_company: { _eq: companyName },
           date: { _between: [startDate, endDate] },
@@ -410,7 +396,7 @@ class BankReconciliationService {
           suggested_match: { _nnull: true }
         },
         aggregate: { count: '*' }
-      }))
+      })
     ]);
 
     const total = parseInt(allTx[0]?.count || 0);
@@ -453,11 +439,9 @@ class BankReconciliationService {
     await this.confirmReconciliation(directus, transactionId, invoice[0], invoiceType);
     
     // Marquer comme rapprochement manuel
-    await directus.request(
-      updateItem('bank_transactions', transactionId, {
+    await directus.items('bank_transactions').updateOne(transactionId, {
         reconciliation_type: 'manual'
-      })
-    );
+      });
 
     return { success: true, message: 'Rapprochement manuel effectué' };
   }
@@ -484,15 +468,13 @@ class BankReconciliationService {
     const collection = invoiceType === 'client_invoice' ? 'client_invoices' : 'supplier_invoices';
 
     // 1. Remettre la transaction comme non rapprochée
-    await directus.request(
-      updateItem('bank_transactions', transactionId, {
+    await directus.items('bank_transactions').updateOne(transactionId, {
         reconciled: false,
         reconciled_at: null,
         reconciled_invoice_id: null,
         reconciled_invoice_type: null,
         reconciliation_type: null
-      })
-    );
+      });
 
     // 2. Remettre la facture comme non payée
     await directus.request(

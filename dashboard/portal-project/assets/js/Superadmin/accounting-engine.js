@@ -4,6 +4,292 @@
 window.AccountingEngine = (function() {
     'use strict';
     
+    // Configuration TVA Suisse 2025
+    const TVA_RATES = {
+        // Taux en vigueur depuis 01.01.2024 (applicable 2025)
+        NORMAL: 0.081,        // 8.1% - Taux normal
+        REDUCED: 0.026,       // 2.6% - Taux réduit (alimentation, médicaments, etc.)
+        ACCOMMODATION: 0.038, // 3.8% - Hébergement
+        EXEMPT: 0,            // 0% - Exonéré
+        
+        // Pourcentages pour affichage
+        NORMAL_PERCENT: 8.1,
+        REDUCED_PERCENT: 2.6,
+        ACCOMMODATION_PERCENT: 3.8,
+        
+        // Taux par défaut pour les calculs
+        DEFAULT: 0.081,
+        DEFAULT_PERCENT: 8.1,
+        
+        // Historique (pour recalcul factures antérieures au 01.01.2024)
+        PREVIOUS: {
+            NORMAL: 0.077,
+            REDUCED: 0.025,
+            ACCOMMODATION: 0.037,
+            validUntil: '2023-12-31'
+        }
+    };
+
+    // Codes TVA comptables (Formulaire 200 AFC)
+    const TVA_CODES = {
+        // ===== VENTES (Output VAT) =====
+        V81: { 
+            code: 'V81',
+            rate: 0.081, 
+            percent: 8.1,
+            type: 'output', 
+            description_fr: 'Ventes taux normal 8.1%',
+            description_de: 'Umsätze Normalsatz 8.1%',
+            formField: '302',
+            accountDebit: '1100',  // Clients
+            accountCredit: '2200'  // TVA due
+        },
+        V26: { 
+            code: 'V26',
+            rate: 0.026, 
+            percent: 2.6,
+            type: 'output', 
+            description_fr: 'Ventes taux réduit 2.6%',
+            description_de: 'Umsätze red. Satz 2.6%',
+            formField: '312',
+            accountDebit: '1100',
+            accountCredit: '2200'
+        },
+        V38: { 
+            code: 'V38',
+            rate: 0.038, 
+            percent: 3.8,
+            type: 'output', 
+            description_fr: 'Ventes hébergement 3.8%',
+            description_de: 'Umsätze Beherbergung 3.8%',
+            formField: '342',
+            accountDebit: '1100',
+            accountCredit: '2200'
+        },
+        VEX: { 
+            code: 'VEX',
+            rate: 0, 
+            percent: 0,
+            type: 'output', 
+            description_fr: 'Ventes exonérées (art. 21)',
+            description_de: 'Steuerbefreit (Art. 21)',
+            formField: '220',
+            accountDebit: '1100',
+            accountCredit: null
+        },
+        VEXP: { 
+            code: 'VEXP',
+            rate: 0, 
+            percent: 0,
+            type: 'output', 
+            description_fr: 'Exportations (art. 23)',
+            description_de: 'Exporte (Art. 23)',
+            formField: '221',
+            accountDebit: '1100',
+            accountCredit: null
+        },
+
+        // ===== ACHATS (Input VAT - Impôt préalable) =====
+        A81: { 
+            code: 'A81',
+            rate: 0.081, 
+            percent: 8.1,
+            type: 'input', 
+            description_fr: 'Achats taux normal 8.1%',
+            description_de: 'Einkäufe Normalsatz 8.1%',
+            formField: '400',
+            accountDebit: '1170',  // TVA récupérable
+            accountCredit: '2000'  // Fournisseurs
+        },
+        A26: { 
+            code: 'A26',
+            rate: 0.026, 
+            percent: 2.6,
+            type: 'input', 
+            description_fr: 'Achats taux réduit 2.6%',
+            description_de: 'Einkäufe red. Satz 2.6%',
+            formField: '400',
+            accountDebit: '1170',
+            accountCredit: '2000'
+        },
+        A38: { 
+            code: 'A38',
+            rate: 0.038, 
+            percent: 3.8,
+            type: 'input', 
+            description_fr: 'Achats hébergement 3.8%',
+            description_de: 'Einkäufe Beherbergung 3.8%',
+            formField: '400',
+            accountDebit: '1170',
+            accountCredit: '2000'
+        },
+        AEX: { 
+            code: 'AEX',
+            rate: 0, 
+            percent: 0,
+            type: 'input', 
+            description_fr: 'Achats exonérés de TVA',
+            description_de: 'MWST-befreite Einkäufe',
+            formField: null,
+            accountDebit: null,
+            accountCredit: '2000'
+        },
+
+        // ===== INVESTISSEMENTS =====
+        I81: { 
+            code: 'I81',
+            rate: 0.081, 
+            percent: 8.1,
+            type: 'input', 
+            description_fr: 'Investissements taux normal 8.1%',
+            description_de: 'Investitionen Normalsatz 8.1%',
+            formField: '405',
+            accountDebit: '1170',
+            accountCredit: '2000'
+        },
+        I26: { 
+            code: 'I26',
+            rate: 0.026, 
+            percent: 2.6,
+            type: 'input', 
+            description_fr: 'Investissements taux réduit 2.6%',
+            description_de: 'Investitionen red. Satz 2.6%',
+            formField: '405',
+            accountDebit: '1170',
+            accountCredit: '2000'
+        },
+
+        // ===== ACQUISITIONS (Services de l'étranger - art. 45) =====
+        ACQ81: { 
+            code: 'ACQ81',
+            rate: 0.081, 
+            percent: 8.1,
+            type: 'acquisition', 
+            description_fr: 'Impôt sur acquisitions 8.1%',
+            description_de: 'Bezugssteuer 8.1%',
+            formField: '382',
+            accountDebit: '1170',
+            accountCredit: '2200'
+        },
+        ACQ26: { 
+            code: 'ACQ26',
+            rate: 0.026, 
+            percent: 2.6,
+            type: 'acquisition', 
+            description_fr: 'Impôt sur acquisitions 2.6%',
+            description_de: 'Bezugssteuer 2.6%',
+            formField: '382',
+            accountDebit: '1170',
+            accountCredit: '2200'
+        },
+
+        // ===== HORS CHAMP =====
+        NA: { 
+            code: 'NA',
+            rate: 0, 
+            percent: 0,
+            type: 'none', 
+            description_fr: 'Non soumis à la TVA',
+            description_de: 'Nicht MWST-pflichtig',
+            formField: null,
+            accountDebit: null,
+            accountCredit: null
+        }
+    };
+
+    // Fonctions de calcul TVA mises à jour
+    /**
+     * Calcule la TVA depuis un montant HT
+     */
+    function calculateVATFromNet(netAmount, tvaCode = 'V81') {
+        const tvaInfo = TVA_CODES[tvaCode] || TVA_CODES.V81;
+        const vatAmount = netAmount * tvaInfo.rate;
+        const grossAmount = netAmount + vatAmount;
+        
+        return {
+            net: roundCHF(netAmount),
+            vat: roundCHF(vatAmount),
+            gross: roundCHF(grossAmount),
+            rate: tvaInfo.rate,
+            percent: tvaInfo.percent,
+            code: tvaCode
+        };
+    }
+
+    /**
+     * Calcule la TVA depuis un montant TTC
+     */
+    function calculateVATFromGross(grossAmount, tvaCode = 'V81') {
+        const tvaInfo = TVA_CODES[tvaCode] || TVA_CODES.V81;
+        const vatAmount = grossAmount * tvaInfo.rate / (1 + tvaInfo.rate);
+        const netAmount = grossAmount - vatAmount;
+        
+        return {
+            net: roundCHF(netAmount),
+            vat: roundCHF(vatAmount),
+            gross: roundCHF(grossAmount),
+            rate: tvaInfo.rate,
+            percent: tvaInfo.percent,
+            code: tvaCode
+        };
+    }
+
+    /**
+     * Arrondi au centime suisse (5 centimes)
+     */
+    function roundCHF(amount) {
+        return Math.round(amount * 20) / 20;
+    }
+
+    /**
+     * Obtient le taux TVA applicable à une date
+     */
+    function getVATRateForDate(date, rateType = 'normal') {
+        const d = new Date(date);
+        const cutoffDate = new Date('2024-01-01');
+        
+        if (d < cutoffDate) {
+            // Anciens taux (avant 2024)
+            switch (rateType) {
+                case 'reduced': return 0.025;
+                case 'accommodation': return 0.037;
+                default: return 0.077;
+            }
+        } else {
+            // Nouveaux taux (2024+)
+            switch (rateType) {
+                case 'reduced': return TVA_RATES.REDUCED;
+                case 'accommodation': return TVA_RATES.ACCOMMODATION;
+                default: return TVA_RATES.NORMAL;
+            }
+        }
+    }
+
+    /**
+     * Détermine automatiquement le code TVA selon le type de transaction
+     */
+    function autoDetectVATCode(transaction) {
+        const { type, rate, isExport, isExempt } = transaction;
+        
+        // Exportations
+        if (isExport) return 'VEXP';
+        
+        // Exonérations
+        if (isExempt) return type === 'sale' ? 'VEX' : 'AEX';
+        
+        // Par taux
+        if (rate === 0.081 || rate === 8.1) {
+            return type === 'sale' ? 'V81' : 'A81';
+        } else if (rate === 0.026 || rate === 2.6) {
+            return type === 'sale' ? 'V26' : 'A26';
+        } else if (rate === 0.038 || rate === 3.8) {
+            return type === 'sale' ? 'V38' : 'A38';
+        }
+        
+        // Par défaut: taux normal
+        return type === 'sale' ? 'V81' : 'A81';
+    }
+
     // Configuration
     const config = {
         // Plan comptable PME suisse (basé sur Sterchi)
@@ -208,6 +494,10 @@ window.AccountingEngine = (function() {
             "invoice_out_created": {
                 description: "Création facture client",
                 generer: function(data) {
+                    // Utiliser le nouveau système de codes TVA
+                    const tvaCode = data.vatCode || 'V81'; // Par défaut 8.1%
+                    const vatInfo = TVA_CODES[tvaCode] || TVA_CODES.V81;
+                    
                     return {
                         lignes: [
                             {
@@ -224,7 +514,7 @@ window.AccountingEngine = (function() {
                             },
                             {
                                 compte: "2200",
-                                libelle: "TVA 7.7%",
+                                libelle: `TVA ${vatInfo.percent}%`,
                                 debit: 0,
                                 credit: data.tva
                             }
@@ -268,6 +558,10 @@ window.AccountingEngine = (function() {
             "invoice_in_validated": {
                 description: "Validation facture fournisseur",
                 generer: function(data) {
+                    // Utiliser le nouveau système de codes TVA
+                    const tvaCode = data.vatCode || 'A81'; // Par défaut achats 8.1%
+                    const vatInfo = TVA_CODES[tvaCode] || TVA_CODES.A81;
+                    
                     return {
                         lignes: [
                             {
@@ -278,7 +572,7 @@ window.AccountingEngine = (function() {
                             },
                             {
                                 compte: "1170",
-                                libelle: "TVA récupérable",
+                                libelle: `TVA récupérable ${vatInfo.percent}%`,
                                 debit: data.tva,
                                 credit: 0
                             },
@@ -382,7 +676,7 @@ window.AccountingEngine = (function() {
                             },
                             {
                                 compte: "1170",
-                                libelle: "TVA récupérable",
+                                libelle: `TVA récupérable ${data.tva_percent || '8.1'}%`,
                                 debit: data.tva,
                                 credit: 0
                             },
@@ -483,7 +777,7 @@ window.AccountingEngine = (function() {
                         },
                         {
                             compte: "2200",
-                            libelle: "TVA 7.7%",
+                            libelle: "TVA 8.1%",
                             debit: 0,
                             credit: 962.50,
                             devise: "CHF"
@@ -553,7 +847,7 @@ window.AccountingEngine = (function() {
                         },
                         {
                             compte: "1170",
-                            libelle: "TVA récupérable 7.7%",
+                            libelle: "TVA récupérable 8.1%",
                             debit: 1155.00,
                             credit: 0,
                             devise: "CHF"
@@ -1607,7 +1901,15 @@ window.AccountingEngine = (function() {
         createAutomaticEntry,
         calculateEntryTotals,
         getBalances: () => state.balances,
-        getEcritures: () => state.ecritures
+        getEcritures: () => state.ecritures,
+        // Nouvelles fonctions TVA 2025
+        TVA_RATES,
+        TVA_CODES,
+        calculateVATFromNet,
+        calculateVATFromGross,
+        roundCHF,
+        getVATRateForDate,
+        autoDetectVATCode
     };
     
 })();

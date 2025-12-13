@@ -59,3 +59,4 @@ integrations/invoice-ninja/.env.invoice-ninja
 
 # Backups
 backup-revolut-*.tar.gz
+.archive-local-docs-*

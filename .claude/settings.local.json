@@ -128,7 +128,12 @@
       "Bash(do)",
       "Bash(if node -c \"$file\")",
       "Bash(then)",
-      "Bash(else)"
+      "Bash(else)",
+      "Bash(./scripts/register_directus_relations.sh:*)",
+      "Bash(bash:*)",
+      "Bash(yarn install)",
+      "Bash(npx directus database:*)",
+      "Bash(psql:*)"
     ],
     "deny": []
   }

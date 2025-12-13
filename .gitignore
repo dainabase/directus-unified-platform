@@ -7,6 +7,7 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+.npmrc
 
 # Build
 dist/
@@ -33,6 +34,7 @@ temp/
 backups/
 backup-*/
 *.backup
+backup_*.sql
 
 # Logs
 logs/

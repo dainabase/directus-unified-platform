@@ -96,7 +96,7 @@ Services cloud                CHF 5'000.00
 Support technique            CHF 3'500.00
 
 Sous-total                   CHF 8'500.00
-TVA 7.7%                     CHF   654.50
+TVA 8.1%                     CHF   688.50
 TOTAL                        CHF 9'154.50
 `;
             
@@ -186,7 +186,7 @@ TOTAL                        CHF 9'154.50
                 currency: 'CHF',
                 extracted_data: {
                     montant_ht: 1000,
-                    taux_tva: 7.7,
+                    taux_tva: 8.1,
                     montant_tva: 77,
                     montant_ttc: 1076, // Erreur: devrait être 1077
                     fournisseur: null  // Test cas null

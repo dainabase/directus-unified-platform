@@ -290,7 +290,7 @@ async function createClientInvoices() {
     dueDate.setDate(dueDate.getDate() + randomNumber(15, 60));
 
     const amount = randomNumber(5000, 150000);
-    const taxRate = 0.077; // TVA Suisse 7.7%
+    const taxRate = 0.081; // TVA Suisse 8.1%
     const taxAmount = Math.round(amount * taxRate);
 
     const invoice = {

@@ -1140,8 +1140,8 @@ window.ExpensesNotion = (function() {
         const amount = parseFloat(document.getElementById('expense-amount').value);
         const category = selectedCategory.dataset.category;
         
-        // Calculer TVA (approximation 7.7%)
-        const vatIncluded = amount * 0.077;
+        // Calculer TVA (TVA Suisse 2025: 8.1%)
+        const vatIncluded = amount * 0.081;
         
         const expenseData = {
             type: "expense_report",

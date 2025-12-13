@@ -386,7 +386,7 @@ RETOURNE UN JSON avec cette structure exacte:
 }
 
 RÈGLES MULTI-DEVISES:
-- CHF: TVA 7.7% (standard), 2.5% (réduit), 3.7% (hébergement)
+- CHF: TVA 8.1% (standard), 2.6% (réduit), 3.8% (hébergement)
 - EUR: TVA varie selon pays (France 20%, Belgique 21%, etc.)
 - USD/GBP/CAD: Adapter selon contexte
 - Montants DOIVENT être dans la devise détectée
@@ -565,7 +565,7 @@ RÈGLES MULTI-DEVISES:
             vatRate = parseFloat(vatMatch[1].replace(',', '.'));
         } else if (vatStatus === 'ttc' && detectedCurrency === 'CHF') {
             // Défaut Suisse si TTC et CHF
-            vatRate = 7.7;
+            vatRate = 8.1;
         }
         
         // Si hors TVA, forcer le taux à 0
@@ -787,12 +787,12 @@ RÈGLES MULTI-DEVISES:
         if (match) {
             const rate = parseFloat(match[1].replace(',', '.'));
             // Arrondir aux taux suisses standards
-            if (rate >= 7 && rate <= 8) return 7.7;
-            if (rate >= 2 && rate <= 3) return 2.5;
-            if (rate >= 3.5 && rate <= 4) return 3.7;
+            if (rate >= 7 && rate <= 9) return 8.1;
+            if (rate >= 2 && rate <= 3) return 2.6;
+            if (rate >= 3.5 && rate <= 4) return 3.8;
             return rate;
         }
-        return 7.7; // Taux standard par défaut
+        return 8.1; // Taux standard par défaut
     }
 
     /**
@@ -906,10 +906,10 @@ RÈGLES MULTI-DEVISES:
         }
 
         // Validation taux TVA selon devise
-        if (data.devise === 'CHF' && data.taux_tva && ![0, 2.5, 3.7, 7.7].includes(data.taux_tva)) {
+        if (data.devise === 'CHF' && data.taux_tva && ![0, 2.6, 3.8, 8.1].includes(data.taux_tva)) {
             warnings.push({
                 field: 'taux_tva',
-                message: `Taux TVA inhabituel pour CHF: ${data.taux_tva}% (attendu: 0%, 2.5%, 3.7%, 7.7%)`
+                message: `Taux TVA inhabituel pour CHF: ${data.taux_tva}% (attendu: 0%, 2.6%, 3.8%, 8.1%)`
             });
         } else if (data.devise === 'EUR' && data.taux_tva && data.taux_tva > 0) {
             // TVA EUR varie selon pays (5% à 27%)
@@ -985,7 +985,7 @@ RÈGLES MULTI-DEVISES:
         }
         
         // Validation taux TVA
-        if (data.extracted_data.taux_tva && ![0, 2.5, 3.7, 7.7, 8.1].includes(data.extracted_data.taux_tva)) {
+        if (data.extracted_data.taux_tva && ![0, 2.6, 3.8, 8.1].includes(data.extracted_data.taux_tva)) {
             warnings.push({
                 field: 'taux_tva',
                 message: `Taux TVA inhabituel: ${data.extracted_data.taux_tva}%`

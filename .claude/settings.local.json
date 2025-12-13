@@ -107,7 +107,12 @@
       "Bash(npm cache clean:*)",
       "Bash(npx @pixelsock/directus-mcp@latest:*)",
       "Bash(DIRECTUS_URL=\"http://localhost:8055\" DIRECTUS_ACCESS_TOKEN=\"e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW\" timeout 5 node directus-mcp-server-v2.js)",
-      "Bash(./cleanup-design-system.sh:*)"
+      "Bash(./cleanup-design-system.sh:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(done)"
     ],
     "deny": []
   }

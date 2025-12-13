@@ -74,7 +74,7 @@ async function createInvoiceInInvoiceNinja(invoiceData) {
         cost: parseFloat(item.unit_price || 0),
         qty: parseFloat(item.quantity || 1),
         tax_name1: 'TVA',
-        tax_rate1: 7.7 // TVA Suisse 7.7%
+        tax_rate1: 8.1 // TVA Suisse 8.1%
       })),
       terms: invoiceData.terms || 'Paiement à 30 jours',
       public_notes: invoiceData.notes || '',

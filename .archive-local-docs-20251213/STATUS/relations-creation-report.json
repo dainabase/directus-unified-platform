@@ -1,0 +1,24 @@
+{
+  "date": "2025-08-03T12:28:32.241Z",
+  "success": [
+    "time_tracking → projects",
+    "time_tracking → deliverables",
+    "content_calendar → companies",
+    "interactions → people",
+    "interactions → projects",
+    "budgets → projects",
+    "compliance → companies",
+    "talents → companies"
+  ],
+  "failed": [
+    {
+      "name": "permissions → directus_users",
+      "error": "Invalid payload. Field \"user_id\" in collection \"permissions\" already has an associated relationship."
+    },
+    {
+      "name": "permissions → directus_roles",
+      "error": "Invalid payload. Field \"role_id\" in collection \"permissions\" already has an associated relationship."
+    }
+  ],
+  "total": 10
+}

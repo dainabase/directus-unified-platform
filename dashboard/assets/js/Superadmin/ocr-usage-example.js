@@ -208,7 +208,7 @@ Services de développement    CHF 5'000.00
 Maintenance mensuelle       CHF 1'500.00
 
 Sous-total                  CHF 6'500.00
-TVA 7.7%                    CHF   500.50
+TVA 8.1%                    CHF   526.50
 TOTAL                       CHF 7'000.50
 `;
         

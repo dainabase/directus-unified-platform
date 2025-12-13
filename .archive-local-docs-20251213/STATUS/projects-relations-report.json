@@ -1,0 +1,24 @@
+{
+  "date": "2025-08-03T14:41:17.766Z",
+  "batch": "projects_relations",
+  "success": [
+    "projects → companies (client)",
+    "projects → providers (main)",
+    "projects → people (PM)",
+    "projects → people (sales)",
+    "deliverables → projects",
+    "client_invoices → projects",
+    "supplier_invoices → projects",
+    "expenses → projects",
+    "bank_transactions → projects",
+    "accounting_entries → projects",
+    "support_tickets → projects",
+    "subscriptions → projects",
+    "projects_team → projects",
+    "projects_team → people"
+  ],
+  "failed": [],
+  "total_project_relations": 14,
+  "total_all_relations": 24,
+  "percentage": "22.9"
+}

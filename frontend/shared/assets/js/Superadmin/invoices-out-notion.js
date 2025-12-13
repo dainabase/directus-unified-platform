@@ -1153,8 +1153,8 @@ window.InvoicesOutNotion = (function() {
                 <td><input type="number" class="form-control item-price" min="0" step="0.01" placeholder="0.00"></td>
                 <td>
                     <select class="form-select item-vat">
-                        <option value="7.7">7.7%</option>
-                        <option value="2.5">2.5%</option>
+                        <option value="8.1">8.1%</option>
+                        <option value="2.6">2.6%</option>
                         <option value="0">0%</option>
                     </select>
                 </td>

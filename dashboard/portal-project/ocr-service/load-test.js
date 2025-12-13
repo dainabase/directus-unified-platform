@@ -46,7 +46,7 @@ async function createTestInvoice(index) {
   const total = amount + vat;
   
   ctx.fillText(`Montant HT: CHF ${amount.toFixed(2)}`, 50, 310);
-  ctx.fillText(`TVA 7.7%: CHF ${vat.toFixed(2)}`, 50, 340);
+  ctx.fillText(`TVA 8.1%: CHF ${vat.toFixed(2)}`, 50, 340);
   ctx.font = 'bold 18px Arial';
   ctx.fillText(`Total: CHF ${total.toFixed(2)}`, 50, 380);
 

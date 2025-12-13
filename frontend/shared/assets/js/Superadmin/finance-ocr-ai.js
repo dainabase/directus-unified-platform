@@ -22,7 +22,7 @@ const FinanceOCRAI = {
         entityPrompts: {
             hypervisual_invoice: `Tu es expert comptable suisse. Analyse cette facture en respectant:
 - Devise: CHF avec format suisse (apostrophes pour milliers: 1'234.56)
-- TVA Suisse: 7.7% (standard), 2.5% (réduit), 3.7% (hébergement), 0% (exonéré)
+- TVA Suisse: 8.1% (standard), 2.6% (réduit), 3.8% (hébergement), 0% (exonéré)
 - Format dates: JJ.MM.AAAA
 Extrais toutes les données structurées en JSON.`,
             
@@ -54,7 +54,7 @@ Extract all structured data as JSON.`
         // Règles validation multi-pays
         validationRules: {
             swiss: { 
-                vatRates: [0, 2.5, 3.7, 7.7], 
+                vatRates: [0, 2.6, 3.8, 8.1], 
                 currency: 'CHF',
                 dateFormat: /(\d{2})\.(\d{2})\.(\d{4})/,
                 amountFormat: /[\d']+(\.[\d]{2})?/
@@ -1026,7 +1026,7 @@ Extract all structured data as JSON.`
 
     getVATLabel(rate, country) {
         const labels = {
-            'Suisse': { 0: 'Exonéré', 2.5: 'Réduit', 3.7: 'Hébergement', 7.7: 'Standard' },
+            'Suisse': { 0: 'Exonéré', 2.6: 'Réduit', 3.8: 'Hébergement', 8.1: 'Standard' },
             'France': { 0: 'Exonéré', 5.5: 'Réduit', 10: 'Intermédiaire', 20: 'Standard' },
             'Angleterre': { 0: 'Zero rate', 5: 'Reduced', 20: 'Standard' },
             'USA': { 0: 'No tax' },

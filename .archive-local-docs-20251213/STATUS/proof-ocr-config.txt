@@ -1,0 +1,11 @@
+=== CONFIGURATION OCR ===
+# OCR Service
+OCR_OPENAI_API_KEY=***
+# OpenAI Configuration for OCR
+OPENAI_API_KEY=***
+OPENAI_MODEL=***
+OPENAI_MAX_TOKENS=***
+OPENAI_TEMPERATURE=***
+Modèle configuré : gpt-4o-mini
+Test réussi avec extraction d'image
+Script de test: scripts/test-ocr-complete.js

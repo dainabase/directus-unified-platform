@@ -3,20 +3,44 @@ import { useAuthStore } from '../store/authStore'
 import toast from 'react-hot-toast'
 
 // API Configuration
-const API_URL = import.meta.env.VITE_DIRECTUS_URL || 'http://localhost:8055'
+const DIRECTUS_URL = import.meta.env.VITE_DIRECTUS_URL || 'http://localhost:8055'
+const UNIFIED_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 const API_TIMEOUT = 30000 // 30 seconds
 
-// Create axios instance
+// Create axios instance for Directus (data operations)
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: DIRECTUS_URL,
   timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor
+// Create axios instance for Unified Backend (auth, finance)
+const unifiedApiClient: AxiosInstance = axios.create({
+  baseURL: UNIFIED_API_URL,
+  timeout: API_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Request interceptor for Directus
 apiClient.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().token
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+// Request interceptor for Unified API
+unifiedApiClient.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token
     if (token) {
@@ -169,29 +193,151 @@ export const collections = {
   },
 }
 
-// Auth endpoints
+// Auth endpoints - Using Unified Backend API
 export const auth = {
   login: async (email: string, password: string) => {
-    const response = await apiClient.post('/auth/login', { email, password })
-    return response.data.data
+    const response = await unifiedApiClient.post('/api/auth/login', { email, password })
+    // Transform response to match expected format
+    const data = response.data
+    if (data.success) {
+      return {
+        access_token: data.accessToken,
+        refresh_token: data.refreshToken,
+        user: data.user
+      }
+    }
+    throw new Error(data.error || 'Login failed')
   },
 
-  logout: async (refresh_token: string) => {
-    await apiClient.post('/auth/logout', { refresh_token })
+  logout: async (refresh_token?: string) => {
+    await unifiedApiClient.post('/api/auth/logout', { refreshToken: refresh_token })
   },
 
   refresh: async (refresh_token: string) => {
-    const response = await apiClient.post('/auth/refresh', { 
-      refresh_token,
-      mode: 'json'
+    const response = await unifiedApiClient.post('/api/auth/refresh', {
+      refreshToken: refresh_token
     })
-    return response.data.data
+    const data = response.data
+    if (data.success) {
+      return {
+        access_token: data.accessToken,
+        refresh_token: data.refreshToken
+      }
+    }
+    throw new Error(data.error || 'Token refresh failed')
   },
 
   me: async () => {
-    const response = await apiClient.get('/users/me')
-    return response.data.data
+    const response = await unifiedApiClient.get('/api/auth/me')
+    const data = response.data
+    if (data.success) {
+      // Transform user data to expected format
+      return {
+        id: data.user.id,
+        email: data.user.email,
+        first_name: data.user.name,
+        last_name: '',
+        avatar: data.user.avatar || null,
+        role: {
+          id: data.user.role,
+          name: data.user.role,
+          admin_access: ['admin', 'superadmin'].includes(data.user.role),
+          app_access: true
+        },
+        owner_company: data.user.companies?.[0]
+      }
+    }
+    throw new Error(data.error || 'Failed to get user info')
   },
+
+  verify: async () => {
+    const response = await unifiedApiClient.get('/api/auth/verify')
+    return response.data
+  },
+
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    const response = await unifiedApiClient.post('/api/auth/change-password', {
+      currentPassword,
+      newPassword
+    })
+    return response.data
+  },
+
+  getCompanies: async () => {
+    const response = await unifiedApiClient.get('/api/auth/companies')
+    return response.data
+  }
 }
 
+// Finance API endpoints - Using Unified Backend
+export const financeApi = {
+  // Dashboard
+  getDashboard: async (company: string) => {
+    const response = await unifiedApiClient.get(`/api/finance/dashboard/${company}`)
+    return response.data
+  },
+
+  getConsolidatedDashboard: async () => {
+    const response = await unifiedApiClient.get('/api/finance/dashboard/consolidated')
+    return response.data
+  },
+
+  getKPIs: async (company: string, params?: { start?: string; end?: string }) => {
+    const response = await unifiedApiClient.get(`/api/finance/kpis/${company}`, { params })
+    return response.data
+  },
+
+  getAlerts: async (company: string) => {
+    const response = await unifiedApiClient.get(`/api/finance/alerts/${company}`)
+    return response.data
+  },
+
+  getCashPosition: async (company: string) => {
+    const response = await unifiedApiClient.get(`/api/finance/cash-position/${company}`)
+    return response.data
+  },
+
+  // Invoices
+  createInvoice: async (data: any) => {
+    const response = await unifiedApiClient.post('/api/finance/invoices', data)
+    return response.data
+  },
+
+  getInvoice: async (id: string) => {
+    const response = await unifiedApiClient.get(`/api/finance/invoices/${id}`)
+    return response.data
+  },
+
+  listInvoices: async (company: string, params?: any) => {
+    const response = await unifiedApiClient.get(`/api/finance/invoices/list/${company}`, { params })
+    return response.data
+  },
+
+  // Reconciliation
+  getReconciliation: async (company: string, params?: any) => {
+    const response = await unifiedApiClient.get(`/api/finance/reconciliation/${company}`, { params })
+    return response.data
+  },
+
+  // OCR
+  processOCR: async (formData: FormData) => {
+    const response = await unifiedApiClient.post('/api/finance/ocr/process', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    return response.data
+  },
+
+  // Config
+  getCompanies: async () => {
+    const response = await unifiedApiClient.get('/api/finance/config/companies')
+    return response.data
+  },
+
+  getTvaRates: async () => {
+    const response = await unifiedApiClient.get('/api/finance/config/tva')
+    return response.data
+  }
+}
+
+export { unifiedApiClient }
 export default apiClient

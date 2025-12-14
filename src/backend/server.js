@@ -1,23 +1,42 @@
 /**
- * Serveur Unifié Directus - Sans conflit avec Twenty
+ * Serveur Unifié Directus - ES Modules
  * Port 3000 : Dashboard unifié
  * Port 8055 : Directus CMS
+ *
+ * @version 2.0.0
+ * @author Claude Code
  */
 
-const express = require('express');
-const path = require('path');
-const axios = require('axios');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-require('dotenv').config();
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import axios from 'axios';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import dotenv from 'dotenv';
+
+// ES Modules: __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Charger les variables d'environnement
+dotenv.config();
 
 const app = express();
 const PORT = process.env.UNIFIED_PORT || 3000;
 
 // Configuration Directus
-const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
 
-console.log('🚀 Démarrage du serveur Directus Unifié...');
+console.log('🚀 Démarrage du serveur Directus Unifié (ES Modules)...');
+
+// ============================================
+// MIDDLEWARES GLOBAUX
+// ============================================
+
+// JSON body parser
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Middleware de logging
 app.use((req, res, next) => {
@@ -25,12 +44,61 @@ app.use((req, res, next) => {
   next();
 });
 
+// CORS simple
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// ============================================
+// API AUTHENTIFICATION
+// ============================================
+
+import authRoutes from './api/auth/auth.routes.js';
+import { authMiddleware, optionalAuth, flexibleAuth } from './middleware/auth.middleware.js';
+app.use('/api/auth', authRoutes);
+console.log('✅ API Auth connectée: /api/auth');
+
+// ============================================
+// API FINANCE - 80+ ENDPOINTS (Protected)
+// ============================================
+
+import financeRoutes from './api/finance/finance.routes.js';
+// Finance API uses flexible auth (JWT or API Key) - see finance.routes.js for route-specific auth
+app.use('/api/finance', financeRoutes);
+console.log('✅ API Finance connectée: /api/finance (80+ endpoints)');
+
+// ============================================
+// API LEGAL - RECOUVREMENT
+// ============================================
+
+import legalRoutes from './api/legal/legal.routes.js';
+app.use('/api/legal', legalRoutes);
+console.log('✅ API Legal connectée: /api/legal');
+
+// ============================================
+// API COLLECTION
+// ============================================
+
+import collectionRoutes from './api/collection/collection.routes.js';
+app.use('/api/collection', collectionRoutes);
+console.log('✅ API Collection connectée: /api/collection');
+
+// ============================================
+// PROXY DIRECTUS LEGACY
+// ============================================
+
 // Proxy simple vers Directus
 app.get('/api/directus/items/:collection', async (req, res) => {
   try {
     const response = await axios.get(
       `${DIRECTUS_URL}/items/${req.params.collection}`,
-      { 
+      {
         headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` },
         params: req.query
       }
@@ -42,14 +110,14 @@ app.get('/api/directus/items/:collection', async (req, res) => {
 });
 
 // Endpoint OCR pour scanner les factures
-app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, res) => {
+app.post('/api/ocr/scan-invoice', async (req, res) => {
   try {
-    const { image } = req.body; // Base64 image
-    
+    const { image } = req.body;
+
     if (!image) {
       return res.status(400).json({ error: 'Image requise' });
     }
-    
+
     // Appeler OpenAI Vision pour analyser l'image
     const openaiResponse = await axios.post(
       'https://api.openai.com/v1/chat/completions',
@@ -79,12 +147,10 @@ app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, r
         }
       }
     );
-    
-    // Parser la réponse
+
     const content = openaiResponse.data.choices[0].message.content;
     let extractedData;
     try {
-      // Extraire le JSON de la réponse
       const jsonMatch = content.match(/\{.*\}/s);
       extractedData = JSON.parse(jsonMatch ? jsonMatch[0] : '{}');
     } catch (e) {
@@ -95,7 +161,7 @@ app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, r
         invoice_number: 'SCAN-' + Date.now()
       };
     }
-    
+
     // Créer une facture draft dans Directus
     const invoiceData = {
       invoice_number: extractedData.invoice_number || 'SCAN-' + Date.now(),
@@ -107,8 +173,7 @@ app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, r
       ocr_extracted: true,
       ocr_data: JSON.stringify(extractedData)
     };
-    
-    // Sauvegarder dans Directus
+
     const directusResponse = await axios.post(
       `${DIRECTUS_URL}/items/client_invoices`,
       invoiceData,
@@ -116,24 +181,25 @@ app.post('/api/ocr/scan-invoice', express.json({ limit: '10mb' }), async (req, r
         headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` }
       }
     );
-    
+
     res.json({
       success: true,
       extracted: extractedData,
       invoice: directusResponse.data.data
     });
-    
+
   } catch (error) {
     console.error('Erreur OCR:', error.response?.data || error.message);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erreur lors du scan',
-      details: error.response?.data?.error?.message || error.message 
+      details: error.response?.data?.error?.message || error.message
     });
   }
 });
 
-// IMPORTANT : Servir les fichiers statiques EN PREMIER
-// pour éviter les conflits avec Twenty ou autres apps
+// ============================================
+// FICHIERS STATIQUES - PORTAILS FRONTEND
+// ============================================
 
 // 1. Dashboard SuperAdmin avec OCR
 app.use('/superadmin', express.static(path.join(__dirname, 'frontend/portals/superadmin'), {
@@ -147,7 +213,7 @@ app.use('/client', express.static(path.join(__dirname, 'frontend/portals/client'
   extensions: ['html']
 }));
 
-// 3. Portal Prestataire  
+// 3. Portal Prestataire
 app.use('/prestataire', express.static(path.join(__dirname, 'frontend/portals/prestataire'), {
   index: 'index.html',
   extensions: ['html']
@@ -166,7 +232,7 @@ app.use('/tabler', express.static(path.join(__dirname, 'frontend/shared/tabler')
 app.use('/dist', express.static(path.join(__dirname, 'frontend/shared/dist')));
 app.use('/static', express.static(path.join(__dirname, 'frontend/shared/static')));
 
-// 5b. Fichiers statiques à la racine (login.html, demo.html, etc)
+// 5b. Fichiers statiques à la racine
 app.get('/login.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/login.html'));
 });
@@ -188,7 +254,10 @@ app.get('/superadmin/test-moderne', (req, res) => {
 // Design System
 app.use('/design-system', express.static(path.join(__dirname, 'design-system')));
 
-// 6. Proxy vers Directus pour l'admin et l'API
+// ============================================
+// PROXY VERS DIRECTUS ADMIN ET API
+// ============================================
+
 app.use('/admin', createProxyMiddleware({
   target: 'http://localhost:8055',
   changeOrigin: true,
@@ -210,36 +279,80 @@ app.use('/graphql', createProxyMiddleware({
   changeOrigin: true
 }));
 
-// 7. API Revolut
-const revolutRouter = require('./api/revolut');
-app.use('/api/revolut', revolutRouter);
+// ============================================
+// LEGACY APIs (mautic, erpnext, revolut)
+// Note: Ces APIs utilisent encore CommonJS, conversion en cours
+// ============================================
 
-// 8. API ERPNext
-const erpnextRouter = require('./api/erpnext');
-app.use('/api/erpnext', erpnextRouter);
+// API Revolut - À convertir
+try {
+  const revolutRouter = await import('./api/revolut/index.js');
+  app.use('/api/revolut', revolutRouter.default);
+  console.log('✅ API Revolut connectée: /api/revolut');
+} catch (err) {
+  console.warn('⚠️ API Revolut non disponible:', err.message);
+}
 
-// 9. API Mautic
-const mauticRouter = require('./api/mautic/router');
-app.use('/api/mautic', mauticRouter);
+// API ERPNext - À convertir
+try {
+  const erpnextRouter = await import('./api/erpnext/index.js');
+  app.use('/api/erpnext', erpnextRouter.default);
+  console.log('✅ API ERPNext connectée: /api/erpnext');
+} catch (err) {
+  console.warn('⚠️ API ERPNext non disponible:', err.message);
+}
 
-// 10. API spéciale OCR
-app.post('/api/ocr/scan', async (req, res) => {
-  // Vérifier la config
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({
-      error: 'OCR non configuré',
-      message: 'Clé OpenAI manquante dans .env'
-    });
-  }
-  
+// API Mautic - À convertir
+try {
+  const mauticRouter = await import('./api/mautic/router.js');
+  app.use('/api/mautic', mauticRouter.default);
+  console.log('✅ API Mautic connectée: /api/mautic');
+} catch (err) {
+  console.warn('⚠️ API Mautic non disponible:', err.message);
+}
+
+// ============================================
+// API OCR STATUS
+// ============================================
+
+app.get('/api/ocr/status', (req, res) => {
   res.json({
-    status: 'ready',
-    message: 'OCR service ready',
-    model: process.env.OPENAI_MODEL
+    status: process.env.OPENAI_API_KEY ? 'ready' : 'not_configured',
+    message: process.env.OPENAI_API_KEY ? 'OCR service ready' : 'Clé OpenAI manquante',
+    model: process.env.OPENAI_MODEL || 'gpt-4-vision-preview'
   });
 });
 
-// 11. Page d'accueil moderne avec tous les portails
+// ============================================
+// HEALTH CHECK
+// ============================================
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    version: '2.0.0',
+    timestamp: new Date().toISOString(),
+    services: {
+      finance: 'ok',
+      legal: 'ok',
+      collection: 'ok',
+      directus: DIRECTUS_URL,
+      ocr: process.env.OPENAI_API_KEY ? 'ok' : 'not_configured'
+    },
+    endpoints: {
+      finance: '/api/finance (80+ endpoints)',
+      legal: '/api/legal',
+      collection: '/api/collection',
+      health: '/api/health'
+    }
+  });
+});
+
+// ============================================
+// PAGE D'ACCUEIL
+// ============================================
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/all-portals.html'));
 });
@@ -261,10 +374,10 @@ app.get('/old-home', (req, res) => {
         <div class="page-wrapper">
           <div class="container-xl">
             <div class="page-header mt-5">
-              <h1>🚀 Directus Unified Platform</h1>
-              <p class="text-muted">Plateforme unifiée avec 4 portails et OCR intégré</p>
+              <h1>🚀 Directus Unified Platform v2.0</h1>
+              <p class="text-muted">Plateforme unifiée avec 4 portails, Finance API et OCR intégré</p>
             </div>
-            
+
             <div class="row row-cards mt-4">
               <div class="col-md-3">
                 <div class="card">
@@ -276,7 +389,7 @@ app.get('/old-home', (req, res) => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-3">
                 <div class="card">
                   <div class="card-status-top bg-success"></div>
@@ -287,7 +400,7 @@ app.get('/old-home', (req, res) => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-3">
                 <div class="card">
                   <div class="card-status-top bg-info"></div>
@@ -298,7 +411,7 @@ app.get('/old-home', (req, res) => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="col-md-3">
                 <div class="card">
                   <div class="card-status-top bg-warning"></div>
@@ -310,14 +423,16 @@ app.get('/old-home', (req, res) => {
                 </div>
               </div>
             </div>
-            
+
             <div class="row mt-4">
               <div class="col-12">
                 <div class="card">
                   <div class="card-body">
                     <h3>🛠️ Administration</h3>
-                    <div class="d-flex gap-2 align-items-center">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
                       <a href="http://localhost:8055/admin" target="_blank" class="btn btn-secondary">⚙️ Directus Admin</a>
+                      <a href="/api/finance/health" target="_blank" class="btn btn-outline-primary">💰 Finance API</a>
+                      <a href="/api/health" target="_blank" class="btn btn-outline-info">📊 Health Check</a>
                       <span class="badge ${ocrStatus ? 'bg-success' : 'bg-danger'}">
                         OCR: ${ocrStatus ? '✅ Configuré' : '❌ Non configuré'}
                       </span>
@@ -327,7 +442,7 @@ app.get('/old-home', (req, res) => {
                 </div>
               </div>
             </div>
-            
+
             <div class="row mt-4">
               <div class="col-12">
                 <div class="card">
@@ -337,6 +452,7 @@ app.get('/old-home', (req, res) => {
                       <li>Base de données : PostgreSQL ✅</li>
                       <li>Cache : Redis ✅</li>
                       <li>CMS : Directus ✅</li>
+                      <li>API Finance : 80+ endpoints ✅</li>
                       <li>OCR : OpenAI GPT-4o-mini ${ocrStatus ? '✅' : '❌'}</li>
                       <li>Collections : 51 avec schéma ✅</li>
                       <li>Relations : 96/105 ✅</li>
@@ -353,49 +469,69 @@ app.get('/old-home', (req, res) => {
   `);
 });
 
-// 12. Gestion des erreurs 404
+// ============================================
+// 404 HANDLER
+// ============================================
+
 app.use((req, res) => {
   console.log(`⚠️ 404: ${req.url}`);
-  res.status(404).send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>404 - Page non trouvée</title>
-      <link rel="stylesheet" href="https://unpkg.com/@tabler/core@latest/dist/css/tabler.min.css">
-    </head>
-    <body>
-      <div class="page">
-        <div class="container-xl">
-          <h1>404 - Page non trouvée</h1>
-          <p>URL demandée : ${req.url}</p>
-          <a href="/" class="btn btn-primary">Retour à l'accueil</a>
-        </div>
-      </div>
-    </body>
-    </html>
-  `);
+  res.status(404).json({
+    success: false,
+    error: 'Not Found',
+    path: req.url,
+    available_apis: [
+      '/api/finance - Finance API (80+ endpoints)',
+      '/api/legal - Legal & Collection API',
+      '/api/collection - Collection API',
+      '/api/health - Health Check'
+    ]
+  });
 });
 
-// Démarrer le serveur
+// ============================================
+// ERROR HANDLER
+// ============================================
+
+app.use((err, req, res, next) => {
+  console.error('❌ Server Error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal Server Error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
+});
+
+// ============================================
+// START SERVER
+// ============================================
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
-✅ Serveur Directus Unifié démarré !
-====================================
-🏠 Page d'accueil    : http://localhost:${PORT}
-👨‍💼 SuperAdmin + OCR : http://localhost:${PORT}/superadmin
-👥 Portal Client     : http://localhost:${PORT}/client
-🔧 Portal Prestataire: http://localhost:${PORT}/prestataire
-🏪 Portal Revendeur  : http://localhost:${PORT}/revendeur
-⚙️ Directus Admin    : http://localhost:8055/admin
+✅ Serveur Directus Unifié v2.0 démarré !
+==========================================
+🏠 Page d'accueil     : http://localhost:${PORT}
+👨‍💼 SuperAdmin + OCR  : http://localhost:${PORT}/superadmin
+👥 Portal Client      : http://localhost:${PORT}/client
+🔧 Portal Prestataire : http://localhost:${PORT}/prestataire
+🏪 Portal Revendeur   : http://localhost:${PORT}/revendeur
+⚙️ Directus Admin     : http://localhost:8055/admin
+
+💰 Finance API        : http://localhost:${PORT}/api/finance
+📋 Legal API          : http://localhost:${PORT}/api/legal
+📊 Health Check       : http://localhost:${PORT}/api/health
 
 📊 Statut:
 - OCR OpenAI : ${process.env.OPENAI_API_KEY ? '✅ Configuré' : '❌ Manquant'}
 - Port       : ${PORT}
 - PID        : ${process.pid}
+- Mode       : ES Modules
   `);
 });
 
-// Gestion propre de l'arrêt
+// ============================================
+// GRACEFUL SHUTDOWN
+// ============================================
+
 process.on('SIGTERM', () => {
   console.log('🛑 Arrêt du serveur...');
   process.exit(0);

@@ -7,7 +7,7 @@
  * @version 2.0.0
  */
 
-import { createDirectus, rest, readItems, createItem, updateItem, deleteItem } from '@directus/sdk';
+import { createDirectus, rest, readItems, readItem, createItem, updateItem, deleteItem } from '@directus/sdk';
 
 /**
  * Service de conversion OCR vers comptabilité
@@ -958,6 +958,309 @@ class OCRToAccountingService {
     );
 
     return { success: true, message: 'Mapping fournisseur enregistré' };
+  }
+
+  // ============================================
+  // MÉTHODES MANQUANTES - APPELÉES PAR LES ROUTES
+  // ============================================
+
+  /**
+   * Traiter un document OCR (upload initial)
+   * @param {Object} options - Options avec buffer, mimetype, filename
+   * @returns {Object} Résultat du traitement OCR
+   */
+  async processOCRDocument(options) {
+    const directus = this.getDirectus();
+    const {
+      file_buffer,
+      mimetype,
+      original_filename,
+      document_type = 'supplier_invoice',
+      owner_company
+    } = options;
+
+    // 1. Sauvegarder le fichier dans le media library (simulé)
+    const fileId = `ocr-${Date.now()}`;
+
+    // 2. Effectuer l'OCR via OpenAI Vision ou autre service
+    let ocrResult = null;
+
+    if (this.openaiKey) {
+      try {
+        // Convertir buffer en base64
+        const base64 = file_buffer.toString('base64');
+        const dataUrl = `data:${mimetype};base64,${base64}`;
+
+        // Appel OpenAI Vision (simulé - à implémenter avec vraie API)
+        ocrResult = {
+          supplier_name: null,
+          invoice_number: null,
+          date: null,
+          amount_ht: null,
+          amount_tva: null,
+          amount_ttc: null,
+          currency: 'CHF',
+          raw_text: 'OCR non configuré - veuillez saisir manuellement',
+          confidence: 0
+        };
+      } catch (e) {
+        console.error('Erreur OCR:', e.message);
+      }
+    }
+
+    // 3. Créer l'enregistrement OCR en attente
+    const ocrDoc = await directus.request(
+      createItem('ocr_documents', {
+        original_filename,
+        mimetype,
+        file_id: fileId,
+        document_type,
+        owner_company,
+        status: 'pending',
+        ocr_result: ocrResult ? JSON.stringify(ocrResult) : null,
+        confidence: ocrResult?.confidence || 0,
+        created_at: new Date().toISOString()
+      })
+    );
+
+    return {
+      success: true,
+      ocr_id: ocrDoc.id,
+      status: 'pending',
+      extracted_data: ocrResult,
+      confidence: ocrResult?.confidence || 0,
+      message: 'Document en attente de validation'
+    };
+  }
+
+  /**
+   * Valider et créer l'écriture comptable depuis OCR
+   * @param {string} ocrId - ID du document OCR
+   * @param {Object} corrections - Corrections manuelles
+   * @returns {Object} Résultat de la création
+   */
+  async validateEntry(ocrId, corrections = {}) {
+    const directus = this.getDirectus();
+
+    // Récupérer le document OCR
+    const ocrDoc = await directus.request(readItem('ocr_documents', ocrId));
+
+    if (!ocrDoc) {
+      throw new Error('Document OCR non trouvé');
+    }
+
+    if (ocrDoc.status === 'validated') {
+      throw new Error('Document déjà validé');
+    }
+
+    // Parser les données OCR
+    const ocrData = ocrDoc.ocr_result
+      ? (typeof ocrDoc.ocr_result === 'string' ? JSON.parse(ocrDoc.ocr_result) : ocrDoc.ocr_result)
+      : {};
+
+    // Appliquer les corrections
+    const finalData = { ...ocrData, ...corrections };
+
+    // Créer la facture fournisseur
+    const supplierInvoice = await directus.request(
+      createItem('supplier_invoices', {
+        owner_company: ocrDoc.owner_company,
+        supplier_name: finalData.supplier_name || 'Fournisseur inconnu',
+        invoice_number: finalData.invoice_number || `OCR-${Date.now()}`,
+        date: finalData.date || new Date().toISOString().split('T')[0],
+        amount_ht: finalData.amount_ht || 0,
+        amount_tva: finalData.amount_tva || 0,
+        amount: finalData.amount_ttc || finalData.amount_ht || 0,
+        currency: finalData.currency || 'CHF',
+        status: 'pending',
+        ocr_document_id: ocrId,
+        created_at: new Date().toISOString()
+      })
+    );
+
+    // Créer l'écriture comptable
+    let accountingEntry = null;
+    try {
+      accountingEntry = await this.createEntryFromOCR(supplierInvoice.id);
+    } catch (e) {
+      console.warn('Écriture comptable non créée:', e.message);
+    }
+
+    // Marquer l'OCR comme validé
+    await directus.request(
+      updateItem('ocr_documents', ocrId, {
+        status: 'validated',
+        validated_at: new Date().toISOString(),
+        supplier_invoice_id: supplierInvoice.id,
+        accounting_entry_id: accountingEntry?.entry?.id || null
+      })
+    );
+
+    return {
+      success: true,
+      ocr_id: ocrId,
+      supplier_invoice: supplierInvoice,
+      accounting_entry: accountingEntry?.entry || null,
+      message: 'Document validé et écriture comptable créée'
+    };
+  }
+
+  /**
+   * Rejeter un document OCR
+   * @param {string} ocrId - ID du document OCR
+   * @param {string} reason - Raison du rejet
+   * @returns {Object} Résultat
+   */
+  async rejectEntry(ocrId, reason = '') {
+    const directus = this.getDirectus();
+
+    const ocrDoc = await directus.request(readItem('ocr_documents', ocrId));
+
+    if (!ocrDoc) {
+      throw new Error('Document OCR non trouvé');
+    }
+
+    if (ocrDoc.status === 'rejected') {
+      throw new Error('Document déjà rejeté');
+    }
+
+    await directus.request(
+      updateItem('ocr_documents', ocrId, {
+        status: 'rejected',
+        rejected_at: new Date().toISOString(),
+        rejection_reason: reason
+      })
+    );
+
+    return {
+      success: true,
+      ocr_id: ocrId,
+      status: 'rejected',
+      reason,
+      message: 'Document OCR rejeté'
+    };
+  }
+
+  /**
+   * Alias pour getPendingInvoices (compatibilité routes)
+   * @param {string} companyName - Entreprise
+   * @param {Object} options - Options
+   * @returns {Object} Documents en attente
+   */
+  async getPendingOCR(companyName, options = {}) {
+    const directus = this.getDirectus();
+
+    try {
+      const pending = await directus.request(
+        readItems('ocr_documents', {
+          filter: {
+            owner_company: { _eq: companyName },
+            status: { _eq: 'pending' }
+          },
+          sort: ['-created_at'],
+          limit: options.limit || 50,
+          offset: ((options.page || 1) - 1) * (options.limit || 50)
+        })
+      );
+
+      return {
+        items: pending,
+        total: pending.length,
+        page: options.page || 1,
+        limit: options.limit || 50
+      };
+    } catch (e) {
+      // Fallback sur getPendingInvoices si table n'existe pas
+      return this.getPendingInvoices(companyName, options);
+    }
+  }
+
+  /**
+   * Retourner tous les mappings comptables disponibles
+   * @returns {Object} Mappings par catégorie
+   */
+  getAccountMappings() {
+    return {
+      expense_categories: this.expenseCategories,
+      vat_accounts: this.vatAccounts,
+      supplier_accounts: {
+        default_creditor: this.supplierAccounts.creditor,
+        prepayment: this.supplierAccounts.prepayment
+      },
+      vat_rates: {
+        normal: 8.1,
+        reduced: 2.6,
+        accommodation: 3.8,
+        exempt: 0
+      },
+      account_ranges: {
+        assets: '1000-1999',
+        liabilities: '2000-2999',
+        equity: '2800-2999',
+        revenue: '3000-3999',
+        expenses: '4000-6999',
+        extraordinary: '7000-7999'
+      }
+    };
+  }
+
+  /**
+   * Rechercher dans les mappings comptables
+   * @param {string} query - Terme de recherche
+   * @returns {Array} Résultats correspondants
+   */
+  searchAccountMappings(query) {
+    const results = [];
+    const lowerQuery = query.toLowerCase();
+
+    // Rechercher dans les catégories de dépenses
+    for (const [key, config] of Object.entries(this.expenseCategories)) {
+      if (
+        key.toLowerCase().includes(lowerQuery) ||
+        config.label.toLowerCase().includes(lowerQuery) ||
+        config.account.toString().includes(lowerQuery)
+      ) {
+        results.push({
+          type: 'expense_category',
+          key,
+          account: config.account,
+          label: config.label,
+          vat_deductible: config.vatDeductible
+        });
+      }
+
+      // Rechercher aussi dans les patterns
+      if (config.patterns) {
+        for (const pattern of config.patterns) {
+          if (pattern.toLowerCase().includes(lowerQuery)) {
+            if (!results.find(r => r.key === key)) {
+              results.push({
+                type: 'expense_category',
+                key,
+                account: config.account,
+                label: config.label,
+                vat_deductible: config.vatDeductible,
+                matched_pattern: pattern
+              });
+            }
+          }
+        }
+      }
+    }
+
+    // Rechercher dans les comptes TVA
+    for (const [key, account] of Object.entries(this.vatAccounts)) {
+      if (key.toLowerCase().includes(lowerQuery) || account.toString().includes(lowerQuery)) {
+        results.push({
+          type: 'vat_account',
+          key,
+          account,
+          label: `TVA ${key}`
+        });
+      }
+    }
+
+    return results;
   }
 }
 

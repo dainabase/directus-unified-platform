@@ -95,14 +95,145 @@ import { unifiedInvoiceService } from '../../services/finance/unified-invoice.se
 import { pdfGeneratorService } from '../../services/finance/pdf-generator.service.js';
 import { bankReconciliationService } from '../../services/finance/bank-reconciliation.service.js';
 import { ocrToAccountingService } from '../../services/finance/ocr-to-accounting.service.js';
+import { companyConfigService } from '../../services/finance/company-config.service.js';
+
+// Authentication middleware
+import {
+  authMiddleware,
+  optionalAuth,
+  flexibleAuth,
+  companyAccess,
+  requireRole,
+  requirePermission
+} from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
+
+/**
+ * Async handler wrapper for error handling
+ */
+const asyncHandler = (fn) => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+// ============================================
+// PUBLIC ENDPOINTS (No auth required)
+// ============================================
+
+/**
+ * Health check - public endpoint
+ */
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    version: '2.0.0',
+    timestamp: new Date().toISOString(),
+    services: {
+      dashboard: 'ok',
+      invoice: 'ok',
+      pdf: 'ok',
+      reconciliation: 'ok',
+      ocr: 'ok'
+    },
+    auth: {
+      required: true,
+      methods: ['JWT Bearer Token', 'API Key (X-API-Key header)']
+    }
+  });
+});
+
+// ============================================
+// AUTH CONFIGURATION FOR FINANCE API
+// ============================================
+// All routes after this point require authentication
+// Read routes: require 'finance.read' or company access
+// Write routes: require 'finance.write' or company access
+
+// Apply flexible auth (JWT or API Key) to all subsequent routes
+router.use(flexibleAuth);
+
+// ============================================
+// CONFIG MANAGEMENT ENDPOINTS
+// ============================================
+
+/**
+ * GET /api/finance/config/companies
+ * List all company configurations
+ */
+router.get('/config/companies', asyncHandler(async (req, res) => {
+  const companies = await companyConfigService.getCompanyList();
+  res.json({ success: true, companies });
+}));
+
+/**
+ * GET /api/finance/config/companies/:code
+ * Get specific company configuration
+ */
+router.get('/config/companies/:code', asyncHandler(async (req, res) => {
+  const company = await companyConfigService.getCompanyConfig(req.params.code);
+  res.json({ success: true, company });
+}));
+
+/**
+ * PUT /api/finance/config/companies/:code
+ * Update company configuration (admin only)
+ */
+router.put('/config/companies/:code', requireRole(['admin', 'superadmin']), asyncHandler(async (req, res) => {
+  const company = await companyConfigService.updateCompanyConfig(req.params.code, req.body);
+  res.json({ success: true, company, message: 'Configuration mise a jour' });
+}));
+
+/**
+ * POST /api/finance/config/sync
+ * Sync fallback companies to database (admin only)
+ */
+router.post('/config/sync', requireRole(['admin', 'superadmin']), asyncHandler(async (req, res) => {
+  const results = await companyConfigService.syncFallbackToDatabase();
+  res.json({ success: true, ...results, message: 'Synchronisation terminee' });
+}));
+
+/**
+ * GET /api/finance/config/tva
+ * Get TVA rates
+ */
+router.get('/config/tva', asyncHandler(async (req, res) => {
+  const rates = await companyConfigService.getTvaRates();
+  res.json({ success: true, rates });
+}));
+
+/**
+ * GET /api/finance/config/exchange-rates
+ * Get exchange rates
+ */
+router.get('/config/exchange-rates', asyncHandler(async (req, res) => {
+  const rates = await companyConfigService.getExchangeRates();
+  res.json({ success: true, rates });
+}));
+
+/**
+ * GET /api/finance/config/thresholds
+ * Get alert thresholds
+ */
+router.get('/config/thresholds', asyncHandler(async (req, res) => {
+  const thresholds = await companyConfigService.getAlertThresholds();
+  res.json({ success: true, thresholds });
+}));
+
+/**
+ * POST /api/finance/config/cache/clear
+ * Clear config cache (admin only)
+ */
+router.post('/config/cache/clear', requireRole(['admin', 'superadmin']), (req, res) => {
+  companyConfigService.clearCache();
+  res.json({ success: true, message: 'Cache vide' });
+});
 
 // ============================================
 // CONFIGURATION
 // ============================================
 
-// Entreprises valides
+// Entreprises valides (loaded from config service)
 const VALID_COMPANIES = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'TAKEOUT'];
 
 // Configuration Multer pour upload fichiers
@@ -158,13 +289,6 @@ const validateCompany = (req, res, next) => {
 
   req.company = normalizedCompany;
   next();
-};
-
-/**
- * Gestion erreurs async
- */
-const asyncHandler = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch(next);
 };
 
 /**
@@ -1591,26 +1715,6 @@ router.get('/companies', (req, res) => {
   res.json({
     success: true,
     data: companies
-  });
-});
-
-/**
- * GET /api/finance/health
- * Health check de l'API Finance
- */
-router.get('/health', (req, res) => {
-  res.json({
-    success: true,
-    status: 'healthy',
-    version: '2.0.0',
-    timestamp: new Date().toISOString(),
-    services: {
-      dashboard: 'ok',
-      invoice: 'ok',
-      pdf: 'ok',
-      reconciliation: 'ok',
-      ocr: 'ok'
-    }
   });
 });
 

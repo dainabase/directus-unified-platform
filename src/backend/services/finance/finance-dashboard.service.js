@@ -7,7 +7,7 @@
  * @author Claude Code
  */
 
-import { createDirectus, rest, readItems, aggregate } from '@directus/sdk';
+import { createDirectus, rest, readItems } from '@directus/sdk';
 
 // Configuration des 5 entreprises
 const COMPANIES = {

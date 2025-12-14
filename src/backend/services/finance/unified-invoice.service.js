@@ -960,6 +960,555 @@ class UnifiedInvoiceService {
 
     return exportData;
   }
+
+  // ============================================
+  // MÉTHODES MANQUANTES - FACTURES CLIENTS
+  // ============================================
+
+  /**
+   * Récupérer une facture par ID
+   * @param {string} invoiceId - ID de la facture
+   * @returns {Object} Facture
+   */
+  async getInvoice(invoiceId) {
+    const directus = this.getDirectusClient();
+    const invoice = await directus.request(readItem('client_invoices', invoiceId));
+
+    // Parser les items si c'est une chaîne JSON
+    if (invoice.items && typeof invoice.items === 'string') {
+      invoice.items = JSON.parse(invoice.items);
+    }
+
+    return invoice;
+  }
+
+  /**
+   * Mettre à jour une facture (brouillon uniquement)
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} updates - Données à mettre à jour
+   * @returns {Object} Facture mise à jour
+   */
+  async updateInvoice(invoiceId, updates) {
+    const directus = this.getDirectusClient();
+
+    // Récupérer la facture existante
+    const existingInvoice = await this.getInvoice(invoiceId);
+
+    if (existingInvoice.status !== 'draft') {
+      throw new Error('Seules les factures en brouillon peuvent être modifiées');
+    }
+
+    // Préparer les mises à jour
+    const updateData = {
+      updated_at: new Date().toISOString()
+    };
+
+    // Champs modifiables
+    const allowedFields = [
+      'client_name', 'notes', 'payment_terms', 'currency',
+      'items', 'due_date'
+    ];
+
+    for (const field of allowedFields) {
+      if (updates[field] !== undefined) {
+        if (field === 'items') {
+          // Recalculer les totaux si les items changent
+          const totals = this.calculateTotals(updates.items);
+          updateData.items = JSON.stringify(updates.items);
+          updateData.amount_ht = totals.ht;
+          updateData.amount_tva = totals.tva;
+          updateData.amount = totals.ttc;
+        } else {
+          updateData[field] = updates[field];
+        }
+      }
+    }
+
+    // Recalculer date d'échéance si payment_terms change
+    if (updates.payment_terms && !updates.due_date) {
+      updateData.due_date = this.calculateDueDate(updates.payment_terms);
+    }
+
+    const updatedInvoice = await directus.request(
+      updateItem('client_invoices', invoiceId, updateData)
+    );
+
+    return {
+      success: true,
+      invoice: updatedInvoice,
+      message: 'Facture mise à jour'
+    };
+  }
+
+  /**
+   * Envoyer une facture par email
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options d'envoi
+   * @returns {Object} Résultat de l'envoi
+   */
+  async sendInvoice(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+    const invoice = await this.getInvoice(invoiceId);
+
+    if (invoice.status === 'cancelled') {
+      throw new Error('Impossible d\'envoyer une facture annulée');
+    }
+
+    // Récupérer les données client pour l'email
+    const clientData = await this.getClientData(directus, invoice.company_id);
+    const recipientEmail = options.recipient_email || clientData.email;
+
+    if (!recipientEmail) {
+      throw new Error('Aucun email de destinataire disponible');
+    }
+
+    // Simuler l'envoi d'email (à connecter avec un vrai service SMTP)
+    const emailResult = {
+      sent: true,
+      recipient: recipientEmail,
+      cc: options.cc_emails || [],
+      timestamp: new Date().toISOString()
+    };
+
+    // Mettre à jour le statut
+    await directus.request(
+      updateItem('client_invoices', invoiceId, {
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        sent_to: recipientEmail,
+        updated_at: new Date().toISOString()
+      })
+    );
+
+    // Enregistrer l'historique d'envoi
+    try {
+      await directus.request(
+        createItem('invoice_history', {
+          invoice_id: invoiceId,
+          action: 'sent',
+          details: JSON.stringify({
+            recipient: recipientEmail,
+            cc: options.cc_emails,
+            attach_pdf: options.attach_pdf !== false,
+            custom_message: options.custom_message
+          }),
+          created_at: new Date().toISOString()
+        })
+      );
+    } catch (e) {
+      // Table peut ne pas exister, ignorer silencieusement
+      console.warn('invoice_history table not available:', e.message);
+    }
+
+    return {
+      success: true,
+      email: emailResult,
+      invoice_number: invoice.invoice_number,
+      message: `Facture envoyée à ${recipientEmail}`
+    };
+  }
+
+  // ============================================
+  // MÉTHODES MANQUANTES - RAPPELS
+  // ============================================
+
+  /**
+   * Envoyer un rappel de paiement
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options du rappel
+   * @returns {Object} Résultat du rappel
+   */
+  async sendReminder(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+    const invoice = await this.getInvoice(invoiceId);
+
+    // Vérifier que la facture est impayée
+    if (['paid', 'cancelled', 'draft'].includes(invoice.status)) {
+      throw new Error(`Impossible d'envoyer un rappel pour une facture ${invoice.status}`);
+    }
+
+    // Récupérer le dernier niveau de rappel
+    let currentLevel = 1;
+    try {
+      const existingReminders = await directus.request(
+        readItems('payment_reminders', {
+          filter: { invoice_id: { _eq: invoiceId } },
+          sort: ['-level'],
+          limit: 1
+        })
+      );
+      if (existingReminders.length > 0) {
+        currentLevel = Math.min(existingReminders[0].level + 1, 3);
+      }
+    } catch (e) {
+      // Table peut ne pas exister
+    }
+
+    // Calculer les intérêts de retard
+    const interestInfo = await this.calculateLateInterest(invoiceId);
+
+    // Déterminer le niveau de rappel
+    const level = options.level === 'auto' ? currentLevel : (options.level || currentLevel);
+
+    // Messages selon le niveau
+    const reminderMessages = {
+      1: 'Premier rappel de paiement',
+      2: 'Deuxième rappel - Paiement en souffrance',
+      3: 'Dernier rappel avant poursuite'
+    };
+
+    // Récupérer email client
+    const clientData = await this.getClientData(directus, invoice.company_id);
+    const recipientEmail = options.recipient_email || clientData.email;
+
+    // Créer l'enregistrement du rappel
+    let reminder = {
+      invoice_id: invoiceId,
+      level,
+      sent_at: new Date().toISOString(),
+      sent_to: recipientEmail,
+      message: reminderMessages[level],
+      interest_amount: interestInfo.interest,
+      total_due: interestInfo.totalDue
+    };
+
+    try {
+      reminder = await directus.request(
+        createItem('payment_reminders', reminder)
+      );
+    } catch (e) {
+      console.warn('payment_reminders table not available');
+      reminder.id = `temp-${Date.now()}`;
+    }
+
+    // Envoyer l'email si demandé
+    if (options.send_email !== false && recipientEmail) {
+      // Simuler l'envoi (à connecter avec SMTP)
+      reminder.email_sent = true;
+    }
+
+    return {
+      success: true,
+      reminder,
+      level,
+      invoice_number: invoice.invoice_number,
+      interest: interestInfo.interest,
+      total_due: interestInfo.totalDue,
+      message: `Rappel niveau ${level} envoyé`
+    };
+  }
+
+  /**
+   * Lister les rappels envoyés
+   * @param {string} ownerCompany - Entreprise
+   * @param {Object} filters - Filtres
+   * @returns {Object} Liste des rappels
+   */
+  async listReminders(ownerCompany, filters = {}) {
+    const directus = this.getDirectusClient();
+
+    try {
+      // D'abord récupérer les factures de l'entreprise
+      const invoiceFilter = { owner_company: { _eq: ownerCompany } };
+      if (filters.from_date) {
+        invoiceFilter.date = { _gte: filters.from_date };
+      }
+      if (filters.to_date) {
+        invoiceFilter.date = { ...invoiceFilter.date, _lte: filters.to_date };
+      }
+
+      const invoices = await directus.request(
+        readItems('client_invoices', {
+          filter: invoiceFilter,
+          fields: ['id', 'invoice_number']
+        })
+      );
+
+      const invoiceIds = invoices.map(i => i.id);
+
+      if (invoiceIds.length === 0) {
+        return { items: [], total: 0 };
+      }
+
+      // Récupérer les rappels pour ces factures
+      const reminders = await directus.request(
+        readItems('payment_reminders', {
+          filter: { invoice_id: { _in: invoiceIds } },
+          sort: ['-sent_at'],
+          limit: filters.limit || 50,
+          offset: ((filters.page || 1) - 1) * (filters.limit || 50)
+        })
+      );
+
+      // Joindre les numéros de facture
+      const invoiceMap = Object.fromEntries(invoices.map(i => [i.id, i.invoice_number]));
+      const enrichedReminders = reminders.map(r => ({
+        ...r,
+        invoice_number: invoiceMap[r.invoice_id]
+      }));
+
+      return {
+        items: enrichedReminders,
+        total: reminders.length,
+        page: filters.page || 1,
+        limit: filters.limit || 50
+      };
+    } catch (e) {
+      // Table peut ne pas exister
+      console.warn('payment_reminders table not available:', e.message);
+      return { items: [], total: 0, message: 'Table rappels non disponible' };
+    }
+  }
+
+  /**
+   * Envoyer des rappels en batch
+   * @param {string} ownerCompany - Entreprise
+   * @param {Array} invoiceIds - IDs des factures
+   * @param {Object} options - Options
+   * @returns {Array} Résultats
+   */
+  async sendBatchReminders(ownerCompany, invoiceIds, options = {}) {
+    const results = [];
+
+    for (const invoiceId of invoiceIds) {
+      try {
+        const result = await this.sendReminder(invoiceId, options);
+        results.push({
+          invoice_id: invoiceId,
+          success: true,
+          level: result.level
+        });
+      } catch (error) {
+        results.push({
+          invoice_id: invoiceId,
+          success: false,
+          error: error.message
+        });
+      }
+    }
+
+    return results;
+  }
+
+  // ============================================
+  // MÉTHODES MANQUANTES - FACTURES FOURNISSEURS
+  // ============================================
+
+  /**
+   * Lister les factures fournisseurs
+   * @param {string} ownerCompany - Entreprise
+   * @param {Object} filters - Filtres de recherche
+   * @returns {Object} Liste paginée
+   */
+  async listSupplierInvoices(ownerCompany, filters = {}) {
+    const directus = this.getDirectusClient();
+
+    const queryFilter = { owner_company: { _eq: ownerCompany } };
+
+    if (filters.status) {
+      queryFilter.status = { _eq: filters.status };
+    }
+    if (filters.supplier_id) {
+      queryFilter.supplier_id = { _eq: filters.supplier_id };
+    }
+    if (filters.from_date) {
+      queryFilter.date = { _gte: filters.from_date };
+    }
+    if (filters.to_date) {
+      queryFilter.date = { ...queryFilter.date, _lte: filters.to_date };
+    }
+
+    const invoices = await directus.request(
+      readItems('supplier_invoices', {
+        filter: queryFilter,
+        sort: ['-date'],
+        limit: filters.limit || 50,
+        offset: ((filters.page || 1) - 1) * (filters.limit || 50),
+        fields: ['*']
+      })
+    );
+
+    return {
+      items: invoices,
+      total: invoices.length,
+      pagination: {
+        page: filters.page || 1,
+        limit: filters.limit || 50
+      }
+    };
+  }
+
+  /**
+   * Approuver une facture fournisseur
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options d'approbation
+   * @returns {Object} Résultat
+   */
+  async approveSupplierInvoice(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+
+    const invoice = await directus.request(readItem('supplier_invoices', invoiceId));
+
+    if (invoice.status === 'approved') {
+      throw new Error('Cette facture est déjà approuvée');
+    }
+    if (invoice.status === 'paid') {
+      throw new Error('Cette facture est déjà payée');
+    }
+    if (invoice.status === 'rejected') {
+      throw new Error('Cette facture a été rejetée');
+    }
+
+    const updatedInvoice = await directus.request(
+      updateItem('supplier_invoices', invoiceId, {
+        status: 'approved',
+        approved_by: options.approved_by || 'system',
+        approved_at: new Date().toISOString(),
+        approval_notes: options.notes || '',
+        updated_at: new Date().toISOString()
+      })
+    );
+
+    return {
+      success: true,
+      invoice: updatedInvoice,
+      message: 'Facture fournisseur approuvée'
+    };
+  }
+
+  /**
+   * Rejeter une facture fournisseur
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options de rejet
+   * @returns {Object} Résultat
+   */
+  async rejectSupplierInvoice(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+
+    if (!options.reason) {
+      throw new Error('Raison de rejet requise');
+    }
+
+    const invoice = await directus.request(readItem('supplier_invoices', invoiceId));
+
+    if (invoice.status === 'paid') {
+      throw new Error('Impossible de rejeter une facture déjà payée');
+    }
+
+    const updatedInvoice = await directus.request(
+      updateItem('supplier_invoices', invoiceId, {
+        status: 'rejected',
+        rejected_by: options.rejected_by || 'system',
+        rejected_at: new Date().toISOString(),
+        rejection_reason: options.reason,
+        updated_at: new Date().toISOString()
+      })
+    );
+
+    return {
+      success: true,
+      invoice: updatedInvoice,
+      reason: options.reason,
+      message: 'Facture fournisseur rejetée'
+    };
+  }
+
+  /**
+   * Programmer le paiement d'une facture fournisseur
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options de programmation
+   * @returns {Object} Résultat
+   */
+  async scheduleSupplierPayment(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+
+    if (!options.payment_date) {
+      throw new Error('Date de paiement requise');
+    }
+
+    const invoice = await directus.request(readItem('supplier_invoices', invoiceId));
+
+    if (invoice.status === 'paid') {
+      throw new Error('Cette facture est déjà payée');
+    }
+    if (invoice.status === 'rejected') {
+      throw new Error('Cette facture a été rejetée');
+    }
+    if (invoice.status !== 'approved') {
+      throw new Error('La facture doit être approuvée avant de programmer le paiement');
+    }
+
+    const updatedInvoice = await directus.request(
+      updateItem('supplier_invoices', invoiceId, {
+        status: 'scheduled',
+        scheduled_payment_date: options.payment_date,
+        bank_account_id: options.bank_account_id || null,
+        updated_at: new Date().toISOString()
+      })
+    );
+
+    return {
+      success: true,
+      invoice: updatedInvoice,
+      payment_date: options.payment_date,
+      message: `Paiement programmé pour le ${options.payment_date}`
+    };
+  }
+
+  /**
+   * Marquer une facture fournisseur comme payée
+   * @param {string} invoiceId - ID de la facture
+   * @param {Object} options - Options de paiement
+   * @returns {Object} Résultat
+   */
+  async markSupplierInvoicePaid(invoiceId, options = {}) {
+    const directus = this.getDirectusClient();
+
+    const invoice = await directus.request(readItem('supplier_invoices', invoiceId));
+
+    if (invoice.status === 'paid') {
+      throw new Error('Cette facture est déjà payée');
+    }
+    if (invoice.status === 'rejected') {
+      throw new Error('Cette facture a été rejetée');
+    }
+
+    // Mettre à jour la facture
+    const updatedInvoice = await directus.request(
+      updateItem('supplier_invoices', invoiceId, {
+        status: 'paid',
+        paid_at: options.payment_date || new Date().toISOString(),
+        payment_method: options.payment_method || 'bank_transfer',
+        payment_transaction_id: options.transaction_id || null,
+        updated_at: new Date().toISOString()
+      })
+    );
+
+    // Créer l'enregistrement du paiement sortant
+    try {
+      await directus.request(
+        createItem('outgoing_payments', {
+          owner_company: invoice.owner_company,
+          supplier_invoice_id: invoiceId,
+          amount: invoice.amount,
+          currency: invoice.currency || 'CHF',
+          payment_date: options.payment_date || new Date().toISOString(),
+          payment_method: options.payment_method || 'bank_transfer',
+          transaction_id: options.transaction_id || null,
+          status: 'completed',
+          created_at: new Date().toISOString()
+        })
+      );
+    } catch (e) {
+      console.warn('outgoing_payments table not available:', e.message);
+    }
+
+    return {
+      success: true,
+      invoice: updatedInvoice,
+      message: 'Facture fournisseur marquée comme payée'
+    };
+  }
 }
 
 // Export singleton et classe

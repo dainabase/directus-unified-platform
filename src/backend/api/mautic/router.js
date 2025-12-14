@@ -1,7 +1,14 @@
-const express = require('express');
+/**
+ * Mautic Router - ES Modules
+ * Routes API pour l'integration Mautic
+ * @version 2.0.0
+ */
+
+import express from 'express';
+import MauticAPI from './index.js';
+import { createDirectus, rest, authentication, readItems, updateItem } from '@directus/sdk';
+
 const router = express.Router();
-const MauticAPI = require('./index');
-const { Directus } = require('@directus/sdk');
 
 // Initialiser Mautic API
 const mautic = new MauticAPI({
@@ -10,8 +17,10 @@ const mautic = new MauticAPI({
   password: process.env.MAUTIC_PASSWORD || 'Admin@Mautic2025'
 });
 
-// Initialiser Directus
-const directus = new Directus('http://localhost:8055');
+// Initialiser Directus SDK v17
+const directus = createDirectus(process.env.DIRECTUS_URL || 'http://localhost:8055')
+  .with(authentication())
+  .with(rest());
 
 // Synchroniser un contact
 router.post('/sync-contact', async (req, res) => {
@@ -23,7 +32,7 @@ router.post('/sync-contact', async (req, res) => {
   }
 });
 
-// Ajouter à une campagne
+// Ajouter a une campagne
 router.post('/add-to-campaign', async (req, res) => {
   try {
     const { contact_id, campaign_id } = req.body;
@@ -38,49 +47,52 @@ router.post('/add-to-campaign', async (req, res) => {
 router.post('/bulk-import', async (req, res) => {
   try {
     const { filter } = req.body;
-    
+
     // Authentifier avec Directus
-    await directus.auth.static(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
-    
-    // Construire la requête selon le filtre
-    let query = { limit: -1 };
-    
+    directus.setToken(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
+
+    // Construire la requete selon le filtre
+    let queryFilter = {};
+
     if (filter === 'new') {
-      query.filter = {
-        mautic_id: { _null: true }
-      };
+      queryFilter = { mautic_id: { _null: true } };
     } else if (filter === 'company') {
-      query.filter = {
-        company_id: req.body.company_id
-      };
+      queryFilter = { company_id: req.body.company_id };
     }
-    
-    // Récupérer les contacts depuis Directus
-    const contacts = await directus.items('contacts').readByQuery(query);
-    
+
+    // Recuperer les contacts depuis Directus
+    const contacts = await directus.request(
+      readItems('contacts', {
+        filter: queryFilter,
+        limit: -1
+      })
+    );
+
     // Importer dans Mautic
-    const result = await mautic.bulkImportContacts(contacts.data);
-    
-    // Mettre à jour les contacts avec leur ID Mautic
-    for (const contact of contacts.data) {
+    const result = await mautic.bulkImportContacts(contacts);
+
+    // Mettre a jour les contacts avec leur ID Mautic
+    for (const contact of contacts) {
       if (result.imported > 0) {
         try {
           const mauticContact = await mautic.api.get('/contacts', {
             params: { search: `email:${contact.email}` }
           });
-          
+
           if (mauticContact.data.total > 0) {
             const mauticId = Object.keys(mauticContact.data.contacts)[0];
-            await directus.items('contacts').updateOne(contact.id, {
-              mautic_id: mauticId
-            });
+            await directus.request(
+              updateItem('contacts', contact.id, {
+                mautic_id: mauticId
+              })
+            );
           }
         } catch (err) {
-          console.error('Erreur mise à jour contact:', err);
+          console.error('Erreur mise a jour contact:', err);
         }
       }
     }
-    
+
     res.json(result);
   } catch (error) {
     console.error('Erreur import en masse:', error);
@@ -88,7 +100,7 @@ router.post('/bulk-import', async (req, res) => {
   }
 });
 
-// Récupérer les statistiques
+// Recuperer les statistiques
 router.get('/stats', async (req, res) => {
   try {
     const stats = await mautic.getStats();
@@ -98,7 +110,7 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-// Récupérer les campagnes actives
+// Recuperer les campagnes actives
 router.get('/campaigns', async (req, res) => {
   try {
     const campaigns = await mautic.getActiveCampaigns();
@@ -111,43 +123,42 @@ router.get('/campaigns', async (req, res) => {
 // Webhook Mautic
 router.post('/webhook', async (req, res) => {
   try {
-    const { trigger, lead, event } = req.body;
-    
-    console.log('Webhook Mautic reçu:', trigger);
-    
-    // Traiter les événements Mautic
+    const { trigger, lead } = req.body;
+
+    console.log('Webhook Mautic recu:', trigger);
+
+    // Traiter les evenements Mautic
     if (trigger === 'lead.updated' || trigger === 'mautic.lead_post_save_update') {
-      // Mettre à jour le scoring dans Directus
       if (lead && lead.fields && lead.fields.email) {
-        await directus.auth.static(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
-        
+        directus.setToken(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
+
         // Chercher le contact par email
-        const contacts = await directus.items('contacts').readByQuery({
-          filter: {
-            email: { _eq: lead.fields.email.value }
-          }
-        });
-        
-        if (contacts.data && contacts.data.length > 0) {
-          const contact = contacts.data[0];
-          await directus.items('contacts').updateOne(contact.id, {
-            mautic_score: lead.points || 0,
-            mautic_last_active: new Date().toISOString()
-          });
+        const contacts = await directus.request(
+          readItems('contacts', {
+            filter: { email: { _eq: lead.fields.email.value } }
+          })
+        );
+
+        if (contacts && contacts.length > 0) {
+          const contact = contacts[0];
+          await directus.request(
+            updateItem('contacts', contact.id, {
+              mautic_score: lead.points || 0,
+              mautic_last_active: new Date().toISOString()
+            })
+          );
         }
       }
     } else if (trigger === 'email.open') {
-      // Enregistrer l'ouverture d'email
       console.log('Email ouvert par:', lead?.fields?.email?.value);
     } else if (trigger === 'page.hit') {
-      // Enregistrer la visite de page
-      console.log('Page visitée par:', lead?.fields?.email?.value);
+      console.log('Page visitee par:', lead?.fields?.email?.value);
     }
-    
+
     res.status(200).send('OK');
   } catch (error) {
     console.error('Erreur webhook:', error);
-    res.status(200).send('OK'); // Toujours retourner 200 pour éviter les renvois
+    res.status(200).send('OK');
   }
 });
 
@@ -168,4 +179,14 @@ router.get('/test', async (req, res) => {
   }
 });
 
-module.exports = router;
+// Health check
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    service: 'mautic',
+    timestamp: new Date().toISOString()
+  });
+});
+
+export default router;

@@ -1,11 +1,17 @@
-const axios = require('axios');
+/**
+ * ERPNext API Service
+ * Service d'integration ERPNext - ES Modules
+ * @version 2.0.0
+ */
+
+import axios from 'axios';
 
 class ERPNextAPI {
   constructor(config) {
     this.baseURL = config.baseURL || 'http://localhost:8083';
     this.apiKey = config.apiKey;
     this.apiSecret = config.apiSecret;
-    
+
     this.api = axios.create({
       baseURL: `${this.baseURL}/api`,
       headers: {
@@ -15,7 +21,7 @@ class ERPNextAPI {
     });
   }
 
-  // === MÉTHODES GÉNÉRIQUES ===
+  // === METHODES GENERIQUES ===
   async getList(doctype, filters = {}, fields = []) {
     const params = {
       doctype,
@@ -23,7 +29,7 @@ class ERPNextAPI {
       fields: JSON.stringify(fields),
       limit_page_length: 1000
     };
-    
+
     const response = await this.api.get('/resource/' + doctype, { params });
     return response.data.data;
   }
@@ -61,7 +67,7 @@ class ERPNextAPI {
       customer_primary_contact: customer.primary_contact,
       customer_primary_address: customer.primary_address
     };
-    
+
     return await this.createDoc('Customer', data);
   }
 
@@ -76,7 +82,7 @@ class ERPNextAPI {
       supplier_primary_contact: supplier.primary_contact,
       supplier_primary_address: supplier.primary_address
     };
-    
+
     return await this.createDoc('Supplier', data);
   }
 
@@ -95,7 +101,7 @@ class ERPNextAPI {
       standard_rate: item.rate || 0,
       company: item.company
     };
-    
+
     return await this.createDoc('Item', data);
   }
 
@@ -118,7 +124,7 @@ class ERPNextAPI {
       payment_terms_template: invoice.payment_terms,
       remarks: invoice.remarks
     };
-    
+
     return await this.createDoc('Sales Invoice', data);
   }
 
@@ -131,14 +137,14 @@ class ERPNextAPI {
         posting_date: new Date().toISOString().split('T')[0]
       }
     });
-    
+
     return response.data.message;
   }
 
   async createStockEntry(entry) {
     const data = {
       company: entry.company,
-      stock_entry_type: entry.type, // 'Material Receipt', 'Material Issue', etc.
+      stock_entry_type: entry.type,
       posting_date: entry.date,
       items: entry.items.map(item => ({
         item_code: item.code,
@@ -148,7 +154,7 @@ class ERPNextAPI {
         basic_rate: item.rate || 0
       }))
     };
-    
+
     return await this.createDoc('Stock Entry', data);
   }
 
@@ -166,7 +172,7 @@ class ERPNextAPI {
       prefered_email: employee.email,
       cell_number: employee.phone
     };
-    
+
     return await this.createDoc('Employee', data);
   }
 
@@ -180,7 +186,7 @@ class ERPNextAPI {
       leave_approver: leave.approver,
       company: leave.company
     };
-    
+
     return await this.createDoc('Leave Application', data);
   }
 
@@ -192,17 +198,15 @@ class ERPNextAPI {
         filters: JSON.stringify(filters)
       }
     });
-    
+
     return response.data.message;
   }
 
   // === KPIs POUR DASHBOARD ===
   async getKPIs(company = null) {
     const filters = company && company !== 'all' ? { company } : {};
-    
-    // Récupérer différentes métriques
+
     const [revenue, pendingInvoices, stock, employees] = await Promise.all([
-      // CA du mois
       this.api.get('/method/frappe.desk.reportview.get', {
         params: {
           doctype: 'Sales Invoice',
@@ -214,29 +218,25 @@ class ERPNextAPI {
           fields: JSON.stringify(['grand_total'])
         }
       }),
-      
-      // Factures en attente
+
       this.getList('Sales Invoice', {
         ...filters,
         status: 'Unpaid',
         docstatus: 1
       }, ['name']),
-      
-      // Stock total (simplification)
+
       this.api.get('/method/erpnext.stock.dashboard.warehouse_dashboard.get_data', {
         params: { filters: JSON.stringify(filters) }
       }),
-      
-      // Employés actifs
+
       this.getList('Employee', {
         ...filters,
         status: 'Active'
       }, ['name'])
     ]);
-    
-    // Calculer les totaux
+
     const totalRevenue = revenue.data.values?.reduce((sum, inv) => sum + (inv.grand_total || 0), 0) || 0;
-    
+
     return {
       revenue: totalRevenue,
       pending_invoices: pendingInvoices.length,
@@ -250,16 +250,16 @@ class ERPNextAPI {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - months);
-    
+
     const filters = {
       posting_date: ['between', [startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]]],
       docstatus: 1
     };
-    
+
     if (company && company !== 'all') {
       filters.company = company;
     }
-    
+
     const response = await this.api.get('/method/frappe.desk.reportview.get', {
       params: {
         doctype: 'Sales Invoice',
@@ -268,14 +268,13 @@ class ERPNextAPI {
         order_by: 'posting_date asc'
       }
     });
-    
-    // Grouper par mois
+
     const monthlyData = {};
     response.data.values?.forEach(inv => {
-      const month = inv.posting_date.substring(0, 7); // YYYY-MM
+      const month = inv.posting_date.substring(0, 7);
       monthlyData[month] = (monthlyData[month] || 0) + inv.grand_total;
     });
-    
+
     return {
       labels: Object.keys(monthlyData),
       values: Object.values(monthlyData)
@@ -285,12 +284,12 @@ class ERPNextAPI {
   async getCompanyBreakdown() {
     const companies = ['HyperVisual', 'Dynamics', 'Lexia', 'NKReality', 'Etekout'];
     const revenues = [];
-    
+
     for (const company of companies) {
       const kpis = await this.getKPIs(company);
       revenues.push(kpis.revenue);
     }
-    
+
     return {
       labels: companies,
       values: revenues
@@ -298,4 +297,4 @@ class ERPNextAPI {
   }
 }
 
-module.exports = ERPNextAPI;
+export default ERPNextAPI;

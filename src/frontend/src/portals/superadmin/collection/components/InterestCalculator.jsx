@@ -375,7 +375,7 @@ const InterestCalculator = ({ company }) => {
               {result.daysDiff > 365 && (
                 <div className="alert alert-warning mt-4">
                   <AlertTriangle size={16} className="me-2" />
-                  <strong>Période > 1 an:</strong><br />
+                  <strong>Période &gt; 1 an:</strong><br />
                   Intérêts composés: {result.compoundInterest.toLocaleString('fr-CH', {
                     style: 'currency',
                     currency: 'CHF'

@@ -129,10 +129,30 @@ export const financesAPI = {
         sum + parseFloat(i.amount || 0), 0
       ) / 3
       
+      // Calculer la croissance en comparant avec le mois précédent
+      const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1
+      const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear
+      
+      const previousMonthInvoices = invoices.filter(i => {
+        const date = new Date(i.date_created || i.date || i.created_at)
+        return date.getMonth() === previousMonth && 
+               date.getFullYear() === previousYear
+      })
+      
+      const previousMrr = previousMonthInvoices.reduce((sum, i) => 
+        sum + parseFloat(i.amount || 0), 0
+      )
+      
+      // Calculer le pourcentage de croissance
+      let growth = 0
+      if (previousMrr > 0) {
+        growth = ((avgMonthly - previousMrr) / previousMrr) * 100
+      }
+      
       return {
         mrr: Math.round(avgMonthly),
         arr: Math.round(avgMonthly * 12),
-        growth: 12.5  // Valeur fixe pour l'instant
+        growth: Math.round(growth * 10) / 10  // Arrondi à une décimale
       }
     } catch (error) {
       console.error('Error in getRevenue:', error)

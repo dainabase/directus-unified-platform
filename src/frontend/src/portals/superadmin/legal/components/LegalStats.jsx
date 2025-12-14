@@ -374,7 +374,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
                     </li>
                     <li className="mb-2">
                       <TrendingUp size={16} className="text-info me-2" />
-                      Migrer vers QES pour contrats > 10'000 CHF
+                      Migrer vers QES pour contrats &gt; 10'000 CHF
                     </li>
                     <li className="mb-2">
                       <Clock size={16} className="text-warning me-2" />

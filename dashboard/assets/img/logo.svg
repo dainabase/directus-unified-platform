@@ -1,9 +1,0 @@
-<svg width="110" height="32" viewBox="0 0 110 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Rectangle de fond -->
-    <rect width="110" height="32" rx="4" fill="#206bc4"/>
-    
-    <!-- Texte PORTAL -->
-    <text x="55" y="21" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
-        PORTAL
-    </text>
-</svg>

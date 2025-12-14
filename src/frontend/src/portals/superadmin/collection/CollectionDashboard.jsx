@@ -146,7 +146,7 @@ const CollectionDashboard = () => {
                 {stats.data?.averageAge || 0}j
               </div>
               <div className="text-muted">
-                {stats.data?.overdueDebtors || 0} créances > 90j
+                {stats.data?.overdueDebtors || 0} créances &gt; 90j
               </div>
             </div>
           </div>

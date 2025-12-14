@@ -1,425 +1,430 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
-  LineChart, Line, BarChart, Bar, AreaChart, Area,
-  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip 
-} from 'recharts'
+  TrendingUp, 
+  TrendingDown,
+  Users,
+  Building,
+  CreditCard,
+  AlertCircle,
+  DollarSign,
+  Briefcase,
+  BarChart3,
+  Target,
+  Activity,
+  RefreshCw,
+  Zap
+} from 'lucide-react'
 
-const SuperAdminDashboard = ({ selectedCompany }) => {
-  // Données mockées pour le dashboard
-  const tasksData = {
-    total: 47,
-    semaine: 12,
-    retard: 3,
-    urgent: 8
+import { GlassCard, Badge } from '../../components/ui'
+import { useKPIData, useMultipleCompanyKPIs, useKPIPrefetch } from '../../hooks/useKPIData'
+
+// Import Recharts components from wrapper
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from '../../utils/recharts'
+
+const Dashboard = () => {
+  const [selectedCompany, setSelectedCompany] = useState(null)
+  const [selectedPeriod, setSelectedPeriod] = useState('30d')
+  
+  // Fetch KPI data with caching
+  const { 
+    overview, 
+    trends, 
+    loading, 
+    error, 
+    isStale, 
+    refresh 
+  } = useKPIData({
+    company: selectedCompany,
+    period: selectedPeriod,
+    prefetchOnMount: true
+  })
+
+  // Prefetch hooks
+  const { prefetchCompany } = useKPIPrefetch()
+
+  // Company list
+  const companies = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI REALTY', 'TAKEOUT']
+
+  // Prefetch company data on hover
+  const handleCompanyHover = (company) => {
+    prefetchCompany(company)
   }
 
-  const projectsData = {
-    actifs: 8,
-    livraison: 3,
-    alertes: 2
+  // Format currency
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('fr-CH', {
+      style: 'currency',
+      currency: 'CHF',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value || 0)
   }
 
-  const pipelineData = {
-    total: '€1.2M',
-    enCours: 15,
-    closing: 5,
-    nouveau: 8
+  // Format percentage
+  const formatPercentage = (value) => {
+    return `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
-  const marketingData = {
-    visiteurs: 1847,
-    leads: 127,
-    conversion: '6.9%',
-    campagnes: 5
+  // Loading skeleton
+  if (loading && !overview) {
+    return (
+      <div className="p-6 space-y-6 animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-32 bg-gray-200 rounded-xl" />
+          ))}
+        </div>
+        <div className="h-96 bg-gray-200 rounded-xl" />
+      </div>
+    )
   }
 
-  const cashData = {
-    disponible: '€847K',
-    runway: '7.3 mois',
-    burn: '€116K/mois',
-    prevision: '€2.1M'
+  // Error state
+  if (error) {
+    return (
+      <div className="p-6">
+        <GlassCard className="p-8 text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Erreur de chargement
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Impossible de charger les données du dashboard
+          </p>
+          <button
+            onClick={() => refresh()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Réessayer
+          </button>
+        </GlassCard>
+      </div>
+    )
   }
 
-  const facturesData = {
-    impayees: { count: 12, montant: '€45K' },
-    retard30j: { count: 3, montant: '€18K' },
-    aEmettre: 8,
-    attente: '€127K'
-  }
-
-  // Graphique Cash Flow 7 jours
-  const cashFlowData = [
-    { day: 'L', value: 45 },
-    { day: 'M', value: 52 },
-    { day: 'M', value: 38 },
-    { day: 'J', value: 65 },
-    { day: 'V', value: 48 },
-    { day: 'S', value: 15 },
-    { day: 'D', value: 8 }
-  ]
+  const data = overview || {}
+  const { financial = {}, projects = {}, people = {}, performance = {}, alerts = [] } = data
 
   return (
-    <>
-      <div className="container-fluid px-3">
-        
-        {/* Section Alertes - COMPACT */}
-        <div className="card mb-2" style={{ height: '80px' }}>
-          <div className="card-body p-2">
-            <div className="d-flex align-items-center justify-content-between h-100">
-              <h5 className="mb-0">📢 Alertes</h5>
-              <div className="d-flex gap-3">
-                <span className="badge bg-danger">3 urgentes</span>
-                <span className="badge bg-warning">5 deadlines</span>
-                <span className="badge bg-info">2 financières</span>
-              </div>
-            </div>
-          </div>
+    <div className="p-6 space-y-6">
+      {/* Header with Controls */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Dashboard SuperAdmin
+          </h1>
+          <p className="text-gray-600">
+            Vue d'ensemble {selectedCompany || 'toutes entreprises'}
+          </p>
         </div>
+        
+        <div className="flex items-center gap-4">
+          {/* Company Filter */}
+          <select
+            value={selectedCompany || ''}
+            onChange={(e) => setSelectedCompany(e.target.value || null)}
+            onMouseEnter={(e) => {
+              // Prefetch on hover over options
+              const options = e.target.options
+              for (let i = 0; i < options.length; i++) {
+                if (options[i].value) {
+                  handleCompanyHover(options[i].value)
+                }
+              }
+            }}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Toutes entreprises</option>
+            {companies.map(company => (
+              <option key={company} value={company}>
+                {company}
+              </option>
+            ))}
+          </select>
 
-        {/* Grille principale COMPACTE */}
-        <div className="row g-2">
-          
-          {/* COLONNE 1: OPÉRATIONNEL */}
-          <div className="col-lg-3">
-            {/* Titre colonne - 30px */}
-            <div className="mb-2" style={{ height: '30px' }}>
-              <h6 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
-                ⚙️ OPÉRATIONNEL
-              </h6>
-            </div>
-            
-            {/* Bloc 1.1 - 280px */}
-            <div className="card mb-2" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">📋 Tâches & Actions</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="row g-1 small">
-                  <div className="col-8">Tâches actives</div>
-                  <div className="col-4 text-end fw-bold">47</div>
-                  
-                  <div className="col-8">Cette semaine</div>
-                  <div className="col-4 text-end fw-bold">14</div>
-                  
-                  <div className="col-8">En retard</div>
-                  <div className="col-4 text-end">
-                    <span className="badge bg-danger badge-sm">3</span>
-                  </div>
-                  
-                  <div className="col-8">Aujourd'hui</div>
-                  <div className="col-4 text-end fw-bold">5</div>
-                </div>
-                
-                <hr className="my-2"/>
-                
-                <div className="small">
-                  <div className="fw-bold mb-1">TOP PRIORITÉS:</div>
-                  <div>• Valider devis BNP</div>
-                  <div>• Call client X (14h)</div>
-                  <div>• Review projet Y</div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Bloc 1.2 - 280px */}
-            <div className="card" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">📁 Projets & Deliverables</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="row g-1 small">
-                  <div className="col-8">Projets actifs</div>
-                  <div className="col-4 text-end fw-bold">8</div>
-                  
-                  <div className="col-8">En cours</div>
-                  <div className="col-4 text-end">
-                    <span className="badge bg-primary badge-sm">5</span>
-                  </div>
-                  
-                  <div className="col-8">En attente</div>
-                  <div className="col-4 text-end">
-                    <span className="badge bg-warning badge-sm">3</span>
-                  </div>
-                  
-                  <div className="col-8">Livraisons/sem</div>
-                  <div className="col-4 text-end fw-bold">2</div>
-                </div>
-                
-                <hr className="my-2"/>
-                
-                <div className="small">
-                  <div className="fw-bold mb-1">PROCHAINS:</div>
-                  <div>📅 Demain - Livraison A</div>
-                  <div>📅 Jeudi - Sprint B</div>
-                  <div>📅 Lundi - Kickoff C</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* COLONNE 2: COMMERCIAL & MARKETING */}
-          <div className="col-lg-3">
-            {/* Titre colonne */}
-            <div className="mb-2" style={{ height: '30px' }}>
-              <h6 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
-                📈 COMMERCIAL & MARKETING
-              </h6>
-            </div>
-            
-            {/* Bloc 2.1 - 280px */}
-            <div className="card mb-2" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">🎯 Pipeline Commercial</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="mb-2">
-                  <div className="h4 mb-0">€1.2M</div>
-                  <div className="text-muted small">24 opportunités</div>
-                </div>
-                
-                <div className="row g-1 small">
-                  <div className="col-7">Devis actifs</div>
-                  <div className="col-5 text-end">
-                    <span className="badge bg-info badge-sm">7</span> €340K
-                  </div>
-                  
-                  <div className="col-7">Conversion</div>
-                  <div className="col-5 text-end">
-                    <span className="badge bg-success badge-sm">32% ↑</span>
-                  </div>
-                  
-                  <div className="col-7">Closing/mois</div>
-                  <div className="col-5 text-end fw-bold">€450K</div>
-                </div>
-                
-                <hr className="my-2"/>
-                
-                <div className="small">
-                  <div className="fw-bold mb-1">HOT LEADS:</div>
-                  <div>🔥 BNP - €120K</div>
-                  <div>🔥 SocGen - €85K</div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Bloc 2.2 - 280px */}
-            <div className="card" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">📊 Marketing & Acquisition</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="row g-1 small">
-                  <div className="col-7">Visiteurs/jour</div>
-                  <div className="col-5 text-end fw-bold">1,847</div>
-                  
-                  <div className="col-7">Leads/semaine</div>
-                  <div className="col-5 text-end fw-bold">124</div>
-                  
-                  <div className="col-7">Conversion</div>
-                  <div className="col-5 text-end fw-bold">6.7%</div>
-                  
-                  <div className="col-7">CAC</div>
-                  <div className="col-5 text-end fw-bold">€320</div>
-                </div>
-                
-                <hr className="my-2"/>
-                
-                <div className="small">
-                  <div className="fw-bold mb-1">SOURCES:</div>
-                  <div className="d-flex justify-content-between">
-                    <span>Google</span>
-                    <span>45%</span>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <span>Direct</span>
-                    <span>30%</span>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <span>Social</span>
-                    <span>25%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* COLONNE 3: FINANCES */}
-          <div className="col-lg-3">
-            {/* Titre colonne */}
-            <div className="mb-2" style={{ height: '30px' }}>
-              <h6 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
-                💰 FINANCES
-              </h6>
-            </div>
-            
-            {/* Bloc 3.1 - 280px */}
-            <div className="card mb-2" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">💵 Trésorerie & Cash</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="mb-2">
-                  <div className="h4 mb-0">€847K</div>
-                  <div className="text-muted small">Cash disponible</div>
-                </div>
-                
-                <div className="row g-1 small">
-                  <div className="col-7">Entrées (7j)</div>
-                  <div className="col-5 text-end text-success fw-bold">+€127K</div>
-                  
-                  <div className="col-7">Sorties (7j)</div>
-                  <div className="col-5 text-end text-danger fw-bold">-€85K</div>
-                  
-                  <div className="col-7">Burn rate</div>
-                  <div className="col-5 text-end fw-bold">€115K</div>
-                  
-                  <div className="col-7">Runway</div>
-                  <div className="col-5 text-end">
-                    <span className="badge bg-success badge-sm">7.3m</span>
-                  </div>
-                </div>
-                
-                <div className="mt-2">
-                  <ResponsiveContainer width="100%" height={60}>
-                    <BarChart data={cashFlowData}>
-                      <Bar dataKey="value" fill="#10b981" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-            
-            {/* Bloc 3.2 - 280px */}
-            <div className="card" style={{ height: '280px' }}>
-              <div className="card-header py-2">
-                <h6 className="card-title mb-0">📄 Factures & Paiements</h6>
-              </div>
-              <div className="card-body p-2" style={{ overflowY: 'auto' }}>
-                <div className="row g-1 small">
-                  <div className="col-7">Impayées</div>
-                  <div className="col-5 text-end">
-                    <span className="badge bg-warning badge-sm">12</span> €45K
-                  </div>
-                  
-                  <div className="col-7">{'> 30 jours'}</div>
-                  <div className="col-5 text-end">
-                    <span className="badge bg-danger badge-sm">3</span> €18K
-                  </div>
-                  
-                  <div className="col-7">À émettre</div>
-                  <div className="col-5 text-end fw-bold">8</div>
-                  
-                  <div className="col-7">En attente</div>
-                  <div className="col-5 text-end fw-bold">€127K</div>
-                </div>
-                
-                <hr className="my-2"/>
-                
-                <div className="d-grid gap-1">
-                  <button className="btn btn-sm btn-danger">
-                    Relancer BNP
-                  </button>
-                  <button className="btn btn-sm btn-primary">
-                    Valider devis
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* COLONNE 4: KPIs - Petits carrés */}
-          <div className="col-lg-3">
-            {/* Titre colonne */}
-            <div className="mb-2" style={{ height: '30px' }}>
-              <h6 className="text-uppercase text-muted mb-0" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
-                🎯 INDICATEURS
-              </h6>
-            </div>
-            
-            {/* Grille de KPIs carrés compacts */}
-            <div className="row g-1">
-              {/* KPI 1 */}
-              <div className="col-6">
-                <div className="card" style={{ height: '90px' }}>
-                  <div className="card-body p-1 text-center d-flex flex-column justify-content-center">
-                    <div className="text-muted" style={{ fontSize: '0.65rem' }}>RUNWAY</div>
-                    <div className="h5 mb-0">7.3m</div>
-                    <div className="text-success" style={{ fontSize: '0.6rem' }}>↑1.2</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* KPI 2 */}
-              <div className="col-6">
-                <div className="card" style={{ height: '90px' }}>
-                  <div className="card-body p-1 text-center d-flex flex-column justify-content-center">
-                    <div className="text-muted" style={{ fontSize: '0.65rem' }}>ARR</div>
-                    <div className="h5 mb-0">€2.4M</div>
-                    <div className="text-success" style={{ fontSize: '0.6rem' }}>↑23%</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* KPI 3 */}
-              <div className="col-6">
-                <div className="card" style={{ height: '90px' }}>
-                  <div className="card-body p-1 text-center d-flex flex-column justify-content-center">
-                    <div className="text-muted" style={{ fontSize: '0.65rem' }}>EBITDA</div>
-                    <div className="h5 mb-0">18.5%</div>
-                    <div className="text-success" style={{ fontSize: '0.6rem' }}>↑2.3%</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* KPI 4 */}
-              <div className="col-6">
-                <div className="card" style={{ height: '90px' }}>
-                  <div className="card-body p-1 text-center d-flex flex-column justify-content-center">
-                    <div className="text-muted" style={{ fontSize: '0.65rem' }}>LTV:CAC</div>
-                    <div className="h5 mb-0">4.2</div>
-                    <div className="text-success" style={{ fontSize: '0.6rem' }}>Good</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* KPI 5 */}
-              <div className="col-12">
-                <div className="card" style={{ height: '90px' }}>
-                  <div className="card-body p-1 text-center d-flex flex-column justify-content-center">
-                    <div className="text-muted" style={{ fontSize: '0.65rem' }}>NPS SCORE</div>
-                    <div className="h5 mb-0">72</div>
-                    <div className="text-success" style={{ fontSize: '0.6rem' }}>Excellent</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
+          {/* Period Selector */}
+          <select
+            value={selectedPeriod}
+            onChange={(e) => setSelectedPeriod(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="7d">7 jours</option>
+            <option value="30d">30 jours</option>
+            <option value="90d">90 jours</option>
+            <option value="1y">1 année</option>
+          </select>
+
+          {/* Refresh Button */}
+          <button
+            onClick={() => refresh()}
+            className={`p-2 rounded-lg border ${
+              isStale 
+                ? 'border-yellow-300 bg-yellow-50 text-yellow-600' 
+                : 'border-gray-300 hover:bg-gray-50'
+            } transition-colors`}
+            title={isStale ? "Données périmées, cliquez pour actualiser" : "Actualiser"}
+          >
+            <RefreshCw 
+              size={20} 
+              className={`${isStale ? 'animate-spin' : ''}`} 
+            />
+          </button>
+
+          {/* Cache Indicator */}
+          {!loading && !isStale && (
+            <Badge variant="success" size="sm">
+              <Zap size={12} className="mr-1" />
+              Cached
+            </Badge>
+          )}
         </div>
       </div>
-      
-      {/* Styles React inline */}
-      <style jsx>{`
-        .container-fluid {
-          max-width: 1920px;
-        }
-        .card {
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-        .badge-sm {
-          font-size: 0.7rem;
-          padding: 0.2rem 0.4rem;
-        }
-        .small {
-          font-size: 0.875rem;
-        }
-      `}</style>
-    </>
+
+      {/* Alerts Section */}
+      {alerts.length > 0 && (
+        <div className="space-y-2">
+          {alerts.map((alert) => (
+            <div
+              key={alert.id}
+              className={`p-4 rounded-lg border flex items-center gap-3 ${
+                alert.type === 'error' 
+                  ? 'bg-red-50 border-red-200 text-red-700'
+                  : 'bg-yellow-50 border-yellow-200 text-yellow-700'
+              }`}
+            >
+              <AlertCircle size={20} />
+              <span>{alert.message}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <DollarSign className="w-8 h-8 text-blue-600" />
+            {financial.growth > 0 ? (
+              <TrendingUp className="w-5 h-5 text-green-600" />
+            ) : (
+              <TrendingDown className="w-5 h-5 text-red-600" />
+            )}
+          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {formatCurrency(financial.mrr)}
+          </p>
+          <p className="text-sm text-gray-600">MRR</p>
+          <p className={`text-sm mt-1 ${
+            financial.growth >= 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {formatPercentage(financial.growth)} vs mois dernier
+          </p>
+        </GlassCard>
+
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <CreditCard className="w-8 h-8 text-green-600" />
+            <Badge 
+              variant={financial.health === 'healthy' ? 'success' : 
+                      financial.health === 'warning' ? 'warning' : 'error'}
+              size="sm"
+            >
+              {financial.runway}m
+            </Badge>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {formatCurrency(financial.balance)}
+          </p>
+          <p className="text-sm text-gray-600">Cash Balance</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Burn rate: {formatCurrency(financial.burnRate)}/mois
+          </p>
+        </GlassCard>
+
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <Briefcase className="w-8 h-8 text-purple-600" />
+            <span className="text-sm text-gray-500">
+              {Math.round(projects.budgetUtilization)}%
+            </span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {projects.active}/{projects.total}
+          </p>
+          <p className="text-sm text-gray-600">Projets actifs</p>
+          {projects.overdue > 0 && (
+            <p className="text-sm text-red-600 mt-1">
+              {projects.overdue} en retard
+            </p>
+          )}
+        </GlassCard>
+
+        <GlassCard className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <Users className="w-8 h-8 text-indigo-600" />
+            <Badge variant="primary" size="sm">
+              {people.departments} depts
+            </Badge>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">
+            {people.active}/{people.total}
+          </p>
+          <p className="text-sm text-gray-600">Employés actifs</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Turnover: {people.turnoverRate}%
+          </p>
+        </GlassCard>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Revenue Trends */}
+        <GlassCard className="p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Tendances des Revenus
+          </h3>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={trends?.revenue || []}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis 
+                  stroke="#6b7280"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(value) => `${value/1000}k`}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px'
+                  }}
+                  formatter={(value) => formatCurrency(value)}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#2563eb"
+                  fill="url(#colorRevenue)"
+                  strokeWidth={2}
+                />
+                <defs>
+                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0.1}/>
+                  </linearGradient>
+                </defs>
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </GlassCard>
+
+        {/* Performance Metrics */}
+        <GlassCard className="p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Métriques de Performance
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium">NPS Score</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-blue-600 to-blue-400"
+                    style={{ width: `${performance.nps}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold">{performance.nps}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-green-600" />
+                <span className="text-sm font-medium">EBITDA</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-600 to-green-400"
+                    style={{ width: `${Math.min(performance.ebitda * 2, 100)}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold">{performance.ebitda}%</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-5 h-5 text-purple-600" />
+                <span className="text-sm font-medium">LTV/CAC</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-600 to-purple-400"
+                    style={{ width: `${Math.min(performance.ltvcac * 20, 100)}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold">{performance.ltvcac}x</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-yellow-600" />
+                <span className="text-sm font-medium">Cash Runway</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400"
+                    style={{ width: `${Math.min(performance.cashRunway * 8, 100)}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold">{performance.cashRunway} mois</span>
+              </div>
+            </div>
+          </div>
+        </GlassCard>
+      </div>
+
+      {/* Health Score */}
+      <GlassCard className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Score de Santé Global
+          </h3>
+          <Badge 
+            variant={data.summary?.overallHealth >= 80 ? 'success' :
+                    data.summary?.overallHealth >= 60 ? 'warning' : 'error'}
+          >
+            {data.summary?.overallHealth || 0}%
+          </Badge>
+        </div>
+        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className={`h-full transition-all duration-500 ${
+              data.summary?.overallHealth >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' :
+              data.summary?.overallHealth >= 60 ? 'bg-gradient-to-r from-yellow-500 to-yellow-600' :
+              'bg-gradient-to-r from-red-500 to-red-600'
+            }`}
+            style={{ width: `${data.summary?.overallHealth || 0}%` }}
+          />
+        </div>
+      </GlassCard>
+    </div>
   )
 }
 
-export default SuperAdminDashboard
+export default Dashboard

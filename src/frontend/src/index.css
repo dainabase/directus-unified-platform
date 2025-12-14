@@ -1,226 +1,25 @@
-/* Global Styles and Variables */
+/* Google Fonts - MUST BE FIRST */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables */
 :root {
-  --primary: #8B5CF6;
-  --secondary: #3B82F6;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --bg-body: #0F172A;
-  --bg-card: rgba(255, 255, 255, 0.05);
-  --bg-hover: rgba(255, 255, 255, 0.1);
-  --border: rgba(255, 255, 255, 0.1);
-  --text-primary: rgba(255, 255, 255, 0.95);
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: rgba(255, 255, 255, 0.5);
-  
-  --navbar-height: 56px;
-  --sidebar-width: 260px;
-  --sidebar-collapsed-width: 80px;
+  --primary: #2563EB;
+  --primary-light: #3B82F6;
+  --primary-dark: #1D4ED8;
+  --bg-body: #F9FAFB;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
 }
 
-/* Reset and base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Base styles */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* PAS DE BACKGROUND ICI */
-  color: rgba(255, 255, 255, 0.95); /* Texte clair pour dark mode */
-  overflow-x: hidden;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-/* Overlay supprimé - géré dans glassmorphism.css */
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-body);
   color: var(--text-primary);
-  font-weight: 600;
-}
-
-p {
-  color: var(--text-secondary);
-}
-
-/* Layout fixes */
-.page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-body);
-}
-
-.page-wrapper {
-  flex: 1;
-  display: flex;
-  position: relative;
-}
-
-.page-main {
-  flex: 1;
-  background: transparent;
-}
-
-.page-body {
-  padding: 0;
-}
-
-.container-fluid {
-  padding: 0;
-  max-width: 100%;
-}
-
-/* Navbar fixes */
-.navbar {
-  background: transparent !important;
-  box-shadow: none;
-  padding: 0;
-}
-
-.navbar-brand {
-  font-weight: 800;
-  font-size: 1.25rem;
-  color: white !important;
-}
-
-.navbar-dark .navbar-toggler {
-  border: none;
-}
-
-.navbar-nav {
-  align-items: center;
-}
-
-/* Form Controls */
-.form-select,
-.form-control {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  transition: all 0.2s;
-}
-
-.form-select:focus,
-.form-control:focus {
-  background: var(--bg-hover);
-  border-color: var(--primary);
-  box-shadow: 0 0 0 0.25rem rgba(139, 92, 246, 0.25);
-  color: var(--text-primary);
-}
-
-.form-select option {
-  background: #1e293b;
-  color: var(--text-primary);
-}
-
-/* Dropdown Overrides */
-.dropdown-menu {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  padding: 8px;
-}
-
-.dropdown-item {
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.dropdown-item:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-.dropdown-item.active,
-.dropdown-item:active {
-  background: rgba(139, 92, 246, 0.2);
-  color: var(--text-primary);
-}
-
-/* Button Overrides */
-.btn {
-  font-weight: 600;
-  transition: all 0.2s;
-  border-radius: 8px;
-}
-
-.btn-primary {
-  background: var(--primary);
-  border-color: var(--primary);
-}
-
-.btn-primary:hover {
-  background: #7C3AED;
-  border-color: #7C3AED;
-}
-
-/* Card improvements */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  box-shadow: none;
-  backdrop-filter: blur(10px);
-}
-
-/* Utilities */
-.text-muted {
-  color: var(--text-tertiary) !important;
-}
-
-.text-white {
-  color: var(--text-primary) !important;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Responsive */
-@media (max-width: 991px) {
-  .navbar-vertical {
-    transform: translateX(-100%);
-  }
-  
-  .navbar-vertical.show {
-    transform: translateX(0);
-  }
-  
-  .page-main {
-    margin-left: 0 !important;
-  }
-}
-
-@media (max-width: 768px) {
-  :root {
-    --sidebar-width: 0;
-  }
-  
-  .page-wrapper {
-    padding-top: var(--navbar-height);
-  }
 }

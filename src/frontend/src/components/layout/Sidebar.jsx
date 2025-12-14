@@ -1,269 +1,305 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard,
-  Users,
-  Briefcase,
-  ShoppingBag,
-  Settings,
-  LogOut,
-  ChevronLeft,
+  LayoutDashboard, 
+  ChevronDown, 
   ChevronRight,
-  Building2,
-  FileText,
-  BarChart3,
-  Wallet,
-  Plus,
-  Building,
-  Folder,
-  DollarSign,
-  UserCheck,
-  FileSearch,
-  Bot,
-  TrendingUp,
-  MessageSquare,
-  HelpCircle,
-  ClipboardList,
+  // Finance
+  Wallet, 
+  Landmark, 
+  Calculator, 
+  FileText, 
+  Receipt, 
+  Scale,
+  PiggyBank,
+  CreditCard,
+  // Projets
+  FolderKanban,
+  ListTodo,
   Clock,
-  Package,
-  ShoppingCart as Cart,
-  PieChart,
+  // CRM
+  Users,
+  Building2,
+  Target,
+  HeartHandshake,
+  // Marketing
+  Megaphone,
+  Calendar,
+  Mail,
+  BarChart3,
+  // RH
+  UserCog,
+  GraduationCap,
+  UserPlus,
+  Trophy,
+  // Juridique
+  Gavel,
+  FileCheck,
   Shield,
-  User,
-  ShoppingCart
-} from 'lucide-react'
-import styles from './Sidebar.module.css'
+  // Support
+  Headphones,
+  Bell,
+  MessageSquare,
+  // Paramètres
+  Settings,
+  Building,
+  Key,
+  Plug
+} from 'lucide-react';
 
-const Sidebar = ({ currentPortal, collapsed = false, setCollapsed = () => {}, selectedCompany, onCompanyChange }) => {
-  const menuItems = {
-    superadmin: [
-      { section: 'CRÉER', items: [
-        { icon: <Plus size={18} />, label: 'Nouvelle Entreprise', href: '#' },
-        { icon: <Plus size={18} />, label: 'Nouveau Contact', href: '#' },
-        { icon: <Plus size={18} />, label: 'Nouveau Projet', href: '#' },
-        { icon: <Plus size={18} />, label: 'Nouvelle Facture', href: '#' }
-      ]},
-      { section: 'GÉRER', items: [
-        { icon: <LayoutDashboard size={18} />, label: 'Dashboard', href: '#', active: true },
-        { icon: <Building size={18} />, label: 'Entreprises', href: '#' },
-        { icon: <Folder size={18} />, label: 'Projets & Tâches', href: '#' },
-        { icon: <DollarSign size={18} />, label: 'Finances', href: '#' },
-        { icon: <UserCheck size={18} />, label: 'Prestataires', href: '#' }
-      ]},
-      { section: 'OUTILS', items: [
-        { icon: <FileSearch size={18} />, label: 'OCR Scanner', href: '#' },
-        { icon: <Bot size={18} />, label: 'Automatisations', href: '#' },
-        { icon: <TrendingUp size={18} />, label: 'Rapports', href: '#' }
-      ]}
-    ],
-    client: [
-      { section: 'NAVIGATION', items: [
-        { icon: <LayoutDashboard size={18} />, label: 'Dashboard', href: '#', active: true },
-        { icon: <Folder size={18} />, label: 'Mes Projets', href: '#' },
-        { icon: <FileText size={18} />, label: 'Mes Documents', href: '#' },
-        { icon: <DollarSign size={18} />, label: 'Mes Factures', href: '#' }
-      ]},
-      { section: 'SUPPORT', items: [
-        { icon: <MessageSquare size={18} />, label: 'Messages', href: '#' },
-        { icon: <HelpCircle size={18} />, label: 'Aide', href: '#' }
-      ]}
-    ],
-    prestataire: [
-      { section: 'TRAVAIL', items: [
-        { icon: <LayoutDashboard size={18} />, label: 'Dashboard', href: '#', active: true },
-        { icon: <ClipboardList size={18} />, label: 'Missions', href: '#' },
-        { icon: <Clock size={18} />, label: 'Temps', href: '#' },
-        { icon: <DollarSign size={18} />, label: 'Paiements', href: '#' }
-      ]},
-      { section: 'OUTILS', items: [
-        { icon: <FileText size={18} />, label: 'Documents', href: '#' },
-        { icon: <BarChart3 size={18} />, label: 'Statistiques', href: '#' }
-      ]}
-    ],
-    revendeur: [
-      { section: 'VENTES', items: [
-        { icon: <LayoutDashboard size={18} />, label: 'Dashboard', href: '#', active: true },
-        { icon: <Cart size={18} />, label: 'Commandes', href: '#' },
-        { icon: <Package size={18} />, label: 'Produits', href: '#' },
-        { icon: <Users size={18} />, label: 'Clients', href: '#' }
-      ]},
-      { section: 'GESTION', items: [
-        { icon: <DollarSign size={18} />, label: 'Comptabilité', href: '#' },
-        { icon: <PieChart size={18} />, label: 'Analytics', href: '#' }
-      ]}
+// Configuration des pôles et sous-modules
+const navigationConfig = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    path: '/superadmin',
+    isGroup: false
+  },
+  {
+    id: 'finance',
+    label: 'Finance',
+    icon: Wallet,
+    isGroup: true,
+    children: [
+      { id: 'banking', label: 'Banking', icon: Landmark, path: '/superadmin/banking' },
+      { id: 'accounting', label: 'Comptabilité', icon: Calculator, path: '/superadmin/accounting' },
+      { id: 'invoices-client', label: 'Factures Clients', icon: FileText, path: '/superadmin/invoices/clients' },
+      { id: 'invoices-supplier', label: 'Factures Fournisseurs', icon: Receipt, path: '/superadmin/invoices/suppliers' },
+      { id: 'collection', label: 'Recouvrement', icon: Scale, path: '/superadmin/collection' },
+      { id: 'budgets', label: 'Budgets', icon: PiggyBank, path: '/superadmin/budgets' },
+      { id: 'expenses', label: 'Dépenses', icon: CreditCard, path: '/superadmin/expenses' },
     ]
-  }
+  },
+  {
+    id: 'projects',
+    label: 'Projets',
+    icon: FolderKanban,
+    isGroup: true,
+    children: [
+      { id: 'projects-list', label: 'Tous les Projets', icon: FolderKanban, path: '/superadmin/projects' },
+      { id: 'deliverables', label: 'Livrables & Tâches', icon: ListTodo, path: '/superadmin/deliverables' },
+      { id: 'time-tracking', label: 'Time Tracking', icon: Clock, path: '/superadmin/time-tracking' },
+    ]
+  },
+  {
+    id: 'crm',
+    label: 'CRM',
+    icon: Users,
+    isGroup: true,
+    children: [
+      { id: 'contacts', label: 'Contacts', icon: Users, path: '/superadmin/crm/contacts' },
+      { id: 'companies', label: 'Entreprises', icon: Building2, path: '/superadmin/crm/companies' },
+      { id: 'pipeline', label: 'Pipeline Commercial', icon: Target, path: '/superadmin/crm/pipeline' },
+      { id: 'customer-success', label: 'Customer Success', icon: HeartHandshake, path: '/superadmin/crm/success' },
+    ]
+  },
+  {
+    id: 'marketing',
+    label: 'Marketing',
+    icon: Megaphone,
+    isGroup: true,
+    children: [
+      { id: 'content-calendar', label: 'Calendrier Éditorial', icon: Calendar, path: '/superadmin/marketing/calendar' },
+      { id: 'campaigns', label: 'Campagnes Email', icon: Mail, path: '/superadmin/marketing/campaigns' },
+      { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/superadmin/marketing/analytics' },
+      { id: 'events', label: 'Événements', icon: Calendar, path: '/superadmin/marketing/events' },
+    ]
+  },
+  {
+    id: 'hr',
+    label: 'Ressources Humaines',
+    icon: UserCog,
+    isGroup: true,
+    children: [
+      { id: 'team', label: 'Équipe', icon: Users, path: '/superadmin/hr/team' },
+      { id: 'talents', label: 'Talents', icon: Trophy, path: '/superadmin/hr/talents' },
+      { id: 'recruitment', label: 'Recrutement', icon: UserPlus, path: '/superadmin/hr/recruitment' },
+      { id: 'trainings', label: 'Formations', icon: GraduationCap, path: '/superadmin/hr/trainings' },
+      { id: 'performance', label: 'Performance', icon: BarChart3, path: '/superadmin/hr/performance' },
+    ]
+  },
+  {
+    id: 'legal',
+    label: 'Juridique',
+    icon: Gavel,
+    isGroup: true,
+    children: [
+      { id: 'contracts', label: 'Contrats', icon: FileCheck, path: '/superadmin/legal/contracts' },
+      { id: 'cgv', label: 'CGV & Mentions', icon: FileText, path: '/superadmin/legal/cgv' },
+      { id: 'compliance', label: 'Compliance', icon: Shield, path: '/superadmin/legal/compliance' },
+    ]
+  },
+  {
+    id: 'support',
+    label: 'Support',
+    icon: Headphones,
+    isGroup: true,
+    children: [
+      { id: 'tickets', label: 'Tickets', icon: MessageSquare, path: '/superadmin/support/tickets' },
+      { id: 'notifications', label: 'Notifications', icon: Bell, path: '/superadmin/support/notifications' },
+    ]
+  },
+  {
+    id: 'settings',
+    label: 'Paramètres',
+    icon: Settings,
+    isGroup: true,
+    children: [
+      { id: 'owner-companies', label: 'Mes Entreprises', icon: Building, path: '/superadmin/settings/companies' },
+      { id: 'users', label: 'Utilisateurs', icon: Users, path: '/superadmin/settings/users' },
+      { id: 'permissions', label: 'Permissions', icon: Key, path: '/superadmin/settings/permissions' },
+      { id: 'integrations', label: 'Intégrations', icon: Plug, path: '/superadmin/settings/integrations' },
+    ]
+  },
+];
 
-  const portalInfo = {
-    superadmin: { 
-      title: 'SuperAdmin CEO',
-      icon: <LayoutDashboard size={20} />,
-      color: '#8B5CF6'
-    },
-    client: { 
-      title: 'Espace Client',
-      icon: <Users size={20} />,
-      color: '#3B82F6'
-    },
-    prestataire: { 
-      title: 'Espace Prestataire',
-      icon: <Briefcase size={20} />,
-      color: '#10B981'
-    },
-    revendeur: { 
-      title: 'Espace Revendeur',
-      icon: <ShoppingBag size={20} />,
-      color: '#F59E0B'
-    }
-  }
+// Composant NavGroup avec dropdown
+const NavGroup = ({ item, isExpanded, onToggle, location }) => {
+  const Icon = item.icon;
+  const hasActiveChild = item.children?.some(child => location.pathname === child.path);
+  
+  return (
+    <div className="mb-1">
+      {/* Header du groupe */}
+      <button
+        onClick={onToggle}
+        className={`
+          w-full flex items-center justify-between px-3 py-2.5 rounded-lg
+          transition-all duration-200 group
+          ${hasActiveChild 
+            ? 'bg-blue-50 text-blue-700' 
+            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          }
+        `}
+      >
+        <div className="flex items-center gap-3">
+          <Icon size={20} className={hasActiveChild ? 'text-blue-600' : 'text-gray-500 group-hover:text-gray-700'} />
+          <span className="font-medium text-sm">{item.label}</span>
+        </div>
+        {isExpanded 
+          ? <ChevronDown size={16} className="text-gray-400" />
+          : <ChevronRight size={16} className="text-gray-400" />
+        }
+      </button>
+      
+      {/* Children avec animation */}
+      <div className={`
+        overflow-hidden transition-all duration-200 ease-in-out
+        ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+      `}>
+        <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-gray-100 pl-3">
+          {item.children?.map((child) => {
+            const ChildIcon = child.icon;
+            const isActive = location.pathname === child.path;
+            
+            return (
+              <NavLink
+                key={child.id}
+                to={child.path}
+                className={`
+                  flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+                  transition-all duration-150
+                  ${isActive 
+                    ? 'bg-blue-600 text-white shadow-sm' 
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  }
+                `}
+              >
+                <ChildIcon size={16} className={isActive ? 'text-white' : 'text-gray-400'} />
+                <span>{child.label}</span>
+              </NavLink>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-  const menu = menuItems[currentPortal] || menuItems.superadmin
-  const portal = portalInfo[currentPortal] || portalInfo.superadmin
+// Composant NavItem simple (sans children)
+const NavItem = ({ item, location }) => {
+  const Icon = item.icon;
+  const isActive = location.pathname === item.path;
+  
+  return (
+    <NavLink
+      to={item.path}
+      className={`
+        flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1
+        transition-all duration-200
+        ${isActive 
+          ? 'bg-blue-600 text-white shadow-sm' 
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+        }
+      `}
+    >
+      <Icon size={20} className={isActive ? 'text-white' : 'text-gray-500'} />
+      <span className="font-medium text-sm">{item.label}</span>
+    </NavLink>
+  );
+};
+
+// Composant Sidebar principal
+const Sidebar = () => {
+  const location = useLocation();
+  const [expandedGroups, setExpandedGroups] = useState(() => {
+    // Ouvrir automatiquement le groupe actif
+    const activeGroup = navigationConfig.find(item => 
+      item.isGroup && item.children?.some(child => location.pathname.startsWith(child.path))
+    );
+    return activeGroup ? [activeGroup.id] : ['finance']; // Finance ouvert par défaut
+  });
+
+  const toggleGroup = (groupId) => {
+    setExpandedGroups(prev => 
+      prev.includes(groupId) 
+        ? prev.filter(id => id !== groupId)
+        : [...prev, groupId]
+    );
+  };
 
   return (
-    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
-      {/* Logo */}
-      <div className={styles.logo}>
-        <Building2 size={32} className={styles.logoIcon} />
-        {!collapsed && <span className={styles.logoText}>DAINAMICS</span>}
-      </div>
+    <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-white/80 backdrop-blur-lg border-r border-gray-200/50 overflow-y-auto z-40">
+      <div className="p-4">
+        {/* Logo Section */}
+        <div className="mb-6 px-3">
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Navigation
+          </h2>
+        </div>
 
-      {/* Sélecteur d'entreprise mieux intégré */}
-      {!collapsed && (
-        <div className={styles.companySelector}>
-          <label className={styles.selectorLabel}>ENTREPRISE</label>
-          <div className={styles.selectorWrapper}>
-            <Building2 size={16} className={styles.selectorIcon} />
-            <select 
-              className={styles.companyDropdown}
-              value={selectedCompany || 'all'}
-              onChange={(e) => onCompanyChange && onCompanyChange(e.target.value)}
-            >
-              <option value="all">Vue Consolidée</option>
-              <option value="HYPERVISUAL">HYPERVISUAL</option>
-              <option value="DAINAMICS">DAINAMICS</option>
-              <option value="LEXAIA">LEXAIA</option>
-              <option value="ENKI_REALTY">ENKI REALTY</option>
-              <option value="TAKEOUT">TAKEOUT</option>
-            </select>
+        {/* Navigation Items */}
+        <nav className="space-y-1">
+          {navigationConfig.map((item) => (
+            item.isGroup ? (
+              <NavGroup
+                key={item.id}
+                item={item}
+                isExpanded={expandedGroups.includes(item.id)}
+                onToggle={() => toggleGroup(item.id)}
+                location={location}
+              />
+            ) : (
+              <NavItem
+                key={item.id}
+                item={item}
+                location={location}
+              />
+            )
+          ))}
+        </nav>
+
+        {/* Footer avec version */}
+        <div className="mt-8 pt-4 border-t border-gray-100">
+          <div className="px-3 text-xs text-gray-400">
+            <p>Unified Platform v2.0</p>
+            <p className="mt-1">5 entreprises • 56 collections</p>
           </div>
         </div>
-      )}
-
-      {/* Toggle Button */}
-      {setCollapsed && (
-        <button 
-          className={styles.toggleBtn}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
-      )}
-
-      {/* Navigation entre portails */}
-      <div className={styles.portalNav}>
-        <div className={styles.portalTitle}>PORTAILS</div>
-        <button 
-          className={`${styles.portalItem} ${currentPortal === 'superadmin' ? styles.active : ''}`}
-          onClick={() => window.location.href = '#superadmin'}
-        >
-          <Shield size={20} />
-          {!collapsed && <span>SuperAdmin</span>}
-        </button>
-        <button 
-          className={`${styles.portalItem} ${currentPortal === 'client' ? styles.active : ''}`}
-          onClick={() => window.location.href = '#client'}
-        >
-          <User size={20} />
-          {!collapsed && <span>Client</span>}
-        </button>
-        <button 
-          className={`${styles.portalItem} ${currentPortal === 'prestataire' ? styles.active : ''}`}
-          onClick={() => window.location.href = '#prestataire'}
-        >
-          <Briefcase size={20} />
-          {!collapsed && <span>Prestataire</span>}
-        </button>
-        <button 
-          className={`${styles.portalItem} ${currentPortal === 'revendeur' ? styles.active : ''}`}
-          onClick={() => window.location.href = '#revendeur'}
-        >
-          <ShoppingCart size={20} />
-          {!collapsed && <span>Revendeur</span>}
-        </button>
       </div>
-
-      {/* Portal Header */}
-      <div className={styles.portalHeader} style={{ '--portal-color': portal.color }}>
-        <span className={styles.portalIcon}>{portal.icon}</span>
-        {!collapsed && <span className={styles.portalTitle}>{portal.title}</span>}
-      </div>
-
-      {/* Main Menu */}
-      <nav className={styles.nav}>
-        {menu.map((section, sectionIndex) => (
-          <div key={sectionIndex} className={styles.navSection}>
-            {!collapsed && (
-              <div className={styles.sectionTitle}>
-                {section.section}
-              </div>
-            )}
-            {section.items.map((item, itemIndex) => (
-              <a
-                key={itemIndex}
-                className={`${styles.navItem} ${item.active ? styles.active : ''}`}
-                href={item.href}
-              >
-                <span className={styles.navIcon}>{item.icon}</span>
-                {!collapsed && <span className={styles.navLabel}>{item.label}</span>}
-                {item.active && (
-                  <span className={styles.activeIndicator} style={{ background: portal.color }} />
-                )}
-              </a>
-            ))}
-          </div>
-        ))}
-
-        {/* Quick Stats */}
-        {!collapsed && currentPortal === 'superadmin' && (
-          <div className={styles.quickStats}>
-            <div className={styles.statItem}>
-              <FileText size={16} />
-              <div>
-                <div className={styles.statValue}>12</div>
-                <div className={styles.statLabel}>Tâches</div>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <BarChart3 size={16} />
-              <div>
-                <div className={styles.statValue}>€2.4M</div>
-                <div className={styles.statLabel}>ARR</div>
-              </div>
-            </div>
-            <div className={styles.statItem}>
-              <Wallet size={16} />
-              <div>
-                <div className={styles.statValue}>7.3m</div>
-                <div className={styles.statLabel}>Runway</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Menu */}
-        <div className={styles.navBottom}>
-          <a className={styles.navItem} href="#settings">
-            <span className={styles.navIcon}><Settings size={18} /></span>
-            {!collapsed && <span className={styles.navLabel}>Paramètres</span>}
-          </a>
-          <a className={styles.navItem} href="#logout">
-            <span className={styles.navIcon}><LogOut size={18} /></span>
-            {!collapsed && <span className={styles.navLabel}>Déconnexion</span>}
-          </a>
-        </div>
-      </nav>
     </aside>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

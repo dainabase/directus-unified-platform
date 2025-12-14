@@ -309,9 +309,9 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
                       </td>
                     </tr>
                     <tr>
-                      <td>Créances > 90 jours</td>
+                      <td>Créances &gt; 90 jours</td>
                       <td>{stats?.overdueDebts || 0}</td>
-                      <td>< 20</td>
+                      <td>&lt; 20</td>
                       <td>
                         <span className={`badge ${(stats?.overdueDebts || 0) < 20 ? 'bg-success' : 'bg-danger'}`}>
                           {(stats?.overdueDebts || 0) < 20 ? 'Objectif atteint' : 'Amélioration nécessaire'}
@@ -321,7 +321,7 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
                     <tr>
                       <td>Coût moyen recouvrement</td>
                       <td>{stats?.averageCost || 0} CHF</td>
-                      <td>< 150 CHF</td>
+                      <td>&lt; 150 CHF</td>
                       <td>
                         <span className={`badge ${(stats?.averageCost || 0) < 150 ? 'bg-success' : 'bg-warning'}`}>
                           {(stats?.averageCost || 0) < 150 ? 'Efficace' : 'Optimisable'}

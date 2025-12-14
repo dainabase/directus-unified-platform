@@ -348,7 +348,7 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
                   <div>
                     <div className="font-weight-medium text-danger">Créances anciennes</div>
                     <div className="text-muted small">
-                      {stats?.overdueDebts || 0} créances > 90j nécessitent action LP
+                      {stats?.overdueDebts || 0} creances &gt; 90j necessitent action LP
                     </div>
                   </div>
                 </div>

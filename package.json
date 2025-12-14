@@ -59,7 +59,7 @@
     ]
   },
   "dependencies": {
-    "@directus/sdk": "^10.3.5",
+    "@directus/sdk": "^17.0.2",
     "axios": "^1.11.0",
     "bcryptjs": "^2.4.3",
     "bullmq": "^5.66.0",

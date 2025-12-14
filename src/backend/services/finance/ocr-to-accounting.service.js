@@ -1,36 +1,98 @@
 /**
  * OCRToAccountingService
  * Convertit les données OCR en écritures comptables suisses
+ * Conforme au plan comptable Käfer PME
+ *
+ * @module finance/ocr-to-accounting
+ * @version 2.0.0
  */
 
-import { Directus } from '@directus/sdk';
+import { createDirectus, rest, readItems, createItem, updateItem, deleteItem } from '@directus/sdk';
 
+/**
+ * Service de conversion OCR vers comptabilité
+ * Gère l'automatisation des écritures comptables depuis les factures scannées
+ */
 class OCRToAccountingService {
   constructor() {
     this.directusUrl = process.env.DIRECTUS_URL || 'http://localhost:8055';
     this.directusToken = process.env.DIRECTUS_TOKEN;
-    
+
     // Mapping catégories OCR vers comptes Käfer PME
     this.accountMappings = {
-      // Charges d'exploitation
-      'marchandises': { debit: '4000', credit: '2000', label: 'Achat marchandises' },
-      'fournitures': { debit: '4200', credit: '2000', label: 'Fournitures de bureau' },
-      'services': { debit: '4400', credit: '2000', label: 'Services externes' },
-      'informatique': { debit: '4410', credit: '2000', label: 'Frais informatiques' },
-      'telecom': { debit: '4420', credit: '2000', label: 'Télécommunications' },
-      'loyer': { debit: '6000', credit: '2000', label: 'Loyer' },
-      'energie': { debit: '6100', credit: '2000', label: 'Énergie' },
-      'assurances': { debit: '6300', credit: '2000', label: 'Assurances' },
-      'honoraires': { debit: '6500', credit: '2000', label: 'Honoraires' },
-      'transport': { debit: '6200', credit: '2000', label: 'Transport' },
-      'publicite': { debit: '6600', credit: '2000', label: 'Publicité' },
-      'formation': { debit: '6700', credit: '2000', label: 'Formation' },
-      'autre': { debit: '6800', credit: '2000', label: 'Frais divers' },
-      
-      // Investissements
-      'materiel': { debit: '1500', credit: '2000', label: 'Matériel' },
-      'mobilier': { debit: '1510', credit: '2000', label: 'Mobilier' },
-      'vehicule': { debit: '1530', credit: '2000', label: 'Véhicule' }
+      // === CHARGES D'EXPLOITATION (Classe 4) ===
+      'marchandises': { debit: '4000', credit: '2000', label: 'Achat marchandises', vatDeductible: true },
+      'marchandises_import': { debit: '4010', credit: '2000', label: 'Achats importation', vatDeductible: true },
+      'fournitures': { debit: '4200', credit: '2000', label: 'Fournitures de bureau', vatDeductible: true },
+      'emballages': { debit: '4300', credit: '2000', label: 'Emballages', vatDeductible: true },
+      'services': { debit: '4400', credit: '2000', label: 'Services externes', vatDeductible: true },
+      'sous_traitance': { debit: '4450', credit: '2000', label: 'Sous-traitance', vatDeductible: true },
+      'informatique': { debit: '4410', credit: '2000', label: 'Frais informatiques', vatDeductible: true },
+      'logiciel': { debit: '4411', credit: '2000', label: 'Licences logiciels', vatDeductible: true },
+      'hebergement_web': { debit: '4412', credit: '2000', label: 'Hébergement web', vatDeductible: true },
+      'telecom': { debit: '4420', credit: '2000', label: 'Télécommunications', vatDeductible: true },
+      'telephonie': { debit: '4421', credit: '2000', label: 'Téléphonie mobile', vatDeductible: true },
+      'internet': { debit: '4422', credit: '2000', label: 'Accès internet', vatDeductible: true },
+
+      // === CHARGES DE PERSONNEL (Classe 5) ===
+      'salaires': { debit: '5000', credit: '2000', label: 'Salaires bruts', vatDeductible: false },
+      'charges_sociales': { debit: '5700', credit: '2000', label: 'Charges sociales', vatDeductible: false },
+      'avs': { debit: '5710', credit: '2000', label: 'AVS/AI/APG', vatDeductible: false },
+      'lpp': { debit: '5720', credit: '2000', label: 'Prévoyance professionnelle', vatDeductible: false },
+      'assurance_accident': { debit: '5730', credit: '2000', label: 'Assurance accidents', vatDeductible: false },
+      'formation_personnel': { debit: '5800', credit: '2000', label: 'Formation du personnel', vatDeductible: true },
+
+      // === AUTRES CHARGES D'EXPLOITATION (Classe 6) ===
+      'loyer': { debit: '6000', credit: '2000', label: 'Loyer', vatDeductible: false },
+      'charges_locatives': { debit: '6010', credit: '2000', label: 'Charges locatives', vatDeductible: true },
+      'entretien_locaux': { debit: '6050', credit: '2000', label: 'Entretien locaux', vatDeductible: true },
+      'energie': { debit: '6100', credit: '2000', label: 'Énergie', vatDeductible: true },
+      'electricite': { debit: '6110', credit: '2000', label: 'Électricité', vatDeductible: true },
+      'chauffage': { debit: '6120', credit: '2000', label: 'Chauffage', vatDeductible: true },
+      'eau': { debit: '6130', credit: '2000', label: 'Eau', vatDeductible: true },
+      'transport': { debit: '6200', credit: '2000', label: 'Transport', vatDeductible: true },
+      'vehicule': { debit: '6210', credit: '2000', label: 'Frais véhicule', vatDeductible: true },
+      'carburant': { debit: '6211', credit: '2000', label: 'Carburant', vatDeductible: true },
+      'entretien_vehicule': { debit: '6212', credit: '2000', label: 'Entretien véhicule', vatDeductible: true },
+      'assurance_vehicule': { debit: '6213', credit: '2000', label: 'Assurance véhicule', vatDeductible: false },
+      'deplacements': { debit: '6220', credit: '2000', label: 'Frais de déplacement', vatDeductible: true },
+      'parking': { debit: '6230', credit: '2000', label: 'Parking', vatDeductible: true },
+      'assurances': { debit: '6300', credit: '2000', label: 'Assurances', vatDeductible: false },
+      'assurance_rc': { debit: '6310', credit: '2000', label: 'Assurance RC', vatDeductible: false },
+      'assurance_choses': { debit: '6320', credit: '2000', label: 'Assurance choses', vatDeductible: false },
+      'honoraires': { debit: '6500', credit: '2000', label: 'Honoraires', vatDeductible: true },
+      'fiduciaire': { debit: '6510', credit: '2000', label: 'Frais fiduciaire', vatDeductible: true },
+      'avocat': { debit: '6520', credit: '2000', label: 'Frais avocat', vatDeductible: true },
+      'notaire': { debit: '6530', credit: '2000', label: 'Frais notaire', vatDeductible: true },
+      'consultant': { debit: '6540', credit: '2000', label: 'Frais consultant', vatDeductible: true },
+      'publicite': { debit: '6600', credit: '2000', label: 'Publicité', vatDeductible: true },
+      'marketing': { debit: '6610', credit: '2000', label: 'Marketing', vatDeductible: true },
+      'site_web': { debit: '6620', credit: '2000', label: 'Site web', vatDeductible: true },
+      'imprimerie': { debit: '6630', credit: '2000', label: 'Imprimerie', vatDeductible: true },
+      'formation': { debit: '6700', credit: '2000', label: 'Formation', vatDeductible: true },
+      'livres': { debit: '6710', credit: '2000', label: 'Documentation', vatDeductible: true },
+      'abonnements': { debit: '6720', credit: '2000', label: 'Abonnements', vatDeductible: true },
+      'frais_bancaires': { debit: '6800', credit: '2000', label: 'Frais bancaires', vatDeductible: false },
+      'frais_admin': { debit: '6810', credit: '2000', label: 'Frais administratifs', vatDeductible: true },
+      'poste': { debit: '6820', credit: '2000', label: 'Frais postaux', vatDeductible: false },
+      'cotisations': { debit: '6830', credit: '2000', label: 'Cotisations associations', vatDeductible: false },
+      'dons': { debit: '6840', credit: '2000', label: 'Dons', vatDeductible: false },
+      'autre': { debit: '6900', credit: '2000', label: 'Frais divers', vatDeductible: true },
+
+      // === INVESTISSEMENTS (Classe 1) ===
+      'materiel': { debit: '1500', credit: '2000', label: 'Machines et équipements', vatDeductible: true },
+      'informatique_immobilise': { debit: '1520', credit: '2000', label: 'Matériel informatique', vatDeductible: true },
+      'mobilier': { debit: '1510', credit: '2000', label: 'Mobilier et installations', vatDeductible: true },
+      'vehicule_immobilise': { debit: '1530', credit: '2000', label: 'Véhicules', vatDeductible: true },
+      'immobilier': { debit: '1600', credit: '2000', label: 'Immeubles', vatDeductible: true },
+
+      // === CHARGES FINANCIÈRES (Classe 6) ===
+      'interets_passifs': { debit: '6800', credit: '2000', label: 'Intérêts passifs', vatDeductible: false },
+      'frais_leasing': { debit: '6850', credit: '2000', label: 'Frais leasing', vatDeductible: true },
+
+      // === CHARGES EXCEPTIONNELLES (Classe 8) ===
+      'pertes_debiteurs': { debit: '8000', credit: '2000', label: 'Pertes sur débiteurs', vatDeductible: false },
+      'amortissements': { debit: '6800', credit: '2000', label: 'Amortissements', vatDeductible: false }
     };
 
     // Taux TVA suisse 2025
@@ -43,179 +105,311 @@ class OCRToAccountingService {
 
     // Comptes TVA
     this.vatAccounts = {
-      'input': '1170',   // TVA déductible (impôt préalable)
-      'output': '2200'   // TVA due
+      'input': '1170',     // TVA déductible (impôt préalable)
+      'output': '2200',    // TVA due
+      'input_import': '1171'  // TVA import
+    };
+
+    // Patterns de détection de fournisseurs suisses connus
+    this.supplierPatterns = [
+      { keywords: ['swisscom', 'sunrise', 'salt', 'upc'], category: 'telecom' },
+      { keywords: ['microsoft', 'google', 'adobe', 'oracle', 'sap', 'atlassian'], category: 'logiciel' },
+      { keywords: ['amazon web services', 'aws', 'azure', 'digitalocean', 'infomaniak'], category: 'hebergement_web' },
+      { keywords: ['sbb', 'cff', 'ffs', 'bls', 'transn'], category: 'deplacements' },
+      { keywords: ['uber', 'taxi', 'bolt'], category: 'transport' },
+      { keywords: ['shell', 'bp', 'avia', 'migrol', 'tamoil', 'carburant', 'essence', 'diesel'], category: 'carburant' },
+      { keywords: ['migros', 'coop', 'denner', 'aldi', 'lidl', 'volg'], category: 'fournitures' },
+      { keywords: ['electricite', 'services industriels', 'sig', 'romande energie', 'groupe e'], category: 'electricite' },
+      { keywords: ['chauffage', 'mazout', 'pellet'], category: 'chauffage' },
+      { keywords: ['loyer', 'bail', 'regie', 'immobilier', 'gerance'], category: 'loyer' },
+      { keywords: ['axa', 'zurich', 'mobiliar', 'helvetia', 'bâloise', 'vaudoise', 'generali', 'allianz'], category: 'assurances' },
+      { keywords: ['avocat', 'etude', 'legal', 'juridique'], category: 'avocat' },
+      { keywords: ['fiduciaire', 'comptable', 'revision', 'audit'], category: 'fiduciaire' },
+      { keywords: ['notaire', 'notariat'], category: 'notaire' },
+      { keywords: ['publicite', 'marketing', 'google ads', 'facebook ads', 'linkedin'], category: 'marketing' },
+      { keywords: ['imprimerie', 'print', 'impression', 'flyeralarm'], category: 'imprimerie' },
+      { keywords: ['formation', 'cours', 'seminaire', 'conference'], category: 'formation' },
+      { keywords: ['poste', 'la poste'], category: 'poste' },
+      { keywords: ['apple', 'dell', 'hp', 'lenovo', 'asus'], category: 'informatique_immobilise' },
+      { keywords: ['ikea', 'pfister', 'conforama', 'interio'], category: 'mobilier' }
+    ];
+
+    // Configuration des entreprises
+    this.companyConfig = {
+      'HYPERVISUAL': { defaultVatRate: 'normal', currency: 'CHF' },
+      'DAINAMICS': { defaultVatRate: 'normal', currency: 'CHF' },
+      'LEXAIA': { defaultVatRate: 'normal', currency: 'CHF' },
+      'ENKI REALTY': { defaultVatRate: 'exonere', currency: 'CHF' },
+      'TAKEOUT': { defaultVatRate: 'reduit', currency: 'CHF' }
     };
   }
 
+  /**
+   * Obtenir le client Directus configuré
+   */
   getDirectus() {
-    const client = new Directus(this.directusUrl);
-    if (this.directusToken) {
-      client.auth.static(this.directusToken);
-    }
+    const client = createDirectus(this.directusUrl).with(rest());
     return client;
   }
 
+  // ==========================================
+  // CRÉATION D'ÉCRITURES COMPTABLES
+  // ==========================================
+
   /**
    * Créer une écriture comptable depuis les données OCR validées
-   * @param {string} supplierInvoiceId - ID de la facture fournisseur dans Directus
-   * @param {Object} options - Options supplémentaires
+   * @param {string} supplierInvoiceId - ID de la facture fournisseur
+   * @param {Object} options - Options (autoPost, overrideAccounts)
+   * @returns {Promise<Object>} Résultat avec écriture créée
    */
   async createEntryFromOCR(supplierInvoiceId, options = {}) {
     const directus = this.getDirectus();
 
     try {
       // 1. Récupérer la facture fournisseur avec données OCR
-      const invoices = await directus.items('supplier_invoices').readMany({
-        filter: { id: { _eq: supplierInvoiceId } },
-        limit: 1
-      });
+      const invoices = await directus.request(
+        readItems('supplier_invoices', {
+          filter: { id: { _eq: supplierInvoiceId } },
+          limit: 1
+        })
+      );
 
       if (!invoices[0]) {
         throw new Error('Facture fournisseur non trouvée');
       }
 
       const invoice = invoices[0];
-      const ocrData = typeof invoice.ocr_data === 'string' 
-        ? JSON.parse(invoice.ocr_data) 
-        : invoice.ocr_data;
+      const ocrData = this.parseOCRData(invoice.ocr_data);
 
-      if (!ocrData) {
-        throw new Error('Données OCR non disponibles');
+      if (!ocrData && !invoice.amount) {
+        throw new Error('Données OCR et montant non disponibles');
       }
 
-      // 2. Déterminer les comptes
-      const accounts = this.suggestAccounts(ocrData, invoice);
+      // 2. Vérifier si une écriture existe déjà
+      if (invoice.accounting_entry_id) {
+        throw new Error(`Une écriture comptable existe déjà: ${invoice.accounting_entry_id}`);
+      }
 
-      // 3. Calculer les montants avec TVA
-      const amounts = this.calculateAmounts(ocrData, invoice);
+      // 3. Déterminer les comptes (override possible)
+      let accounts;
+      if (options.overrideAccounts) {
+        accounts = {
+          debit: options.overrideAccounts.debit || '6900',
+          credit: options.overrideAccounts.credit || '2000',
+          label: options.overrideAccounts.label || 'Charge personnalisée',
+          vatDeductible: options.overrideAccounts.vatDeductible !== false
+        };
+      } else {
+        accounts = this.suggestAccounts(ocrData, invoice);
+      }
 
-      // 4. Créer l'écriture comptable
-      const entryData = {
-        owner_company: invoice.owner_company,
-        entry_date: invoice.invoice_date || new Date().toISOString().split('T')[0],
-        reference: invoice.invoice_number || `OCR-${supplierInvoiceId.slice(0, 8)}`,
-        description: `${accounts.label} - ${invoice.supplier_name || 'Fournisseur'}`,
-        document_type: 'supplier_invoice',
-        document_id: supplierInvoiceId,
-        status: options.autoPost ? 'posted' : 'draft',
-        lines: []
-      };
+      // 4. Calculer les montants avec TVA
+      const amounts = this.calculateAmounts(ocrData, invoice, accounts);
+
+      // 5. Créer l'écriture comptable
+      const entryDate = invoice.invoice_date || invoice.date || new Date().toISOString().split('T')[0];
+      const reference = invoice.invoice_number || `OCR-${supplierInvoiceId.slice(0, 8)}`;
+
+      const entryLines = [];
 
       // Ligne débit (charge ou actif)
-      entryData.lines.push({
+      entryLines.push({
+        line_number: 1,
         account_number: accounts.debit,
         account_name: this.getAccountName(accounts.debit),
         debit: amounts.ht,
         credit: 0,
-        description: accounts.label
+        description: accounts.label,
+        cost_center: invoice.cost_center || null
       });
 
       // Ligne TVA déductible (si applicable)
-      if (amounts.tva > 0) {
-        entryData.lines.push({
+      if (amounts.tva > 0 && accounts.vatDeductible) {
+        entryLines.push({
+          line_number: 2,
           account_number: this.vatAccounts.input,
           account_name: 'TVA déductible (impôt préalable)',
           debit: amounts.tva,
           credit: 0,
-          description: `TVA ${amounts.vatRate}% sur ${accounts.label}`
+          description: `TVA ${amounts.vatRate}% sur ${accounts.label}`,
+          vat_rate: amounts.vatRate,
+          vat_code: this.getVATCode(amounts.vatRate)
         });
       }
 
       // Ligne crédit (créanciers)
-      entryData.lines.push({
+      entryLines.push({
+        line_number: entryLines.length + 1,
         account_number: accounts.credit,
         account_name: 'Créanciers (fournisseurs)',
         debit: 0,
         credit: amounts.ttc,
-        description: `${invoice.supplier_name || 'Fournisseur'} - ${invoice.invoice_number || ''}`
+        description: `${invoice.supplier_name || 'Fournisseur'} - ${reference}`,
+        supplier_id: invoice.supplier_id || null
       });
 
       // Créer l'écriture dans Directus
-      const entry = await directus.items('accounting_entries').createOne({
-        ...entryData,
-        lines: JSON.stringify(entryData.lines),
-        total_debit: amounts.ttc,
-        total_credit: amounts.ttc
-      });
+      const entry = await directus.request(
+        createItem('accounting_entries', {
+          owner_company: invoice.owner_company,
+          entry_date: entryDate,
+          posting_date: options.autoPost ? new Date().toISOString().split('T')[0] : null,
+          reference: reference,
+          description: `${accounts.label} - ${invoice.supplier_name || 'Fournisseur'}`,
+          document_type: 'supplier_invoice',
+          document_id: supplierInvoiceId,
+          document_number: invoice.invoice_number,
+          status: options.autoPost ? 'posted' : 'draft',
+          lines: JSON.stringify(entryLines),
+          total_debit: amounts.ttc,
+          total_credit: amounts.ttc,
+          currency: invoice.currency || 'CHF',
+          created_from: 'ocr',
+          ocr_confidence: ocrData?.confidence || null,
+          vat_included: true,
+          vat_amount: amounts.tva,
+          vat_rate: amounts.vatRate
+        })
+      );
 
-      // 5. Lier l'écriture à la facture
-      await directus.items('supplier_invoices').updateOne(supplierInvoiceId, {
-        accounting_entry_id: entry.id,
-        ocr_validated: true,
-        ocr_validated_at: new Date().toISOString(),
-        status: 'posted'
-      });
+      // 6. Lier l'écriture à la facture
+      await directus.request(
+        updateItem('supplier_invoices', supplierInvoiceId, {
+          accounting_entry_id: entry.id,
+          ocr_validated: true,
+          ocr_validated_at: new Date().toISOString(),
+          ocr_validated_by: options.userId || null,
+          status: 'approved',
+          accounting_status: options.autoPost ? 'posted' : 'pending'
+        })
+      );
 
       console.log(`✅ Écriture comptable créée: ${entry.id} pour facture ${supplierInvoiceId}`);
 
       return {
         success: true,
-        entry,
+        entry: {
+          id: entry.id,
+          reference: reference,
+          date: entryDate,
+          status: entry.status
+        },
         amounts,
         accounts,
-        message: `Écriture comptable créée: ${entry.reference}`
+        lines: entryLines,
+        message: `Écriture comptable créée: ${reference}`
       };
 
     } catch (error) {
       console.error('Erreur création écriture OCR:', error);
+
+      // Logger l'erreur dans la facture
+      try {
+        await directus.request(
+          updateItem('supplier_invoices', supplierInvoiceId, {
+            ocr_error: error.message,
+            ocr_error_at: new Date().toISOString()
+          })
+        );
+      } catch (e) { /* ignore */ }
+
       throw error;
     }
+  }
+
+  /**
+   * Parser les données OCR (JSON ou objet)
+   */
+  parseOCRData(data) {
+    if (!data) return null;
+    if (typeof data === 'string') {
+      try {
+        return JSON.parse(data);
+      } catch {
+        return null;
+      }
+    }
+    return data;
   }
 
   /**
    * Suggérer les comptes comptables basé sur les données OCR
    */
   suggestAccounts(ocrData, invoice) {
-    // 1. Utiliser la catégorie détectée par OCR
-    const category = (ocrData.category || 'autre').toLowerCase();
-    
-    if (this.accountMappings[category]) {
-      return this.accountMappings[category];
+    // 1. Utiliser la catégorie détectée par OCR si disponible
+    const ocrCategory = (ocrData?.category || '').toLowerCase();
+    if (ocrCategory && this.accountMappings[ocrCategory]) {
+      return this.accountMappings[ocrCategory];
     }
 
-    // 2. Analyser le nom du fournisseur ou la description
-    const text = `${invoice.supplier_name || ''} ${ocrData.description || ''}`.toLowerCase();
+    // 2. Utiliser le mapping fournisseur si enregistré
+    if (invoice.supplier_account_mapping) {
+      try {
+        const mapping = typeof invoice.supplier_account_mapping === 'string'
+          ? JSON.parse(invoice.supplier_account_mapping)
+          : invoice.supplier_account_mapping;
+        if (mapping.debit) {
+          return {
+            debit: mapping.debit,
+            credit: mapping.credit || '2000',
+            label: mapping.label || 'Charge fournisseur',
+            vatDeductible: mapping.vatDeductible !== false
+          };
+        }
+      } catch { /* ignore */ }
+    }
 
-    // Patterns de détection
-    const patterns = [
-      { keywords: ['swisscom', 'sunrise', 'salt', 'telecom'], mapping: 'telecom' },
-      { keywords: ['microsoft', 'google', 'adobe', 'software', 'logiciel'], mapping: 'informatique' },
-      { keywords: ['sbb', 'cff', 'uber', 'taxi', 'carburant', 'essence'], mapping: 'transport' },
-      { keywords: ['migros', 'coop', 'denner', 'aldi'], mapping: 'fournitures' },
-      { keywords: ['electricite', 'gaz', 'services industriels', 'sig'], mapping: 'energie' },
-      { keywords: ['loyer', 'bail', 'immobilier'], mapping: 'loyer' },
-      { keywords: ['assurance', 'zurich', 'axa', 'mobiliar'], mapping: 'assurances' },
-      { keywords: ['avocat', 'fiduciaire', 'expert', 'conseil'], mapping: 'honoraires' },
-      { keywords: ['publicite', 'marketing', 'google ads', 'facebook'], mapping: 'publicite' }
-    ];
+    // 3. Analyser le nom du fournisseur et la description
+    const searchText = `${invoice.supplier_name || ''} ${ocrData?.description || ''} ${ocrData?.vendor || ''}`.toLowerCase();
 
-    for (const pattern of patterns) {
-      if (pattern.keywords.some(kw => text.includes(kw))) {
-        return this.accountMappings[pattern.mapping];
+    for (const pattern of this.supplierPatterns) {
+      if (pattern.keywords.some(kw => searchText.includes(kw))) {
+        if (this.accountMappings[pattern.category]) {
+          return this.accountMappings[pattern.category];
+        }
       }
     }
 
-    // 3. Défaut
+    // 4. Défaut basé sur le montant (investissement si > 1000 CHF)
+    const amount = parseFloat(invoice.amount || ocrData?.total || 0);
+    if (amount > 5000) {
+      // Vérifier si c'est potentiellement un investissement
+      const investKeywords = ['ordinateur', 'serveur', 'machine', 'véhicule', 'voiture', 'meuble', 'équipement'];
+      if (investKeywords.some(kw => searchText.includes(kw))) {
+        return this.accountMappings['materiel'];
+      }
+    }
+
+    // 5. Défaut: frais divers
     return this.accountMappings['autre'];
   }
 
   /**
    * Calculer les montants HT, TVA, TTC
    */
-  calculateAmounts(ocrData, invoice) {
-    const ttc = parseFloat(invoice.amount || ocrData.total || 0);
-    let ht = parseFloat(ocrData.subtotal || 0);
-    let tva = parseFloat(ocrData.vat_amount || 0);
-    let vatRate = parseFloat(ocrData.vat_rate || 0);
+  calculateAmounts(ocrData, invoice, accounts) {
+    const ttc = parseFloat(invoice.amount || ocrData?.total || 0);
+    let ht = parseFloat(ocrData?.subtotal || invoice.amount_ht || 0);
+    let tva = parseFloat(ocrData?.vat_amount || invoice.vat_amount || 0);
+    let vatRate = parseFloat(ocrData?.vat_rate || invoice.vat_rate || 0);
 
-    // Si on a le TTC mais pas le détail
+    // Si TVA non déductible, pas de calcul TVA
+    if (!accounts.vatDeductible) {
+      return {
+        ttc: Math.round(ttc * 100) / 100,
+        ht: Math.round(ttc * 100) / 100,
+        tva: 0,
+        vatRate: 0
+      };
+    }
+
+    // Si on a le TTC mais pas le détail HT/TVA
     if (ttc > 0 && ht === 0) {
-      // Détecter le taux de TVA
+      // Détecter ou utiliser le taux de TVA
       if (vatRate === 0) {
         vatRate = this.detectVATRate(ocrData, invoice);
       }
-      
+
       // Calculer HT et TVA depuis TTC
       if (vatRate > 0) {
         ht = ttc / (1 + vatRate / 100);
@@ -226,11 +420,17 @@ class OCRToAccountingService {
       }
     }
 
+    // Vérifier la cohérence
+    const calculatedTTC = ht + tva;
+    if (Math.abs(calculatedTTC - ttc) > 0.10) {
+      console.warn(`⚠️ Incohérence TVA détectée: HT ${ht} + TVA ${tva} ≠ TTC ${ttc}`);
+    }
+
     return {
       ttc: Math.round(ttc * 100) / 100,
       ht: Math.round(ht * 100) / 100,
       tva: Math.round(tva * 100) / 100,
-      vatRate
+      vatRate: vatRate
     };
   }
 
@@ -238,25 +438,42 @@ class OCRToAccountingService {
    * Détecter le taux de TVA applicable
    */
   detectVATRate(ocrData, invoice) {
-    const text = `${invoice.supplier_name || ''} ${ocrData.description || ''}`.toLowerCase();
-    
-    // Hébergement
-    if (text.includes('hotel') || text.includes('logement') || text.includes('airbnb')) {
-      return this.vatRates.hebergement;
-    }
-    
-    // Taux réduit (alimentaire, livres, journaux, médicaments)
-    if (text.includes('pharmacie') || text.includes('livre') || text.includes('journal')) {
-      return this.vatRates.reduit;
-    }
-    
-    // Exonéré (santé, formation, certains services)
-    if (text.includes('médecin') || text.includes('hopital') || text.includes('formation')) {
+    const text = `${invoice.supplier_name || ''} ${ocrData?.description || ''} ${ocrData?.category || ''}`.toLowerCase();
+
+    // Exonéré (santé, social, éducation, immobilier)
+    const exonereKeywords = ['médecin', 'docteur', 'hopital', 'clinique', 'dentiste', 'kiné', 'physiothérapie',
+      'ecole', 'université', 'formation professionnelle', 'crèche', 'garderie',
+      'assurance maladie', 'lamal', 'caisse maladie', 'banque', 'intérêts'];
+    if (exonereKeywords.some(kw => text.includes(kw))) {
       return this.vatRates.exonere;
     }
-    
+
+    // Hébergement (hôtels, airbnb)
+    const hebergementKeywords = ['hotel', 'hôtel', 'motel', 'auberge', 'airbnb', 'booking', 'hébergement', 'nuitée'];
+    if (hebergementKeywords.some(kw => text.includes(kw))) {
+      return this.vatRates.hebergement;
+    }
+
+    // Taux réduit (alimentaire, livres, journaux, médicaments)
+    const reduitKeywords = ['pharmacie', 'médicament', 'livre', 'librairie', 'journal', 'magazine',
+      'eau potable', 'denrées alimentaires', 'restaurant', 'café'];
+    if (reduitKeywords.some(kw => text.includes(kw))) {
+      return this.vatRates.reduit;
+    }
+
     // Défaut: taux normal
     return this.vatRates.normal;
+  }
+
+  /**
+   * Obtenir le code TVA pour le taux
+   */
+  getVATCode(vatRate) {
+    if (vatRate === 8.1) return 'N81';
+    if (vatRate === 2.6) return 'R26';
+    if (vatRate === 3.8) return 'H38';
+    if (vatRate === 0) return 'E00';
+    return 'N81';
   }
 
   /**
@@ -265,27 +482,76 @@ class OCRToAccountingService {
   getAccountName(accountNumber) {
     const names = {
       '1170': 'TVA déductible (impôt préalable)',
+      '1171': 'TVA import',
       '1500': 'Machines et équipements',
       '1510': 'Mobilier et installations',
+      '1520': 'Matériel informatique',
       '1530': 'Véhicules',
+      '1600': 'Immeubles',
       '2000': 'Créanciers (fournisseurs)',
       '2200': 'TVA due',
       '4000': 'Charges de marchandises',
+      '4010': 'Achats importation',
       '4200': 'Fournitures de bureau',
+      '4300': 'Emballages',
       '4400': 'Services et sous-traitance',
       '4410': 'Frais informatiques',
+      '4411': 'Licences logiciels',
+      '4412': 'Hébergement web',
       '4420': 'Télécommunications',
-      '6000': 'Charges de locaux',
+      '4421': 'Téléphonie mobile',
+      '4422': 'Accès internet',
+      '4450': 'Sous-traitance',
+      '5000': 'Salaires bruts',
+      '5700': 'Charges sociales',
+      '5710': 'AVS/AI/APG',
+      '5720': 'Prévoyance professionnelle (LPP)',
+      '5730': 'Assurance accidents (LAA)',
+      '5800': 'Formation du personnel',
+      '6000': 'Charges de locaux (loyer)',
+      '6010': 'Charges locatives',
+      '6050': 'Entretien et réparations locaux',
       '6100': 'Énergie',
+      '6110': 'Électricité',
+      '6120': 'Chauffage',
+      '6130': 'Eau',
       '6200': 'Transport',
+      '6210': 'Frais véhicule',
+      '6211': 'Carburant',
+      '6212': 'Entretien véhicule',
+      '6213': 'Assurance véhicule',
+      '6220': 'Frais de déplacement',
+      '6230': 'Parking',
       '6300': 'Assurances',
+      '6310': 'Assurance RC',
+      '6320': 'Assurance choses',
       '6500': 'Honoraires',
+      '6510': 'Frais fiduciaire',
+      '6520': 'Frais avocat',
+      '6530': 'Frais notaire',
+      '6540': 'Frais consultant',
       '6600': 'Publicité',
+      '6610': 'Marketing',
+      '6620': 'Site web',
+      '6630': 'Imprimerie',
       '6700': 'Formation',
-      '6800': 'Frais divers'
+      '6710': 'Documentation',
+      '6720': 'Abonnements',
+      '6800': 'Frais bancaires / Intérêts passifs',
+      '6810': 'Frais administratifs',
+      '6820': 'Frais postaux',
+      '6830': 'Cotisations associations',
+      '6840': 'Dons',
+      '6850': 'Frais leasing',
+      '6900': 'Frais divers',
+      '8000': 'Pertes sur débiteurs'
     };
     return names[accountNumber] || `Compte ${accountNumber}`;
   }
+
+  // ==========================================
+  // PRÉVISUALISATION ET VALIDATION
+  // ==========================================
 
   /**
    * Prévisualiser l'écriture avant validation
@@ -293,154 +559,405 @@ class OCRToAccountingService {
   async previewEntry(supplierInvoiceId) {
     const directus = this.getDirectus();
 
-    const invoices = await directus.items('supplier_invoices').readMany({
-      filter: { id: { _eq: supplierInvoiceId } },
-      limit: 1
-    });
+    const invoices = await directus.request(
+      readItems('supplier_invoices', {
+        filter: { id: { _eq: supplierInvoiceId } },
+        limit: 1
+      })
+    );
 
     if (!invoices[0]) {
       throw new Error('Facture non trouvée');
     }
 
     const invoice = invoices[0];
-    const ocrData = typeof invoice.ocr_data === 'string' 
-      ? JSON.parse(invoice.ocr_data) 
-      : invoice.ocr_data || {};
-
+    const ocrData = this.parseOCRData(invoice.ocr_data);
     const accounts = this.suggestAccounts(ocrData, invoice);
-    const amounts = this.calculateAmounts(ocrData, invoice);
+    const amounts = this.calculateAmounts(ocrData, invoice, accounts);
+
+    // Construire les lignes de prévisualisation
+    const previewLines = [
+      {
+        account: accounts.debit,
+        name: this.getAccountName(accounts.debit),
+        debit: amounts.ht,
+        credit: 0,
+        description: accounts.label
+      }
+    ];
+
+    if (amounts.tva > 0 && accounts.vatDeductible) {
+      previewLines.push({
+        account: this.vatAccounts.input,
+        name: 'TVA déductible (impôt préalable)',
+        debit: amounts.tva,
+        credit: 0,
+        description: `TVA ${amounts.vatRate}%`
+      });
+    }
+
+    previewLines.push({
+      account: accounts.credit,
+      name: this.getAccountName(accounts.credit),
+      debit: 0,
+      credit: amounts.ttc,
+      description: invoice.supplier_name || 'Fournisseur'
+    });
 
     return {
       invoice: {
         id: invoice.id,
         number: invoice.invoice_number,
         supplier: invoice.supplier_name,
-        date: invoice.invoice_date
+        date: invoice.invoice_date || invoice.date,
+        amount: invoice.amount,
+        currency: invoice.currency || 'CHF'
       },
+      ocr_data: ocrData ? {
+        confidence: ocrData.confidence,
+        vendor: ocrData.vendor,
+        category: ocrData.category,
+        total: ocrData.total,
+        subtotal: ocrData.subtotal,
+        vat_amount: ocrData.vat_amount,
+        vat_rate: ocrData.vat_rate
+      } : null,
       suggested: {
-        accounts,
-        amounts
+        accounts: {
+          ...accounts,
+          debit_name: this.getAccountName(accounts.debit),
+          credit_name: this.getAccountName(accounts.credit)
+        },
+        amounts,
+        vat_code: amounts.vatRate > 0 ? this.getVATCode(amounts.vatRate) : null
       },
       preview: {
-        lines: [
-          {
-            account: accounts.debit,
-            name: this.getAccountName(accounts.debit),
-            debit: amounts.ht,
-            credit: 0
-          },
-          ...(amounts.tva > 0 ? [{
-            account: this.vatAccounts.input,
-            name: 'TVA déductible',
-            debit: amounts.tva,
-            credit: 0
-          }] : []),
-          {
-            account: accounts.credit,
-            name: this.getAccountName(accounts.credit),
-            debit: 0,
-            credit: amounts.ttc
-          }
-        ],
+        lines: previewLines,
         total_debit: amounts.ttc,
         total_credit: amounts.ttc,
-        balanced: true
-      }
+        balanced: Math.abs(amounts.ttc - amounts.ttc) < 0.01
+      },
+      alternative_accounts: this.getAlternativeAccounts(ocrData, invoice)
     };
   }
 
   /**
-   * Modifier les comptes suggérés avant validation
+   * Obtenir des comptes alternatifs suggérés
    */
-  async createEntryWithCustomAccounts(supplierInvoiceId, customAccounts) {
-    const directus = this.getDirectus();
+  getAlternativeAccounts(ocrData, invoice) {
+    const alternatives = [];
+    const currentCategory = this.suggestAccounts(ocrData, invoice);
 
-    const invoices = await directus.items('supplier_invoices').readMany({
-      filter: { id: { _eq: supplierInvoiceId } },
-      limit: 1
-    });
+    // Proposer des alternatives courantes
+    const commonAlternatives = ['fournitures', 'services', 'informatique', 'autre'];
 
-    if (!invoices[0]) {
-      throw new Error('Facture non trouvée');
+    for (const cat of commonAlternatives) {
+      const mapping = this.accountMappings[cat];
+      if (mapping && mapping.debit !== currentCategory.debit) {
+        alternatives.push({
+          category: cat,
+          debit: mapping.debit,
+          debit_name: this.getAccountName(mapping.debit),
+          label: mapping.label
+        });
+      }
     }
 
-    const invoice = invoices[0];
-    const ocrData = typeof invoice.ocr_data === 'string' 
-      ? JSON.parse(invoice.ocr_data) 
-      : invoice.ocr_data || {};
-
-    const amounts = this.calculateAmounts(ocrData, invoice);
-
-    // Utiliser les comptes personnalisés
-    const accounts = {
-      debit: customAccounts.debit || '6800',
-      credit: customAccounts.credit || '2000',
-      label: customAccounts.label || 'Charge personnalisée'
-    };
-
-    // Créer l'écriture avec les comptes modifiés
-    const entry = await directus.items('accounting_entries').createOne({
-      owner_company: invoice.owner_company,
-      entry_date: invoice.invoice_date || new Date().toISOString().split('T')[0],
-      reference: invoice.invoice_number,
-      description: `${accounts.label} - ${invoice.supplier_name}`,
-      document_type: 'supplier_invoice',
-      document_id: supplierInvoiceId,
-      status: 'posted',
-      lines: JSON.stringify([
-        { account_number: accounts.debit, debit: amounts.ht, credit: 0 },
-        ...(amounts.tva > 0 ? [{ account_number: this.vatAccounts.input, debit: amounts.tva, credit: 0 }] : []),
-        { account_number: accounts.credit, debit: 0, credit: amounts.ttc }
-      ]),
-      total_debit: amounts.ttc,
-      total_credit: amounts.ttc
-    });
-
-    // Mettre à jour la facture
-    await directus.items('supplier_invoices').updateOne(supplierInvoiceId, {
-      accounting_entry_id: entry.id,
-      ocr_validated: true,
-      ocr_validated_at: new Date().toISOString()
-    });
-
-    return { success: true, entry };
+    return alternatives.slice(0, 5);
   }
+
+  /**
+   * Créer une écriture avec des comptes personnalisés
+   */
+  async createEntryWithCustomAccounts(supplierInvoiceId, customAccounts, options = {}) {
+    return this.createEntryFromOCR(supplierInvoiceId, {
+      ...options,
+      overrideAccounts: {
+        debit: customAccounts.debit || '6900',
+        credit: customAccounts.credit || '2000',
+        label: customAccounts.label || 'Charge personnalisée',
+        vatDeductible: customAccounts.vatDeductible !== false
+      }
+    });
+  }
+
+  // ==========================================
+  // TRAITEMENT EN LOT
+  // ==========================================
 
   /**
    * Traitement en lot des factures OCR non comptabilisées
    */
   async processPendingOCR(companyName, options = {}) {
     const directus = this.getDirectus();
-    
-    const invoices = await directus.items('supplier_invoices').readMany({
-      filter: {
-        owner_company: { _eq: companyName },
-        ocr_validated: { _eq: false },
-        ocr_data: { _nnull: true }
-      },
-      limit: options.limit || 50
-    });
+
+    const invoices = await directus.request(
+      readItems('supplier_invoices', {
+        filter: {
+          owner_company: { _eq: companyName },
+          _or: [
+            { ocr_validated: { _eq: false } },
+            { ocr_validated: { _null: true } }
+          ],
+          ocr_data: { _nnull: true },
+          accounting_entry_id: { _null: true }
+        },
+        sort: ['-date'],
+        limit: options.limit || 50
+      })
+    );
 
     const results = {
       processed: 0,
       success: 0,
       errors: 0,
+      skipped: 0,
       details: []
     };
 
+    console.log(`📋 ${invoices.length} factures OCR à traiter pour ${companyName}`);
+
     for (const invoice of invoices) {
       results.processed++;
+
       try {
-        const result = await this.createEntryFromOCR(invoice.id, { autoPost: options.autoPost });
+        // Vérifier la confiance OCR minimale
+        const ocrData = this.parseOCRData(invoice.ocr_data);
+        const confidence = ocrData?.confidence || 0;
+
+        if (options.minConfidence && confidence < options.minConfidence) {
+          results.skipped++;
+          results.details.push({
+            id: invoice.id,
+            number: invoice.invoice_number,
+            status: 'skipped',
+            reason: `Confiance OCR insuffisante: ${confidence}%`
+          });
+          continue;
+        }
+
+        const result = await this.createEntryFromOCR(invoice.id, {
+          autoPost: options.autoPost,
+          userId: options.userId
+        });
+
         results.success++;
-        results.details.push({ id: invoice.id, status: 'success', entry: result.entry.id });
+        results.details.push({
+          id: invoice.id,
+          number: invoice.invoice_number,
+          status: 'success',
+          entry_id: result.entry.id,
+          amount: result.amounts.ttc,
+          account: result.accounts.debit
+        });
+
       } catch (error) {
         results.errors++;
-        results.details.push({ id: invoice.id, status: 'error', message: error.message });
+        results.details.push({
+          id: invoice.id,
+          number: invoice.invoice_number,
+          status: 'error',
+          error: error.message
+        });
       }
     }
 
+    console.log(`✅ Traitement terminé: ${results.success} succès, ${results.errors} erreurs, ${results.skipped} ignorées`);
     return results;
+  }
+
+  /**
+   * Obtenir les factures en attente de comptabilisation
+   */
+  async getPendingInvoices(companyName, options = {}) {
+    const directus = this.getDirectus();
+
+    const filter = {
+      owner_company: { _eq: companyName },
+      accounting_entry_id: { _null: true }
+    };
+
+    if (options.hasOCR) {
+      filter.ocr_data = { _nnull: true };
+    }
+
+    if (options.status) {
+      filter.status = { _eq: options.status };
+    }
+
+    const invoices = await directus.request(
+      readItems('supplier_invoices', {
+        filter,
+        sort: ['-date'],
+        limit: options.limit || 100,
+        fields: [
+          'id', 'invoice_number', 'supplier_name', 'supplier_id',
+          'amount', 'currency', 'date', 'invoice_date', 'due_date',
+          'status', 'ocr_data', 'ocr_validated', 'ocr_confidence',
+          'accounting_status'
+        ]
+      })
+    );
+
+    return invoices.map(inv => {
+      const ocrData = this.parseOCRData(inv.ocr_data);
+      return {
+        ...inv,
+        ocr_confidence: ocrData?.confidence || inv.ocr_confidence || null,
+        ocr_category: ocrData?.category || null,
+        suggested_account: ocrData ? this.suggestAccounts(ocrData, inv).debit : null
+      };
+    });
+  }
+
+  // ==========================================
+  // RAPPORTS ET STATISTIQUES
+  // ==========================================
+
+  /**
+   * Obtenir les statistiques de traitement OCR
+   */
+  async getOCRStats(companyName, period = {}) {
+    const directus = this.getDirectus();
+
+    const now = new Date();
+    const startDate = period.start || new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const endDate = period.end || now.toISOString();
+
+    const baseFilter = {
+      owner_company: { _eq: companyName },
+      date: { _between: [startDate, endDate] }
+    };
+
+    const [total, withOCR, validated, withEntries, errors] = await Promise.all([
+      directus.request(readItems('supplier_invoices', {
+        filter: baseFilter,
+        aggregate: { count: '*', sum: ['amount'] }
+      })),
+      directus.request(readItems('supplier_invoices', {
+        filter: { ...baseFilter, ocr_data: { _nnull: true } },
+        aggregate: { count: '*' }
+      })),
+      directus.request(readItems('supplier_invoices', {
+        filter: { ...baseFilter, ocr_validated: { _eq: true } },
+        aggregate: { count: '*' }
+      })),
+      directus.request(readItems('supplier_invoices', {
+        filter: { ...baseFilter, accounting_entry_id: { _nnull: true } },
+        aggregate: { count: '*', sum: ['amount'] }
+      })),
+      directus.request(readItems('supplier_invoices', {
+        filter: { ...baseFilter, ocr_error: { _nnull: true } },
+        aggregate: { count: '*' }
+      }))
+    ]);
+
+    const totalCount = parseInt(total[0]?.count || 0);
+    const ocrCount = parseInt(withOCR[0]?.count || 0);
+    const validatedCount = parseInt(validated[0]?.count || 0);
+    const entriesCount = parseInt(withEntries[0]?.count || 0);
+    const errorCount = parseInt(errors[0]?.count || 0);
+
+    return {
+      period: { start: startDate, end: endDate },
+      company: companyName,
+      invoices: {
+        total: totalCount,
+        with_ocr: ocrCount,
+        validated: validatedCount,
+        with_entries: entriesCount,
+        with_errors: errorCount,
+        pending: totalCount - entriesCount
+      },
+      rates: {
+        ocr_coverage: totalCount > 0 ? Math.round((ocrCount / totalCount) * 100) : 0,
+        validation_rate: ocrCount > 0 ? Math.round((validatedCount / ocrCount) * 100) : 0,
+        automation_rate: totalCount > 0 ? Math.round((entriesCount / totalCount) * 100) : 0,
+        error_rate: ocrCount > 0 ? Math.round((errorCount / ocrCount) * 100) : 0
+      },
+      amounts: {
+        total: parseFloat(total[0]?.sum?.amount || 0),
+        processed: parseFloat(withEntries[0]?.sum?.amount || 0),
+        currency: 'CHF'
+      },
+      generated_at: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Obtenir la répartition par compte
+   */
+  async getAccountDistribution(companyName, period = {}) {
+    const directus = this.getDirectus();
+
+    const now = new Date();
+    const startDate = period.start || new Date(now.getFullYear(), 0, 1).toISOString();
+    const endDate = period.end || now.toISOString();
+
+    const entries = await directus.request(
+      readItems('accounting_entries', {
+        filter: {
+          owner_company: { _eq: companyName },
+          entry_date: { _between: [startDate, endDate] },
+          document_type: { _eq: 'supplier_invoice' },
+          created_from: { _eq: 'ocr' }
+        },
+        fields: ['id', 'lines', 'total_debit']
+      })
+    );
+
+    // Agréger par compte de débit
+    const distribution = {};
+
+    for (const entry of entries) {
+      const lines = typeof entry.lines === 'string' ? JSON.parse(entry.lines) : entry.lines;
+      if (!lines) continue;
+
+      for (const line of lines) {
+        if (line.debit > 0 && line.account_number !== this.vatAccounts.input) {
+          const account = line.account_number;
+          if (!distribution[account]) {
+            distribution[account] = {
+              account: account,
+              name: this.getAccountName(account),
+              count: 0,
+              total: 0
+            };
+          }
+          distribution[account].count++;
+          distribution[account].total += line.debit;
+        }
+      }
+    }
+
+    // Trier par montant total décroissant
+    const sorted = Object.values(distribution).sort((a, b) => b.total - a.total);
+
+    return {
+      period: { start: startDate, end: endDate },
+      company: companyName,
+      distribution: sorted,
+      total_entries: entries.length,
+      generated_at: new Date().toISOString()
+    };
+  }
+
+  /**
+   * Enregistrer un mapping fournisseur pour apprentissage
+   */
+  async saveSupplierMapping(supplierId, mapping, companyName) {
+    const directus = this.getDirectus();
+
+    await directus.request(
+      updateItem('suppliers', supplierId, {
+        default_account: mapping.debit,
+        default_account_label: mapping.label,
+        default_vat_deductible: mapping.vatDeductible !== false,
+        owner_company: companyName
+      })
+    );
+
+    return { success: true, message: 'Mapping fournisseur enregistré' };
   }
 }
 

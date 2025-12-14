@@ -1,3 +1,19 @@
+# PROMPT 8/8 - ORCHESTRATEUR D'INTÉGRATION FINANCE
+
+## Contexte
+Ce service orchestre tous les services Finance et gère les workflows complexes impliquant plusieurs services. Il coordonne Invoice Ninja, Revolut, et les services internes Directus.
+
+## Fichier à créer
+`src/backend/services/finance/finance-orchestrator.service.js`
+
+## Dépendances
+- Tous les services Finance (prompts 1-5)
+- BullMQ pour les jobs asynchrones
+- Event Emitter pour la communication inter-services
+
+## Code complet
+
+```javascript
 /**
  * FinanceOrchestratorService
  * Coordonne tous les services Finance et gère les workflows complexes
@@ -356,15 +372,15 @@ class FinanceOrchestratorService extends EventEmitter {
     try {
       // Étape 1: Extraction OCR
       const extraction = await ocrToAccountingService.processDocument(
-        Buffer.from(file_buffer, 'base64'),
+        file_buffer,
         mime_type,
         options
       );
       results.extraction = extraction;
-      results.steps.push({ step: 'ocr', success: true, confidence: extraction.confidence || 0.8 });
+      results.steps.push({ step: 'ocr', success: true, confidence: extraction.confidence });
       
       // Étape 2: Validation automatique si confiance élevée
-      if ((extraction.confidence || 0.8) > 0.9 && options.auto_validate) {
+      if (extraction.confidence > 0.9 && options.auto_validate) {
         const validation = await ocrToAccountingService.validateAndSave(
           extraction.extraction_id,
           {}, // Pas de corrections
@@ -384,14 +400,14 @@ class FinanceOrchestratorService extends EventEmitter {
           type: 'ocr_needs_review',
           extraction_id: extraction.extraction_id,
           company: options.owner_company,
-          confidence: extraction.confidence || 0.8
+          confidence: extraction.confidence
         });
         results.steps.push({ step: 'pending_review', success: true });
       }
       
       this.emit('ocr:processed', {
         extraction_id: extraction.extraction_id,
-        auto_validated: (extraction.confidence || 0.8) > 0.9
+        auto_validated: extraction.confidence > 0.9
       });
       
       return results;
@@ -506,13 +522,15 @@ class FinanceOrchestratorService extends EventEmitter {
     
     // Enregistrer dans Directus pour le dashboard
     const directus = this.getDirectus();
-    await directus.items('notifications').createOne({
-      type: data.type,
-      company: data.company,
-      data: JSON.stringify(data),
-      status: 'sent',
-      created_at: new Date().toISOString()
-    });
+    await directus.request(
+      createItem('notifications', {
+        type: data.type,
+        company: data.company,
+        data: JSON.stringify(data),
+        status: 'sent',
+        created_at: new Date().toISOString()
+      })
+    );
     
     return { sent: true, type: data.type };
   }
@@ -540,10 +558,12 @@ class FinanceOrchestratorService extends EventEmitter {
    */
   async updateReminderCount(invoiceId, level) {
     const directus = this.getDirectus();
-    await directus.items('client_invoices').updateOne(invoiceId, {
-      reminder_count: level,
-      last_reminder_at: new Date().toISOString()
-    });
+    await directus.request(
+      updateItem('client_invoices', invoiceId, {
+        reminder_count: level,
+        last_reminder_at: new Date().toISOString()
+      })
+    );
   }
 
   /**
@@ -555,16 +575,13 @@ class FinanceOrchestratorService extends EventEmitter {
   }
 
   /**
-   * Obtenir le client Directus (SDK v17)
+   * Obtenir le client Directus
    */
   getDirectus() {
     const client = createDirectus(this.directusUrl)
       .with(authentication())
       .with(rest());
-
-    if (this.directusToken) {
-      client.setToken(this.directusToken);
-    }
+    client.setToken(this.directusToken);
     return client;
   }
 
@@ -690,3 +707,173 @@ class FinanceOrchestratorService extends EventEmitter {
 // Singleton
 export const financeOrchestrator = new FinanceOrchestratorService();
 export default FinanceOrchestratorService;
+```
+
+## Fichier d'index global des services Finance
+`src/backend/services/finance/index.js`
+
+```javascript
+/**
+ * Finance Services Index
+ * Point d'entrée unique pour tous les services Finance
+ */
+
+// Services individuels
+export { unifiedInvoiceService } from './unified-invoice.service.js';
+export { pdfGeneratorService } from './pdf-generator.service.js';
+export { bankReconciliationService } from './bank-reconciliation.service.js';
+export { ocrToAccountingService } from './ocr-to-accounting.service.js';
+export { financeDashboardService } from './finance-dashboard.service.js';
+
+// Orchestrateur
+export { financeOrchestrator } from './finance-orchestrator.service.js';
+
+// Export par défaut: orchestrateur
+export { financeOrchestrator as default } from './finance-orchestrator.service.js';
+```
+
+## Intégration dans le serveur
+`src/backend/server.js` (modifications)
+
+```javascript
+import express from 'express';
+import { financeOrchestrator } from './services/finance/index.js';
+import financeRoutes from './api/finance/index.js';
+
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Routes Finance
+app.use('/api/finance', financeRoutes);
+
+// Initialiser l'orchestrateur au démarrage
+const startServer = async () => {
+  try {
+    await financeOrchestrator.initialize();
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erreur démarrage serveur:', error);
+    process.exit(1);
+  }
+};
+
+// Gestion de l'arrêt propre
+process.on('SIGTERM', async () => {
+  await financeOrchestrator.shutdown();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  await financeOrchestrator.shutdown();
+  process.exit(0);
+});
+
+startServer();
+```
+
+## Instructions pour Claude Code
+1. Créer `src/backend/services/finance/finance-orchestrator.service.js`
+2. Créer/Mettre à jour `src/backend/services/finance/index.js`
+3. Mettre à jour `src/backend/server.js` pour initialiser l'orchestrateur
+4. Installer les dépendances: `npm install bullmq ioredis`
+5. S'assurer que Redis est en cours d'exécution
+
+## Configuration Redis (docker-compose.yml)
+```yaml
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:
+```
+
+## Test de l'orchestrateur
+```javascript
+import { financeOrchestrator } from './services/finance/index.js';
+
+// Initialiser
+await financeOrchestrator.initialize();
+
+// Créer et envoyer une facture
+const job = await financeOrchestrator.createAndSendInvoice({
+  client_id: '123',
+  owner_company: 'HYPERVISUAL',
+  line_items: [
+    { description: 'Développement web', quantity: 1, unit_price: 5000 }
+  ],
+  client_email: 'client@example.com'
+}, {
+  sendEmail: true,
+  generatePdf: true
+});
+
+console.log('Job créé:', job.id);
+
+// Écouter les événements
+financeOrchestrator.on('invoice:created_and_sent', (data) => {
+  console.log('Facture créée et envoyée:', data);
+});
+
+// Statut des queues
+const status = await financeOrchestrator.getQueuesStatus();
+console.log('Statut queues:', status);
+
+// Dashboard enrichi
+const dashboard = await financeOrchestrator.getEnhancedDashboard('HYPERVISUAL');
+console.log('Dashboard:', JSON.stringify(dashboard, null, 2));
+```
+
+## Récapitulatif des 8 Prompts Finance
+
+| # | Fichier | Description |
+|---|---------|-------------|
+| 1 | `unified-invoice.service.js` | Service de facturation unifié (client + fournisseur) |
+| 2 | `pdf-generator.service.js` | Génération de PDF avec templates |
+| 3 | `bank-reconciliation.service.js` | Rapprochement bancaire automatique |
+| 4 | `ocr-to-accounting.service.js` | OCR et comptabilisation documents |
+| 5 | `finance-dashboard.service.js` | Agrégation données pour dashboard |
+| 6 | `finance.routes.js` | Endpoints API REST |
+| 7 | Composants React | Frontend dashboard Finance |
+| 8 | `finance-orchestrator.service.js` | Orchestration et workflows |
+
+## Architecture finale
+```
+src/backend/
+├── api/
+│   └── finance/
+│       ├── finance.routes.js     # PROMPT 6
+│       └── index.js
+└── services/
+    └── finance/
+        ├── unified-invoice.service.js        # PROMPT 1
+        ├── pdf-generator.service.js          # PROMPT 2
+        ├── bank-reconciliation.service.js    # PROMPT 3
+        ├── ocr-to-accounting.service.js      # PROMPT 4
+        ├── finance-dashboard.service.js      # PROMPT 5
+        ├── finance-orchestrator.service.js   # PROMPT 8
+        └── index.js
+
+src/frontend/src/portals/superadmin/finance/  # PROMPT 7
+├── FinanceDashboard.jsx
+├── components/
+│   ├── KPICards.jsx
+│   ├── AlertsPanel.jsx
+│   ├── CashFlowChart.jsx
+│   └── RecentTransactions.jsx
+├── hooks/
+│   └── useFinanceData.js
+└── services/
+    └── financeApi.js
+```

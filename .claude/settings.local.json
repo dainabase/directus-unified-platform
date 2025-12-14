@@ -133,7 +133,11 @@
       "Bash(bash:*)",
       "Bash(yarn install)",
       "Bash(npx directus database:*)",
-      "Bash(psql:*)"
+      "Bash(psql:*)",
+      "Bash(SKIP_SIMPLE_GIT_HOOKS=1 git commit -m \"feat: Complete SuperAdmin Dashboard with Light Mode Design\n\n- Implemented Phase 4 finalization (Prompts 4.1-4.6)\n  - Cleaned up obsolete files and consolidated dashboard components\n  - Created SidebarV2 and TopBar with glassmorphism design\n  - Integrated Recharts visualization library\n  - Set up data fetching with React Query and caching\n  \n- Applied design corrections (Light Mode with Blue-600)\n  - Replaced dark mode violet theme with light mode Blue-600\n  - Updated all CSS files for light backgrounds and proper colors\n  - Fixed glassmorphism effects for light mode\n  - Created design-system.css with proper design tokens\n  \n- Added new modules and features\n  - Finance modules (banking, accounting, invoices, collection)\n  - CRM module with contacts and companies\n  - Legal module with CGV management\n  - HR module with team management\n  - Created mock data services and hooks\n  \n- Technical improvements\n  - Fixed all import errors and missing dependencies\n  - Added proper routing structure\n  - Implemented multi-company architecture\n  - Set up LRU cache with TTL for performance\")",
+      "Bash(claude doctor)",
+      "Bash(node --check:*)",
+      "Bash(wc:*)"
     ],
     "deny": []
   }

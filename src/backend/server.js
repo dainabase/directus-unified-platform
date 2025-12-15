@@ -26,7 +26,7 @@ const PORT = process.env.UNIFIED_PORT || 3000;
 
 // Configuration Directus
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
 
 console.log('🚀 Démarrage du serveur Directus Unifié (ES Modules)...');
 
@@ -88,6 +88,31 @@ console.log('✅ API Legal connectée: /api/legal');
 import collectionRoutes from './api/collection/collection.routes.js';
 app.use('/api/collection', collectionRoutes);
 console.log('✅ API Collection connectée: /api/collection');
+
+// ============================================
+// API COMMERCIAL - WORKFLOW COMPLET
+// Lead → Quote → CGV → Signature → Acompte → Projet
+// ============================================
+
+try {
+  const commercialRoutes = await import('./api/commercial/index.js');
+  app.use('/api/commercial', commercialRoutes.default);
+  console.log('✅ API Commercial connectée: /api/commercial (workflow complet)');
+} catch (err) {
+  console.warn('⚠️ API Commercial non disponible:', err.message);
+}
+
+// ============================================
+// API INTEGRATIONS - DocuSeal, Invoice Ninja, Mautic
+// ============================================
+
+try {
+  const integrationsRoutes = await import('./api/integrations/index.js');
+  app.use('/api/integrations', integrationsRoutes.default);
+  console.log('✅ API Integrations connectée: /api/integrations (DocuSeal, Invoice Ninja, Mautic)');
+} catch (err) {
+  console.warn('⚠️ API Integrations non disponible:', err.message);
+}
 
 // ============================================
 // PROXY DIRECTUS LEGACY
@@ -280,11 +305,20 @@ app.use('/graphql', createProxyMiddleware({
 }));
 
 // ============================================
-// LEGACY APIs (mautic, erpnext, revolut)
-// Note: Ces APIs utilisent encore CommonJS, conversion en cours
+// EXTERNAL INTEGRATIONS (ES Modules)
+// Invoice Ninja, Revolut, ERPNext, Mautic
 // ============================================
 
-// API Revolut - À convertir
+// API Invoice Ninja - ES Modules
+try {
+  const invoiceNinjaRouter = await import('./api/invoice-ninja/index.js');
+  app.use('/api/invoice-ninja', invoiceNinjaRouter.default);
+  console.log('✅ API Invoice Ninja connectée: /api/invoice-ninja');
+} catch (err) {
+  console.warn('⚠️ API Invoice Ninja non disponible:', err.message);
+}
+
+// API Revolut - ES Modules
 try {
   const revolutRouter = await import('./api/revolut/index.js');
   app.use('/api/revolut', revolutRouter.default);
@@ -331,19 +365,34 @@ app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     status: 'healthy',
-    version: '2.0.0',
+    version: '2.1.0',
     timestamp: new Date().toISOString(),
     services: {
       finance: 'ok',
       legal: 'ok',
       collection: 'ok',
+      commercial: 'ok',
+      auth: 'ok',
       directus: DIRECTUS_URL,
       ocr: process.env.OPENAI_API_KEY ? 'ok' : 'not_configured'
     },
+    integrations: {
+      invoice_ninja: process.env.INVOICE_NINJA_API_TOKEN ? 'configured' : 'not_configured',
+      revolut: process.env.REVOLUT_ACCESS_TOKEN ? 'configured' : 'not_configured',
+      mautic: process.env.MAUTIC_URL ? 'configured' : 'not_configured',
+      erpnext: process.env.ERPNEXT_API_KEY ? 'configured' : 'not_configured',
+      docuseal: process.env.DOCUSEAL_API_KEY ? 'configured' : 'not_configured'
+    },
     endpoints: {
+      auth: '/api/auth',
       finance: '/api/finance (80+ endpoints)',
       legal: '/api/legal',
       collection: '/api/collection',
+      commercial: '/api/commercial (workflow complet)',
+      invoice_ninja: '/api/invoice-ninja',
+      revolut: '/api/revolut',
+      mautic: '/api/mautic',
+      erpnext: '/api/erpnext',
       health: '/api/health'
     }
   });
@@ -483,6 +532,7 @@ app.use((req, res) => {
       '/api/finance - Finance API (80+ endpoints)',
       '/api/legal - Legal & Collection API',
       '/api/collection - Collection API',
+      '/api/commercial - Commercial Workflow API',
       '/api/health - Health Check'
     ]
   });
@@ -507,7 +557,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
-✅ Serveur Directus Unifié v2.0 démarré !
+✅ Serveur Directus Unifié v2.1 démarré !
 ==========================================
 🏠 Page d'accueil     : http://localhost:${PORT}
 👨‍💼 SuperAdmin + OCR  : http://localhost:${PORT}/superadmin
@@ -518,10 +568,12 @@ app.listen(PORT, '0.0.0.0', () => {
 
 💰 Finance API        : http://localhost:${PORT}/api/finance
 📋 Legal API          : http://localhost:${PORT}/api/legal
+🛒 Commercial API     : http://localhost:${PORT}/api/commercial
 📊 Health Check       : http://localhost:${PORT}/api/health
 
 📊 Statut:
 - OCR OpenAI : ${process.env.OPENAI_API_KEY ? '✅ Configuré' : '❌ Manquant'}
+- DocuSeal   : ${process.env.DOCUSEAL_API_KEY ? '✅ Configuré' : '❌ Non configuré'}
 - Port       : ${PORT}
 - PID        : ${process.pid}
 - Mode       : ES Modules

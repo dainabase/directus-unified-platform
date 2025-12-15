@@ -434,7 +434,6 @@ Ces plugins sont des serveurs MCP avancés offrant des capacités d'automatisati
 
 ---
 
-
 ## 🎯 SÉLECTION PRIORITAIRE POUR DIRECTUS UNIFIED PLATFORM
 
 ### Vue d'ensemble des Besoins
@@ -732,8 +731,6 @@ ls -la $SKILLS_DIR | head -20
 ```
 
 ---
-
-
 
 ## 🔗 MAPPING AVEC LES BESOINS DU PROJET
 

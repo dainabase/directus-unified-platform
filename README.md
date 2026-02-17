@@ -96,26 +96,44 @@ node scripts/migration/migrate-massive-data.js
 ./scripts/utilities/cleanup-temp-files.sh
 ```
 
-## 📊 État du Projet
+## 📊 État du Projet (v2.0 - Decembre 2024)
 
 ### ✅ Complété
-- Structure React avec 4 portails
-- 83 collections Directus créées
-- 100/105 relations configurées
-- Intégration OCR fonctionnelle
-- 5 services externes intégrés
+- Structure React avec 4 portails complets
+- **67 collections Directus** avec schemas complets
+- API Finance avec **80+ endpoints**
+- API Auth avec JWT + Refresh tokens
+- Module Lead Management (Kanban, Liste, Formulaires)
+- 4 integrations externes operationnelles:
+  - Invoice Ninja v5 (facturation)
+  - Revolut Business (banking)
+  - Mautic (marketing automation)
+  - ERPNext (ERP)
+- Integration OCR OpenAI fonctionnelle
+- Frontend React 18 avec Tailwind CSS
 
-### 🔄 En Cours
-- Migration des données de production
-- Connexion React ↔ Directus
-- Dashboard temps réel
-- Synchronisation multi-services
+### 🔌 API Endpoints Disponibles
+
+```
+GET  /api/health              - Status systeme
+POST /api/auth/login          - Authentification
+POST /api/auth/refresh        - Refresh token
+GET  /api/auth/me             - User info
+
+/api/finance/*                - 80+ endpoints Finance
+/api/legal/*                  - API Juridique
+/api/collection/*             - API Recouvrement
+/api/invoice-ninja/*          - Integration IN v5
+/api/revolut/*                - Integration Revolut
+/api/mautic/*                 - Integration Mautic
+/api/erpnext/*                - Integration ERPNext
+```
 
 ### 📅 À Faire
 - Tests E2E complets
-- Documentation API
-- Déploiement production
-- Monitoring & Analytics
+- CI/CD Pipeline
+- Monitoring & Alerting
+- Documentation Swagger
 
 ## 🔌 MCP (Model Context Protocol)
 
@@ -176,4 +194,4 @@ Propriétaire - © 2024 DAINAMICS
 
 ---
 
-**Dernière mise à jour**: 24 décembre 2024
+**Dernière mise à jour**: 14 décembre 2024 (v2.0)

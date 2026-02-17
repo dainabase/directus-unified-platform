@@ -1,23 +1,41 @@
 // src/frontend/src/portals/superadmin/settings/SettingsDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import {
-  Settings, Building2, FileText, Percent, Package, RefreshCw
+  Settings, Building2, FileText, Percent, Package, RefreshCw,
+  Users, Key, Plug
 } from 'lucide-react';
 import { useOurCompanies } from './hooks/useSettingsData';
 import CompanySettings from './components/CompanySettings';
 import InvoiceSettings from './components/InvoiceSettings';
 import TaxSettings from './components/TaxSettings';
 import ProductsList from './components/ProductsList';
+import UsersSettings from './components/UsersSettings';
+import PermissionsSettings from './components/PermissionsSettings';
+import IntegrationsSettings from './components/IntegrationsSettings';
 import toast from 'react-hot-toast';
 
-const SettingsDashboard = () => {
-  const [activeTab, setActiveTab] = useState('company');
+const SettingsDashboard = ({ view }) => {
+  const getInitialTab = () => {
+    if (view === 'users') return 'users';
+    if (view === 'permissions') return 'permissions';
+    if (view === 'integrations') return 'integrations';
+    return 'company';
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab());
   const [selectedCompany, setSelectedCompany] = useState(null);
+
+  // Update tab when view prop changes
+  useEffect(() => {
+    if (view) {
+      setActiveTab(getInitialTab());
+    }
+  }, [view]);
 
   const { data: companiesData, isLoading, refetch } = useOurCompanies();
   const companies = companiesData?.data || [];
 
-  // Auto-sélectionner la première entreprise
+  // Auto-selectionner la premiere entreprise
   useEffect(() => {
     if (companies.length > 0 && !selectedCompany) {
       setSelectedCompany(companies[0].id);
@@ -26,14 +44,17 @@ const SettingsDashboard = () => {
 
   const handleRefresh = () => {
     refetch();
-    toast.success('Données actualisées');
+    toast.success('Donnees actualisees');
   };
 
   const tabs = [
     { id: 'company', label: 'Mon entreprise', icon: Building2 },
     { id: 'invoicing', label: 'Facturation', icon: FileText },
     { id: 'taxes', label: 'TVA', icon: Percent },
-    { id: 'products', label: 'Produits', icon: Package }
+    { id: 'products', label: 'Produits', icon: Package },
+    { id: 'users', label: 'Utilisateurs', icon: Users },
+    { id: 'permissions', label: 'Permissions', icon: Key },
+    { id: 'integrations', label: 'Integrations', icon: Plug }
   ];
 
   return (
@@ -119,6 +140,15 @@ const SettingsDashboard = () => {
               )}
               {activeTab === 'products' && (
                 <ProductsList companyId={selectedCompany} />
+              )}
+              {activeTab === 'users' && (
+                <UsersSettings />
+              )}
+              {activeTab === 'permissions' && (
+                <PermissionsSettings />
+              )}
+              {activeTab === 'integrations' && (
+                <IntegrationsSettings />
               )}
             </>
           )}

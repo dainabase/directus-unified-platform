@@ -11,18 +11,39 @@ import TopBar from './components/layout/TopBar'
 // Portals & Modules
 import SuperAdminDashboard from './portals/superadmin/Dashboard'
 import ProjectsModule from './modules/projects/ProjectsModule'
+import TimeTrackingView from './modules/projects/views/TimeTrackingView'
+import DeliverablesView from './modules/projects/views/DeliverablesView'
 import HRModule from './modules/hr/HRModule'
+import TrainingsView from './modules/hr/views/TrainingsView'
 
 // Finance Modules
 import BankingDashboard from './components/banking/BankingDashboard'
 import FinanceDashboard from './portals/superadmin/finance/FinanceDashboard'
 import CollectionDashboard from './portals/superadmin/collection/CollectionDashboard'
+import BudgetsManager from './portals/superadmin/finance/components/BudgetsManager'
+import ExpensesTracker from './portals/superadmin/finance/components/ExpensesTracker'
 
 // CRM Module
 import CRMDashboard from './portals/superadmin/crm/CRMDashboard'
+import PipelineView from './portals/superadmin/crm/components/PipelineView'
+import CustomerSuccess from './portals/superadmin/crm/components/CustomerSuccess'
+
+// Leads Module
+import LeadsDashboard from './portals/superadmin/leads/LeadsDashboard'
 
 // Legal Module
 import LegalDashboard from './portals/superadmin/legal/LegalDashboard'
+import ContractsManager from './portals/superadmin/legal/components/ContractsManager'
+import ComplianceManager from './portals/superadmin/legal/components/ComplianceManager'
+
+// Marketing Module
+import MarketingDashboard from './portals/superadmin/marketing/MarketingDashboard'
+
+// Support Module
+import SupportDashboard from './portals/superadmin/support/SupportDashboard'
+
+// Settings Module
+import SettingsDashboard from './portals/superadmin/settings/SettingsDashboard'
 
 // React Query configuration
 const queryClient = new QueryClient({
@@ -107,50 +128,58 @@ function App() {
             <Route path="/superadmin/invoices/clients" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-clients" />} />
             <Route path="/superadmin/invoices/suppliers" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-suppliers" />} />
             <Route path="/superadmin/collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/budgets" element={<ComingSoon module="Budgets" description="Gestion des budgets et prévisions financières" />} />
-            <Route path="/superadmin/expenses" element={<ComingSoon module="Dépenses" description="Suivi et catégorisation des dépenses" />} />
+            <Route path="/superadmin/budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/expenses" element={<ExpensesTracker selectedCompany={selectedCompany} />} />
             
             {/* === PROJETS === */}
             <Route path="/superadmin/projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/deliverables" element={<ComingSoon module="Livrables & Tâches" description="Gestion des livrables et suivi des tâches" />} />
-            <Route path="/superadmin/time-tracking" element={<ComingSoon module="Time Tracking" description="Suivi du temps passé sur les projets" />} />
+            <Route path="/superadmin/deliverables" element={<DeliverablesView selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/time-tracking" element={<TimeTrackingView selectedCompany={selectedCompany} />} />
             
             {/* === CRM === */}
             <Route path="/superadmin/crm" element={<CRMDashboard selectedCompany={selectedCompany} />} />
             <Route path="/superadmin/crm/contacts" element={<CRMDashboard selectedCompany={selectedCompany} view="contacts" />} />
             <Route path="/superadmin/crm/companies" element={<CRMDashboard selectedCompany={selectedCompany} view="companies" />} />
-            <Route path="/superadmin/crm/pipeline" element={<ComingSoon module="Pipeline Commercial" description="Gestion du pipeline de ventes (quotes, proposals)" />} />
-            <Route path="/superadmin/crm/success" element={<ComingSoon module="Customer Success" description="Suivi de la satisfaction et rétention clients" />} />
+            <Route path="/superadmin/crm/pipeline" element={<PipelineView selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/crm/success" element={<CustomerSuccess selectedCompany={selectedCompany} />} />
+
+            {/* === LEADS === */}
+            <Route path="/superadmin/leads" element={<LeadsDashboard selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/leads/kanban" element={<LeadsDashboard selectedCompany={selectedCompany} view="kanban" />} />
+            <Route path="/superadmin/leads/list" element={<LeadsDashboard selectedCompany={selectedCompany} view="list" />} />
             
             {/* === MARKETING === */}
-            <Route path="/superadmin/marketing/calendar" element={<ComingSoon module="Calendrier Éditorial" description="Planification du contenu (Mautic integration)" />} />
-            <Route path="/superadmin/marketing/campaigns" element={<ComingSoon module="Campagnes Email" description="Gestion des campagnes email via Mautic" />} />
-            <Route path="/superadmin/marketing/analytics" element={<ComingSoon module="Analytics Marketing" description="Métriques et performances marketing" />} />
-            <Route path="/superadmin/marketing/events" element={<ComingSoon module="Événements" description="Gestion des événements et webinaires" />} />
+            <Route path="/superadmin/marketing" element={<MarketingDashboard selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/marketing/calendar" element={<MarketingDashboard selectedCompany={selectedCompany} view="calendar" />} />
+            <Route path="/superadmin/marketing/campaigns" element={<MarketingDashboard selectedCompany={selectedCompany} view="campaigns" />} />
+            <Route path="/superadmin/marketing/analytics" element={<MarketingDashboard selectedCompany={selectedCompany} view="analytics" />} />
+            <Route path="/superadmin/marketing/events" element={<MarketingDashboard selectedCompany={selectedCompany} view="events" />} />
             
             {/* === RH === */}
             <Route path="/superadmin/hr" element={<HRModule selectedCompany={selectedCompany} />} />
             <Route path="/superadmin/hr/team" element={<HRModule selectedCompany={selectedCompany} view="team" />} />
             <Route path="/superadmin/hr/talents" element={<HRModule selectedCompany={selectedCompany} view="talents" />} />
             <Route path="/superadmin/hr/recruitment" element={<HRModule selectedCompany={selectedCompany} view="recruitment" />} />
-            <Route path="/superadmin/hr/trainings" element={<ComingSoon module="Formations" description="Catalogue et suivi des formations" />} />
+            <Route path="/superadmin/hr/trainings" element={<TrainingsView selectedCompany={selectedCompany} />} />
             <Route path="/superadmin/hr/performance" element={<HRModule selectedCompany={selectedCompany} view="performance" />} />
             
             {/* === JURIDIQUE === */}
             <Route path="/superadmin/legal" element={<LegalDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/legal/contracts" element={<ComingSoon module="Contrats" description="Gestion des contrats clients et fournisseurs" />} />
+            <Route path="/superadmin/legal/contracts" element={<ContractsManager selectedCompany={selectedCompany} />} />
             <Route path="/superadmin/legal/cgv" element={<LegalDashboard selectedCompany={selectedCompany} view="cgv" />} />
-            <Route path="/superadmin/legal/compliance" element={<ComingSoon module="Compliance" description="Conformité réglementaire et audit" />} />
+            <Route path="/superadmin/legal/compliance" element={<ComplianceManager selectedCompany={selectedCompany} />} />
             
             {/* === SUPPORT === */}
-            <Route path="/superadmin/support/tickets" element={<ComingSoon module="Tickets Support" description="Gestion des tickets d'assistance" />} />
-            <Route path="/superadmin/support/notifications" element={<ComingSoon module="Notifications" description="Centre de notifications système" />} />
+            <Route path="/superadmin/support" element={<SupportDashboard selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/support/tickets" element={<SupportDashboard selectedCompany={selectedCompany} view="tickets" />} />
+            <Route path="/superadmin/support/notifications" element={<SupportDashboard selectedCompany={selectedCompany} view="notifications" />} />
             
-            {/* === PARAMÈTRES === */}
-            <Route path="/superadmin/settings/companies" element={<ComingSoon module="Mes Entreprises" description="Configuration des 5 entreprises (HYPERVISUAL, DAINAMICS, LEXAIA, ENKI REALTY, TAKEOUT)" />} />
-            <Route path="/superadmin/settings/users" element={<ComingSoon module="Utilisateurs" description="Gestion des utilisateurs et accès" />} />
-            <Route path="/superadmin/settings/permissions" element={<ComingSoon module="Permissions" description="Rôles et permissions granulaires" />} />
-            <Route path="/superadmin/settings/integrations" element={<ComingSoon module="Intégrations" description="Invoice Ninja, Revolut, Mautic, ERPNext" />} />
+            {/* === PARAMETRES === */}
+            <Route path="/superadmin/settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />
+            <Route path="/superadmin/settings/companies" element={<SettingsDashboard selectedCompany={selectedCompany} view="company" />} />
+            <Route path="/superadmin/settings/users" element={<SettingsDashboard selectedCompany={selectedCompany} view="users" />} />
+            <Route path="/superadmin/settings/permissions" element={<SettingsDashboard selectedCompany={selectedCompany} view="permissions" />} />
+            <Route path="/superadmin/settings/integrations" element={<SettingsDashboard selectedCompany={selectedCompany} view="integrations" />} />
             
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/superadmin" replace />} />

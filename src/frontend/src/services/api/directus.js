@@ -4,7 +4,7 @@ import { addOwnerCompanyFilter, debugCompanyFilter } from '../../utils/company-f
 
 // Configuration API avec gestion d'erreurs avancée
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8055';
-const API_TOKEN = import.meta.env.VITE_API_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+const API_TOKEN = import.meta.env.VITE_API_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
 
 class DirectusAPI {
   constructor() {

@@ -88,6 +88,7 @@ const navigationConfig = [
     icon: Users,
     isGroup: true,
     children: [
+      { id: 'leads', label: 'Leads', icon: UserPlus, path: '/superadmin/leads' },
       { id: 'contacts', label: 'Contacts', icon: Users, path: '/superadmin/crm/contacts' },
       { id: 'companies', label: 'Entreprises', icon: Building2, path: '/superadmin/crm/companies' },
       { id: 'pipeline', label: 'Pipeline Commercial', icon: Target, path: '/superadmin/crm/pipeline' },
@@ -294,7 +295,7 @@ const Sidebar = () => {
         <div className="mt-8 pt-4 border-t border-gray-100">
           <div className="px-3 text-xs text-gray-400">
             <p>Unified Platform v2.0</p>
-            <p className="mt-1">5 entreprises • 56 collections</p>
+            <p className="mt-1">5 entreprises • 67 collections</p>
           </div>
         </div>
       </div>

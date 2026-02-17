@@ -282,4 +282,20 @@ router.get('/lp/fees/:amount', async (req, res) => {
   }
 });
 
+// ==================== HEALTH CHECK ====================
+
+/**
+ * GET /api/collection/health
+ * Health check du module recouvrement
+ */
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    service: 'collection',
+    modules: ['collection', 'interest-calculator', 'lp-integration'],
+    timestamp: new Date().toISOString()
+  });
+});
+
 export default router;

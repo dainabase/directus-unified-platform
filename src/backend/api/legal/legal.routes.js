@@ -216,4 +216,20 @@ router.post('/signature/:id/cancel', companyAccessMiddleware, async (req, res) =
   }
 });
 
+// ==================== HEALTH CHECK ====================
+
+/**
+ * GET /api/legal/health
+ * Health check du module légal
+ */
+router.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    service: 'legal',
+    modules: ['cgv', 'signature'],
+    timestamp: new Date().toISOString()
+  });
+});
+
 export default router;

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Client - Directus Platform</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+</head>
+<body class="antialiased">
+  <div class="page">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <div class="container-xl">
+        <a class="navbar-brand" href="/">
+          <span class="fw-bold">Directus Platform</span>
+        </a>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="nav-item">
+            <a href="/" class="btn btn-outline-primary">
+              <i class="ti ti-home me-2"></i>Accueil
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <h2 class="page-title">
+            <i class="ti ti-users me-2 text-success"></i>
+            Espace Client
+          </h2>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards">
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-success-lt me-3">
+                      <i class="ti ti-file-invoice text-success"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Mes Factures</h3>
+                  </div>
+                  <p class="text-muted">Consultez et téléchargez vos factures</p>
+                  <a href="/client/invoices" class="btn btn-success w-100">Voir les factures</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-primary-lt me-3">
+                      <i class="ti ti-file-text text-primary"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Mes Documents</h3>
+                  </div>
+                  <p class="text-muted">Accédez à vos contrats et documents</p>
+                  <a href="/client/documents" class="btn btn-primary w-100">Voir les documents</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-info-lt me-3">
+                      <i class="ti ti-headset text-info"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Support</h3>
+                  </div>
+                  <p class="text-muted">Contactez notre équipe support</p>
+                  <a href="/client/support" class="btn btn-info w-100">Contacter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

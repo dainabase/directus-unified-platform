@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directus Unified Platform - Accueil</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <style>
+    :root {
+      --tblr-primary: #206bc4;
+      --tblr-success: #2fb344;
+      --tblr-info: #4299e1;
+      --tblr-warning: #f76707;
+      --tblr-dark: #1e293b;
+    }
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .hero-section {
+      padding: 4rem 0;
+      color: white;
+      text-align: center;
+    }
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .portal-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .portal-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .portal-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .api-section {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .api-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      margin: 0.25rem;
+      color: white;
+      font-size: 0.875rem;
+    }
+    .company-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: white;
+      border-radius: 20px;
+      margin: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="container-xl">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <h1 class="hero-title">Directus Unified Platform</h1>
+        <p class="hero-subtitle">
+          Plateforme de gestion d'entreprise multi-portails avec Finance API,
+          intégrations externes et OCR intelligent
+        </p>
+        <div class="mt-4">
+          <span class="company-badge" style="background: #206bc4; color: white;">HYPERVISUAL</span>
+          <span class="company-badge" style="background: #2fb344; color: white;">DAINAMICS</span>
+          <span class="company-badge" style="background: #f76707; color: white;">LEXAIA</span>
+          <span class="company-badge" style="background: #d63939; color: white;">ENKI REALTY</span>
+          <span class="company-badge" style="background: #ae3ec9; color: white;">TAKEOUT</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">67</div>
+          <div class="stat-label">Collections Directus</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">80+</div>
+          <div class="stat-label">API Endpoints</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Intégrations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5</div>
+          <div class="stat-label">Entreprises</div>
+        </div>
+      </div>
+
+      <!-- Portals Grid -->
+      <div class="row row-cards mt-5">
+        <div class="col-md-6 col-lg-3">
+          <div class="card portal-card h-100">
+            <div class="card-body text-center py-4">
+              <div class="portal-icon">👨‍💼</div>
+              <h3 class="card-title">SuperAdmin</h3>
+              <p class="text-muted">Dashboard complet, OCR, Finance, Leads et gestion globale</p>
+              <a href="/superadmin" class="btn btn-primary w-100 mt-3">
+                Accéder au Dashboard
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card portal-card h-100">
+            <div class="card-body text-center py-4">
+              <div class="portal-icon">👥</div>
+              <h3 class="card-title">Portal Client</h3>
+              <p class="text-muted">Espace client avec factures, documents et suivi</p>
+              <a href="/client" class="btn btn-success w-100 mt-3">
+                Espace Client
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card portal-card h-100">
+            <div class="card-body text-center py-4">
+              <div class="portal-icon">🔧</div>
+              <h3 class="card-title">Portal Prestataire</h3>
+              <p class="text-muted">Gestion des missions, facturation et planning</p>
+              <a href="/prestataire" class="btn btn-info w-100 mt-3">
+                Espace Prestataire
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="card portal-card h-100">
+            <div class="card-body text-center py-4">
+              <div class="portal-icon">🏪</div>
+              <h3 class="card-title">Portal Revendeur</h3>
+              <p class="text-muted">Gestion des ventes, commissions et clients</p>
+              <a href="/revendeur" class="btn btn-warning w-100 mt-3">
+                Espace Revendeur
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Section -->
+      <div class="api-section mt-5">
+        <h4 class="text-white mb-3">APIs Disponibles</h4>
+        <div>
+          <a href="/api/health" class="api-badge text-decoration-none">Health Check</a>
+          <a href="/api/auth/health" class="api-badge text-decoration-none">Auth API</a>
+          <a href="/api/finance/health" class="api-badge text-decoration-none">Finance API (80+)</a>
+          <a href="/api/legal/health" class="api-badge text-decoration-none">Legal API</a>
+          <a href="/api/collection/health" class="api-badge text-decoration-none">Collection API</a>
+          <a href="/api/invoice-ninja/health" class="api-badge text-decoration-none">Invoice Ninja</a>
+          <a href="/api/revolut/health" class="api-badge text-decoration-none">Revolut</a>
+          <a href="/api/erpnext/health" class="api-badge text-decoration-none">ERPNext</a>
+          <a href="/api/mautic/health" class="api-badge text-decoration-none">Mautic</a>
+        </div>
+      </div>
+
+      <!-- Admin Link -->
+      <div class="text-center mt-5 pb-5">
+        <a href="http://localhost:8055/admin" class="btn btn-outline-light btn-lg" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+          </svg>
+          Accéder à Directus Admin
+        </a>
+        <p class="text-white-50 mt-3">
+          Version 2.0 | Dernière mise à jour: Décembre 2024
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

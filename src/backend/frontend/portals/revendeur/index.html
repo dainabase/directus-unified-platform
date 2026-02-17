@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Revendeur - Directus Platform</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+</head>
+<body class="antialiased">
+  <div class="page">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <div class="container-xl">
+        <a class="navbar-brand" href="/">
+          <span class="fw-bold">Directus Platform</span>
+        </a>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="nav-item">
+            <a href="/" class="btn btn-outline-primary">
+              <i class="ti ti-home me-2"></i>Accueil
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <h2 class="page-title">
+            <i class="ti ti-building-store me-2 text-warning"></i>
+            Espace Revendeur
+          </h2>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards">
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-warning-lt me-3">
+                      <i class="ti ti-shopping-cart text-warning"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Mes Ventes</h3>
+                  </div>
+                  <p class="text-muted">Suivez vos ventes et performances</p>
+                  <a href="/revendeur/sales" class="btn btn-warning w-100">Voir les ventes</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-success-lt me-3">
+                      <i class="ti ti-coins text-success"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Commissions</h3>
+                  </div>
+                  <p class="text-muted">Consultez vos commissions</p>
+                  <a href="/revendeur/commissions" class="btn btn-success w-100">Voir les commissions</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-primary-lt me-3">
+                      <i class="ti ti-users text-primary"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Mes Clients</h3>
+                  </div>
+                  <p class="text-muted">Gérez votre portefeuille clients</p>
+                  <a href="/revendeur/clients" class="btn btn-primary w-100">Voir les clients</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

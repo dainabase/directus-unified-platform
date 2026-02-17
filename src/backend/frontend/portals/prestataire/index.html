@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Prestataire - Directus Platform</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+</head>
+<body class="antialiased">
+  <div class="page">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <div class="container-xl">
+        <a class="navbar-brand" href="/">
+          <span class="fw-bold">Directus Platform</span>
+        </a>
+        <div class="navbar-nav flex-row order-md-last">
+          <div class="nav-item">
+            <a href="/" class="btn btn-outline-primary">
+              <i class="ti ti-home me-2"></i>Accueil
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <h2 class="page-title">
+            <i class="ti ti-tool me-2 text-info"></i>
+            Espace Prestataire
+          </h2>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-cards">
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-info-lt me-3">
+                      <i class="ti ti-briefcase text-info"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Mes Missions</h3>
+                  </div>
+                  <p class="text-muted">Gérez vos missions en cours et à venir</p>
+                  <a href="/prestataire/missions" class="btn btn-info w-100">Voir les missions</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-success-lt me-3">
+                      <i class="ti ti-file-invoice text-success"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Facturation</h3>
+                  </div>
+                  <p class="text-muted">Créez et suivez vos factures</p>
+                  <a href="/prestataire/invoices" class="btn btn-success w-100">Gérer</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-3">
+                    <span class="avatar bg-primary-lt me-3">
+                      <i class="ti ti-calendar text-primary"></i>
+                    </span>
+                    <h3 class="card-title mb-0">Planning</h3>
+                  </div>
+                  <p class="text-muted">Consultez votre planning</p>
+                  <a href="/prestataire/planning" class="btn btn-primary w-100">Voir le planning</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+</body>
+</html>

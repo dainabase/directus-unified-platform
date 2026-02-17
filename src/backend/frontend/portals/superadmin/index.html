@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperAdmin Dashboard - Directus Unified Platform</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <style>
+    :root {
+      --tblr-primary: #206bc4;
+      --sidebar-bg: #1e293b;
+    }
+    .navbar-vertical {
+      background: var(--sidebar-bg);
+      width: 250px;
+    }
+    .navbar-vertical .nav-link {
+      color: rgba(255,255,255,0.7);
+    }
+    .navbar-vertical .nav-link:hover,
+    .navbar-vertical .nav-link.active {
+      color: white;
+      background: rgba(255,255,255,0.1);
+    }
+    .page-wrapper {
+      margin-left: 250px;
+    }
+    .stat-card {
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+    .company-selector {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    @media (max-width: 991px) {
+      .navbar-vertical { display: none; }
+      .page-wrapper { margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <!-- Sidebar -->
+  <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <span class="text-white fw-bold">Directus Platform</span>
+      </a>
+
+      <div class="collapse navbar-collapse" id="sidebar-menu">
+        <ul class="navbar-nav pt-lg-3">
+          <li class="nav-item">
+            <a class="nav-link active" href="/superadmin">
+              <span class="nav-link-icon"><i class="ti ti-home"></i></span>
+              <span class="nav-link-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <span class="nav-link-icon"><i class="ti ti-cash"></i></span>
+              <span class="nav-link-title">Finance</span>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/superadmin/finance/dashboard">Dashboard Finance</a>
+              <a class="dropdown-item" href="/superadmin/finance/invoices">Factures</a>
+              <a class="dropdown-item" href="/superadmin/finance/payments">Paiements</a>
+              <a class="dropdown-item" href="/superadmin/finance/reconciliation">Rapprochement</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/superadmin/ocr">
+              <span class="nav-link-icon"><i class="ti ti-scan"></i></span>
+              <span class="nav-link-title">OCR Documents</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/superadmin/leads">
+              <span class="nav-link-icon"><i class="ti ti-users"></i></span>
+              <span class="nav-link-title">Leads</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <span class="nav-link-icon"><i class="ti ti-gavel"></i></span>
+              <span class="nav-link-title">Juridique</span>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/superadmin/legal/cgv">CGV</a>
+              <a class="dropdown-item" href="/superadmin/legal/contracts">Contrats</a>
+              <a class="dropdown-item" href="/superadmin/legal/signatures">Signatures</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/superadmin/collection">
+              <span class="nav-link-icon"><i class="ti ti-report-money"></i></span>
+              <span class="nav-link-title">Recouvrement</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <span class="nav-link-icon"><i class="ti ti-plug"></i></span>
+              <span class="nav-link-title">Intégrations</span>
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/superadmin/integrations/invoice-ninja">Invoice Ninja</a>
+              <a class="dropdown-item" href="/superadmin/integrations/revolut">Revolut</a>
+              <a class="dropdown-item" href="/superadmin/integrations/erpnext">ERPNext</a>
+              <a class="dropdown-item" href="/superadmin/integrations/mautic">Mautic</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/superadmin/settings">
+              <span class="nav-link-icon"><i class="ti ti-settings"></i></span>
+              <span class="nav-link-title">Paramètres</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-auto p-3">
+          <a href="http://localhost:8055/admin" target="_blank" class="btn btn-outline-light w-100">
+            <i class="ti ti-external-link me-2"></i>Directus Admin
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="page-wrapper">
+    <div class="page-header d-print-none">
+      <div class="container-xl">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <h2 class="page-title">Dashboard SuperAdmin</h2>
+          </div>
+          <div class="col-auto ms-auto">
+            <select class="company-selector" id="companySelect">
+              <option value="all">Toutes les entreprises</option>
+              <option value="HYPERVISUAL">HYPERVISUAL</option>
+              <option value="DAINAMICS">DAINAMICS</option>
+              <option value="LEXAIA">LEXAIA</option>
+              <option value="ENKI_REALTY">ENKI REALTY</option>
+              <option value="TAKEOUT">TAKEOUT</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="container-xl">
+        <!-- Stats Row -->
+        <div class="row row-deck row-cards">
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Chiffre d'affaires</div>
+                </div>
+                <div class="h1 mb-3" id="totalRevenue">CHF 0</div>
+                <div class="d-flex mb-2">
+                  <div class="text-green">+12.5%</div>
+                  <div class="ms-auto text-muted">vs mois dernier</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Factures en attente</div>
+                </div>
+                <div class="h1 mb-3" id="pendingInvoices">0</div>
+                <div class="d-flex mb-2">
+                  <div class="text-yellow">CHF 0</div>
+                  <div class="ms-auto text-muted">montant total</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Leads actifs</div>
+                </div>
+                <div class="h1 mb-3" id="activeLeads">0</div>
+                <div class="d-flex mb-2">
+                  <div class="text-blue">+8</div>
+                  <div class="ms-auto text-muted">cette semaine</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="subheader">Taux de conversion</div>
+                </div>
+                <div class="h1 mb-3">24.5%</div>
+                <div class="d-flex mb-2">
+                  <div class="text-green">+2.3%</div>
+                  <div class="ms-auto text-muted">vs mois dernier</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Recent Activity -->
+        <div class="row mt-4">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Actions rapides</h3>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-6">
+                    <a href="/superadmin/ocr" class="btn btn-primary w-100 py-3">
+                      <i class="ti ti-scan me-2"></i>Scanner un document
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="/superadmin/finance/invoices/new" class="btn btn-success w-100 py-3">
+                      <i class="ti ti-plus me-2"></i>Nouvelle facture
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="/superadmin/leads/new" class="btn btn-info w-100 py-3">
+                      <i class="ti ti-user-plus me-2"></i>Nouveau lead
+                    </a>
+                  </div>
+                  <div class="col-6">
+                    <a href="/superadmin/collection" class="btn btn-warning w-100 py-3">
+                      <i class="ti ti-alert-triangle me-2"></i>Recouvrements
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Activité récente</h3>
+              </div>
+              <div class="list-group list-group-flush" id="recentActivity">
+                <div class="list-group-item">
+                  <div class="row align-items-center">
+                    <div class="col-auto"><span class="badge bg-green"></span></div>
+                    <div class="col">Facture #INV-2024-001 payée</div>
+                    <div class="col-auto text-muted">Il y a 2h</div>
+                  </div>
+                </div>
+                <div class="list-group-item">
+                  <div class="row align-items-center">
+                    <div class="col-auto"><span class="badge bg-blue"></span></div>
+                    <div class="col">Nouveau lead: Tech Solutions SA</div>
+                    <div class="col-auto text-muted">Il y a 4h</div>
+                  </div>
+                </div>
+                <div class="list-group-item">
+                  <div class="row align-items-center">
+                    <div class="col-auto"><span class="badge bg-yellow"></span></div>
+                    <div class="col">Document OCR traité</div>
+                    <div class="col-auto text-muted">Il y a 5h</div>
+                  </div>
+                </div>
+                <div class="list-group-item">
+                  <div class="row align-items-center">
+                    <div class="col-auto"><span class="badge bg-red"></span></div>
+                    <div class="col">Rappel envoyé: Facture #INV-2024-089</div>
+                    <div class="col-auto text-muted">Hier</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Status -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">État des services</h3>
+              </div>
+              <div class="card-body">
+                <div class="row g-3" id="serviceStatus">
+                  <!-- Populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+  <script>
+    // Check API services
+    async function checkServices() {
+      const services = [
+        { name: 'Finance API', url: '/api/finance/health', icon: 'ti-cash' },
+        { name: 'Auth API', url: '/api/auth/health', icon: 'ti-lock' },
+        { name: 'Legal API', url: '/api/legal/health', icon: 'ti-gavel' },
+        { name: 'Collection API', url: '/api/collection/health', icon: 'ti-report-money' },
+        { name: 'Invoice Ninja', url: '/api/invoice-ninja/health', icon: 'ti-file-invoice' },
+        { name: 'Revolut', url: '/api/revolut/health', icon: 'ti-brand-revolut' },
+        { name: 'ERPNext', url: '/api/erpnext/health', icon: 'ti-building' },
+        { name: 'Mautic', url: '/api/mautic/health', icon: 'ti-mail' }
+      ];
+
+      const container = document.getElementById('serviceStatus');
+      container.innerHTML = '';
+
+      for (const service of services) {
+        try {
+          const response = await fetch(service.url);
+          const data = await response.json();
+          const isHealthy = data.success === true;
+
+          container.innerHTML += `
+            <div class="col-sm-6 col-lg-3">
+              <div class="card card-sm">
+                <div class="card-body d-flex align-items-center">
+                  <span class="bg-${isHealthy ? 'success' : 'danger'} text-white avatar me-3">
+                    <i class="ti ${service.icon}"></i>
+                  </span>
+                  <div>
+                    <div class="font-weight-medium">${service.name}</div>
+                    <div class="text-muted">${isHealthy ? 'Opérationnel' : 'Hors ligne'}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } catch (e) {
+          container.innerHTML += `
+            <div class="col-sm-6 col-lg-3">
+              <div class="card card-sm">
+                <div class="card-body d-flex align-items-center">
+                  <span class="bg-secondary text-white avatar me-3">
+                    <i class="ti ${service.icon}"></i>
+                  </span>
+                  <div>
+                    <div class="font-weight-medium">${service.name}</div>
+                    <div class="text-muted">Non disponible</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Load dashboard data
+    async function loadDashboardData() {
+      try {
+        const response = await fetch('/api/finance/dashboard/all');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            document.getElementById('totalRevenue').textContent =
+              `CHF ${(data.data?.totalRevenue || 0).toLocaleString()}`;
+            document.getElementById('pendingInvoices').textContent =
+              data.data?.pendingInvoices || 0;
+          }
+        }
+      } catch (e) {
+        console.log('Dashboard data not available');
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      checkServices();
+      loadDashboardData();
+    });
+  </script>
+</body>
+</html>

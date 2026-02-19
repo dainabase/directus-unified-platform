@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 8/47 stories — 17%
+**Progression globale** : 9/47 stories — 19%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -34,12 +34,12 @@
 ---
 
 ## PHASE 1 — Dashboard SuperAdmin + Module Leads
-**Statut** : [~] IN_PROGRESS | **Progression** : 2/8 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 3/8 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query) — 2026-02-19
 - [V] S-01-02 · Router principal + authentification portails — 2026-02-19
-- [ ] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism)
+- [V] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism) — 2026-02-19
 - [ ] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003)
 - [ ] S-01-05 · Widget KPIs financiers temps reel (REQ-CEO-001/002)
 - [ ] S-01-06 · Widget Pipeline commercial (leads + devis)

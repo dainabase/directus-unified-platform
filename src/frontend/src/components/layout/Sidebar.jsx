@@ -294,8 +294,8 @@ const Sidebar = () => {
         {/* Footer avec version */}
         <div className="mt-8 pt-4 border-t border-gray-100">
           <div className="px-3 text-xs text-gray-400">
-            <p>Unified Platform v2.0</p>
-            <p className="mt-1">5 entreprises • 67 collections</p>
+            <p>Unified Platform v2.1</p>
+            <p className="mt-1">5 entreprises • 83 collections</p>
           </div>
         </div>
       </div>

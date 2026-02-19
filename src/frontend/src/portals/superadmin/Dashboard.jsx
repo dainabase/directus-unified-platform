@@ -43,7 +43,7 @@ const Dashboard = () => {
   const { prefetchCompany } = useKPIPrefetch()
 
   // Company list
-  const companies = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI REALTY', 'TAKEOUT']
+  const companies = ['HMF Corporation SA', 'HYPERVISUAL', 'ETEKOUT', 'NK REALITY', 'LEXIA']
 
   // Prefetch company data on hover
   const handleCompanyHover = (company) => {

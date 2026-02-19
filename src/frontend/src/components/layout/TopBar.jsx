@@ -1,30 +1,43 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
-import { 
-  Bell, 
-  Search, 
-  User, 
+import { useLocation, useNavigate } from 'react-router-dom'
+import {
+  Bell,
+  Search,
+  User,
   Building,
   ChevronDown,
-  Activity
+  Activity,
+  LogOut
 } from 'lucide-react'
+import { useAuthStore } from '../../stores/authStore'
 
-const TopBar = ({ 
-  selectedCompany = 'all', 
+const TopBar = ({
+  selectedCompany = 'all',
   onCompanyChange,
-  notifications = [],
-  currentUser = { name: 'Jean-Marie Delaunay', role: 'CEO' }
+  notifications = []
 }) => {
   const location = useLocation()
-  
+  const navigate = useNavigate()
+  const user = useAuthStore((s) => s.user)
+  const logout = useAuthStore((s) => s.logout)
+
+  const currentUser = user
+    ? { name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email, role: user.role || 'SuperAdmin' }
+    : { name: 'Jean-Marie Delaunay', role: 'CEO' }
+
   const companies = [
     { value: 'all', label: 'Toutes les entreprises' },
+    { value: 'HMF Corporation SA', label: 'HMF Corporation SA' },
     { value: 'HYPERVISUAL', label: 'HYPERVISUAL' },
-    { value: 'DAINAMICS', label: 'DAINAMICS' },
-    { value: 'LEXAIA', label: 'LEXAIA' },
-    { value: 'ENKI_REALTY', label: 'ENKI REALTY' },
-    { value: 'TAKEOUT', label: 'TAKEOUT' }
+    { value: 'ETEKOUT', label: 'ETEKOUT' },
+    { value: 'NK REALITY', label: 'NK REALITY' },
+    { value: 'LEXIA', label: 'LEXIA' }
   ]
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
 
   const unreadCount = notifications.filter(n => !n.read).length
 
@@ -122,11 +135,15 @@ const TopBar = ({
               <p className="text-sm font-medium text-gray-900">{currentUser.name}</p>
               <p className="text-xs text-gray-500">{currentUser.role}</p>
             </div>
-            <button className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
-                <User className="w-5 h-5 text-white" />
-              </div>
-              <ChevronDown size={14} className="text-gray-400 hidden sm:block" />
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-white" />
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
+              title="Déconnexion"
+            >
+              <LogOut size={18} />
             </button>
           </div>
         </div>

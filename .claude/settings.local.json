@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(*)",
+      "Bash",
       "WebFetch(domain:*)",
       "WebSearch",
       "mcp__fast-filesystem__fast_write_file",

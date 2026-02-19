@@ -12,12 +12,14 @@ import LeadsList from './components/LeadsList'
 import LeadForm from './components/LeadForm'
 import LeadKanban from './components/LeadKanban'
 import LeadStats from './components/LeadStats'
+import LeadDetail from './components/LeadDetail'
 import { useLeads, useLeadStats, LEAD_STATUSES } from '../../../hooks/useLeads'
 
 const LeadsDashboard = ({ selectedCompany }) => {
   const [view, setView] = useState('kanban')
   const [showForm, setShowForm] = useState(false)
   const [editingLead, setEditingLead] = useState(null)
+  const [selectedLead, setSelectedLead] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [sourceFilter, setSourceFilter] = useState('all')
@@ -63,6 +65,10 @@ const LeadsDashboard = ({ selectedCompany }) => {
   const handleCreateLead = () => {
     setEditingLead(null)
     setShowForm(true)
+  }
+
+  const handleViewLead = (lead) => {
+    setSelectedLead(lead)
   }
 
   const handleEditLead = (lead) => {
@@ -115,6 +121,18 @@ const LeadsDashboard = ({ selectedCompany }) => {
       (lead.notes && lead.notes.toLowerCase().includes(sourceFilter.toLowerCase()))
     return matchesSource
   })
+
+  // Detail view
+  if (selectedLead) {
+    return (
+      <LeadDetail
+        lead={selectedLead}
+        onBack={() => setSelectedLead(null)}
+        onEdit={(lead) => { setSelectedLead(null); handleEditLead(lead) }}
+        onStatusChange={handleStatusChange}
+      />
+    )
+  }
 
   // Affichage erreur
   if (error) {
@@ -263,14 +281,14 @@ const LeadsDashboard = ({ selectedCompany }) => {
       ) : view === 'kanban' ? (
         <LeadKanban
           leads={filteredLeads}
-          onEdit={handleEditLead}
+          onEdit={handleViewLead}
           onDelete={handleDeleteLead}
           onStatusChange={handleStatusChange}
         />
       ) : (
         <LeadsList
           leads={filteredLeads}
-          onEdit={handleEditLead}
+          onEdit={handleViewLead}
           onDelete={handleDeleteLead}
         />
       )}

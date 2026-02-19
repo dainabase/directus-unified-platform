@@ -16,9 +16,13 @@ import TopBar from './components/layout/TopBar'
 import SuperAdminDashboard from './portals/superadmin/Dashboard'
 import PrestataireLayout from './portals/prestataire/layout/PrestataireLayout'
 import PrestataireDashboard from './portals/prestataire/Dashboard'
-import PlaceholderPage from './portals/prestataire/pages/PlaceholderPage'
+import PrestatairePlaceholder from './portals/prestataire/pages/PlaceholderPage'
 import PrestataireQuotesModule from './portals/prestataire/quotes/QuotesModule'
 import PrestataireProfilePage from './portals/prestataire/profile/ProfilePage'
+
+// Client Portal
+import ClientLayout from './portals/client/layout/ClientLayout'
+import ClientPlaceholder from './portals/client/pages/PlaceholderPage'
 import ProjectsModule from './modules/projects/ProjectsModule'
 import TimeTrackingView from './modules/projects/views/TimeTrackingView'
 import DeliverablesView from './modules/projects/views/DeliverablesView'
@@ -177,12 +181,20 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* ── Client portal placeholder ── */}
-          <Route path="/client/*" element={
+          {/* ── Client portal ── */}
+          <Route path="/client" element={
             <ProtectedRoute allowedPortals={['client']}>
-              <div>Client Portal — Phase 3</div>
+              <ClientLayout />
             </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<ClientPlaceholder title="Tableau de bord" description="Dashboard client — S-03-02" />} />
+            <Route path="projects" element={<ClientPlaceholder title="Mes projets" description="Suivi projets — S-03-03" />} />
+            <Route path="quotes" element={<ClientPlaceholder title="Devis" description="Module devis client — S-03-04" />} />
+            <Route path="invoices" element={<ClientPlaceholder title="Factures" description="Module factures client — S-03-03" />} />
+            <Route path="payments" element={<ClientPlaceholder title="Paiements" description="Historique paiements — S-03-03" />} />
+            <Route path="documents" element={<ClientPlaceholder title="Documents" description="Documents — Phase 4" />} />
+            <Route path="support" element={<ClientPlaceholder title="Support" description="Support — Phase 4" />} />
+          </Route>
 
           {/* ── Prestataire portal ── */}
           <Route path="/prestataire" element={
@@ -192,9 +204,9 @@ function App() {
           }>
             <Route index element={<PrestataireDashboard />} />
             <Route path="dashboard" element={<PrestataireDashboard />} />
-            <Route path="missions" element={<PlaceholderPage title="Missions" description="Module missions — S-02-03" />} />
+            <Route path="missions" element={<PrestatairePlaceholder title="Missions" description="Module missions — S-02-03" />} />
             <Route path="quotes" element={<PrestataireQuotesModule />} />
-            <Route path="invoices" element={<PlaceholderPage title="Factures" description="Module factures — Phase 3" />} />
+            <Route path="invoices" element={<PrestatairePlaceholder title="Factures" description="Module factures — Phase 3" />} />
             <Route path="documents" element={<PrestataireProfilePage />} />
             <Route path="profile" element={<PrestataireProfilePage />} />
           </Route>

@@ -13,12 +13,12 @@
 import axios from 'axios';
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
+const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 const api = axios.create({
   baseURL: DIRECTUS_URL,
   headers: {
-    'Authorization': `Bearer ${DIRECTUS_TOKEN}`,
+    'Authorization': `Bearer ${DIRECTUS_ADMIN_TOKEN}`,
     'Content-Type': 'application/json'
   }
 });

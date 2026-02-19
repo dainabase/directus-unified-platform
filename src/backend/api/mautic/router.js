@@ -13,8 +13,8 @@ const router = express.Router();
 // Initialiser Mautic API
 const mautic = new MauticAPI({
   baseURL: process.env.MAUTIC_URL || 'http://localhost:8084',
-  username: process.env.MAUTIC_USERNAME || 'admin',
-  password: process.env.MAUTIC_PASSWORD || 'Admin@Mautic2025'
+  username: process.env.MAUTIC_USERNAME,
+  password: process.env.MAUTIC_PASSWORD
 });
 
 // Initialiser Directus SDK v17
@@ -49,7 +49,7 @@ router.post('/bulk-import', async (req, res) => {
     const { filter } = req.body;
 
     // Authentifier avec Directus
-    directus.setToken(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
+    directus.setToken(process.env.DIRECTUS_ADMIN_TOKEN);
 
     // Construire la requete selon le filtre
     let queryFilter = {};
@@ -130,7 +130,7 @@ router.post('/webhook', async (req, res) => {
     // Traiter les evenements Mautic
     if (trigger === 'lead.updated' || trigger === 'mautic.lead_post_save_update') {
       if (lead && lead.fields && lead.fields.email) {
-        directus.setToken(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW');
+        directus.setToken(process.env.DIRECTUS_ADMIN_TOKEN);
 
         // Chercher le contact par email
         const contacts = await directus.request(

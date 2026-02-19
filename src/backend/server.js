@@ -13,6 +13,7 @@ import { fileURLToPath } from 'url';
 import axios from 'axios';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
+import { validateEnv } from './config/env.validator.js';
 
 // ES Modules: __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -21,14 +22,17 @@ const __dirname = path.dirname(__filename);
 // Charger les variables d'environnement
 dotenv.config();
 
+// Valider les variables d'environnement
+validateEnv();
+
 const app = express();
 const PORT = process.env.UNIFIED_PORT || 3000;
 
 // Configuration Directus
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
+const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
-console.log('🚀 Démarrage du serveur Directus Unifié (ES Modules)...');
+console.log('Demarrage du serveur Directus Unifie (ES Modules)...');
 
 // ============================================
 // MIDDLEWARES GLOBAUX
@@ -44,11 +48,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// CORS simple
+// CORS — whitelist origins from env
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-API-Key');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
@@ -124,7 +136,7 @@ app.get('/api/directus/items/:collection', async (req, res) => {
     const response = await axios.get(
       `${DIRECTUS_URL}/items/${req.params.collection}`,
       {
-        headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` },
+        headers: { 'Authorization': `Bearer ${DIRECTUS_ADMIN_TOKEN}` },
         params: req.query
       }
     );
@@ -203,7 +215,7 @@ app.post('/api/ocr/scan-invoice', async (req, res) => {
       `${DIRECTUS_URL}/items/client_invoices`,
       invoiceData,
       {
-        headers: { 'Authorization': `Bearer ${DIRECTUS_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${DIRECTUS_ADMIN_TOKEN}` }
       }
     );
 

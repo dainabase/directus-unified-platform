@@ -59,6 +59,9 @@ integrations/revolut/logs/*.log
 integrations/invoice-ninja/.env
 integrations/invoice-ninja/.env.invoice-ninja
 
+# ERPNext secrets
+integrations/erpnext/erpnext-api-keys.json
+
 # Backups
 backup-revolut-*.tar.gz
 .archive-local-docs-*

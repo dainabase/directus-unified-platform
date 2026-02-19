@@ -1,0 +1,7 @@
+{
+  "api_key": "<ERPNEXT_API_KEY>",
+  "api_secret": "<ERPNEXT_API_SECRET>",
+  "url": "http://localhost:8083",
+  "username": "Administrator",
+  "note": "Copy to erpnext-api-keys.json and fill with real credentials. Never commit."
+}

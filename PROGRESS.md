@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 2/47 stories — 4%
+**Progression globale** : 3/47 stories — 6%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -17,18 +17,18 @@
 ---
 
 ## PHASE 0 — Fondations & Nettoyage
-**Statut** : [~] IN_PROGRESS | **Progression** : 2/6 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 3/6 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-00-01 · Audit complet du repo (voir AUDIT-REPO.md) — 2026-02-19
 - [V] S-00-02 · Nettoyage fichiers obsoletes + archivage — 2026-02-19
-- [ ] S-00-03 · Variables d'environnement securisees (.env structure)
+- [V] S-00-03 · Variables d'environnement securisees (.env structure) — 2026-02-19
 - [ ] S-00-04 · Authentification Directus (JWT + refresh tokens + roles)
 - [ ] S-00-05 · Systeme de permissions par portail (SuperAdmin/Client/Prestataire/Revendeur)
 - [ ] S-00-06 · Docker health checks + monitoring basique
 
-**Fichiers crees/modifies** : AUDIT-REPO.md, PROGRESS.md, DECISIONS.md, .gitignore, archive/2026-02-19/
-**Observations** : Score sante 62/100. 8 fichiers avec tokens hardcodes. 20 composants frontend mockes. ERPNext import casse.
+**Fichiers crees/modifies** : AUDIT-REPO.md, PROGRESS.md, DECISIONS.md, .gitignore, archive/2026-02-19/, env.validator.js, .env.example, server.js, auth.middleware.js, lead-hooks.js, quote-hooks.js, invoice-hooks.js, mautic/router.js, erpnext/index.js, erpnext-api-keys.example.json
+**Observations** : Score sante 62/100. 7 tokens hardcodes retires (5x DIRECTUS_TOKEN, 1x MAUTIC creds, 1x JWT_SECRET). CORS securise. Validation env au demarrage.
 **Blocages** : —
 
 ---
@@ -146,7 +146,10 @@
 
 | Date | Story | Decouverte | Impact sur le plan | Decision prise |
 |------|-------|-----------|-------------------|----------------|
-| —    | —     | —         | —                 | —              |
+| 2026-02-19 | S-00-03 | frontend/src/api/directus.js n'a PAS de token hardcode (utilise env + SDK auth) | 1 fichier de moins a modifier | Skip modification |
+| 2026-02-19 | S-00-03 | src/backend/api/revolut/index.js existe deja (260 lignes, complet) | Pas besoin de creer un stub | Import fonctionne via try/catch |
+| 2026-02-19 | S-00-03 | mautic/router.js avait un token Directus DIFFERENT (e6Vt5...) des autres (hbQz...) | 2 tokens compromis distincts | Les 2 retires |
+| 2026-02-19 | S-00-03 | ERPNext import resout correctement (src/services/erpnext-api.js) | Import pas casse au niveau path | Ajout fallback stub robuste |
 
 ---
 

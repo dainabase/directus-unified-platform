@@ -8,7 +8,22 @@ import express from 'express';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import ERPNextAPI from '../../../services/erpnext-api.js';
+// ERPNext service — loaded from src/services/
+let ERPNextAPI;
+try {
+  const mod = await import('../../../services/erpnext-api.js');
+  ERPNextAPI = mod.default;
+} catch {
+  // Fallback: stub if service module unavailable
+  ERPNextAPI = class {
+    constructor() { this.api = { get: () => Promise.reject(new Error('ERPNext service not loaded')) }; }
+    async getKPIs() { return {}; }
+    async getList() { return []; }
+    async getRevenueChart() { return { labels: [], data: [] }; }
+    async getCompanyBreakdown() { return []; }
+  };
+  console.warn('[erpnext] Service module not found — using stub');
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

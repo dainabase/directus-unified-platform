@@ -7,8 +7,9 @@
 import React, { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Clock, Plus, Search, Edit3, Trash2, Save, X, Loader2, Calendar
+  Clock, Plus, Search, Edit3, Trash2, Save, X, Loader2, Calendar, Receipt
 } from 'lucide-react'
+import TimeToInvoiceModule from './TimeToInvoiceModule'
 import {
   BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip
 } from 'recharts'
@@ -105,6 +106,7 @@ const TimeTrackingModule = ({ selectedCompany }) => {
   const qc = useQueryClient()
   const company = selectedCompany === 'all' ? '' : selectedCompany
 
+  const [activeTab, setActiveTab] = useState('tracking')
   const [period, setPeriod] = useState('month')
   const [search, setSearch] = useState('')
   const [showForm, setShowForm] = useState(false)
@@ -191,6 +193,28 @@ const TimeTrackingModule = ({ selectedCompany }) => {
     return weeks
   }, [entries])
 
+  if (activeTab === 'billing') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Time Tracking</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Suivi du temps de travail</p>
+          </div>
+        </div>
+        <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+          <button onClick={() => setActiveTab('tracking')} className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900">
+            <Clock size={16} /> Saisie du temps
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-blue-600">
+            <Receipt size={16} /> Facturation en regie
+          </button>
+        </div>
+        <TimeToInvoiceModule />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -202,6 +226,16 @@ const TimeTrackingModule = ({ selectedCompany }) => {
         <button onClick={() => { setEditEntry(null); setShowForm(true) }}
           className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
           <Plus size={16} /> Nouvelle entree
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+        <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-blue-600">
+          <Clock size={16} /> Saisie du temps
+        </button>
+        <button onClick={() => setActiveTab('billing')} className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900">
+          <Receipt size={16} /> Facturation en regie
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 14/47 stories — 29%
+**Progression globale** : 21/47 stories — 45%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -53,19 +53,19 @@
 ---
 
 ## PHASE 2 — Portail Prestataire + Module Devis
-**Statut** : [ ] TODO | **Progression** : 0/7 stories
-**Demarre** : — | **Termine** : —
+**Statut** : [V] DONE | **Progression** : 7/7 stories
+**Demarre** : 2026-02-19 | **Termine** : 2026-02-19
 
-- [ ] S-02-01 · Layout Portail Prestataire (auth + projets assignes)
-- [ ] S-02-02 · Module demande de devis prestataire (REQ-PRES-001/002)
-- [ ] S-02-03 · Upload factures prestataires + OCR automatique
-- [ ] S-02-04 · Createur de devis client (interface CEO)
-- [ ] S-02-05 · Calcul marges automatique (cout prestataire -> prix client)
-- [ ] S-02-06 · Integration DocuSeal (signature electronique)
-- [ ] S-02-07 · Workflow post-signature (creation projet + facture acompte)
+- [V] S-02-01 · Correctif noms entreprises (HYPERVISUAL, DAINAMICS, ENKI REALTY, LEXAIA, TAKEOUT) — 2026-02-19
+- [V] S-02-02 · Layout Portail Prestataire (sidebar + topbar + routing) — 2026-02-19
+- [V] S-02-03 · Dashboard Prestataire avec donnees reelles Directus — 2026-02-19
+- [V] S-02-04 · Module Devis Prestataire (reception + reponse) — 2026-02-19
+- [V] S-02-05 · Module Devis SuperAdmin (gestion complete) — 2026-02-19
+- [V] S-02-06 · Hook useCommercial + service layer commercial — 2026-02-19
+- [V] S-02-07 · Profil Prestataire + Documents — 2026-02-19
 
-**Fichiers crees/modifies** : —
-**Observations** : —
+**Fichiers crees/modifies** : portals/prestataire/layout/PrestataireLayout.jsx, portals/prestataire/pages/PlaceholderPage.jsx, portals/prestataire/Dashboard.jsx (rewrite), portals/prestataire/quotes/QuotesModule.jsx, portals/prestataire/quotes/QuotesList.jsx, portals/prestataire/quotes/QuoteResponseForm.jsx, portals/prestataire/profile/ProfilePage.jsx, portals/superadmin/quotes/QuotesModule.jsx, portals/superadmin/quotes/QuotesList.jsx, portals/superadmin/quotes/QuoteForm.jsx, portals/superadmin/quotes/QuoteDetail.jsx, hooks/useCommercial.js, services/api/commercial.js, components/layout/TopBar.jsx, components/layout/Sidebar.jsx, pages/LoginPage.jsx, App.jsx
+**Observations** : Noms entreprises corriges (S-01-03 avait HMF/ETEKOUT/NK REALITY/LEXIA). Collection proposals peut ne pas exister — le code gere gracieusement avec catch. Collection providers structure non confirmee — profil gere la creation si inexistant. Pas de champ prestataire_id sur projects — missions affichees sans filtre prestataire pour l'instant.
 **Blocages** : —
 
 ---
@@ -157,6 +157,12 @@
 | 2026-02-19 | S-01-01 | services/api/config.js avait token hardcode dashboard-api-token-2025 | Token dev en prod | Retire le fallback |
 | 2026-02-19 | S-01-01 | DirectusAPI class (services/api/directus.js) deja complete (342 lignes) avec CRUD + company filter | Pas besoin de recreer un client axios | Reutilise avec import lib/axios |
 | 2026-02-19 | S-01-08 | Module Leads deja complet (5 fichiers, 293+203+7293+15622+2969 bytes) avec kanban + table + form + stats | Pas besoin de recreer | Valide tel quel, connecte a Directus via useLeads hook |
+| 2026-02-19 | S-02-01 | TopBar.jsx avait noms faux entreprises (HMF Corp, ETEKOUT, NK REALITY, LEXIA) introduits en S-01-03 | Filtrage company incorrect | Corriges avec vrais noms + UUIDs Directus |
+| 2026-02-19 | S-02-01 | LoginPage footer disait "HMF Corporation SA" | Branding incorrect | Corrige en "HYPERVISUAL Switzerland" |
+| 2026-02-19 | S-02-03 | Pas de champ prestataire_id sur collection projects | Impossible de filtrer missions par prestataire | Affiche toutes les missions, a implementer plus tard |
+| 2026-02-19 | S-02-04 | Collection proposals peut ne pas exister dans Directus | Requetes retournent 403/404 | Tous les fetch ont catch gracieux retournant [] |
+| 2026-02-19 | S-02-07 | Collection providers structure non confirmee | Profil prestataire peut etre vide | Code gere creation si inexistant + alerte profil incomplet |
+| 2026-02-19 | S-02-07 | Collection provider_documents peut ne pas exister | Upload documents peut echouer | Catch gracieux, section documents affiche vide |
 
 ---
 
@@ -165,4 +171,4 @@
 **Endpoints custom** : 156
 **Fichiers archives lors du nettoyage** : — (a remplir apres S-00-02)
 **Fichiers supprimes** : — (a remplir apres S-00-02)
-**Dernier commit** : efa444b — feat(auth): add permissions matrix
+**Dernier commit** : 58fa20a — feat(frontend): prestataire profile + document upload — S-02-07

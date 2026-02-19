@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 3/47 stories — 6%
+**Progression globale** : 4/47 stories — 8%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -17,13 +17,13 @@
 ---
 
 ## PHASE 0 — Fondations & Nettoyage
-**Statut** : [~] IN_PROGRESS | **Progression** : 3/6 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 4/6 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-00-01 · Audit complet du repo (voir AUDIT-REPO.md) — 2026-02-19
 - [V] S-00-02 · Nettoyage fichiers obsoletes + archivage — 2026-02-19
 - [V] S-00-03 · Variables d'environnement securisees (.env structure) — 2026-02-19
-- [ ] S-00-04 · Authentification Directus (JWT + refresh tokens + roles)
+- [V] S-00-04 · Authentification Directus (JWT + refresh tokens + roles) — 2026-02-19
 - [ ] S-00-05 · Systeme de permissions par portail (SuperAdmin/Client/Prestataire/Revendeur)
 - [ ] S-00-06 · Docker health checks + monitoring basique
 
@@ -150,6 +150,9 @@
 | 2026-02-19 | S-00-03 | src/backend/api/revolut/index.js existe deja (260 lignes, complet) | Pas besoin de creer un stub | Import fonctionne via try/catch |
 | 2026-02-19 | S-00-03 | mautic/router.js avait un token Directus DIFFERENT (e6Vt5...) des autres (hbQz...) | 2 tokens compromis distincts | Les 2 retires |
 | 2026-02-19 | S-00-03 | ERPNext import resout correctement (src/services/erpnext-api.js) | Import pas casse au niveau path | Ajout fallback stub robuste |
+| 2026-02-19 | S-00-04 | auth.routes.js deja 662 lignes avec login/refresh/logout/me/register | Completer plutot que reecrire | Ajout magic-link + portal param + rotation |
+| 2026-02-19 | S-00-04 | collection.routes.js bypass auth (next() stubs L13-21) | Faille securite sur /api/collection | Remplace par vrai authMiddleware |
+| 2026-02-19 | S-00-04 | auth.routes.js utilisait DIRECTUS_TOKEN (ancien nom) | Incoherence avec S-00-03 | Renomme en DIRECTUS_ADMIN_TOKEN |
 
 ---
 

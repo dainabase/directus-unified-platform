@@ -25,7 +25,7 @@ const router = express.Router();
 // Directus client for user operations (using staticToken for SDK v17+)
 const getDirectus = () => {
   return createDirectus(process.env.DIRECTUS_URL || 'http://localhost:8055')
-    .with(staticToken(process.env.DIRECTUS_TOKEN))
+    .with(staticToken(process.env.DIRECTUS_ADMIN_TOKEN))
     .with(rest());
 };
 
@@ -40,7 +40,7 @@ const asyncHandler = (fn) => (req, res, next) =>
  * Authenticate user and return JWT tokens
  */
 router.post('/login', asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, portal } = req.body;
 
   // Validation
   if (!email || !password) {
@@ -198,11 +198,28 @@ router.post('/login', asyncHandler(async (req, res) => {
       // Non-critical - continue
     }
 
+    // Validate portal matches role if specified
+    const portalRoleMap = {
+      superadmin: ['admin', 'superadmin'],
+      client: ['client'],
+      prestataire: ['prestataire'],
+      revendeur: ['revendeur']
+    };
+
+    if (portal && portalRoleMap[portal] && !portalRoleMap[portal].includes(role)) {
+      return res.status(403).json({
+        success: false,
+        error: `Acces au portail ${portal} non autorise pour le role ${role}`,
+        code: 'PORTAL_ACCESS_DENIED'
+      });
+    }
+
     res.json({
       success: true,
       accessToken,
       refreshToken,
       expiresIn: '24h',
+      portal: portal || null,
       user: {
         id: user.id,
         email: user.email,
@@ -280,6 +297,9 @@ router.post('/refresh', asyncHandler(async (req, res) => {
         code: 'ACCOUNT_DISABLED'
       });
     }
+
+    // Blacklist old refresh token (rotation)
+    blacklistToken(refreshToken);
 
     // Generate new tokens
     const tokens = generateTokens({
@@ -643,6 +663,199 @@ router.post('/register', authMiddleware, asyncHandler(async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Erreur lors de la création de l\'utilisateur',
+      code: 'SERVER_ERROR'
+    });
+  }
+}));
+
+/**
+ * POST /api/auth/magic-link
+ * Send a one-time login link (client portal only)
+ */
+router.post('/magic-link', asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      error: 'Email requis',
+      code: 'VALIDATION_ERROR'
+    });
+  }
+
+  try {
+    const directus = getDirectus();
+    const crypto = await import('crypto');
+
+    // Find contact in contacts collection
+    const contacts = await directus.request(
+      readItems('contacts', {
+        filter: { email: { _eq: email.toLowerCase() } },
+        limit: 1
+      })
+    );
+
+    // Always return success to avoid email enumeration
+    if (!contacts || contacts.length === 0) {
+      return res.json({
+        success: true,
+        message: 'Si un compte existe avec cet email, un lien de connexion a ete envoye.'
+      });
+    }
+
+    const contact = contacts[0];
+
+    // Generate one-time token
+    const token = crypto.randomUUID();
+
+    // Store token in Directus (magic_link_tokens collection or contact field)
+    try {
+      await directus.request(
+        createItem('magic_link_tokens', {
+          token,
+          contact_id: contact.id,
+          email: contact.email,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          used: false
+        })
+      );
+    } catch {
+      // If collection doesn't exist, store on contact directly
+      await directus.request(
+        updateItem('contacts', contact.id, {
+          magic_link_token: token,
+          magic_link_expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        })
+      );
+    }
+
+    // In dev mode, return token for testing
+    const isDev = process.env.NODE_ENV !== 'production';
+    if (isDev) {
+      console.log(`[auth] Magic link token for ${email}: ${token}`);
+    }
+
+    // TODO: Send email via Mautic when available
+    // await sendMagicLinkEmail(contact.email, token);
+
+    res.json({
+      success: true,
+      message: 'Si un compte existe avec cet email, un lien de connexion a ete envoye.',
+      ...(isDev && { dev_token: token })
+    });
+
+  } catch (error) {
+    console.error('Magic link error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur lors de l\'envoi du lien',
+      code: 'SERVER_ERROR'
+    });
+  }
+}));
+
+/**
+ * GET /api/auth/magic-link/verify/:token
+ * Verify a magic link token and create a session
+ */
+router.get('/magic-link/verify/:token', asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  if (!token) {
+    return res.status(400).json({
+      success: false,
+      error: 'Token requis',
+      code: 'VALIDATION_ERROR'
+    });
+  }
+
+  try {
+    const directus = getDirectus();
+    let contact = null;
+
+    // Try magic_link_tokens collection first
+    try {
+      const tokens = await directus.request(
+        readItems('magic_link_tokens', {
+          filter: {
+            _and: [
+              { token: { _eq: token } },
+              { used: { _eq: false } },
+              { expires_at: { _gt: new Date().toISOString() } }
+            ]
+          },
+          limit: 1
+        })
+      );
+
+      if (tokens.length > 0) {
+        const tokenRecord = tokens[0];
+        contact = await directus.request(readItem('contacts', tokenRecord.contact_id));
+
+        // Mark token as used (one-time)
+        await directus.request(
+          updateItem('magic_link_tokens', tokenRecord.id, { used: true })
+        );
+      }
+    } catch {
+      // Fallback: check contact directly
+      const contacts = await directus.request(
+        readItems('contacts', {
+          filter: {
+            _and: [
+              { magic_link_token: { _eq: token } },
+              { magic_link_expires: { _gt: new Date().toISOString() } }
+            ]
+          },
+          limit: 1
+        })
+      );
+
+      if (contacts.length > 0) {
+        contact = contacts[0];
+        // Clear token (one-time use)
+        await directus.request(
+          updateItem('contacts', contact.id, {
+            magic_link_token: null,
+            magic_link_expires: null
+          })
+        );
+      }
+    }
+
+    if (!contact) {
+      return res.status(401).json({
+        success: false,
+        error: 'Lien invalide ou expire',
+        code: 'INVALID_MAGIC_LINK'
+      });
+    }
+
+    // Generate client session token (24h)
+    const { accessToken } = generateTokens({
+      id: contact.id,
+      email: contact.email,
+      name: contact.first_name || contact.name || 'Client',
+      role: 'client',
+      companies: contact.company_id ? [contact.company_id] : [],
+      permissions: ['projects.read', 'quotes.read', 'invoices.read']
+    });
+
+    res.json({
+      success: true,
+      accessToken,
+      contact: {
+        id: contact.id,
+        name: contact.first_name || contact.name,
+        email: contact.email
+      }
+    });
+
+  } catch (error) {
+    console.error('Magic link verify error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Erreur de verification',
       code: 'SERVER_ERROR'
     });
   }

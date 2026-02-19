@@ -9,16 +9,7 @@ import { interestCalculator } from '../../services/collection/interest-calculato
 
 const router = express.Router();
 
-// Middleware d'authentification basique (à adapter selon votre système)
-const authMiddleware = (req, res, next) => {
-  // TODO: Implémenter la vérification du token d'authentification
-  next();
-};
-
-const companyAccessMiddleware = (req, res, next) => {
-  // TODO: Vérifier que l'utilisateur a accès à l'entreprise spécifiée
-  next();
-};
+import { authMiddleware, companyAccess } from '../../middleware/auth.middleware.js';
 
 router.use(authMiddleware);
 

@@ -1,0 +1,154 @@
+{
+  "_comment": "Phase E — Directus Flows pour email automation. A importer via Directus Admin > Settings > Flows",
+  "flows": [
+    {
+      "name": "E-01 — Email confirmation lead",
+      "description": "Envoie un email de confirmation quand un nouveau lead est créé (status=new). REQ-LEAD-007.",
+      "trigger": "event",
+      "options": {
+        "type": "action",
+        "scope": ["items.create"],
+        "collections": ["leads"]
+      },
+      "operations": [
+        {
+          "name": "Webhook E-01",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/lead-confirmation",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{ \"lead_id\": \"{{$trigger.key}}\" }"
+          }
+        }
+      ]
+    },
+    {
+      "name": "E-02 — Email devis envoyé",
+      "description": "Envoie le devis au client quand le statut passe à 'sent'. REQ-FACT-004.",
+      "trigger": "event",
+      "options": {
+        "type": "action",
+        "scope": ["items.update"],
+        "collections": ["quotes"]
+      },
+      "operations": [
+        {
+          "name": "Filter status=sent",
+          "type": "condition",
+          "options": {
+            "filter": { "$trigger": { "payload": { "status": { "_eq": "sent" } } } }
+          }
+        },
+        {
+          "name": "Webhook E-02",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/quote-sent",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{ \"quote_id\": \"{{$trigger.keys[0]}}\" }"
+          }
+        }
+      ]
+    },
+    {
+      "name": "E-03 — Email paiement confirmé",
+      "description": "Envoie un accusé de réception quand un paiement passe à 'completed'. REQ-FACT-006.",
+      "trigger": "event",
+      "options": {
+        "type": "action",
+        "scope": ["items.update"],
+        "collections": ["payments"]
+      },
+      "operations": [
+        {
+          "name": "Filter status=completed",
+          "type": "condition",
+          "options": {
+            "filter": { "$trigger": { "payload": { "status": { "_eq": "completed" } } } }
+          }
+        },
+        {
+          "name": "Webhook E-03",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/payment-confirmed",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{ \"payment_id\": \"{{$trigger.keys[0]}}\" }"
+          }
+        }
+      ]
+    },
+    {
+      "name": "E-04 — Rappels factures impayées (CRON 09h00)",
+      "description": "CRON quotidien — rappels J+7/J+14/J+30 pour factures impayées. REQ-FACT-010.",
+      "trigger": "schedule",
+      "options": {
+        "cron": "0 9 * * *"
+      },
+      "operations": [
+        {
+          "name": "Webhook E-04",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/invoice-reminders",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "E-05 — Notification prestataire facture approuvée",
+      "description": "Notifie le prestataire quand sa facture est approuvée. REQ-APPRO-005.",
+      "trigger": "event",
+      "options": {
+        "type": "action",
+        "scope": ["items.update"],
+        "collections": ["supplier_invoices"]
+      },
+      "operations": [
+        {
+          "name": "Filter status=approved",
+          "type": "condition",
+          "options": {
+            "filter": { "$trigger": { "payload": { "status": { "_eq": "approved" } } } }
+          }
+        },
+        {
+          "name": "Webhook E-05",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/supplier-invoice-approved",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{ \"invoice_id\": \"{{$trigger.keys[0]}}\" }"
+          }
+        }
+      ]
+    },
+    {
+      "name": "E-06 — Rappel prestataire (CRON horaire)",
+      "description": "CRON horaire — rappel prestataire si proposal en attente > 24h. REQ-PREST-004.",
+      "trigger": "schedule",
+      "options": {
+        "cron": "0 * * * *"
+      },
+      "operations": [
+        {
+          "name": "Webhook E-06",
+          "type": "request",
+          "options": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/email/provider-reminder",
+            "headers": [{ "header": "Content-Type", "value": "application/json" }],
+            "body": "{}"
+          }
+        }
+      ]
+    }
+  ]
+}

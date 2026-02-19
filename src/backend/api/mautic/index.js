@@ -195,6 +195,51 @@ class MauticAPI {
     }
   }
 
+  // Envoyer un email transactionnel a un contact
+  async sendEmail(contactId, emailData) {
+    try {
+      // Creer l'email transactionnel dans Mautic
+      const mauticEmail = {
+        name: emailData.name || `transactional-${Date.now()}`,
+        subject: emailData.subject,
+        customHtml: emailData.html,
+        isPublished: true,
+        emailType: 'template'
+      };
+
+      const emailResponse = await this.api.post('/emails/new', mauticEmail);
+      const emailId = emailResponse.data.email?.id;
+
+      if (!emailId) {
+        throw new Error('Impossible de creer l email dans Mautic');
+      }
+
+      // Envoyer l'email au contact
+      const sendResponse = await this.api.post(`/emails/${emailId}/contact/${contactId}/send`);
+      return { success: true, emailId, sendResponse: sendResponse.data };
+    } catch (error) {
+      console.error('Erreur envoi email Mautic:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  // Envoyer un email direct par adresse (upsert contact puis envoie)
+  async sendEmailToAddress(email, contact, emailData) {
+    try {
+      const mauticContact = await this.upsertContact({
+        email,
+        first_name: contact.first_name || '',
+        last_name: contact.last_name || '',
+        company: contact.company || '',
+        tags: contact.tags || ['directus-automation']
+      });
+      return await this.sendEmail(mauticContact.id, emailData);
+    } catch (error) {
+      console.error('Erreur envoi email a:', email, error.message);
+      throw error;
+    }
+  }
+
   // Import en masse depuis Directus
   async bulkImportContacts(contacts) {
     let imported = 0;

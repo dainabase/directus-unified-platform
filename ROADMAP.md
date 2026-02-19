@@ -189,23 +189,40 @@
 
 ---
 
-## PHASE E — AUTOMATISATIONS EMAIL (MAUTIC)
-**Objectif CDC** : Zéro email manuel pour HYPERVISUAL  
-**Modules CDC** : Module 1, 3, 5, 8  
-**Note technique** : Mautic 5.x gère TOUS les emails (marketing + transactionnels)  
-**Progression** : 0/6 stories
+## PHASE E — AUTOMATISATIONS EMAIL (MAUTIC) *(TERMINÉE)*
+**Objectif CDC** : Zéro email manuel pour HYPERVISUAL
+**Modules CDC** : Module 1, 3, 5, 8
+**Note technique** : Mautic 5.x gère TOUS les emails (marketing + transactionnels)
+**Progression** : 6/6 stories — [V] DONE — 2026-02-19
 
-- [ ] **E-01** · Email confirmation lead (REQ-LEAD-007 — dans les 5 minutes)  
-- [ ] **E-02** · Email devis envoyé au client avec PDF  
-  *CDC* : REQ-FACT-004  
-- [ ] **E-03** · Email accusé de réception paiement + activation projet  
-  *CDC* : REQ-FACT-006  
-- [ ] **E-04** · Rappels automatiques factures impayées (J+7, J+14, J+30)  
-  *CDC* : REQ-FACT-010 (procédure recouvrement suisse SchKG/LP)  
-- [ ] **E-05** · Notification prestataire approbation facture + date paiement  
-  *CDC* : REQ-APPRO-005  
-- [ ] **E-06** · Rappel prestataire si pas de réponse sous 24h  
-  *CDC* : REQ-PREST-004  
+- [V] **E-01** · Email confirmation lead (REQ-LEAD-007 — dans les 5 minutes) — 2026-02-19
+  *Fichiers* : `api/email/lead-confirmation.js`, `api/email/templates.js`
+  *Livré* : Directus Flow items.create leads → POST /api/email/lead-confirmation → Mautic upsert + send. Anti-doublon via automation_logs.
+
+- [V] **E-02** · Email devis envoyé au client avec PDF — 2026-02-19
+  *Fichiers* : `api/email/quote-sent.js`
+  *CDC* : REQ-FACT-004
+  *Livré* : Flow items.update quotes status=sent → email client avec lien signature portail + montant TTC CHF.
+
+- [V] **E-03** · Email accusé de réception paiement + activation projet — 2026-02-19
+  *Fichiers* : `api/email/payment-confirmed.js`
+  *CDC* : REQ-FACT-006
+  *Livré* : Flow items.update payments status=completed → chaîne payment→invoice→contact → email confirmation + lien portail projet.
+
+- [V] **E-04** · Rappels automatiques factures impayées (J+7, J+14, J+30) — 2026-02-19
+  *Fichiers* : `api/email/invoice-reminders.js`
+  *CDC* : REQ-FACT-010 (procédure recouvrement suisse SchKG/LP)
+  *Livré* : CRON quotidien 09h00 → 3 paliers (courtois/ferme/mise en demeure SchKG Art. 67). Anti-doublon par level. Champ due_date ajouté à client_invoices.
+
+- [V] **E-05** · Notification prestataire approbation facture + date paiement — 2026-02-19
+  *Fichiers* : `api/email/supplier-approved.js`
+  *CDC* : REQ-APPRO-005
+  *Livré* : Flow items.update supplier_invoices status=approved → email prestataire avec date paiement prévue (date_paid ou J+30).
+
+- [V] **E-06** · Rappel prestataire si pas de réponse sous 24h — 2026-02-19
+  *Fichiers* : `api/email/provider-reminder.js`
+  *CDC* : REQ-PREST-004
+  *Livré* : CRON horaire → proposals pending/active > 24h sans submitted_at → max 1 rappel par proposal via automation_logs.
 
 ---
 
@@ -389,6 +406,10 @@
 | 2026-02-19 | D-01 | MCP Directus retourne 401 — token MCP mal configuré | Contourné | Utilisé curl + static admin token pour vérifier/ajouter champs |
 | 2026-02-19 | D-01 | Collections providers/proposals/orders manquaient beaucoup de champs | Bloquant | Ajouté 18 champs via API Directus (email, phone, amounts, TVA, etc.) |
 | 2026-02-19 | D-01 | Auth prestataire = magic link (comme client), pas JWT admin | Architecture | Cohérent avec portail client Phase C — portails externes isolés du JWT superadmin |
+| 2026-02-19 | E-04 | client_invoices n'avait pas de champ due_date | Bloquant E-04 | Ajouté due_date (type date) via API Directus |
+| 2026-02-19 | E-04 | automation_logs existait mais manquait entity_type, entity_id, recipient_email, level | Enrichi | 4 champs ajoutés pour traçabilité complète |
+| 2026-02-19 | E-all | MauticAPI n'avait pas de sendEmail() ni sendEmailToAddress() | Bloquant | Ajouté 2 méthodes à api/mautic/index.js |
+| 2026-02-19 | E-all | quotes.total (pas total_ttc), supplier_invoices.date_paid (pas payment_date), proposals.created_at (pas date_created) | Noms champs | Adapté le code aux noms réels vérifiés via MCP |
 
 ---
 
@@ -401,9 +422,10 @@
 | Stories Phase B (cycle vente) | 8/8 ✅ |
 | Stories Phase C (portail client) | 8/8 ✅ |
 | Stories Phase D (portail prestataire) | 7/7 ✅ |
-| Stories CDC restantes | 30 à faire |
-| Modules CDC couverts | 6/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire) |
-| Dernier commit Phase D | 9d57c20 — 2026-02-19 |
+| Stories Phase E (email automation) | 6/6 ✅ |
+| Stories CDC restantes | 24 à faire |
+| Modules CDC couverts | 7/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation) |
+| Dernier commit Phase E | — 2026-02-19 |
 
 ---
 

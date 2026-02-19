@@ -116,6 +116,18 @@ try {
 }
 
 // ============================================
+// API EMAIL AUTOMATION - Phase E (Mautic transactional)
+// ============================================
+
+try {
+  const emailRoutes = await import('./api/email/index.js');
+  app.use('/api/email', emailRoutes.default);
+  console.log('[api] Email automation connected: /api/email (6 flows Phase E)');
+} catch (err) {
+  console.warn('[api] Email automation not available:', err.message);
+}
+
+// ============================================
 // API INTEGRATIONS - DocuSeal, Invoice Ninja, Mautic
 // ============================================
 

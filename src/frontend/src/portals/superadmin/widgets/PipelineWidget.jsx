@@ -30,19 +30,20 @@ const formatCHF = (value) => {
 
 const fetchPipelineData = async (company) => {
   try {
-    const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+    const leadsFilter = company && company !== 'all' ? { company: { _eq: company } } : {}
+    const quotesFilter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
 
     const [leadsRes, quotesRes] = await Promise.all([
       api.get('/items/leads', {
         params: {
-          filter,
+          filter: leadsFilter,
           fields: ['status', 'estimated_value'],
           limit: -1
         }
       }).catch(() => ({ data: { data: [] } })),
       api.get('/items/quotes', {
         params: {
-          filter,
+          filter: quotesFilter,
           fields: ['status', 'total_amount'],
           limit: -1
         }

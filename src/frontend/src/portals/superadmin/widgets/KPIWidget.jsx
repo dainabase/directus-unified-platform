@@ -27,7 +27,7 @@ const fetchKPIs = async (company) => {
     const [invoicesRes, projectsRes, leadsRes] = await Promise.all([
       api.get('/items/client_invoices', {
         params: {
-          aggregate: { sum: ['total_amount'], count: ['*'] },
+          aggregate: { sum: ['amount'], count: ['*'] },
           filter: company && company !== 'all' ? { owner_company: { _eq: company } } : {},
           groupBy: ['status']
         }
@@ -42,7 +42,7 @@ const fetchKPIs = async (company) => {
       api.get('/items/leads', {
         params: {
           aggregate: { count: ['*'], sum: ['estimated_value'] },
-          filter: company && company !== 'all' ? { owner_company: { _eq: company } } : {},
+          filter: company && company !== 'all' ? { company: { _eq: company } } : {},
           groupBy: ['status']
         }
       }).catch(() => ({ data: { data: [] } }))
@@ -54,7 +54,7 @@ const fetchKPIs = async (company) => {
 
     // Calculate MRR from paid invoices
     const paidInvoices = invoiceData.find(i => i.status === 'paid')
-    const totalRevenue = parseFloat(paidInvoices?.sum?.total_amount || 0)
+    const totalRevenue = parseFloat(paidInvoices?.sum?.amount || 0)
 
     // Pipeline value from open leads
     const pipelineLeads = leadData.filter(l => !['won', 'lost'].includes(l.status))

@@ -23,20 +23,98 @@ const PRIORITY_CONFIG = {
 }
 
 const fetchAlerts = async (company) => {
-  const params = {
-    filter: { status: { _eq: 'active' } },
-    sort: ['-priority', '-date_created'],
-    limit: 10
-  }
-  if (company && company !== 'all') {
-    params.filter.owner_company = { _eq: company }
-  }
+  const companyFilter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+  const leadsCompanyFilter = company && company !== 'all' ? { company: { _eq: company } } : {}
+  const now = new Date()
+  const alerts = []
 
   try {
-    const { data } = await api.get('/items/dashboard_kpis', { params })
-    return data?.data || []
+    const [overdueInvoices, urgentLeads, openTickets] = await Promise.all([
+      // Pending invoices (potential overdue)
+      api.get('/items/client_invoices', {
+        params: {
+          filter: {
+            ...companyFilter,
+            status: { _eq: 'pending' }
+          },
+          fields: ['id', 'invoice_number', 'client_name', 'amount', 'date_created', 'owner_company'],
+          sort: ['-date_created'],
+          limit: 5
+        }
+      }).catch(() => ({ data: { data: [] } })),
+
+      // Urgent leads not yet won/lost
+      api.get('/items/leads', {
+        params: {
+          filter: {
+            ...leadsCompanyFilter,
+            priority: { _eq: 'urgent' },
+            status: { _nin: ['won', 'lost'] }
+          },
+          fields: ['id', 'first_name', 'last_name', 'company_name', 'estimated_value', 'date_created', 'company'],
+          sort: ['-date_created'],
+          limit: 5
+        }
+      }).catch(() => ({ data: { data: [] } })),
+
+      // Open support tickets
+      api.get('/items/support_tickets', {
+        params: {
+          filter: {
+            ...companyFilter,
+            status: { _eq: 'open' }
+          },
+          fields: ['id', 'ticket_number', 'subject', 'priority', 'date_created'],
+          sort: ['-date_created'],
+          limit: 3
+        }
+      }).catch(() => ({ data: { data: [] } }))
+    ])
+
+    // Build alerts from overdue invoices
+    const invoiceData = overdueInvoices.data?.data || []
+    invoiceData.forEach(inv => {
+      const daysOld = Math.floor((now - new Date(inv.date_created)) / (1000 * 60 * 60 * 24))
+      if (daysOld > 30) {
+        alerts.push({
+          id: `inv-${inv.id}`,
+          priority: daysOld > 60 ? 'critical' : 'high',
+          title: `Facture en retard: ${inv.invoice_number}`,
+          description: `${inv.client_name} — ${new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(inv.amount || 0)} — ${daysOld}j`,
+          date_created: inv.date_created
+        })
+      }
+    })
+
+    // Build alerts from urgent leads
+    const leadData = urgentLeads.data?.data || []
+    leadData.forEach(lead => {
+      alerts.push({
+        id: `lead-${lead.id}`,
+        priority: 'high',
+        title: `Lead urgent: ${lead.first_name} ${lead.last_name}`,
+        description: `${lead.company_name} — ${new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(lead.estimated_value || 0)} estime`,
+        date_created: lead.date_created
+      })
+    })
+
+    // Build alerts from open tickets
+    const ticketData = openTickets.data?.data || []
+    ticketData.forEach(ticket => {
+      alerts.push({
+        id: `ticket-${ticket.id}`,
+        priority: ticket.priority === 'high' ? 'high' : 'medium',
+        title: `Ticket #${ticket.ticket_number}: ${ticket.subject}`,
+        description: 'Support client ouvert',
+        date_created: ticket.date_created
+      })
+    })
+
+    // Sort by priority
+    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3, info: 4 }
+    return alerts.sort((a, b) => (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4))
+
   } catch {
-    // Fallback: return empty array — widget shows "no alerts"
     return []
   }
 }
@@ -53,7 +131,8 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
 
   const dismissMutation = useMutation({
     mutationFn: async (alertId) => {
-      await api.patch(`/items/dashboard_kpis/${alertId}`, { status: 'dismissed' })
+      // Composite IDs (inv-xxx, lead-xxx, ticket-xxx) — dismiss locally
+      return alertId
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['alerts'] })

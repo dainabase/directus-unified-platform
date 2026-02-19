@@ -140,19 +140,17 @@ router.post('/login', asyncHandler(async (req, res) => {
       });
     }
 
-    // Verify password
-    const passwordField = user.password || user.password_hash;
-    if (!passwordField) {
-      recordLoginAttempt(email.toLowerCase(), false);
-      return res.status(401).json({
-        success: false,
-        error: 'Configuration du compte invalide',
-        code: 'ACCOUNT_SETUP_REQUIRED'
-      });
-    }
+    // Verify password via Directus native auth (supports argon2)
+    const directusLoginRes = await fetch(
+      `${process.env.DIRECTUS_URL || 'http://localhost:8055'}/auth/login`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase(), password })
+      }
+    );
 
-    const isValidPassword = await bcrypt.compare(password, passwordField);
-    if (!isValidPassword) {
+    if (!directusLoginRes.ok) {
       recordLoginAttempt(email.toLowerCase(), false);
       return res.status(401).json({
         success: false,

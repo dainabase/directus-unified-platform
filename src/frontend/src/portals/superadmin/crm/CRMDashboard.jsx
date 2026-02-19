@@ -12,9 +12,12 @@ import CompaniesList from './components/CompaniesList';
 import ContactForm from './components/ContactForm';
 import CompanyForm from './components/CompanyForm';
 
-const CRMDashboard = () => {
-  const [selectedCompany, setSelectedCompany] = useState('all');
-  const [activeTab, setActiveTab] = useState('dashboard');
+const CRMDashboard = ({ selectedCompany: propCompany, view }) => {
+  const [localCompany, setLocalCompany] = useState('all');
+  const selectedCompany = propCompany || localCompany;
+  const setSelectedCompany = setLocalCompany;
+  const viewToTab = { contacts: 'contacts', companies: 'companies', activities: 'activities' };
+  const [activeTab, setActiveTab] = useState(viewToTab[view] || 'dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [showContactForm, setShowContactForm] = useState(false);
   const [showCompanyForm, setShowCompanyForm] = useState(false);

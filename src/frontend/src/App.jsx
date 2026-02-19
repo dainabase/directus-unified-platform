@@ -50,6 +50,9 @@ import LeadsDashboard from './portals/superadmin/leads/LeadsDashboard'
 // Quotes Module
 import QuotesModule from './portals/superadmin/quotes/QuotesModule'
 
+// Invoices Module
+import AdminInvoicesModule from './portals/superadmin/invoices/InvoicesModule'
+
 // Legal Module
 import LegalDashboard from './portals/superadmin/legal/LegalDashboard'
 import ContractsManager from './portals/superadmin/legal/components/ContractsManager'
@@ -121,7 +124,7 @@ function App() {
                   {/* Finance */}
                   <Route path="banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
                   <Route path="accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
-                  <Route path="invoices/clients" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-clients" />} />
+                  <Route path="invoices/clients" element={<AdminInvoicesModule selectedCompany={selectedCompany} />} />
                   <Route path="invoices/suppliers" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-suppliers" />} />
                   <Route path="collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
                   <Route path="budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />

@@ -50,6 +50,10 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true
       },
+      '/api/reports': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
       '/health': {
         target: 'http://localhost:3000',
         changeOrigin: true
@@ -78,7 +82,31 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-query': ['@tanstack/react-query'],
+          'vendor-charts': ['recharts'],
+          'vendor-utils': ['date-fns', 'lucide-react'],
+          // Portal chunks — one per portal
+          'portal-client': [
+            './src/portals/client/Dashboard.jsx',
+            './src/portals/client/layout/ClientLayout.jsx'
+          ],
+          'portal-prestataire': [
+            './src/portals/prestataire/Dashboard.jsx',
+            './src/portals/prestataire/layout/PrestataireLayout.jsx'
+          ],
+          'portal-revendeur': [
+            './src/portals/revendeur/RevendeurDashboard.jsx',
+            './src/portals/revendeur/layout/RevendeurLayout.jsx'
+          ]
+        }
+      }
+    }
   },
   // Supprimer les warnings de dépendances
   optimizeDeps: {

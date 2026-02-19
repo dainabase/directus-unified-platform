@@ -1,80 +1,94 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
+import { Loader2 } from 'lucide-react'
 import queryClient from './lib/queryClient'
 import { useAuthStore } from './stores/authStore'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
 
-// Layout components
+// Layout components (kept eager — always needed)
 import Sidebar from './components/layout/Sidebar'
 import TopBar from './components/layout/TopBar'
 
-// Portals & Modules
-import SuperAdminDashboard from './portals/superadmin/Dashboard'
-import PrestataireLayout from './portals/prestataire/layout/PrestataireLayout'
-import PrestataireDashboard from './portals/prestataire/Dashboard'
-import PrestatairePlaceholder from './portals/prestataire/pages/PlaceholderPage'
-import PrestataireQuotesModule from './portals/prestataire/quotes/QuotesModule'
-import PrestataireProfilePage from './portals/prestataire/profile/ProfilePage'
+// ── Loading spinner for Suspense fallback ──
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+  </div>
+)
+
+// ── Lazy-loaded portals & modules (code-split per route) ──
+
+// SuperAdmin
+const SuperAdminDashboard = lazy(() => import('./portals/superadmin/Dashboard'))
+
+// Prestataire Portal
+const PrestataireLayout = lazy(() => import('./portals/prestataire/layout/PrestataireLayout'))
+const PrestataireDashboard = lazy(() => import('./portals/prestataire/Dashboard'))
+const PrestatairePlaceholder = lazy(() => import('./portals/prestataire/pages/PlaceholderPage'))
+const PrestataireQuotesModule = lazy(() => import('./portals/prestataire/quotes/QuotesModule'))
+const PrestataireProfilePage = lazy(() => import('./portals/prestataire/profile/ProfilePage'))
 
 // Revendeur Portal
-import RevendeurLayout from './portals/revendeur/layout/RevendeurLayout'
-import RevendeurDashboard from './portals/revendeur/RevendeurDashboard'
-import RevendeurPlaceholder from './portals/revendeur/pages/PlaceholderPage'
+const RevendeurLayout = lazy(() => import('./portals/revendeur/layout/RevendeurLayout'))
+const RevendeurDashboard = lazy(() => import('./portals/revendeur/RevendeurDashboard'))
+const RevendeurPlaceholder = lazy(() => import('./portals/revendeur/pages/PlaceholderPage'))
 
 // Client Portal
-import ClientLayout from './portals/client/layout/ClientLayout'
-import ClientDashboard from './portals/client/Dashboard'
-import ClientInvoicesModule from './portals/client/invoices/InvoicesModule'
-import ClientQuotesModule from './portals/client/quotes/QuotesModule'
-import ClientPlaceholder from './portals/client/pages/PlaceholderPage'
-import ClientProjectsModule from './portals/client/projects/ClientProjectsModule'
-import ProjectsModule from './portals/superadmin/projects/ProjectsModule'
-import DeliverablesModule from './portals/superadmin/deliverables/DeliverablesModule'
-import TimeTrackingModule from './portals/superadmin/time/TimeTrackingModule'
-import SubscriptionsModule from './portals/superadmin/subscriptions/SubscriptionsModule'
-import ProjectsDashboard from './portals/superadmin/projects/ProjectsDashboard'
-import HRModule from './modules/hr/HRModule'
-import TrainingsView from './modules/hr/views/TrainingsView'
+const ClientLayout = lazy(() => import('./portals/client/layout/ClientLayout'))
+const ClientDashboard = lazy(() => import('./portals/client/Dashboard'))
+const ClientInvoicesModule = lazy(() => import('./portals/client/invoices/InvoicesModule'))
+const ClientQuotesModule = lazy(() => import('./portals/client/quotes/QuotesModule'))
+const ClientPlaceholder = lazy(() => import('./portals/client/pages/PlaceholderPage'))
+const ClientProjectsModule = lazy(() => import('./portals/client/projects/ClientProjectsModule'))
+
+// SuperAdmin Modules
+const ProjectsModule = lazy(() => import('./portals/superadmin/projects/ProjectsModule'))
+const DeliverablesModule = lazy(() => import('./portals/superadmin/deliverables/DeliverablesModule'))
+const TimeTrackingModule = lazy(() => import('./portals/superadmin/time/TimeTrackingModule'))
+const SubscriptionsModule = lazy(() => import('./portals/superadmin/subscriptions/SubscriptionsModule'))
+const ProjectsDashboard = lazy(() => import('./portals/superadmin/projects/ProjectsDashboard'))
+const HRModule = lazy(() => import('./modules/hr/HRModule'))
+const TrainingsView = lazy(() => import('./modules/hr/views/TrainingsView'))
 
 // Finance Modules
-import BankingDashboard from './components/banking/BankingDashboard'
-import FinanceDashboard from './portals/superadmin/finance/FinanceDashboard'
-import CollectionDashboard from './portals/superadmin/collection/CollectionDashboard'
-import BudgetsManager from './portals/superadmin/finance/components/BudgetsManager'
-import ExpensesTracker from './portals/superadmin/finance/components/ExpensesTracker'
+const BankingDashboard = lazy(() => import('./components/banking/BankingDashboard'))
+const FinanceDashboard = lazy(() => import('./portals/superadmin/finance/FinanceDashboard'))
+const CollectionDashboard = lazy(() => import('./portals/superadmin/collection/CollectionDashboard'))
+const BudgetsManager = lazy(() => import('./portals/superadmin/finance/components/BudgetsManager'))
+const ExpensesTracker = lazy(() => import('./portals/superadmin/finance/components/ExpensesTracker'))
 
 // CRM Module
-import CRMDashboard from './portals/superadmin/crm/CRMDashboard'
-import PipelineView from './portals/superadmin/crm/components/PipelineView'
-import CustomerSuccess from './portals/superadmin/crm/components/CustomerSuccess'
-import CRMAnalytics from './portals/superadmin/crm/CRMAnalytics'
+const CRMDashboard = lazy(() => import('./portals/superadmin/crm/CRMDashboard'))
+const PipelineView = lazy(() => import('./portals/superadmin/crm/components/PipelineView'))
+const CustomerSuccess = lazy(() => import('./portals/superadmin/crm/components/CustomerSuccess'))
+const CRMAnalytics = lazy(() => import('./portals/superadmin/crm/CRMAnalytics'))
 
 // Leads Module
-import LeadsDashboard from './portals/superadmin/leads/LeadsDashboard'
+const LeadsDashboard = lazy(() => import('./portals/superadmin/leads/LeadsDashboard'))
 
 // Quotes Module
-import QuotesModule from './portals/superadmin/quotes/QuotesModule'
+const QuotesModule = lazy(() => import('./portals/superadmin/quotes/QuotesModule'))
 
 // Invoices Module
-import AdminInvoicesModule from './portals/superadmin/invoices/InvoicesModule'
+const AdminInvoicesModule = lazy(() => import('./portals/superadmin/invoices/InvoicesModule'))
 
 // Legal Module
-import LegalDashboard from './portals/superadmin/legal/LegalDashboard'
-import ContractsManager from './portals/superadmin/legal/components/ContractsManager'
-import ComplianceManager from './portals/superadmin/legal/components/ComplianceManager'
+const LegalDashboard = lazy(() => import('./portals/superadmin/legal/LegalDashboard'))
+const ContractsManager = lazy(() => import('./portals/superadmin/legal/components/ContractsManager'))
+const ComplianceManager = lazy(() => import('./portals/superadmin/legal/components/ComplianceManager'))
 
 // Marketing Module
-import MarketingDashboard from './portals/superadmin/marketing/MarketingDashboard'
+const MarketingDashboard = lazy(() => import('./portals/superadmin/marketing/MarketingDashboard'))
 
 // Support Module
-import SupportDashboard from './portals/superadmin/support/SupportDashboard'
+const SupportDashboard = lazy(() => import('./portals/superadmin/support/SupportDashboard'))
 
 // Settings Module
-import SettingsDashboard from './portals/superadmin/settings/SettingsDashboard'
+const SettingsDashboard = lazy(() => import('./portals/superadmin/settings/SettingsDashboard'))
 
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
@@ -116,6 +130,7 @@ function App() {
           }}
         />
 
+        <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           {/* ── Public routes ── */}
           <Route path="/login" element={<LoginPage />} />
@@ -244,6 +259,7 @@ function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/superadmin" replace />} />
         </Routes>
+        </Suspense>
 
         {import.meta.env.DEV && (
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />

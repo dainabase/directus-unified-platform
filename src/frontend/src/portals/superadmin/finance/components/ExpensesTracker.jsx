@@ -1,479 +1,359 @@
-// src/frontend/src/portals/superadmin/finance/components/ExpensesTracker.jsx
-import React, { useState } from 'react';
+/**
+ * ExpensesTracker — Connected to Directus `expenses` collection
+ * Expense management and approval workflow.
+ */
+import React, { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Receipt, Plus, Edit2, Trash2, Search, Filter, Download,
-  CheckCircle, Clock, XCircle, Eye, Upload, Calendar, User
-} from 'lucide-react';
+  Receipt, Plus, Edit2, Trash2, Search, Download,
+  CheckCircle, Clock, XCircle, Eye, Calendar, User, Loader2
+} from 'lucide-react'
 import {
   BarChart, Bar, PieChart, Pie, Cell,
-  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from 'recharts';
-import toast from 'react-hot-toast';
-
-const mockExpenses = [
-  {
-    id: 1,
-    description: 'Licence Figma annuelle',
-    amount: 540,
-    category: 'software',
-    vendor: 'Figma Inc.',
-    date: '2024-12-10',
-    status: 'approved',
-    submittedBy: 'Marie Martin',
-    approvedBy: 'Jean Dupont',
-    receipt: true
-  },
-  {
-    id: 2,
-    description: 'Deplacement client Zurich',
-    amount: 285,
-    category: 'travel',
-    vendor: 'SBB / Hotels.ch',
-    date: '2024-12-08',
-    status: 'approved',
-    submittedBy: 'Pierre Blanc',
-    approvedBy: 'Jean Dupont',
-    receipt: true
-  },
-  {
-    id: 3,
-    description: 'Materiel de bureau',
-    amount: 156,
-    category: 'office',
-    vendor: 'Office World',
-    date: '2024-12-05',
-    status: 'pending',
-    submittedBy: 'Sophie Dubois',
-    approvedBy: null,
-    receipt: true
-  },
-  {
-    id: 4,
-    description: 'Repas d\'equipe',
-    amount: 420,
-    category: 'meals',
-    vendor: 'Restaurant Le Central',
-    date: '2024-12-03',
-    status: 'pending',
-    submittedBy: 'Lucas Meyer',
-    approvedBy: null,
-    receipt: false
-  },
-  {
-    id: 5,
-    description: 'Formation React Advanced',
-    amount: 1200,
-    category: 'training',
-    vendor: 'Frontend Masters',
-    date: '2024-11-28',
-    status: 'approved',
-    submittedBy: 'Pierre Blanc',
-    approvedBy: 'Marie Martin',
-    receipt: true
-  },
-  {
-    id: 6,
-    description: 'Hebergement serveur cloud',
-    amount: 890,
-    category: 'infrastructure',
-    vendor: 'Google Cloud',
-    date: '2024-11-25',
-    status: 'approved',
-    submittedBy: 'Admin',
-    approvedBy: 'Auto',
-    receipt: true
-  },
-  {
-    id: 7,
-    description: 'Pub LinkedIn Ads',
-    amount: 500,
-    category: 'marketing',
-    vendor: 'LinkedIn',
-    date: '2024-11-20',
-    status: 'rejected',
-    submittedBy: 'Marie Martin',
-    approvedBy: 'Jean Dupont',
-    receipt: true,
-    rejectReason: 'Budget marketing depasse'
-  }
-];
-
-const mockCategoryBreakdown = [
-  { name: 'Software', value: 2540, color: '#3b82f6' },
-  { name: 'Deplacements', value: 1850, color: '#10b981' },
-  { name: 'Formation', value: 1200, color: '#f59e0b' },
-  { name: 'Infrastructure', value: 890, color: '#ef4444' },
-  { name: 'Marketing', value: 500, color: '#8b5cf6' },
-  { name: 'Autre', value: 576, color: '#6b7280' }
-];
-
-const mockMonthlyExpenses = [
-  { month: 'Jul', amount: 4200 },
-  { month: 'Aou', amount: 3800 },
-  { month: 'Sep', amount: 5100 },
-  { month: 'Oct', amount: 4600 },
-  { month: 'Nov', amount: 5800 },
-  { month: 'Dec', amount: 3200 }
-];
+  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip
+} from 'recharts'
+import toast from 'react-hot-toast'
+import api from '../../../../lib/axios'
 
 const CATEGORIES = {
-  software: { label: 'Logiciels', color: 'primary' },
-  travel: { label: 'Deplacements', color: 'success' },
-  training: { label: 'Formation', color: 'warning' },
-  office: { label: 'Bureau', color: 'info' },
-  meals: { label: 'Repas', color: 'purple' },
-  infrastructure: { label: 'Infrastructure', color: 'danger' },
-  marketing: { label: 'Marketing', color: 'cyan' },
-  other: { label: 'Autre', color: 'secondary' }
-};
+  software: { label: 'Logiciels', color: '#3b82f6' },
+  travel: { label: 'Deplacements', color: '#10b981' },
+  training: { label: 'Formation', color: '#f59e0b' },
+  office: { label: 'Bureau', color: '#6366f1' },
+  meals: { label: 'Repas', color: '#8b5cf6' },
+  infrastructure: { label: 'Infrastructure', color: '#ef4444' },
+  marketing: { label: 'Marketing', color: '#06b6d4' },
+  other: { label: 'Autre', color: '#6b7280' }
+}
+
+const formatCHF = (amount) =>
+  new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(amount)
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-'
+  return new Date(dateStr).toLocaleDateString('fr-CH')
+}
+
+const fetchExpenses = async (company) => {
+  try {
+    const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+    const res = await api.get('/items/expenses', {
+      params: { filter, fields: ['*'], sort: ['-date_created'], limit: -1 }
+    })
+    return res.data?.data || []
+  } catch {
+    return []
+  }
+}
 
 const ExpensesTracker = ({ selectedCompany }) => {
-  const [expenses, setExpenses] = useState(mockExpenses);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedExpense, setSelectedExpense] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const queryClient = useQueryClient()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterCategory, setFilterCategory] = useState('all')
+  const [filterStatus, setFilterStatus] = useState('all')
+
+  const { data: expenses = [], isLoading } = useQuery({
+    queryKey: ['expenses', selectedCompany],
+    queryFn: () => fetchExpenses(selectedCompany),
+    staleTime: 1000 * 60 * 2
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }) => {
+      await api.patch(`/items/expenses/${id}`, data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['expenses'] })
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      await api.delete(`/items/expenses/${id}`)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['expenses'] })
+      toast.success('Depense supprimee')
+    },
+    onError: () => toast.error('Erreur lors de la suppression')
+  })
 
   const filteredExpenses = expenses.filter(e => {
-    const matchesSearch = e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          e.vendor.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || e.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || e.status === filterStatus;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+    const matchesSearch = !searchTerm ||
+      (e.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (e.vendor || '').toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = filterCategory === 'all' || e.category === filterCategory
+    const matchesStatus = filterStatus === 'all' || e.status === filterStatus
+    return matchesSearch && matchesCategory && matchesStatus
+  })
+
+  const handleApprove = (id) => {
+    updateMutation.mutate({ id, data: { status: 'approved' } }, {
+      onSuccess: () => toast.success('Depense approuvee')
+    })
+  }
+
+  const handleReject = (id) => {
+    updateMutation.mutate({ id, data: { status: 'rejected' } }, {
+      onSuccess: () => toast.success('Depense refusee')
+    })
+  }
+
+  // Category breakdown for pie chart
+  const categoryBreakdown = Object.entries(CATEGORIES).map(([key, config]) => {
+    const total = expenses
+      .filter(e => e.category === key)
+      .reduce((sum, e) => sum + parseFloat(e.amount || 0), 0)
+    return { name: config.label, value: total, color: config.color }
+  }).filter(c => c.value > 0)
+
+  // Monthly expenses (last 6 months)
+  const monthlyExpenses = (() => {
+    const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec']
+    const now = new Date()
+    const last6 = []
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      const monthIdx = d.getMonth()
+      const year = d.getFullYear()
+      const monthExp = expenses.filter(e => {
+        const ed = new Date(e.date || e.date_created)
+        return ed.getMonth() === monthIdx && ed.getFullYear() === year
+      })
+      last6.push({
+        month: months[monthIdx],
+        amount: Math.round(monthExp.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0))
+      })
+    }
+    return last6
+  })()
+
+  // Stats
+  const stats = {
+    total: expenses.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0),
+    approved: expenses.filter(e => e.status === 'approved').reduce((sum, e) => sum + parseFloat(e.amount || 0), 0),
+    pending: expenses.filter(e => e.status === 'pending').reduce((sum, e) => sum + parseFloat(e.amount || 0), 0),
+    pendingCount: expenses.filter(e => e.status === 'pending').length
+  }
 
   const getStatusBadge = (status) => {
     switch (status) {
       case 'approved':
-        return <span className="badge bg-success"><CheckCircle size={12} className="me-1" />Approuve</span>;
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} />Approuve</span>
       case 'pending':
-        return <span className="badge bg-warning"><Clock size={12} className="me-1" />En attente</span>;
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><Clock size={12} />En attente</span>
       case 'rejected':
-        return <span className="badge bg-danger"><XCircle size={12} className="me-1" />Refuse</span>;
+        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"><XCircle size={12} />Refuse</span>
       default:
-        return <span className="badge bg-secondary">{status}</span>;
+        return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{status || 'N/A'}</span>
     }
-  };
+  }
 
-  const handleApprove = (id) => {
-    setExpenses(expenses.map(e =>
-      e.id === id ? { ...e, status: 'approved', approvedBy: 'Admin' } : e
-    ));
-    toast.success('Depense approuvee');
-  };
-
-  const handleReject = (id) => {
-    setExpenses(expenses.map(e =>
-      e.id === id ? { ...e, status: 'rejected', approvedBy: 'Admin' } : e
-    ));
-    toast.success('Depense refusee');
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm('Supprimer cette depense?')) {
-      setExpenses(expenses.filter(e => e.id !== id));
-      toast.success('Depense supprimee');
-    }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(amount);
-  };
-
-  const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString('fr-CH');
-  };
-
-  // Stats
-  const stats = {
-    total: expenses.reduce((sum, e) => sum + e.amount, 0),
-    approved: expenses.filter(e => e.status === 'approved').reduce((sum, e) => sum + e.amount, 0),
-    pending: expenses.filter(e => e.status === 'pending').reduce((sum, e) => sum + e.amount, 0),
-    pendingCount: expenses.filter(e => e.status === 'pending').length
-  };
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="glass-card p-6"><div className="h-12 glass-skeleton rounded-lg" /></div>
+        <div className="grid grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => <div key={i} className="glass-card p-6"><div className="h-20 glass-skeleton rounded-lg" /></div>)}
+        </div>
+        <div className="glass-card p-6"><div className="h-64 glass-skeleton rounded-lg" /></div>
+      </div>
+    )
+  }
 
   return (
-    <div className="container-xl">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="page-header d-print-none mb-4">
-        <div className="row align-items-center">
-          <div className="col-auto">
-            <h2 className="page-title">
-              <Receipt className="me-2" size={24} />
-              Suivi des Depenses
-            </h2>
-            <div className="text-muted mt-1">
-              Gestion et validation des notes de frais
-            </div>
-          </div>
-          <div className="col-auto ms-auto d-flex gap-2">
-            <button className="btn btn-outline-secondary">
-              <Download size={16} className="me-1" />
-              Exporter
-            </button>
-            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-              <Plus size={16} className="me-1" />
-              Nouvelle depense
-            </button>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <Receipt className="w-6 h-6 text-blue-600" />
+            Suivi des Depenses
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">Gestion et validation des notes de frais</p>
+        </div>
+        <div className="flex gap-2">
+          <button className="glass-button text-gray-600"><Download size={16} className="mr-1" />Exporter</button>
+          <button className="glass-button bg-blue-600 text-white hover:bg-blue-700"><Plus size={16} className="mr-1" />Nouvelle depense</button>
         </div>
       </div>
 
       {/* KPIs */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Receipt size={20} className="text-primary me-2" />
-                <span className="text-muted small">Total depenses</span>
-              </div>
-              <h3 className="mb-0">{formatCurrency(stats.total)}</h3>
-              <small className="text-muted">Ce mois</small>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Receipt size={18} className="text-blue-600" />
+            <span className="text-sm text-gray-500">Total depenses</span>
           </div>
+          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.total)}</p>
         </div>
-        <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <CheckCircle size={20} className="text-success me-2" />
-                <span className="text-muted small">Approuvees</span>
-              </div>
-              <h3 className="mb-0">{formatCurrency(stats.approved)}</h3>
-            </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle size={18} className="text-green-600" />
+            <span className="text-sm text-gray-500">Approuvees</span>
           </div>
+          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.approved)}</p>
         </div>
-        <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Clock size={20} className="text-warning me-2" />
-                <span className="text-muted small">En attente</span>
-              </div>
-              <h3 className="mb-0">{formatCurrency(stats.pending)}</h3>
-              <small className="text-warning">{stats.pendingCount} a valider</small>
-            </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock size={18} className="text-yellow-600" />
+            <span className="text-sm text-gray-500">En attente</span>
           </div>
+          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.pending)}</p>
         </div>
-        <div className="col-md-3">
-          <div className="card bg-warning-lt">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Clock size={20} className="text-warning me-2" />
-                <span className="text-muted small">A approuver</span>
-              </div>
-              <h3 className="mb-0">{stats.pendingCount}</h3>
-              <small className="text-warning">Necessite validation</small>
-            </div>
+        <div className="glass-card p-5 border-l-4 border-yellow-400">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock size={18} className="text-yellow-600" />
+            <span className="text-sm text-gray-500">A approuver</span>
           </div>
+          <p className="text-2xl font-bold text-gray-900">{stats.pendingCount}</p>
+          {stats.pendingCount > 0 && <p className="text-xs text-yellow-600 mt-1">Necessite validation</p>}
         </div>
       </div>
 
       {/* Charts Row */}
-      <div className="row g-4 mb-4">
-        <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Depenses mensuelles (6 mois)</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={mockMonthlyExpenses}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="month" />
-                  <YAxis tickFormatter={(v) => `${v/1000}k`} />
-                  <Tooltip formatter={(v) => formatCurrency(v)} />
-                  <Bar dataKey="amount" fill="#3b82f6" name="Depenses" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="glass-card p-5 lg:col-span-2">
+          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Depenses mensuelles (6 mois)</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={monthlyExpenses}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="month" />
+              <YAxis tickFormatter={(v) => `${v / 1000}k`} />
+              <Tooltip formatter={(v) => formatCHF(v)} />
+              <Bar dataKey="amount" fill="#3b82f6" name="Depenses" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-        <div className="col-lg-4">
-          <div className="card h-100">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Par categorie</h5>
-            </div>
-            <div className="card-body">
+        <div className="glass-card p-5">
+          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Par categorie</h3>
+          {categoryBreakdown.length > 0 ? (
+            <>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
-                  <Pie
-                    data={mockCategoryBreakdown}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={70}
-                    paddingAngle={3}
-                    dataKey="value"
-                  >
-                    {mockCategoryBreakdown.map((entry, index) => (
+                  <Pie data={categoryBreakdown} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={3} dataKey="value">
+                    {categoryBreakdown.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v) => formatCurrency(v)} />
+                  <Tooltip formatter={(v) => formatCHF(v)} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="d-flex flex-wrap justify-content-center gap-2">
-                {mockCategoryBreakdown.slice(0, 4).map(item => (
-                  <div key={item.name} className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle me-1"
-                      style={{ width: 8, height: 8, backgroundColor: item.color }}
-                    />
-                    <small className="text-muted">{item.name}</small>
+              <div className="flex flex-wrap justify-center gap-3">
+                {categoryBreakdown.slice(0, 4).map(item => (
+                  <div key={item.name} className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-xs text-gray-500">{item.name}</span>
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-48 text-gray-400 text-sm">Aucune donnee</div>
+          )}
         </div>
       </div>
 
       {/* Filters */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-4">
-          <div className="input-group">
-            <span className="input-group-text"><Search size={16} /></span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Rechercher..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+      <div className="flex flex-wrap gap-3">
+        <div className="relative flex-1 max-w-xs">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 bg-white/80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            placeholder="Rechercher..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-        <div className="col-md-3">
-          <select
-            className="form-select"
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-          >
-            <option value="all">Toutes categories</option>
-            {Object.entries(CATEGORIES).map(([key, value]) => (
-              <option key={key} value={key}>{value.label}</option>
-            ))}
-          </select>
-        </div>
-        <div className="col-md-3">
-          <select
-            className="form-select"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="all">Tous statuts</option>
-            <option value="approved">Approuve</option>
-            <option value="pending">En attente</option>
-            <option value="rejected">Refuse</option>
-          </select>
-        </div>
+        <select className="glass-button text-sm" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+          <option value="all">Toutes categories</option>
+          {Object.entries(CATEGORIES).map(([key, value]) => (
+            <option key={key} value={key}>{value.label}</option>
+          ))}
+        </select>
+        <select className="glass-button text-sm" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+          <option value="all">Tous statuts</option>
+          <option value="approved">Approuve</option>
+          <option value="pending">En attente</option>
+          <option value="rejected">Refuse</option>
+        </select>
       </div>
 
       {/* Expenses Table */}
-      <div className="card">
-        <div className="table-responsive">
-          <table className="table table-hover card-table">
+      <div className="glass-card overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
             <thead>
-              <tr>
-                <th>Description</th>
-                <th>Categorie</th>
-                <th>Fournisseur</th>
-                <th>Date</th>
-                <th>Montant</th>
-                <th>Statut</th>
-                <th>Soumis par</th>
-                <th className="text-end">Actions</th>
+              <tr className="border-b border-gray-100">
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Description</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Categorie</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Montant</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Statut</th>
+                <th className="text-right p-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredExpenses.map(expense => {
-                const catInfo = CATEGORIES[expense.category];
-
-                return (
-                  <tr key={expense.id}>
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <span className="fw-medium">{expense.description}</span>
-                        {expense.receipt && (
-                          <span className="badge bg-secondary-lt text-secondary ms-2" title="Justificatif">
-                            <Receipt size={10} />
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`badge bg-${catInfo?.color || 'secondary'}-lt text-${catInfo?.color || 'secondary'}`}>
-                        {catInfo?.label}
-                      </span>
-                    </td>
-                    <td className="text-muted">{expense.vendor}</td>
-                    <td>
-                      <span className="text-muted">
-                        <Calendar size={12} className="me-1" />
-                        {formatDate(expense.date)}
-                      </span>
-                    </td>
-                    <td className="fw-medium">{formatCurrency(expense.amount)}</td>
-                    <td>{getStatusBadge(expense.status)}</td>
-                    <td>
-                      <span className="text-muted">
-                        <User size={12} className="me-1" />
-                        {expense.submittedBy}
-                      </span>
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group">
-                        {expense.status === 'pending' && (
-                          <>
-                            <button
-                              className="btn btn-sm btn-ghost-success"
-                              onClick={() => handleApprove(expense.id)}
-                              title="Approuver"
-                            >
-                              <CheckCircle size={14} />
-                            </button>
-                            <button
-                              className="btn btn-sm btn-ghost-danger"
-                              onClick={() => handleReject(expense.id)}
-                              title="Refuser"
-                            >
-                              <XCircle size={14} />
-                            </button>
-                          </>
-                        )}
-                        <button
-                          className="btn btn-sm btn-ghost-primary"
-                          onClick={() => setSelectedExpense(expense)}
-                          title="Details"
-                        >
-                          <Eye size={14} />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-ghost-danger"
-                          onClick={() => handleDelete(expense.id)}
-                          title="Supprimer"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+              {filteredExpenses.map(expense => (
+                <tr key={expense.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="p-4">
+                    <span className="font-medium text-gray-900">{expense.description || expense.name || '-'}</span>
+                    {expense.vendor && <span className="block text-xs text-gray-400">{expense.vendor}</span>}
+                  </td>
+                  <td className="p-4">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                      {CATEGORIES[expense.category]?.label || expense.category || '-'}
+                    </span>
+                  </td>
+                  <td className="p-4 text-gray-500">
+                    <span className="flex items-center gap-1"><Calendar size={12} />{formatDate(expense.date || expense.date_created)}</span>
+                  </td>
+                  <td className="p-4 font-medium text-gray-900">{formatCHF(expense.amount || 0)}</td>
+                  <td className="p-4">{getStatusBadge(expense.status)}</td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      {expense.status === 'pending' && (
+                        <>
+                          <button
+                            className="p-1.5 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+                            onClick={() => handleApprove(expense.id)}
+                            title="Approuver"
+                          >
+                            <CheckCircle size={14} />
+                          </button>
+                          <button
+                            className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                            onClick={() => handleReject(expense.id)}
+                            title="Refuser"
+                          >
+                            <XCircle size={14} />
+                          </button>
+                        </>
+                      )}
+                      <button
+                        className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                        onClick={() => { if (window.confirm('Supprimer?')) deleteMutation.mutate(expense.id) }}
+                        title="Supprimer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
         {filteredExpenses.length === 0 && (
-          <div className="text-center py-5 text-muted">
-            <Receipt size={48} className="mb-3 opacity-50" />
-            <p>Aucune depense trouvee</p>
+          <div className="text-center py-12 text-gray-400">
+            <Receipt size={48} className="mx-auto mb-3 opacity-50" />
+            <p className="text-sm">Aucune depense trouvee</p>
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ExpensesTracker;
+export default ExpensesTracker

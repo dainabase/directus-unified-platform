@@ -1,94 +1,100 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { 
-  Landmark,
-  TrendingUp, 
-  TrendingDown,
-  ArrowUpRight,
-  ArrowDownRight,
-  CreditCard,
-  Wallet,
-  RefreshCw,
-  Clock,
-  DollarSign,
-  Euro,
-  PoundSterling
-} from 'lucide-react';
-import { format, formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+/**
+ * BankingDashboard — Connected to Directus `bank_accounts` + `bank_transactions`
+ * Multi-currency banking overview with live transaction feed.
+ */
+import React, { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import {
+  Landmark, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight,
+  CreditCard, Wallet, RefreshCw, Clock, DollarSign, Euro, PoundSterling
+} from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import api from '../../lib/axios'
 
-// Simulate API - replace with real Directus calls
+const formatCHF = (amount, currency = 'CHF') =>
+  new Intl.NumberFormat('fr-CH', { style: 'currency', currency }).format(amount)
+
 const fetchBankAccounts = async (company) => {
-  // Demo data - will be replaced by Directus API
-  return [
-    { id: 1, currency: 'CHF', balance: 125430.50, iban: 'CH93 0076 2011 6238 5295 7', name: 'Compte Principal', last_sync: new Date() },
-    { id: 2, currency: 'EUR', balance: 45230.80, iban: 'CH93 0076 2011 6238 5295 8', name: 'Compte EUR', last_sync: new Date() },
-    { id: 3, currency: 'USD', balance: 28150.25, iban: 'CH93 0076 2011 6238 5295 9', name: 'Compte USD', last_sync: new Date() },
-  ];
-};
+  try {
+    const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+    const res = await api.get('/items/bank_accounts', {
+      params: { filter, fields: ['*'], limit: -1 }
+    })
+    return res.data?.data || []
+  } catch {
+    return []
+  }
+}
 
 const fetchTransactions = async (company) => {
-  // Demo data - will be replaced by Directus API
-  return [
-    { id: 1, type: 'credit', amount: 15000, currency: 'CHF', description: 'Paiement client - Projet Web', merchant_name: 'ABC Corp', date: new Date(Date.now() - 1000 * 60 * 5) },
-    { id: 2, type: 'debit', amount: 2500, currency: 'CHF', description: 'Abonnement serveurs', merchant_name: 'AWS', date: new Date(Date.now() - 1000 * 60 * 60) },
-    { id: 3, type: 'credit', amount: 8500, currency: 'EUR', description: 'Facture #2024-089', merchant_name: 'Client FR', date: new Date(Date.now() - 1000 * 60 * 60 * 3) },
-    { id: 4, type: 'debit', amount: 450, currency: 'CHF', description: 'Licences logiciels', merchant_name: 'Adobe', date: new Date(Date.now() - 1000 * 60 * 60 * 5) },
-    { id: 5, type: 'debit', amount: 1200, currency: 'CHF', description: 'Marketing digital', merchant_name: 'Google Ads', date: new Date(Date.now() - 1000 * 60 * 60 * 8) },
-  ];
-};
+  try {
+    const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+    const res = await api.get('/items/bank_transactions', {
+      params: { filter, fields: ['*'], sort: ['-date', '-date_created'], limit: 20 }
+    })
+    return res.data?.data || []
+  } catch {
+    return []
+  }
+}
 
 const CurrencyIcon = ({ currency, className }) => {
   switch (currency) {
-    case 'EUR': return <Euro className={className} />;
-    case 'USD': return <DollarSign className={className} />;
-    case 'GBP': return <PoundSterling className={className} />;
-    default: return <span className={`font-bold ${className}`}>₣</span>;
+    case 'EUR': return <Euro className={className} />
+    case 'USD': return <DollarSign className={className} />
+    case 'GBP': return <PoundSterling className={className} />
+    default: return <span className={`font-bold ${className}`}>CHF</span>
   }
-};
+}
 
 const BankingDashboard = ({ selectedCompany }) => {
-  const [selectedCurrency, setSelectedCurrency] = useState('CHF');
-  
-  const exchangeRates = {
-    EUR: 0.94,
-    USD: 0.88,
-    GBP: 1.12,
-    CHF: 1
-  };
+  const [selectedCurrency, setSelectedCurrency] = useState('CHF')
+
+  const exchangeRates = { EUR: 0.94, USD: 0.88, GBP: 1.12, CHF: 1 }
 
   const { data: accounts = [], isLoading: accountsLoading } = useQuery({
     queryKey: ['bank-accounts', selectedCompany],
     queryFn: () => fetchBankAccounts(selectedCompany),
-    refetchInterval: 30000
-  });
+    staleTime: 1000 * 60 * 2,
+    refetchInterval: 1000 * 30
+  })
 
   const { data: transactions = [], isLoading: transactionsLoading } = useQuery({
     queryKey: ['bank-transactions', selectedCompany],
     queryFn: () => fetchTransactions(selectedCompany),
-    refetchInterval: 10000
-  });
+    staleTime: 1000 * 60,
+    refetchInterval: 1000 * 15
+  })
 
   // Calculate totals
   const totalBalanceCHF = accounts.reduce((total, account) => {
-    const rate = exchangeRates[account.currency] || 1;
-    return total + (account.balance / rate);
-  }, 0);
+    const rate = exchangeRates[account.currency] || 1
+    return total + (parseFloat(account.balance || 0) / rate)
+  }, 0)
 
   const todayExpenses = transactions
-    .filter(tx => tx.type === 'debit' && new Date(tx.date).toDateString() === new Date().toDateString())
-    .reduce((sum, tx) => sum + tx.amount, 0);
+    .filter(tx => {
+      const isDebit = tx.type === 'debit' || parseFloat(tx.amount || 0) < 0
+      const txDate = new Date(tx.date || tx.date_created)
+      return isDebit && txDate.toDateString() === new Date().toDateString()
+    })
+    .reduce((sum, tx) => sum + Math.abs(parseFloat(tx.amount || 0)), 0)
 
   const monthRevenue = transactions
-    .filter(tx => tx.type === 'credit')
-    .reduce((sum, tx) => sum + tx.amount, 0);
+    .filter(tx => tx.type === 'credit' || parseFloat(tx.amount || 0) > 0)
+    .reduce((sum, tx) => sum + Math.abs(parseFloat(tx.amount || 0)), 0)
 
   if (accountsLoading || transactionsLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <RefreshCw className="w-8 h-8 text-blue-600 animate-spin" />
+      <div className="space-y-4">
+        <div className="glass-card p-8"><div className="h-32 glass-skeleton rounded-lg" /></div>
+        <div className="grid grid-cols-3 gap-4">
+          {[1,2,3].map(i => <div key={i} className="glass-card p-6"><div className="h-24 glass-skeleton rounded-lg" /></div>)}
+        </div>
+        <div className="glass-card p-6"><div className="h-64 glass-skeleton rounded-lg" /></div>
       </div>
-    );
+    )
   }
 
   return (
@@ -99,7 +105,7 @@ const BankingDashboard = ({ selectedCompany }) => {
           <h1 className="text-2xl font-bold text-gray-900">Banking Dashboard</h1>
           <p className="text-gray-500">Revolut Business - Comptes multi-devises</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button className="glass-button bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-2">
           <RefreshCw size={16} />
           Synchroniser
         </button>
@@ -110,13 +116,10 @@ const BankingDashboard = ({ selectedCompany }) => {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-blue-100 text-sm font-medium uppercase tracking-wider">Solde Total</p>
-            <h2 className="text-4xl font-bold mt-2">
-              {totalBalanceCHF.toLocaleString('fr-CH', { style: 'currency', currency: 'CHF' })}
-            </h2>
+            <h2 className="text-4xl font-bold mt-2">{formatCHF(totalBalanceCHF)}</h2>
             <div className="flex items-center gap-2 mt-3">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-sm">
-                <TrendingUp size={14} />
-                +12.5% ce mois
+                {accounts.length} compte{accounts.length !== 1 ? 's' : ''}
               </span>
             </div>
           </div>
@@ -125,73 +128,66 @@ const BankingDashboard = ({ selectedCompany }) => {
       </div>
 
       {/* Currency Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {accounts.map((account) => (
-          <button
-            key={account.id}
-            onClick={() => setSelectedCurrency(account.currency)}
-            className={`
-              p-6 rounded-xl border-2 transition-all text-left
-              ${selectedCurrency === account.currency 
-                ? 'border-blue-500 bg-blue-50 shadow-lg' 
-                : 'border-gray-200 bg-white/80 backdrop-blur hover:border-blue-300'
-              }
-            `}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`
-                w-12 h-12 rounded-xl flex items-center justify-center
-                ${selectedCurrency === account.currency ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}
-              `}>
-                <CurrencyIcon currency={account.currency} className="w-6 h-6" />
+      {accounts.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {accounts.map((account) => (
+            <button
+              key={account.id}
+              onClick={() => setSelectedCurrency(account.currency || 'CHF')}
+              className={`p-6 rounded-xl border-2 transition-all text-left ${
+                selectedCurrency === (account.currency || 'CHF')
+                  ? 'border-blue-500 bg-blue-50 shadow-lg'
+                  : 'border-gray-200 bg-white/80 backdrop-blur hover:border-blue-300'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  selectedCurrency === (account.currency || 'CHF') ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'
+                }`}>
+                  <CurrencyIcon currency={account.currency || 'CHF'} className="w-6 h-6" />
+                </div>
+                <span className="text-xs text-gray-400">{account.name || account.currency}</span>
               </div>
-              <span className="text-xs text-gray-400">{account.name}</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">
-              {account.balance.toLocaleString('fr-CH', { style: 'currency', currency: account.currency })}
-            </p>
-            {account.currency !== 'CHF' && (
-              <p className="text-xs text-gray-500 mt-1">
-                ≈ {(account.balance / exchangeRates[account.currency]).toLocaleString('fr-CH', { style: 'currency', currency: 'CHF' })}
+              <p className="text-2xl font-bold text-gray-900">
+                {formatCHF(parseFloat(account.balance || 0), account.currency || 'CHF')}
               </p>
-            )}
-            <div className="mt-4 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-blue-600 rounded-full"
-                style={{ width: `${Math.min((account.balance / 200000) * 100, 100)}%` }}
-              />
-            </div>
-          </button>
-        ))}
-      </div>
+              {(account.currency || 'CHF') !== 'CHF' && (
+                <p className="text-xs text-gray-500 mt-1">
+                  ≈ {formatCHF(parseFloat(account.balance || 0) / (exchangeRates[account.currency] || 1))}
+                </p>
+              )}
+              <div className="mt-4 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-blue-600 rounded-full"
+                  style={{ width: `${Math.min((parseFloat(account.balance || 0) / 200000) * 100, 100)}%` }}
+                />
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/80 backdrop-blur rounded-xl p-5 border border-gray-200/50">
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
               <CreditCard className="w-5 h-5 text-red-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500">Dépenses du jour</p>
-          <p className="text-xl font-bold text-gray-900">
-            {todayExpenses.toLocaleString('fr-CH', { style: 'currency', currency: 'CHF' })}
-          </p>
+          <p className="text-sm text-gray-500">Depenses du jour</p>
+          <p className="text-xl font-bold text-gray-900">{formatCHF(todayExpenses)}</p>
         </div>
-
-        <div className="bg-white/80 backdrop-blur rounded-xl p-5 border border-gray-200/50">
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-green-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500">Revenus du mois</p>
-          <p className="text-xl font-bold text-green-600">
-            +{monthRevenue.toLocaleString('fr-CH', { style: 'currency', currency: 'CHF' })}
-          </p>
+          <p className="text-sm text-gray-500">Revenus recents</p>
+          <p className="text-xl font-bold text-green-600">+{formatCHF(monthRevenue)}</p>
         </div>
-
-        <div className="bg-white/80 backdrop-blur rounded-xl p-5 border border-gray-200/50">
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
               <Wallet className="w-5 h-5 text-blue-600" />
@@ -200,65 +196,72 @@ const BankingDashboard = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500">Transactions</p>
           <p className="text-xl font-bold text-gray-900">{transactions.length}</p>
         </div>
-
-        <div className="bg-white/80 backdrop-blur rounded-xl p-5 border border-gray-200/50">
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
               <Clock className="w-5 h-5 text-purple-600" />
             </div>
           </div>
-          <p className="text-sm text-gray-500">Dernière sync</p>
-          <p className="text-xl font-bold text-gray-900">À l'instant</p>
+          <p className="text-sm text-gray-500">Derniere sync</p>
+          <p className="text-xl font-bold text-gray-900">Live</p>
         </div>
       </div>
 
       {/* Transactions List */}
-      <div className="bg-white/80 backdrop-blur rounded-xl border border-gray-200/50 overflow-hidden">
+      <div className="glass-card overflow-hidden">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">Transactions récentes</h3>
+          <h3 className="font-semibold text-gray-900">Transactions recentes</h3>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
             Live
           </span>
         </div>
         <div className="divide-y divide-gray-100">
-          {transactions.map((tx, index) => (
-            <div 
-              key={tx.id} 
-              className={`p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${index === 0 ? 'bg-blue-50/50' : ''}`}
-            >
-              <div className="flex items-center gap-4">
-                <div className={`
-                  w-10 h-10 rounded-full flex items-center justify-center
-                  ${tx.type === 'credit' ? 'bg-green-100' : 'bg-red-100'}
-                `}>
-                  {tx.type === 'credit' 
-                    ? <ArrowDownRight className="w-5 h-5 text-green-600" />
-                    : <ArrowUpRight className="w-5 h-5 text-red-600" />
-                  }
+          {transactions.length > 0 ? transactions.map((tx, index) => {
+            const isCredit = tx.type === 'credit' || parseFloat(tx.amount || 0) > 0
+            const txDate = tx.date || tx.date_created
+            return (
+              <div
+                key={tx.id}
+                className={`p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${index === 0 ? 'bg-blue-50/50' : ''}`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isCredit ? 'bg-green-100' : 'bg-red-100'}`}>
+                    {isCredit
+                      ? <ArrowDownRight className="w-5 h-5 text-green-600" />
+                      : <ArrowUpRight className="w-5 h-5 text-red-600" />
+                    }
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{tx.description || 'Transaction'}</p>
+                    <p className="text-sm text-gray-500">
+                      {tx.merchant_name || tx.reference || ''} {txDate && `· ${formatDistanceToNow(new Date(txDate), { addSuffix: true, locale: fr })}`}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-gray-900">{tx.description}</p>
-                  <p className="text-sm text-gray-500">
-                    {tx.merchant_name} • {formatDistanceToNow(new Date(tx.date), { addSuffix: true, locale: fr })}
-                  </p>
+                <div className={`text-right font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
+                  {isCredit ? '+' : '-'}
+                  {formatCHF(Math.abs(parseFloat(tx.amount || 0)), tx.currency || 'CHF')}
                 </div>
               </div>
-              <div className={`text-right font-semibold ${tx.type === 'credit' ? 'text-green-600' : 'text-red-600'}`}>
-                {tx.type === 'credit' ? '+' : '-'}
-                {tx.amount.toLocaleString('fr-CH', { style: 'currency', currency: tx.currency })}
-              </div>
+            )
+          }) : (
+            <div className="p-8 text-center text-gray-400">
+              <Wallet size={32} className="mx-auto mb-2 opacity-50" />
+              <p className="text-sm">Aucune transaction</p>
             </div>
-          ))}
+          )}
         </div>
-        <div className="p-4 bg-gray-50 text-center">
-          <button className="text-blue-600 text-sm font-medium hover:text-blue-700">
-            Voir toutes les transactions →
-          </button>
-        </div>
+        {transactions.length > 0 && (
+          <div className="p-4 bg-gray-50 text-center">
+            <button className="text-blue-600 text-sm font-medium hover:text-blue-700">
+              Voir toutes les transactions
+            </button>
+          </div>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BankingDashboard;
+export default BankingDashboard

@@ -25,7 +25,7 @@ Le **workflow commercial** (Lead → Devis → CGV → Signature → Acompte →
 
 ### Points critiques
 
-Six routes API sensibles (collection, legal, revolut, invoice-ninja, mautic, erpnext) n'ont **aucune authentification**. Des **clés API sont exposées** dans le fichier .env committé (OpenAI, Notion, Directus). La blacklist JWT et la protection brute force sont **non-persistantes** (in-memory). Il n'existe **aucun test automatisé** malgré Jest et Playwright configurés. 25 composants frontend utilisent des **données mock hardcodées** avec un flag `USE_MOCK_DATA` par défaut à `true`.
+Six routes API sensibles (collection, legal, revolut, invoice-ninja, mautic, erpnext) n'ont **aucune authentification**. Des **clés API sont exposées** dans le fichier .env commité (OpenAI, Notion, Directus). La blacklist JWT et la protection brute force sont **non-persistantes** (in-memory). Il n'existe **aucun test automatisé** malgré Jest et Playwright configurés. 25 composants frontend utilisent des **données mock hardcodées** avec un flag `USE_MOCK_DATA` par défaut à `true`.
 
 ---
 

@@ -272,7 +272,7 @@
 ### Composants MOCK à connecter (priorité)
 
 | Priorité | Module | Composants | Collection cible |
-|----------|--------|------------|------------------|
+|----------|--------|------------|-----------------|
 | **P1** | Marketing | 5 composants | → Mautic iframe |
 | **P1** | Support | 3 composants | → support_tickets |
 | **P2** | Finance | 2 composants | → budgets, expenses |

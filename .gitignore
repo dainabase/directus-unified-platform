@@ -62,3 +62,12 @@ integrations/invoice-ninja/.env.invoice-ninja
 # Backups
 backup-revolut-*.tar.gz
 .archive-local-docs-*
+
+# Archive (cleanup sessions)
+archive/
+
+# Overnight dev logs
+.overnight-dev-log.txt
+
+# Claude worktrees
+.claude/worktrees/

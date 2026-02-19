@@ -1,0 +1,158 @@
+# PROGRESS — HYPERVISUAL Unified Platform
+**Date de debut** : 2026-02-19
+**Progression globale** : 2/47 stories — 4%
+> Ce fichier est mis a jour par Claude Code apres chaque story.
+> Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
+
+---
+
+## LEGENDE
+- [ ] TODO — Pas encore demarre
+- [~] IN_PROGRESS — En cours (avec timestamp de debut)
+- [V] DONE — Implemente, en attente de validation Jean
+- [A] AUDITED — Valide par Jean
+- [X] BLOCKED — Bloque (raison obligatoire)
+- [S] SKIPPED — Reporte (raison obligatoire)
+
+---
+
+## PHASE 0 — Fondations & Nettoyage
+**Statut** : [~] IN_PROGRESS | **Progression** : 2/6 stories
+**Demarre** : 2026-02-19 | **Termine** : —
+
+- [V] S-00-01 · Audit complet du repo (voir AUDIT-REPO.md) — 2026-02-19
+- [V] S-00-02 · Nettoyage fichiers obsoletes + archivage — 2026-02-19
+- [ ] S-00-03 · Variables d'environnement securisees (.env structure)
+- [ ] S-00-04 · Authentification Directus (JWT + refresh tokens + roles)
+- [ ] S-00-05 · Systeme de permissions par portail (SuperAdmin/Client/Prestataire/Revendeur)
+- [ ] S-00-06 · Docker health checks + monitoring basique
+
+**Fichiers crees/modifies** : AUDIT-REPO.md, PROGRESS.md, DECISIONS.md, .gitignore, archive/2026-02-19/
+**Observations** : Score sante 62/100. 8 fichiers avec tokens hardcodes. 20 composants frontend mockes. ERPNext import casse.
+**Blocages** : —
+
+---
+
+## PHASE 1 — Dashboard SuperAdmin + Module Leads
+**Statut** : [ ] TODO | **Progression** : 0/8 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query)
+- [ ] S-01-02 · Router principal + authentification portails
+- [ ] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism)
+- [ ] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003)
+- [ ] S-01-05 · Widget KPIs financiers temps reel (REQ-CEO-001/002)
+- [ ] S-01-06 · Widget Pipeline commercial (leads + devis)
+- [ ] S-01-07 · Widget Tresorerie Revolut (REQ-CEO-001)
+- [ ] S-01-08 · Module Leads — tableau de bord capture + qualification LLM
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## PHASE 2 — Portail Prestataire + Module Devis
+**Statut** : [ ] TODO | **Progression** : 0/7 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-02-01 · Layout Portail Prestataire (auth + projets assignes)
+- [ ] S-02-02 · Module demande de devis prestataire (REQ-PRES-001/002)
+- [ ] S-02-03 · Upload factures prestataires + OCR automatique
+- [ ] S-02-04 · Createur de devis client (interface CEO)
+- [ ] S-02-05 · Calcul marges automatique (cout prestataire -> prix client)
+- [ ] S-02-06 · Integration DocuSeal (signature electronique)
+- [ ] S-02-07 · Workflow post-signature (creation projet + facture acompte)
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## PHASE 3 — Portail Client + Facturation QR Swiss
+**Statut** : [ ] TODO | **Progression** : 0/7 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-03-01 · Layout Portail Client (auth par lien securise)
+- [ ] S-03-02 · Vue devis + signature client
+- [ ] S-03-03 · Vue suivi projet temps reel
+- [ ] S-03-04 · Vue jalons + tableau recapitulatif paiements
+- [ ] S-03-05 · Generation QR-Invoice v2.3 (swissqrbill)
+- [ ] S-03-06 · Integration Invoice Ninja (sync bidirectionnelle)
+- [ ] S-03-07 · Workflow paiement acompte -> activation projet
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## PHASE 4 — Gestion Projets + Facturation Recurrente
+**Statut** : [ ] TODO | **Progression** : 0/6 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-04-01 · Module Projets — tableau de bord CEO
+- [ ] S-04-02 · Statuts projet + workflow automatique
+- [ ] S-04-03 · Gestion documentaire projet (upload/download)
+- [ ] S-04-04 · Suivi commandes hardware Chine
+- [ ] S-04-05 · Facturation recurrente (maintenance/hebergement)
+- [ ] S-04-06 · Rappels automatiques paiements (J+7, J+14, J+30)
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## PHASE 5 — Finance Avancee (Modules 9-12)
+**Statut** : [ ] TODO | **Progression** : 0/8 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-05-01 · Facturation par jalons (deliverables -> factures auto)
+- [ ] S-05-02 · Avoirs & remboursements (annulations evenementielles)
+- [ ] S-05-03 · Contrats recurrents (maintenance mensuelle/annuelle)
+- [ ] S-05-04 · Workflow validation factures fournisseurs (collection approvals)
+- [ ] S-05-05 · Dashboard KPI Finance pre-alimente (240 KPIs existants)
+- [ ] S-05-06 · Rapprochement bancaire renforce (matching multi-criteres)
+- [ ] S-05-07 · Module comptabilite suisse (ecritures automatiques)
+- [ ] S-05-08 · Formulaire TVA AFC 200 (taux 8.1% / 2.6% / 3.8%)
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## PHASE 6 — Modules Avances (13-16)
+**Statut** : [ ] TODO | **Progression** : 0/6 stories
+**Demarre** : — | **Termine** : —
+
+- [ ] S-06-01 · Suivi du temps -> facturation en regie
+- [ ] S-06-02 · Tickets support -> facturation hors contrat
+- [ ] S-06-03 · Alertes seuils KPI configurables
+- [ ] S-06-04 · Rapport quotidien CEO automatique (Mautic)
+- [ ] S-06-05 · Portail Revendeur (layout + fonctionnalites)
+- [ ] S-06-06 · Optimisations performance + tests de charge
+
+**Fichiers crees/modifies** : —
+**Observations** : —
+**Blocages** : —
+
+---
+
+## DECOUVERTES & AJUSTEMENTS
+> Toute decouverte qui impacte le plan est loggee ici immediatement.
+
+| Date | Story | Decouverte | Impact sur le plan | Decision prise |
+|------|-------|-----------|-------------------|----------------|
+| —    | —     | —         | —                 | —              |
+
+---
+
+## METRIQUES
+**Collections Directus** : 83 actives
+**Endpoints custom** : 156
+**Fichiers archives lors du nettoyage** : — (a remplir apres S-00-02)
+**Fichiers supprimes** : — (a remplir apres S-00-02)
+**Dernier commit** : 2b7dacd — feat: add skill-router

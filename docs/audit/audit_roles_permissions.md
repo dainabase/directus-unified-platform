@@ -153,7 +153,7 @@ Identifié par les commentaires TODO :
 ### 5.1 Permissions par rôle (à implémenter)
 
 | Ressource | SuperAdmin | Admin | User | Client | Prestataire | Revendeur |
-|-----------|-----------|-------|------|--------|-------------|----------|
+|-----------|-----------|-------|------|--------|-------------|-----------|
 | **Finance** | CRUD all | CRUD own company | Read own | — | — | — |
 | **Invoices** | CRUD all | CRUD own company | Read own | Read own | Read assigned | Read own |
 | **Quotes** | CRUD all | CRUD own company | CRUD own | Read/Accept | — | Read own |

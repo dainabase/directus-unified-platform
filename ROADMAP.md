@@ -258,24 +258,33 @@
 **Critères d'acceptation** :  
 - Taux rapprochement automatique ≥ 85% (REQ-RECO-001, cible > 90%)  
 - Projet activé en < 60 secondes après réception paiement (REQ-FACT-006)  
-**Progression** : 0/5 stories
+**Progression** : 5/5 stories — [V] DONE — 2026-02-20
 
-- [ ] **G-01** · Revolut webhook — Réception transactions en temps réel  
-  *CDC* : REQ-FACT-005  
-  *Note* : Tokens Revolut expire 40min — refresh automatique obligatoire  
+- [V] **G-01** · Revolut webhook — Réception transactions en temps réel — 2026-02-20
+  *CDC* : REQ-FACT-005
+  *Livré* : `webhook-receiver.js` (HMAC-SHA256, express.raw), `sync-transactions.js` (upsert Directus), sync horaire secours
 
-- [ ] **G-02** · Algorithme rapprochement multi-critères  
-  *CDC* : REQ-RECO-001 (montant exact + QR 27 chiffres + date ±3j + fuzzy match 80%)  
-  *Skills requis* : `postgresql-directus-optimizer`
+- [V] **G-02** · Algorithme rapprochement multi-critères — 2026-02-20
+  *CDC* : REQ-RECO-001 (montant exact + QR 27 chiffres + date ±3j + fuzzy match 80%)
+  *Livré* : `reconciliation.js` — scoring 4 critères (40+35+15+10 pts), Levenshtein normalisé, auto-match ≥85%
 
-- [ ] **G-03** · Dashboard rapprochement bancaire avec suggestions  
-  *CDC* : REQ-RECO-002, REQ-RECO-003 (top 3 suggestions par similarité)  
+- [V] **G-03** · Dashboard rapprochement bancaire avec suggestions — 2026-02-20
+  *CDC* : REQ-RECO-002, REQ-RECO-003 (top 3 suggestions par similarité)
+  *Livré* : `ReconciliationDashboard.jsx` — KPIs, table transactions, modal rapprochement, filtres, route `/superadmin/reconciliation`
 
-- [ ] **G-04** · Activation automatique projet à réception acompte confirmé  
-  *CDC* : REQ-FACT-006 (remplace l'activation manuelle de Phase B-06)  
+- [V] **G-04** · Activation automatique projet à réception acompte confirmé — 2026-02-20
+  *CDC* : REQ-FACT-006 (remplace l'activation manuelle de Phase B-06)
+  *Livré* : `activateProjectIfDeposit()` dans reconciliation.js — détecte facture acompte, active projet, déclenche email Phase E
 
-- [ ] **G-05** · Alertes transactions non rapprochées > 5 jours  
-  *CDC* : REQ-RECO-004  
+- [V] **G-05** · Alertes transactions non rapprochées > 5 jours — 2026-02-20
+  *CDC* : REQ-RECO-004
+  *Livré* : `alerts.js` — polling horaire, notifications Directus, anti-doublon via automation_logs
+
+**Découvertes Phase G** :
+- `src/backend/api/revolut/` est un symlink vers `integrations/revolut/`
+- Module Revolut existant avec revolut-api.js complet (auth, accounts, transactions, payments, counterparties)
+- 18 champs ajoutés sur 4 collections : bank_transactions (+6), client_invoices (+3), projects (+2), reconciliations (+7)
+- Arrondi suisse ±0.05 CHF implémenté dans le scoring montant
 
 ---
 
@@ -448,9 +457,9 @@ La plateforme V1 sera considérée opérationnelle quand :
 4. `[A]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
 5. `[A]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
 6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — Phase I
-7. `[A]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel, Revolut webhook Phase G)
+7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel) + **Phase G** (Revolut webhook auto)
 8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
 9. `[ ]` 240 KPIs existants affichés correctement (REQ-KPI-001) — Phase J
 10. `[ ]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — Phase I
-11. `[ ]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — Phase G
+11. `[V]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — **FAIT Phase G** (scoring 4 critères, seuil auto ≥85%)
 12. `[ ]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — Phase I

@@ -61,6 +61,7 @@ const TrainingsView = lazy(() => import('./modules/hr/views/TrainingsView'))
 
 // Finance Modules
 const BankingDashboard = lazy(() => import('./components/banking/BankingDashboard'))
+const ReconciliationDashboard = lazy(() => import('./components/banking/ReconciliationDashboard'))
 const FinanceDashboard = lazy(() => import('./portals/superadmin/finance/FinanceDashboard'))
 const CollectionDashboard = lazy(() => import('./portals/superadmin/collection/CollectionDashboard'))
 const BudgetsManager = lazy(() => import('./portals/superadmin/finance/components/BudgetsManager'))
@@ -157,6 +158,7 @@ function App() {
 
                   {/* Finance */}
                   <Route path="banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="reconciliation" element={<ReconciliationDashboard selectedCompany={selectedCompany} />} />
                   <Route path="accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
                   <Route path="invoices/clients" element={<AdminInvoicesModule selectedCompany={selectedCompany} />} />
                   <Route path="invoices/:id" element={<InvoiceDetailView />} />

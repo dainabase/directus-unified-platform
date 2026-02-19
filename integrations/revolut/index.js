@@ -6,6 +6,10 @@
 
 import express from 'express';
 import RevolutAPI from './revolut-api.js';
+import webhookReceiver from './webhook-receiver.js';
+import { syncRecentTransactions } from './sync-transactions.js';
+import { reconcileTransaction, applyReconciliation } from './reconciliation.js';
+import { startAlertsMonitor, checkUnmatchedTransactions } from './alerts.js';
 
 const router = express.Router();
 
@@ -194,36 +198,60 @@ router.delete('/webhooks/:id', async (req, res) => {
   }
 });
 
-// Webhook endpoint (réception des notifications Revolut)
-router.post('/webhook-handler', async (req, res) => {
+// === PHASE G — WEBHOOK + RECONCILIATION ===
+
+// G-01 : Webhook Revolut (raw body pour verification signature)
+router.use('/webhook-receiver', webhookReceiver);
+
+// G-01 : Sync manuelle (pour tests)
+router.post('/sync-transactions', async (req, res) => {
   try {
-    const event = req.body;
-    console.log('Webhook Revolut reçu:', event.event);
+    const hours = req.body.hours || 24;
+    const result = await syncRecentTransactions(revolut, hours);
+    res.json({ success: true, ...result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
-    // Traiter les différents types d'événements
-    switch (event.event) {
-      case 'TransactionCreated':
-        console.log('Nouvelle transaction:', event.data?.id);
-        // TODO: Synchroniser avec Directus
-        break;
-
-      case 'TransactionStateChanged':
-        console.log('État transaction changé:', event.data?.id, event.data?.state);
-        // TODO: Mettre à jour le statut dans Directus
-        break;
-
-      case 'PayoutLinkCreated':
-        console.log('Lien de paiement créé:', event.data?.id);
-        break;
-
-      default:
-        console.log('Événement Revolut non traité:', event.event);
+// G-02 : Rapprochement manuel depuis dashboard
+router.post('/reconcile', async (req, res) => {
+  try {
+    const { transaction_id, invoice_id } = req.body;
+    if (!transaction_id || !invoice_id) {
+      return res.status(400).json({ error: 'transaction_id et invoice_id requis' });
     }
 
-    res.status(200).send('OK');
+    const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
+    const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
+    const headers = { Authorization: `Bearer ${DIRECTUS_TOKEN}` };
+
+    const [txRes, invRes] = await Promise.all([
+      fetch(`${DIRECTUS_URL}/items/bank_transactions/${transaction_id}`, { headers }),
+      fetch(`${DIRECTUS_URL}/items/client_invoices/${invoice_id}`, { headers })
+    ]);
+
+    const tx = (await txRes.json()).data;
+    const invoice = (await invRes.json()).data;
+
+    if (!tx || !invoice) {
+      return res.status(404).json({ error: 'Transaction ou facture introuvable' });
+    }
+
+    await applyReconciliation(tx, invoice, 100, 'manual', ['manual_validation']);
+    res.json({ success: true, method: 'manual', score: 100 });
   } catch (error) {
-    console.error('Erreur webhook Revolut:', error);
-    res.status(200).send('OK'); // Toujours répondre 200 pour éviter les retries
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// G-05 : Verification manuelle des alertes
+router.post('/check-alerts', async (req, res) => {
+  try {
+    const result = await checkUnmatchedTransactions();
+    res.json({ success: true, ...result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -234,6 +262,15 @@ router.get('/health', (req, res) => {
     success: true,
     status: 'healthy',
     service: 'revolut',
+    phase_g: {
+      'G-01-webhook': 'active',
+      'G-02-reconciliation': 'active',
+      'G-03-dashboard': 'frontend',
+      'G-04-auto-activate': 'active',
+      'G-05-alerts': 'active'
+    },
+    webhook_id: process.env.REVOLUT_WEBHOOK_ID || null,
+    env: process.env.REVOLUT_ENV || 'not_set',
     sandbox: process.env.REVOLUT_SANDBOX === 'true',
     timestamp: new Date().toISOString()
   });
@@ -255,5 +292,19 @@ router.get('/test', async (req, res) => {
     });
   }
 });
+
+// === SERVICES BACKGROUND (Phase G) ===
+
+// Demarrer alertes monitoring (G-05)
+startAlertsMonitor();
+
+// Sync horaire de secours (au cas ou webhook rate un event)
+setInterval(() => {
+  syncRecentTransactions(revolut, 2).catch(err => {
+    console.error('[Revolut] Erreur sync horaire:', err.message);
+  });
+}, 60 * 60 * 1000);
+
+console.log('[Revolut Phase G] Services demarres — webhook, reconciliation, alertes, sync horaire');
 
 export default router;

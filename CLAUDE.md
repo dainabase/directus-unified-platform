@@ -34,6 +34,23 @@
 - API Directus via `src/frontend/src/api/directus.js`
 - Hooks custom : `useDirectusQuery`, `useCompanies`, `useFinances`, `useProjects`, `usePeople`
 
+## Tool Discovery — Skill Router System
+
+AVANT toute tache complexe (developpement, optimisation, audit, migration, securite, testing) :
+1. Consulter le skill-router : `.claude/skills/skill-router/references/REGISTRY.md`
+2. Identifier les outils pertinents dans la categorie appropriee
+3. Lire le SKILL.md complet de l'outil choisi avant d'implementer
+4. Utiliser les MCP servers quand l'acces direct (DB, Directus, ESLint) est plus efficace
+
+### Outils disponibles
+- 6 MCP Servers : PostgreSQL (SQL direct), Directus (CRUD collections), ESLint, Playwright, Context7, Sequential Thinking
+- 8 Custom Skills : Directus, Swiss compliance, Multi-portal, Docker, CEO dashboard, etc.
+- 939+ Skills a la demande : Voir `REGISTRY.md` dans le skill-router
+- TOTAL : ~950 outils specialises via progressive disclosure
+
+### Regle d'or
+Ne jamais coder "a l'aveugle" quand un skill specialise existe. Toujours verifier le registry d'abord.
+
 ## Swiss Compliance (Critical)
 - QR-Invoice: SIX Group IG v2.3, structured addresses mandatory, `swissqrbill` npm
 - VAT: 8.1% normal, 2.6% reduced, 3.8% accommodation — NEVER hardcode, always config

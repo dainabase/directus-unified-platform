@@ -128,6 +128,18 @@ try {
 }
 
 // ============================================
+// API REPORTS - CEO Daily Report
+// ============================================
+
+try {
+  const reportsRoutes = await import('./api/reports/ceo-report.routes.js');
+  app.use('/api/reports', flexibleAuth, reportsRoutes.default);
+  console.log('[api] Reports connected: /api/reports (CEO daily report)');
+} catch (err) {
+  console.warn('[api] Reports not available:', err.message);
+}
+
+// ============================================
 // PROXY DIRECTUS LEGACY
 // ============================================
 

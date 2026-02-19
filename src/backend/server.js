@@ -371,45 +371,13 @@ app.get('/api/ocr/status', (req, res) => {
 });
 
 // ============================================
-// HEALTH CHECK
+// HEALTH CHECK (public — no auth)
 // ============================================
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    success: true,
-    status: 'healthy',
-    version: '2.1.0',
-    timestamp: new Date().toISOString(),
-    services: {
-      finance: 'ok',
-      legal: 'ok',
-      collection: 'ok',
-      commercial: 'ok',
-      auth: 'ok',
-      directus: DIRECTUS_URL,
-      ocr: process.env.OPENAI_API_KEY ? 'ok' : 'not_configured'
-    },
-    integrations: {
-      invoice_ninja: process.env.INVOICE_NINJA_API_TOKEN ? 'configured' : 'not_configured',
-      revolut: process.env.REVOLUT_ACCESS_TOKEN ? 'configured' : 'not_configured',
-      mautic: process.env.MAUTIC_URL ? 'configured' : 'not_configured',
-      erpnext: process.env.ERPNEXT_API_KEY ? 'configured' : 'not_configured',
-      docuseal: process.env.DOCUSEAL_API_KEY ? 'configured' : 'not_configured'
-    },
-    endpoints: {
-      auth: '/api/auth',
-      finance: '/api/finance (80+ endpoints)',
-      legal: '/api/legal',
-      collection: '/api/collection',
-      commercial: '/api/commercial (workflow complet)',
-      invoice_ninja: '/api/invoice-ninja',
-      revolut: '/api/revolut',
-      mautic: '/api/mautic',
-      erpnext: '/api/erpnext',
-      health: '/api/health'
-    }
-  });
-});
+import healthRoutes from './api/health/health.routes.js';
+app.use('/health', healthRoutes);
+app.use('/api/health', healthRoutes);
+console.log('[api] Health check connected: /health + /api/health');
 
 // ============================================
 // PAGE D'ACCUEIL

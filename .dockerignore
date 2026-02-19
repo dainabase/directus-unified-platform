@@ -1,0 +1,17 @@
+node_modules
+.env
+*.env
+.env.*
+archive/
+.git
+*.sql
+.DS_Store
+coverage/
+.nyc_output/
+*.log
+tmp/
+temp/
+.claude/
+docs/
+*.md
+!README.md

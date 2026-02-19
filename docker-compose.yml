@@ -11,7 +11,7 @@ services:
       SECRET: "${SECRET}"
       ADMIN_EMAIL: "${ADMIN_EMAIL}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
-      
+
       # PostgreSQL
       DB_CLIENT: "pg"
       DB_HOST: "postgres"
@@ -19,8 +19,13 @@ services:
       DB_DATABASE: "directus"
       DB_USER: "directus"
       DB_PASSWORD: "${DB_PASSWORD}"
-      
-      # CORS Configuration - TRÈS IMPORTANT
+
+      # Redis
+      CACHE_ENABLED: "true"
+      CACHE_STORE: "redis"
+      CACHE_REDIS: "redis://redis:6379"
+
+      # CORS Configuration
       CORS_ENABLED: "true"
       CORS_ORIGIN: "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:3000"
       CORS_CREDENTIALS: "true"
@@ -28,14 +33,23 @@ services:
       CORS_ALLOWED_HEADERS: "Content-Type,Authorization,X-Requested-With"
       CORS_EXPOSED_HEADERS: "Content-Range,X-Content-Range"
       CORS_MAX_AGE: "18000"
-      
-      # Optimisations migration
+
+      # Optimisations
       DB_POOL__MIN: 10
       DB_POOL__MAX: 50
       RELATIONAL_BATCH_SIZE: 15000
-      
+
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8055/server/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   postgres:
     image: postgres:15-alpine
@@ -45,6 +59,25 @@ services:
       POSTGRES_DB: directus
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
+  redis_data:

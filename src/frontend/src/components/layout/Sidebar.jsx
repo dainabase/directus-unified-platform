@@ -89,6 +89,7 @@ const navigationConfig = [
     isGroup: true,
     children: [
       { id: 'leads', label: 'Leads', icon: UserPlus, path: '/superadmin/leads' },
+      { id: 'quotes', label: 'Devis', icon: FileText, path: '/superadmin/quotes' },
       { id: 'contacts', label: 'Contacts', icon: Users, path: '/superadmin/crm/contacts' },
       { id: 'companies', label: 'Entreprises', icon: Building2, path: '/superadmin/crm/companies' },
       { id: 'pipeline', label: 'Pipeline Commercial', icon: Target, path: '/superadmin/crm/pipeline' },

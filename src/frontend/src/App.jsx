@@ -39,6 +39,9 @@ import CustomerSuccess from './portals/superadmin/crm/components/CustomerSuccess
 // Leads Module
 import LeadsDashboard from './portals/superadmin/leads/LeadsDashboard'
 
+// Quotes Module
+import QuotesModule from './portals/superadmin/quotes/QuotesModule'
+
 // Legal Module
 import LegalDashboard from './portals/superadmin/legal/LegalDashboard'
 import ContractsManager from './portals/superadmin/legal/components/ContractsManager'
@@ -127,6 +130,9 @@ function App() {
                   <Route path="crm/companies" element={<CRMDashboard selectedCompany={selectedCompany} view="companies" />} />
                   <Route path="crm/pipeline" element={<PipelineView selectedCompany={selectedCompany} />} />
                   <Route path="crm/success" element={<CustomerSuccess selectedCompany={selectedCompany} />} />
+
+                  {/* Devis */}
+                  <Route path="quotes" element={<QuotesModule selectedCompany={selectedCompany} />} />
 
                   {/* Leads */}
                   <Route path="leads" element={<LeadsDashboard selectedCompany={selectedCompany} />} />

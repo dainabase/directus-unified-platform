@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
+import queryClient from './lib/queryClient'
+import { useAuthStore } from './stores/authStore'
 
 // Layout components
 import Sidebar from './components/layout/Sidebar'
@@ -45,18 +47,7 @@ import SupportDashboard from './portals/superadmin/support/SupportDashboard'
 // Settings Module
 import SettingsDashboard from './portals/superadmin/settings/SettingsDashboard'
 
-// React Query configuration
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      cacheTime: 1000 * 60 * 10,
-      retry: 3,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true
-    }
-  }
-})
+// queryClient imported from lib/queryClient.js
 
 // Coming Soon placeholder
 const ComingSoon = ({ module, description }) => (
@@ -98,6 +89,10 @@ const AppLayout = ({ children, selectedCompany, setSelectedCompany }) => {
 
 function App() {
   const [selectedCompany, setSelectedCompany] = useState('all')
+  const hydrate = useAuthStore((s) => s.hydrate)
+
+  // Hydrate auth tokens from persisted storage on mount
+  useEffect(() => { hydrate() }, [hydrate])
 
   return (
     <QueryClientProvider client={queryClient}>

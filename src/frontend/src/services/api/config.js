@@ -1,6 +1,6 @@
 // API configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8055'
-const API_TOKEN = import.meta.env.VITE_API_TOKEN || 'dashboard-api-token-2025'
+const API_TOKEN = import.meta.env.VITE_API_TOKEN || ''
 
 // Create API client with default headers
 const api = {

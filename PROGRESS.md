@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 6/47 stories — 12%
+**Progression globale** : 7/47 stories — 14%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -34,10 +34,10 @@
 ---
 
 ## PHASE 1 — Dashboard SuperAdmin + Module Leads
-**Statut** : [ ] TODO | **Progression** : 0/8 stories
-**Demarre** : — | **Termine** : —
+**Statut** : [~] IN_PROGRESS | **Progression** : 1/8 stories
+**Demarre** : 2026-02-19 | **Termine** : —
 
-- [ ] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query)
+- [V] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query) — 2026-02-19
 - [ ] S-01-02 · Router principal + authentification portails
 - [ ] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism)
 - [ ] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003)
@@ -46,8 +46,8 @@
 - [ ] S-01-07 · Widget Tresorerie Revolut (REQ-CEO-001)
 - [ ] S-01-08 · Module Leads — tableau de bord capture + qualification LLM
 
-**Fichiers crees/modifies** : —
-**Observations** : —
+**Fichiers crees/modifies** : lib/axios.js, lib/queryClient.js, stores/authStore.js, services/api/directus.js, services/api/config.js, App.jsx, vite.config.js
+**Observations** : services/api/directus.js avait un token hardcode (hbQz-...) en fallback — retire. DirectusAPI class existante reutilisee avec axios centralise. QueryClient extrait de App.jsx vers lib/queryClient.js.
 **Blocages** : —
 
 ---
@@ -153,6 +153,9 @@
 | 2026-02-19 | S-00-04 | auth.routes.js deja 662 lignes avec login/refresh/logout/me/register | Completer plutot que reecrire | Ajout magic-link + portal param + rotation |
 | 2026-02-19 | S-00-04 | collection.routes.js bypass auth (next() stubs L13-21) | Faille securite sur /api/collection | Remplace par vrai authMiddleware |
 | 2026-02-19 | S-00-04 | auth.routes.js utilisait DIRECTUS_TOKEN (ancien nom) | Incoherence avec S-00-03 | Renomme en DIRECTUS_ADMIN_TOKEN |
+| 2026-02-19 | S-01-01 | services/api/directus.js avait token hardcode hbQz-... en fallback | Token compromis dans frontend | Retire, utilise lib/axios.js centralise |
+| 2026-02-19 | S-01-01 | services/api/config.js avait token hardcode dashboard-api-token-2025 | Token dev en prod | Retire le fallback |
+| 2026-02-19 | S-01-01 | DirectusAPI class (services/api/directus.js) deja complete (342 lignes) avec CRUD + company filter | Pas besoin de recreer un client axios | Reutilise avec import lib/axios |
 
 ---
 

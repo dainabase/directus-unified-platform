@@ -1,79 +1,11 @@
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import api from '../../lib/axios';
 import { addOwnerCompanyFilter, debugCompanyFilter } from '../../utils/company-filter';
-
-// Configuration API avec gestion d'erreurs avancée
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8055';
-const API_TOKEN = import.meta.env.VITE_API_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
 
 class DirectusAPI {
   constructor() {
-    this.client = axios.create({
-      baseURL: API_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(API_TOKEN && { 'Authorization': `Bearer ${API_TOKEN}` })
-      },
-      timeout: 15000
-    });
-
-    // Intercepteur pour les requêtes
-    this.client.interceptors.request.use(
-      config => {
-        // Log en développement
-        if (import.meta.env.DEV) {
-          console.log(`📡 API Request: ${config.method?.toUpperCase()} ${config.url}`);
-          if (config.params) {
-            console.log('   Params:', config.params);
-          }
-        }
-        return config;
-      },
-      error => {
-        console.error('❌ Request Error:', error);
-        return Promise.reject(error);
-      }
-    );
-
-    // Intercepteur pour les réponses
-    this.client.interceptors.response.use(
-      response => {
-        if (import.meta.env.DEV) {
-          const dataLength = response.data?.data?.length || 0;
-          console.log(`✅ API Response: ${dataLength} items`);
-        }
-        return response;
-      },
-      error => {
-        const message = error.response?.data?.errors?.[0]?.message || 
-                       error.response?.data?.error?.message ||
-                       error.message || 
-                       'Une erreur API est survenue';
-        
-        // Gestion spécifique des erreurs réseau
-        if (error.code === 'ERR_NETWORK' || error.response?.status === 0) {
-          console.error('❌ Directus API non disponible');
-          toast.error('Connexion à Directus impossible', {
-            style: {
-              background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
-              color: '#fff',
-              border: '1px solid rgba(239, 68, 68, 0.3)'
-            }
-          });
-        } else if (error.response?.status !== 404) {
-          // Notification pour les autres erreurs (sauf 404)
-          toast.error(message, {
-            style: {
-              background: 'linear-gradient(135deg, #1e293b, #334155)',
-              color: '#fff',
-              border: '1px solid rgba(239, 68, 68, 0.3)'
-            }
-          });
-        }
-        
-        return Promise.reject(error);
-      }
-    );
+    // Use the centralized axios instance (JWT managed by interceptors)
+    this.client = api;
   }
 
   /**

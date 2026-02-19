@@ -42,6 +42,18 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true
       },
+      '/api/commercial': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
+      '/api/revolut': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
+      '/health': {
+        target: 'http://localhost:3000',
+        changeOrigin: true
+      },
       // Autres API → Directus (port 8055)
       '/api': {
         target: 'http://localhost:8055',

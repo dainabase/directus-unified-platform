@@ -5,6 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
 import queryClient from './lib/queryClient'
 import { useAuthStore } from './stores/authStore'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import LoginPage from './pages/LoginPage'
 
 // Layout components
 import Sidebar from './components/layout/Sidebar'
@@ -47,32 +49,8 @@ import SupportDashboard from './portals/superadmin/support/SupportDashboard'
 // Settings Module
 import SettingsDashboard from './portals/superadmin/settings/SettingsDashboard'
 
-// queryClient imported from lib/queryClient.js
-
-// Coming Soon placeholder
-const ComingSoon = ({ module, description }) => (
-  <div className="flex items-center justify-center min-h-[60vh]">
-    <div className="text-center p-8 bg-white/80 backdrop-blur-lg rounded-2xl border border-gray-200/50 shadow-lg max-w-md">
-      <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-      </div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">
-        {module}
-      </h2>
-      <p className="text-gray-600 mb-4">
-        {description || 'Ce module est en cours de développement'}
-      </p>
-      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-        Coming Soon
-      </span>
-    </div>
-  </div>
-)
-
-// Layout wrapper
-const AppLayout = ({ children, selectedCompany, setSelectedCompany }) => {
+// SuperAdmin layout wrapper (sidebar + topbar)
+const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Sidebar />
@@ -97,7 +75,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             duration: 4000,
@@ -110,77 +88,109 @@ function App() {
             }
           }}
         />
-        
-        <AppLayout selectedCompany={selectedCompany} setSelectedCompany={setSelectedCompany}>
-          <Routes>
-            {/* Dashboard */}
-            <Route path="/" element={<Navigate to="/superadmin" replace />} />
-            <Route path="/superadmin" element={<SuperAdminDashboard selectedCompany={selectedCompany} />} />
-            
-            {/* === FINANCE === */}
-            <Route path="/superadmin/banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
-            <Route path="/superadmin/invoices/clients" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-clients" />} />
-            <Route path="/superadmin/invoices/suppliers" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-suppliers" />} />
-            <Route path="/superadmin/collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/expenses" element={<ExpensesTracker selectedCompany={selectedCompany} />} />
-            
-            {/* === PROJETS === */}
-            <Route path="/superadmin/projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/deliverables" element={<DeliverablesView selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/time-tracking" element={<TimeTrackingView selectedCompany={selectedCompany} />} />
-            
-            {/* === CRM === */}
-            <Route path="/superadmin/crm" element={<CRMDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/crm/contacts" element={<CRMDashboard selectedCompany={selectedCompany} view="contacts" />} />
-            <Route path="/superadmin/crm/companies" element={<CRMDashboard selectedCompany={selectedCompany} view="companies" />} />
-            <Route path="/superadmin/crm/pipeline" element={<PipelineView selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/crm/success" element={<CustomerSuccess selectedCompany={selectedCompany} />} />
 
-            {/* === LEADS === */}
-            <Route path="/superadmin/leads" element={<LeadsDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/leads/kanban" element={<LeadsDashboard selectedCompany={selectedCompany} view="kanban" />} />
-            <Route path="/superadmin/leads/list" element={<LeadsDashboard selectedCompany={selectedCompany} view="list" />} />
-            
-            {/* === MARKETING === */}
-            <Route path="/superadmin/marketing" element={<MarketingDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/marketing/calendar" element={<MarketingDashboard selectedCompany={selectedCompany} view="calendar" />} />
-            <Route path="/superadmin/marketing/campaigns" element={<MarketingDashboard selectedCompany={selectedCompany} view="campaigns" />} />
-            <Route path="/superadmin/marketing/analytics" element={<MarketingDashboard selectedCompany={selectedCompany} view="analytics" />} />
-            <Route path="/superadmin/marketing/events" element={<MarketingDashboard selectedCompany={selectedCompany} view="events" />} />
-            
-            {/* === RH === */}
-            <Route path="/superadmin/hr" element={<HRModule selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/hr/team" element={<HRModule selectedCompany={selectedCompany} view="team" />} />
-            <Route path="/superadmin/hr/talents" element={<HRModule selectedCompany={selectedCompany} view="talents" />} />
-            <Route path="/superadmin/hr/recruitment" element={<HRModule selectedCompany={selectedCompany} view="recruitment" />} />
-            <Route path="/superadmin/hr/trainings" element={<TrainingsView selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/hr/performance" element={<HRModule selectedCompany={selectedCompany} view="performance" />} />
-            
-            {/* === JURIDIQUE === */}
-            <Route path="/superadmin/legal" element={<LegalDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/legal/contracts" element={<ContractsManager selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/legal/cgv" element={<LegalDashboard selectedCompany={selectedCompany} view="cgv" />} />
-            <Route path="/superadmin/legal/compliance" element={<ComplianceManager selectedCompany={selectedCompany} />} />
-            
-            {/* === SUPPORT === */}
-            <Route path="/superadmin/support" element={<SupportDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/support/tickets" element={<SupportDashboard selectedCompany={selectedCompany} view="tickets" />} />
-            <Route path="/superadmin/support/notifications" element={<SupportDashboard selectedCompany={selectedCompany} view="notifications" />} />
-            
-            {/* === PARAMETRES === */}
-            <Route path="/superadmin/settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />
-            <Route path="/superadmin/settings/companies" element={<SettingsDashboard selectedCompany={selectedCompany} view="company" />} />
-            <Route path="/superadmin/settings/users" element={<SettingsDashboard selectedCompany={selectedCompany} view="users" />} />
-            <Route path="/superadmin/settings/permissions" element={<SettingsDashboard selectedCompany={selectedCompany} view="permissions" />} />
-            <Route path="/superadmin/settings/integrations" element={<SettingsDashboard selectedCompany={selectedCompany} view="integrations" />} />
-            
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/superadmin" replace />} />
-          </Routes>
-        </AppLayout>
-        
+        <Routes>
+          {/* ── Public routes ── */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* ── Root redirect ── */}
+          <Route path="/" element={<Navigate to="/superadmin" replace />} />
+
+          {/* ── SuperAdmin portal (protected) ── */}
+          <Route path="/superadmin/*" element={
+            <ProtectedRoute allowedPortals={['superadmin']}>
+              <SuperAdminLayout selectedCompany={selectedCompany} setSelectedCompany={setSelectedCompany}>
+                <Routes>
+                  <Route index element={<SuperAdminDashboard selectedCompany={selectedCompany} />} />
+
+                  {/* Finance */}
+                  <Route path="banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
+                  <Route path="invoices/clients" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-clients" />} />
+                  <Route path="invoices/suppliers" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-suppliers" />} />
+                  <Route path="collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />
+                  <Route path="expenses" element={<ExpensesTracker selectedCompany={selectedCompany} />} />
+
+                  {/* Projets */}
+                  <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
+                  <Route path="deliverables" element={<DeliverablesView selectedCompany={selectedCompany} />} />
+                  <Route path="time-tracking" element={<TimeTrackingView selectedCompany={selectedCompany} />} />
+
+                  {/* CRM */}
+                  <Route path="crm" element={<CRMDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="crm/contacts" element={<CRMDashboard selectedCompany={selectedCompany} view="contacts" />} />
+                  <Route path="crm/companies" element={<CRMDashboard selectedCompany={selectedCompany} view="companies" />} />
+                  <Route path="crm/pipeline" element={<PipelineView selectedCompany={selectedCompany} />} />
+                  <Route path="crm/success" element={<CustomerSuccess selectedCompany={selectedCompany} />} />
+
+                  {/* Leads */}
+                  <Route path="leads" element={<LeadsDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="leads/kanban" element={<LeadsDashboard selectedCompany={selectedCompany} view="kanban" />} />
+                  <Route path="leads/list" element={<LeadsDashboard selectedCompany={selectedCompany} view="list" />} />
+
+                  {/* Marketing */}
+                  <Route path="marketing" element={<MarketingDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="marketing/calendar" element={<MarketingDashboard selectedCompany={selectedCompany} view="calendar" />} />
+                  <Route path="marketing/campaigns" element={<MarketingDashboard selectedCompany={selectedCompany} view="campaigns" />} />
+                  <Route path="marketing/analytics" element={<MarketingDashboard selectedCompany={selectedCompany} view="analytics" />} />
+                  <Route path="marketing/events" element={<MarketingDashboard selectedCompany={selectedCompany} view="events" />} />
+
+                  {/* RH */}
+                  <Route path="hr" element={<HRModule selectedCompany={selectedCompany} />} />
+                  <Route path="hr/team" element={<HRModule selectedCompany={selectedCompany} view="team" />} />
+                  <Route path="hr/talents" element={<HRModule selectedCompany={selectedCompany} view="talents" />} />
+                  <Route path="hr/recruitment" element={<HRModule selectedCompany={selectedCompany} view="recruitment" />} />
+                  <Route path="hr/trainings" element={<TrainingsView selectedCompany={selectedCompany} />} />
+                  <Route path="hr/performance" element={<HRModule selectedCompany={selectedCompany} view="performance" />} />
+
+                  {/* Juridique */}
+                  <Route path="legal" element={<LegalDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="legal/contracts" element={<ContractsManager selectedCompany={selectedCompany} />} />
+                  <Route path="legal/cgv" element={<LegalDashboard selectedCompany={selectedCompany} view="cgv" />} />
+                  <Route path="legal/compliance" element={<ComplianceManager selectedCompany={selectedCompany} />} />
+
+                  {/* Support */}
+                  <Route path="support" element={<SupportDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="support/tickets" element={<SupportDashboard selectedCompany={selectedCompany} view="tickets" />} />
+                  <Route path="support/notifications" element={<SupportDashboard selectedCompany={selectedCompany} view="notifications" />} />
+
+                  {/* Parametres */}
+                  <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />
+                  <Route path="settings/companies" element={<SettingsDashboard selectedCompany={selectedCompany} view="company" />} />
+                  <Route path="settings/users" element={<SettingsDashboard selectedCompany={selectedCompany} view="users" />} />
+                  <Route path="settings/permissions" element={<SettingsDashboard selectedCompany={selectedCompany} view="permissions" />} />
+                  <Route path="settings/integrations" element={<SettingsDashboard selectedCompany={selectedCompany} view="integrations" />} />
+                </Routes>
+              </SuperAdminLayout>
+            </ProtectedRoute>
+          } />
+
+          {/* ── Client portal placeholder ── */}
+          <Route path="/client/*" element={
+            <ProtectedRoute allowedPortals={['client']}>
+              <div>Client Portal — Phase 3</div>
+            </ProtectedRoute>
+          } />
+
+          {/* ── Prestataire portal placeholder ── */}
+          <Route path="/prestataire/*" element={
+            <ProtectedRoute allowedPortals={['prestataire']}>
+              <div>Prestataire Portal — Phase 2</div>
+            </ProtectedRoute>
+          } />
+
+          {/* ── Revendeur portal placeholder ── */}
+          <Route path="/revendeur/*" element={
+            <ProtectedRoute allowedPortals={['revendeur']}>
+              <div>Revendeur Portal — Phase 6</div>
+            </ProtectedRoute>
+          } />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/superadmin" replace />} />
+        </Routes>
+
         {import.meta.env.DEV && (
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         )}

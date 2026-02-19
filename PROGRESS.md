@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 7/47 stories — 14%
+**Progression globale** : 8/47 stories — 17%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -34,11 +34,11 @@
 ---
 
 ## PHASE 1 — Dashboard SuperAdmin + Module Leads
-**Statut** : [~] IN_PROGRESS | **Progression** : 1/8 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 2/8 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query) — 2026-02-19
-- [ ] S-01-02 · Router principal + authentification portails
+- [V] S-01-02 · Router principal + authentification portails — 2026-02-19
 - [ ] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism)
 - [ ] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003)
 - [ ] S-01-05 · Widget KPIs financiers temps reel (REQ-CEO-001/002)
@@ -46,7 +46,7 @@
 - [ ] S-01-07 · Widget Tresorerie Revolut (REQ-CEO-001)
 - [ ] S-01-08 · Module Leads — tableau de bord capture + qualification LLM
 
-**Fichiers crees/modifies** : lib/axios.js, lib/queryClient.js, stores/authStore.js, services/api/directus.js, services/api/config.js, App.jsx, vite.config.js
+**Fichiers crees/modifies** : lib/axios.js, lib/queryClient.js, stores/authStore.js, services/api/directus.js, services/api/config.js, App.jsx, vite.config.js, components/auth/ProtectedRoute.jsx, pages/LoginPage.jsx
 **Observations** : services/api/directus.js avait un token hardcode (hbQz-...) en fallback — retire. DirectusAPI class existante reutilisee avec axios centralise. QueryClient extrait de App.jsx vers lib/queryClient.js.
 **Blocages** : —
 

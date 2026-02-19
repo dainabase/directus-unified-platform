@@ -1,393 +1,343 @@
-// src/frontend/src/portals/superadmin/support/SupportDashboard.jsx
-import React, { useState } from 'react';
+/**
+ * SupportDashboard — S-05-03
+ * Module support tickets SuperAdmin. Connecte a Directus support_tickets.
+ * Vue d'ensemble avec KPIs reels, liste tickets CRUD, formulaire creation.
+ */
+
+import React, { useState, useMemo } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Headphones, Ticket, Bell, MessageSquare, Users, Clock,
-  TrendingUp, CheckCircle, AlertCircle, RefreshCw, Plus
-} from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
-import {
-  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
-  ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from 'recharts';
-import TicketsManager from './components/TicketsManager';
-import NotificationsCenter from './components/NotificationsCenter';
+  Headphones, MessageSquare, Bell, Clock, Plus, Search, Filter,
+  AlertCircle, CheckCircle, Loader2, X, Save, Trash2, Edit, Eye,
+  TrendingUp, ChevronRight
+} from 'lucide-react'
+import { format, differenceInHours } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import toast from 'react-hot-toast'
+import { fetchTickets, createTicket, updateTicket, deleteTicket } from '../../../services/api/crm'
 
-const TABS = [
-  { id: 'overview', label: 'Vue d\'ensemble', icon: Headphones },
-  { id: 'tickets', label: 'Tickets', icon: Ticket },
-  { id: 'notifications', label: 'Notifications', icon: Bell }
-];
+const STATUS_CONFIG = {
+  open: { label: 'Ouvert', color: 'bg-blue-100 text-blue-700' },
+  in_progress: { label: 'En cours', color: 'bg-amber-100 text-amber-700' },
+  pending: { label: 'En attente', color: 'bg-purple-100 text-purple-700' },
+  resolved: { label: 'Resolu', color: 'bg-green-100 text-green-700' },
+  closed: { label: 'Ferme', color: 'bg-gray-100 text-gray-600' }
+}
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+const PRIORITY_CONFIG = {
+  critical: { label: 'Critique', color: 'bg-red-100 text-red-700' },
+  high: { label: 'Haute', color: 'bg-orange-100 text-orange-700' },
+  medium: { label: 'Moyenne', color: 'bg-yellow-100 text-yellow-700' },
+  low: { label: 'Basse', color: 'bg-gray-100 text-gray-600' }
+}
 
-const mockOverviewData = {
-  kpis: {
-    openTickets: 23,
-    resolvedToday: 12,
-    avgResponseTime: '2.4h',
-    satisfaction: 94,
-    pendingNotifications: 8,
-    activeAgents: 5
-  },
-  ticketTrend: [
-    { date: 'Lun', created: 15, resolved: 12 },
-    { date: 'Mar', created: 18, resolved: 16 },
-    { date: 'Mer', created: 12, resolved: 14 },
-    { date: 'Jeu', created: 20, resolved: 18 },
-    { date: 'Ven', created: 16, resolved: 15 },
-    { date: 'Sam', created: 8, resolved: 10 },
-    { date: 'Dim', created: 5, resolved: 6 }
-  ],
-  ticketsByPriority: [
-    { name: 'Critique', value: 3 },
-    { name: 'Haute', value: 8 },
-    { name: 'Moyenne', value: 15 },
-    { name: 'Basse', value: 12 }
-  ],
-  ticketsByCategory: [
-    { category: 'Technique', count: 18 },
-    { category: 'Facturation', count: 12 },
-    { category: 'Commercial', count: 8 },
-    { category: 'Autre', count: 5 }
-  ],
-  recentTickets: [
-    { id: 'TKT-1234', subject: 'Probleme connexion API', status: 'open', priority: 'high', customer: 'ACME Corp', created: '2024-12-14T09:30:00' },
-    { id: 'TKT-1233', subject: 'Question facturation', status: 'pending', priority: 'medium', customer: 'TechStart SA', created: '2024-12-14T08:45:00' },
-    { id: 'TKT-1232', subject: 'Demande de fonctionnalite', status: 'open', priority: 'low', customer: 'Digital AG', created: '2024-12-13T16:20:00' }
-  ]
-};
+const CATEGORY_OPTIONS = [
+  'Technique', 'Facturation', 'Commercial', 'Fonctionnalite', 'Autre'
+]
 
-const SupportDashboard = ({ selectedCompany, view }) => {
-  const getInitialTab = () => {
-    if (view === 'tickets') return 'tickets';
-    if (view === 'notifications') return 'notifications';
-    return 'overview';
-  };
+// ── Ticket Form ────────────────────────────────────────────
+const TicketForm = ({ ticket, onSave, onClose, isSaving }) => {
+  const [form, setForm] = useState({
+    subject: ticket?.subject || '',
+    description: ticket?.description || '',
+    status: ticket?.status || 'open',
+    priority: ticket?.priority || 'medium',
+    category: ticket?.category || 'Technique',
+    assigned_to: ticket?.assigned_to || ''
+  })
 
-  const [activeTab, setActiveTab] = useState(getInitialTab());
-  const [dateRange, setDateRange] = useState('7d');
-
-  const { data: overviewData, isLoading, refetch } = useQuery({
-    queryKey: ['support-overview', selectedCompany, dateRange],
-    queryFn: async () => {
-      await new Promise(r => setTimeout(r, 500));
-      return mockOverviewData;
-    },
-    staleTime: 60000
-  });
-
-  const data = overviewData || mockOverviewData;
-
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'critical': return 'danger';
-      case 'high': return 'warning';
-      case 'medium': return 'info';
-      default: return 'secondary';
-    }
-  };
-
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'open':
-        return <span className="badge bg-success">Ouvert</span>;
-      case 'pending':
-        return <span className="badge bg-warning">En attente</span>;
-      case 'resolved':
-        return <span className="badge bg-secondary">Resolu</span>;
-      case 'closed':
-        return <span className="badge bg-dark">Ferme</span>;
-      default:
-        return <span className="badge bg-light text-dark">{status}</span>;
-    }
-  };
-
-  const renderOverview = () => (
-    <div className="space-y-6">
-      {/* KPIs */}
-      <div className="row g-3">
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <AlertCircle size={20} className="text-danger me-2" />
-                <span className="text-muted small">Tickets ouverts</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.openTickets}</h3>
-              <small className="text-danger">+3 aujourd'hui</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <CheckCircle size={20} className="text-success me-2" />
-                <span className="text-muted small">Resolus aujourd'hui</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.resolvedToday}</h3>
-              <small className="text-success">+8% vs hier</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Clock size={20} className="text-info me-2" />
-                <span className="text-muted small">Temps reponse</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.avgResponseTime}</h3>
-              <small className="text-success">-15min vs moyenne</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <TrendingUp size={20} className="text-warning me-2" />
-                <span className="text-muted small">Satisfaction</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.satisfaction}%</h3>
-              <small className="text-success">+2% ce mois</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Bell size={20} className="text-purple me-2" />
-                <span className="text-muted small">Notifications</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.pendingNotifications}</h3>
-              <small className="text-muted">en attente</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Users size={20} className="text-primary me-2" />
-                <span className="text-muted small">Agents actifs</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.activeAgents}</h3>
-              <small className="text-muted">en ligne</small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Row */}
-      <div className="row g-4">
-        <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Evolution des tickets (7 jours)</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={data.ticketTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="created" fill="#ef4444" name="Crees" />
-                  <Bar dataKey="resolved" fill="#10b981" name="Resolus" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-4">
-          <div className="card h-100">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Par priorite</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={data.ticketsByPriority}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.ticketsByPriority.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
-                {data.ticketsByPriority.map((item, index) => (
-                  <div key={item.name} className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle me-1"
-                      style={{ width: 8, height: 8, backgroundColor: COLORS[index] }}
-                    />
-                    <small className="text-muted">{item.name} ({item.value})</small>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Categories and Recent */}
-      <div className="row g-4">
-        <div className="col-lg-4">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Par categorie</h5>
-            </div>
-            <div className="card-body">
-              {data.ticketsByCategory.map((cat, index) => (
-                <div key={cat.category} className="mb-3">
-                  <div className="d-flex justify-content-between mb-1">
-                    <span className="small">{cat.category}</span>
-                    <span className="small fw-medium">{cat.count}</span>
-                  </div>
-                  <div className="progress" style={{ height: 6 }}>
-                    <div
-                      className="progress-bar"
-                      style={{
-                        width: `${(cat.count / 43) * 100}%`,
-                        backgroundColor: COLORS[index]
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="card-title mb-0">Tickets recents</h5>
-              <button className="btn btn-sm btn-primary" onClick={() => setActiveTab('tickets')}>
-                Voir tous
-              </button>
-            </div>
-            <div className="table-responsive">
-              <table className="table table-hover card-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Sujet</th>
-                    <th>Client</th>
-                    <th>Statut</th>
-                    <th>Priorite</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.recentTickets.map(ticket => (
-                    <tr key={ticket.id}>
-                      <td className="fw-medium text-primary">{ticket.id}</td>
-                      <td>{ticket.subject}</td>
-                      <td className="text-muted">{ticket.customer}</td>
-                      <td>{getStatusBadge(ticket.status)}</td>
-                      <td>
-                        <span className={`badge bg-${getPriorityColor(ticket.priority)}-lt text-${getPriorityColor(ticket.priority)}`}>
-                          {ticket.priority}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!form.subject.trim()) return
+    onSave(form)
+  }
 
   return (
-    <div className="container-xl">
-      {/* Header */}
-      <div className="page-header d-print-none mb-4">
-        <div className="row align-items-center">
-          <div className="col-auto">
-            <h2 className="page-title">
-              <Headphones className="me-2" size={24} />
-              Support
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <form onSubmit={handleSubmit}>
+          <div className="flex items-center justify-between p-5 border-b border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900">
+              {ticket ? 'Modifier le ticket' : 'Nouveau ticket'}
             </h2>
-            <div className="text-muted mt-1">
-              Tickets et notifications
+            <button type="button" onClick={onClose} className="p-1 hover:bg-gray-100 rounded-lg">
+              <X size={20} />
+            </button>
+          </div>
+          <div className="p-5 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sujet *</label>
+              <input
+                type="text" value={form.subject} required
+                onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              />
             </div>
-          </div>
-          <div className="col-auto ms-auto d-flex gap-2">
-            <select
-              className="form-select"
-              value={dateRange}
-              onChange={(e) => setDateRange(e.target.value)}
-              style={{ width: 'auto' }}
-            >
-              <option value="7d">7 derniers jours</option>
-              <option value="30d">30 derniers jours</option>
-              <option value="90d">90 derniers jours</option>
-            </select>
-            <button
-              className="btn btn-outline-secondary"
-              onClick={() => refetch()}
-              disabled={isLoading}
-            >
-              <RefreshCw size={16} className={isLoading ? 'spin' : ''} />
-            </button>
-            <button className="btn btn-primary">
-              <Plus size={16} className="me-1" />
-              Nouveau ticket
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="card mb-4">
-        <div className="card-header">
-          <ul className="nav nav-tabs card-header-tabs">
-            {TABS.map(tab => (
-              <li className="nav-item" key={tab.id}>
-                <a
-                  className={`nav-link ${activeTab === tab.id ? 'active' : ''}`}
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); setActiveTab(tab.id); }}
-                >
-                  <tab.icon size={16} className="me-2" />
-                  {tab.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="card-body">
-          {isLoading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Chargement...</span>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <textarea
+                rows={3} value={form.description}
+                onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                <select value={form.status} onChange={e => setForm(p => ({ ...p, status: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                  {Object.entries(STATUS_CONFIG).map(([k, v]) => (
+                    <option key={k} value={k}>{v.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Priorite</label>
+                <select value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                  {Object.entries(PRIORITY_CONFIG).map(([k, v]) => (
+                    <option key={k} value={k}>{v.label}</option>
+                  ))}
+                </select>
               </div>
             </div>
-          ) : (
-            <>
-              {activeTab === 'overview' && renderOverview()}
-              {activeTab === 'tickets' && <TicketsManager selectedCompany={selectedCompany} />}
-              {activeTab === 'notifications' && <NotificationsCenter selectedCompany={selectedCompany} />}
-            </>
-          )}
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Categorie</label>
+              <select value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                {CATEGORY_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 p-5 border-t border-gray-100">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">
+              Annuler
+            </button>
+            <button type="submit" disabled={isSaving}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+              {ticket ? 'Mettre a jour' : 'Creer'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SupportDashboard;
+// ── Main Dashboard ─────────────────────────────────────────
+const SupportDashboard = ({ selectedCompany, view }) => {
+  const queryClient = useQueryClient()
+  const [activeTab, setActiveTab] = useState(view === 'tickets' ? 'tickets' : view === 'notifications' ? 'notifications' : 'overview')
+  const [showForm, setShowForm] = useState(false)
+  const [editingTicket, setEditingTicket] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [priorityFilter, setPriorityFilter] = useState('all')
+
+  const company = selectedCompany === 'all' ? '' : selectedCompany
+
+  // Fetch tickets from Directus
+  const { data: tickets = [], isLoading } = useQuery({
+    queryKey: ['support-tickets', { company, status: statusFilter !== 'all' ? statusFilter : undefined, priority: priorityFilter !== 'all' ? priorityFilter : undefined, search: searchQuery }],
+    queryFn: () => fetchTickets({ company, status: statusFilter !== 'all' ? statusFilter : undefined, priority: priorityFilter !== 'all' ? priorityFilter : undefined, search: searchQuery }),
+    staleTime: 30_000
+  })
+
+  // Mutations
+  const createMut = useMutation({
+    mutationFn: createTicket,
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['support-tickets'] }); toast.success('Ticket cree'); setShowForm(false) },
+    onError: () => toast.error('Erreur creation')
+  })
+  const updateMut = useMutation({
+    mutationFn: ({ id, data }) => updateTicket(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['support-tickets'] }); toast.success('Ticket mis a jour'); setShowForm(false); setEditingTicket(null) },
+    onError: () => toast.error('Erreur mise a jour')
+  })
+  const deleteMut = useMutation({
+    mutationFn: deleteTicket,
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['support-tickets'] }); toast.success('Ticket supprime') }
+  })
+
+  const handleSave = (formData) => {
+    if (editingTicket) {
+      updateMut.mutate({ id: editingTicket.id, data: formData })
+    } else {
+      createMut.mutate({ ...formData, owner_company: company || undefined })
+    }
+  }
+
+  // KPIs computed from real data
+  const kpis = useMemo(() => {
+    const open = tickets.filter(t => t.status === 'open' || t.status === 'in_progress').length
+    const resolved = tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length
+    const critical = tickets.filter(t => t.priority === 'critical' || t.priority === 'high').length
+    const avgResponse = tickets.length > 0
+      ? Math.round(tickets.reduce((s, t) => s + (t.date_created ? differenceInHours(new Date(), new Date(t.date_created)) : 0), 0) / tickets.length)
+      : 0
+    return { open, resolved, critical, total: tickets.length, avgResponse }
+  }, [tickets])
+
+  // Filtered for display
+  const displayTickets = tickets
+
+  const StatusBadge = ({ status }) => {
+    const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.open
+    return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>{cfg.label}</span>
+  }
+
+  const PriorityBadge = ({ priority }) => {
+    const cfg = PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.medium
+    return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>{cfg.label}</span>
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs text-gray-500 uppercase tracking-wide">Support</p>
+          <h2 className="text-xl font-bold text-gray-900">Tickets & Notifications</h2>
+        </div>
+        <button
+          onClick={() => { setEditingTicket(null); setShowForm(true) }}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+        >
+          <Plus size={16} /> Nouveau ticket
+        </button>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <MessageSquare size={14} className="text-gray-400" />
+            <span className="text-xs text-gray-500">Total</span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{kpis.total}</p>
+        </div>
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <AlertCircle size={14} className="text-blue-400" />
+            <span className="text-xs text-gray-500">Ouverts</span>
+          </div>
+          <p className="text-2xl font-bold text-blue-600">{kpis.open}</p>
+        </div>
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <CheckCircle size={14} className="text-green-400" />
+            <span className="text-xs text-gray-500">Resolus</span>
+          </div>
+          <p className="text-2xl font-bold text-green-600">{kpis.resolved}</p>
+        </div>
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <AlertCircle size={14} className="text-red-400" />
+            <span className="text-xs text-gray-500">Critiques</span>
+          </div>
+          <p className="text-2xl font-bold text-red-600">{kpis.critical}</p>
+        </div>
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <Clock size={14} className="text-amber-400" />
+            <span className="text-xs text-gray-500">Age moyen</span>
+          </div>
+          <p className="text-2xl font-bold text-amber-600">{kpis.avgResponse}h</p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="relative flex-1 min-w-52">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+          <input
+            type="text" value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Rechercher..."
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
+          className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <option value="all">Tous les statuts</option>
+          {Object.entries(STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+        </select>
+        <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)}
+          className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <option value="all">Toutes les priorites</option>
+          {Object.entries(PRIORITY_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+        </select>
+        <span className="text-sm text-gray-500">{displayTickets.length} ticket(s)</span>
+      </div>
+
+      {/* Tickets Table */}
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        </div>
+      ) : displayTickets.length === 0 ? (
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+          <Headphones className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500">Aucun ticket de support</p>
+          <p className="text-sm text-gray-400 mt-1">Creez un premier ticket pour commencer</p>
+        </div>
+      ) : (
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200/50">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Sujet</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Statut</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Priorite</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Categorie</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {displayTickets.map(t => (
+                <tr key={t.id} className="hover:bg-gray-50/50 transition-colors">
+                  <td className="px-4 py-3">
+                    <p className="text-sm font-medium text-gray-900">{t.subject || '(sans sujet)'}</p>
+                    {t.description && <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{t.description}</p>}
+                  </td>
+                  <td className="px-4 py-3"><StatusBadge status={t.status} /></td>
+                  <td className="px-4 py-3"><PriorityBadge priority={t.priority} /></td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{t.category || '—'}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">
+                    {t.date_created ? format(new Date(t.date_created), 'dd MMM yyyy', { locale: fr }) : '—'}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex justify-end gap-1">
+                      <button onClick={() => { setEditingTicket(t); setShowForm(true) }}
+                        className="p-1.5 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                        <Edit size={14} />
+                      </button>
+                      <button onClick={() => { if (window.confirm('Supprimer ce ticket ?')) deleteMut.mutate(t.id) }}
+                        className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Ticket Form Modal */}
+      {showForm && (
+        <TicketForm
+          ticket={editingTicket}
+          onSave={handleSave}
+          onClose={() => { setShowForm(false); setEditingTicket(null) }}
+          isSaving={createMut.isPending || updateMut.isPending}
+        />
+      )}
+    </div>
+  )
+}
+
+export default SupportDashboard

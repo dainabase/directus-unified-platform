@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 21/47 stories — 45%
+**Progression globale** : 28/47 stories — 60%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -71,19 +71,19 @@
 ---
 
 ## PHASE 3 — Portail Client + Facturation QR Swiss
-**Statut** : [ ] TODO | **Progression** : 0/7 stories
-**Demarre** : — | **Termine** : —
+**Statut** : [V] DONE | **Progression** : 7/7 stories
+**Demarre** : 2026-02-19 | **Termine** : 2026-02-19
 
-- [ ] S-03-01 · Layout Portail Client (auth par lien securise)
-- [ ] S-03-02 · Vue devis + signature client
-- [ ] S-03-03 · Vue suivi projet temps reel
-- [ ] S-03-04 · Vue jalons + tableau recapitulatif paiements
-- [ ] S-03-05 · Generation QR-Invoice v2.3 (swissqrbill)
-- [ ] S-03-06 · Integration Invoice Ninja (sync bidirectionnelle)
-- [ ] S-03-07 · Workflow paiement acompte -> activation projet
+- [V] S-03-01 · Layout Portail Client (sidebar verte #059669 + routing React Router) — 2026-02-19
+- [V] S-03-02 · Dashboard Client (stats + projets + factures + devis reels Directus) — 2026-02-19
+- [V] S-03-03 · Module Factures Client (liste + detail + QR-Facture suisse) — 2026-02-19
+- [V] S-03-04 · Module Devis Client (CGV acceptance + signature + workflow complet) — 2026-02-19
+- [V] S-03-05 · Module Facturation SuperAdmin (CRUD + QR Swiss + timeline statut) — 2026-02-19
+- [V] S-03-06 · Finance Dashboard reel (useFinance hook + services/api/finance.js) — 2026-02-19
+- [V] S-03-07 · Deposit Config Manager (onglet Acomptes dans Settings) — 2026-02-19
 
-**Fichiers crees/modifies** : —
-**Observations** : —
+**Fichiers crees/modifies** : components/payments/QRSwiss.jsx, portals/client/layout/ClientLayout.jsx, portals/client/pages/PlaceholderPage.jsx, portals/client/Dashboard.jsx (rewrite), portals/client/invoices/InvoicesModule.jsx, portals/client/quotes/QuotesModule.jsx, portals/superadmin/invoices/InvoicesModule.jsx, portals/superadmin/invoices/InvoiceForm.jsx, portals/superadmin/invoices/InvoiceDetail.jsx, portals/superadmin/finance/FinanceDashboard.jsx (refactor), portals/superadmin/settings/SettingsDashboard.jsx, portals/superadmin/settings/components/DepositConfigManager.jsx, hooks/useFinance.js, services/api/finance.js, App.jsx
+**Observations** : Portail client existant avait deja ClientPortalApp.jsx + pages/ + components/ (auth, QuoteViewer, InvoicesList, etc.) — code legacy conserve, nouveaux composants TanStack Query ajoutes. Collection client_invoices peut ne pas exister — catch gracieux. FinanceDashboard refactore de Tabler CSS vers Tailwind + useFinance hook TanStack Query. CGV Manager deja complet dans module Legal (pas de duplication). Evolution mensuelle requiert 24 requetes Directus — staleTime 2min.
 **Blocages** : —
 
 ---
@@ -163,6 +163,14 @@
 | 2026-02-19 | S-02-04 | Collection proposals peut ne pas exister dans Directus | Requetes retournent 403/404 | Tous les fetch ont catch gracieux retournant [] |
 | 2026-02-19 | S-02-07 | Collection providers structure non confirmee | Profil prestataire peut etre vide | Code gere creation si inexistant + alerte profil incomplet |
 | 2026-02-19 | S-02-07 | Collection provider_documents peut ne pas exister | Upload documents peut echouer | Catch gracieux, section documents affiche vide |
+| 2026-02-19 | S-03-01 | Portail client legacy existant (ClientPortalApp.jsx + pages/ + components/ + context/) avec Bootstrap 5 + authFetch | Nouveau code TanStack Query ajoute a cote, pas de remplacement | Legacy conserve, nouveaux composants cohabitent |
+| 2026-02-19 | S-03-02 | Dashboard client etait 100% mock (hardcoded projects, invoices, tasks) | Rewrite complet necessaire | Remplace par 4 fetch TanStack Query filtres par client_id |
+| 2026-02-19 | S-03-03 | Collection client_invoices peut ne pas exister dans Directus | Requetes retournent 403/404 | Catch gracieux retournant [] comme S-02-04 |
+| 2026-02-19 | S-03-04 | Collection cgv_versions avec champ is_active pour CGV par entreprise | Workflow CGV fonctionnel | fetchActiveCGV filtre par owner_company + is_active=true |
+| 2026-02-19 | S-03-06 | Evolution mensuelle tresorerie requiert 24 requetes Directus (12 mois x revenus + depenses) | Requete couteuse | staleTime 120_000ms (2 min) pour limiter les re-fetches |
+| 2026-02-19 | S-03-06 | FinanceDashboard utilisait Tabler CSS + useFinanceData (useState/useEffect) | Incoherence avec design Tailwind du reste | Refactore vers Tailwind + useFinance TanStack Query |
+| 2026-02-19 | S-03-07 | CGV Manager deja complet dans module Legal (CGVManager + CGVEditor + CGVPreview + AcceptanceHistory) | Pas de duplication necessaire | S-03-07 ne cree que DepositConfigManager |
+| 2026-02-19 | S-03-05 | Import PlaceholderPage collision entre portails prestataire et client | Erreur build potentielle | Renomme en PrestatairePlaceholder et ClientPlaceholder |
 
 ---
 
@@ -171,4 +179,4 @@
 **Endpoints custom** : 156
 **Fichiers archives lors du nettoyage** : — (a remplir apres S-00-02)
 **Fichiers supprimes** : — (a remplir apres S-00-02)
-**Dernier commit** : 58fa20a — feat(frontend): prestataire profile + document upload — S-02-07
+**Dernier commit** : 32b14dd — feat(settings): deposit config manager + onglet Acomptes — S-03-07

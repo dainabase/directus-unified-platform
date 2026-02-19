@@ -31,6 +31,7 @@ import ProjectsModule from './portals/superadmin/projects/ProjectsModule'
 import DeliverablesModule from './portals/superadmin/deliverables/DeliverablesModule'
 import TimeTrackingModule from './portals/superadmin/time/TimeTrackingModule'
 import SubscriptionsModule from './portals/superadmin/subscriptions/SubscriptionsModule'
+import ProjectsDashboard from './portals/superadmin/projects/ProjectsDashboard'
 import HRModule from './modules/hr/HRModule'
 import TrainingsView from './modules/hr/views/TrainingsView'
 
@@ -134,6 +135,7 @@ function App() {
 
                   {/* Projets */}
                   <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
+                  <Route path="projects/dashboard" element={<ProjectsDashboard selectedCompany={selectedCompany} />} />
                   <Route path="deliverables" element={<DeliverablesModule selectedCompany={selectedCompany} />} />
                   <Route path="time-tracking" element={<TimeTrackingModule selectedCompany={selectedCompany} />} />
                   <Route path="subscriptions" element={<SubscriptionsModule selectedCompany={selectedCompany} />} />

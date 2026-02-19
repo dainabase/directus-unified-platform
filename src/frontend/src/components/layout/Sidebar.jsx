@@ -16,6 +16,7 @@ import {
   RefreshCw,
   // Projets
   FolderKanban,
+  TrendingUp,
   ListTodo,
   Clock,
   // CRM
@@ -79,6 +80,7 @@ const navigationConfig = [
     icon: FolderKanban,
     isGroup: true,
     children: [
+      { id: 'projects-dashboard', label: 'Tableau de bord', icon: TrendingUp, path: '/superadmin/projects/dashboard' },
       { id: 'projects-list', label: 'Tous les Projets', icon: FolderKanban, path: '/superadmin/projects' },
       { id: 'deliverables', label: 'Livrables & Tâches', icon: ListTodo, path: '/superadmin/deliverables' },
       { id: 'time-tracking', label: 'Time Tracking', icon: Clock, path: '/superadmin/time-tracking' },

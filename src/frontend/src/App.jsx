@@ -18,6 +18,7 @@ import PrestataireLayout from './portals/prestataire/layout/PrestataireLayout'
 import PrestataireDashboard from './portals/prestataire/Dashboard'
 import PlaceholderPage from './portals/prestataire/pages/PlaceholderPage'
 import PrestataireQuotesModule from './portals/prestataire/quotes/QuotesModule'
+import PrestataireProfilePage from './portals/prestataire/profile/ProfilePage'
 import ProjectsModule from './modules/projects/ProjectsModule'
 import TimeTrackingView from './modules/projects/views/TimeTrackingView'
 import DeliverablesView from './modules/projects/views/DeliverablesView'
@@ -194,8 +195,8 @@ function App() {
             <Route path="missions" element={<PlaceholderPage title="Missions" description="Module missions — S-02-03" />} />
             <Route path="quotes" element={<PrestataireQuotesModule />} />
             <Route path="invoices" element={<PlaceholderPage title="Factures" description="Module factures — Phase 3" />} />
-            <Route path="documents" element={<PlaceholderPage title="Documents" description="Module documents — S-02-07" />} />
-            <Route path="profile" element={<PlaceholderPage title="Profil" description="Module profil — S-02-07" />} />
+            <Route path="documents" element={<PrestataireProfilePage />} />
+            <Route path="profile" element={<PrestataireProfilePage />} />
           </Route>
 
           {/* ── Revendeur portal placeholder ── */}

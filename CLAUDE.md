@@ -93,6 +93,21 @@ Prioritaires pour ce projet :
 **1c. Verifier les champs Directus via MCP avant de coder :**
 JAMAIS supposer un nom de champ — toujours `directus:get_collection_items(collection, limit=1)`.
 
+> ⚠️ **SI MCP Directus retourne 401** : utiliser curl avec le static token admin.
+> Ne JAMAIS bloquer sur ce problème — passer directement au fallback :
+> ```bash
+> # Lister les champs d'une collection
+> curl -s "http://localhost:8055/items/COLLECTION?limit=1" \
+>   -H "Authorization: Bearer hypervisual-admin-static-token-2026"
+>
+> # Créer un champ
+> curl -s -X POST "http://localhost:8055/fields/COLLECTION" \
+>   -H "Authorization: Bearer hypervisual-admin-static-token-2026" \
+>   -H "Content-Type: application/json" \
+>   -d '{"field":"nom_champ","type":"string"}'
+> ```
+> Le token statique est valide pour jmd@hypervisual.ch (admin).
+
 ### ETAPE FINALE — Mettre a jour ROADMAP.md (OBLIGATOIRE apres chaque story)
 1. Passer la story `[ ]` → `[V]` avec date YYYY-MM-DD
 2. Logger toute decouverte dans section DECOUVERTES

@@ -1,316 +1,346 @@
 // src/frontend/src/portals/superadmin/marketing/components/MarketingAnalytics.jsx
-import React, { useState } from 'react';
+import React, { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
-  BarChart3, TrendingUp, TrendingDown, Users, Target,
-  Eye, MousePointer, Mail, Globe, Smartphone, Monitor
-} from 'lucide-react';
+  BarChart3, Megaphone, MessageSquare, Target, TrendingUp
+} from 'lucide-react'
 import {
-  LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  BarChart, Bar, PieChart, Pie, Cell,
   ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from 'recharts';
+} from 'recharts'
+import api from '../../../../lib/axios'
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
 
-const mockAnalytics = {
-  overview: {
-    totalEmails: 45800,
-    avgOpenRate: 24.5,
-    avgClickRate: 3.8,
-    totalConversions: 892,
-    conversionRate: 1.95,
-    revenue: 156000
-  },
-  trends: [
-    { month: 'Jul', emails: 8200, opens: 1968, clicks: 311, conversions: 160 },
-    { month: 'Aou', emails: 7800, opens: 1872, clicks: 296, conversions: 148 },
-    { month: 'Sep', emails: 9100, opens: 2275, clicks: 364, conversions: 182 },
-    { month: 'Oct', emails: 8600, opens: 2150, clicks: 344, conversions: 172 },
-    { month: 'Nov', emails: 9800, opens: 2450, clicks: 392, conversions: 196 },
-    { month: 'Dec', emails: 12300, opens: 3013, clicks: 478, conversions: 234 }
-  ],
-  devices: [
-    { name: 'Mobile', value: 58 },
-    { name: 'Desktop', value: 35 },
-    { name: 'Tablet', value: 7 }
-  ],
-  emailClients: [
-    { name: 'Gmail', value: 42 },
-    { name: 'Outlook', value: 28 },
-    { name: 'Apple Mail', value: 18 },
-    { name: 'Autres', value: 12 }
-  ],
-  topPerformers: [
-    { name: 'Newsletter Nov', openRate: 32.5, clickRate: 5.2, conversions: 89 },
-    { name: 'Promo Black Friday', openRate: 28.8, clickRate: 8.1, conversions: 156 },
-    { name: 'Welcome Series', openRate: 45.2, clickRate: 12.3, conversions: 78 },
-    { name: 'Rappel Abandon', openRate: 38.6, clickRate: 6.8, conversions: 45 }
-  ],
-  hourlyEngagement: [
-    { hour: '06h', opens: 120, clicks: 18 },
-    { hour: '08h', opens: 450, clicks: 68 },
-    { hour: '10h', opens: 680, clicks: 102 },
-    { hour: '12h', opens: 520, clicks: 78 },
-    { hour: '14h', opens: 420, clicks: 63 },
-    { hour: '16h', opens: 380, clicks: 57 },
-    { hour: '18h', opens: 560, clicks: 84 },
-    { hour: '20h', opens: 320, clicks: 48 },
-    { hour: '22h', opens: 180, clicks: 27 }
-  ]
-};
+const STATUS_CFG = {
+  draft:     { label: 'Brouillon',  bg: 'bg-gray-100',   text: 'text-gray-600' },
+  scheduled: { label: 'Planifiee',  bg: 'bg-amber-100',  text: 'text-amber-700' },
+  active:    { label: 'Active',     bg: 'bg-green-100',  text: 'text-green-700' },
+  paused:    { label: 'En pause',   bg: 'bg-blue-100',   text: 'text-blue-700' },
+  completed: { label: 'Terminee',   bg: 'bg-purple-100', text: 'text-purple-700' },
+  cancelled: { label: 'Annulee',    bg: 'bg-red-100',    text: 'text-red-700' }
+}
 
-const MarketingAnalytics = ({ selectedCompany }) => {
-  const [period, setPeriod] = useState('6m');
-  const data = mockAnalytics;
+const MONTHS_FR = [
+  'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin',
+  'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec'
+]
 
-  const MetricCard = ({ icon: Icon, label, value, change, color = 'primary' }) => (
-    <div className="card">
-      <div className="card-body">
-        <div className="d-flex align-items-center mb-2">
-          <div className={`avatar bg-${color}-lt text-${color} me-3`}>
-            <Icon size={20} />
-          </div>
-          <span className="text-muted">{label}</span>
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+const AnalyticsSkeleton = () => (
+  <div className="space-y-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="glass-card p-5">
+          <div className="glass-skeleton h-4 w-28 rounded mb-3" />
+          <div className="glass-skeleton h-8 w-16 rounded" />
         </div>
-        <h3 className="mb-1">{value}</h3>
-        {change && (
-          <small className={change >= 0 ? 'text-success' : 'text-danger'}>
-            {change >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-            {' '}{Math.abs(change)}% vs periode precedente
-          </small>
-        )}
+      ))}
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="glass-card p-5">
+        <div className="glass-skeleton h-5 w-40 rounded mb-4" />
+        <div className="glass-skeleton h-[250px] w-full rounded" />
+      </div>
+      <div className="glass-card p-5">
+        <div className="glass-skeleton h-5 w-40 rounded mb-4" />
+        <div className="glass-skeleton h-[250px] w-full rounded" />
       </div>
     </div>
-  );
+    <div className="glass-card p-0 overflow-hidden">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
+          <div className="glass-skeleton h-4 w-48 rounded" />
+          <div className="glass-skeleton h-4 w-24 rounded" />
+          <div className="glass-skeleton h-4 w-20 rounded" />
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+// ── Component ────────────────────────────────────────────────────────────────
+const MarketingAnalytics = ({ selectedCompany }) => {
+  const company = selectedCompany === 'all' ? null : selectedCompany
+
+  // ── Fetch campaigns ──
+  const { data: campaigns = [], isLoading: loadingCampaigns } = useQuery({
+    queryKey: ['marketing-analytics-campaigns', company],
+    queryFn: async () => {
+      const filter = {}
+      if (company) {
+        filter.owner_company = { _eq: company }
+      }
+      const res = await api.get('/items/campaigns', {
+        params: {
+          filter,
+          fields: ['*'],
+          sort: ['-date_created'],
+          limit: -1
+        }
+      })
+      return res.data?.data || []
+    },
+    staleTime: 2 * 60 * 1000,
+    retry: 2
+  })
+
+  // ── Fetch whatsapp messages ──
+  const { data: whatsappMessages = [], isLoading: loadingWA } = useQuery({
+    queryKey: ['marketing-analytics-whatsapp', company],
+    queryFn: async () => {
+      const filter = {}
+      if (company) {
+        filter.owner_company = { _eq: company }
+      }
+      const res = await api.get('/items/whatsapp_messages', {
+        params: {
+          filter,
+          fields: ['*'],
+          sort: ['-date_created'],
+          limit: -1
+        }
+      })
+      return res.data?.data || []
+    },
+    staleTime: 2 * 60 * 1000,
+    retry: 2
+  })
+
+  const isLoading = loadingCampaigns || loadingWA
+
+  // ── KPIs ──
+  const kpis = useMemo(() => ({
+    totalCampaigns: campaigns.length,
+    totalWhatsapp: whatsappMessages.length,
+    activeCampaigns: campaigns.filter(c => c.status === 'active').length
+  }), [campaigns, whatsappMessages])
+
+  // ── Chart: campaigns by month ──
+  const monthlyData = useMemo(() => {
+    const buckets = {}
+    campaigns.forEach(c => {
+      if (!c.date_created) return
+      const d = new Date(c.date_created)
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+      const label = `${MONTHS_FR[d.getMonth()]} ${d.getFullYear()}`
+      if (!buckets[key]) buckets[key] = { key, label, count: 0 }
+      buckets[key].count += 1
+    })
+    return Object.values(buckets).sort((a, b) => a.key.localeCompare(b.key))
+  }, [campaigns])
+
+  // ── Chart: campaigns by status ──
+  const statusData = useMemo(() => {
+    const counts = {}
+    campaigns.forEach(c => {
+      const s = c.status || 'draft'
+      counts[s] = (counts[s] || 0) + 1
+    })
+    return Object.entries(counts).map(([name, value]) => ({
+      name: STATUS_CFG[name]?.label || name,
+      value
+    }))
+  }, [campaigns])
+
+  // ── Detect campaign table columns dynamically ──
+  const campaignColumns = useMemo(() => {
+    if (campaigns.length === 0) return []
+    const priority = ['name', 'title', 'status', 'channel', 'type', 'budget', 'emails_sent', 'opens', 'clicks', 'conversions', 'start_date', 'end_date', 'date_created']
+    const available = Object.keys(campaigns[0])
+    const skip = new Set(['id', 'owner_company', 'user_created', 'user_updated', 'date_updated', 'sort'])
+    const ordered = []
+    priority.forEach(k => { if (available.includes(k) && !skip.has(k)) ordered.push(k) })
+    available.forEach(k => { if (!skip.has(k) && !ordered.includes(k)) ordered.push(k) })
+    return ordered.slice(0, 10) // limit visible columns
+  }, [campaigns])
+
+  const formatCell = (value) => {
+    if (value === null || value === undefined) return '-'
+    if (typeof value === 'boolean') return value ? 'Oui' : 'Non'
+    if (typeof value === 'number') return value.toLocaleString('fr-CH')
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value)) {
+      return new Date(value).toLocaleDateString('fr-CH')
+    }
+    return String(value)
+  }
+
+  const columnLabel = (key) => {
+    const labels = {
+      name: 'Nom', title: 'Titre', status: 'Statut', channel: 'Canal',
+      type: 'Type', budget: 'Budget', emails_sent: 'Emails envoyes',
+      opens: 'Ouvertures', clicks: 'Clics', conversions: 'Conversions',
+      start_date: 'Debut', end_date: 'Fin', date_created: 'Cree le',
+      description: 'Description'
+    }
+    return labels[key] || key.replace(/_/g, ' ')
+  }
+
+  // ── Loading ──
+  if (isLoading && campaigns.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-gray-900">Analytics Marketing</h2>
+        </div>
+        <AnalyticsSkeleton />
+      </div>
+    )
+  }
 
   return (
-    <div>
-      {/* Period Selector */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h5 className="mb-0">
-          <BarChart3 size={20} className="me-2" />
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <BarChart3 className="w-6 h-6 text-blue-600" />
           Analytics Marketing
-        </h5>
-        <div className="btn-group">
-          {['1m', '3m', '6m', '1y'].map(p => (
-            <button
-              key={p}
-              className={`btn btn-sm ${period === p ? 'btn-primary' : 'btn-outline-secondary'}`}
-              onClick={() => setPeriod(p)}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Statistiques des campagnes et messages WhatsApp
+        </p>
       </div>
 
       {/* KPI Cards */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={Mail}
-            label="Emails envoyes"
-            value={data.overview.totalEmails.toLocaleString()}
-            change={12.5}
-            color="primary"
-          />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Megaphone className="w-5 h-5 text-blue-600" />
+            <span className="text-sm text-gray-500">Total campagnes</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.totalCampaigns}</div>
         </div>
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={Eye}
-            label="Taux ouverture"
-            value={`${data.overview.avgOpenRate}%`}
-            change={2.3}
-            color="info"
-          />
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <MessageSquare className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-gray-500">Messages WhatsApp</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.totalWhatsapp}</div>
         </div>
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={MousePointer}
-            label="Taux clic"
-            value={`${data.overview.avgClickRate}%`}
-            change={-0.5}
-            color="success"
-          />
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={Target}
-            label="Conversions"
-            value={data.overview.totalConversions.toLocaleString()}
-            change={18.2}
-            color="warning"
-          />
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={Users}
-            label="Taux conv."
-            value={`${data.overview.conversionRate}%`}
-            change={5.1}
-            color="danger"
-          />
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <MetricCard
-            icon={TrendingUp}
-            label="Revenus"
-            value={`CHF ${(data.overview.revenue / 1000).toFixed(0)}k`}
-            change={22.8}
-            color="purple"
-          />
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Target className="w-5 h-5 text-amber-500" />
+            <span className="text-sm text-gray-500">Campagnes actives</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.activeCampaigns}</div>
         </div>
       </div>
 
-      {/* Charts Row */}
-      <div className="row g-4 mb-4">
-        <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Evolution des performances</h5>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Bar chart: campaigns by month */}
+        <div className="glass-card p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Campagnes par mois</h3>
+          {monthlyData.length === 0 ? (
+            <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
+              Aucune donnee disponible
             </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={data.trends}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Area type="monotone" dataKey="opens" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Ouvertures" />
-                  <Area type="monotone" dataKey="clicks" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Clics" />
-                  <Area type="monotone" dataKey="conversions" stackId="3" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} name="Conversions" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="label" tick={{ fontSize: 11 }} />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Campagnes" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
-        <div className="col-lg-4">
-          <div className="card h-100">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Repartition par appareil</h5>
+
+        {/* Pie chart: campaigns by status */}
+        <div className="glass-card p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par statut</h3>
+          {statusData.length === 0 ? (
+            <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
+              Aucune campagne
             </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={data.devices}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.devices.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ) : (
+            <ResponsiveContainer width="100%" height={260}>
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={55}
+                  outerRadius={90}
+                  paddingAngle={4}
+                  dataKey="value"
+                >
+                  {statusData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </div>
+
+      {/* WhatsApp summary */}
+      <div className="glass-card p-5">
+        <div className="flex items-center gap-2 mb-2">
+          <MessageSquare className="w-5 h-5 text-green-500" />
+          <h3 className="text-sm font-semibold text-gray-900">Resume WhatsApp</h3>
+        </div>
+        <p className="text-sm text-gray-600">
+          {whatsappMessages.length === 0
+            ? 'Aucun message WhatsApp. Les messages apparaitront une fois la collection whatsapp_messages peuplee.'
+            : `${whatsappMessages.length} message(s) au total dans la collection whatsapp_messages.`}
+        </p>
+      </div>
+
+      {/* Recent campaigns table */}
+      <div className="glass-card p-0 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-semibold text-gray-900">Campagnes recentes</h3>
+        </div>
+        {campaigns.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+            <Megaphone size={48} className="mb-3 opacity-40" />
+            <p className="text-lg font-medium text-gray-500">Aucune campagne trouvee</p>
+            <p className="text-sm mt-1">
+              Ajoutez des campagnes dans Directus pour les voir ici.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50/60 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {campaignColumns.map(col => (
+                    <th key={col} className="px-5 py-3 whitespace-nowrap">{columnLabel(col)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {campaigns.slice(0, 20).map(campaign => (
+                  <tr key={campaign.id} className="hover:bg-gray-50/60 transition-colors">
+                    {campaignColumns.map(col => (
+                      <td key={col} className="px-5 py-3 whitespace-nowrap text-gray-700">
+                        {col === 'status' ? (
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                            (STATUS_CFG[campaign.status] || STATUS_CFG.draft).bg
+                          } ${(STATUS_CFG[campaign.status] || STATUS_CFG.draft).text}`}>
+                            {(STATUS_CFG[campaign.status] || STATUS_CFG.draft).label}
+                          </span>
+                        ) : (
+                          formatCell(campaign[col])
+                        )}
+                      </td>
                     ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="d-flex justify-content-around mt-3">
-                {data.devices.map((device, index) => (
-                  <div key={device.name} className="text-center">
-                    {device.name === 'Mobile' && <Smartphone size={16} className="text-muted mb-1" />}
-                    {device.name === 'Desktop' && <Monitor size={16} className="text-muted mb-1" />}
-                    {device.name === 'Tablet' && <Globe size={16} className="text-muted mb-1" />}
-                    <div className="small text-muted">{device.name}</div>
-                    <div className="fw-bold" style={{ color: COLORS[index] }}>{device.value}%</div>
-                  </div>
+                  </tr>
                 ))}
-              </div>
-            </div>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </div>
-
-      {/* Second Row */}
-      <div className="row g-4">
-        <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Engagement par heure</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={data.hourlyEngagement}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="hour" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="opens" fill="#3b82f6" name="Ouvertures" />
-                  <Bar dataKey="clicks" fill="#10b981" name="Clics" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Top Campagnes</h5>
-            </div>
-            <div className="card-body">
-              <div className="table-responsive">
-                <table className="table table-sm">
-                  <thead>
-                    <tr>
-                      <th>Campagne</th>
-                      <th className="text-center">Ouvertures</th>
-                      <th className="text-center">Clics</th>
-                      <th className="text-center">Conv.</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.topPerformers.map((campaign, index) => (
-                      <tr key={index}>
-                        <td className="fw-medium">{campaign.name}</td>
-                        <td className="text-center">
-                          <span className="badge bg-primary-lt text-primary">{campaign.openRate}%</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="badge bg-success-lt text-success">{campaign.clickRate}%</span>
-                        </td>
-                        <td className="text-center">
-                          <span className="badge bg-warning-lt text-warning">{campaign.conversions}</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Email Clients */}
-      <div className="card mt-4">
-        <div className="card-header">
-          <h5 className="card-title mb-0">Clients email utilises</h5>
-        </div>
-        <div className="card-body">
-          <div className="row align-items-center">
-            {data.emailClients.map((client, index) => (
-              <div className="col-md-3" key={client.name}>
-                <div className="d-flex align-items-center mb-2">
-                  <span className="fw-medium">{client.name}</span>
-                  <span className="ms-auto">{client.value}%</span>
-                </div>
-                <div className="progress" style={{ height: 8 }}>
-                  <div
-                    className="progress-bar"
-                    style={{ width: `${client.value}%`, backgroundColor: COLORS[index] }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MarketingAnalytics;
+export default MarketingAnalytics

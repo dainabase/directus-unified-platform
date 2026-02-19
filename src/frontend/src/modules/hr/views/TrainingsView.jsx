@@ -1,551 +1,382 @@
-// src/frontend/src/modules/hr/views/TrainingsView.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import api from '../../../lib/axios'
 import {
-  GraduationCap, Plus, Search, Filter, Calendar, Users, Clock,
-  Star, Award, CheckCircle, Play, BookOpen, Video, FileText,
-  TrendingUp, Target, Edit2, Trash2, Eye, Download, BarChart3
-} from 'lucide-react';
+  GraduationCap, Search, Calendar, Clock,
+  BookOpen, TrendingUp, BarChart3
+} from 'lucide-react'
 import {
-  BarChart, Bar, PieChart, Pie, Cell, LineChart, Line,
+  BarChart, Bar, PieChart, Pie, Cell,
   ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from 'recharts';
-import toast from 'react-hot-toast';
+} from 'recharts'
+import toast from 'react-hot-toast'
+import { GlassCard, Badge, Table } from '../../../components/ui'
 
-const mockCourses = [
-  {
-    id: 1,
-    title: 'Management & Leadership',
-    category: 'management',
-    type: 'video',
-    duration: 8,
-    level: 'intermediate',
-    enrolled: 24,
-    completed: 18,
-    rating: 4.7,
-    mandatory: false,
-    instructor: 'Dr. Sophie Martin'
-  },
-  {
-    id: 2,
-    title: 'Securite Informatique - Fondamentaux',
-    category: 'security',
-    type: 'interactive',
-    duration: 4,
-    level: 'beginner',
-    enrolled: 45,
-    completed: 42,
-    rating: 4.5,
-    mandatory: true,
-    instructor: 'Jean Dupont'
-  },
-  {
-    id: 3,
-    title: 'Communication Client',
-    category: 'soft-skills',
-    type: 'workshop',
-    duration: 6,
-    level: 'beginner',
-    enrolled: 15,
-    completed: 8,
-    rating: 4.8,
-    mandatory: false,
-    instructor: 'Marie Blanc'
-  },
-  {
-    id: 4,
-    title: 'RGPD et Protection des Donnees',
-    category: 'compliance',
-    type: 'video',
-    duration: 2,
-    level: 'beginner',
-    enrolled: 52,
-    completed: 50,
-    rating: 4.2,
-    mandatory: true,
-    instructor: 'Thomas Weber'
-  },
-  {
-    id: 5,
-    title: 'Developpement Agile & Scrum',
-    category: 'technical',
-    type: 'interactive',
-    duration: 12,
-    level: 'advanced',
-    enrolled: 18,
-    completed: 12,
-    rating: 4.9,
-    mandatory: false,
-    instructor: 'Lucas Meyer'
-  },
-  {
-    id: 6,
-    title: 'Excel Avance',
-    category: 'technical',
-    type: 'video',
-    duration: 5,
-    level: 'intermediate',
-    enrolled: 28,
-    completed: 20,
-    rating: 4.4,
-    mandatory: false,
-    instructor: 'Anna Schmidt'
-  }
-];
+const MONTH_LABELS = [
+  'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun',
+  'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'
+]
 
-const mockEmployeeProgress = [
-  { name: 'Marie Martin', courses: 5, completed: 4, hours: 22 },
-  { name: 'Jean Dupont', courses: 4, completed: 4, hours: 18 },
-  { name: 'Sophie Blanc', courses: 6, completed: 3, hours: 15 },
-  { name: 'Thomas Weber', courses: 3, completed: 3, hours: 12 },
-  { name: 'Lucas Meyer', courses: 5, completed: 2, hours: 10 }
-];
-
-const mockMonthlyStats = [
-  { month: 'Jul', completions: 12, enrollments: 18 },
-  { month: 'Aou', completions: 8, enrollments: 15 },
-  { month: 'Sep', completions: 15, enrollments: 22 },
-  { month: 'Oct', completions: 20, enrollments: 28 },
-  { month: 'Nov', completions: 18, enrollments: 25 },
-  { month: 'Dec', completions: 22, enrollments: 30 }
-];
-
-const mockCategoryDistribution = [
-  { name: 'Technique', value: 35, color: '#3b82f6' },
-  { name: 'Compliance', value: 25, color: '#10b981' },
-  { name: 'Soft Skills', value: 20, color: '#f59e0b' },
-  { name: 'Management', value: 12, color: '#8b5cf6' },
-  { name: 'Securite', value: 8, color: '#ef4444' }
-];
-
-const CATEGORIES = {
-  technical: { label: 'Technique', color: 'primary' },
-  compliance: { label: 'Compliance', color: 'success' },
-  'soft-skills': { label: 'Soft Skills', color: 'warning' },
-  management: { label: 'Management', color: 'purple' },
-  security: { label: 'Securite', color: 'danger' }
-};
-
-const LEVELS = {
-  beginner: { label: 'Debutant', color: 'success' },
-  intermediate: { label: 'Intermediaire', color: 'warning' },
-  advanced: { label: 'Avance', color: 'danger' }
-};
-
-const TYPE_ICONS = {
-  video: Video,
-  interactive: Play,
-  workshop: Users,
-  document: FileText
-};
+const CHART_COLORS = [
+  '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6',
+  '#ef4444', '#06b6d4', '#ec4899', '#f97316',
+  '#14b8a6', '#6366f1', '#84cc16', '#a855f7'
+]
 
 const TrainingsView = ({ selectedCompany }) => {
-  const [courses, setCourses] = useState(mockCourses);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
-  const [filterLevel, setFilterLevel] = useState('all');
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [showNewModal, setShowNewModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('courses');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [activeTab, setActiveTab] = useState('catalogue')
 
-  const filteredCourses = courses.filter(c => {
-    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || c.category === filterCategory;
-    const matchesLevel = filterLevel === 'all' || c.level === filterLevel;
-    return matchesSearch && matchesCategory && matchesLevel;
-  });
+  // Fetch trainings from Directus
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['trainings', selectedCompany],
+    queryFn: async () => {
+      const params = {
+        fields: '*',
+        sort: '-date_created',
+        limit: -1
+      }
 
-  const getCategoryBadge = (category) => {
-    const config = CATEGORIES[category];
-    return (
-      <span className={`badge bg-${config?.color || 'secondary'}-lt text-${config?.color || 'secondary'}`}>
-        {config?.label || category}
-      </span>
-    );
-  };
+      if (selectedCompany && selectedCompany !== 'all') {
+        params['filter[owner_company][_eq]'] = selectedCompany
+      }
 
-  const getLevelBadge = (level) => {
-    const config = LEVELS[level];
-    return (
-      <span className={`badge bg-${config?.color || 'secondary'}`}>
-        {config?.label || level}
-      </span>
-    );
-  };
-
-  const getTypeIcon = (type) => {
-    const Icon = TYPE_ICONS[type] || BookOpen;
-    return <Icon size={16} />;
-  };
-
-  const renderStars = (rating) => {
-    return (
-      <div className="d-flex align-items-center">
-        {[1, 2, 3, 4, 5].map(star => (
-          <Star
-            key={star}
-            size={12}
-            className={star <= Math.round(rating) ? 'text-warning' : 'text-muted'}
-            fill={star <= Math.round(rating) ? 'currentColor' : 'none'}
-          />
-        ))}
-        <small className="ms-1 text-muted">{rating}</small>
-      </div>
-    );
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm('Supprimer cette formation?')) {
-      setCourses(courses.filter(c => c.id !== id));
-      toast.success('Formation supprimee');
+      const response = await api.get('/items/trainings', { params })
+      return response.data?.data || []
+    },
+    staleTime: 30000,
+    refetchOnWindowFocus: true,
+    onError: () => {
+      toast.error('Erreur lors du chargement des formations')
     }
-  };
+  })
 
-  // Stats
-  const stats = {
-    totalCourses: courses.length,
-    totalEnrollments: courses.reduce((sum, c) => sum + c.enrolled, 0),
-    totalCompletions: courses.reduce((sum, c) => sum + c.completed, 0),
-    avgRating: (courses.reduce((sum, c) => sum + c.rating, 0) / courses.length).toFixed(1),
-    totalHours: courses.reduce((sum, c) => sum + c.duration, 0),
-    mandatoryCourses: courses.filter(c => c.mandatory).length
-  };
+  const trainings = data || []
 
-  const completionRate = Math.round((stats.totalCompletions / stats.totalEnrollments) * 100);
+  // Detect available fields dynamically from data
+  const dynamicFields = useMemo(() => {
+    if (trainings.length === 0) return []
+    const knownFields = new Set(['id', 'date_created', 'owner_company', 'date_updated', 'user_created', 'user_updated', 'sort'])
+    const allKeys = new Set()
+    trainings.forEach(t => {
+      Object.keys(t).forEach(k => {
+        if (!knownFields.has(k) && t[k] !== null && t[k] !== undefined) {
+          allKeys.add(k)
+        }
+      })
+    })
+    return Array.from(allKeys)
+  }, [trainings])
+
+  // Search filter across all fields
+  const filteredTrainings = useMemo(() => {
+    if (!searchTerm.trim()) return trainings
+    const term = searchTerm.toLowerCase()
+    return trainings.filter(t =>
+      Object.values(t).some(val =>
+        val !== null && val !== undefined && String(val).toLowerCase().includes(term)
+      )
+    )
+  }, [trainings, searchTerm])
+
+  // Monthly distribution from date_created for BarChart
+  const monthlyData = useMemo(() => {
+    const counts = {}
+    trainings.forEach(t => {
+      if (!t.date_created) return
+      const d = new Date(t.date_created)
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`
+      const label = `${MONTH_LABELS[d.getMonth()]} ${d.getFullYear()}`
+      if (!counts[key]) counts[key] = { key, month: label, count: 0 }
+      counts[key].count += 1
+    })
+    return Object.values(counts).sort((a, b) => a.key.localeCompare(b.key)).slice(-12)
+  }, [trainings])
+
+  // Category distribution (if category/type field exists)
+  const categoryData = useMemo(() => {
+    const categoryField = dynamicFields.find(f =>
+      ['category', 'type', 'categorie', 'training_type'].includes(f.toLowerCase())
+    )
+    if (!categoryField) return []
+    const counts = {}
+    trainings.forEach(t => {
+      const val = t[categoryField] || 'Non classe'
+      counts[val] = (counts[val] || 0) + 1
+    })
+    return Object.entries(counts).map(([name, value], i) => ({
+      name,
+      value,
+      color: CHART_COLORS[i % CHART_COLORS.length]
+    }))
+  }, [trainings, dynamicFields])
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '-'
+    return new Date(dateString).toLocaleDateString('fr-CH', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })
+  }
+
+  const formatFieldLabel = (field) => {
+    return field
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase())
+  }
+
+  // Skeleton loader
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <GlassCard key={i} className="p-4">
+              <div className="animate-pulse space-y-3">
+                <div className="h-8 w-8 bg-gray-200 rounded" />
+                <div className="h-6 w-16 bg-gray-200 rounded" />
+                <div className="h-4 w-24 bg-gray-200 rounded" />
+              </div>
+            </GlassCard>
+          ))}
+        </div>
+        <GlassCard>
+          <div className="animate-pulse space-y-4">
+            <div className="h-6 w-48 bg-gray-200 rounded" />
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="h-12 w-full bg-gray-50 rounded" />
+            ))}
+          </div>
+        </GlassCard>
+      </div>
+    )
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <GlassCard className="p-8 text-center">
+        <GraduationCap size={48} className="mx-auto mb-4 text-gray-300" />
+        <p className="text-red-600 font-medium mb-2">Erreur de chargement</p>
+        <p className="text-sm text-gray-500">{error?.message || 'Impossible de charger les formations.'}</p>
+      </GlassCard>
+    )
+  }
 
   return (
-    <div className="container-xl">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="page-header d-print-none mb-4">
-        <div className="row align-items-center">
-          <div className="col-auto">
-            <h2 className="page-title">
-              <GraduationCap className="me-2" size={24} />
-              Formations
-            </h2>
-            <div className="text-muted mt-1">
-              Catalogue et suivi des formations
-            </div>
-          </div>
-          <div className="col-auto ms-auto d-flex gap-2">
-            <button className="btn btn-outline-secondary">
-              <Download size={16} className="me-1" />
-              Rapport
-            </button>
-            <button className="btn btn-primary" onClick={() => setShowNewModal(true)}>
-              <Plus size={16} className="me-1" />
-              Nouvelle formation
-            </button>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <GraduationCap size={24} />
+            Formations
+          </h1>
+          <p className="text-gray-600 mt-1">Catalogue et suivi des formations</p>
         </div>
       </div>
 
-      {/* KPIs */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <BookOpen size={20} className="text-primary me-2" />
-                <span className="text-muted small">Formations</span>
-              </div>
-              <h3 className="mb-0">{stats.totalCourses}</h3>
-            </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <GlassCard className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <BookOpen className="w-8 h-8 text-blue-600" />
           </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Users size={20} className="text-info me-2" />
-                <span className="text-muted small">Inscriptions</span>
-              </div>
-              <h3 className="mb-0">{stats.totalEnrollments}</h3>
-            </div>
+          <p className="text-2xl font-bold text-gray-900">{trainings.length}</p>
+          <p className="text-sm text-gray-600">Total formations</p>
+        </GlassCard>
+
+        <GlassCard className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <TrendingUp className="w-8 h-8 text-green-600" />
           </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <CheckCircle size={20} className="text-success me-2" />
-                <span className="text-muted small">Completees</span>
-              </div>
-              <h3 className="mb-0">{stats.totalCompletions}</h3>
-              <small className="text-muted">{completionRate}% taux</small>
-            </div>
+          <p className="text-2xl font-bold text-gray-900">{dynamicFields.length}</p>
+          <p className="text-sm text-gray-600">Champs disponibles</p>
+        </GlassCard>
+
+        <GlassCard className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <Calendar className="w-8 h-8 text-purple-600" />
           </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Clock size={20} className="text-warning me-2" />
-                <span className="text-muted small">Heures totales</span>
-              </div>
-              <h3 className="mb-0">{stats.totalHours}h</h3>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Star size={20} className="text-warning me-2" />
-                <span className="text-muted small">Note moyenne</span>
-              </div>
-              <h3 className="mb-0">{stats.avgRating}/5</h3>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Award size={20} className="text-danger me-2" />
-                <span className="text-muted small">Obligatoires</span>
-              </div>
-              <h3 className="mb-0">{stats.mandatoryCourses}</h3>
-            </div>
-          </div>
-        </div>
+          <p className="text-2xl font-bold text-gray-900">{monthlyData.length}</p>
+          <p className="text-sm text-gray-600">Mois avec formations</p>
+        </GlassCard>
       </div>
 
       {/* Tabs */}
-      <ul className="nav nav-tabs mb-4">
-        <li className="nav-item">
-          <a
-            className={`nav-link ${activeTab === 'courses' ? 'active' : ''}`}
-            href="#"
-            onClick={(e) => { e.preventDefault(); setActiveTab('courses'); }}
-          >
-            <BookOpen size={16} className="me-2" />
-            Catalogue
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={`nav-link ${activeTab === 'progress' ? 'active' : ''}`}
-            href="#"
-            onClick={(e) => { e.preventDefault(); setActiveTab('progress'); }}
-          >
-            <TrendingUp size={16} className="me-2" />
-            Progression
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={`nav-link ${activeTab === 'analytics' ? 'active' : ''}`}
-            href="#"
-            onClick={(e) => { e.preventDefault(); setActiveTab('analytics'); }}
-          >
-            <BarChart3 size={16} className="me-2" />
-            Analytics
-          </a>
-        </li>
-      </ul>
+      <GlassCard className="p-1">
+        <div className="flex">
+          {[
+            { id: 'catalogue', label: 'Catalogue', icon: <BookOpen size={18} /> },
+            { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={18} /> }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`
+                flex-1 flex items-center justify-center gap-2
+                px-4 py-3 rounded-md transition-all duration-200
+                ${activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'hover:bg-gray-100 text-gray-700'}
+              `}
+            >
+              {tab.icon}
+              <span className="font-medium">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </GlassCard>
 
-      {activeTab === 'courses' && (
+      {/* Catalogue Tab */}
+      {activeTab === 'catalogue' && (
         <>
-          {/* Search & Filters */}
-          <div className="d-flex gap-2 mb-4">
-            <div className="input-group" style={{ width: 300 }}>
-              <span className="input-group-text">
-                <Search size={16} />
-              </span>
+          {/* Search */}
+          <GlassCard className="p-4">
+            <div className="relative">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                className="form-control"
-                placeholder="Rechercher..."
+                placeholder="Rechercher dans les formations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 bg-white/70 backdrop-blur-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <select
-              className="form-select"
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              style={{ width: 'auto' }}
-            >
-              <option value="all">Toutes categories</option>
-              {Object.entries(CATEGORIES).map(([key, val]) => (
-                <option key={key} value={key}>{val.label}</option>
-              ))}
-            </select>
-            <select
-              className="form-select"
-              value={filterLevel}
-              onChange={(e) => setFilterLevel(e.target.value)}
-              style={{ width: 'auto' }}
-            >
-              <option value="all">Tous niveaux</option>
-              {Object.entries(LEVELS).map(([key, val]) => (
-                <option key={key} value={key}>{val.label}</option>
-              ))}
-            </select>
-          </div>
+          </GlassCard>
 
-          {/* Courses Grid */}
-          <div className="row g-4">
-            {filteredCourses.map(course => (
-              <div key={course.id} className="col-md-6 col-lg-4">
-                <div className="card h-100">
-                  <div className="card-header">
-                    <div className="d-flex justify-content-between align-items-start">
-                      <div>
-                        <h5 className="card-title mb-1">{course.title}</h5>
-                        <small className="text-muted">{course.instructor}</small>
-                      </div>
-                      <div className="d-flex align-items-center gap-1">
-                        {getTypeIcon(course.type)}
-                        {course.mandatory && (
-                          <span className="badge bg-danger-lt text-danger ms-1">Obligatoire</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <div className="d-flex flex-wrap gap-2 mb-3">
-                      {getCategoryBadge(course.category)}
-                      {getLevelBadge(course.level)}
-                    </div>
-
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <div className="d-flex align-items-center text-muted small">
-                        <Clock size={14} className="me-1" />
-                        {course.duration}h
-                      </div>
-                      {renderStars(course.rating)}
-                    </div>
-
-                    <div className="mb-3">
-                      <div className="d-flex justify-content-between mb-1">
-                        <small>Completion</small>
-                        <small className="fw-medium">
-                          {course.completed}/{course.enrolled}
-                        </small>
-                      </div>
-                      <div className="progress" style={{ height: 6 }}>
-                        <div
-                          className="progress-bar bg-success"
-                          style={{ width: `${(course.completed / course.enrolled) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="card-footer">
-                    <div className="d-flex justify-content-between">
-                      <button
-                        className="btn btn-sm btn-ghost-primary"
-                        onClick={() => setSelectedCourse(course)}
-                      >
-                        <Eye size={14} className="me-1" />
-                        Details
-                      </button>
-                      <div>
-                        <button className="btn btn-sm btn-ghost-primary">
-                          <Edit2 size={14} />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-ghost-danger"
-                          onClick={() => handleDelete(course.id)}
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {filteredCourses.length === 0 && (
-            <div className="card">
-              <div className="card-body text-center py-5 text-muted">
-                <GraduationCap size={48} className="mb-3 opacity-50" />
-                <p>Aucune formation trouvee</p>
-              </div>
+          {/* Trainings Table */}
+          <GlassCard className="p-0">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Liste des formations ({filteredTrainings.length})
+              </h2>
             </div>
-          )}
+
+            {filteredTrainings.length === 0 ? (
+              <div className="py-16 text-center">
+                <GraduationCap size={48} className="mx-auto mb-4 text-gray-300" />
+                <p className="text-gray-500 font-medium">Aucune formation trouvee</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  {searchTerm
+                    ? 'Essayez de modifier votre recherche.'
+                    : 'Aucune formation enregistree dans Directus.'}
+                </p>
+              </div>
+            ) : (
+              <Table>
+                <Table.Head>
+                  <Table.Row>
+                    <Table.Header>ID</Table.Header>
+                    {dynamicFields.map(field => (
+                      <Table.Header key={field}>{formatFieldLabel(field)}</Table.Header>
+                    ))}
+                    <Table.Header>Date creation</Table.Header>
+                  </Table.Row>
+                </Table.Head>
+                <Table.Body>
+                  {filteredTrainings.map((training) => (
+                    <Table.Row key={training.id}>
+                      <Table.Cell>
+                        <span className="text-xs font-mono text-gray-500">
+                          {typeof training.id === 'string' ? training.id.slice(0, 8) : training.id}
+                        </span>
+                      </Table.Cell>
+                      {dynamicFields.map(field => (
+                        <Table.Cell key={field}>
+                          {training[field] !== null && training[field] !== undefined ? (
+                            typeof training[field] === 'boolean' ? (
+                              <Badge variant={training[field] ? 'success' : 'default'} size="sm">
+                                {training[field] ? 'Oui' : 'Non'}
+                              </Badge>
+                            ) : typeof training[field] === 'number' ? (
+                              <span className="text-sm font-medium text-gray-900">
+                                {training[field]}
+                              </span>
+                            ) : (
+                              <span className="text-sm text-gray-700">
+                                {String(training[field]).length > 60
+                                  ? `${String(training[field]).slice(0, 60)}...`
+                                  : String(training[field])}
+                              </span>
+                            )
+                          ) : (
+                            <span className="text-gray-400 text-sm">-</span>
+                          )}
+                        </Table.Cell>
+                      ))}
+                      <Table.Cell>
+                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                          <Clock size={14} className="text-gray-400" />
+                          {formatDate(training.date_created)}
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            )}
+
+            {filteredTrainings.length > 0 && (
+              <div className="px-6 py-3 border-t border-gray-100 text-sm text-gray-500">
+                {filteredTrainings.length} formation{filteredTrainings.length > 1 ? 's' : ''}
+                {searchTerm && ` sur ${trainings.length} au total`}
+              </div>
+            )}
+          </GlassCard>
         </>
       )}
 
-      {activeTab === 'progress' && (
-        <div className="card">
-          <div className="card-header">
-            <h5 className="card-title mb-0">Progression par employe</h5>
-          </div>
-          <div className="table-responsive">
-            <table className="table table-hover card-table">
-              <thead>
-                <tr>
-                  <th>Employe</th>
-                  <th>Formations inscrites</th>
-                  <th>Completees</th>
-                  <th>Progression</th>
-                  <th>Heures</th>
-                </tr>
-              </thead>
-              <tbody>
-                {mockEmployeeProgress.map((emp, index) => (
-                  <tr key={index}>
-                    <td className="fw-medium">{emp.name}</td>
-                    <td>{emp.courses}</td>
-                    <td>{emp.completed}</td>
-                    <td style={{ width: 150 }}>
-                      <div className="d-flex align-items-center">
-                        <div className="progress flex-grow-1" style={{ height: 6 }}>
-                          <div
-                            className="progress-bar bg-success"
-                            style={{ width: `${(emp.completed / emp.courses) * 100}%` }}
-                          />
-                        </div>
-                        <small className="ms-2 text-muted">
-                          {Math.round((emp.completed / emp.courses) * 100)}%
-                        </small>
-                      </div>
-                    </td>
-                    <td>{emp.hours}h</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
+      {/* Analytics Tab */}
       {activeTab === 'analytics' && (
-        <div className="row g-4">
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-header">
-                <h5 className="card-title mb-0">Inscriptions vs Completions (6 mois)</h5>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Trainings by month BarChart */}
+          <GlassCard>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Formations par mois
+            </h3>
+            {monthlyData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={monthlyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255,255,255,0.95)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <Legend />
+                  <Bar
+                    dataKey="count"
+                    name="Formations"
+                    fill="#3b82f6"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-64 flex items-center justify-center text-gray-400">
+                <p>Pas de donnees temporelles disponibles</p>
               </div>
-              <div className="card-body">
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={mockMonthlyStats}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="enrollments" fill="#3b82f6" name="Inscriptions" />
-                    <Bar dataKey="completions" fill="#10b981" name="Completions" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4">
-            <div className="card h-100">
-              <div className="card-header">
-                <h5 className="card-title mb-0">Par categorie</h5>
-              </div>
-              <div className="card-body">
+            )}
+          </GlassCard>
+
+          {/* Category PieChart (if category data detected) */}
+          <GlassCard>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Repartition par categorie
+            </h3>
+            {categoryData.length > 0 ? (
+              <>
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie
-                      data={mockCategoryDistribution}
+                      data={categoryData}
                       cx="50%"
                       cy="50%"
                       innerRadius={50}
@@ -553,184 +384,35 @@ const TrainingsView = ({ selectedCompany }) => {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {mockCategoryDistribution.map((entry, index) => (
+                      {categoryData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
-                <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
-                  {mockCategoryDistribution.map(item => (
-                    <div key={item.name} className="d-flex align-items-center">
+                <div className="flex flex-wrap justify-center gap-3 mt-3">
+                  {categoryData.map(item => (
+                    <div key={item.name} className="flex items-center gap-1.5">
                       <div
-                        className="rounded-circle me-1"
-                        style={{ width: 8, height: 8, backgroundColor: item.color }}
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: item.color }}
                       />
-                      <small>{item.name}</small>
+                      <span className="text-sm text-gray-600">{item.name} ({item.value})</span>
                     </div>
                   ))}
                 </div>
+              </>
+            ) : (
+              <div className="h-64 flex items-center justify-center text-gray-400">
+                <p>Aucun champ de categorie detecte dans les donnees</p>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Course Detail Modal */}
-      {selectedCourse && (
-        <div className="modal modal-blur fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <div>
-                  <h5 className="modal-title">{selectedCourse.title}</h5>
-                  <small className="text-muted">Par {selectedCourse.instructor}</small>
-                </div>
-                <button className="btn-close" onClick={() => setSelectedCourse(null)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="row g-4">
-                  <div className="col-md-6">
-                    <div className="d-flex flex-wrap gap-2 mb-3">
-                      {getCategoryBadge(selectedCourse.category)}
-                      {getLevelBadge(selectedCourse.level)}
-                      {selectedCourse.mandatory && (
-                        <span className="badge bg-danger">Obligatoire</span>
-                      )}
-                    </div>
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Duree</small>
-                      <span className="fw-medium">{selectedCourse.duration} heures</span>
-                    </div>
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Note</small>
-                      {renderStars(selectedCourse.rating)}
-                    </div>
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Type</small>
-                      <span className="text-capitalize">{selectedCourse.type}</span>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Inscrits</small>
-                      <span className="fw-medium">{selectedCourse.enrolled} employes</span>
-                    </div>
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Completions</small>
-                      <span className="fw-medium">{selectedCourse.completed} employes</span>
-                    </div>
-                    <div className="mb-3">
-                      <small className="text-muted d-block">Taux de completion</small>
-                      <div className="d-flex align-items-center">
-                        <div className="progress flex-grow-1" style={{ height: 8 }}>
-                          <div
-                            className="progress-bar bg-success"
-                            style={{ width: `${(selectedCourse.completed / selectedCourse.enrolled) * 100}%` }}
-                          />
-                        </div>
-                        <span className="ms-2 fw-medium">
-                          {Math.round((selectedCourse.completed / selectedCourse.enrolled) * 100)}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setSelectedCourse(null)}>
-                  Fermer
-                </button>
-                <button className="btn btn-outline-primary">
-                  <Users size={14} className="me-1" />
-                  Voir inscrits
-                </button>
-                <button className="btn btn-primary">
-                  <Play size={14} className="me-1" />
-                  Lancer
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* New Course Modal */}
-      {showNewModal && (
-        <div className="modal modal-blur fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Nouvelle formation</h5>
-                <button className="btn-close" onClick={() => setShowNewModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">Titre</label>
-                  <input type="text" className="form-control" placeholder="Titre de la formation" />
-                </div>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <label className="form-label">Categorie</label>
-                    <select className="form-select">
-                      {Object.entries(CATEGORIES).map(([key, val]) => (
-                        <option key={key} value={key}>{val.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Niveau</label>
-                    <select className="form-select">
-                      {Object.entries(LEVELS).map(([key, val]) => (
-                        <option key={key} value={key}>{val.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="row g-3 mt-1">
-                  <div className="col-md-6">
-                    <label className="form-label">Type</label>
-                    <select className="form-select">
-                      <option value="video">Video</option>
-                      <option value="interactive">Interactif</option>
-                      <option value="workshop">Atelier</option>
-                      <option value="document">Document</option>
-                    </select>
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">Duree (heures)</label>
-                    <input type="number" className="form-control" placeholder="ex: 4" />
-                  </div>
-                </div>
-                <div className="mb-3 mt-3">
-                  <label className="form-label">Instructeur</label>
-                  <input type="text" className="form-control" placeholder="Nom de l'instructeur" />
-                </div>
-                <div className="mb-3">
-                  <label className="form-check">
-                    <input type="checkbox" className="form-check-input" />
-                    <span className="form-check-label">Formation obligatoire</span>
-                  </label>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowNewModal(false)}>
-                  Annuler
-                </button>
-                <button className="btn btn-primary" onClick={() => {
-                  toast.success('Formation creee');
-                  setShowNewModal(false);
-                }}>
-                  Creer
-                </button>
-              </div>
-            </div>
-          </div>
+            )}
+          </GlassCard>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default TrainingsView;
+export default TrainingsView

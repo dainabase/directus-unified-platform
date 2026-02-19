@@ -1,231 +1,384 @@
 // src/frontend/src/portals/superadmin/marketing/components/ContentCalendar.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
-  Calendar, ChevronLeft, ChevronRight, Plus, Edit2,
-  Mail, FileText, Image, Video, MessageSquare
-} from 'lucide-react';
+  Calendar, ChevronLeft, ChevronRight, FileText,
+  Eye, Clock, Archive, Loader2
+} from 'lucide-react'
+import api from '../../../../lib/axios'
 
-const CONTENT_TYPES = {
-  email: { icon: Mail, color: 'primary', label: 'Email' },
-  blog: { icon: FileText, color: 'success', label: 'Article' },
-  social: { icon: Image, color: 'info', label: 'Social' },
-  video: { icon: Video, color: 'danger', label: 'Video' },
-  newsletter: { icon: MessageSquare, color: 'warning', label: 'Newsletter' }
-};
+// ── Status config ────────────────────────────────────────────────────────────
+const STATUS_CFG = {
+  draft:     { label: 'Brouillon',  bg: 'bg-gray-100',   text: 'text-gray-600' },
+  scheduled: { label: 'Planifie',   bg: 'bg-blue-100',   text: 'text-blue-700' },
+  published: { label: 'Publie',     bg: 'bg-green-100',  text: 'text-green-700' },
+  archived:  { label: 'Archive',    bg: 'bg-orange-100',  text: 'text-orange-700' }
+}
 
-// Mock content items
-const mockContent = [
-  { id: 1, title: 'Newsletter Decembre', type: 'newsletter', date: '2024-12-15', status: 'scheduled' },
-  { id: 2, title: 'Article SEO: Guide 2025', type: 'blog', date: '2024-12-16', status: 'draft' },
-  { id: 3, title: 'Promo LinkedIn', type: 'social', date: '2024-12-17', status: 'published' },
-  { id: 4, title: 'Email Nouveaux Clients', type: 'email', date: '2024-12-18', status: 'scheduled' },
-  { id: 5, title: 'Video Temoignage Client', type: 'video', date: '2024-12-20', status: 'draft' },
-  { id: 6, title: 'Post Instagram', type: 'social', date: '2024-12-14', status: 'published' },
-  { id: 7, title: 'Campagne Voeux', type: 'email', date: '2024-12-24', status: 'scheduled' }
-];
-
-const ContentCalendar = ({ selectedCompany }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDay = firstDay.getDay();
-    return { daysInMonth, startingDay };
-  };
-
-  const { daysInMonth, startingDay } = getDaysInMonth(currentDate);
-
-  const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  };
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  };
-
-  const getContentForDate = (day) => {
-    const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return mockContent.filter(c => c.date === dateStr);
-  };
-
-  const formatMonth = (date) => {
-    return date.toLocaleDateString('fr-CH', { month: 'long', year: 'numeric' });
-  };
-
-  const isToday = (day) => {
-    const today = new Date();
-    return day === today.getDate() &&
-           currentDate.getMonth() === today.getMonth() &&
-           currentDate.getFullYear() === today.getFullYear();
-  };
-
-  const renderCalendar = () => {
-    const days = [];
-    const totalCells = Math.ceil((daysInMonth + startingDay) / 7) * 7;
-
-    for (let i = 0; i < totalCells; i++) {
-      const day = i - startingDay + 1;
-      const isValidDay = day > 0 && day <= daysInMonth;
-      const content = isValidDay ? getContentForDate(day) : [];
-
-      days.push(
-        <div
-          key={i}
-          className={`calendar-cell border p-2 ${
-            isValidDay ? 'cursor-pointer hover-bg-light' : 'bg-light'
-          } ${isToday(day) ? 'bg-primary-lt' : ''}`}
-          style={{ minHeight: '100px', cursor: isValidDay ? 'pointer' : 'default' }}
-          onClick={() => isValidDay && setSelectedDate(day)}
-        >
-          {isValidDay && (
-            <>
-              <div className={`fw-bold mb-1 ${isToday(day) ? 'text-primary' : ''}`}>
-                {day}
-              </div>
-              <div className="d-flex flex-column gap-1">
-                {content.slice(0, 3).map(item => {
-                  const typeInfo = CONTENT_TYPES[item.type];
-                  const Icon = typeInfo.icon;
-                  return (
-                    <div
-                      key={item.id}
-                      className={`badge bg-${typeInfo.color}-lt text-${typeInfo.color} text-truncate w-100`}
-                      style={{ fontSize: '10px' }}
-                      title={item.title}
-                    >
-                      <Icon size={10} className="me-1" />
-                      {item.title}
-                    </div>
-                  );
-                })}
-                {content.length > 3 && (
-                  <small className="text-muted">+{content.length - 3} de plus</small>
-                )}
-              </div>
-            </>
-          )}
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+const ContentCalendarSkeleton = () => (
+  <div className="space-y-6">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="glass-card p-5">
+          <div className="glass-skeleton h-4 w-24 rounded mb-3" />
+          <div className="glass-skeleton h-8 w-16 rounded" />
         </div>
-      );
-    }
-    return days;
-  };
+      ))}
+    </div>
+    <div className="glass-card p-6">
+      <div className="glass-skeleton h-6 w-48 rounded mb-4" />
+      <div className="grid grid-cols-7 gap-2">
+        {[...Array(35)].map((_, i) => (
+          <div key={i} className="glass-skeleton h-20 rounded" />
+        ))}
+      </div>
+    </div>
+    <div className="glass-card p-0 overflow-hidden">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
+          <div className="glass-skeleton h-4 w-48 rounded" />
+          <div className="glass-skeleton h-4 w-24 rounded" />
+          <div className="glass-skeleton h-4 w-20 rounded" />
+          <div className="glass-skeleton h-4 w-28 rounded" />
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const DAYS_FR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+const MONTHS_FR = [
+  'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin',
+  'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'
+]
+
+const isSameDay = (d1, d2) =>
+  d1.getFullYear() === d2.getFullYear() &&
+  d1.getMonth() === d2.getMonth() &&
+  d1.getDate() === d2.getDate()
+
+// ── Component ────────────────────────────────────────────────────────────────
+const ContentCalendar = ({ selectedCompany }) => {
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [filterStatus, setFilterStatus] = useState('all')
+  const [filterChannel, setFilterChannel] = useState('all')
+
+  const company = selectedCompany === 'all' ? null : selectedCompany
+
+  // ── Fetch content calendar items ──
+  const { data: items = [], isLoading, isError } = useQuery({
+    queryKey: ['content-calendar', company],
+    queryFn: async () => {
+      const filter = {}
+      if (company) {
+        filter.owner_company = { _eq: company }
+      }
+      const res = await api.get('/items/content_calendar', {
+        params: {
+          filter,
+          fields: ['id', 'title', 'status', 'publish_date', 'channel', 'content_type', 'owner_company', 'sort', 'date_created'],
+          sort: ['-publish_date'],
+          limit: -1
+        }
+      })
+      return res.data?.data || []
+    },
+    staleTime: 2 * 60 * 1000,
+    retry: 2
+  })
+
+  // ── Derived data ──
+  const filteredItems = useMemo(() => {
+    return items.filter(item => {
+      if (filterStatus !== 'all' && item.status !== filterStatus) return false
+      if (filterChannel !== 'all' && item.channel !== filterChannel) return false
+      return true
+    })
+  }, [items, filterStatus, filterChannel])
+
+  const channels = useMemo(() => {
+    const set = new Set(items.map(i => i.channel).filter(Boolean))
+    return [...set].sort()
+  }, [items])
+
+  const kpis = useMemo(() => ({
+    total: items.length,
+    draft: items.filter(i => i.status === 'draft').length,
+    scheduled: items.filter(i => i.status === 'scheduled').length,
+    published: items.filter(i => i.status === 'published').length
+  }), [items])
+
+  // ── Calendar grid ──
+  const year = currentDate.getFullYear()
+  const month = currentDate.getMonth()
+  const firstDayOfMonth = new Date(year, month, 1)
+  // getDay() returns 0=Sun, we want 0=Mon
+  const startOffset = (firstDayOfMonth.getDay() + 6) % 7
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7
+
+  const getItemsForDay = (day) => {
+    const target = new Date(year, month, day)
+    return filteredItems.filter(item => {
+      if (!item.publish_date) return false
+      return isSameDay(new Date(item.publish_date), target)
+    })
+  }
+
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1))
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1))
+  const goToday = () => setCurrentDate(new Date())
+
+  const today = new Date()
+
+  // ── Loading ──
+  if (isLoading && items.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-2">
+          <Calendar className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-gray-900">Calendrier de contenu</h2>
+        </div>
+        <ContentCalendarSkeleton />
+      </div>
+    )
+  }
 
   return (
-    <div>
-      {/* Calendar Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div className="d-flex align-items-center gap-3">
-          <button className="btn btn-outline-secondary btn-sm" onClick={prevMonth}>
-            <ChevronLeft size={16} />
-          </button>
-          <h4 className="mb-0 text-capitalize">{formatMonth(currentDate)}</h4>
-          <button className="btn btn-outline-secondary btn-sm" onClick={nextMonth}>
-            <ChevronRight size={16} />
-          </button>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <Calendar className="w-6 h-6 text-blue-600" />
+            Calendrier de contenu
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Planification et suivi des publications
+          </p>
         </div>
-        <div className="d-flex gap-2">
-          <button className="btn btn-outline-secondary btn-sm" onClick={() => setCurrentDate(new Date())}>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <FileText className="w-5 h-5 text-blue-600" />
+            <span className="text-sm text-gray-500">Total</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="w-5 h-5 text-gray-500" />
+            <span className="text-sm text-gray-500">Brouillons</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.draft}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Calendar className="w-5 h-5 text-blue-500" />
+            <span className="text-sm text-gray-500">Planifies</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.scheduled}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Eye className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-gray-500">Publies</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.published}</div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+        >
+          <option value="all">Tous les statuts</option>
+          {Object.entries(STATUS_CFG).map(([k, v]) => (
+            <option key={k} value={k}>{v.label}</option>
+          ))}
+        </select>
+        <select
+          value={filterChannel}
+          onChange={(e) => setFilterChannel(e.target.value)}
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+        >
+          <option value="all">Tous les canaux</option>
+          {channels.map(ch => (
+            <option key={ch} value={ch}>{ch}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Calendar navigation */}
+      <div className="glass-card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={prevMonth}
+              className="p-1.5 rounded-lg hover:bg-gray-200/60 transition-colors"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <h3 className="text-lg font-semibold text-gray-900 capitalize">
+              {MONTHS_FR[month]} {year}
+            </h3>
+            <button
+              onClick={nextMonth}
+              className="p-1.5 rounded-lg hover:bg-gray-200/60 transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+          <button
+            onClick={goToday}
+            className="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+          >
             Aujourd'hui
           </button>
-          <button className="btn btn-primary btn-sm" onClick={() => setShowModal(true)}>
-            <Plus size={14} className="me-1" />
-            Nouveau contenu
-          </button>
         </div>
-      </div>
 
-      {/* Legend */}
-      <div className="d-flex gap-3 mb-3">
-        {Object.entries(CONTENT_TYPES).map(([key, value]) => {
-          const Icon = value.icon;
-          return (
-            <div key={key} className="d-flex align-items-center">
-              <span className={`badge bg-${value.color}-lt text-${value.color} me-1`}>
-                <Icon size={12} />
-              </span>
-              <small>{value.label}</small>
+        {/* Day headers */}
+        <div className="grid grid-cols-7 gap-1 mb-1">
+          {DAYS_FR.map(d => (
+            <div key={d} className="text-center text-xs font-medium text-gray-500 uppercase py-2">
+              {d}
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
 
-      {/* Calendar Grid */}
-      <div className="card">
-        <div className="card-body p-0">
-          {/* Week Headers */}
-          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
-            {['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'].map(day => (
-              <div key={day} className="text-center py-2 border bg-light fw-medium">
-                {day}
+        {/* Day cells */}
+        <div className="grid grid-cols-7 gap-1">
+          {[...Array(totalCells)].map((_, i) => {
+            const day = i - startOffset + 1
+            const isValid = day > 0 && day <= daysInMonth
+            const isToday = isValid && isSameDay(new Date(year, month, day), today)
+            const dayItems = isValid ? getItemsForDay(day) : []
+
+            return (
+              <div
+                key={i}
+                className={`min-h-[80px] rounded-lg border p-1.5 transition-colors ${
+                  isValid
+                    ? isToday
+                      ? 'border-blue-300 bg-blue-50/50'
+                      : 'border-gray-100 bg-white/50 hover:bg-gray-50/60'
+                    : 'border-transparent bg-gray-50/30'
+                }`}
+              >
+                {isValid && (
+                  <>
+                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-600' : 'text-gray-500'}`}>
+                      {day}
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      {dayItems.slice(0, 3).map(item => {
+                        const cfg = STATUS_CFG[item.status] || STATUS_CFG.draft
+                        return (
+                          <div
+                            key={item.id}
+                            className={`px-1 py-0.5 rounded text-[10px] font-medium truncate ${cfg.bg} ${cfg.text}`}
+                            title={item.title}
+                          >
+                            {item.title}
+                          </div>
+                        )
+                      })}
+                      {dayItems.length > 3 && (
+                        <span className="text-[10px] text-gray-400 pl-1">
+                          +{dayItems.length - 3} de plus
+                        </span>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
-            ))}
-          </div>
-
-          {/* Calendar Days */}
-          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
-            {renderCalendar()}
-          </div>
+            )
+          })}
         </div>
       </div>
 
-      {/* Selected Day Panel */}
-      {selectedDate && (
-        <div className="card mt-4">
-          <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">
-              Contenu du {selectedDate} {formatMonth(currentDate)}
-            </h5>
-            <button className="btn-close" onClick={() => setSelectedDate(null)}></button>
+      {/* Table listing */}
+      <div className="glass-card p-0 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-semibold text-gray-900">Tous les contenus</h3>
+        </div>
+        {filteredItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+            <Calendar size={48} className="mb-3 opacity-40" />
+            <p className="text-lg font-medium text-gray-500">Aucun contenu trouve</p>
+            <p className="text-sm mt-1">
+              Ajoutez des items dans la collection content_calendar de Directus.
+            </p>
           </div>
-          <div className="card-body">
-            {getContentForDate(selectedDate).length > 0 ? (
-              <div className="list-group list-group-flush">
-                {getContentForDate(selectedDate).map(item => {
-                  const typeInfo = CONTENT_TYPES[item.type];
-                  const Icon = typeInfo.icon;
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50/60 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-5 py-3">Titre</th>
+                  <th className="px-5 py-3">Statut</th>
+                  <th className="px-5 py-3">Canal</th>
+                  <th className="px-5 py-3">Type de contenu</th>
+                  <th className="px-5 py-3">Date de publication</th>
+                  <th className="px-5 py-3">Date de creation</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filteredItems.map(item => {
+                  const cfg = STATUS_CFG[item.status] || STATUS_CFG.draft
                   return (
-                    <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                      <div className="d-flex align-items-center">
-                        <span className={`avatar bg-${typeInfo.color}-lt text-${typeInfo.color} me-3`}>
-                          <Icon size={20} />
+                    <tr key={item.id} className="hover:bg-gray-50/60 transition-colors">
+                      <td className="px-5 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        {item.title || <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-5 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+                          {cfg.label}
                         </span>
-                        <div>
-                          <h6 className="mb-0">{item.title}</h6>
-                          <small className="text-muted">{typeInfo.label}</small>
-                        </div>
-                      </div>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className={`badge ${
-                          item.status === 'published' ? 'bg-success' :
-                          item.status === 'scheduled' ? 'bg-warning' : 'bg-secondary'
-                        }`}>
-                          {item.status === 'published' ? 'Publie' :
-                           item.status === 'scheduled' ? 'Planifie' : 'Brouillon'}
-                        </span>
-                        <button className="btn btn-sm btn-ghost-primary">
-                          <Edit2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  );
+                      </td>
+                      <td className="px-5 py-3 text-gray-600 whitespace-nowrap capitalize">
+                        {item.channel || <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-5 py-3 text-gray-600 whitespace-nowrap capitalize">
+                        {item.content_type || <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-5 py-3 text-gray-500 whitespace-nowrap">
+                        {item.publish_date
+                          ? new Date(item.publish_date).toLocaleDateString('fr-CH')
+                          : <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-5 py-3 text-gray-500 whitespace-nowrap">
+                        {item.date_created
+                          ? new Date(item.date_created).toLocaleDateString('fr-CH')
+                          : <span className="text-gray-300">-</span>}
+                      </td>
+                    </tr>
+                  )
                 })}
-              </div>
-            ) : (
-              <div className="text-center py-4 text-muted">
-                Aucun contenu planifie pour cette date
-              </div>
-            )}
+              </tbody>
+            </table>
           </div>
+        )}
+      </div>
+
+      {/* Error state */}
+      {isError && (
+        <div className="glass-card p-6 text-center">
+          <p className="text-sm text-red-500">
+            Erreur lors du chargement des donnees. Verifiez que la collection content_calendar existe dans Directus.
+          </p>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ContentCalendar;
+export default ContentCalendar

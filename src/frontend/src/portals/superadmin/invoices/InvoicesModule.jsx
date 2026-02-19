@@ -62,9 +62,9 @@ async function fetchInvoices({ company, status, search, page = 1 }) {
     params: {
       filter: Object.keys(filter).length ? filter : undefined,
       fields: [
-        'id', 'invoice_number', 'status', 'total_ht', 'total_tva', 'total_ttc',
-        'due_date', 'date_created', 'date_issued', 'client_name', 'client_id',
-        'owner_company.name', 'currency'
+        'id', 'invoice_number', 'status', 'amount',
+        'date_created', 'client_name', 'client_id',
+        'owner_company', 'currency'
       ],
       sort: ['-date_created'],
       limit: 25,
@@ -123,7 +123,6 @@ const InvoicesModule = ({ selectedCompany }) => {
         ...rest,
         status: 'draft',
         invoice_number: `${invoice_number}-COPIE`,
-        date_issued: null,
         date_sent: null
       })
     },
@@ -252,10 +251,10 @@ const InvoicesModule = ({ selectedCompany }) => {
                 <tr key={inv.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-4 py-3 font-medium text-gray-900">{inv.invoice_number}</td>
                   <td className="px-4 py-3 text-gray-600">{inv.client_name || '—'}</td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">{inv.owner_company?.name || '—'}</td>
-                  <td className="px-4 py-3 text-gray-500">{formatDate(inv.date_issued || inv.date_created)}</td>
-                  <td className="px-4 py-3 text-gray-500">{formatDate(inv.due_date)}</td>
-                  <td className="px-4 py-3 text-right font-semibold">{displayCHF(inv.total_ttc)}</td>
+                  <td className="px-4 py-3 text-gray-500 text-xs">{inv.owner_company || '—'}</td>
+                  <td className="px-4 py-3 text-gray-500">{formatDate(inv.date_created)}</td>
+                  <td className="px-4 py-3 text-gray-500">—</td>
+                  <td className="px-4 py-3 text-right font-semibold">{displayCHF(parseFloat(inv.amount || 0))}</td>
                   <td className="px-4 py-3 text-center"><StatusBadge status={inv.status} /></td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1">

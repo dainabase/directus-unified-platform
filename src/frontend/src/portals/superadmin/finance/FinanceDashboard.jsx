@@ -10,9 +10,15 @@ import { KPICards } from './components/KPICards'
 import { AlertsPanel } from './components/AlertsPanel'
 import { CashFlowChart } from './components/CashFlowChart'
 import { RecentTransactions } from './components/RecentTransactions'
+import AccountingDashboard from './components/AccountingDashboard'
+import SupplierInvoicesModule from './components/SupplierInvoicesModule'
 import { Loader2, RefreshCw, AlertCircle } from 'lucide-react'
 
 export function FinanceDashboard({ selectedCompany, view }) {
+  // Route to sub-views if specified
+  if (view === 'accounting') return <AccountingDashboard selectedCompany={selectedCompany} />
+  if (view === 'invoices-suppliers') return <SupplierInvoicesModule selectedCompany={selectedCompany} />
+
   const company = selectedCompany === 'all' ? '' : selectedCompany
 
   const {

@@ -5,13 +5,13 @@ import {
   Users, Key, Plug, CreditCard, Bell, BarChart3
 } from 'lucide-react';
 import { useOurCompanies } from './hooks/useSettingsData';
-import CompanySettings from './components/CompanySettings';
+import CompaniesSettings from './components/CompaniesSettings';
 import InvoiceSettings from './components/InvoiceSettings';
 import TaxSettings from './components/TaxSettings';
 import ProductsList from './components/ProductsList';
-import UsersSettings from './components/UsersSettings';
-import PermissionsSettings from './components/PermissionsSettings';
-import IntegrationsSettings from './components/IntegrationsSettings';
+import UsersManager from './components/UsersManager';
+import PermissionsManager from './components/PermissionsManager';
+import IntegrationsManager from './components/IntegrationsManager';
 import DepositConfigManager from './components/DepositConfigManager';
 import KPIAlertsModule from './components/KPIAlertsModule';
 import CEOReportModule from './components/CEOReportModule';
@@ -137,7 +137,7 @@ const SettingsDashboard = ({ view }) => {
           ) : (
             <>
               {activeTab === 'company' && (
-                <CompanySettings companyId={selectedCompany} />
+                <CompaniesSettings companyId={selectedCompany} />
               )}
               {activeTab === 'invoicing' && (
                 <InvoiceSettings companyId={selectedCompany} />
@@ -149,10 +149,10 @@ const SettingsDashboard = ({ view }) => {
                 <ProductsList companyId={selectedCompany} />
               )}
               {activeTab === 'users' && (
-                <UsersSettings />
+                <UsersManager />
               )}
               {activeTab === 'permissions' && (
-                <PermissionsSettings />
+                <PermissionsManager />
               )}
               {activeTab === 'deposits' && (
                 <DepositConfigManager selectedCompany={selectedCompany} />
@@ -164,7 +164,7 @@ const SettingsDashboard = ({ view }) => {
                 <CEOReportModule />
               )}
               {activeTab === 'integrations' && (
-                <IntegrationsSettings />
+                <IntegrationsManager />
               )}
             </>
           )}

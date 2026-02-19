@@ -16,6 +16,7 @@ import TeamView from './views/TeamView'
 import TalentsView from './views/TalentsView'
 import PerformanceView from './views/PerformanceView'
 import RecruitmentView from './views/RecruitmentView'
+import TrainingsView from './views/TrainingsView'
 import { usePeople } from '../../services/hooks/usePeople'
 
 const HRModule = ({ selectedCompany }) => {
@@ -35,7 +36,8 @@ const HRModule = ({ selectedCompany }) => {
     { id: 'team', label: 'Équipe', icon: <Users size={18} /> },
     { id: 'talents', label: 'Talents', icon: <Award size={18} /> },
     { id: 'performance', label: 'Performance', icon: <TrendingUp size={18} /> },
-    { id: 'recruitment', label: 'Recrutement', icon: <UserPlus size={18} /> }
+    { id: 'recruitment', label: 'Recrutement', icon: <UserPlus size={18} /> },
+    { id: 'trainings', label: 'Formations', icon: <Calendar size={18} /> }
   ]
 
   // Filter people
@@ -211,7 +213,8 @@ const HRModule = ({ selectedCompany }) => {
             {currentView === 'team' && <TeamView people={filteredPeople} />}
             {currentView === 'talents' && <TalentsView people={filteredPeople} />}
             {currentView === 'performance' && <PerformanceView people={filteredPeople} />}
-            {currentView === 'recruitment' && <RecruitmentView />}
+            {currentView === 'recruitment' && <RecruitmentView selectedCompany={selectedCompany} />}
+            {currentView === 'trainings' && <TrainingsView selectedCompany={selectedCompany} />}
           </>
         )}
       </div>

@@ -178,11 +178,8 @@ const LegalDashboard = () => {
             />
           )}
           {activeTab === 'cgv' && (
-            <CGVManager 
-              company={selectedCompany}
-              cgvTypes={CGV_TYPES}
-              cgvList={cgvList.data}
-              onRefresh={() => cgvList.refetch()}
+            <CGVManager
+              selectedCompany={selectedCompany}
             />
           )}
           {activeTab === 'signatures' && (

@@ -1,205 +1,204 @@
 // src/frontend/src/portals/superadmin/legal/components/CGVManager.jsx
-import React, { useState } from 'react';
-import { 
-  FileText, Plus, Edit, Eye, Archive, CheckCircle, 
-  Clock, AlertTriangle, Copy, Download, Trash2 
-} from 'lucide-react';
-import { useSaveCGV, useActivateCGV, useCGV } from '../hooks/useLegalData';
-import CGVEditor from './CGVEditor';
-import CGVPreview from './CGVPreview';
-import toast from 'react-hot-toast';
+//
+// Self-contained CGV versions manager.
+// Fetches data directly from /items/cgv_versions (Directus).
+// NOTE: This collection uses `owner_company_id` (UUID FK), not `owner_company`.
+//
+import React, { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import {
+  FileText, CheckCircle, Clock, Archive
+} from 'lucide-react'
+import api from '../../../../lib/axios'
 
-const CGVManager = ({ company, cgvTypes, cgvList, onRefresh }) => {
-  const [selectedType, setSelectedType] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [previewMode, setPreviewMode] = useState(false);
-  const [selectedCGV, setSelectedCGV] = useState(null);
-  
-  const saveCGV = useSaveCGV();
-  const activateCGV = useActivateCGV();
-  
-  const handleCreate = (type) => {
-    setSelectedType(type);
-    setSelectedCGV(null);
-    setEditMode(true);
-  };
-  
-  const handleEdit = (cgv) => {
-    setSelectedCGV(cgv);
-    setSelectedType(cgv.type);
-    setEditMode(true);
-  };
-  
-  const handlePreview = (cgv) => {
-    setSelectedCGV(cgv);
-    setPreviewMode(true);
-  };
-  
-  const handleSave = async (data) => {
-    await saveCGV.mutateAsync({
-      company,
-      type: selectedType,
-      data
-    });
-    setEditMode(false);
-    onRefresh();
-  };
-  
-  const handleActivate = async (cgvId) => {
-    await activateCGV.mutateAsync(cgvId);
-    onRefresh();
-  };
-  
-  const handleDuplicate = (cgv) => {
-    setSelectedCGV({ ...cgv, id: null, version: cgv.version + 1 });
-    setSelectedType(cgv.type);
-    setEditMode(true);
-    toast.success('CGV dupliquée - modifiez et sauvegardez');
-  };
-  
-  const getStatusBadge = (status) => {
-    const badges = {
-      active: { class: 'bg-success', label: 'Active' },
-      draft: { class: 'bg-warning', label: 'Brouillon' },
-      archived: { class: 'bg-secondary', label: 'Archivée' }
-    };
-    const badge = badges[status] || badges.draft;
-    return <span className={`badge ${badge.class}`}>{badge.label}</span>;
-  };
+// ── Status config ────────────────────────────────────────────────────────────
+const STATUS_CFG = {
+  active:   { label: 'Active',    bg: 'bg-green-100',  text: 'text-green-700' },
+  draft:    { label: 'Brouillon', bg: 'bg-gray-100',   text: 'text-gray-600' },
+  archived: { label: 'Archivee',  bg: 'bg-orange-100', text: 'text-orange-700' }
+}
 
-  // Modal Éditeur
-  if (editMode) {
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+const CGVManagerSkeleton = () => (
+  <div className="space-y-6">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="glass-card p-5">
+          <div className="glass-skeleton h-4 w-24 rounded mb-3" />
+          <div className="glass-skeleton h-8 w-16 rounded" />
+        </div>
+      ))}
+    </div>
+    <div className="glass-card p-0 overflow-hidden">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
+          <div className="glass-skeleton h-4 w-16 rounded" />
+          <div className="glass-skeleton h-4 w-48 rounded" />
+          <div className="glass-skeleton h-4 w-20 rounded" />
+          <div className="glass-skeleton h-4 w-28 rounded" />
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+// ── Component ────────────────────────────────────────────────────────────────
+const CGVManager = ({ selectedCompany }) => {
+  const company = selectedCompany === 'all' ? null : selectedCompany
+
+  // ── Fetch CGV versions ──
+  // This collection uses owner_company_id (UUID FK) instead of owner_company
+  const { data: cgvVersions = [], isLoading, isError } = useQuery({
+    queryKey: ['cgv-versions', company],
+    queryFn: async () => {
+      const filter = {}
+      if (company) {
+        filter.owner_company_id = { _eq: company }
+      }
+      const res = await api.get('/items/cgv_versions', {
+        params: {
+          filter,
+          fields: ['id', 'version', 'title', 'status', 'effective_date', 'owner_company_id', 'sort'],
+          sort: ['-version'],
+          limit: -1
+        }
+      })
+      return res.data?.data || []
+    },
+    staleTime: 2 * 60 * 1000,
+    retry: 2
+  })
+
+  // ── KPIs ──
+  const kpis = useMemo(() => ({
+    total: cgvVersions.length,
+    active: cgvVersions.filter(c => c.status === 'active').length,
+    draft: cgvVersions.filter(c => c.status === 'draft').length,
+    archived: cgvVersions.filter(c => c.status === 'archived').length
+  }), [cgvVersions])
+
+  // ── Loading ──
+  if (isLoading && cgvVersions.length === 0) {
     return (
-      <CGVEditor 
-        company={company}
-        type={selectedType}
-        cgv={selectedCGV}
-        onSave={handleSave}
-        onCancel={() => setEditMode(false)}
-        isLoading={saveCGV.isPending}
-      />
-    );
-  }
-  
-  // Modal Prévisualisation
-  if (previewMode) {
-    return (
-      <CGVPreview 
-        cgv={selectedCGV}
-        onClose={() => setPreviewMode(false)}
-      />
-    );
+      <div className="space-y-6">
+        <div className="flex items-center gap-2">
+          <FileText className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-gray-900">Gestion des CGV</h2>
+        </div>
+        <CGVManagerSkeleton />
+      </div>
+    )
   }
 
   return (
-    <div>
-      {/* Boutons création par type */}
-      <div className="row mb-4">
-        {cgvTypes.map(type => (
-          <div className="col-md-4" key={type.id}>
-            <div className="card card-sm">
-              <div className="card-body d-flex align-items-center">
-                <type.icon size={24} className="me-3 text-primary" />
-                <div className="flex-fill">
-                  <div className="font-weight-medium">{type.label}</div>
-                  <div className="text-muted small">
-                    {cgvList?.filter(c => c.type === type.id && c.status === 'active').length || 0} active(s)
-                  </div>
-                </div>
-                <button 
-                  className="btn btn-primary btn-sm"
-                  onClick={() => handleCreate(type.id)}
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-            </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <FileText className="w-6 h-6 text-blue-600" />
+          Gestion des CGV
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Versions des conditions generales de vente
+        </p>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <FileText className="w-5 h-5 text-blue-600" />
+            <span className="text-sm text-gray-500">Total versions</span>
           </div>
-        ))}
+          <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-gray-500">Actives</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.active}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="w-5 h-5 text-gray-500" />
+            <span className="text-sm text-gray-500">Brouillons</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.draft}</div>
+        </div>
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Archive className="w-5 h-5 text-orange-500" />
+            <span className="text-sm text-gray-500">Archivees</span>
+          </div>
+          <div className="text-2xl font-bold text-gray-900">{kpis.archived}</div>
+        </div>
       </div>
 
-      {/* Liste des CGV existantes */}
-      <div className="table-responsive">
-        <table className="table table-vcenter card-table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Version</th>
-              <th>Titre</th>
-              <th>Statut</th>
-              <th>Dernière modification</th>
-              <th>Acceptations</th>
-              <th className="w-1">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cgvList?.length === 0 && (
-              <tr>
-                <td colSpan="7" className="text-center text-muted py-4">
-                  Aucune CGV créée. Cliquez sur + pour commencer.
-                </td>
-              </tr>
-            )}
-            {cgvList?.map(cgv => (
-              <tr key={cgv.id}>
-                <td>
-                  <span className="badge bg-blue-lt">
-                    {cgvTypes.find(t => t.id === cgv.type)?.label || cgv.type}
-                  </span>
-                </td>
-                <td>v{cgv.version}</td>
-                <td>{cgv.title}</td>
-                <td>{getStatusBadge(cgv.status)}</td>
-                <td>
-                  <Clock size={14} className="me-1" />
-                  {new Date(cgv.updated_at).toLocaleDateString('fr-CH')}
-                </td>
-                <td>
-                  <span className="badge bg-green-lt">
-                    {cgv.acceptance_count || 0}
-                  </span>
-                </td>
-                <td>
-                  <div className="btn-list flex-nowrap">
-                    <button 
-                      className="btn btn-sm btn-ghost-primary"
-                      onClick={() => handlePreview(cgv)}
-                      title="Prévisualiser"
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button 
-                      className="btn btn-sm btn-ghost-primary"
-                      onClick={() => handleEdit(cgv)}
-                      title="Modifier"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button 
-                      className="btn btn-sm btn-ghost-primary"
-                      onClick={() => handleDuplicate(cgv)}
-                      title="Dupliquer"
-                    >
-                      <Copy size={16} />
-                    </button>
-                    {cgv.status !== 'active' && (
-                      <button 
-                        className="btn btn-sm btn-ghost-success"
-                        onClick={() => handleActivate(cgv.id)}
-                        title="Activer"
-                      >
-                        <CheckCircle size={16} />
-                      </button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Table */}
+      <div className="glass-card p-0 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100">
+          <h3 className="font-semibold text-gray-900">Versions CGV</h3>
+        </div>
+        {cgvVersions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+            <FileText size={48} className="mb-3 opacity-40" />
+            <p className="text-lg font-medium text-gray-500">Aucune version CGV trouvee</p>
+            <p className="text-sm mt-1">
+              Ajoutez des versions dans la collection cgv_versions de Directus.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50/60 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-5 py-3">Version</th>
+                  <th className="px-5 py-3">Titre</th>
+                  <th className="px-5 py-3">Statut</th>
+                  <th className="px-5 py-3">Date d'effet</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {cgvVersions.map(cgv => {
+                  const cfg = STATUS_CFG[cgv.status] || STATUS_CFG.draft
+                  return (
+                    <tr key={cgv.id} className="hover:bg-gray-50/60 transition-colors">
+                      <td className="px-5 py-3 text-gray-900 whitespace-nowrap font-medium">
+                        v{cgv.version ?? '-'}
+                      </td>
+                      <td className="px-5 py-3 text-gray-900 whitespace-nowrap">
+                        {cgv.title || <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-5 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+                          {cfg.label}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-gray-500 whitespace-nowrap">
+                        {cgv.effective_date
+                          ? new Date(cgv.effective_date).toLocaleDateString('fr-CH')
+                          : <span className="text-gray-300">-</span>}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
+
+      {/* Error state */}
+      {isError && (
+        <div className="glass-card p-6 text-center">
+          <p className="text-sm text-red-500">
+            Erreur lors du chargement des CGV. Verifiez que la collection cgv_versions existe dans Directus.
+          </p>
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default CGVManager;
+export default CGVManager

@@ -22,6 +22,9 @@ import {
   fetchCampaigns, createCampaign, updateCampaign, deleteCampaign,
   fetchWhatsappMessages, formatCHF
 } from '../../../services/api/crm'
+import ContentCalendar from './components/ContentCalendar'
+import MarketingAnalytics from './components/MarketingAnalytics'
+import MarketingEvents from './components/MarketingEvents'
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
 
@@ -37,7 +40,10 @@ const STATUS_CFG = {
 const TABS = [
   { id: 'overview', label: 'Vue d\'ensemble', icon: BarChart3 },
   { id: 'campaigns', label: 'Campagnes', icon: Mail },
-  { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare }
+  { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare },
+  { id: 'calendar', label: 'Calendrier', icon: Calendar },
+  { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+  { id: 'events', label: 'Evenements', icon: Users }
 ]
 
 const MarketingDashboard = ({ selectedCompany, view }) => {
@@ -452,6 +458,9 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
           {activeTab === 'overview' && renderOverview()}
           {activeTab === 'campaigns' && renderCampaigns()}
           {activeTab === 'whatsapp' && renderWhatsApp()}
+          {activeTab === 'calendar' && <ContentCalendar selectedCompany={selectedCompany} />}
+          {activeTab === 'analytics' && <MarketingAnalytics selectedCompany={selectedCompany} />}
+          {activeTab === 'events' && <MarketingEvents selectedCompany={selectedCompany} />}
         </>
       )}
 

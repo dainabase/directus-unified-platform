@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 34/47 stories — 72%
+**Progression globale** : 41/47 stories — 87%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -105,21 +105,20 @@
 
 ---
 
-## PHASE 5 — Finance Avancee (Modules 9-12)
-**Statut** : [ ] TODO | **Progression** : 0/8 stories
-**Demarre** : — | **Termine** : —
+## PHASE 5 — CRM, Support, Revendeur, Notifications & Marketing
+**Statut** : [V] DONE | **Progression** : 7/7 stories
+**Demarre** : 2026-02-19 | **Termine** : 2026-02-19
 
-- [ ] S-05-01 · Facturation par jalons (deliverables -> factures auto)
-- [ ] S-05-02 · Avoirs & remboursements (annulations evenementielles)
-- [ ] S-05-03 · Contrats recurrents (maintenance mensuelle/annuelle)
-- [ ] S-05-04 · Workflow validation factures fournisseurs (collection approvals)
-- [ ] S-05-05 · Dashboard KPI Finance pre-alimente (240 KPIs existants)
-- [ ] S-05-06 · Rapprochement bancaire renforce (matching multi-criteres)
-- [ ] S-05-07 · Module comptabilite suisse (ecritures automatiques)
-- [ ] S-05-08 · Formulaire TVA AFC 200 (taux 8.1% / 2.6% / 3.8%)
+- [V] S-05-01 · Lead Detail View + Activities Timeline (CRUD activites, fiche lead, status change) — 2026-02-19
+- [V] S-05-02 · CRM Contacts Module (selectedCompany + view props, contacts/companies connectes) — 2026-02-19
+- [V] S-05-03 · Support Tickets Module (rewrite 100% mock -> Directus, KPIs, CRUD, filtres) — 2026-02-19
+- [V] S-05-04 · Portail Revendeur (layout orange #ea580c, dashboard KPIs, routes nested) — 2026-02-19
+- [V] S-05-05 · Notifications System (useNotifications 30s polling, NotificationsCenter dropdown, TopBar) — 2026-02-19
+- [V] S-05-06 · Marketing Module (campaigns CRUD, WhatsApp messages, PieChart + BarChart) — 2026-02-19
+- [V] S-05-07 · CRM Analytics Dashboard (FunnelChart, PieChart, LineChart 6 mois, BarChart sources) — 2026-02-19
 
-**Fichiers crees/modifies** : —
-**Observations** : —
+**Fichiers crees/modifies** : services/api/crm.js, portals/superadmin/leads/components/LeadDetail.jsx, portals/superadmin/leads/LeadsDashboard.jsx, portals/superadmin/crm/CRMDashboard.jsx, portals/superadmin/crm/CRMAnalytics.jsx, portals/superadmin/support/SupportDashboard.jsx, portals/superadmin/marketing/MarketingDashboard.jsx, portals/revendeur/layout/RevendeurLayout.jsx, portals/revendeur/RevendeurDashboard.jsx, portals/revendeur/pages/PlaceholderPage.jsx, hooks/useNotifications.js, components/notifications/NotificationsCenter.jsx, components/layout/TopBar.jsx, App.jsx
+**Observations** : LeadsDashboard et CRM contacts/companies etaient deja connectes Directus — ajout LeadDetail + activities. SupportDashboard et MarketingDashboard etaient 100% mock — rewrite complet. Ancien revendeur Dashboard etait un mock en EUR — remplace par vrai portail CHF avec layout orange. TopBar avait un bell icon mort — connecte a useNotifications avec 30s polling.
 **Blocages** : —
 
 ---
@@ -178,6 +177,13 @@
 | 2026-02-19 | S-04-05 | Collection recurring_invoices n'existe PAS dans Directus | Impossible d'utiliser recurring_invoices | Utilise collection subscriptions avec decouverte de schema au runtime |
 | 2026-02-19 | S-04-05 | Champs subscriptions decouverts dynamiquement (fields: *) | Structure schema inconnue a l'avance | Runtime schema discovery via Object.keys(sample) |
 | 2026-02-19 | S-04-06 | Route /superadmin/projects/dashboard requiert nested route dans App.jsx | Route projects deja occupee par ProjectsModule | Ajoute /projects/dashboard comme route distincte + sidebar entry |
+| 2026-02-19 | S-05-01 | LeadsDashboard + LeadKanban + useLeads deja 100% connectes Directus | Pas besoin de rewrite, seulement ajouter LeadDetail | Cree LeadDetail + activities timeline |
+| 2026-02-19 | S-05-02 | CRM ContactsList + CompaniesList + crmApi.js deja connectes Directus | Pas de rework necessaire | Ajoute selectedCompany + view props au CRMDashboard |
+| 2026-02-19 | S-05-03 | SupportDashboard etait 100% mock (mockOverviewData + setTimeout) avec Bootstrap classes | Rewrite complet necessaire | Remplace par TanStack Query + Tailwind glassmorphism + Directus support_tickets |
+| 2026-02-19 | S-05-04 | Ancien revendeur Dashboard.jsx = 323 lignes 100% mock avec EUR au lieu de CHF | Remplace par vrai portail | Nouveau RevendeurLayout orange #ea580c + RevendeurDashboard connecte quotes/products |
+| 2026-02-19 | S-05-05 | TopBar avait Bell icon mais notifications=[] jamais connecte | Fonctionnalite morte | Cree useNotifications hook avec 30s polling + NotificationsCenter dropdown |
+| 2026-02-19 | S-05-06 | MarketingDashboard importait 4 sous-composants mock (ContentCalendar, CampaignsList, EventsManager, MarketingAnalytics) | Tout mock, Bootstrap classes | Rewrite complet avec 3 tabs: Overview, Campaigns CRUD, WhatsApp |
+| 2026-02-19 | S-05-06 | Deux service layers CRM coexistent: crm/services/crmApi.js (directus class) et services/api/crm.js (raw axios) | Pas de conflit, patterns differents | Nouveaux modules utilisent services/api/crm.js |
 
 ---
 
@@ -186,4 +192,4 @@
 **Endpoints custom** : 156
 **Fichiers archives lors du nettoyage** : — (a remplir apres S-00-02)
 **Fichiers supprimes** : — (a remplir apres S-00-02)
-**Dernier commit** : 4e647a7 — feat(superadmin): dashboard analytique projets — S-04-06
+**Dernier commit** : 76bdc8e — feat(S-05-07): CRM analytics dashboard — Phase 5 complete

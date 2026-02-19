@@ -13,6 +13,7 @@ import {
   Scale,
   PiggyBank,
   CreditCard,
+  RefreshCw,
   // Projets
   FolderKanban,
   ListTodo,
@@ -69,6 +70,7 @@ const navigationConfig = [
       { id: 'collection', label: 'Recouvrement', icon: Scale, path: '/superadmin/collection' },
       { id: 'budgets', label: 'Budgets', icon: PiggyBank, path: '/superadmin/budgets' },
       { id: 'expenses', label: 'Dépenses', icon: CreditCard, path: '/superadmin/expenses' },
+      { id: 'subscriptions', label: 'Abonnements', icon: RefreshCw, path: '/superadmin/subscriptions' },
     ]
   },
   {

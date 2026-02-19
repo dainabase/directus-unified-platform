@@ -55,6 +55,7 @@ const TopBar = ({
       'collection': 'Finance → Recouvrement',
       'budgets': 'Finance → Budgets',
       'expenses': 'Finance → Dépenses',
+      'subscriptions': 'Finance → Abonnements',
       'projects': 'Projets',
       'deliverables': 'Projets → Livrables',
       'time-tracking': 'Projets → Time Tracking',

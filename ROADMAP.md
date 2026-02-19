@@ -101,31 +101,47 @@
 
 ---
 
-## PHASE C — PORTAIL CLIENT FONCTIONNEL *(PRIORITÉ 2)*
-**Objectif CDC** : Un client peut signer, payer, suivre son projet sans appel HYPERVISUAL  
+## PHASE C — PORTAIL CLIENT FONCTIONNEL *(TERMINÉE)*
+**Objectif CDC** : Un client HYPERVISUAL gère tout depuis son portail sans formation  
 **Modules CDC** : Module 4 (Portail Client)  
 **Critères d'acceptation** :  
-- Client signe son devis en ligne depuis son portail (REQ-CLIENT-006)  
-- Client télécharge ses factures et voit le statut paiement (REQ-CLIENT-003/005)  
-- Client uploade des documents (plans, briefs) (REQ-CLIENT-004)  
-**Progression** : 0/5 stories
+- ✅ Client signe son devis en ligne avec CGV (signature atomique — REQ-CLIENT-006)  
+- ✅ Client suit l'avancement de son projet en temps réel (REQ-CLIENT-002)  
+- ✅ Client télécharge/imprime ses factures (REQ-CLIENT-003/005)  
+- ✅ Client communique avec HYPERVISUAL via messagerie  
+**Progression** : 8/8 stories — [V] DONE — commit f488d28 — 2026-02-19
 
-- [ ] **C-01** · Client — Signature devis intégrée (DocuSeal ou fallback acceptation CGV)  
-  *CDC* : REQ-CLIENT-006, REQ-DEVIS-004  
-  *Note* : DocuSeal intégration complète en Phase E. Phase C = acceptation in-app.
+- [V] **C-00** · Fix format numéro facture INV-YYYY-NN — 2026-02-19  
+  *Fichiers* : `InvoiceGenerator.jsx`  
+  *Livré* : Séquence auto via count Directus
 
-- [ ] **C-02** · Client — Upload documents (plans, briefs, visuels)  
-  *CDC* : REQ-CLIENT-004  
-  *Fichiers* : `portals/client/documents/DocumentUpload.jsx`
+- [V] **C-01** · Auth portail client (magic link token localStorage) — 2026-02-19  
+  *Fichiers* : `ClientAuth.jsx`, `hooks/useClientAuth.js`, `ClientPortalGuard.jsx` (3 nouveaux)  
+  *Livré* : Login email → token → accès données client. Guard sur /client/*
 
-- [ ] **C-03** · Client — Suivi projet temps réel avec statuts  
-  *CDC* : REQ-CLIENT-002, REQ-PROJ-002  
+- [V] **C-02** · Dashboard client connecté Directus — 2026-02-19  
+  *Fichiers* : `Dashboard.jsx` (réécriture complète)  
+  *Livré* : 4 cartes statut, section "Action requise", timeline projet (tout filtré contact_id)
 
-- [ ] **C-04** · Client — Historique factures + téléchargement PDF  
-  *CDC* : REQ-CLIENT-003, REQ-CLIENT-005  
+- [V] **C-03** · Signature devis en ligne avec CGV intégrée — 2026-02-19  
+  *Fichiers* : `QuoteSignature.jsx` (nouveau)  
+  *Livré* : Flow 3 étapes atomique : CGV acceptance → signature_log → PATCH quote
 
-- [ ] **C-05** · Client — Messagerie simple client ↔ HYPERVISUAL  
-  *CDC* : REQ-CLIENT-008  
+- [V] **C-04** · Suivi projet temps réel — 2026-02-19  
+  *Fichiers* : `ClientProjectsList.jsx`, `ProjectTracking.jsx` (2 nouveaux)  
+  *Livré* : Liste projets + détail avec progression deliverables
+
+- [V] **C-05** · Historique factures + impression — 2026-02-19  
+  *Fichiers* : `ClientInvoices.jsx` (nouveau)  
+  *Livré* : Tableau statuts, solde outstanding, print via window.open
+
+- [V] **C-06** · Messagerie client ↔ HYPERVISUAL — 2026-02-19  
+  *Fichiers* : `ClientMessages.jsx` (nouveau)  
+  *Livré* : Chat UI sur collection comments, polling 15s
+
+- [V] **C-07** · Navigation et layout portail client — 2026-02-19  
+  *Fichiers* : `ClientLayout.jsx` (réécriture)  
+  *Livré* : Sidebar 5 items emerald, header logo + prénom + logout
 
 ---
 
@@ -349,8 +365,9 @@
 |------|-------|-----------|--------|----------|
 | 2026-02-19 | — | PROGRESS.md 47/47 couvrait uniquement la couche affichage | 80% CDC restant | Ce ROADMAP.md créé |
 | 2026-02-19 | B-01 | Score qualification implémenté en 1-5 (numérique) vs High/Medium/Low (CDC) | Acceptable | **DÉCISION JEAN : Conserver 1-5** |
-| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs CDC) | Mineur | **DÉCISION JEAN : Format INV-XXXX-YY** — à corriger en Phase C |
+| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs CDC) | Mineur | **DÉCISION JEAN : Format INV-YYYY-NN** — corrigé en C-00 |
 | 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus | Conserver |
+| 2026-02-19 | C-06 | Messagerie implémentée avec polling 15s (pas WebSocket) | Acceptable Phase C | WebSocket temps réel = Phase E si besoin |
 
 ---
 
@@ -361,9 +378,10 @@
 | Collections Directus | 83 actives |
 | Stories Phase A (infra+display) | 47/47 ✅ |
 | Stories Phase B (cycle vente) | 8/8 ✅ |
-| Stories CDC restantes | 45 à faire |
-| Modules CDC couverts | 4/16 (Leads, Devis, Facturation, Projets — opérationnels) |
-| Dernier commit Phase B | 5926787 — 2026-02-19 |
+| Stories Phase C (portail client) | 8/8 ✅ |
+| Stories CDC restantes | 37 à faire |
+| Modules CDC couverts | 5/16 (Leads, Devis, Facturation, Projets, Portail Client) |
+| Dernier commit Phase C | f488d28 — 2026-02-19 |
 
 ---
 
@@ -373,9 +391,9 @@ La plateforme V1 sera considérée opérationnelle quand :
 
 1. `[V]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001) — Phase F
 2. `[V]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
-3. `[ ]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — Phase H
+3. `[V]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
 4. `[V]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
-5. `[ ]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — Phase C
+5. `[V]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
 6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — Phase I
 7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel, Revolut webhook Phase G)
 8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G

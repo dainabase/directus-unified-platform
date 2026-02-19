@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Settings, Building2, FileText, Percent, Package, RefreshCw,
-  Users, Key, Plug
+  Users, Key, Plug, CreditCard
 } from 'lucide-react';
 import { useOurCompanies } from './hooks/useSettingsData';
 import CompanySettings from './components/CompanySettings';
@@ -12,6 +12,7 @@ import ProductsList from './components/ProductsList';
 import UsersSettings from './components/UsersSettings';
 import PermissionsSettings from './components/PermissionsSettings';
 import IntegrationsSettings from './components/IntegrationsSettings';
+import DepositConfigManager from './components/DepositConfigManager';
 import toast from 'react-hot-toast';
 
 const SettingsDashboard = ({ view }) => {
@@ -19,6 +20,7 @@ const SettingsDashboard = ({ view }) => {
     if (view === 'users') return 'users';
     if (view === 'permissions') return 'permissions';
     if (view === 'integrations') return 'integrations';
+    if (view === 'deposits') return 'deposits';
     return 'company';
   };
 
@@ -54,6 +56,7 @@ const SettingsDashboard = ({ view }) => {
     { id: 'products', label: 'Produits', icon: Package },
     { id: 'users', label: 'Utilisateurs', icon: Users },
     { id: 'permissions', label: 'Permissions', icon: Key },
+    { id: 'deposits', label: 'Acomptes', icon: CreditCard },
     { id: 'integrations', label: 'Integrations', icon: Plug }
   ];
 
@@ -146,6 +149,9 @@ const SettingsDashboard = ({ view }) => {
               )}
               {activeTab === 'permissions' && (
                 <PermissionsSettings />
+              )}
+              {activeTab === 'deposits' && (
+                <DepositConfigManager selectedCompany={selectedCompany} />
               )}
               {activeTab === 'integrations' && (
                 <IntegrationsSettings />

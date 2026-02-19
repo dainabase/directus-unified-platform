@@ -22,6 +22,7 @@ import PrestataireProfilePage from './portals/prestataire/profile/ProfilePage'
 
 // Client Portal
 import ClientLayout from './portals/client/layout/ClientLayout'
+import ClientDashboard from './portals/client/Dashboard'
 import ClientPlaceholder from './portals/client/pages/PlaceholderPage'
 import ProjectsModule from './modules/projects/ProjectsModule'
 import TimeTrackingView from './modules/projects/views/TimeTrackingView'
@@ -187,7 +188,7 @@ function App() {
               <ClientLayout />
             </ProtectedRoute>
           }>
-            <Route index element={<ClientPlaceholder title="Tableau de bord" description="Dashboard client — S-03-02" />} />
+            <Route index element={<ClientDashboard />} />
             <Route path="projects" element={<ClientPlaceholder title="Mes projets" description="Suivi projets — S-03-03" />} />
             <Route path="quotes" element={<ClientPlaceholder title="Devis" description="Module devis client — S-03-04" />} />
             <Route path="invoices" element={<ClientPlaceholder title="Factures" description="Module factures client — S-03-03" />} />

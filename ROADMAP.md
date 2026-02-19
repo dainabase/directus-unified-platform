@@ -226,25 +226,29 @@
 
 ---
 
-## PHASE F — CAPTURE LEADS MULTICANAL
-**Objectif CDC** : Leads créés automatiquement depuis tous les canaux  
-**Modules CDC** : Module 1 (Sources entrantes)  
-**Progression** : 0/4 stories
+## PHASE F — CAPTURE LEADS MULTICANAL *(3/4 stories — F-02 reporté Phase F-bis)*
+**Objectif CDC** : Leads créés automatiquement depuis tous les canaux
+**Modules CDC** : Module 1 (Sources entrantes)
+**Progression** : 3/4 stories — [V] DONE — 2026-02-20
 
-- [ ] **F-01** · WordPress → Lead Directus (webhook formulaire multi-étapes)  
-  *CDC* : REQ-LEAD-001  
-  *Note* : Formulaire WordPress conditionnel avec qualification automatique  
+- [V] **F-01** · WordPress → Lead Directus (webhook Fluent Form Pro #17) — 2026-02-20
+  *CDC* : REQ-LEAD-001
+  *Fichiers* : `src/backend/api/leads/wp-webhook.js`, `lead-creator.js`, `index.js`
+  *Livré* : POST /api/leads/wp-webhook — validation HMAC optionnelle, mapping flexible champs Fluent Form, anti-doublon 30min, upsert lead par email.
 
-- [ ] **F-02** · WhatsApp Business → Lead Directus (API Meta + LLM résumé)  
-  *CDC* : REQ-LEAD-002  
-  *Dépendance* : Compte WhatsApp Business API, Claude API  
+- [ ] **F-02** · WhatsApp Business → Lead Directus (API Meta + LLM résumé) — **REPORTÉ Phase F-bis**
+  *CDC* : REQ-LEAD-002
+  *Dépendance* : Compte WhatsApp Business API non disponible actuellement
 
-- [ ] **F-03** · Email info@hypervisual.ch → Lead Directus (LLM extraction)  
-  *CDC* : REQ-LEAD-004  
+- [V] **F-03** · Email info@hypervisual.ch → Lead Directus (LLM extraction GPT-4o-mini) — 2026-02-20
+  *CDC* : REQ-LEAD-004
+  *Fichiers* : `src/backend/api/leads/imap-monitor.js`
+  *Livré* : Polling IMAP 5min → simpleParser → GPT-4o-mini extraction JSON (confidence ≥ 60%) → lead Directus. Anti-doublon par Message-ID. Deps: imapflow, mailparser.
 
-- [ ] **F-04** · Ringover → Lead Directus (transcription + résumé LLM)  
-  *CDC* : REQ-LEAD-003  
-  *Dépendance* : Intégration Ringover API  
+- [V] **F-04** · Ringover → Lead Directus (analyse appels LLM GPT-4o-mini) — 2026-02-20
+  *CDC* : REQ-LEAD-003
+  *Fichiers* : `src/backend/api/leads/ringover-polling.js`
+  *Livré* : Polling 15min API Ringover v2 → analyse LLM des métadonnées appels → lead si pertinent. Skip numéros internes (+4178327*). Anti-doublon par call_id.
 
 ---
 
@@ -410,6 +414,10 @@
 | 2026-02-19 | E-04 | automation_logs existait mais manquait entity_type, entity_id, recipient_email, level | Enrichi | 4 champs ajoutés pour traçabilité complète |
 | 2026-02-19 | E-all | MauticAPI n'avait pas de sendEmail() ni sendEmailToAddress() | Bloquant | Ajouté 2 méthodes à api/mautic/index.js |
 | 2026-02-19 | E-all | quotes.total (pas total_ttc), supplier_invoices.date_paid (pas payment_date), proposals.created_at (pas date_created) | Noms champs | Adapté le code aux noms réels vérifiés via MCP |
+| 2026-02-20 | F-all | leads manquait 6 champs pour capture multicanal (source_channel, source_detail, raw_data, openai_summary, ringover_call_id, call_duration) | Enrichi | 6 champs ajoutés via API Directus |
+| 2026-02-20 | F-all | lead_sources.code existait déjà — pas besoin d'ajouter | OK | Vérifié via MCP avant action |
+| 2026-02-20 | F-all | Projet en ES Modules ("type":"module") — prompt fournissait du CommonJS (require) | Adaptation | Tout converti en import/export ES Modules |
+| 2026-02-20 | F-all | leads.source est uuid→lead_sources (pas un string) — le prompt utilisait lead_source_id | Noms champs | Adapté lead-creator.js pour écrire dans source (uuid) |
 
 ---
 
@@ -418,14 +426,15 @@
 | Métrique | Valeur |
 |----------|--------|
 | Collections Directus | 83 actives |
-| Stories Phase A (infra+display) | 47/47 [A] |
-| Stories Phase B (cycle vente) | 8/8 [A] |
-| Stories Phase C (portail client) | 8/8 [A] |
-| Stories Phase D (portail prestataire) | 7/7 [A] |
-| Stories Phase E (email automation) | 6/6 [A] |
-| Stories CDC restantes | 24 à faire |
-| Modules CDC couverts | 7/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation) |
-| Dernier commit Phase E | — 2026-02-19 |
+| Stories Phase A (infra+display) | 47/47 ✅ |
+| Stories Phase B (cycle vente) | 8/8 ✅ |
+| Stories Phase C (portail client) | 8/8 ✅ |
+| Stories Phase D (portail prestataire) | 7/7 ✅ |
+| Stories Phase E (email automation) | 6/6 ✅ |
+| Stories Phase F (lead capture) | 3/4 ✅ (F-02 WhatsApp → Phase F-bis) |
+| Stories CDC restantes | 21 à faire |
+| Modules CDC couverts | 8/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal) |
+| Dernier commit Phase F | — 2026-02-20 |
 
 ---
 

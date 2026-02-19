@@ -116,6 +116,18 @@ try {
 }
 
 // ============================================
+// API LEAD CAPTURE - Phase F (WordPress, IMAP, Ringover)
+// ============================================
+
+try {
+  const leadsRoutes = await import('./api/leads/index.js');
+  app.use('/api/leads', leadsRoutes.default);
+  console.log('[api] Lead capture connected: /api/leads (F-01 WP, F-03 IMAP, F-04 Ringover)');
+} catch (err) {
+  console.warn('[api] Lead capture not available:', err.message);
+}
+
+// ============================================
 // API EMAIL AUTOMATION - Phase E (Mautic transactional)
 // ============================================
 

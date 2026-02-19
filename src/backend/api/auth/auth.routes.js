@@ -499,26 +499,45 @@ router.post('/change-password', authMiddleware, asyncHandler(async (req, res) =>
       });
     }
 
-    // Verify current password
-    const passwordField = user.password || user.password_hash;
-    const isValidPassword = await bcrypt.compare(currentPassword, passwordField);
-    if (!isValidPassword) {
+    // Verify current password via Directus native auth (supports argon2)
+    const verifyRes = await fetch(
+      `${process.env.DIRECTUS_URL || 'http://localhost:8055'}/auth/login`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email.toLowerCase(), password: currentPassword })
+      }
+    );
+
+    if (!verifyRes.ok) {
       return res.status(401).json({
         success: false,
         error: 'Mot de passe actuel incorrect',
-        code: 'INVALID_PASSWORD'
+        code: 'INVALID_CURRENT_PASSWORD'
       });
     }
 
-    // Hash new password
-    const salt = await bcrypt.genSalt(12);
-    const newPasswordHash = await bcrypt.hash(newPassword, salt);
+    // Update password via Directus API (hashes as argon2 natively)
+    await fetch(
+      `${process.env.DIRECTUS_URL || 'http://localhost:8055'}/users/${user.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.DIRECTUS_ADMIN_TOKEN}`
+        },
+        body: JSON.stringify({ password: newPassword })
+      }
+    );
 
-    // Update password
-    await directus.request(updateItem(userCollection, req.user.id, {
-      password: newPasswordHash,
-      password_updated_at: new Date().toISOString()
-    }));
+    // Update timestamp in custom collection
+    try {
+      await directus.request(updateItem(userCollection, req.user.id, {
+        password_updated_at: new Date().toISOString()
+      }));
+    } catch {
+      // Non-critical — timestamp update may fail if field doesn't exist
+    }
 
     // Blacklist current token to force re-login
     const authHeader = req.headers.authorization;

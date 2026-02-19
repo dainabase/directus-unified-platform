@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   Bell,
@@ -10,16 +10,42 @@ import {
   LogOut
 } from 'lucide-react'
 import { useAuthStore } from '../../stores/authStore'
+import { useNotifications } from '../../hooks/useNotifications'
+import NotificationsCenter from '../notifications/NotificationsCenter'
 
 const TopBar = ({
   selectedCompany = 'all',
-  onCompanyChange,
-  notifications = []
+  onCompanyChange
 }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
+
+  const [showNotifications, setShowNotifications] = useState(false)
+  const notifRef = useRef(null)
+
+  const {
+    notifications,
+    unreadCount,
+    isLoading: notifLoading,
+    markRead,
+    markAllRead,
+    isMarkingAllRead
+  } = useNotifications()
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifications(false)
+      }
+    }
+    if (showNotifications) {
+      document.addEventListener('mousedown', handleClick)
+    }
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showNotifications])
 
   const currentUser = user
     ? { name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email, role: user.role || 'SuperAdmin' }
@@ -39,15 +65,13 @@ const TopBar = ({
     navigate('/login', { replace: true })
   }
 
-  const unreadCount = notifications.filter(n => !n.read).length
-
   // Breadcrumb basé sur la route
   const getBreadcrumb = () => {
     const path = location.pathname
     const segments = path.split('/').filter(Boolean)
-    
+
     if (segments.length <= 1) return 'Dashboard'
-    
+
     const labels = {
       'banking': 'Finance → Banking',
       'accounting': 'Finance → Comptabilité',
@@ -60,17 +84,19 @@ const TopBar = ({
       'deliverables': 'Projets → Livrables',
       'time-tracking': 'Projets → Time Tracking',
       'crm': 'CRM',
+      'leads': 'Leads',
+      'quotes': 'Devis',
       'marketing': 'Marketing',
       'hr': 'Ressources Humaines',
       'legal': 'Juridique',
       'support': 'Support',
       'settings': 'Paramètres',
     }
-    
+
     for (const [key, label] of Object.entries(labels)) {
       if (path.includes(key)) return label
     }
-    
+
     return segments[segments.length - 1]
   }
 
@@ -83,10 +109,10 @@ const TopBar = ({
           <div className="hidden lg:block">
             <span className="text-sm text-gray-500">{getBreadcrumb()}</span>
           </div>
-          
+
           {/* Divider */}
           <div className="hidden lg:block w-px h-6 bg-gray-200"></div>
-          
+
           {/* Company Selector */}
           <div className="flex items-center gap-2 bg-white/60 rounded-lg px-3 py-2 border border-gray-200/50">
             <Building className="w-4 h-4 text-gray-500" />
@@ -121,14 +147,31 @@ const TopBar = ({
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
-            <Bell size={20} className="text-gray-600" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-medium rounded-full flex items-center justify-center">
-                {unreadCount}
-              </span>
+          <div className="relative" ref={notifRef}>
+            <button
+              className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setShowNotifications(prev => !prev)}
+            >
+              <Bell size={20} className="text-gray-600" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-medium rounded-full flex items-center justify-center">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {showNotifications && (
+              <NotificationsCenter
+                notifications={notifications}
+                unreadCount={unreadCount}
+                isLoading={notifLoading}
+                onMarkRead={markRead}
+                onMarkAllRead={markAllRead}
+                onClose={() => setShowNotifications(false)}
+                isMarkingAllRead={isMarkingAllRead}
+              />
             )}
-          </button>
+          </div>
 
           {/* User Menu */}
           <div className="flex items-center gap-3 pl-3 border-l border-gray-200">

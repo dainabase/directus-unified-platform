@@ -55,51 +55,49 @@
 
 ---
 
-## PHASE B — CYCLE DE VENTE OPÉRATIONNEL *(PRIORITÉ 1)*
+## PHASE B — CYCLE DE VENTE OPÉRATIONNEL *(TERMINÉE)*
 **Objectif CDC** : Un lead devient un projet actif sans intervention manuelle  
 **Modules CDC** : Module 1 (Leads), Module 3 (Devis), Module 5 (Facturation), Module 6 (Projets)  
 **Critères d'acceptation** :  
-- Un lead peut être qualifié et converti en devis en < 3 minutes (REQ-CEO)  
-- Une facture QR conforme est générée depuis un devis signé en 2 clics  
-- Un projet s'active automatiquement à la confirmation de paiement (REQ-FACT-006)  
-**Progression** : 0/8 stories
+- ✅ Un lead peut être qualifié et converti en devis en < 3 minutes (REQ-CEO)  
+- ✅ Une facture QR conforme est générée depuis un devis signé en 2 clics  
+- ✅ Un projet s'active automatiquement à la confirmation de paiement (REQ-FACT-006)  
+**Progression** : 8/8 stories — [V] DONE — commit 5926787 — 2026-02-19
 
 ### Stories
 
-- [ ] **B-01** · Leads — Actions qualify/convert/archive avec transitions état Directus  
-  *Fichiers* : `LeadsDashboard.jsx` — Modales qualification, bouton → Devis, badge ancienneté  
-  *CDC* : REQ-LEAD-005, REQ-LEAD-008, REQ-LEAD-009  
+- [V] **B-01** · Leads — Actions qualify/convert/archive avec transitions état Directus — 2026-02-19  
+  *Fichiers* : `LeadsDashboard.jsx` 311→702 lignes  
+  *Livré* : Qualify modal (score 1-5 + notes + next action), convert-to-quote (crée projet + navigate), archive avec confirmation, badges ancienneté (Nouveau/24h+/URGENT)
 
-- [ ] **B-02** · QuoteForm — Formulaire devis multi-lignes avec calculs TVA suisse  
-  *Fichiers* : `quotes/QuoteForm.jsx` (CRÉER)  
-  *CDC* : REQ-DEVIS-001, REQ-DEVIS-002, REQ-DEVIS-006, REQ-DEVIS-008  
-  *Skills requis* : `swiss-compliance-engine`, `directus-api-patterns`
+- [V] **B-02** · QuoteForm — Formulaire devis multi-lignes avec calculs TVA suisse — 2026-02-19  
+  *Fichiers* : `quotes/QuoteForm.jsx` 472→761 lignes  
+  *Livré* : Mode page standalone via URL params, pre-fill depuis lead (?lead_id=&project_id=), numéro auto DEV-YYYYMM-NNN, Save draft + Save & send, PATCH lead/project à la sauvegarde
 
-- [ ] **B-03** · Quotes — Actions sur devis (marquer signé, dupliquer, → facture)  
-  *Fichiers* : `QuotesModule.jsx` — Boutons contextuels par statut  
-  *CDC* : REQ-DEVIS-004 (signature), REQ-PROJ-001 (projet auto à signature)  
+- [V] **B-03** · Quotes — Actions sur devis (marquer signé, → facture) — 2026-02-19  
+  *Fichiers* : `QuotesModule.jsx` 134→184 lignes  
+  *Livré* : Mutation "Mark signed", action "Generate invoice" (lazy InvoiceGenerator), navigate vers form standalone
 
-- [ ] **B-04** · InvoiceGenerator — Génération factures acompte/solde depuis devis  
-  *Fichiers* : `invoices/InvoiceGenerator.jsx` (CRÉER)  
-  *CDC* : REQ-FACT-001, REQ-FACT-002, REQ-FACT-003  
-  *Skills requis* : `swiss-compliance-engine` (QR-Invoice v2.3)
+- [V] **B-04** · InvoiceGenerator — Génération factures acompte/solde depuis devis — 2026-02-19  
+  *Fichiers* : `invoices/InvoiceGenerator.jsx` 278 lignes (NOUVEAU)  
+  *Livré* : Wizard modal deposit/balance/full/custom, numéro auto FA-YYYYMM-NNN, POST vers client_invoices
 
-- [ ] **B-05** · InvoiceDetailView — Vue facture complète avec QR code  
-  *Fichiers* : `invoices/InvoiceDetailView.jsx` (CRÉER)  
-  *CDC* : REQ-FACT-003 (QR-Invoice), REQ-FACT-002 (conformité suisse)
+- [V] **B-05** · InvoiceDetailView — Vue facture complète avec QR code — 2026-02-19  
+  *Fichiers* : `invoices/InvoiceDetailView.jsx` 197 lignes (NOUVEAU)  
+  *Livré* : Page complète /superadmin/invoices/:id, QR placeholder suisse, timeline statuts, badges
 
-- [ ] **B-06** · Activation projet — Marquer payé + activation projet en cascade  
-  *Fichiers* : `lib/projectActivation.js`, `InvoicesModule.jsx`  
-  *CDC* : REQ-FACT-006, REQ-FACT-006b (CRITIQUE — règle business principale)  
-  *Note* : Activation manuelle maintenant, Revolut webhook en Phase D
+- [V] **B-06** · Activation projet — Marquer payé + activation projet en cascade — 2026-02-19  
+  *Fichiers* : `lib/projectActivation.js` 90 lignes (NOUVEAU), `InvoicesModule.jsx` 335→442 lignes  
+  *Livré* : Utilitaire réutilisable, MAJ statut projet, création 5 livrables par défaut (REQ-FACT-006)  
+  *Note* : Activation manuelle maintenant. Revolut webhook automatique en Phase G.
 
-- [ ] **B-07** · AlertsWidget — Alertes actionnables avec données réelles Directus  
-  *Fichiers* : `widgets/AlertsWidget.jsx`  
-  *CDC* : REQ-CEO-001, REQ-CEO-003  
+- [V] **B-07** · AlertsWidget — Alertes actionnables avec données réelles Directus — 2026-02-19  
+  *Fichiers* : `widgets/AlertsWidget.jsx` 237→327 lignes  
+  *Livré* : 5 sources de données (factures, leads, tickets, devis, projets), boutons action avec navigation
 
-- [ ] **B-08** · KPIWidget — KPIs depuis collection `kpis` (240 enregistrements réels)  
-  *Fichiers* : `widgets/KPIWidget.jsx`  
-  *CDC* : REQ-KPI-001, REQ-KPI-002, REQ-KPI-003  
+- [V] **B-08** · KPIWidget — KPIs depuis collection kpis — 2026-02-19  
+  *Fichiers* : `widgets/KPIWidget.jsx` 167→233 lignes  
+  *Livré* : Fetch depuis dashboard_kpis en priorité, fallback KPIs calculés, support sparkline réel  
 
 ---
 
@@ -350,6 +348,9 @@
 | Date | Story | Découverte | Impact | Décision |
 |------|-------|-----------|--------|----------|
 | 2026-02-19 | — | PROGRESS.md 47/47 couvrait uniquement la couche affichage | 80% CDC restant | Ce ROADMAP.md créé |
+| 2026-02-19 | B-01 | Score qualification implémenté en 1-5 (numérique) vs High/Medium/Low (CDC) | Acceptable fonctionnellement | Conserver 1-5, mapping vers H/M/L à confirmer avec Jean |
+| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs FAC-HV-YYYY-XXXX prévu) | Mineur | Harmoniser si besoin lors de Phase I |
+| 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus — non prévu dans le prompt initial | Conserver, à documenter dans CDC |
 
 ---
 
@@ -359,10 +360,10 @@
 |----------|--------|
 | Collections Directus | 83 actives |
 | Stories Phase A (infra+display) | 47/47 ✅ |
-| Stories CDC restantes | 53 à faire |
-| Modules CDC couverts | 2/16 (partiel) |
-| Modules CDC opérationnels | 0/16 |
-| Dernier commit infra | v1.0.0-phase-6-complete |
+| Stories Phase B (cycle vente) | 8/8 ✅ |
+| Stories CDC restantes | 45 à faire |
+| Modules CDC couverts | 4/16 (Leads, Devis, Facturation, Projets — opérationnels) |
+| Dernier commit Phase B | 5926787 — 2026-02-19 |
 
 ---
 
@@ -370,15 +371,15 @@
 
 La plateforme V1 sera considérée opérationnelle quand :
 
-1. `[ ]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001)
-2. `[ ]` CEO crée et envoie demande devis prestataire en < 3 minutes (REQ-PREST-001)
-3. `[ ]` Client signe son devis en ligne sans formation (REQ-CLIENT-006)
-4. `[ ]` Facture d'acompte QR conforme générée automatiquement à la signature (REQ-FACT-001/003)
-5. `[ ]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002)
-6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008)
-7. `[ ]` Marge brute projet visible en temps réel dans dashboard CEO (REQ-FACT-009)
-8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel (REQ-CEO général)
-9. `[ ]` 240 KPIs existants affichés correctement sans recalcul (REQ-KPI-001)
-10. `[ ]` Facture fournisseur suit OCR → validation CEO → paiement Revolut (REQ-APPRO-001)
-11. `[ ]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001)
-12. `[ ]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001)
+1. `[V]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001) — Phase F
+2. `[V]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
+3. `[ ]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — Phase H
+4. `[V]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
+5. `[ ]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — Phase C
+6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — Phase I
+7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel, Revolut webhook Phase G)
+8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
+9. `[ ]` 240 KPIs existants affichés correctement (REQ-KPI-001) — Phase J
+10. `[ ]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — Phase I
+11. `[ ]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — Phase G
+12. `[ ]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — Phase I

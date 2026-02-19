@@ -131,7 +131,7 @@
 - [ ] S-06-02 · Tickets support -> facturation hors contrat
 - [ ] S-06-03 · Alertes seuils KPI configurables
 - [ ] S-06-04 · Rapport quotidien CEO automatique (Mautic)
-- [ ] S-06-05 · Portail Revendeur (layout + fonctionnalites)
+- [V] S-06-05 · Portail Revendeur (layout + fonctionnalites) — COMPLETE en S-05-04 (RevendeurDashboard CHF) 2026-02-19
 - [ ] S-06-06 · Optimisations performance + tests de charge
 
 **Fichiers crees/modifies** : —

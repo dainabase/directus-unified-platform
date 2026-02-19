@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 9/47 stories — 19%
+**Progression globale** : 13/47 stories — 27%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -34,19 +34,19 @@
 ---
 
 ## PHASE 1 — Dashboard SuperAdmin + Module Leads
-**Statut** : [~] IN_PROGRESS | **Progression** : 3/8 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 7/8 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-01-01 · Connexion React <-> Directus (Axios + TanStack Query) — 2026-02-19
 - [V] S-01-02 · Router principal + authentification portails — 2026-02-19
 - [V] S-01-03 · Layout SuperAdmin (Tabler.io CDN, glassmorphism) — 2026-02-19
-- [ ] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003)
-- [ ] S-01-05 · Widget KPIs financiers temps reel (REQ-CEO-001/002)
-- [ ] S-01-06 · Widget Pipeline commercial (leads + devis)
-- [ ] S-01-07 · Widget Tresorerie Revolut (REQ-CEO-001)
+- [V] S-01-04 · Widget Alertes & Actions prioritaires (REQ-CEO-003) — 2026-02-19
+- [V] S-01-05 · Widget KPIs financiers temps reel (REQ-CEO-001/002) — 2026-02-19
+- [V] S-01-06 · Widget Pipeline commercial (leads + devis) — 2026-02-19
+- [V] S-01-07 · Widget Tresorerie Revolut (REQ-CEO-001) — 2026-02-19
 - [ ] S-01-08 · Module Leads — tableau de bord capture + qualification LLM
 
-**Fichiers crees/modifies** : lib/axios.js, lib/queryClient.js, stores/authStore.js, services/api/directus.js, services/api/config.js, App.jsx, vite.config.js, components/auth/ProtectedRoute.jsx, pages/LoginPage.jsx
+**Fichiers crees/modifies** : lib/axios.js, lib/queryClient.js, stores/authStore.js, services/api/directus.js, services/api/config.js, App.jsx, vite.config.js, components/auth/ProtectedRoute.jsx, pages/LoginPage.jsx, portals/superadmin/widgets/AlertsWidget.jsx, portals/superadmin/widgets/KPIWidget.jsx, portals/superadmin/widgets/PipelineWidget.jsx, portals/superadmin/widgets/TreasuryWidget.jsx, portals/superadmin/Dashboard.jsx (refactored)
 **Observations** : services/api/directus.js avait un token hardcode (hbQz-...) en fallback — retire. DirectusAPI class existante reutilisee avec axios centralise. QueryClient extrait de App.jsx vers lib/queryClient.js.
 **Blocages** : —
 

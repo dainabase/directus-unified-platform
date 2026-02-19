@@ -324,10 +324,10 @@
 4. **Identifier les dépendances** : Lister les services externes nécessaires (Mautic, Revolut, DocuSeal)
 
 ### Pendant le développement
-5. **Skills OBLIGATOIRES** : Claude Code DOIT lire le SKILL.md approprié avant chaque story
-   - Swiss compliance → `.claude/skills/swiss-compliance-engine/SKILL.md`
-   - Directus patterns → `.claude/skills/directus-api-patterns/SKILL.md`
-   - Multi-portal → `.claude/skills/multi-portal-architecture/SKILL.md`
+5. **Skills OBLIGATOIRES** : Claude Code DOIT lire les skills appropriés avant chaque story.
+   Consulter `SKILLS-MAPPING.md` pour la combinaison exacte de skills par story.
+   Minimum : 1 skill projet (`.claude/skills/`) + 1 skill spécialisé (`~/.claude/skills-repos/`)
+   **Sans cette étape = code générique. Avec = code exceptionnel.**
 6. **Vérification champs réels** : TOUJOURS vérifier via `directus:get_collection_items` avant de coder
 7. **Pas d'invention** : JAMAIS inventer des noms de champs, toujours vérifier
 

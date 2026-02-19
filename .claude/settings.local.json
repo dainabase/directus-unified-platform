@@ -196,7 +196,21 @@
       "Bash(xargs:*)",
       "Bash(__NEW_LINE_480e0871e18de9b2__ echo \"=== PRESTATAIRE & REVENDEUR PORTALS ===\" wc -l /Users/jean-mariedelaunay/directus-unified-platform/src/frontend/src/portals/prestataire/Dashboard.jsx wc -l /Users/jean-mariedelaunay/directus-unified-platform/src/frontend/src/portals/revendeur/Dashboard.jsx echo \"\" echo \"=== CLIENT PORTAL ===\" find /Users/jean-mariedelaunay/directus-unified-platform/src/frontend/src/portals/client -type f \\\\\\( -name \"*.jsx\" -o -name \"*.js\" \\\\\\) -exec wc -l {} +)",
       "Bash(tail -1 echo \"\" echo \"=== TOTAL SOURCE FILES ===\" find /Users/jean-mariedelaunay/directus-unified-platform/src/frontend/src -type f \\\\\\( -name \"*.jsx\" -o -name \"*.js\" \\\\\\))",
-      "Bash(git status:*)"
+      "Bash(git status:*)",
+      "Bash(npx vite build)",
+      "mcp__fast-filesystem__fast_list_directory",
+      "mcp__fast-filesystem__fast_read_file",
+      "mcp__desktop-commander__get_file_info",
+      "mcp__desktop-commander__read_file",
+      "Bash(/opt/homebrew/bin/node -e '\nfetch\\(\"\"http://localhost:8055/auth/login\"\", {\n  method: \"\"POST\"\",\n  headers: {\"\"Content-Type\"\": \"\"application/json\"\"},\n  body: JSON.stringify\\({email:\"\"jmd@hypervisual.ch\"\", password:\"\"Admin1234!\"\"}\\)\n}\\).then\\(r=>r.json\\(\\)\\).then\\(j=>console.log\\(JSON.stringify\\(j,null,2\\).slice\\(0,300\\)\\)\\).catch\\(e=>console.error\\(e\\)\\)\n')",
+      "Bash(/opt/homebrew/bin/node:*)",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/cgv_versions\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/quotes\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/projects\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/deliverables\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/client_invoices\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(TOKEN=\"hypervisual-admin-static-token-2026\" curl -s \"http://localhost:8055/fields/people\" -H \"Authorization: Bearer $TOKEN\")"
     ],
     "deny": []
   }

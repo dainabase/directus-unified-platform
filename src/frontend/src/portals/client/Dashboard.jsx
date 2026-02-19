@@ -1,369 +1,247 @@
 /**
- * ClientDashboard — S-03-02
- * Dashboard portail client connecte a Directus via TanStack Query.
- * Affiche: stats, projets actifs, factures recentes, devis en attente.
+ * ClientDashboard — C-02
+ * Connected to Directus, filtered by contact_id.
+ * Shows: greeting, stat cards, action required section, project timeline.
  */
-
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import {
-  FolderKanban, Receipt, FileText, Clock,
-  ArrowRight, AlertTriangle, CheckCircle2, Loader2
+  FileText, FolderKanban, Receipt, Calendar,
+  AlertTriangle, PenTool, CreditCard, Loader2,
+  ChevronRight, CheckCircle
 } from 'lucide-react'
-import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 import api from '../../lib/axios'
-import { useAuthStore } from '../../stores/authStore'
-
-const GREEN = '#059669'
+import { useClientAuth } from './hooks/useClientAuth'
 
 const formatCHF = (v) => new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(v || 0)
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
-const formatDate = (d) => {
-  if (!d) return '—'
-  return new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: 'short', year: 'numeric' })
-}
-
-/**
- * Fetches aggregated stats for the logged-in client.
- * Uses the client's company filter from their auth context.
- */
-async function fetchClientStats(userId) {
-  const [projectsRes, invoicesRes, quotesRes, paymentsRes] = await Promise.all([
-    api.get('/items/projects', {
-      params: { filter: { client_id: { _eq: userId } }, aggregate: { count: '*' }, 'filter[status][_neq]': 'archived' }
-    }).catch(() => ({ data: { data: [{ count: 0 }] } })),
-    api.get('/items/client_invoices', {
-      params: { filter: { client_id: { _eq: userId }, status: { _eq: 'pending' } }, aggregate: { count: '*', sum: { total_ttc: 'total' } } }
-    }).catch(() => ({ data: { data: [{ count: 0, sum: { total_ttc: 0 } }] } })),
-    api.get('/items/quotes', {
-      params: { filter: { client_id: { _eq: userId }, status: { _in: ['sent', 'viewed'] } }, aggregate: { count: '*' } }
-    }).catch(() => ({ data: { data: [{ count: 0 }] } })),
-    api.get('/items/payments', {
-      params: { filter: { client_id: { _eq: userId } }, aggregate: { count: '*', sum: { amount: 'total' } } }
-    }).catch(() => ({ data: { data: [{ count: 0, sum: { amount: 0 } }] } }))
-  ])
-
-  const pData = projectsRes.data?.data?.[0] || {}
-  const iData = invoicesRes.data?.data?.[0] || {}
-  const qData = quotesRes.data?.data?.[0] || {}
-
-  return {
-    activeProjects: Number(pData.count) || 0,
-    pendingInvoices: Number(iData.count) || 0,
-    pendingAmount: Number(iData.sum?.total_ttc) || 0,
-    pendingQuotes: Number(qData.count) || 0
-  }
-}
-
-async function fetchClientProjects(userId) {
-  const { data } = await api.get('/items/projects', {
-    params: {
-      filter: { client_id: { _eq: userId }, status: { _neq: 'archived' } },
-      fields: ['id', 'name', 'status', 'progress', 'deadline', 'owner_company'],
-      sort: ['-date_updated'],
-      limit: 5
-    }
-  }).catch(() => ({ data: { data: [] } }))
-  return data?.data || []
-}
-
-async function fetchClientInvoices(userId) {
-  const { data } = await api.get('/items/client_invoices', {
-    params: {
-      filter: { client_id: { _eq: userId } },
-      fields: ['id', 'invoice_number', 'status', 'total_ttc', 'due_date', 'date_created'],
-      sort: ['-date_created'],
-      limit: 5
-    }
-  }).catch(() => ({ data: { data: [] } }))
-  return data?.data || []
-}
-
-async function fetchClientQuotes(userId) {
-  const { data } = await api.get('/items/quotes', {
-    params: {
-      filter: { client_id: { _eq: userId }, status: { _in: ['sent', 'viewed', 'signed'] } },
-      fields: ['id', 'reference', 'title', 'status', 'total_ttc', 'date_created', 'valid_until'],
-      sort: ['-date_created'],
-      limit: 5
-    }
-  }).catch(() => ({ data: { data: [] } }))
-  return data?.data || []
-}
-
-// --- Stat Card ---
-const StatCard = ({ icon: Icon, label, value, subtext, color = GREEN }) => (
-  <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 shadow-sm hover:shadow-md transition-shadow">
-    <div className="flex items-start justify-between">
-      <div>
-        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
-        <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
-        {subtext && <p className="text-xs text-gray-500 mt-1">{subtext}</p>}
-      </div>
-      <div className="p-2.5 rounded-lg" style={{ backgroundColor: `${color}15` }}>
-        <Icon size={22} style={{ color }} />
-      </div>
-    </div>
-  </div>
-)
-
-// --- Status badge ---
-const STATUS_COLORS = {
-  active: 'bg-emerald-50 text-emerald-700',
-  in_progress: 'bg-blue-50 text-blue-700',
-  completed: 'bg-gray-100 text-gray-600',
-  pending: 'bg-amber-50 text-amber-700',
-  paid: 'bg-emerald-50 text-emerald-700',
-  overdue: 'bg-red-50 text-red-700',
-  sent: 'bg-blue-50 text-blue-700',
-  viewed: 'bg-purple-50 text-purple-700',
-  signed: 'bg-emerald-50 text-emerald-700',
-  draft: 'bg-gray-100 text-gray-500'
-}
-
-const STATUS_LABELS = {
-  active: 'Actif', in_progress: 'En cours', completed: 'Termine', pending: 'En attente',
-  paid: 'Paye', overdue: 'En retard', sent: 'Envoye', viewed: 'Consulte',
-  signed: 'Signe', draft: 'Brouillon', planning: 'Planification'
-}
-
-const StatusBadge = ({ status }) => (
-  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[status] || 'bg-gray-100 text-gray-600'}`}>
-    {STATUS_LABELS[status] || status}
-  </span>
-)
-
-// --- Main Dashboard ---
 const ClientDashboard = () => {
+  const { client } = useClientAuth()
   const navigate = useNavigate()
-  const user = useAuthStore((s) => s.user)
-  const userId = user?.id
+  const contactId = client?.id
 
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['client-stats', userId],
-    queryFn: () => fetchClientStats(userId),
-    enabled: !!userId,
-    staleTime: 30_000
-  })
-
-  const { data: projects = [] } = useQuery({
-    queryKey: ['client-projects', userId],
-    queryFn: () => fetchClientProjects(userId),
-    enabled: !!userId,
-    staleTime: 30_000
-  })
-
-  const { data: invoices = [] } = useQuery({
-    queryKey: ['client-invoices-recent', userId],
-    queryFn: () => fetchClientInvoices(userId),
-    enabled: !!userId,
-    staleTime: 30_000
-  })
-
+  // Fetch quotes for this client
   const { data: quotes = [] } = useQuery({
-    queryKey: ['client-quotes-recent', userId],
-    queryFn: () => fetchClientQuotes(userId),
-    enabled: !!userId,
-    staleTime: 30_000
+    queryKey: ['client-quotes', contactId],
+    queryFn: async () => {
+      const { data } = await api.get('/items/quotes', {
+        params: {
+          filter: { contact_id: { _eq: contactId }, status: { _nin: ['draft'] } },
+          fields: ['id', 'quote_number', 'status', 'total', 'valid_until', 'description', 'signed_at'],
+          sort: ['-created_at'],
+          limit: 20
+        }
+      })
+      return data?.data || []
+    },
+    enabled: !!contactId
   })
 
-  const displayName = user
-    ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Client'
-    : 'Client'
+  // Fetch projects for this client
+  const { data: projects = [] } = useQuery({
+    queryKey: ['client-projects', contactId],
+    queryFn: async () => {
+      const { data } = await api.get('/items/projects', {
+        params: {
+          filter: {
+            _or: [
+              { client_id: { _eq: client?.company_id } },
+              { company_id: { _eq: client?.company_id } }
+            ]
+          },
+          fields: ['id', 'name', 'status', 'start_date', 'end_date', 'date_created'],
+          sort: ['-date_created'],
+          limit: 20
+        }
+      })
+      return data?.data || []
+    },
+    enabled: !!contactId
+  })
 
-  if (statsLoading) {
+  // Fetch invoices
+  const { data: invoices = [] } = useQuery({
+    queryKey: ['client-invoices', contactId],
+    queryFn: async () => {
+      const { data } = await api.get('/items/client_invoices', {
+        params: {
+          filter: { contact_id: { _eq: contactId } },
+          fields: ['id', 'invoice_number', 'amount', 'status', 'date_created'],
+          sort: ['-date_created'],
+          limit: 20
+        }
+      })
+      return data?.data || []
+    },
+    enabled: !!contactId
+  })
+
+  // Fetch latest project deliverables
+  const latestProject = projects.filter(p => ['active', 'in_progress', 'in_preparation'].includes(p.status))[0]
+  const { data: deliverables = [] } = useQuery({
+    queryKey: ['client-deliverables', latestProject?.id],
+    queryFn: async () => {
+      const { data } = await api.get('/items/deliverables', {
+        params: {
+          filter: { project_id: { _eq: latestProject.id } },
+          fields: ['id', 'title', 'status', 'due_date'],
+          sort: ['due_date']
+        }
+      })
+      return data?.data || []
+    },
+    enabled: !!latestProject?.id
+  })
+
+  // Computed stats
+  const pendingQuotes = quotes.filter(q => q.status === 'sent' || q.status === 'viewed')
+  const activeProjects = projects.filter(p => !['cancelled', 'completed'].includes(p.status))
+  const unpaidInvoices = invoices.filter(i => ['pending', 'overdue'].includes(i.status))
+  const totalDue = unpaidInvoices.reduce((sum, i) => sum + parseFloat(i.amount || 0), 0)
+  const completedDel = deliverables.filter(d => d.status === 'completed').length
+  const totalDel = deliverables.length
+  const progressPct = totalDel > 0 ? Math.round((completedDel / totalDel) * 100) : 0
+
+  // Next deadline
+  const allDates = [
+    ...quotes.filter(q => q.valid_until).map(q => ({ date: q.valid_until, label: `Devis ${q.quote_number}` })),
+    ...deliverables.filter(d => d.due_date && d.status !== 'completed').map(d => ({ date: d.due_date, label: d.title }))
+  ].sort((a, b) => new Date(a.date) - new Date(b.date))
+  const nextDeadline = allDates[0]
+
+  if (!contactId) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: GREEN }} />
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome banner */}
-      <div
-        className="rounded-xl p-6 text-white"
-        style={{ background: `linear-gradient(135deg, ${GREEN}, #047857)` }}
-      >
-        <h2 className="text-xl font-bold">Bienvenue, {displayName}</h2>
-        <p className="text-emerald-100 mt-1">Suivez l'avancement de vos projets et gerez vos documents.</p>
+    <div className="space-y-6 max-w-6xl">
+      {/* Greeting */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Bonjour {client?.first_name} 👋
+        </h1>
+        <p className="text-gray-500 mt-1">Bienvenue sur votre espace HYPERVISUAL</p>
       </div>
 
-      {/* Stats grid */}
+      {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={FolderKanban}
-          label="Projets actifs"
-          value={stats?.activeProjects || 0}
-        />
-        <StatCard
-          icon={Receipt}
-          label="Factures en attente"
-          value={formatCHF(stats?.pendingAmount || 0)}
-          subtext={`${stats?.pendingInvoices || 0} facture(s)`}
-          color="#f59e0b"
-        />
-        <StatCard
-          icon={FileText}
-          label="Devis a signer"
-          value={stats?.pendingQuotes || 0}
-          color="#8b5cf6"
-        />
-        <StatCard
-          icon={Clock}
-          label="Prochain echeance"
-          value={projects[0]?.deadline ? formatDate(projects[0].deadline) : '—'}
-          subtext={projects[0]?.name || ''}
-          color="#ef4444"
-        />
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+             onClick={() => navigate('/client/quotes')}>
+          <div className="flex items-center justify-between mb-3">
+            <FileText className="w-8 h-8 text-blue-500" />
+            <span className="text-2xl font-bold text-gray-900">{pendingQuotes.length}</span>
+          </div>
+          <p className="text-sm text-gray-600">Devis à signer</p>
+        </div>
+
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+             onClick={() => navigate('/client/projects')}>
+          <div className="flex items-center justify-between mb-3">
+            <FolderKanban className="w-8 h-8 text-emerald-500" />
+            <span className="text-2xl font-bold text-gray-900">{activeProjects.length}</span>
+          </div>
+          <p className="text-sm text-gray-600">Projets actifs</p>
+        </div>
+
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+             onClick={() => navigate('/client/invoices')}>
+          <div className="flex items-center justify-between mb-3">
+            <Receipt className="w-8 h-8 text-amber-500" />
+            <span className="text-2xl font-bold text-gray-900">{formatCHF(totalDue)}</span>
+          </div>
+          <p className="text-sm text-gray-600">{unpaidInvoices.length} facture(s) à régler</p>
+        </div>
+
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <Calendar className="w-8 h-8 text-purple-500" />
+            <span className="text-sm font-medium text-gray-900">{nextDeadline ? formatDate(nextDeadline.date) : '—'}</span>
+          </div>
+          <p className="text-sm text-gray-600">{nextDeadline ? nextDeadline.label : 'Aucune échéance'}</p>
+        </div>
       </div>
 
-      {/* Alerts bar */}
-      {(stats?.pendingQuotes > 0 || stats?.pendingInvoices > 0) && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex items-center gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0" />
-          <div className="flex-1 text-sm text-amber-800">
-            {stats.pendingQuotes > 0 && (
-              <span>Vous avez <strong>{stats.pendingQuotes} devis</strong> en attente de signature. </span>
-            )}
-            {stats.pendingInvoices > 0 && (
-              <span><strong>{stats.pendingInvoices} facture(s)</strong> en attente de paiement ({formatCHF(stats.pendingAmount)}). </span>
-            )}
+      {/* Action Required */}
+      {(pendingQuotes.length > 0 || unpaidInvoices.filter(i => i.status === 'overdue').length > 0) && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="w-5 h-5 text-orange-600" />
+            <h3 className="font-semibold text-orange-800">Action requise</h3>
+          </div>
+          <div className="space-y-2">
+            {pendingQuotes.map(q => (
+              <div key={q.id} className="flex items-center justify-between bg-white/80 rounded-lg p-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Devis {q.quote_number} — {formatCHF(q.total)}</p>
+                  <p className="text-xs text-gray-500">Valide jusqu'au {formatDate(q.valid_until)}</p>
+                </div>
+                <button onClick={() => navigate(`/client/quotes?sign=${q.id}`)}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700">
+                  <PenTool size={14} /> Signer
+                </button>
+              </div>
+            ))}
+            {unpaidInvoices.filter(i => i.status === 'overdue').map(inv => (
+              <div key={inv.id} className="flex items-center justify-between bg-white/80 rounded-lg p-3">
+                <div>
+                  <p className="text-sm font-medium text-red-700">Facture {inv.invoice_number} en retard — {formatCHF(inv.amount)}</p>
+                </div>
+                <button onClick={() => navigate('/client/invoices')}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700">
+                  <CreditCard size={14} /> Payer
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Projects list */}
-        <div className="lg:col-span-2">
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Mes projets</h3>
-              <button
-                onClick={() => navigate('/client/projects')}
-                className="text-sm font-medium flex items-center gap-1 hover:opacity-80 transition-opacity"
-                style={{ color: GREEN }}
-              >
-                Voir tout <ArrowRight size={14} />
-              </button>
+      {/* Project Timeline */}
+      {latestProject && (
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="font-semibold text-gray-900">{latestProject.name}</h3>
+              <p className="text-xs text-gray-500">Projet en cours</p>
             </div>
-            <div className="divide-y divide-gray-50">
-              {projects.length === 0 ? (
-                <div className="px-5 py-8 text-center text-gray-400 text-sm">
-                  Aucun projet actif
-                </div>
-              ) : (
-                projects.map((p) => (
-                  <div key={p.id} className="px-5 py-3 flex items-center gap-4 hover:bg-gray-50/50 transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
-                      <p className="text-xs text-gray-500">
-                        Echeance: {formatDate(p.deadline)}
-                      </p>
-                    </div>
-                    <div className="w-32">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs text-gray-500">{p.progress || 0}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5">
-                        <div
-                          className="h-1.5 rounded-full transition-all"
-                          style={{ width: `${p.progress || 0}%`, backgroundColor: GREEN }}
-                        />
-                      </div>
-                    </div>
-                    <StatusBadge status={p.status} />
-                  </div>
-                ))
-              )}
+            <button onClick={() => navigate(`/client/projects/${latestProject.id}`)}
+              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+              Voir détails <ChevronRight size={14} />
+            </button>
+          </div>
+          {/* Progress bar */}
+          <div className="mb-4">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="text-gray-500">Progression</span>
+              <span className="font-medium text-gray-900">{progressPct}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="bg-emerald-500 h-2.5 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
             </div>
           </div>
-        </div>
-
-        {/* Recent quotes */}
-        <div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Devis recents</h3>
-              <button
-                onClick={() => navigate('/client/quotes')}
-                className="text-sm font-medium flex items-center gap-1 hover:opacity-80 transition-opacity"
-                style={{ color: GREEN }}
-              >
-                Voir tout <ArrowRight size={14} />
-              </button>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {quotes.length === 0 ? (
-                <div className="px-5 py-8 text-center text-gray-400 text-sm">
-                  Aucun devis
-                </div>
-              ) : (
-                quotes.map((q) => (
-                  <div key={q.id} className="px-5 py-3 hover:bg-gray-50/50 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-gray-900 truncate">{q.title || q.reference}</p>
-                      <StatusBadge status={q.status} />
-                    </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-xs text-gray-500">{formatDate(q.date_created)}</span>
-                      <span className="text-sm font-semibold text-gray-700">{formatCHF(q.total_ttc)}</span>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+          {/* Deliverables */}
+          <div className="space-y-2">
+            {deliverables.slice(0, 5).map(d => (
+              <div key={d.id} className="flex items-center gap-3 text-sm">
+                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                  d.status === 'completed' ? 'bg-emerald-500' :
+                  d.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300'
+                }`} />
+                <span className={d.status === 'completed' ? 'text-gray-400 line-through' : 'text-gray-700'}>
+                  {d.title}
+                </span>
+                {d.due_date && <span className="text-xs text-gray-400 ml-auto">{formatDate(d.due_date)}</span>}
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* Recent invoices */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">Dernieres factures</h3>
-          <button
-            onClick={() => navigate('/client/invoices')}
-            className="text-sm font-medium flex items-center gap-1 hover:opacity-80 transition-opacity"
-            style={{ color: GREEN }}
-          >
-            Voir tout <ArrowRight size={14} />
-          </button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
-                <th className="px-5 py-3">Reference</th>
-                <th className="px-5 py-3">Date</th>
-                <th className="px-5 py-3">Echeance</th>
-                <th className="px-5 py-3 text-right">Montant</th>
-                <th className="px-5 py-3 text-center">Statut</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {invoices.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-gray-400">
-                    Aucune facture
-                  </td>
-                </tr>
-              ) : (
-                invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-5 py-3 font-medium text-gray-900">{inv.invoice_number}</td>
-                    <td className="px-5 py-3 text-gray-500">{formatDate(inv.date_created)}</td>
-                    <td className="px-5 py-3 text-gray-500">{formatDate(inv.due_date)}</td>
-                    <td className="px-5 py-3 text-right font-semibold">{formatCHF(inv.total_ttc)}</td>
-                    <td className="px-5 py-3 text-center"><StatusBadge status={inv.status} /></td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      )}
     </div>
   )
 }

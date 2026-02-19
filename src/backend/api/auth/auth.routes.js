@@ -67,21 +67,20 @@ router.post('/login', asyncHandler(async (req, res) => {
     // Find user by email in directus_users or custom users collection
     let user = null;
 
-    // Try directus_users first (for admin/internal users)
+    // Try directus_users first (for admin/internal users) via REST /users endpoint
     try {
-      const directusUsers = await directus.request(
-        readItems('directus_users', {
-          filter: {
-            email: { _eq: email.toLowerCase() }
-          },
-          limit: 1
-        })
+      const usersRes = await fetch(
+        `${process.env.DIRECTUS_URL || 'http://localhost:8055'}/users?filter[email][_eq]=${encodeURIComponent(email.toLowerCase())}&limit=1`,
+        { headers: { 'Authorization': `Bearer ${process.env.DIRECTUS_ADMIN_TOKEN}` } }
       );
-      if (directusUsers.length > 0) {
-        user = { ...directusUsers[0], source: 'directus_users' };
+      if (usersRes.ok) {
+        const usersData = await usersRes.json();
+        if (usersData.data && usersData.data.length > 0) {
+          user = { ...usersData.data[0], source: 'directus_users' };
+        }
       }
     } catch (e) {
-      // May not have access to directus_users, try custom collection
+      // May not have access, try custom collection
     }
 
     // Try portal_users collection (for portal users)
@@ -163,7 +162,12 @@ router.post('/login', asyncHandler(async (req, res) => {
     recordLoginAttempt(email.toLowerCase(), true);
 
     // Get user role and permissions
-    const role = user.role || 'user';
+    // Directus users have a role UUID — map to string role
+    // If user has admin_access flag or is from directus_users, treat as admin
+    const rawRole = user.role || 'user';
+    const role = (user.source === 'directus_users' || user.admin_access === true)
+      ? 'admin'
+      : rawRole;
     const companies = user.companies || (role === 'admin' ? COMPANIES : []);
     const permissions = user.permissions || [];
 

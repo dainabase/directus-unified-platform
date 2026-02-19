@@ -37,13 +37,16 @@ const RevendeurLayout = lazy(() => import('./portals/revendeur/layout/RevendeurL
 const RevendeurDashboard = lazy(() => import('./portals/revendeur/RevendeurDashboard'))
 const RevendeurPlaceholder = lazy(() => import('./portals/revendeur/pages/PlaceholderPage'))
 
-// Client Portal
+// Client Portal (Phase C)
+const ClientAuth = lazy(() => import('./portals/client/auth/ClientAuth'))
+const ClientPortalGuard = lazy(() => import('./portals/client/auth/ClientPortalGuard'))
 const ClientLayout = lazy(() => import('./portals/client/layout/ClientLayout'))
 const ClientDashboard = lazy(() => import('./portals/client/Dashboard'))
-const ClientInvoicesModule = lazy(() => import('./portals/client/invoices/InvoicesModule'))
-const ClientQuotesModule = lazy(() => import('./portals/client/quotes/QuotesModule'))
-const ClientPlaceholder = lazy(() => import('./portals/client/pages/PlaceholderPage'))
-const ClientProjectsModule = lazy(() => import('./portals/client/projects/ClientProjectsModule'))
+const ClientQuoteSignature = lazy(() => import('./portals/client/quotes/QuoteSignature'))
+const ClientProjectsList = lazy(() => import('./portals/client/projects/ClientProjectsList'))
+const ClientProjectTracking = lazy(() => import('./portals/client/projects/ProjectTracking'))
+const ClientInvoices = lazy(() => import('./portals/client/invoices/ClientInvoices'))
+const ClientMessages = lazy(() => import('./portals/client/messages/ClientMessages'))
 
 // SuperAdmin Modules
 const ProjectsModule = lazy(() => import('./portals/superadmin/projects/ProjectsModule'))
@@ -216,19 +219,17 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* ── Client portal ── */}
-          <Route path="/client" element={
-            <ProtectedRoute allowedPortals={['client']}>
-              <ClientLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<ClientDashboard />} />
-            <Route path="projects" element={<ClientProjectsModule />} />
-            <Route path="quotes" element={<ClientQuotesModule />} />
-            <Route path="invoices" element={<ClientInvoicesModule />} />
-            <Route path="payments" element={<ClientPlaceholder title="Paiements" description="Historique paiements — S-03-03" />} />
-            <Route path="documents" element={<ClientPlaceholder title="Documents" description="Documents — Phase 4" />} />
-            <Route path="support" element={<ClientPlaceholder title="Support" description="Support — Phase 4" />} />
+          {/* ── Client portal (Phase C) ── */}
+          <Route path="/client/login" element={<ClientAuth />} />
+          <Route path="/client" element={<ClientPortalGuard />}>
+            <Route element={<ClientLayout />}>
+              <Route index element={<ClientDashboard />} />
+              <Route path="quotes" element={<ClientQuoteSignature />} />
+              <Route path="projects" element={<ClientProjectsList />} />
+              <Route path="projects/:id" element={<ClientProjectTracking />} />
+              <Route path="invoices" element={<ClientInvoices />} />
+              <Route path="messages" element={<ClientMessages />} />
+            </Route>
           </Route>
 
           {/* ── Prestataire portal ── */}

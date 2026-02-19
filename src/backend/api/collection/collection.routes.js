@@ -9,7 +9,7 @@ import { interestCalculator } from '../../services/collection/interest-calculato
 
 const router = express.Router();
 
-import { authMiddleware, companyAccess } from '../../middleware/auth.middleware.js';
+import { authMiddleware, companyAccess as companyAccessMiddleware } from '../../middleware/auth.middleware.js';
 
 router.use(authMiddleware);
 

@@ -8,6 +8,8 @@
 
 import jwt from 'jsonwebtoken';
 import { createDirectus, rest, readItems, readItem } from '@directus/sdk';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET;

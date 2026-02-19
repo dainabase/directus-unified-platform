@@ -4,7 +4,7 @@
  * Supports deposit (acompte), balance (solde), full, or custom amount.
  */
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { X, Receipt, Loader2, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -13,12 +13,22 @@ import api from '../../../lib/axios'
 const formatCHF = (v) =>
   new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(v || 0)
 
-const generateInvoiceNumber = () => {
-  const d = new Date()
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0')
-  return `FA-${y}${m}-${rand}`
+const generateInvoiceNumber = async () => {
+  const y = new Date().getFullYear()
+  try {
+    const { data } = await api.get('/items/client_invoices', {
+      params: {
+        aggregate: { count: ['id'] },
+        filter: { invoice_number: { _starts_with: `INV-${y}` } }
+      }
+    })
+    const count = parseInt(data?.data?.[0]?.count?.id || 0)
+    const seq = String(count + 1).padStart(2, '0')
+    return `INV-${y}-${seq}`
+  } catch {
+    const rand = String(Math.floor(Math.random() * 100)).padStart(2, '0')
+    return `INV-${y}-${rand}`
+  }
 }
 
 const InvoiceGenerator = ({ quote, onClose }) => {
@@ -42,7 +52,11 @@ const InvoiceGenerator = ({ quote, onClose }) => {
 
   const [selectedType, setSelectedType] = useState(defaultType)
   const [customAmount, setCustomAmount] = useState('')
-  const [invoiceNumber] = useState(() => generateInvoiceNumber())
+  const [invoiceNumber, setInvoiceNumber] = useState('INV-...')
+
+  useEffect(() => {
+    generateInvoiceNumber().then(setInvoiceNumber)
+  }, [])
 
   const selectedAmount = useMemo(() => {
     switch (selectedType) {

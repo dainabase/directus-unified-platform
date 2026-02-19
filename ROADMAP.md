@@ -348,9 +348,9 @@
 | Date | Story | Découverte | Impact | Décision |
 |------|-------|-----------|--------|----------|
 | 2026-02-19 | — | PROGRESS.md 47/47 couvrait uniquement la couche affichage | 80% CDC restant | Ce ROADMAP.md créé |
-| 2026-02-19 | B-01 | Score qualification implémenté en 1-5 (numérique) vs High/Medium/Low (CDC) | Acceptable fonctionnellement | Conserver 1-5, mapping vers H/M/L à confirmer avec Jean |
-| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs FAC-HV-YYYY-XXXX prévu) | Mineur | Harmoniser si besoin lors de Phase I |
-| 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus — non prévu dans le prompt initial | Conserver, à documenter dans CDC |
+| 2026-02-19 | B-01 | Score qualification implémenté en 1-5 (numérique) vs High/Medium/Low (CDC) | Acceptable | **DÉCISION JEAN : Conserver 1-5** |
+| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs CDC) | Mineur | **DÉCISION JEAN : Format INV-XXXX-YY** — à corriger en Phase C |
+| 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus | Conserver |
 
 ---
 

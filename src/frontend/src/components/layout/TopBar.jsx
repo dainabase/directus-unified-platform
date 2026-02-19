@@ -27,11 +27,11 @@ const TopBar = ({
 
   const companies = [
     { value: 'all', label: 'Toutes les entreprises' },
-    { value: 'HMF Corporation SA', label: 'HMF Corporation SA' },
-    { value: 'HYPERVISUAL', label: 'HYPERVISUAL' },
-    { value: 'ETEKOUT', label: 'ETEKOUT' },
-    { value: 'NK REALITY', label: 'NK REALITY' },
-    { value: 'LEXIA', label: 'LEXIA' }
+    { value: '2d6b906a-5b8a-4d9e-a37b-aee8c1281b22', label: 'HYPERVISUAL' },
+    { value: '55483d07-6621-43d4-89a9-5ebbffe86fea', label: 'DAINAMICS' },
+    { value: '6f4bc42a-d083-4df5-ace3-6b910164ae18', label: 'ENKI REALTY' },
+    { value: '8db45f3b-4021-9556-3acaa5f35b3f', label: 'LEXAIA' },
+    { value: 'a1313adf-0347-424b-aff2-c5f0b33c4a05', label: 'TAKEOUT' }
   ]
 
   const handleLogout = () => {

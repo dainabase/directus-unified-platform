@@ -168,7 +168,7 @@ const LoginPage = () => {
 
         {/* Footer */}
         <p className="text-center text-xs text-gray-400 mt-6">
-          HMF Corporation SA — Fribourg, Suisse
+          HYPERVISUAL Switzerland — Fribourg, Suisse
         </p>
       </div>
     </div>

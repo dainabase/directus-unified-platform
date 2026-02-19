@@ -26,9 +26,11 @@ import ClientDashboard from './portals/client/Dashboard'
 import ClientInvoicesModule from './portals/client/invoices/InvoicesModule'
 import ClientQuotesModule from './portals/client/quotes/QuotesModule'
 import ClientPlaceholder from './portals/client/pages/PlaceholderPage'
-import ProjectsModule from './modules/projects/ProjectsModule'
-import TimeTrackingView from './modules/projects/views/TimeTrackingView'
-import DeliverablesView from './modules/projects/views/DeliverablesView'
+import ClientProjectsModule from './portals/client/projects/ClientProjectsModule'
+import ProjectsModule from './portals/superadmin/projects/ProjectsModule'
+import DeliverablesModule from './portals/superadmin/deliverables/DeliverablesModule'
+import TimeTrackingModule from './portals/superadmin/time/TimeTrackingModule'
+import SubscriptionsModule from './portals/superadmin/subscriptions/SubscriptionsModule'
 import HRModule from './modules/hr/HRModule'
 import TrainingsView from './modules/hr/views/TrainingsView'
 
@@ -132,8 +134,9 @@ function App() {
 
                   {/* Projets */}
                   <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
-                  <Route path="deliverables" element={<DeliverablesView selectedCompany={selectedCompany} />} />
-                  <Route path="time-tracking" element={<TimeTrackingView selectedCompany={selectedCompany} />} />
+                  <Route path="deliverables" element={<DeliverablesModule selectedCompany={selectedCompany} />} />
+                  <Route path="time-tracking" element={<TimeTrackingModule selectedCompany={selectedCompany} />} />
+                  <Route path="subscriptions" element={<SubscriptionsModule selectedCompany={selectedCompany} />} />
 
                   {/* CRM */}
                   <Route path="crm" element={<CRMDashboard selectedCompany={selectedCompany} />} />
@@ -194,7 +197,7 @@ function App() {
             </ProtectedRoute>
           }>
             <Route index element={<ClientDashboard />} />
-            <Route path="projects" element={<ClientPlaceholder title="Mes projets" description="Suivi projets — S-03-03" />} />
+            <Route path="projects" element={<ClientProjectsModule />} />
             <Route path="quotes" element={<ClientQuotesModule />} />
             <Route path="invoices" element={<ClientInvoicesModule />} />
             <Route path="payments" element={<ClientPlaceholder title="Paiements" description="Historique paiements — S-03-03" />} />

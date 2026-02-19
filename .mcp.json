@@ -17,7 +17,7 @@
       ],
       "env": {
         "DIRECTUS_URL": "http://localhost:8055",
-        "DIRECTUS_TOKEN": "hbQz-9935crJ2YkLul_zpQJDBw2M-y5v"
+        "DIRECTUS_TOKEN": "hypervisual-admin-static-token-2026"
       }
     }
   }

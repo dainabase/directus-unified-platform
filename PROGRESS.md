@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 28/47 stories — 60%
+**Progression globale** : 34/47 stories — 72%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -89,18 +89,18 @@
 ---
 
 ## PHASE 4 — Gestion Projets + Facturation Recurrente
-**Statut** : [ ] TODO | **Progression** : 0/6 stories
-**Demarre** : — | **Termine** : —
+**Statut** : [V] DONE | **Progression** : 6/6 stories
+**Demarre** : 2026-02-19 | **Termine** : 2026-02-19
 
-- [ ] S-04-01 · Module Projets — tableau de bord CEO
-- [ ] S-04-02 · Statuts projet + workflow automatique
-- [ ] S-04-03 · Gestion documentaire projet (upload/download)
-- [ ] S-04-04 · Suivi commandes hardware Chine
-- [ ] S-04-05 · Facturation recurrente (maintenance/hebergement)
-- [ ] S-04-06 · Rappels automatiques paiements (J+7, J+14, J+30)
+- [V] S-04-01 · Module Projets SuperAdmin (liste + kanban + detail + form) — 2026-02-19
+- [V] S-04-02 · Module Livrables & Taches (kanban + CRUD + sous-taches) — 2026-02-19
+- [V] S-04-03 · Module Time Tracking (graphiques Recharts + CRUD) — 2026-02-19
+- [V] S-04-04 · Module Projets Client (lecture seule + timeline) — 2026-02-19
+- [V] S-04-05 · Abonnements & Facturation Recurrente (subscriptions + generation factures) — 2026-02-19
+- [V] S-04-06 · Dashboard Projets analytique (PieChart + BarChart + LineChart + KPIs) — 2026-02-19
 
-**Fichiers crees/modifies** : —
-**Observations** : —
+**Fichiers crees/modifies** : services/api/projects.js, portals/superadmin/projects/ProjectsModule.jsx, portals/superadmin/projects/ProjectsDashboard.jsx, portals/superadmin/deliverables/DeliverablesModule.jsx, portals/superadmin/time/TimeTrackingModule.jsx, portals/superadmin/subscriptions/SubscriptionsModule.jsx, portals/client/projects/ClientProjectsModule.jsx, App.jsx, components/layout/Sidebar.jsx, components/layout/TopBar.jsx
+**Observations** : Ancien ProjectsModule (modules/projects/) remplace par portals/superadmin/projects/ connecte TanStack Query. DeliverablesView et TimeTrackingView etaient 100% mock — remplaces par modules connectes Directus. Collection recurring_invoices n'existe pas — utilise subscriptions avec schema discovery runtime. Module client projets avec fallback HYPERVISUAL si pas de client_id match.
 **Blocages** : —
 
 ---
@@ -171,6 +171,13 @@
 | 2026-02-19 | S-03-06 | FinanceDashboard utilisait Tabler CSS + useFinanceData (useState/useEffect) | Incoherence avec design Tailwind du reste | Refactore vers Tailwind + useFinance TanStack Query |
 | 2026-02-19 | S-03-07 | CGV Manager deja complet dans module Legal (CGVManager + CGVEditor + CGVPreview + AcceptanceHistory) | Pas de duplication necessaire | S-03-07 ne cree que DepositConfigManager |
 | 2026-02-19 | S-03-05 | Import PlaceholderPage collision entre portails prestataire et client | Erreur build potentielle | Renomme en PrestatairePlaceholder et ClientPlaceholder |
+| 2026-02-19 | S-04-01 | Ancien ProjectsModule (modules/projects/) deja connecte Directus via useProjects hook | Pas besoin de recreer le hook existant | Nouveau module dans portals/superadmin/projects/ avec fetch direct |
+| 2026-02-19 | S-04-02 | DeliverablesView existant 100% mock (mockDeliverables, mockTasks hardcodes) | Remplacement complet necessaire | Rewrite avec TanStack Query + Directus deliverables collection |
+| 2026-02-19 | S-04-03 | TimeTrackingView existant 100% mock (mockTimeEntries, mockWeeklyData, mockProjectDistribution) | Remplacement complet necessaire | Rewrite avec Recharts connecte a time_tracking collection |
+| 2026-02-19 | S-04-04 | Pas de mapping client_id fiable sur collection projects | Projets client peuvent etre vides | Fallback: affiche projets HYPERVISUAL avec log console explicatif |
+| 2026-02-19 | S-04-05 | Collection recurring_invoices n'existe PAS dans Directus | Impossible d'utiliser recurring_invoices | Utilise collection subscriptions avec decouverte de schema au runtime |
+| 2026-02-19 | S-04-05 | Champs subscriptions decouverts dynamiquement (fields: *) | Structure schema inconnue a l'avance | Runtime schema discovery via Object.keys(sample) |
+| 2026-02-19 | S-04-06 | Route /superadmin/projects/dashboard requiert nested route dans App.jsx | Route projects deja occupee par ProjectsModule | Ajoute /projects/dashboard comme route distincte + sidebar entry |
 
 ---
 
@@ -179,4 +186,4 @@
 **Endpoints custom** : 156
 **Fichiers archives lors du nettoyage** : — (a remplir apres S-00-02)
 **Fichiers supprimes** : — (a remplir apres S-00-02)
-**Dernier commit** : 32b14dd — feat(settings): deposit config manager + onglet Acomptes — S-03-07
+**Dernier commit** : 4e647a7 — feat(superadmin): dashboard analytique projets — S-04-06

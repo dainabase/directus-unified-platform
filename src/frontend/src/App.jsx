@@ -51,6 +51,7 @@ import ExpensesTracker from './portals/superadmin/finance/components/ExpensesTra
 import CRMDashboard from './portals/superadmin/crm/CRMDashboard'
 import PipelineView from './portals/superadmin/crm/components/PipelineView'
 import CustomerSuccess from './portals/superadmin/crm/components/CustomerSuccess'
+import CRMAnalytics from './portals/superadmin/crm/CRMAnalytics'
 
 // Leads Module
 import LeadsDashboard from './portals/superadmin/leads/LeadsDashboard'
@@ -151,6 +152,7 @@ function App() {
                   <Route path="crm/companies" element={<CRMDashboard selectedCompany={selectedCompany} view="companies" />} />
                   <Route path="crm/pipeline" element={<PipelineView selectedCompany={selectedCompany} />} />
                   <Route path="crm/success" element={<CustomerSuccess selectedCompany={selectedCompany} />} />
+                  <Route path="crm/analytics" element={<CRMAnalytics selectedCompany={selectedCompany} />} />
 
                   {/* Devis */}
                   <Route path="quotes" element={<QuotesModule selectedCompany={selectedCompany} />} />

@@ -14,6 +14,9 @@ import TopBar from './components/layout/TopBar'
 
 // Portals & Modules
 import SuperAdminDashboard from './portals/superadmin/Dashboard'
+import PrestataireLayout from './portals/prestataire/layout/PrestataireLayout'
+import PrestataireDashboard from './portals/prestataire/Dashboard'
+import PlaceholderPage from './portals/prestataire/pages/PlaceholderPage'
 import ProjectsModule from './modules/projects/ProjectsModule'
 import TimeTrackingView from './modules/projects/views/TimeTrackingView'
 import DeliverablesView from './modules/projects/views/DeliverablesView'
@@ -173,12 +176,20 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* ── Prestataire portal placeholder ── */}
-          <Route path="/prestataire/*" element={
+          {/* ── Prestataire portal ── */}
+          <Route path="/prestataire" element={
             <ProtectedRoute allowedPortals={['prestataire']}>
-              <div>Prestataire Portal — Phase 2</div>
+              <PrestataireLayout />
             </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<PrestataireDashboard />} />
+            <Route path="dashboard" element={<PrestataireDashboard />} />
+            <Route path="missions" element={<PlaceholderPage title="Missions" description="Module missions — S-02-03" />} />
+            <Route path="quotes" element={<PlaceholderPage title="Devis reçus" description="Module devis prestataire — S-02-04" />} />
+            <Route path="invoices" element={<PlaceholderPage title="Factures" description="Module factures — Phase 3" />} />
+            <Route path="documents" element={<PlaceholderPage title="Documents" description="Module documents — S-02-07" />} />
+            <Route path="profile" element={<PlaceholderPage title="Profil" description="Module profil — S-02-07" />} />
+          </Route>
 
           {/* ── Revendeur portal placeholder ── */}
           <Route path="/revendeur/*" element={

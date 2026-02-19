@@ -9,12 +9,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Headphones, MessageSquare, Bell, Clock, Plus, Search, Filter,
   AlertCircle, CheckCircle, Loader2, X, Save, Trash2, Edit, Eye,
-  TrendingUp, ChevronRight
+  TrendingUp, ChevronRight, Receipt
 } from 'lucide-react'
 import { format, differenceInHours } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import toast from 'react-hot-toast'
 import { fetchTickets, createTicket, updateTicket, deleteTicket } from '../../../services/api/crm'
+import TicketsToInvoiceModule from './TicketsToInvoiceModule'
 
 const STATUS_CONFIG = {
   open: { label: 'Ouvert', color: 'bg-blue-100 text-blue-700' },
@@ -200,13 +201,36 @@ const SupportDashboard = ({ selectedCompany, view }) => {
           <p className="text-xs text-gray-500 uppercase tracking-wide">Support</p>
           <h2 className="text-xl font-bold text-gray-900">Tickets & Notifications</h2>
         </div>
+        {activeTab !== 'billing' && (
+          <button
+            onClick={() => { setEditingTicket(null); setShowForm(true) }}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+          >
+            <Plus size={16} /> Nouveau ticket
+          </button>
+        )}
+      </div>
+
+      {/* Tab toggle */}
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
         <button
-          onClick={() => { setEditingTicket(null); setShowForm(true) }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+          onClick={() => setActiveTab('overview')}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab !== 'billing' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'}`}
         >
-          <Plus size={16} /> Nouveau ticket
+          <Headphones size={16} /> Tickets
+        </button>
+        <button
+          onClick={() => setActiveTab('billing')}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'billing' ? 'bg-white shadow text-emerald-600' : 'text-gray-600 hover:text-gray-900'}`}
+        >
+          <Receipt size={16} /> Facturation hors contrat
         </button>
       </div>
+
+      {activeTab === 'billing' ? (
+        <TicketsToInvoiceModule />
+      ) : (
+      <>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -325,6 +349,9 @@ const SupportDashboard = ({ selectedCompany, view }) => {
             </tbody>
           </table>
         </div>
+      )}
+
+      </>
       )}
 
       {/* Ticket Form Modal */}

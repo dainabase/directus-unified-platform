@@ -1,15 +1,5 @@
 {
   "mcpServers": {
-    "postgres": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://directus:Two5u24pqiIi03w2pNswBg==@localhost:5432/directus"
-      ],
-      "env": {}
-    },
     "eslint": {
       "type": "stdio",
       "command": "npx",
@@ -21,7 +11,7 @@
     },
     "directus": {
       "type": "stdio",
-      "command": "node",
+      "command": "/opt/homebrew/bin/node",
       "args": [
         "/Users/jean-mariedelaunay/directus-unified-platform/.mcp/directus-mcp-server.js"
       ],

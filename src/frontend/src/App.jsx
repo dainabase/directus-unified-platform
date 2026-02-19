@@ -162,10 +162,8 @@ function App() {
 
                   {/* Marketing */}
                   <Route path="marketing" element={<MarketingDashboard selectedCompany={selectedCompany} />} />
-                  <Route path="marketing/calendar" element={<MarketingDashboard selectedCompany={selectedCompany} view="calendar" />} />
                   <Route path="marketing/campaigns" element={<MarketingDashboard selectedCompany={selectedCompany} view="campaigns" />} />
-                  <Route path="marketing/analytics" element={<MarketingDashboard selectedCompany={selectedCompany} view="analytics" />} />
-                  <Route path="marketing/events" element={<MarketingDashboard selectedCompany={selectedCompany} view="events" />} />
+                  <Route path="marketing/whatsapp" element={<MarketingDashboard selectedCompany={selectedCompany} view="whatsapp" />} />
 
                   {/* RH */}
                   <Route path="hr" element={<HRModule selectedCompany={selectedCompany} />} />

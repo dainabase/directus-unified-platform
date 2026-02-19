@@ -1,360 +1,600 @@
-// src/frontend/src/portals/superadmin/marketing/MarketingDashboard.jsx
-import React, { useState } from 'react';
+/**
+ * MarketingDashboard — S-05-06
+ * Marketing module connected to Directus campaigns + whatsapp messages.
+ * Overview KPIs computed from real campaign data.
+ */
+
+import React, { useState, useMemo } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Megaphone, Calendar, Mail, BarChart3, Users, Target,
-  TrendingUp, Eye, MousePointer, RefreshCw, Plus
-} from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+  TrendingUp, Eye, MousePointer, RefreshCw, Plus,
+  MessageSquare, Loader2, Search, X, Edit, Trash2
+} from 'lucide-react'
 import {
-  AreaChart, Area, PieChart, Pie, Cell,
+  BarChart, Bar, PieChart, Pie, Cell,
   ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
-} from 'recharts';
-import ContentCalendar from './components/ContentCalendar';
-import CampaignsList from './components/CampaignsList';
-import MarketingAnalytics from './components/MarketingAnalytics';
-import EventsManager from './components/EventsManager';
+} from 'recharts'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import toast from 'react-hot-toast'
+import {
+  fetchCampaigns, createCampaign, updateCampaign, deleteCampaign,
+  fetchWhatsappMessages, formatCHF
+} from '../../../services/api/crm'
+
+const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+
+const STATUS_CFG = {
+  draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
+  scheduled: { label: 'Planifiee', color: 'bg-amber-100 text-amber-700' },
+  active: { label: 'Active', color: 'bg-green-100 text-green-700' },
+  paused: { label: 'En pause', color: 'bg-blue-100 text-blue-700' },
+  completed: { label: 'Terminee', color: 'bg-purple-100 text-purple-700' },
+  cancelled: { label: 'Annulee', color: 'bg-red-100 text-red-700' }
+}
 
 const TABS = [
   { id: 'overview', label: 'Vue d\'ensemble', icon: BarChart3 },
-  { id: 'calendar', label: 'Calendrier', icon: Calendar },
   { id: 'campaigns', label: 'Campagnes', icon: Mail },
-  { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-  { id: 'events', label: 'Evenements', icon: Users }
-];
-
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-
-// Mock data for overview
-const mockOverviewData = {
-  kpis: {
-    emailsSent: 12450,
-    openRate: 24.5,
-    clickRate: 3.2,
-    conversions: 156,
-    revenue: 45600,
-    leads: 89
-  },
-  emailTrend: [
-    { date: '01/12', sent: 420, opened: 105, clicked: 14 },
-    { date: '02/12', sent: 380, opened: 98, clicked: 12 },
-    { date: '03/12', sent: 450, opened: 118, clicked: 18 },
-    { date: '04/12', sent: 520, opened: 135, clicked: 22 },
-    { date: '05/12', sent: 480, opened: 125, clicked: 19 },
-    { date: '06/12', sent: 560, opened: 148, clicked: 25 },
-    { date: '07/12', sent: 620, opened: 165, clicked: 28 }
-  ],
-  channelPerformance: [
-    { name: 'Email', value: 45 },
-    { name: 'Social', value: 25 },
-    { name: 'SEO', value: 20 },
-    { name: 'Ads', value: 10 }
-  ],
-  recentCampaigns: [
-    { id: 1, name: 'Newsletter Decembre', status: 'active', sent: 5200, opens: 1248, clicks: 167 },
-    { id: 2, name: 'Promo Fin d\'annee', status: 'scheduled', sent: 0, opens: 0, clicks: 0 },
-    { id: 3, name: 'Nouveaux Services', status: 'completed', sent: 4800, opens: 1152, clicks: 144 }
-  ]
-};
+  { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare }
+]
 
 const MarketingDashboard = ({ selectedCompany, view }) => {
+  const queryClient = useQueryClient()
   const getInitialTab = () => {
-    if (view === 'calendar') return 'calendar';
-    if (view === 'campaigns') return 'campaigns';
-    if (view === 'analytics') return 'analytics';
-    if (view === 'events') return 'events';
-    return 'overview';
-  };
+    if (view === 'campaigns') return 'campaigns'
+    if (view === 'whatsapp') return 'whatsapp'
+    return 'overview'
+  }
 
-  const [activeTab, setActiveTab] = useState(getInitialTab());
-  const [dateRange, setDateRange] = useState('30d');
+  const [activeTab, setActiveTab] = useState(getInitialTab())
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [showForm, setShowForm] = useState(false)
+  const [editingCampaign, setEditingCampaign] = useState(null)
 
-  // Mock data query
-  const { data: overviewData, isLoading, refetch } = useQuery({
-    queryKey: ['marketing-overview', selectedCompany, dateRange],
-    queryFn: async () => {
-      // TODO: Replace with real API call
-      await new Promise(r => setTimeout(r, 500));
-      return mockOverviewData;
+  const company = selectedCompany === 'all' ? null : selectedCompany
+
+  // Fetch campaigns
+  const { data: campaigns = [], isLoading } = useQuery({
+    queryKey: ['campaigns', company, statusFilter, searchQuery],
+    queryFn: () => fetchCampaigns({
+      company,
+      status: statusFilter !== 'all' ? statusFilter : null,
+      search: searchQuery || null
+    }),
+    staleTime: 30_000
+  })
+
+  // Fetch whatsapp messages
+  const { data: whatsappMessages = [], isLoading: loadingWA } = useQuery({
+    queryKey: ['whatsapp-messages'],
+    queryFn: () => fetchWhatsappMessages({ limit: 50 }),
+    staleTime: 60_000
+  })
+
+  // Mutations
+  const createMutation = useMutation({
+    mutationFn: createCampaign,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['campaigns'] })
+      toast.success('Campagne creee')
+      setShowForm(false)
     },
-    staleTime: 60000
-  });
+    onError: (err) => toast.error(`Erreur: ${err.message}`)
+  })
 
-  const data = overviewData || mockOverviewData;
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => updateCampaign(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['campaigns'] })
+      toast.success('Campagne mise a jour')
+      setShowForm(false)
+      setEditingCampaign(null)
+    },
+    onError: (err) => toast.error(`Erreur: ${err.message}`)
+  })
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteCampaign,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['campaigns'] })
+      toast.success('Campagne supprimee')
+    },
+    onError: (err) => toast.error(`Erreur: ${err.message}`)
+  })
+
+  // KPIs from real data
+  const kpis = useMemo(() => {
+    const total = campaigns.length
+    const active = campaigns.filter(c => c.status === 'active').length
+    const completed = campaigns.filter(c => c.status === 'completed').length
+    const totalSent = campaigns.reduce((s, c) => s + (c.emails_sent || 0), 0)
+    const totalOpens = campaigns.reduce((s, c) => s + (c.opens || 0), 0)
+    const totalClicks = campaigns.reduce((s, c) => s + (c.clicks || 0), 0)
+    const totalConversions = campaigns.reduce((s, c) => s + (c.conversions || 0), 0)
+    const totalBudget = campaigns.reduce((s, c) => s + (c.budget || 0), 0)
+    const openRate = totalSent > 0 ? ((totalOpens / totalSent) * 100).toFixed(1) : 0
+    const clickRate = totalSent > 0 ? ((totalClicks / totalSent) * 100).toFixed(1) : 0
+    return { total, active, completed, totalSent, totalOpens, totalClicks, totalConversions, totalBudget, openRate, clickRate }
+  }, [campaigns])
+
+  // Chart data: campaigns by status
+  const statusChartData = useMemo(() => {
+    const counts = {}
+    campaigns.forEach(c => {
+      const status = c.status || 'draft'
+      counts[status] = (counts[status] || 0) + 1
+    })
+    return Object.entries(counts).map(([name, value]) => ({
+      name: STATUS_CFG[name]?.label || name,
+      value
+    }))
+  }, [campaigns])
+
+  // Chart data: campaigns by type/channel
+  const channelChartData = useMemo(() => {
+    const counts = {}
+    campaigns.forEach(c => {
+      const ch = c.channel || c.type || 'email'
+      counts[ch] = (counts[ch] || 0) + 1
+    })
+    return Object.entries(counts).map(([name, value]) => ({ name, value }))
+  }, [campaigns])
+
+  const handleSave = (formData) => {
+    if (editingCampaign) {
+      updateMutation.mutate({ id: editingCampaign.id, data: formData })
+    } else {
+      createMutation.mutate({
+        ...formData,
+        owner_company: company || undefined
+      })
+    }
+  }
+
+  const handleDelete = (id) => {
+    if (!window.confirm('Supprimer cette campagne ?')) return
+    deleteMutation.mutate(id)
+  }
+
+  // ── Overview Tab ──
   const renderOverview = () => (
     <div className="space-y-6">
-      {/* KPIs */}
-      <div className="row g-3">
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Mail size={20} className="text-primary me-2" />
-                <span className="text-muted small">Emails envoyes</span>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {[
+          { label: 'Campagnes', value: kpis.total, icon: Megaphone, color: 'text-blue-500' },
+          { label: 'Actives', value: kpis.active, icon: Target, color: 'text-green-500' },
+          { label: 'Emails envoyes', value: kpis.totalSent.toLocaleString(), icon: Mail, color: 'text-indigo-500' },
+          { label: 'Taux ouverture', value: `${kpis.openRate}%`, icon: Eye, color: 'text-cyan-500' },
+          { label: 'Taux clic', value: `${kpis.clickRate}%`, icon: MousePointer, color: 'text-amber-500' },
+          { label: 'Budget total', value: formatCHF(kpis.totalBudget), icon: TrendingUp, color: 'text-emerald-500' }
+        ].map((kpi, i) => {
+          const Icon = kpi.icon
+          return (
+            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Icon size={14} className={kpi.color} />
+                <span className="text-xs text-gray-500">{kpi.label}</span>
               </div>
-              <h3 className="mb-0">{data.kpis.emailsSent.toLocaleString()}</h3>
-              <small className="text-success">+12% ce mois</small>
+              <p className="text-xl font-bold text-gray-900">{kpi.value}</p>
             </div>
-          </div>
+          )
+        })}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Status distribution */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par statut</h3>
+          {statusChartData.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-8">Aucune campagne</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie data={statusChartData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={4} dataKey="value">
+                  {statusChartData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
         </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Eye size={20} className="text-info me-2" />
-                <span className="text-muted small">Taux ouverture</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.openRate}%</h3>
-              <small className="text-success">+2.3% vs moyenne</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <MousePointer size={20} className="text-success me-2" />
-                <span className="text-muted small">Taux clic</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.clickRate}%</h3>
-              <small className="text-warning">-0.5% vs moyenne</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Target size={20} className="text-warning me-2" />
-                <span className="text-muted small">Conversions</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.conversions}</h3>
-              <small className="text-success">+8 cette semaine</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <TrendingUp size={20} className="text-danger me-2" />
-                <span className="text-muted small">Revenus</span>
-              </div>
-              <h3 className="mb-0">CHF {data.kpis.revenue.toLocaleString()}</h3>
-              <small className="text-success">+15% ce mois</small>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-4 col-lg-2">
-          <div className="card">
-            <div className="card-body">
-              <div className="d-flex align-items-center mb-2">
-                <Users size={20} className="text-purple me-2" />
-                <span className="text-muted small">Nouveaux leads</span>
-              </div>
-              <h3 className="mb-0">{data.kpis.leads}</h3>
-              <small className="text-success">+23 cette semaine</small>
-            </div>
-          </div>
+
+        {/* Channel distribution */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par canal</h3>
+          {channelChartData.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-8">Aucune donnee</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={channelChartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Campagnes" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
 
-      {/* Charts Row */}
-      <div className="row g-4">
-        <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Performance Email (7 derniers jours)</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={data.emailTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Area type="monotone" dataKey="sent" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Envoyes" />
-                  <Area type="monotone" dataKey="opened" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Ouverts" />
-                  <Area type="monotone" dataKey="clicked" stackId="3" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} name="Cliques" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-4">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Performance par Canal</h5>
-            </div>
-            <div className="card-body">
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={data.channelPerformance}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.channelPerformance.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                {data.channelPerformance.map((item, index) => (
-                  <div key={item.name} className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle me-2"
-                      style={{ width: 10, height: 10, backgroundColor: COLORS[index] }}
-                    />
-                    <small>{item.name} ({item.value}%)</small>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Campaigns */}
-      <div className="card">
-        <div className="card-header d-flex justify-content-between align-items-center">
-          <h5 className="card-title mb-0">Campagnes Recentes</h5>
-          <button className="btn btn-sm btn-primary" onClick={() => setActiveTab('campaigns')}>
+      {/* Recent campaigns */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="font-semibold text-gray-900">Campagnes recentes</h3>
+          <button onClick={() => setActiveTab('campaigns')} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
             Voir toutes
           </button>
         </div>
-        <div className="card-body">
-          <div className="table-responsive">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Campagne</th>
-                  <th>Statut</th>
-                  <th>Envoyes</th>
-                  <th>Ouvertures</th>
-                  <th>Clics</th>
-                  <th>Taux</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.recentCampaigns.map(campaign => (
-                  <tr key={campaign.id}>
-                    <td className="fw-medium">{campaign.name}</td>
-                    <td>
-                      <span className={`badge ${
-                        campaign.status === 'active' ? 'bg-success' :
-                        campaign.status === 'scheduled' ? 'bg-warning' : 'bg-secondary'
-                      }`}>
-                        {campaign.status === 'active' ? 'Active' :
-                         campaign.status === 'scheduled' ? 'Planifiee' : 'Terminee'}
-                      </span>
-                    </td>
-                    <td>{campaign.sent.toLocaleString()}</td>
-                    <td>{campaign.opens.toLocaleString()}</td>
-                    <td>{campaign.clicks.toLocaleString()}</td>
-                    <td>
-                      {campaign.sent > 0 ? (
-                        <span className="text-success">
-                          {((campaign.opens / campaign.sent) * 100).toFixed(1)}%
-                        </span>
-                      ) : '-'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {campaigns.length === 0 ? (
+          <div className="p-8 text-center text-gray-400 text-sm">Aucune campagne</div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {campaigns.slice(0, 5).map(c => {
+              const cfg = STATUS_CFG[c.status] || STATUS_CFG.draft
+              return (
+                <div key={c.id} className="px-4 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                      {cfg.label}
+                    </span>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{c.name || c.title || `Campagne #${c.id?.slice(0, 8)}`}</p>
+                      <p className="text-xs text-gray-400">
+                        {c.date_created ? format(new Date(c.date_created), 'dd MMM yyyy', { locale: fr }) : '—'}
+                        {c.channel ? ` · ${c.channel}` : ''}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right text-xs text-gray-500">
+                    {c.emails_sent ? `${c.emails_sent} envoyes` : ''}
+                  </div>
+                </div>
+              )
+            })}
           </div>
-        </div>
+        )}
       </div>
     </div>
-  );
+  )
+
+  // ── Campaigns Tab ──
+  const renderCampaigns = () => (
+    <div className="space-y-4">
+      {/* Filters */}
+      <div className="flex items-center gap-4 flex-wrap">
+        <div className="relative flex-1 min-w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Rechercher une campagne..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="all">Tous les statuts</option>
+          {Object.entries(STATUS_CFG).map(([k, v]) => (
+            <option key={k} value={k}>{v.label}</option>
+          ))}
+        </select>
+        <button
+          onClick={() => { setEditingCampaign(null); setShowForm(true) }}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+        >
+          <Plus size={16} /> Nouvelle campagne
+        </button>
+      </div>
+
+      {/* Campaign list */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        {campaigns.length === 0 ? (
+          <div className="p-12 text-center text-gray-400">
+            <Megaphone className="w-12 h-12 mx-auto mb-3 text-gray-200" />
+            <p className="text-sm">Aucune campagne trouvee</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {campaigns.map(c => {
+              const cfg = STATUS_CFG[c.status] || STATUS_CFG.draft
+              return (
+                <div key={c.id} className="px-4 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
+                  <div className="flex items-center gap-3 flex-1">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                      {cfg.label}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">{c.name || c.title || `Campagne #${c.id?.slice(0, 8)}`}</p>
+                      <p className="text-xs text-gray-400">
+                        {c.date_created ? format(new Date(c.date_created), 'dd MMM yyyy', { locale: fr }) : '—'}
+                        {c.channel ? ` · ${c.channel}` : ''}
+                        {c.budget ? ` · Budget: ${formatCHF(c.budget)}` : ''}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-4 text-xs text-gray-500">
+                      {c.emails_sent > 0 && <span>{c.emails_sent} envoyes</span>}
+                      {c.opens > 0 && <span>{c.opens} ouvertures</span>}
+                      {c.clicks > 0 && <span>{c.clicks} clics</span>}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => { setEditingCampaign(c); setShowForm(true) }}
+                        className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-blue-600"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(c.id)}
+                        className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-red-600"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+
+  // ── WhatsApp Tab ──
+  const renderWhatsApp = () => (
+    <div className="space-y-4">
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="p-4 border-b border-gray-100 flex items-center gap-2">
+          <MessageSquare size={16} className="text-green-500" />
+          <h3 className="font-semibold text-gray-900">Messages WhatsApp</h3>
+          <span className="text-xs text-gray-400 ml-auto">{whatsappMessages.length} messages</span>
+        </div>
+        {loadingWA ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 text-green-500 animate-spin" />
+          </div>
+        ) : whatsappMessages.length === 0 ? (
+          <div className="p-12 text-center text-gray-400">
+            <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-200" />
+            <p className="text-sm">Aucun message WhatsApp</p>
+            <p className="text-xs mt-1">Les messages apparaitront ici une fois la collection peuplee.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {whatsappMessages.map(m => (
+              <div key={m.id} className="px-4 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare size={14} className="text-green-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-gray-900">{m.contact_name || m.phone || 'Inconnu'}</p>
+                    <span className={`px-1.5 py-0.5 rounded text-xs ${m.direction === 'outgoing' ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                      {m.direction === 'outgoing' ? 'Sortant' : 'Entrant'}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">{m.message || m.body || '—'}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {m.date_created ? format(new Date(m.date_created), 'dd MMM yyyy HH:mm', { locale: fr }) : '—'}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 
   return (
-    <div className="container-xl">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="page-header d-print-none mb-4">
-        <div className="row align-items-center">
-          <div className="col-auto">
-            <h2 className="page-title">
-              <Megaphone className="me-2" size={24} />
-              Marketing
-            </h2>
-            <div className="text-muted mt-1">
-              Campagnes, contenu et analytics
-            </div>
-          </div>
-          <div className="col-auto ms-auto d-flex gap-2">
-            <select
-              className="form-select"
-              value={dateRange}
-              onChange={(e) => setDateRange(e.target.value)}
-              style={{ width: 'auto' }}
-            >
-              <option value="7d">7 derniers jours</option>
-              <option value="30d">30 derniers jours</option>
-              <option value="90d">90 derniers jours</option>
-              <option value="1y">Cette annee</option>
-            </select>
-            <button
-              className="btn btn-outline-secondary"
-              onClick={() => refetch()}
-              disabled={isLoading}
-            >
-              <RefreshCw size={16} className={isLoading ? 'spin' : ''} />
-            </button>
-            <button className="btn btn-primary">
-              <Plus size={16} className="me-1" />
-              Nouvelle campagne
-            </button>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <Megaphone size={22} className="text-blue-500" />
+            Marketing
+          </h1>
+          <p className="text-sm text-gray-500 mt-0.5">Campagnes, WhatsApp et analytics</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => queryClient.invalidateQueries({ queryKey: ['campaigns'] })}
+            disabled={isLoading}
+            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="card mb-4">
-        <div className="card-header">
-          <ul className="nav nav-tabs card-header-tabs">
-            {TABS.map(tab => (
-              <li className="nav-item" key={tab.id}>
-                <a
-                  className={`nav-link ${activeTab === tab.id ? 'active' : ''}`}
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); setActiveTab(tab.id); }}
-                >
-                  <tab.icon size={16} className="me-2" />
-                  {tab.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+        {TABS.map(tab => {
+          const Icon = tab.icon
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === tab.id ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Icon size={16} />
+              {tab.label}
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Content */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
-        <div className="card-body">
-          {isLoading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Chargement...</span>
-              </div>
+      ) : (
+        <>
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'campaigns' && renderCampaigns()}
+          {activeTab === 'whatsapp' && renderWhatsApp()}
+        </>
+      )}
+
+      {/* Campaign Form Modal */}
+      {showForm && (
+        <CampaignFormModal
+          campaign={editingCampaign}
+          onSave={handleSave}
+          onClose={() => { setShowForm(false); setEditingCampaign(null) }}
+          isSaving={createMutation.isPending || updateMutation.isPending}
+        />
+      )}
+    </div>
+  )
+}
+
+// ── Campaign Form Modal ──
+const CampaignFormModal = ({ campaign, onSave, onClose, isSaving }) => {
+  const [form, setForm] = useState({
+    name: campaign?.name || '',
+    description: campaign?.description || '',
+    status: campaign?.status || 'draft',
+    channel: campaign?.channel || 'email',
+    budget: campaign?.budget || '',
+    start_date: campaign?.start_date || '',
+    end_date: campaign?.end_date || ''
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!form.name.trim()) return toast.error('Nom requis')
+    onSave({
+      ...form,
+      budget: form.budget ? Number(form.budget) : null
+    })
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg" onClick={e => e.stopPropagation()}>
+        <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">
+            {campaign ? 'Modifier la campagne' : 'Nouvelle campagne'}
+          </h3>
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-gray-100">
+            <X size={18} className="text-gray-400" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Ex: Newsletter Fevrier 2026"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              value={form.description}
+              onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+              <select
+                value={form.status}
+                onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              >
+                {Object.entries(STATUS_CFG).map(([k, v]) => (
+                  <option key={k} value={k}>{v.label}</option>
+                ))}
+              </select>
             </div>
-          ) : (
-            <>
-              {activeTab === 'overview' && renderOverview()}
-              {activeTab === 'calendar' && <ContentCalendar selectedCompany={selectedCompany} />}
-              {activeTab === 'campaigns' && <CampaignsList selectedCompany={selectedCompany} />}
-              {activeTab === 'analytics' && <MarketingAnalytics selectedCompany={selectedCompany} />}
-              {activeTab === 'events' && <EventsManager selectedCompany={selectedCompany} />}
-            </>
-          )}
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Canal</label>
+              <select
+                value={form.channel}
+                onChange={e => setForm(f => ({ ...f, channel: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              >
+                <option value="email">Email</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="sms">SMS</option>
+                <option value="social">Social Media</option>
+                <option value="ads">Ads</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Budget (CHF)</label>
+              <input
+                type="number"
+                value={form.budget}
+                onChange={e => setForm(f => ({ ...f, budget: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                placeholder="0"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Debut</label>
+              <input
+                type="date"
+                value={form.start_date}
+                onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fin</label>
+              <input
+                type="date"
+                value={form.end_date}
+                onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100">
+              Annuler
+            </button>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+            >
+              {isSaving && <Loader2 size={14} className="animate-spin" />}
+              {campaign ? 'Mettre a jour' : 'Creer'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MarketingDashboard;
+export default MarketingDashboard

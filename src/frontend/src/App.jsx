@@ -20,6 +20,11 @@ import PrestatairePlaceholder from './portals/prestataire/pages/PlaceholderPage'
 import PrestataireQuotesModule from './portals/prestataire/quotes/QuotesModule'
 import PrestataireProfilePage from './portals/prestataire/profile/ProfilePage'
 
+// Revendeur Portal
+import RevendeurLayout from './portals/revendeur/layout/RevendeurLayout'
+import RevendeurDashboard from './portals/revendeur/RevendeurDashboard'
+import RevendeurPlaceholder from './portals/revendeur/pages/PlaceholderPage'
+
 // Client Portal
 import ClientLayout from './portals/client/layout/ClientLayout'
 import ClientDashboard from './portals/client/Dashboard'
@@ -222,12 +227,19 @@ function App() {
             <Route path="profile" element={<PrestataireProfilePage />} />
           </Route>
 
-          {/* ── Revendeur portal placeholder ── */}
-          <Route path="/revendeur/*" element={
+          {/* ── Revendeur portal ── */}
+          <Route path="/revendeur" element={
             <ProtectedRoute allowedPortals={['revendeur']}>
-              <div>Revendeur Portal — Phase 6</div>
+              <RevendeurLayout />
             </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<RevendeurDashboard />} />
+            <Route path="quotes" element={<RevendeurPlaceholder title="Devis" description="Module devis revendeur — Phase 6" />} />
+            <Route path="orders" element={<RevendeurPlaceholder title="Commandes" description="Module commandes — Phase 6" />} />
+            <Route path="catalogue" element={<RevendeurPlaceholder title="Catalogue" description="Catalogue produits — Phase 6" />} />
+            <Route path="clients" element={<RevendeurPlaceholder title="Mes Clients" description="Gestion clients — Phase 6" />} />
+            <Route path="analytics" element={<RevendeurPlaceholder title="Statistiques" description="Analytiques revendeur — Phase 6" />} />
+          </Route>
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/superadmin" replace />} />

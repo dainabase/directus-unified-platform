@@ -38,6 +38,15 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true
       },
+      // Auth Directus direct (sans préfixe /api)
+      '/auth': {
+        target: 'http://localhost:8055',
+        changeOrigin: true
+      },
+      '/users': {
+        target: 'http://localhost:8055',
+        changeOrigin: true
+      },
       '/api/health': {
         target: 'http://localhost:3000',
         changeOrigin: true

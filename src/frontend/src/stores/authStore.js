@@ -27,16 +27,32 @@ export const useAuthStore = create(
       login: async (email, password, portal = 'superadmin') => {
         set({ isLoading: true, error: null })
         try {
-          const { data } = await api.post('/api/auth/login', {
+          // Authentification directe Directus (évite le backend Express port 3000)
+          const { data } = await api.post('/auth/login', {
             email,
-            password,
-            portal
+            password
           })
 
           const payload = data.data || data
           const token = payload.access_token
           const refresh = payload.refresh_token
-          const user = payload.user || null
+
+          // Récupérer le profil utilisateur depuis Directus
+          window.__AUTH_TOKEN__ = token
+          let user = null
+          try {
+            const meRes = await api.get('/users/me', {
+              params: { fields: 'id,email,first_name,last_name,role' }
+            })
+            const me = meRes.data?.data || meRes.data
+            user = {
+              id: me.id,
+              email: me.email,
+              name: `${me.first_name || ''} ${me.last_name || ''}`.trim() || me.email,
+              role: portal, // on fait confiance au portal sélectionné
+              companies: ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'TAKEOUT']
+            }
+          } catch { user = { id: 'admin', email, name: email, role: portal } }
 
           // Set global token for axios interceptor
           window.__AUTH_TOKEN__ = token

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 import axios from 'axios';
 
 // Configuration
@@ -17,119 +18,147 @@ const axiosInstance = axios.create({
 });
 
 // Create server instance
-const server = new Server({
+const server = new McpServer({
   name: 'directus-mcp',
   version: '1.0.0',
-}, {
-  capabilities: {
-    tools: {}
-  }
 });
 
-// Handle list tools request
-server.setRequestHandler('tools/list', async () => ({
-  tools: [
-    {
-      name: 'directus_list_collections',
-      description: 'List all collections in Directus',
-      inputSchema: {
-        type: 'object',
-        properties: {},
-        required: []
-      }
-    },
-    {
-      name: 'directus_get_items',
-      description: 'Get items from a Directus collection',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          collection: { type: 'string', description: 'Collection name' },
-          filter: { type: 'object', description: 'Filter object' },
-          limit: { type: 'number', description: 'Number of items to return' }
-        },
-        required: ['collection']
-      }
-    },
-    {
-      name: 'directus_create_item',
-      description: 'Create a new item in a Directus collection',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          collection: { type: 'string', description: 'Collection name' },
-          data: { type: 'object', description: 'Item data' }
-        },
-        required: ['collection', 'data']
-      }
-    },
-    {
-      name: 'directus_update_item',
-      description: 'Update an item in a Directus collection',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          collection: { type: 'string', description: 'Collection name' },
-          id: { type: 'string', description: 'Item ID' },
-          data: { type: 'object', description: 'Update data' }
-        },
-        required: ['collection', 'id', 'data']
-      }
+// Register tools
+server.tool(
+  'directus_list_collections',
+  'List all collections in Directus',
+  {},
+  async () => {
+    try {
+      const response = await axiosInstance.get('/collections');
+      return {
+        content: [{ type: 'text', text: JSON.stringify(response.data.data, null, 2) }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
     }
-  ]
-}));
-
-// Handle tool execution
-server.setRequestHandler('tools/call', async (request) => {
-  const { name, arguments: args } = request.params;
-
-  try {
-    let result;
-    
-    switch (name) {
-      case 'directus_list_collections':
-        const collectionsResponse = await axiosInstance.get('/collections');
-        result = collectionsResponse.data.data;
-        break;
-
-      case 'directus_get_items':
-        const { collection, filter = {}, limit = 100 } = args;
-        const itemsResponse = await axiosInstance.get(`/items/${collection}`, {
-          params: { filter, limit }
-        });
-        result = itemsResponse.data.data;
-        break;
-
-      case 'directus_create_item':
-        const createResponse = await axiosInstance.post(`/items/${args.collection}`, args.data);
-        result = createResponse.data.data;
-        break;
-
-      case 'directus_update_item':
-        const updateResponse = await axiosInstance.patch(`/items/${args.collection}/${args.id}`, args.data);
-        result = updateResponse.data.data;
-        break;
-
-      default:
-        throw new Error(`Unknown tool: ${name}`);
-    }
-
-    return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify(result, null, 2)
-      }]
-    };
-  } catch (error) {
-    return {
-      content: [{
-        type: 'text',
-        text: `Error: ${error.message}`
-      }],
-      isError: true
-    };
   }
-});
+);
+
+server.tool(
+  'directus_get_items',
+  'Get items from a Directus collection',
+  {
+    collection: z.string().describe('Collection name'),
+    filter: z.record(z.any()).optional().describe('Filter object'),
+    limit: z.number().optional().default(100).describe('Number of items to return'),
+    fields: z.array(z.string()).optional().describe('Fields to return'),
+    sort: z.array(z.string()).optional().describe('Sort fields'),
+  },
+  async ({ collection, filter, limit, fields, sort }) => {
+    try {
+      const params = { limit };
+      if (filter) params.filter = JSON.stringify(filter);
+      if (fields) params.fields = fields.join(',');
+      if (sort) params.sort = sort.join(',');
+      const response = await axiosInstance.get(`/items/${collection}`, { params });
+      return {
+        content: [{ type: 'text', text: JSON.stringify(response.data.data, null, 2) }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  'directus_create_item',
+  'Create a new item in a Directus collection',
+  {
+    collection: z.string().describe('Collection name'),
+    data: z.record(z.any()).describe('Item data'),
+  },
+  async ({ collection, data }) => {
+    try {
+      const response = await axiosInstance.post(`/items/${collection}`, data);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(response.data.data, null, 2) }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  'directus_update_item',
+  'Update an item in a Directus collection',
+  {
+    collection: z.string().describe('Collection name'),
+    id: z.string().describe('Item ID'),
+    data: z.record(z.any()).describe('Update data'),
+  },
+  async ({ collection, id, data }) => {
+    try {
+      const response = await axiosInstance.patch(`/items/${collection}/${id}`, data);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(response.data.data, null, 2) }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  'directus_delete_item',
+  'Delete an item from a Directus collection',
+  {
+    collection: z.string().describe('Collection name'),
+    id: z.string().describe('Item ID'),
+  },
+  async ({ collection, id }) => {
+    try {
+      await axiosInstance.delete(`/items/${collection}/${id}`);
+      return {
+        content: [{ type: 'text', text: `Item ${id} deleted from ${collection}` }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
+
+server.tool(
+  'directus_get_schema',
+  'Get the schema/fields of a Directus collection',
+  {
+    collection: z.string().describe('Collection name'),
+  },
+  async ({ collection }) => {
+    try {
+      const response = await axiosInstance.get(`/fields/${collection}`);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(response.data.data, null, 2) }]
+      };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Error: ${error.message}` }],
+        isError: true
+      };
+    }
+  }
+);
 
 // Start the server
 async function main() {

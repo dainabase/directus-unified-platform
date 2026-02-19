@@ -403,7 +403,7 @@
 | Stories Phase D (portail prestataire) | 7/7 ✅ |
 | Stories CDC restantes | 30 à faire |
 | Modules CDC couverts | 6/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire) |
-| Dernier commit Phase D | 2026-02-19 |
+| Dernier commit Phase D | 9d57c20 — 2026-02-19 |
 
 ---
 

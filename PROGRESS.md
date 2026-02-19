@@ -1,6 +1,6 @@
 # PROGRESS — HYPERVISUAL Unified Platform
 **Date de debut** : 2026-02-19
-**Progression globale** : 4/47 stories — 8%
+**Progression globale** : 5/47 stories — 10%
 > Ce fichier est mis a jour par Claude Code apres chaque story.
 > Jean (CEO) est le seul a pouvoir passer un statut de [V] DONE a [A] AUDITED.
 
@@ -17,14 +17,14 @@
 ---
 
 ## PHASE 0 — Fondations & Nettoyage
-**Statut** : [~] IN_PROGRESS | **Progression** : 4/6 stories
+**Statut** : [~] IN_PROGRESS | **Progression** : 5/6 stories
 **Demarre** : 2026-02-19 | **Termine** : —
 
 - [V] S-00-01 · Audit complet du repo (voir AUDIT-REPO.md) — 2026-02-19
 - [V] S-00-02 · Nettoyage fichiers obsoletes + archivage — 2026-02-19
 - [V] S-00-03 · Variables d'environnement securisees (.env structure) — 2026-02-19
 - [V] S-00-04 · Authentification Directus (JWT + refresh tokens + roles) — 2026-02-19
-- [ ] S-00-05 · Systeme de permissions par portail (SuperAdmin/Client/Prestataire/Revendeur)
+- [V] S-00-05 · Systeme de permissions par portail (SuperAdmin/Client/Prestataire/Revendeur) — 2026-02-19
 - [ ] S-00-06 · Docker health checks + monitoring basique
 
 **Fichiers crees/modifies** : AUDIT-REPO.md, PROGRESS.md, DECISIONS.md, .gitignore, archive/2026-02-19/, env.validator.js, .env.example, server.js, auth.middleware.js, lead-hooks.js, quote-hooks.js, invoice-hooks.js, mautic/router.js, erpnext/index.js, erpnext-api-keys.example.json

@@ -73,33 +73,34 @@ app.use((req, res, next) => {
 
 import authRoutes from './api/auth/auth.routes.js';
 import { authMiddleware, optionalAuth, flexibleAuth } from './middleware/auth.middleware.js';
+import { companyFilter } from './middleware/company-filter.middleware.js';
 app.use('/api/auth', authRoutes);
-console.log('✅ API Auth connectée: /api/auth');
+console.log('[api] Auth connected: /api/auth');
 
 // ============================================
 // API FINANCE - 80+ ENDPOINTS (Protected)
 // ============================================
 
 import financeRoutes from './api/finance/finance.routes.js';
-// Finance API uses flexible auth (JWT or API Key) - see finance.routes.js for route-specific auth
-app.use('/api/finance', financeRoutes);
-console.log('✅ API Finance connectée: /api/finance (80+ endpoints)');
+// Finance API uses flexible auth (JWT or API Key) — route-level auth in finance.routes.js
+app.use('/api/finance', flexibleAuth, companyFilter, financeRoutes);
+console.log('[api] Finance connected: /api/finance (80+ endpoints)');
 
 // ============================================
 // API LEGAL - RECOUVREMENT
 // ============================================
 
 import legalRoutes from './api/legal/legal.routes.js';
-app.use('/api/legal', legalRoutes);
-console.log('✅ API Legal connectée: /api/legal');
+app.use('/api/legal', authMiddleware, companyFilter, legalRoutes);
+console.log('[api] Legal connected: /api/legal');
 
 // ============================================
 // API COLLECTION
 // ============================================
 
 import collectionRoutes from './api/collection/collection.routes.js';
-app.use('/api/collection', collectionRoutes);
-console.log('✅ API Collection connectée: /api/collection');
+app.use('/api/collection', authMiddleware, companyFilter, collectionRoutes);
+console.log('[api] Collection connected: /api/collection');
 
 // ============================================
 // API COMMERCIAL - WORKFLOW COMPLET
@@ -108,10 +109,10 @@ console.log('✅ API Collection connectée: /api/collection');
 
 try {
   const commercialRoutes = await import('./api/commercial/index.js');
-  app.use('/api/commercial', commercialRoutes.default);
-  console.log('✅ API Commercial connectée: /api/commercial (workflow complet)');
+  app.use('/api/commercial', authMiddleware, companyFilter, commercialRoutes.default);
+  console.log('[api] Commercial connected: /api/commercial (workflow complet)');
 } catch (err) {
-  console.warn('⚠️ API Commercial non disponible:', err.message);
+  console.warn('[api] Commercial not available:', err.message);
 }
 
 // ============================================
@@ -120,10 +121,10 @@ try {
 
 try {
   const integrationsRoutes = await import('./api/integrations/index.js');
-  app.use('/api/integrations', integrationsRoutes.default);
-  console.log('✅ API Integrations connectée: /api/integrations (DocuSeal, Invoice Ninja, Mautic)');
+  app.use('/api/integrations', authMiddleware, integrationsRoutes.default);
+  console.log('[api] Integrations connected: /api/integrations (DocuSeal, Invoice Ninja, Mautic)');
 } catch (err) {
-  console.warn('⚠️ API Integrations non disponible:', err.message);
+  console.warn('[api] Integrations not available:', err.message);
 }
 
 // ============================================

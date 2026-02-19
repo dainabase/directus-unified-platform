@@ -34,22 +34,75 @@
 - API Directus via `src/frontend/src/api/directus.js`
 - Hooks custom : `useDirectusQuery`, `useCompanies`, `useFinances`, `useProjects`, `usePeople`
 
-## Tool Discovery — Skill Router System
+## REGLE DE SECURITE — BLOCAGE SI NON RESPECTE
 
-AVANT toute tache complexe (developpement, optimisation, audit, migration, securite, testing) :
-1. Consulter le skill-router : `.claude/skills/skill-router/references/REGISTRY.md`
-2. Identifier les outils pertinents dans la categorie appropriee
-3. Lire le SKILL.md complet de l'outil choisi avant d'implementer
-4. Utiliser les MCP servers quand l'acces direct (DB, Directus, ESLint) est plus efficace
+> Si le prompt recu ne mentionne pas de skills a lire, Claude Code DOIT :
+> 1. NE PAS commencer a coder
+> 2. Repondre : "Aucun skill specifie dans le prompt. Je lance le skill-router pour identifier les meilleurs outils avant de commencer."
+> 3. Executer le skill-router (voir ci-dessous)
+> 4. Proposer une liste de skills et attendre confirmation
+>
+> Cette regle protege la qualite du code. Elle n'est JAMAIS sautee.
 
-### Outils disponibles
-- 6 MCP Servers : PostgreSQL (SQL direct), Directus (CRUD collections), ESLint, Playwright, Context7, Sequential Thinking
-- 8 Custom Skills : Directus, Swiss compliance, Multi-portal, Docker, CEO dashboard, etc.
-- 939+ Skills a la demande : Voir `REGISTRY.md` dans le skill-router
-- TOTAL : ~950 outils specialises via progressive disclosure
+## PROTOCOL OBLIGATOIRE — A EXECUTER AVANT CHAQUE TACHE
 
-### Regle d'or
-Ne jamais coder "a l'aveugle" quand un skill specialise existe. Toujours verifier le registry d'abord.
+> Ce protocol s'applique SANS EXCEPTION a chaque story, chaque composant, chaque feature.
+> Il n'est jamais saute, meme pour une "petite" modification.
+
+### ETAPE 0 — Lire la roadmap et lancer le skill-router
+
+**0a. Roadmap :**
+1. Lire `ROADMAP.md` → identifier la story en cours
+2. Lire `SKILLS-MAPPING.md` → combinaisons pre-selectionnees par story
+
+**0b. Skill-router (scanne les 939 skills) :**
+1. Lire `.claude/skills/skill-router/SKILL.md`
+2. Lire `.claude/skills/skill-router/references/REGISTRY.md`
+3. Identifier les categories pertinentes pour cette tache (Frontend ? API ? Database ? Security ?)
+4. Lire `references/categories/<categorie>.md` pour chaque categorie pertinente
+5. Choisir les 2-4 skills les plus adaptes avec leurs chemins complets
+→ Ce processus garantit que les 939 skills sont consideres, pas seulement les 3-4 connus.
+
+### ETAPE 1 — Lire les skills (OBLIGATOIRE — minimum 2 skills)
+
+**1a. Skill projet (toujours en premier) :**
+Selon le type de tache, lire dans `.claude/skills/` :
+- Directus : `.claude/skills/directus-api-patterns/SKILL.md`
+- Swiss/Finance : `.claude/skills/swiss-compliance-engine/SKILL.md`
+- Portails : `.claude/skills/multi-portal-architecture/SKILL.md`
+- Dashboard CEO : `.claude/skills/ceo-dashboard-designer/SKILL.md`
+- PostgreSQL : `.claude/skills/postgresql-directus-optimizer/SKILL.md`
+- Integrations : `.claude/skills/integration-sync-engine/SKILL.md`
+
+**1b. Skills specialises (au moins 2 depuis les 939 skills) :**
+Racine : `/Users/jean-mariedelaunay/.claude/skills-repos/`
+Consulter `SKILLS-MAPPING.md` pour les chemins exacts par type de tache.
+
+Prioritaires pour ce projet :
+- UI exceptionnel : `anthropics-skills/skills/frontend-design/SKILL.md`
+- React 18 patterns : `jeffallan-claude-skills/skills/react-expert/SKILL.md`
+- Design system : `alirezarezvani-claude-skills/product-team/ui-design-system/SKILL.md`
+- Hooks React : `claude-code-plugins-plus-skills/skills/05-frontend-dev/react-hook-creator/SKILL.md`
+- Composants : `claude-code-plugins-plus-skills/skills/05-frontend-dev/react-component-generator/SKILL.md`
+- Tailwind : `claude-code-plugins-plus-skills/skills/05-frontend-dev/tailwind-class-optimizer/SKILL.md`
+- Webhooks : `claude-code-plugins-plus-skills/skills/16-api-integration/webhook-receiver-generator/SKILL.md`
+- PostgreSQL : `jeffallan-claude-skills/skills/postgres-pro/SKILL.md`
+- Fullstack : `jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md`
+- Express : `claude-code-plugins-plus-skills/skills/06-backend-dev/express-route-generator/SKILL.md`
+
+**1c. Verifier les champs Directus via MCP avant de coder :**
+JAMAIS supposer un nom de champ — toujours `directus:get_collection_items(collection, limit=1)`.
+
+### ETAPE FINALE — Mettre a jour ROADMAP.md (OBLIGATOIRE apres chaque story)
+1. Passer la story `[ ]` → `[V]` avec date YYYY-MM-DD
+2. Logger toute decouverte dans section DECOUVERTES
+3. Commit : `feat(X-XX): description courte`
+
+## Tool Discovery — Ressources
+- **6 MCP Servers** : PostgreSQL, Directus, ESLint, Playwright, Context7, Sequential Thinking
+- **8 Custom Skills projet** : `.claude/skills/`
+- **939 Skills specialises** : `/Users/jean-mariedelaunay/.claude/skills-repos/`
+- **Mapping complet** : `SKILLS-MAPPING.md` (combinaisons recommandees par story)
 
 ## Swiss Compliance (Critical)
 - QR-Invoice: SIX Group IG v2.3, structured addresses mandatory, `swissqrbill` npm

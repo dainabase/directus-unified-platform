@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Settings, Building2, FileText, Percent, Package, RefreshCw,
-  Users, Key, Plug, CreditCard
+  Users, Key, Plug, CreditCard, Bell
 } from 'lucide-react';
 import { useOurCompanies } from './hooks/useSettingsData';
 import CompanySettings from './components/CompanySettings';
@@ -13,6 +13,7 @@ import UsersSettings from './components/UsersSettings';
 import PermissionsSettings from './components/PermissionsSettings';
 import IntegrationsSettings from './components/IntegrationsSettings';
 import DepositConfigManager from './components/DepositConfigManager';
+import KPIAlertsModule from './components/KPIAlertsModule';
 import toast from 'react-hot-toast';
 
 const SettingsDashboard = ({ view }) => {
@@ -57,6 +58,7 @@ const SettingsDashboard = ({ view }) => {
     { id: 'users', label: 'Utilisateurs', icon: Users },
     { id: 'permissions', label: 'Permissions', icon: Key },
     { id: 'deposits', label: 'Acomptes', icon: CreditCard },
+    { id: 'kpi-alerts', label: 'Alertes KPI', icon: Bell },
     { id: 'integrations', label: 'Integrations', icon: Plug }
   ];
 
@@ -152,6 +154,9 @@ const SettingsDashboard = ({ view }) => {
               )}
               {activeTab === 'deposits' && (
                 <DepositConfigManager selectedCompany={selectedCompany} />
+              )}
+              {activeTab === 'kpi-alerts' && (
+                <KPIAlertsModule />
               )}
               {activeTab === 'integrations' && (
                 <IntegrationsSettings />

@@ -42,6 +42,8 @@ import {
   Headphones,
   Bell,
   MessageSquare,
+  // Prestataires
+  Wrench,
   // Paramètres
   Settings,
   Building,
@@ -145,6 +147,13 @@ const navigationConfig = [
       { id: 'tickets', label: 'Tickets', icon: MessageSquare, path: '/superadmin/support/tickets' },
       { id: 'notifications', label: 'Notifications', icon: Bell, path: '/superadmin/support/notifications' },
     ]
+  },
+  {
+    id: 'providers',
+    label: 'Prestataires',
+    icon: Wrench,
+    path: '/superadmin/providers',
+    isGroup: false
   },
   {
     id: 'settings',

@@ -30,7 +30,7 @@
 - ❌ Workflows validation factures fournisseurs
 - ❌ Rapprochement bancaire algorithme multi-critères
 - ❌ Portail client fonctionnel (signer, uploader, communiquer)
-- ❌ Portail prestataire fonctionnel (soumettre devis, voir paiements)
+- ✅ Portail prestataire fonctionnel (soumettre devis, voir paiements) — **FAIT Phase D**
 - ❌ Facturation par jalons (deliverables → factures)
 - ❌ Facturation récurrente automatique
 - ❌ KPIs depuis collection `kpis` (240 enregistrements réels)
@@ -145,29 +145,47 @@
 
 ---
 
-## PHASE D — PORTAIL PRESTATAIRE FONCTIONNEL
-**Objectif CDC** : Un prestataire peut recevoir une demande, soumettre un devis, voir ses paiements  
-**Modules CDC** : Module 2 (Portail Prestataire)  
-**Critères d'acceptation** :  
-- Prestataire soumets son devis en < 5 minutes (REQ-PREST-003)  
-- Prestataire voit le bon de commande une fois projet activé (REQ-PREST-006)  
-- Prestataire voit le statut paiement de sa prestation (REQ-PREST-007)  
-**Progression** : 0/5 stories
+## PHASE D — PORTAIL PRESTATAIRE FONCTIONNEL *(TERMINÉE)*
+**Objectif CDC** : Un prestataire peut recevoir une demande, soumettre un devis, voir ses paiements
+**Modules CDC** : Module 2 (Portail Prestataire)
+**Critères d'acceptation** :
+- ✅ Prestataire soumets son devis en < 5 minutes (REQ-PREST-003)
+- ✅ Prestataire voit le bon de commande une fois projet activé (REQ-PREST-006)
+- ✅ Prestataire voit le statut paiement de sa prestation (REQ-PREST-007)
+**Progression** : 7/7 stories — [V] DONE — 2026-02-19
 
-- [ ] **D-01** · Prestataire — Réception demande de devis avec détails complets projet  
-  *CDC* : REQ-PREST-001, REQ-PREST-002, REQ-PREST-006  
+- [V] **D-01** · Auth portail prestataire (magic link email → token localStorage) — 2026-02-19
+  *Fichiers* : `hooks/useProviderAuth.js`, `auth/ProviderAuth.jsx`, `auth/ProviderPortalGuard.jsx` (3 nouveaux)
+  *Livré* : Login email → lookup providers → token localStorage → guard /prestataire/*. Thème violet/indigo.
 
-- [ ] **D-02** · Prestataire — Formulaire soumission devis (montant + PDF upload)  
-  *CDC* : REQ-PREST-003  
+- [V] **D-02** · Dashboard prestataire connecté Directus — 2026-02-19
+  *Fichiers* : `Dashboard.jsx` (réécriture complète)
+  *Livré* : 4 cartes KPI (devis en attente, projets actifs, factures à soumettre, paiements en attente), section "Actions requises" avec liens directs.
 
-- [ ] **D-03** · Prestataire — Bon de commande (généré après activation projet)  
-  *CDC* : REQ-PREST-006  
+- [V] **D-03** · Demandes de devis + soumission offre avec TVA 8.1% auto — 2026-02-19
+  *Fichiers* : `quotes/QuoteRequests.jsx` (nouveau)
+  *CDC* : REQ-PREST-001, REQ-PREST-002, REQ-PREST-003
+  *Livré* : Table proposals filtrée provider_id, filtres statut, modal SubmitOfferModal (montant HT + TVA 8.1% auto + deadline + notes), PATCH proposals.
 
-- [ ] **D-04** · Prestataire — Statut paiement de ses prestations  
-  *CDC* : REQ-PREST-007  
+- [V] **D-04** · Bons de commande — 2026-02-19
+  *Fichiers* : `orders/PurchaseOrders.jsx` (nouveau)
+  *CDC* : REQ-PREST-006
+  *Livré* : Projets où main_provider_id = provider.id, bouton "Confirmer réception BC", création/MAJ order record.
 
-- [ ] **D-05** · SuperAdmin — Validation devis prestataire + notification CEO  
-  *CDC* : REQ-PREST-005, REQ-DEVIS-001 (devis client depuis devis prestataire)  
+- [V] **D-05** · Factures fournisseur + upload PDF + suivi paiement — 2026-02-19
+  *Fichiers* : `invoices/ProviderInvoices.jsx` (nouveau)
+  *CDC* : REQ-PREST-007
+  *Livré* : Liste supplier_invoices, cards résumé (en attente/payées), modal création facture avec upload PDF (FormData → Directus files), TVA auto, suivi statut paiement.
+
+- [V] **D-06** · Navigation portail prestataire — 2026-02-19
+  *Fichiers* : `layout/PrestataireLayout.jsx` (réécriture complète)
+  *Livré* : Sidebar 4 items violet (Dashboard, Devis, Commandes, Factures), header logo + nom prestataire + logout.
+
+- [V] **D-07** · SuperAdmin — Gestion prestataires + envoi demande devis — 2026-02-19
+  *Fichiers* : `superadmin/providers/ProvidersModule.jsx` (nouveau), `Sidebar.jsx` (entrée Prestataires)
+  *CDC* : REQ-PREST-005
+  *Livré* : Onglets Prestataires/Offres reçues, envoi demande devis (POST proposals), Accept/Reject offres soumises (accept → MAJ project.main_provider_id), badge alerte nouvelles soumissions.
+
 
 ---
 
@@ -368,6 +386,9 @@
 | 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs CDC) | Mineur | **DÉCISION JEAN : Format INV-YYYY-NN** — corrigé en C-00 |
 | 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus | Conserver |
 | 2026-02-19 | C-06 | Messagerie implémentée avec polling 15s (pas WebSocket) | Acceptable Phase C | WebSocket temps réel = Phase E si besoin |
+| 2026-02-19 | D-01 | MCP Directus retourne 401 — token MCP mal configuré | Contourné | Utilisé curl + static admin token pour vérifier/ajouter champs |
+| 2026-02-19 | D-01 | Collections providers/proposals/orders manquaient beaucoup de champs | Bloquant | Ajouté 18 champs via API Directus (email, phone, amounts, TVA, etc.) |
+| 2026-02-19 | D-01 | Auth prestataire = magic link (comme client), pas JWT admin | Architecture | Cohérent avec portail client Phase C — portails externes isolés du JWT superadmin |
 
 ---
 
@@ -379,9 +400,10 @@
 | Stories Phase A (infra+display) | 47/47 ✅ |
 | Stories Phase B (cycle vente) | 8/8 ✅ |
 | Stories Phase C (portail client) | 8/8 ✅ |
-| Stories CDC restantes | 37 à faire |
-| Modules CDC couverts | 5/16 (Leads, Devis, Facturation, Projets, Portail Client) |
-| Dernier commit Phase C | f488d28 — 2026-02-19 |
+| Stories Phase D (portail prestataire) | 7/7 ✅ |
+| Stories CDC restantes | 30 à faire |
+| Modules CDC couverts | 6/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire) |
+| Dernier commit Phase D | 2026-02-19 |
 
 ---
 

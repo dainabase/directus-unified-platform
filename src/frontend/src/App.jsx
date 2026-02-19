@@ -25,12 +25,14 @@ const LoadingSpinner = () => (
 // SuperAdmin
 const SuperAdminDashboard = lazy(() => import('./portals/superadmin/Dashboard'))
 
-// Prestataire Portal
+// Prestataire Portal (Phase D)
+const ProviderAuth = lazy(() => import('./portals/prestataire/auth/ProviderAuth'))
+const ProviderPortalGuard = lazy(() => import('./portals/prestataire/auth/ProviderPortalGuard'))
 const PrestataireLayout = lazy(() => import('./portals/prestataire/layout/PrestataireLayout'))
 const PrestataireDashboard = lazy(() => import('./portals/prestataire/Dashboard'))
-const PrestatairePlaceholder = lazy(() => import('./portals/prestataire/pages/PlaceholderPage'))
-const PrestataireQuotesModule = lazy(() => import('./portals/prestataire/quotes/QuotesModule'))
-const PrestataireProfilePage = lazy(() => import('./portals/prestataire/profile/ProfilePage'))
+const QuoteRequests = lazy(() => import('./portals/prestataire/quotes/QuoteRequests'))
+const PurchaseOrders = lazy(() => import('./portals/prestataire/orders/PurchaseOrders'))
+const ProviderInvoices = lazy(() => import('./portals/prestataire/invoices/ProviderInvoices'))
 
 // Revendeur Portal
 const RevendeurLayout = lazy(() => import('./portals/revendeur/layout/RevendeurLayout'))
@@ -94,6 +96,9 @@ const SupportDashboard = lazy(() => import('./portals/superadmin/support/Support
 
 // Settings Module
 const SettingsDashboard = lazy(() => import('./portals/superadmin/settings/SettingsDashboard'))
+
+// Providers Module (Phase D-07)
+const ProvidersModule = lazy(() => import('./portals/superadmin/providers/ProvidersModule'))
 
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
@@ -208,6 +213,9 @@ function App() {
                   <Route path="support/tickets" element={<SupportDashboard selectedCompany={selectedCompany} view="tickets" />} />
                   <Route path="support/notifications" element={<SupportDashboard selectedCompany={selectedCompany} view="notifications" />} />
 
+                  {/* Prestataires (Phase D-07) */}
+                  <Route path="providers" element={<ProvidersModule selectedCompany={selectedCompany} />} />
+
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />
                   <Route path="settings/companies" element={<SettingsDashboard selectedCompany={selectedCompany} view="company" />} />
@@ -232,19 +240,16 @@ function App() {
             </Route>
           </Route>
 
-          {/* ── Prestataire portal ── */}
-          <Route path="/prestataire" element={
-            <ProtectedRoute allowedPortals={['prestataire']}>
-              <PrestataireLayout />
-            </ProtectedRoute>
-          }>
-            <Route index element={<PrestataireDashboard />} />
-            <Route path="dashboard" element={<PrestataireDashboard />} />
-            <Route path="missions" element={<PrestatairePlaceholder title="Missions" description="Module missions — S-02-03" />} />
-            <Route path="quotes" element={<PrestataireQuotesModule />} />
-            <Route path="invoices" element={<PrestatairePlaceholder title="Factures" description="Module factures — Phase 3" />} />
-            <Route path="documents" element={<PrestataireProfilePage />} />
-            <Route path="profile" element={<PrestataireProfilePage />} />
+          {/* ── Prestataire portal (Phase D) ── */}
+          <Route path="/prestataire/login" element={<ProviderAuth />} />
+          <Route path="/prestataire" element={<ProviderPortalGuard />}>
+            <Route element={<PrestataireLayout />}>
+              <Route index element={<PrestataireDashboard />} />
+              <Route path="dashboard" element={<PrestataireDashboard />} />
+              <Route path="quotes" element={<QuoteRequests />} />
+              <Route path="orders" element={<PurchaseOrders />} />
+              <Route path="invoices" element={<ProviderInvoices />} />
+            </Route>
           </Route>
 
           {/* ── Revendeur portal ── */}

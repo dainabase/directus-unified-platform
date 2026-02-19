@@ -2,14 +2,17 @@
  * InvoicesModule — S-03-05
  * Module facturation SuperAdmin: CRUD factures client + QR Swiss.
  * Gere la liste, creation, edition et detail des factures.
+ * Actions: envoyer, marquer payee, relancer, avoir (credit note), dupliquer, supprimer.
  */
 
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Receipt, Plus, Search, Eye, Edit3, Trash2, Copy, Send,
-  Loader2, AlertCircle, CheckCircle2, Clock, XCircle, Filter
+  Loader2, AlertCircle, CheckCircle2, Clock, XCircle, Filter,
+  DollarSign, FileX, Mail
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import api from '../../../lib/axios'
 import QRSwiss, { displayCHF } from '../../../components/payments/QRSwiss'
 import InvoiceForm from './InvoiceForm'
@@ -64,7 +67,7 @@ async function fetchInvoices({ company, status, search, page = 1 }) {
       fields: [
         'id', 'invoice_number', 'status', 'amount',
         'date_created', 'client_name', 'client_id',
-        'owner_company', 'currency'
+        'owner_company', 'currency', 'project_id'
       ],
       sort: ['-date_created'],
       limit: 25,
@@ -101,7 +104,11 @@ const InvoicesModule = ({ selectedCompany }) => {
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/items/client_invoices/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    onSuccess: () => {
+      toast.success('Facture supprimee')
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    },
+    onError: () => toast.error('Erreur lors de la suppression')
   })
 
   // Send mutation (mark as sent)
@@ -109,7 +116,11 @@ const InvoicesModule = ({ selectedCompany }) => {
     mutationFn: (id) => api.patch(`/items/client_invoices/${id}`, {
       status: 'sent', date_sent: new Date().toISOString()
     }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    onSuccess: () => {
+      toast.success('Facture marquee comme envoyee')
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    },
+    onError: () => toast.error('Erreur lors de l\'envoi')
   })
 
   // Duplicate mutation
@@ -126,7 +137,72 @@ const InvoicesModule = ({ selectedCompany }) => {
         date_sent: null
       })
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    onSuccess: () => {
+      toast.success('Facture dupliquee')
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    },
+    onError: () => toast.error('Erreur lors de la duplication')
+  })
+
+  // Mark paid mutation — patches invoice status to 'paid' and activates linked project
+  const markPaidMutation = useMutation({
+    mutationFn: async (invoice) => {
+      // 1. Mark the invoice as paid
+      await api.patch(`/items/client_invoices/${invoice.id}`, {
+        status: 'paid',
+        date_paid: new Date().toISOString()
+      })
+      // 2. If invoice is linked to a project, activate it (deposit received)
+      if (invoice.project_id) {
+        await api.patch(`/items/projects/${invoice.project_id}`, {
+          status: 'deposit_received'
+        })
+      }
+    },
+    onSuccess: (_data, invoice) => {
+      const msg = invoice.project_id
+        ? 'Facture marquee payee — projet active'
+        : 'Facture marquee payee'
+      toast.success(msg)
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+      qc.invalidateQueries({ queryKey: ['projects'] })
+    },
+    onError: () => toast.error('Erreur lors du marquage comme payee')
+  })
+
+  // Send reminder mutation — marks invoice as overdue (email sending is Phase 4)
+  const reminderMutation = useMutation({
+    mutationFn: (id) => api.patch(`/items/client_invoices/${id}`, {
+      status: 'overdue'
+    }),
+    onSuccess: () => {
+      toast.success('Relance enregistree — statut mis a jour')
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    },
+    onError: () => toast.error('Erreur lors de la relance')
+  })
+
+  // Generate credit note mutation — creates a copy with negative amount and 'cancelled' status
+  const creditNoteMutation = useMutation({
+    mutationFn: async (id) => {
+      const { data } = await api.get(`/items/client_invoices/${id}`, { params: { fields: ['*'] } })
+      const original = data?.data
+      if (!original) throw new Error('Facture introuvable')
+      const { id: _id, date_created, date_updated, invoice_number, amount, ...rest } = original
+      return api.post('/items/client_invoices', {
+        ...rest,
+        status: 'cancelled',
+        invoice_number: `${invoice_number}-CN`,
+        amount: -Math.abs(parseFloat(amount || 0)),
+        date_sent: null,
+        date_paid: null
+      })
+    },
+    onSuccess: () => {
+      toast.success('Avoir (credit note) cree avec succes')
+      qc.invalidateQueries({ queryKey: ['admin-invoices'] })
+    },
+    onError: () => toast.error('Erreur lors de la creation de l\'avoir')
   })
 
   const handleDelete = (id) => {
@@ -281,6 +357,26 @@ const InvoicesModule = ({ selectedCompany }) => {
                           <Send size={14} />
                         </button>
                       )}
+                      {(inv.status === 'sent' || inv.status === 'pending') && (
+                        <button
+                          onClick={() => markPaidMutation.mutate(inv)}
+                          disabled={markPaidMutation.isPending}
+                          className="p-1.5 rounded hover:bg-emerald-50 text-gray-500 hover:text-emerald-600"
+                          title="Marquer payee"
+                        >
+                          <CheckCircle2 size={14} />
+                        </button>
+                      )}
+                      {inv.status === 'overdue' && (
+                        <button
+                          onClick={() => reminderMutation.mutate(inv.id)}
+                          disabled={reminderMutation.isPending}
+                          className="p-1.5 rounded hover:bg-amber-50 text-gray-500 hover:text-amber-600"
+                          title="Relancer"
+                        >
+                          <Mail size={14} />
+                        </button>
+                      )}
                       <button
                         onClick={() => duplicateMutation.mutate(inv.id)}
                         className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-purple-600"
@@ -288,6 +384,16 @@ const InvoicesModule = ({ selectedCompany }) => {
                       >
                         <Copy size={14} />
                       </button>
+                      {inv.status === 'paid' && (
+                        <button
+                          onClick={() => creditNoteMutation.mutate(inv.id)}
+                          disabled={creditNoteMutation.isPending}
+                          className="p-1.5 rounded hover:bg-red-50 text-gray-500 hover:text-red-600"
+                          title="Avoir"
+                        >
+                          <FileX size={14} />
+                        </button>
+                      )}
                       {inv.status === 'draft' && (
                         <button
                           onClick={() => handleDelete(inv.id)}

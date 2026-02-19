@@ -1,30 +1,41 @@
 /**
  * QuotesModule — S-02-05
  * Page principale /superadmin/quotes.
- * Le CEO gère tous les devis clients : liste, création, édition, aperçu.
+ * Le CEO gere tous les devis clients : liste, creation, edition, apercu.
+ *
+ * Actions :
+ *  - Creer / Editer   -> navigation vers /superadmin/quotes/new
+ *  - Envoyer           -> PATCH status = 'sent'
+ *  - Dupliquer         -> POST copie en brouillon
+ *  - Marquer signe     -> PATCH status = 'signed' + signature_date + signed_by
+ *  - Generer facture   -> ouvre InvoiceGenerator (lazy)
  */
 
-import React, { useState } from 'react'
+import React, { lazy, Suspense, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import api from '../../../lib/axios'
 import QuotesList from './QuotesList'
-import QuoteForm from './QuoteForm'
 import QuoteDetail from './QuoteDetail'
 
+const InvoiceGenerator = lazy(() => import('../invoices/InvoiceGenerator'))
+
 const QuotesModule = ({ selectedCompany }) => {
-  const [mode, setMode] = useState(null) // null | 'create' | 'edit' | 'view'
+  const [mode, setMode] = useState(null) // null | 'view'
   const [selectedQuote, setSelectedQuote] = useState(null)
+  const [invoiceQuote, setInvoiceQuote] = useState(null)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  // --- Navigation -----------------------------------------------------------
 
   const handleCreate = () => {
-    setSelectedQuote(null)
-    setMode('create')
+    navigate('/superadmin/quotes/new')
   }
 
   const handleEdit = (quote) => {
-    setSelectedQuote(quote)
-    setMode('edit')
+    navigate(`/superadmin/quotes/new?quote_id=${quote.id}`)
   }
 
   const handleView = (quote) => {
@@ -37,6 +48,8 @@ const QuotesModule = ({ selectedCompany }) => {
     setSelectedQuote(null)
   }
 
+  // --- Mutations ------------------------------------------------------------
+
   // Envoi devis
   const sendMutation = useMutation({
     mutationFn: (quote) => api.patch(`/items/quotes/${quote.id}`, {
@@ -44,7 +57,7 @@ const QuotesModule = ({ selectedCompany }) => {
       sent_at: new Date().toISOString()
     }),
     onSuccess: () => {
-      toast.success('Devis envoyé')
+      toast.success('Devis envoye')
       queryClient.invalidateQueries({ queryKey: ['admin-quotes'] })
     },
     onError: () => toast.error("Erreur lors de l'envoi")
@@ -77,11 +90,27 @@ const QuotesModule = ({ selectedCompany }) => {
       return api.post('/items/quotes', copy)
     },
     onSuccess: () => {
-      toast.success('Devis dupliqué (brouillon)')
+      toast.success('Devis duplique (brouillon)')
       queryClient.invalidateQueries({ queryKey: ['admin-quotes'] })
     },
     onError: () => toast.error('Erreur lors de la duplication')
   })
+
+  // Marquer comme signe
+  const markSignedMutation = useMutation({
+    mutationFn: (quote) => api.patch(`/items/quotes/${quote.id}`, {
+      status: 'signed',
+      signature_date: new Date().toISOString(),
+      signed_by: 'CEO'
+    }),
+    onSuccess: () => {
+      toast.success('Devis marque comme signe')
+      queryClient.invalidateQueries({ queryKey: ['admin-quotes'] })
+    },
+    onError: () => toast.error('Erreur lors de la signature')
+  })
+
+  // --- Handlers -------------------------------------------------------------
 
   const handleSend = (quote) => {
     if (window.confirm(`Envoyer le devis ${quote.quote_number || ''} pour signature ?`)) {
@@ -93,13 +122,29 @@ const QuotesModule = ({ selectedCompany }) => {
     duplicateMutation.mutate(quote)
   }
 
+  const handleMarkSigned = (quote) => {
+    if (window.confirm(`Marquer le devis ${quote.quote_number || ''} comme signe ?`)) {
+      markSignedMutation.mutate(quote)
+    }
+  }
+
+  const handleGenerateInvoice = (quote) => {
+    if (quote.status !== 'signed') {
+      toast.error('Seuls les devis signes peuvent etre factures')
+      return
+    }
+    setInvoiceQuote(quote)
+  }
+
+  // --- Render ---------------------------------------------------------------
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Gestion des devis</h1>
         <p className="text-sm text-gray-500">
-          Créer, envoyer et suivre les devis clients
+          Creer, envoyer et suivre les devis clients
         </p>
       </div>
 
@@ -111,21 +156,26 @@ const QuotesModule = ({ selectedCompany }) => {
         onViewQuote={handleView}
         onSendQuote={handleSend}
         onDuplicateQuote={handleDuplicate}
+        onMarkSigned={handleMarkSigned}
+        onGenerateInvoice={handleGenerateInvoice}
       />
 
-      {/* Modals */}
-      {(mode === 'create' || mode === 'edit') && (
-        <QuoteForm
-          quote={mode === 'edit' ? selectedQuote : null}
-          onClose={handleClose}
-        />
-      )}
-
+      {/* Detail modal */}
       {mode === 'view' && selectedQuote && (
         <QuoteDetail
           quote={selectedQuote}
           onClose={handleClose}
         />
+      )}
+
+      {/* Invoice generator (lazy loaded) */}
+      {invoiceQuote && (
+        <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"><span className="text-white text-lg">Chargement...</span></div>}>
+          <InvoiceGenerator
+            quote={invoiceQuote}
+            onClose={() => setInvoiceQuote(null)}
+          />
+        </Suspense>
       )}
     </div>
   )

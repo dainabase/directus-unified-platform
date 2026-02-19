@@ -72,9 +72,11 @@ const LeadsDashboard = lazy(() => import('./portals/superadmin/leads/LeadsDashbo
 
 // Quotes Module
 const QuotesModule = lazy(() => import('./portals/superadmin/quotes/QuotesModule'))
+const QuoteFormPage = lazy(() => import('./portals/superadmin/quotes/QuoteForm'))
 
 // Invoices Module
 const AdminInvoicesModule = lazy(() => import('./portals/superadmin/invoices/InvoicesModule'))
+const InvoiceDetailView = lazy(() => import('./portals/superadmin/invoices/InvoiceDetailView'))
 
 // Legal Module
 const LegalDashboard = lazy(() => import('./portals/superadmin/legal/LegalDashboard'))
@@ -149,6 +151,7 @@ function App() {
                   <Route path="banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
                   <Route path="accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
                   <Route path="invoices/clients" element={<AdminInvoicesModule selectedCompany={selectedCompany} />} />
+                  <Route path="invoices/:id" element={<InvoiceDetailView />} />
                   <Route path="invoices/suppliers" element={<FinanceDashboard selectedCompany={selectedCompany} view="invoices-suppliers" />} />
                   <Route path="collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
                   <Route path="budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />
@@ -170,6 +173,7 @@ function App() {
                   <Route path="crm/analytics" element={<CRMAnalytics selectedCompany={selectedCompany} />} />
 
                   {/* Devis */}
+                  <Route path="quotes/new" element={<QuoteFormPage />} />
                   <Route path="quotes" element={<QuotesModule selectedCompany={selectedCompany} />} />
 
                   {/* Leads */}

@@ -44,21 +44,66 @@ export default function handler(directusGet, directusPost, directusPatch, logAut
         return res.json({ success: true, skipped: true, reason: 'Duplicate (30min window)' });
       }
 
+      const phone = fields.phone || fields.telephone || fields.mobile || '';
+      const companyName = fields.company || fields.entreprise || fields.societe || '';
+      const budgetRaw = fields.budget || fields.budget_estimate || fields.budget_estime || 0;
+      const budget = parseFloat(String(budgetRaw).replace(/[^0-9.]/g, '')) || 0;
+      const eventDate = fields.event_date || fields.date_evenement || fields.date || '';
+      const typeProjet = fields.type_projet || fields.type || '';
+
+      // Qualification score (1-5)
+      let score = 1;
+      if (budget > 10000) score += 2;
+      else if (budget >= 3000) score += 1;
+      if (eventDate) {
+        const daysUntil = (new Date(eventDate) - new Date()) / (1000 * 60 * 60 * 24);
+        if (daysUntil > 0 && daysUntil <= 30) score += 1;
+      }
+      if (email && phone && companyName) score += 1;
+      if (typeProjet && typeProjet !== 'inconnu') score += 1;
+      score = Math.min(score, 5);
+
       const leadData = {
         first_name: fields.first_name || fields.prenom || (fields.name ? fields.name.split(' ')[0] : ''),
         last_name: fields.last_name || fields.nom || (fields.name ? fields.name.split(' ').slice(1).join(' ') : ''),
         email,
-        phone: fields.phone || fields.telephone || fields.mobile || '',
-        company_name: fields.company || fields.entreprise || fields.societe || '',
+        phone,
+        company_name: companyName,
+        estimated_value: budget || null,
         message: fields.message || fields.description || fields.besoin || '',
         source_channel: 'wordpress',
         source_detail: `Fluent Form #${payload.form_id || 17} — ${payload.form_title || 'Contact Form'}`,
         raw_data: payload,
-        status: 'new'
+        status: 'new',
+        score
       };
 
       // Creer le lead
       const lead = await createOrUpdateLead(directusGet, directusPost, directusPatch, leadData, 'wp_form_17');
+
+      // Create lead_activity
+      try {
+        await directusPost('/items/lead_activities', {
+          lead: lead?.id || null,
+          type: 'created',
+          subject: 'Lead cree via Fluent Forms Pro',
+          content: `Formulaire #${payload.form_id || 17} — Score: ${score}/5 — Budget: ${budget ? `CHF ${budget}` : 'N/A'}`,
+          is_automated: true,
+          metadata: JSON.stringify({ form_id: payload.form_id, score, budget, type_projet: typeProjet })
+        });
+      } catch (actErr) {
+        console.error('[F-01] Error creating lead_activity:', actErr.message);
+      }
+
+      // Trigger email confirmation (best-effort)
+      try {
+        const fetch = (await import('node-fetch')).default;
+        await fetch('http://localhost:3000/api/email/send-lead-confirmation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead_id: lead?.id, email, first_name: leadData.first_name })
+        }).catch(() => {});
+      } catch { /* best-effort */ }
 
       // Log automation
       await logAutomation({

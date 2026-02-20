@@ -76,6 +76,7 @@ const CRMAnalytics = lazy(() => import('./portals/superadmin/crm/CRMAnalytics'))
 
 // Leads Module
 const LeadsDashboard = lazy(() => import('./portals/superadmin/leads/LeadsDashboard'))
+const WhatsAppInbox = lazy(() => import('./portals/superadmin/leads/WhatsAppInbox'))
 
 // Quotes Module
 const QuotesModule = lazy(() => import('./portals/superadmin/quotes/QuotesModule'))
@@ -201,6 +202,7 @@ function App() {
                   <Route path="leads" element={<LeadsDashboard selectedCompany={selectedCompany} />} />
                   <Route path="leads/kanban" element={<LeadsDashboard selectedCompany={selectedCompany} view="kanban" />} />
                   <Route path="leads/list" element={<LeadsDashboard selectedCompany={selectedCompany} view="list" />} />
+                  <Route path="leads/whatsapp" element={<WhatsAppInbox />} />
 
                   {/* Marketing */}
                   <Route path="marketing" element={<MarketingDashboard selectedCompany={selectedCompany} />} />

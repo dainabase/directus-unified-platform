@@ -1,9 +1,9 @@
 /**
  * Lead Capture Router — Phase F
- * F-01: WordPress Fluent Form webhook
+ * F-01: WordPress Fluent Form webhook (POST /wp-webhook)
+ * F-02: WhatsApp Business API (GET+POST /whatsapp-webhook)
  * F-03: IMAP email monitor (background polling)
  * F-04: Ringover API polling (background polling)
- * F-02: WhatsApp — reporte Phase F-bis
  *
  * Pattern identique a Phase E : helpers centralises, factory handlers
  */
@@ -13,6 +13,7 @@ import axios from 'axios';
 
 // Story handlers
 import wpWebhookHandler from './wp-webhook.js';
+import whatsappWebhookHandler from './whatsapp-webhook.js';
 import { startImapMonitor } from './imap-monitor.js';
 import { startRingoverPolling } from './ringover-polling.js';
 
@@ -86,6 +87,28 @@ async function hasSentRecently(rule_name, entity_id) {
 // F-01 : WordPress Fluent Form webhook
 router.post('/wp-webhook', wpWebhookHandler(directusGet, directusPost, directusPatch, logAutomation, hasSentRecently));
 
+// F-02 : WhatsApp Business API
+const whatsapp = whatsappWebhookHandler(directusGet, directusPost, directusPatch, logAutomation, hasSentRecently);
+router.get('/whatsapp-webhook', whatsapp.verify);
+router.post('/whatsapp-webhook', whatsapp.receive);
+
+// F-02 : WhatsApp messages list (for frontend inbox)
+router.get('/whatsapp-messages', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 50;
+    const offset = parseInt(req.query.offset) || 0;
+    const messages = await directusGet('/items/whatsapp_messages', {
+      sort: '-date_created',
+      limit,
+      offset,
+      'fields': 'id,phone,direction,message_type,content,status,lead,external_id,date_created'
+    });
+    res.json({ success: true, data: messages || [] });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur chargement messages WhatsApp', details: error.message });
+  }
+});
+
 // F-03 : IMAP polling trigger manuel (pour tests)
 router.post('/imap-scan', async (req, res) => {
   try {
@@ -117,7 +140,7 @@ router.get('/health', (req, res) => {
     service: 'lead-capture',
     channels: {
       'F-01-wordpress': 'active',
-      'F-02-whatsapp': 'pending (Phase F-bis)',
+      'F-02-whatsapp': process.env.WHATSAPP_VERIFY_TOKEN ? 'active' : 'disabled (no WHATSAPP_VERIFY_TOKEN)',
       'F-03-imap': process.env.IMAP_PASSWORD ? 'active' : 'disabled (no IMAP_PASSWORD)',
       'F-04-ringover': process.env.RINGOVER_API_KEY ? 'active' : 'disabled (no RINGOVER_API_KEY)'
     },

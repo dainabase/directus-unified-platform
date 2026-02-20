@@ -1,47 +1,31 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { ChevronDown } from 'lucide-react'
 
-const Select = React.forwardRef(({ 
+const Select = React.forwardRef(({
   label,
   error,
-  hint,
   options = [],
-  placeholder = 'Sélectionner...',
+  placeholder = 'Selectionner...',
   className = '',
-  containerClassName = '',
-  ...props 
+  ...props
 }, ref) => {
-  const selectClasses = `
-    glass-input
-    appearance-none
-    pr-10
-    ${error ? 'border-red-500 focus:border-red-500' : ''}
-    ${className}
-  `.trim()
-
   return (
-    <div className={`${containerClassName}`}>
+    <div>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          {label}
-        </label>
+        <label className="ds-label block mb-1">{label}</label>
       )}
-      
       <div className="relative">
         <select
           ref={ref}
-          className={selectClasses}
+          className={`ds-input appearance-none pr-9 ${error ? '!border-[var(--danger)]' : ''} ${className}`}
           {...props}
         >
           {placeholder && (
-            <option value="" disabled>
-              {placeholder}
-            </option>
+            <option value="" disabled>{placeholder}</option>
           )}
           {options.map((option) => (
-            <option 
-              key={option.value} 
+            <option
+              key={option.value}
               value={option.value}
               disabled={option.disabled}
             >
@@ -49,35 +33,19 @@ const Select = React.forwardRef(({
             </option>
           ))}
         </select>
-        
-        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none w-5 h-5" />
+        <ChevronDown
+          size={16}
+          className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+          style={{ color: 'var(--text-tertiary)' }}
+        />
       </div>
-      
-      {hint && !error && (
-        <p className="mt-1 text-sm text-gray-500">{hint}</p>
-      )}
-      
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1" style={{ fontSize: 11, color: 'var(--danger)' }}>{error}</p>
       )}
     </div>
   )
 })
 
 Select.displayName = 'Select'
-
-Select.propTypes = {
-  label: PropTypes.string,
-  error: PropTypes.string,
-  hint: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    label: PropTypes.string.isRequired,
-    disabled: PropTypes.bool
-  })),
-  placeholder: PropTypes.string,
-  className: PropTypes.string,
-  containerClassName: PropTypes.string
-}
 
 export default Select

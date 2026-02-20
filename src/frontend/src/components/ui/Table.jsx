@@ -1,126 +1,91 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-const Table = ({ 
-  children,
-  className = '',
-  ...props 
-}) => {
+const Table = ({ columns, data, loading, emptyState, className = '' }) => {
+  if (loading) {
+    return (
+      <div className={`overflow-x-auto ${className}`}>
+        <table className="w-full">
+          <thead>
+            <tr>
+              {(columns || [{ key: 1 }, { key: 2 }, { key: 3 }]).map((col) => (
+                <th
+                  key={col.key || col}
+                  className="text-left px-4 py-3"
+                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-tertiary)' }}
+                >
+                  <div className="ds-skeleton h-3 w-16" />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <tr key={i}>
+                {(columns || [{ key: 1 }, { key: 2 }, { key: 3 }]).map((col) => (
+                  <td key={col.key || col} className="px-4 py-3" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                    <div className="ds-skeleton h-4 w-24" />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12" style={{ color: 'var(--text-secondary)' }}>
+        {emptyState || <p className="ds-body">Aucune donnee</p>}
+      </div>
+    )
+  }
+
   return (
-    <div className="overflow-x-auto">
-      <table 
-        className={`glass-table w-full ${className}`}
-        {...props}
-      >
-        {children}
+    <div className={`overflow-x-auto ${className}`}>
+      <table className="w-full">
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                className="text-left px-4 py-3"
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.6px',
+                  color: 'var(--text-tertiary)',
+                  borderBottom: '1px solid rgba(0,0,0,0.08)',
+                }}
+              >
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, idx) => (
+            <tr key={row.id || idx} className="transition-colors duration-150 hover:bg-black/[0.02]">
+              {columns.map((col) => (
+                <td
+                  key={col.key}
+                  className="px-4 py-3"
+                  style={{
+                    fontSize: '13.5px',
+                    borderBottom: '1px solid rgba(0,0,0,0.06)',
+                  }}
+                >
+                  {col.render ? col.render(row[col.key], row) : row[col.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
 }
-
-const TableHead = ({ children, className = '', ...props }) => (
-  <thead className={className} {...props}>
-    {children}
-  </thead>
-)
-
-const TableBody = ({ children, className = '', ...props }) => (
-  <tbody className={className} {...props}>
-    {children}
-  </tbody>
-)
-
-const TableRow = ({ children, className = '', hoverable = true, ...props }) => (
-  <tr 
-    className={`
-      ${hoverable ? 'hover:bg-gray-50/50' : ''}
-      ${className}
-    `} 
-    {...props}
-  >
-    {children}
-  </tr>
-)
-
-const TableHeader = ({ children, className = '', align = 'left', ...props }) => {
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right'
-  }
-
-  return (
-    <th 
-      className={`
-        px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider
-        ${alignClasses[align]}
-        ${className}
-      `}
-      {...props}
-    >
-      {children}
-    </th>
-  )
-}
-
-const TableCell = ({ children, className = '', align = 'left', ...props }) => {
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right'
-  }
-
-  return (
-    <td 
-      className={`
-        px-6 py-4 whitespace-nowrap text-sm
-        ${alignClasses[align]}
-        ${className}
-      `}
-      {...props}
-    >
-      {children}
-    </td>
-  )
-}
-
-Table.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string
-}
-
-TableHead.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string
-}
-
-TableBody.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string
-}
-
-TableRow.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  hoverable: PropTypes.bool
-}
-
-TableHeader.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  align: PropTypes.oneOf(['left', 'center', 'right'])
-}
-
-TableCell.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  align: PropTypes.oneOf(['left', 'center', 'right'])
-}
-
-Table.Head = TableHead
-Table.Body = TableBody
-Table.Row = TableRow
-Table.Header = TableHeader
-Table.Cell = TableCell
 
 export default Table

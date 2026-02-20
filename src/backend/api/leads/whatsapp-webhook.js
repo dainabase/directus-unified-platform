@@ -153,7 +153,9 @@ async function processMessage(msg, contacts, directusGet, directusPost, directus
     source_detail: `WhatsApp: ${textBody.slice(0, 100)}`,
     openai_summary: JSON.stringify(extracted),
     raw_data: { message_id: messageId, text: textBody, contact_name: contactName },
-    status: 'new'
+    status: 'new',
+    score: extracted.score || null,
+    estimated_value: extracted.budget_estimate || null
   };
 
   const lead = await createOrUpdateLead(directusGet, directusPost, directusPatch, leadData, 'whatsapp_business');

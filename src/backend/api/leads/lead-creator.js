@@ -4,7 +4,7 @@
  *
  * Pattern : helpers directusGet/directusPost injectes depuis index.js
  * Champs leads verifies via MCP : id(int), first_name, last_name, email, phone,
- *   company_name, source(uuid→lead_sources), status, score, notes, tags(json),
+ *   company_name, source(int→lead_sources), status, score, notes, tags(json),
  *   source_channel, source_detail, raw_data, openai_summary, ringover_call_id, call_duration
  */
 
@@ -64,11 +64,12 @@ async function findExistingLead(directusGet, email, phone) {
 async function createOrUpdateLead(directusGet, directusPost, directusPatch, leadData, sourceCode) {
   const sourceNames = {
     wp_form_17: 'WordPress Form #17',
+    whatsapp_business: 'WhatsApp Business',
     imap_info: 'Email info@hypervisual.ch',
     ringover_polling: 'Ringover Telephone'
   };
 
-  // Recuperer/creer la source
+  // Recuperer/creer la source dans lead_sources
   const sourceId = await getOrCreateLeadSource(
     directusGet,
     directusPost,
@@ -99,6 +100,8 @@ async function createOrUpdateLead(directusGet, directusPost, directusPatch, lead
     company_name: leadData.company_name || null,
     notes: leadData.message || null,
     status: leadData.status || 'new',
+    score: leadData.score || null,
+    estimated_value: leadData.estimated_value || null,
     source: sourceId || null,
     source_channel: leadData.source_channel || null,
     source_detail: leadData.source_detail || null,

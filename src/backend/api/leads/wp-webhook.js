@@ -63,9 +63,11 @@ export default function handler(directusGet, directusPost, directusPatch, logAut
       if (typeProjet && typeProjet !== 'inconnu') score += 1;
       score = Math.min(score, 5);
 
+      // Fluent Form Pro envoie souvent les noms dans un objet "names"
+      const names = fields.names || {};
       const leadData = {
-        first_name: fields.first_name || fields.prenom || (fields.name ? fields.name.split(' ')[0] : ''),
-        last_name: fields.last_name || fields.nom || (fields.name ? fields.name.split(' ').slice(1).join(' ') : ''),
+        first_name: fields.first_name || names.first_name || fields.prenom || (fields.name ? fields.name.split(' ')[0] : ''),
+        last_name: fields.last_name || names.last_name || fields.nom || (fields.name ? fields.name.split(' ').slice(1).join(' ') : ''),
         email,
         phone,
         company_name: companyName,

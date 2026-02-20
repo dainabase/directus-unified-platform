@@ -59,6 +59,7 @@
     ]
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@dinero.js/currencies": "^2.0.0-alpha.1",
     "@directus/extensions-sdk": "^17.0.9",
     "@directus/sdk": "^17.0.2",

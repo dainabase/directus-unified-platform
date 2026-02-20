@@ -1,11 +1,7 @@
 /**
- * KPIWidget — S-01-05
- * Real-time KPI sidebar with Recharts sparklines.
+ * KPIWidget — S-01-05 — Apple Premium Design System
+ * Real-time KPI cards with Recharts sparklines.
  * CHF formatting, fr-CH locale.
- *
- * Data strategy:
- *   1. Primary — fetch from `dashboard_kpis` collection (pre-computed KPIs)
- *   2. Fallback — compute KPIs on the fly from invoices, projects, leads
  */
 
 import React from 'react'
@@ -25,10 +21,6 @@ const formatCHF = (value) => {
   }).format(value)
 }
 
-/**
- * Try to load KPIs from the `dashboard_kpis` collection.
- * Returns a normalised KPI map or null if the collection is empty / unavailable.
- */
 const fetchDashboardKPIs = async (company) => {
   const kpisRes = await api.get('/items/dashboard_kpis', {
     params: {
@@ -46,7 +38,6 @@ const fetchDashboardKPIs = async (company) => {
       if (item.history) {
         try {
           const parsed = typeof item.history === 'string' ? JSON.parse(item.history) : item.history
-          // Normalise to array of { value } objects for Recharts
           sparklineData = Array.isArray(parsed)
             ? parsed.map(v => (typeof v === 'object' ? v : { value: v }))
             : null
@@ -70,10 +61,6 @@ const fetchDashboardKPIs = async (company) => {
   return null
 }
 
-/**
- * Compute KPIs on the fly from invoices, projects and leads collections.
- * Used as fallback when `dashboard_kpis` is empty or unavailable.
- */
 const fetchComputedKPIs = async (company) => {
   const [invoicesRes, projectsRes, leadsRes] = await Promise.all([
     api.get('/items/client_invoices', {
@@ -103,20 +90,16 @@ const fetchComputedKPIs = async (company) => {
   const projectData = projectsRes.data?.data || []
   const leadData = leadsRes.data?.data || []
 
-  // Calculate revenue from paid invoices
   const paidInvoices = invoiceData.find(i => i.status === 'paid')
   const totalRevenue = parseFloat(paidInvoices?.sum?.amount || 0)
 
-  // Pipeline value from open leads
   const pipelineLeads = leadData.filter(l => !['won', 'lost'].includes(l.status))
   const pipelineValue = pipelineLeads.reduce((sum, l) => sum + parseFloat(l.sum?.estimated_value || 0), 0)
 
-  // Active projects
   const activeProjects = projectData
     .filter(p => ['active', 'in_progress', 'in-progress'].includes(p.status))
     .reduce((sum, p) => sum + parseInt(p.count || 0), 0)
 
-  // Conversion rate
   const wonLeads = leadData.find(l => l.status === 'won')
   const totalLeads = leadData.reduce((sum, l) => sum + parseInt(l.count || 0), 0)
   const conversionRate = totalLeads > 0 ? ((parseInt(wonLeads?.count || 0) / totalLeads) * 100) : 0
@@ -129,17 +112,10 @@ const fetchComputedKPIs = async (company) => {
   }
 }
 
-/**
- * Main fetch function.
- * Tries dashboard_kpis first, falls back to computed KPIs.
- */
 const fetchKPIs = async (company) => {
   try {
-    // 1. Primary source — pre-computed KPIs from dashboard_kpis collection
     const dashboardKPIs = await fetchDashboardKPIs(company)
     if (dashboardKPIs) return dashboardKPIs
-
-    // 2. Fallback — compute from invoices, projects, leads
     return await fetchComputedKPIs(company)
   } catch {
     return {
@@ -152,13 +128,12 @@ const fetchKPIs = async (company) => {
 }
 
 const TrendIcon = ({ value }) => {
-  if (value > 0) return <TrendingUp size={14} className="text-green-600" />
-  if (value < 0) return <TrendingDown size={14} className="text-red-600" />
-  return <Minus size={14} className="text-gray-400" />
+  if (value > 0) return <TrendingUp size={12} style={{ color: 'var(--success)' }} />
+  if (value < 0) return <TrendingDown size={12} style={{ color: 'var(--danger)' }} />
+  return <Minus size={12} style={{ color: 'var(--text-tertiary)' }} />
 }
 
-const MiniSparkline = ({ color = '#2563eb', data: externalData }) => {
-  // Use real sparkline data when provided, otherwise generate a placeholder curve
+const MiniSparkline = ({ data: externalData }) => {
   const data = externalData || Array.from({ length: 7 }, (_, i) => ({
     value: 50 + Math.sin(i * 0.8) * 20 + Math.random() * 10
   }))
@@ -169,9 +144,9 @@ const MiniSparkline = ({ color = '#2563eb', data: externalData }) => {
         <Area
           type="monotone"
           dataKey="value"
-          stroke={color}
-          fill={color}
-          fillOpacity={0.1}
+          stroke="var(--accent)"
+          fill="var(--accent)"
+          fillOpacity={0.08}
           strokeWidth={1.5}
         />
       </AreaChart>
@@ -183,32 +158,34 @@ const KPIWidget = ({ selectedCompany }) => {
   const { data: kpis, isLoading } = useQuery({
     queryKey: ['dashboard-kpis', selectedCompany],
     queryFn: () => fetchKPIs(selectedCompany),
-    staleTime: 1000 * 60 * 2, // 2 minutes
-    refetchInterval: 1000 * 60 * 5 // 5 minutes
+    staleTime: 1000 * 60 * 2,
+    refetchInterval: 1000 * 60 * 5
   })
 
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="glass-card p-4 h-24 glass-skeleton" />
+          <div key={i} className="ds-card p-4 h-24">
+            <div className="ds-skeleton h-3 w-20 rounded mb-2" />
+            <div className="ds-skeleton h-6 w-16 rounded" />
+          </div>
         ))}
       </div>
     )
   }
 
   const items = kpis ? Object.entries(kpis) : []
-  const colors = ['#2563eb', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#84cc16']
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {items.map(([key, kpi], idx) => (
-        <div key={key} className="glass-card p-4">
+      {items.map(([key, kpi]) => (
+        <div key={key} className="ds-card p-4">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-500 font-medium">{kpi.label}</span>
+            <span className="ds-label">{kpi.label}</span>
             <TrendIcon value={kpi.trend} />
           </div>
-          <p className="text-xl font-bold text-gray-900">
+          <p style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text-primary)', lineHeight: 1.2 }}>
             {kpi.isPercent
               ? `${kpi.value.toFixed(1)}%`
               : kpi.isCurrency === false
@@ -216,10 +193,10 @@ const KPIWidget = ({ selectedCompany }) => {
                 : formatCHF(kpi.value)}
           </p>
           <div className="mt-2">
-            <MiniSparkline color={colors[idx % colors.length]} data={kpi.sparklineData} />
+            <MiniSparkline data={kpi.sparklineData} />
           </div>
           {kpi.trend !== 0 && (
-            <p className={`text-xs mt-1 ${kpi.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className="ds-meta mt-1" style={{ color: kpi.trend > 0 ? 'var(--success)' : 'var(--danger)' }}>
               {kpi.trend > 0 ? '+' : ''}{kpi.trend.toFixed(1)}% vs mois dernier
             </p>
           )}

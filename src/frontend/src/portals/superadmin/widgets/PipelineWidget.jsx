@@ -1,21 +1,20 @@
 /**
- * PipelineWidget — S-01-06
+ * PipelineWidget — S-01-06 — Apple Premium Design System
  * Commercial pipeline funnel (leads + quotes).
- * Real data from Directus leads + quotes collections.
  */
 
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Target, ChevronRight, Users } from 'lucide-react'
+import { Target, Users } from 'lucide-react'
 import api from '../../../lib/axios'
 
 const STAGES = [
-  { key: 'new', label: 'Nouveau', color: 'bg-blue-500' },
-  { key: 'contacted', label: 'Contacté', color: 'bg-cyan-500' },
-  { key: 'qualified', label: 'Qualifié', color: 'bg-green-500' },
-  { key: 'proposal', label: 'Proposition', color: 'bg-yellow-500' },
-  { key: 'negotiation', label: 'Négo', color: 'bg-orange-500' },
-  { key: 'won', label: 'Gagné', color: 'bg-emerald-600' }
+  { key: 'new', label: 'Nouveau' },
+  { key: 'contacted', label: 'Contacte' },
+  { key: 'qualified', label: 'Qualifie' },
+  { key: 'proposal', label: 'Proposition' },
+  { key: 'negotiation', label: 'Nego' },
+  { key: 'won', label: 'Gagne' }
 ]
 
 const formatCHF = (value) => {
@@ -35,25 +34,16 @@ const fetchPipelineData = async (company) => {
 
     const [leadsRes, quotesRes] = await Promise.all([
       api.get('/items/leads', {
-        params: {
-          filter: leadsFilter,
-          fields: ['status', 'estimated_value'],
-          limit: -1
-        }
+        params: { filter: leadsFilter, fields: ['status', 'estimated_value'], limit: -1 }
       }).catch(() => ({ data: { data: [] } })),
       api.get('/items/quotes', {
-        params: {
-          filter: quotesFilter,
-          fields: ['status', 'total_amount'],
-          limit: -1
-        }
+        params: { filter: quotesFilter, fields: ['status', 'total_amount'], limit: -1 }
       }).catch(() => ({ data: { data: [] } }))
     ])
 
     const leads = leadsRes.data?.data || []
     const quotes = quotesRes.data?.data || []
 
-    // Count by stage
     const stages = {}
     STAGES.forEach(s => { stages[s.key] = { count: 0, value: 0 } })
 
@@ -65,7 +55,6 @@ const fetchPipelineData = async (company) => {
       }
     })
 
-    // Total pipeline value
     const totalValue = Object.values(stages).reduce((sum, s) => sum + s.value, 0)
     const totalLeads = leads.length
     const activeQuotes = quotes.filter(q => ['draft', 'sent', 'pending'].includes(q.status))
@@ -92,8 +81,8 @@ const PipelineWidget = ({ selectedCompany }) => {
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="h-48 glass-skeleton rounded-lg" />
+      <div className="ds-card p-5">
+        <div className="ds-skeleton h-44 rounded-lg" />
       </div>
     )
   }
@@ -102,36 +91,44 @@ const PipelineWidget = ({ selectedCompany }) => {
   const maxCount = Math.max(...Object.values(stages).map(s => s.count), 1)
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Target className="w-5 h-5 text-blue-600" />
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Pipeline Commercial
-          </h3>
+          <Target size={16} style={{ color: 'var(--accent)' }} />
+          <span className="ds-card-title">Pipeline Commercial</span>
         </div>
-        <span className="text-sm font-semibold text-gray-900">
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
           {formatCHF(totalValue)}
         </span>
       </div>
 
       {/* Funnel bars */}
       <div className="space-y-2">
-        {STAGES.map((stage) => {
+        {STAGES.map((stage, idx) => {
           const stageData = stages[stage.key] || { count: 0, value: 0 }
           const widthPercent = maxCount > 0 ? (stageData.count / maxCount) * 100 : 0
+          // Opacity gradient: first bar full, last bar lighter
+          const opacity = 1 - (idx * 0.12)
 
           return (
             <div key={stage.key} className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-20 text-right truncate">
-                {stage.label}
-              </span>
-              <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden relative">
+              <span className="ds-meta w-20 text-right truncate">{stage.label}</span>
+              <div
+                className="flex-1 h-6 rounded-full overflow-hidden relative"
+                style={{ background: 'rgba(0,0,0,0.04)' }}
+              >
                 <div
-                  className={`h-full ${stage.color} rounded-full transition-all duration-500 flex items-center`}
-                  style={{ width: `${Math.max(widthPercent, 2)}%` }}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.max(widthPercent, 2)}%`,
+                    background: `var(--accent)`,
+                    opacity
+                  }}
                 />
-                <span className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-medium text-gray-600">
+                <span
+                  className="absolute inset-0 flex items-center justify-end pr-2"
+                  style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)' }}
+                >
                   {stageData.count > 0 && `${stageData.count} · ${formatCHF(stageData.value)}`}
                 </span>
               </div>
@@ -140,15 +137,18 @@ const PipelineWidget = ({ selectedCompany }) => {
         })}
       </div>
 
-      {/* Summary row */}
-      <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-        <div className="flex items-center gap-1">
-          <Users size={14} />
+      {/* Summary */}
+      <div
+        className="mt-4 pt-3 flex items-center justify-between"
+        style={{ borderTop: '1px solid var(--border-light)' }}
+      >
+        <div className="flex items-center gap-1.5 ds-meta">
+          <Users size={12} />
           <span>{totalLeads} leads</span>
         </div>
-        <div>
+        <span className="ds-meta">
           {activeQuotes} devis actifs · {formatCHF(quotesValue)}
-        </div>
+        </span>
       </div>
     </div>
   )

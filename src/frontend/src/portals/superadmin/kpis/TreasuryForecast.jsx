@@ -1,12 +1,11 @@
 /**
- * TreasuryForecast — Phase J-04
- * Prévision trésorerie 30/60/90 jours avec BarChart Recharts.
- * Glassmorphism design, blue-600 dominant.
+ * TreasuryForecast — Phase J-04 — Apple Premium Design System
+ * Prevision tresorerie 30/60/90 jours avec BarChart Recharts.
  */
 
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Wallet, TrendingDown, AlertTriangle, Loader2, RefreshCw } from 'lucide-react'
+import { Wallet, AlertTriangle, Loader2, RefreshCw } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000'
@@ -22,7 +21,7 @@ const formatCHFFull = (value) =>
 
 async function fetchTreasury(company) {
   const res = await fetch(`${API_BASE}/api/kpis/treasury?company=${company || 'HYPERVISUAL'}`)
-  if (!res.ok) throw new Error('Erreur chargement prévision trésorerie')
+  if (!res.ok) throw new Error('Erreur chargement prevision tresorerie')
   return res.json()
 }
 
@@ -38,15 +37,13 @@ export default function TreasuryForecast({ selectedCompany }) {
 
   if (isLoading) {
     return (
-      <div className="glass-card p-5">
+      <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Wallet className="w-5 h-5 text-blue-600" />
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Trésorerie prévisionnelle
-          </h3>
+          <Wallet size={16} style={{ color: 'var(--accent)' }} />
+          <span className="ds-card-title">Tresorerie previsionnelle</span>
         </div>
         <div className="flex justify-center py-8">
-          <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+          <Loader2 size={20} className="animate-spin" style={{ color: 'var(--accent)' }} />
         </div>
       </div>
     )
@@ -58,7 +55,6 @@ export default function TreasuryForecast({ selectedCompany }) {
   const burnRate = data.burn_rate_monthly || 0
   const runway = data.runway_months || 0
 
-  // Chart data
   const chartData = [
     { name: 'Actuel', balance: currentBalance },
     { name: '+30j', balance: data.d30?.balance || 0 },
@@ -66,41 +62,40 @@ export default function TreasuryForecast({ selectedCompany }) {
     { name: '+90j', balance: data.d90?.balance || 0 }
   ]
 
-  const runwayColor = runway > 6 ? 'text-green-600' : runway > 3 ? 'text-amber-600' : 'text-red-600'
-  const runwayBg = runway > 6 ? 'bg-green-50 border-green-100' : runway > 3 ? 'bg-amber-50 border-amber-100' : 'bg-red-50 border-red-100'
+  const runwayColor = runway > 6 ? 'var(--success)' : runway > 3 ? 'var(--warning)' : 'var(--danger)'
+  const runwayBg = runway > 6 ? 'var(--success-light)' : runway > 3 ? 'var(--warning-light)' : 'var(--danger-light)'
 
   return (
-    <div className="glass-card p-5">
+    <div className="ds-card p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Wallet className="w-5 h-5 text-blue-600" />
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Trésorerie prévisionnelle
-          </h3>
+          <Wallet size={16} style={{ color: 'var(--accent)' }} />
+          <span className="ds-card-title">Tresorerie previsionnelle</span>
         </div>
         <button
           onClick={() => refetch()}
-          className="p-1 rounded hover:bg-gray-100 transition-colors"
+          className="p-1 rounded-md transition-colors duration-150"
+          style={{ color: 'var(--text-tertiary)' }}
           title="Actualiser"
         >
-          <RefreshCw size={14} className="text-gray-400" />
+          <RefreshCw size={13} />
         </button>
       </div>
 
       {/* Summary cards */}
       <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100 text-center">
-          <p className="text-xs text-gray-500 mb-1">Solde</p>
-          <p className="text-lg font-bold text-gray-900">{formatCHF(currentBalance)}</p>
+        <div className="p-3 rounded-xl text-center" style={{ background: 'var(--accent-light)', border: '1px solid rgba(0,113,227,0.12)' }}>
+          <p className="ds-meta mb-1">Solde</p>
+          <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{formatCHF(currentBalance)}</p>
         </div>
-        <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 text-center">
-          <p className="text-xs text-gray-500 mb-1">Burn</p>
-          <p className="text-lg font-bold text-gray-900">{formatCHF(burnRate)}/m</p>
+        <div className="p-3 rounded-xl text-center" style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--border-light)' }}>
+          <p className="ds-meta mb-1">Burn</p>
+          <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>{formatCHF(burnRate)}/m</p>
         </div>
-        <div className={`p-3 rounded-xl border text-center ${runwayBg}`}>
-          <p className="text-xs text-gray-500 mb-1">Runway</p>
-          <p className={`text-lg font-bold ${runwayColor}`}>{runway} mois</p>
+        <div className="p-3 rounded-xl border text-center" style={{ background: runwayBg, borderColor: 'transparent' }}>
+          <p className="ds-meta mb-1">Runway</p>
+          <p style={{ fontSize: 16, fontWeight: 700, color: runwayColor }}>{runway} mois</p>
         </div>
       </div>
 
@@ -111,16 +106,18 @@ export default function TreasuryForecast({ selectedCompany }) {
           { label: '+60j', data: data.d60 },
           { label: '+90j', data: data.d90 }
         ].map(({ label, data: horizonData }) => (
-          <div key={label} className="p-2 rounded-lg bg-gray-50/50">
-            <p className="text-xs font-medium text-gray-500">{label}</p>
-            <p className={`text-sm font-bold ${
-              (horizonData?.balance || 0) >= currentBalance ? 'text-gray-900' : 'text-red-600'
-            }`}>
+          <div key={label} className="p-2 rounded-lg" style={{ background: 'rgba(0,0,0,0.02)' }}>
+            <p className="ds-meta" style={{ fontWeight: 500 }}>{label}</p>
+            <p style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: (horizonData?.balance || 0) >= currentBalance ? 'var(--text-primary)' : 'var(--danger)'
+            }}>
               {formatCHF(horizonData?.balance || 0)}
             </p>
-            <div className="flex justify-between mt-1 text-xs text-gray-400">
-              <span className="text-green-500">+{formatCHF(horizonData?.incoming || 0)}</span>
-              <span className="text-red-400">-{formatCHF(horizonData?.outgoing || 0)}</span>
+            <div className="flex justify-between mt-1" style={{ fontSize: 10 }}>
+              <span style={{ color: 'var(--success)' }}>+{formatCHF(horizonData?.incoming || 0)}</span>
+              <span style={{ color: 'var(--danger)' }}>-{formatCHF(horizonData?.outgoing || 0)}</span>
             </div>
           </div>
         ))}
@@ -132,12 +129,12 @@ export default function TreasuryForecast({ selectedCompany }) {
           <BarChart data={chartData} barCategoryGap="20%">
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 11, fill: '#6b7280' }}
+              tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 10, fill: '#9ca3af' }}
+              tick={{ fontSize: 10, fill: 'var(--text-tertiary)' }}
               axisLine={false}
               tickLine={false}
               tickFormatter={v => `${Math.round(v / 1000)}K`}
@@ -146,10 +143,10 @@ export default function TreasuryForecast({ selectedCompany }) {
               formatter={(v) => formatCHFFull(v)}
               contentStyle={{
                 fontSize: '12px',
-                background: 'rgba(255,255,255,0.95)',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--border-light)',
+                borderRadius: 'var(--radius-input)',
+                boxShadow: 'var(--shadow-md)'
               }}
               labelStyle={{ fontWeight: 600 }}
             />
@@ -157,7 +154,7 @@ export default function TreasuryForecast({ selectedCompany }) {
               {chartData.map((entry, index) => (
                 <Cell
                   key={index}
-                  fill={entry.balance >= currentBalance ? '#2563eb' : '#ef4444'}
+                  fill={entry.balance >= currentBalance ? 'var(--accent)' : 'var(--danger)'}
                 />
               ))}
             </Bar>
@@ -167,9 +164,12 @@ export default function TreasuryForecast({ selectedCompany }) {
 
       {/* Warning if runway < 6 months */}
       {runway > 0 && runway <= 6 && (
-        <div className="mt-3 flex items-center gap-2 p-2.5 bg-amber-50 border border-amber-100 rounded-lg text-xs text-amber-700">
-          <AlertTriangle size={14} className="flex-shrink-0" />
-          <span>Runway inférieur à 6 mois — attention requise</span>
+        <div
+          className="mt-3 flex items-center gap-2 p-2.5 rounded-lg"
+          style={{ background: 'var(--warning-light)', fontSize: 12, color: 'var(--warning)' }}
+        >
+          <AlertTriangle size={14} className="shrink-0" />
+          <span>Runway inferieur a 6 mois — attention requise</span>
         </div>
       )}
     </div>

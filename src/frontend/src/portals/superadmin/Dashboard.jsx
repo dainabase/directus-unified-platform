@@ -1,7 +1,6 @@
 /**
- * SuperAdmin Dashboard — Refactored with real widgets
- * S-01-04 to S-01-07 assembled here.
- * Layout: KPIs top → Alerts + Pipeline side-by-side → Treasury + Charts
+ * SuperAdmin Dashboard — Apple Premium Design System
+ * Story 1.5 — KPIs + Operations + Commercial + Finance + KPI Sidebar
  */
 
 import React from 'react'
@@ -28,20 +27,20 @@ const Dashboard = ({ selectedCompany }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ds-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard SuperAdmin</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="ds-page-title">Dashboard</h1>
+          <p className="ds-meta mt-0.5">
             Vue d'ensemble {selectedCompany && selectedCompany !== 'all' ? selectedCompany : 'toutes entreprises'}
           </p>
         </div>
         <button
           onClick={handleRefreshAll}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 glass-button transition-colors"
+          className="ds-btn ds-btn-ghost"
         >
-          <RefreshCw size={16} />
+          <RefreshCw size={14} />
           Actualiser
         </button>
       </div>
@@ -49,15 +48,15 @@ const Dashboard = ({ selectedCompany }) => {
       {/* KPIs Row */}
       <KPIWidget selectedCompany={selectedCompany} />
 
-      {/* Alerts + Pipeline + KPIs Sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Operations + Pipeline + KPIs Sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <AlertsWidget selectedCompany={selectedCompany} maxItems={5} />
         <PipelineWidget selectedCompany={selectedCompany} />
         <KPISidebar selectedCompany={selectedCompany} />
       </div>
 
       {/* Treasury */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <TreasuryWidget selectedCompany={selectedCompany} />
         <TreasuryForecast selectedCompany={selectedCompany} />
       </div>

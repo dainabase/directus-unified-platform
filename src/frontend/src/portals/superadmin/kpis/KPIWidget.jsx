@@ -1,8 +1,7 @@
 /**
- * KPIWidget — Phase J-01
+ * KPISidebar — Phase J-01 — Apple Premium Design System
  * Sidebar KPI panel with real data from `kpis` collection.
  * MRR sparkline via Recharts LineChart.
- * Glassmorphism design, blue-600 dominant.
  */
 
 import React from 'react'
@@ -38,7 +37,6 @@ const METRIC_LABELS = {
   EBITDA: 'EBITDA'
 }
 
-// Priority order for display
 const METRIC_ORDER = ['MRR', 'ARR', 'RUNWAY', 'EBITDA', 'LTV_CAC', 'NPS', 'ACTIVE_PROJECTS']
 
 async function fetchLatestKPIs(company) {
@@ -55,12 +53,19 @@ async function fetchMRRHistory(company) {
 
 const TrendBadge = ({ variation, trend }) => {
   if (!variation || variation === 0) {
-    return <span className="flex items-center gap-0.5 text-gray-400 text-xs"><Minus size={12} /> 0%</span>
+    return (
+      <span className="flex items-center gap-0.5" style={{ color: 'var(--text-tertiary)', fontSize: 11 }}>
+        <Minus size={11} /> 0%
+      </span>
+    )
   }
   const isUp = trend === 'up'
   return (
-    <span className={`flex items-center gap-0.5 text-xs font-medium ${isUp ? 'text-green-400' : 'text-red-400'}`}>
-      {isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+    <span
+      className="flex items-center gap-0.5"
+      style={{ fontSize: 11, fontWeight: 500, color: isUp ? 'var(--success)' : 'var(--danger)' }}
+    >
+      {isUp ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
       {variation > 0 ? '+' : ''}{variation}%
     </span>
   )
@@ -75,7 +80,7 @@ const MRRSparkline = ({ data }) => {
           <Line
             type="monotone"
             dataKey="value"
-            stroke="#3b82f6"
+            stroke="var(--accent)"
             dot={false}
             strokeWidth={2}
           />
@@ -103,7 +108,6 @@ export default function KPISidebar({ selectedCompany }) {
 
   const kpis = kpiData?.kpis || {}
 
-  // Sort metrics by priority order
   const sortedMetrics = Object.keys(kpis).sort((a, b) => {
     const ia = METRIC_ORDER.indexOf(a)
     const ib = METRIC_ORDER.indexOf(b)
@@ -111,40 +115,42 @@ export default function KPISidebar({ selectedCompany }) {
   })
 
   return (
-    <div className="glass-card p-5">
+    <div className="ds-card p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-blue-600" />
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            KPIs {company}
-          </h3>
+          <BarChart3 size={16} style={{ color: 'var(--accent)' }} />
+          <span className="ds-card-title">KPIs {company}</span>
         </div>
         <button
           onClick={() => refetch()}
-          className="p-1 rounded hover:bg-gray-100 transition-colors"
+          className="p-1 rounded-md transition-colors duration-150"
+          style={{ color: 'var(--text-tertiary)' }}
           title="Actualiser"
         >
-          <RefreshCw size={14} className="text-gray-400" />
+          <RefreshCw size={13} />
         </button>
       </div>
 
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="h-14 glass-skeleton rounded-lg" />
+            <div key={i} className="ds-skeleton h-12 rounded-lg" />
           ))}
         </div>
       ) : (
         <div className="space-y-1">
-          {/* MRR — Featured with sparkline */}
+          {/* MRR — Featured */}
           {kpis.MRR && (
-            <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100">
+            <div
+              className="p-3 rounded-xl"
+              style={{ background: 'var(--accent-light)', border: '1px solid rgba(0,113,227,0.12)' }}
+            >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-blue-600">MRR</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)' }}>MRR</span>
                 <TrendBadge variation={kpis.MRR.variation} trend={kpis.MRR.trend} />
               </div>
-              <p className="text-xl font-bold text-gray-900 mt-0.5">
+              <p style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', marginTop: 2 }}>
                 {formatCHF(kpis.MRR.value)}
               </p>
               <MRRSparkline data={mrrHistory?.data} />
@@ -159,12 +165,18 @@ export default function KPISidebar({ selectedCompany }) {
               if (!kpi) return null
 
               return (
-                <div key={metric} className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors">
-                  <span className="text-sm text-gray-600">
+                <div
+                  key={metric}
+                  className="flex items-center justify-between py-2.5 px-3 rounded-lg transition-colors duration-150"
+                  style={{ cursor: 'default' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.02)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <span className="ds-body" style={{ color: 'var(--text-secondary)' }}>
                     {METRIC_LABELS[metric] || metric}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-900">
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
                       {formatMetricValue(metric, kpi.value)}
                     </span>
                     <TrendBadge variation={kpi.variation} trend={kpi.trend} />

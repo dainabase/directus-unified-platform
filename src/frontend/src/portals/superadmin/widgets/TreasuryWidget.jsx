@@ -1,13 +1,12 @@
 /**
- * TreasuryWidget — S-01-07
+ * TreasuryWidget — S-01-07 — Apple Premium Design System
  * Revolut treasury overview with graceful degradation.
- * If /api/revolut is unavailable, shows bank_transactions from Directus.
  */
 
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Wallet, TrendingUp, TrendingDown, AlertCircle, RefreshCw } from 'lucide-react'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts'
+import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import api from '../../../lib/axios'
 
 const formatCHF = (value) => {
@@ -20,7 +19,6 @@ const formatCHF = (value) => {
 }
 
 const fetchTreasury = async (company) => {
-  // Try Revolut API first
   try {
     const { data } = await api.get('/api/revolut/balance')
     if (data && (data.accounts || data.balance !== undefined)) {
@@ -35,7 +33,6 @@ const fetchTreasury = async (company) => {
     // Revolut API unavailable, fallback to Directus
   }
 
-  // Fallback: fetch from bank_transactions + bank_accounts
   try {
     const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
 
@@ -58,7 +55,6 @@ const fetchTreasury = async (company) => {
 
     const totalBalance = accounts.reduce((sum, a) => sum + parseFloat(a.balance || a.current_balance || 0), 0)
 
-    // Weekly inflows/outflows
     const now = new Date()
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
     const recentTx = transactions.filter(t => new Date(t.date) >= weekAgo)
@@ -71,7 +67,6 @@ const fetchTreasury = async (company) => {
       .filter(t => parseFloat(t.amount) < 0)
       .reduce((sum, t) => sum + Math.abs(parseFloat(t.amount)), 0)
 
-    // Daily data for mini chart
     const dailyData = []
     for (let i = 6; i >= 0; i--) {
       const d = new Date(now)
@@ -113,8 +108,8 @@ const TreasuryWidget = ({ selectedCompany }) => {
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="h-52 glass-skeleton rounded-lg" />
+      <div className="ds-card p-5">
+        <div className="ds-skeleton h-48 rounded-lg" />
       </div>
     )
   }
@@ -127,53 +122,47 @@ const TreasuryWidget = ({ selectedCompany }) => {
     dailyData = []
   } = data || {}
 
-  const cashFlow = inflows - outflows
   const burnRate = outflows > 0 ? outflows : 1
-  const runway = balance > 0 ? Math.round((balance / burnRate) * 7 / 30) : 0 // weeks to months approx
+  const runway = balance > 0 ? Math.round((balance / burnRate) * 7 / 30) : 0
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Wallet className="w-5 h-5 text-green-600" />
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Trésorerie
-          </h3>
+          <Wallet size={16} style={{ color: 'var(--success)' }} />
+          <span className="ds-card-title">Tresorerie</span>
         </div>
         <div className="flex items-center gap-2">
           {source === 'revolut' ? (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-              Revolut
-            </span>
+            <span className="ds-badge ds-badge-success">Revolut</span>
           ) : source === 'directus' ? (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-              Directus
-            </span>
+            <span className="ds-badge ds-badge-info">Directus</span>
           ) : (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-              Offline
-            </span>
+            <span className="ds-badge">Offline</span>
           )}
           <button
             onClick={() => refetch()}
-            className="p-1 rounded hover:bg-gray-100 transition-colors"
+            className="p-1 rounded-md transition-colors duration-150"
+            style={{ color: 'var(--text-tertiary)' }}
             title="Actualiser"
           >
-            <RefreshCw size={14} className="text-gray-400" />
+            <RefreshCw size={13} />
           </button>
         </div>
       </div>
 
       {/* Balance */}
       <div className="mb-4">
-        <p className="text-3xl font-bold text-gray-900">{formatCHF(balance)}</p>
-        <div className="flex items-center gap-4 mt-1 text-sm">
-          <span className="flex items-center gap-1 text-green-600">
-            <TrendingUp size={14} />
+        <p style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--text-primary)', lineHeight: 1.2 }}>
+          {formatCHF(balance)}
+        </p>
+        <div className="flex items-center gap-4 mt-1.5">
+          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--success)' }}>
+            <TrendingUp size={13} />
             +{formatCHF(inflows)} (7j)
           </span>
-          <span className="flex items-center gap-1 text-red-500">
-            <TrendingDown size={14} />
+          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--danger)' }}>
+            <TrendingDown size={13} />
             -{formatCHF(outflows)} (7j)
           </span>
         </div>
@@ -184,35 +173,45 @@ const TreasuryWidget = ({ selectedCompany }) => {
         <div className="h-24 mb-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dailyData} barGap={2}>
-              <XAxis dataKey="day" tick={{ fontSize: 10 }} stroke="#9ca3af" />
+              <XAxis dataKey="day" tick={{ fontSize: 10, fill: 'var(--text-tertiary)' }} axisLine={false} tickLine={false} />
               <Tooltip
                 formatter={(value) => `${value.toFixed(1)}K CHF`}
                 contentStyle={{
                   fontSize: '12px',
-                  background: 'rgba(255,255,255,0.95)',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px'
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-light)',
+                  borderRadius: 'var(--radius-input)',
+                  boxShadow: 'var(--shadow-md)'
                 }}
               />
-              <Bar dataKey="inflows" fill="#10b981" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="outflows" fill="#ef4444" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="inflows" fill="var(--success)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="outflows" fill="var(--danger)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
 
       {/* Runway */}
-      <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-        <span className="text-gray-500">Runway estimé</span>
-        <span className={`font-semibold ${runway > 6 ? 'text-green-600' : runway > 3 ? 'text-yellow-600' : 'text-red-600'}`}>
+      <div
+        className="pt-3 flex items-center justify-between"
+        style={{ borderTop: '1px solid var(--border-light)', fontSize: 12 }}
+      >
+        <span style={{ color: 'var(--text-secondary)' }}>Runway estime</span>
+        <span style={{
+          fontWeight: 600,
+          color: runway > 6 ? 'var(--success)' : runway > 3 ? 'var(--warning)' : 'var(--danger)'
+        }}>
           {runway > 0 ? `${runway} mois` : 'N/A'}
         </span>
       </div>
 
       {source === 'offline' && (
-        <div className="mt-3 flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-100 rounded-lg text-xs text-yellow-700">
+        <div
+          className="mt-3 flex items-center gap-2 p-2.5 rounded-lg"
+          style={{ background: 'var(--warning-light)', fontSize: 12, color: 'var(--warning)' }}
+        >
           <AlertCircle size={14} />
-          <span>Données indisponibles — vérifier la connexion</span>
+          <span>Donnees indisponibles — verifier la connexion</span>
         </div>
       )}
     </div>

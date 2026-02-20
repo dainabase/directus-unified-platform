@@ -98,19 +98,19 @@ const SummaryCards = ({ invoices }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4 shadow-sm">
+      <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">Total du</p>
         <p className="text-xl font-bold text-gray-900 mt-1">{displayCHF(totalDue)}</p>
       </div>
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4 shadow-sm">
+      <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En attente</p>
         <p className="text-xl font-bold text-amber-600 mt-1">{pendingCount}</p>
       </div>
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4 shadow-sm">
+      <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En retard</p>
         <p className="text-xl font-bold text-red-600 mt-1">{overdueCount}</p>
       </div>
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4 shadow-sm">
+      <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">Payees</p>
         <p className="text-xl font-bold text-emerald-600 mt-1">{paidCount}</p>
       </div>
@@ -173,7 +173,7 @@ const InvoiceDetail = ({ invoiceId, onBack }) => {
       </div>
 
       {/* Invoice info card */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card">
         <div className="p-5 border-b border-gray-100">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
@@ -240,7 +240,7 @@ const InvoiceDetail = ({ invoiceId, onBack }) => {
 
       {/* QR Swiss Payment slip — only for unpaid invoices */}
       {invoice.status !== 'paid' && invoice.status !== 'cancelled' && creditor.iban && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-4">Bulletin de paiement QR</h3>
           <QRSwiss
             invoice={invoice}
@@ -339,7 +339,7 @@ const InvoicesModule = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-6 h-6 animate-spin" style={{ color: GREEN }} />

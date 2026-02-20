@@ -105,7 +105,7 @@ const ProjectDetail = ({ project, onBack }) => {
       </div>
 
       {/* Header */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-6">
+      <div className="ds-card p-6">
         <h2 className="text-xl font-bold text-gray-900">{project.name}</h2>
         {project.description && <p className="text-sm text-gray-500 mt-1">{project.description}</p>}
         <div className="flex items-center gap-3 mt-3">
@@ -134,7 +134,7 @@ const ProjectDetail = ({ project, onBack }) => {
       </div>
 
       {/* Deliverables (read-only) */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card">
         <div className="p-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Livrables ({totalDel})</h3>
         </div>
@@ -163,7 +163,7 @@ const ProjectDetail = ({ project, onBack }) => {
 
       {/* Timeline */}
       {timeline.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="ds-card">
           <div className="p-4 border-b border-gray-100">
             <h3 className="font-semibold text-gray-900">Timeline</h3>
           </div>
@@ -215,7 +215,7 @@ const ClientProjectsModule = () => {
       {isLoading ? (
         <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-emerald-500 animate-spin" /></div>
       ) : projects.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <FolderKanban className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">Aucun projet pour le moment</p>
         </div>
@@ -223,7 +223,7 @@ const ClientProjectsModule = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {projects.map(p => (
             <div key={p.id} onClick={() => setSelectedProject(p)}
-              className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5 cursor-pointer hover:shadow-md transition-shadow">
+              className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-semibold text-gray-900">{p.name}</h3>
                 <StatusBadge status={p.status} />

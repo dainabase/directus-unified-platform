@@ -202,7 +202,7 @@ const QuoteDetail = ({ quoteId, onBack }) => {
       )}
 
       {/* Amounts card */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card">
         <div className="p-5 border-b border-gray-100">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div>
@@ -270,7 +270,7 @@ const QuoteDetail = ({ quoteId, onBack }) => {
 
       {/* CGV Acceptance */}
       {needsCGV && cgv && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="ds-card">
           <div className="p-5">
             <div className="flex items-center gap-3 mb-4">
               <Shield className="w-5 h-5 text-gray-600" />
@@ -343,7 +343,7 @@ const QuoteDetail = ({ quoteId, onBack }) => {
 
       {/* Sign button */}
       {canSign && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-semibold text-gray-900">Signer ce devis</h3>
@@ -452,7 +452,7 @@ const QuotesModule = () => {
       </div>
 
       {/* List */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-6 h-6 animate-spin" style={{ color: GREEN }} />

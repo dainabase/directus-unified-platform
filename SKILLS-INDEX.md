@@ -1,251 +1,255 @@
 # SKILLS-INDEX.md — Index Complet des Skills Disponibles
 
-> **IMPORTANT** : Ce fichier est une version initiale statique.
-> Pour obtenir l'index à jour complet (939 skills), exécuter :
-> ```bash
-> bash scripts/generate-skills-index.sh
-> ```
-> Ce script scanne `~/.claude/skills-repos/` en temps réel et régénère ce fichier.
-
-> ## COMMENT UTILISER CET INDEX
-> 1. **Lire ce fichier EN ENTIER** avant toute tâche (2-3 minutes)
-> 2. **Identifier** les skills pertinents pour la tâche en cours
-> 3. **Lire** leurs fichiers SKILL.md complets (chemins indiqués)
-> 4. **Coder** seulement après avoir lu minimum 2-3 skills
->
-> ⛔ **RÈGLE ABSOLUE** : Ne jamais commencer à coder sans avoir lu cet index
+> **⚠️ FICHIER STATIQUE** — Regénérer avec : `bash scripts/generate-skills-index.sh`  
+> **Total estimé** : 939+ skills spécialisés dans `~/.claude/skills-repos/`  
+> **Dernière MAJ** : Février 2026 (version initiale — exécuter le script pour actualiser)
 
 ---
 
-## 📁 SKILLS PROJET (Spécifiques HYPERVISUAL — PRIORITÉ MAXIMALE)
+## 🔴 INSTRUCTIONS CLAUDE CODE — LIRE EN PREMIER
 
-Ces skills connaissent l'architecture exacte du projet. Toujours lire en premier.
+**AVANT d'écrire la première ligne de code :**
 
-- **directus-api-patterns** `.claude/skills/directus-api-patterns/SKILL.md`
-  > Patterns d'accès Directus : ItemsService, relations, filtres, hooks. Ne jamais utiliser Knex brut.
+1. Exécuter `bash scripts/generate-skills-index.sh` pour obtenir l'index à jour
+2. Lire l'output COMPLET (toutes les catégories)
+3. Sélectionner 3-6 skills les plus pertinents pour cette tâche précise
+4. Lire leurs fichiers `SKILL.md` complets
+5. **SEULEMENT ALORS** commencer à coder
 
-- **swiss-compliance-engine** `.claude/skills/swiss-compliance-engine/SKILL.md`
-  > TVA 2025 (8.1%/2.6%/3.8%), QR-Invoice v2.3, Formulaire 200 AFC, Code des Obligations
-
-- **multi-portal-architecture** `.claude/skills/multi-portal-architecture/SKILL.md`
-  > Architecture 4 portails (SuperAdmin/Client/Prestataire/Revendeur), RBAC, routing JWT
-
-- **ceo-dashboard-designer** `.claude/skills/ceo-dashboard-designer/SKILL.md`
-  > Layout dashboard CEO, KPIs, widgets, graphiques Recharts, alertes temps réel
-
-- **postgresql-directus-optimizer** `.claude/skills/postgresql-directus-optimizer/SKILL.md`
-  > Optimisation requêtes PostgreSQL via Directus, index, explain analyze
-
-- **integration-sync-engine** `.claude/skills/integration-sync-engine/SKILL.md`
-  > Synchronisation Invoice Ninja / Revolut / Mautic / ERPNext avec Directus
-
-- **docker-stack-ops** `.claude/skills/docker-stack-ops/SKILL.md`
-  > Opérations Docker Compose, services, networking, volumes
-
-- **skill-router** `.claude/skills/skill-router/SKILL.md`
-  > Router intelligent pour sélectionner les meilleurs skills selon la tâche
+> Si le script échoue, lire ce fichier statique (mis à jour manuellement).
 
 ---
 
-## 🗂️ SKILLS REPOS EXTERNES
+## SKILLS PROJET HYPERVISUAL (Niveau 1 — Toujours lire en premier)
+
+*Spécifiques au projet. Chemins relatifs depuis la racine du repo.*
+
+- **directus-api-patterns** → `.claude/skills/directus-api-patterns/SKILL.md`
+  > Patterns Directus : ItemsService, relations, auth, CRUD, never raw Knex
+
+- **swiss-compliance-engine** → `.claude/skills/swiss-compliance-engine/SKILL.md`
+  > TVA 8.1%/2.6%/3.8%, QR-Invoice ISO 20022 v2.3, Formulaire 200 AFC, CGV suisses
+
+- **multi-portal-architecture** → `.claude/skills/multi-portal-architecture/SKILL.md`
+  > Logique 4 portails (SuperAdmin/Client/Prestataire/Revendeur), auth multi-rôles JWT
+
+- **ceo-dashboard-designer** → `.claude/skills/ceo-dashboard-designer/SKILL.md`
+  > Dashboard CEO : layout, KPIs, widgets, alertes, trésorerie temps réel
+
+- **postgresql-directus-optimizer** → `.claude/skills/postgresql-directus-optimizer/SKILL.md`
+  > Optimisation requêtes PostgreSQL via Directus, index, perf
+
+- **docker-stack-ops** → `.claude/skills/docker-stack-ops/SKILL.md`
+  > Docker Compose, services, infrastructure, Directus + PostgreSQL + Redis
+
+- **integration-sync-engine** → `.claude/skills/integration-sync-engine/SKILL.md`
+  > Connexions Invoice Ninja / Revolut / Mautic / ERPNext
+
+- **skill-router** → `.claude/skills/skill-router/SKILL.md`
+  > Router intelligent pour choisir les meilleurs skills selon la tâche
+
+---
+
+## SKILLS SPÉCIALISÉS — ~/.claude/skills-repos/
 
 ### 📦 anthropics-skills (Skills officiels Anthropic)
 
-- **frontend-design** `~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md`
-  *Qualité visuelle exceptionnelle, design system, composants premium. TOUJOURS lire pour tout composant UI.*
+**[skills]**
+- **frontend-design** → `~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md`
+  > Qualité visuelle exceptionnelle, design systems, composants React production-ready
 
-- **theme-factory** `~/.claude/skills-repos/anthropics-skills/skills/theme-factory/SKILL.md`
-  *Génération de thèmes complets, tokens CSS, design tokens cohérents*
+- **theme-factory** → `~/.claude/skills-repos/anthropics-skills/skills/theme-factory/SKILL.md`
+  > Génération de thèmes complets, tokens CSS, dark mode
 
-- **web-artifacts-builder** `~/.claude/skills-repos/anthropics-skills/skills/web-artifacts-builder/SKILL.md`
-  *Composants web élaborés multi-couches, artifacts complexes*
+- **web-artifacts-builder** → `~/.claude/skills-repos/anthropics-skills/skills/web-artifacts-builder/SKILL.md`
+  > Composants élaborés multi-layer, interactions complexes
 
-- **webapp-testing** `~/.claude/skills-repos/anthropics-skills/skills/webapp-testing/SKILL.md`
-  *Tests visuels, tests d'interactions, validation UI*
+- **webapp-testing** → `~/.claude/skills-repos/anthropics-skills/skills/webapp-testing/SKILL.md`
+  > Tests visuels, interactions, qualité production
 
 ---
 
 ### 📦 alirezarezvani-claude-skills
 
-#### product-team
-- **ui-design-system** `~/.claude/skills-repos/alirezarezvani-claude-skills/product-team/ui-design-system/SKILL.md`
-  *Design system complet : tokens couleurs, spacing, typographie, composants*
+**[product-team]**
+- **ui-design-system** → `~/.claude/skills-repos/alirezarezvani-claude-skills/product-team/ui-design-system/SKILL.md`
+  > Design system & tokens : couleurs, spacing, typographie, composants cohérents
 
-- **ux-researcher-designer** `~/.claude/skills-repos/alirezarezvani-claude-skills/product-team/ux-researcher-designer/SKILL.md`
-  *Personas, user flows, heuristiques Nielsen, UX research*
+- **ux-researcher-designer** → `~/.claude/skills-repos/alirezarezvani-claude-skills/product-team/ux-researcher-designer/SKILL.md`
+  > Personas, user flows, heuristiques, recherche UX, design décision-driven
 
-#### engineering-team
-- **senior-frontend** `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-frontend/SKILL.md`
-  *Best practices frontend senior, architecture propre, performance*
+**[engineering-team]**
+- **senior-frontend** → `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-frontend/SKILL.md`
+  > Best practices frontend senior, architecture propre, patterns avancés
 
-- **senior-backend** `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-backend/SKILL.md`
-  *Patterns backend senior, API design, services*
+- **senior-fullstack** → `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-fullstack/SKILL.md`
+  > Fullstack senior : React + Node, patterns complets front + back
 
-- **senior-fullstack** `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-fullstack/SKILL.md`
-  *Architecture fullstack, feature complète front+back*
+- **senior-backend** → `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-backend/SKILL.md`
+  > Architecture backend senior, API design, sécurité, performance
 
-- **senior-qa** `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-qa/SKILL.md`
-  *QA senior : stratégie tests, couverture, qualité*
+- **senior-qa** → `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering-team/senior-qa/SKILL.md`
+  > Stratégie QA senior, couverture tests, qualité production
 
-#### finance
-- **financial-analyst** `~/.claude/skills-repos/alirezarezvani-claude-skills/finance/financial-analyst/SKILL.md`
-  *Analyse financière, KPIs, P&L, tableaux de bord financiers*
+**[finance]**
+- **financial-analyst** → `~/.claude/skills-repos/alirezarezvani-claude-skills/finance/financial-analyst/SKILL.md`
+  > Analyse financière, KPIs, métriques, dashboards finance
 
-#### engineering
-- **api-design-reviewer** `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering/api-design-reviewer/SKILL.md`
-  *Review design API REST, conventions, sécurité*
+**[engineering]**
+- **api-design-reviewer** → `~/.claude/skills-repos/alirezarezvani-claude-skills/engineering/api-design-reviewer/SKILL.md`
+  > Review et design REST API, endpoints Revolut / DocuSeal / Invoice Ninja
 
 ---
 
 ### 📦 jezweb-claude-skills
 
-- **web-design-methodology** `~/.claude/skills-repos/jezweb-claude-skills/skills/web-design-methodology/SKILL.md`
-  *BEM, accessibilité, dark mode, conventions design web*
+**[skills]**
+- **web-design-methodology** → `~/.claude/skills-repos/jezweb-claude-skills/skills/web-design-methodology/SKILL.md`
+  > Méthodologie design web : BEM, accessibilité, dark mode, conventions professionnelles
 
-- **web-design-patterns** `~/.claude/skills-repos/jezweb-claude-skills/skills/web-design-patterns/SKILL.md`
-  *Patterns layouts, navigation, interaction design*
+- **web-design-patterns** → `~/.claude/skills-repos/jezweb-claude-skills/skills/web-design-patterns/SKILL.md`
+  > Patterns UI/UX : layouts, navigation, interaction patterns prouvés
 
-- **ux-audit** `~/.claude/skills-repos/jezweb-claude-skills/skills/ux-audit/SKILL.md`
-  *Évaluer et améliorer l'UX existante, audit heuristique*
+- **ux-audit** → `~/.claude/skills-repos/jezweb-claude-skills/skills/ux-audit/SKILL.md`
+  > Audit UX : évaluer et améliorer l'UX existante, heuristiques Nielsen
 
-- **tailwind-theme-builder** `~/.claude/skills-repos/jezweb-claude-skills/skills/tailwind-theme-builder/SKILL.md`
-  *Variables CSS Tailwind, dark mode, theming complet*
+- **tailwind-theme-builder** → `~/.claude/skills-repos/jezweb-claude-skills/skills/tailwind-theme-builder/SKILL.md`
+  > CSS variables Tailwind, dark mode, theming complet, tokens sémantiques
 
-- **color-palette** `~/.claude/skills-repos/jezweb-claude-skills/skills/color-palette/SKILL.md`
-  *Cohérence couleurs, tokens sémantiques, contrastes*
+- **shadcn-ui** → `~/.claude/skills-repos/jezweb-claude-skills/skills/shadcn-ui/SKILL.md`
+  > Composants shadcn/ui accessibles et bien architecturés
 
-- **shadcn-ui** `~/.claude/skills-repos/jezweb-claude-skills/skills/shadcn-ui/SKILL.md`
-  *Composants shadcn/ui accessibles et bien architecturés*
+- **color-palette** → `~/.claude/skills-repos/jezweb-claude-skills/skills/color-palette/SKILL.md`
+  > Cohérence couleurs, tokens sémantiques, palettes harmonieuses
 
-- **icon-set-generator** `~/.claude/skills-repos/jezweb-claude-skills/skills/icon-set-generator/SKILL.md`
-  *Icônes cohérentes dans le design system*
+- **icon-set-generator** → `~/.claude/skills-repos/jezweb-claude-skills/skills/icon-set-generator/SKILL.md`
+  > Icônes cohérentes dans le design system, Lucide / Hero Icons
 
 ---
 
 ### 📦 jeffallan-claude-skills
 
-- **react-expert** `~/.claude/skills-repos/jeffallan-claude-skills/skills/react-expert/SKILL.md`
-  *React 18 patterns, hooks avancés, performance, composition*
+**[skills]**
+- **react-expert** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/react-expert/SKILL.md`
+  > React 18 : hooks, patterns perf, composition, useMemo/useCallback, context
 
-- **fullstack-guardian** `~/.claude/skills-repos/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md`
-  *Feature complète fullstack front+back, architecture propre*
+- **fullstack-guardian** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md`
+  > Feature complète front + back : end-to-end, de l'UI à la DB
 
-- **playwright-expert** `~/.claude/skills-repos/jeffallan-claude-skills/skills/playwright-expert/SKILL.md`
-  *Tests E2E Playwright, portails, parcours utilisateur*
+- **playwright-expert** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/playwright-expert/SKILL.md`
+  > Tests E2E Playwright : portails, interactions, assertions visuelles
 
-- **postgres-pro** `~/.claude/skills-repos/jeffallan-claude-skills/skills/postgres-pro/SKILL.md`
-  *PostgreSQL avancé, optimisation, index, requêtes complexes*
+- **postgres-pro** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/postgres-pro/SKILL.md`
+  > PostgreSQL avancé : index, explain analyze, optimisation queries
 
-- **sql-pro** `~/.claude/skills-repos/jeffallan-claude-skills/skills/sql-pro/SKILL.md`
-  *SQL expert, CTEs, window functions, optimisation*
+- **sql-pro** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/sql-pro/SKILL.md`
+  > SQL complexe : CTEs, window functions, rapprochement multi-critères
 
-- **secure-code-guardian** `~/.claude/skills-repos/jeffallan-claude-skills/skills/secure-code-guardian/SKILL.md`
-  *Review sécurité, vulnérabilités, bonnes pratiques*
+- **secure-code-guardian** → `~/.claude/skills-repos/jeffallan-claude-skills/skills/secure-code-guardian/SKILL.md`
+  > Review sécurité du code : injection, auth, secrets, OWASP Top 10
 
 ---
 
 ### 📦 claude-code-plugins-plus-skills
 
-#### 03-security-fundamentals
-- **api-key-manager** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/03-security-fundamentals/api-key-manager/SKILL.md`
-  *Gestion sécurisée des API keys (Revolut, DocuSeal, OpenAI)*
+**[03-security-fundamentals]**
+- **api-key-manager** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/03-security-fundamentals/api-key-manager/SKILL.md`
+  > Gestion sécurisée des clés API (Revolut, DocuSeal, OpenAI) : rotation, stockage
 
-- **rate-limiter-config** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/03-security-fundamentals/rate-limiter-config/SKILL.md`
-  *Protection endpoints publics, rate limiting*
+- **rate-limiter-config** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/03-security-fundamentals/rate-limiter-config/SKILL.md`
+  > Protection endpoints publics par rate limiting (Express middleware)
 
-#### 05-frontend-dev
-- **react-component-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/react-component-generator/SKILL.md`
-  *Génération composants React structurés et architecturés*
+**[05-frontend-dev]**
+- **react-component-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/react-component-generator/SKILL.md`
+  > Génération composants React structurés et réutilisables
 
-- **react-hook-creator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/react-hook-creator/SKILL.md`
-  *Hooks custom dédiés (useQuote, useInvoice, useProjects...)*
+- **react-hook-creator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/react-hook-creator/SKILL.md`
+  > Hooks custom dédiés : useQuote, useInvoice, useProjects, useActivation
 
-- **tailwind-class-optimizer** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/tailwind-class-optimizer/SKILL.md`
-  *Éviter le bloat Tailwind, classes cohérentes et optimisées*
+- **tailwind-class-optimizer** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/tailwind-class-optimizer/SKILL.md`
+  > Éviter le bloat Tailwind, classes cohérentes, purge optimisée
 
-- **responsive-breakpoint-analyzer** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/responsive-breakpoint-analyzer/SKILL.md`
-  *Breakpoints sm/md/lg/xl/2xl cohérents, responsive design*
+- **responsive-breakpoint-analyzer** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/responsive-breakpoint-analyzer/SKILL.md`
+  > Breakpoints sm/md/lg/xl/2xl cohérents, responsive design
 
-- **accessibility-audit-runner** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/accessibility-audit-runner/SKILL.md`
-  *WCAG, aria-labels, navigation clavier, contraste*
+- **accessibility-audit-runner** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/accessibility-audit-runner/SKILL.md`
+  > WCAG, aria-labels, navigation clavier, accessibilité production
 
-- **color-contrast-checker** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/color-contrast-checker/SKILL.md`
-  *Vérificateur WCAG AA/AAA, contrastes couleurs*
+- **color-contrast-checker** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/color-contrast-checker/SKILL.md`
+  > Vérificateur WCAG AA/AAA, contraste texte/fond
 
-- **web-vitals-monitor** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/web-vitals-monitor/SKILL.md`
-  *LCP, FID, CLS — Core Web Vitals*
+- **web-vitals-monitor** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/web-vitals-monitor/SKILL.md`
+  > Core Web Vitals : LCP, FID, CLS — optimisation perf
 
-- **bundle-size-analyzer** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/bundle-size-analyzer/SKILL.md`
-  *Analyser et réduire le poids JS/CSS*
+- **bundle-size-analyzer** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/bundle-size-analyzer/SKILL.md`
+  > Analyser et réduire le poids JS/CSS, code splitting, lazy loading
 
-- **zustand-store-creator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/zustand-store-creator/SKILL.md`
-  *État global Zustand bien structuré*
+- **zustand-store-creator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/05-frontend-dev/zustand-store-creator/SKILL.md`
+  > État global bien structuré avec Zustand, slices, persist
 
-#### 06-backend-dev
-- **express-route-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/express-route-generator/SKILL.md`
-  *Routes Express propres, middleware, validation*
+**[06-backend-dev]**
+- **express-route-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/express-route-generator/SKILL.md`
+  > Routes Express propres : validation, middleware, error handling
 
-- **redis-cache-manager** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/redis-cache-manager/SKILL.md`
-  *Cache Redis, sessions, tokens Revolut 40min*
+- **redis-cache-manager** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/redis-cache-manager/SKILL.md`
+  > Cache Redis : sessions, tokens Revolut 40min, invalidation
 
-#### 09-test-automation
-- **api-test-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/09-test-automation/api-test-generator/SKILL.md`
-  *Tests API automatisés, couverture endpoints*
+**[09-test-automation]**
+- **api-test-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/09-test-automation/api-test-generator/SKILL.md`
+  > Tests API automatiques : endpoints, auth, edge cases
 
-#### 12-data-analytics
-- **cte-query-builder** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/12-data-analytics/cte-query-builder/SKILL.md`
-  *CTEs optimisées, rapprochement bancaire multi-critères*
+**[12-data-analytics]**
+- **cte-query-builder** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/12-data-analytics/cte-query-builder/SKILL.md`
+  > CTEs PostgreSQL optimisées pour rapprochement bancaire avancé
 
-#### 16-api-integration
-- **webhook-receiver-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-receiver-generator/SKILL.md`
-  *Réception webhooks Revolut, validation signature, retry*
+**[16-api-integration]**
+- **webhook-receiver-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-receiver-generator/SKILL.md`
+  > Réception webhooks Revolut (paiements, confirmation projets)
 
-- **webhook-signature-validator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-signature-validator/SKILL.md`
-  *Sécurité webhooks, validation HMAC*
+- **webhook-signature-validator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-signature-validator/SKILL.md`
+  > Validation signature HMAC des webhooks (sécurité)
 
-- **webhook-retry-handler** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-retry-handler/SKILL.md`
-  *Retry automatique si webhook échoue*
+- **webhook-retry-handler** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/webhook-retry-handler/SKILL.md`
+  > Retry automatique si webhook échoue (resilience)
 
-- **server-sent-events-setup** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/server-sent-events-setup/SKILL.md`
-  *Notifications push temps réel via SSE*
+- **server-sent-events-setup** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/server-sent-events-setup/SKILL.md`
+  > SSE : notifications push temps réel (dashboard CEO live)
 
-- **api-client-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/api-client-generator/SKILL.md`
-  *Clients API Mautic, Invoice Ninja, Revolut*
+- **api-client-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/api-client-generator/SKILL.md`
+  > Clients API typosés : Mautic, Invoice Ninja, Revolut
 
-- **api-response-cacher** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/api-response-cacher/SKILL.md`
-  *Mise en cache des réponses API, performance*
+- **api-response-cacher** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/16-api-integration/api-response-cacher/SKILL.md`
+  > Cache réponses API (perf), stratégies TTL
 
-#### 18-visual-content
-- **mermaid-flowchart-generator** `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/18-visual-content/mermaid-flowchart-generator/SKILL.md`
-  *Diagrammes Mermaid, architecture, flows*
+**[18-visual-content]**
+- **mermaid-flowchart-generator** → `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/18-visual-content/mermaid-flowchart-generator/SKILL.md`
+  > Diagrammes Mermaid : architecture, flows, relations
 
 ---
 
 ### 📦 awesome-claude-code-toolkit
 
-- **react-patterns** `~/.claude/skills-repos/awesome-claude-code-toolkit/skills/react-patterns/SKILL.md`
-  *Patterns React avancés : formulaires complexes, HOC, render props*
+**[skills]**
+- **react-patterns** → `~/.claude/skills-repos/awesome-claude-code-toolkit/skills/react-patterns/SKILL.md`
+  > Patterns React avancés : formulaires complexes, HOC, render props, compound components
 
 ---
 
-## 🎯 GUIDE DE SÉLECTION RAPIDE
+## RÈGLES DE SÉLECTION RAPIDE
 
 | Type de tâche | Skills prioritaires (dans l'ordre) |
-|---------------|------------------------------------|
-| **UI/UX — nouveau composant React** | `frontend-design` → `ui-design-system` → `react-expert` → `react-component-generator` |
-| **UI/UX — refactoring design** | `frontend-design` → `ui-design-system` → `web-design-methodology` → `ux-audit` |
-| **Dashboard / KPIs / Charts** | `ceo-dashboard-designer` → `frontend-design` → `ui-design-system` → `directus-api-patterns` |
-| **Formulaire complexe** | `frontend-design` → `react-expert` → `react-hook-creator` → `directus-api-patterns` |
-| **Sidebar / Navigation** | `frontend-design` → `ui-design-system` → `web-design-patterns` → `react-expert` |
-| **Design system — tokens CSS** | `ui-design-system` → `theme-factory` → `tailwind-theme-builder` → `color-palette` |
-| **Module complet fullstack** | `frontend-design` → `ux-researcher-designer` → `fullstack-guardian` → `directus-api-patterns` |
-| **API Express / Webhook** | `express-route-generator` → `webhook-receiver-generator` → `integration-sync-engine` |
-| **Finance / TVA / QR-Invoice** | `swiss-compliance-engine` → `directus-api-patterns` → `fullstack-guardian` |
-| **Base de données / PostgreSQL** | `postgresql-directus-optimizer` → `postgres-pro` → `sql-pro` |
-| **Sécurité / Auth JWT** | `secure-code-guardian` → `api-key-manager` → `rate-limiter-config` |
-| **Tests E2E** | `playwright-expert` → `webapp-testing` → `api-test-generator` |
-| **Performance frontend** | `web-vitals-monitor` → `bundle-size-analyzer` → `tailwind-class-optimizer` |
-| **Accessibilité** | `accessibility-audit-runner` → `color-contrast-checker` → `web-design-methodology` |
+|---|---|
+| **Tout composant UI** | `frontend-design` + `ui-design-system` + `react-expert` |
+| **Design System / tokens** | `frontend-design` + `ui-design-system` + `tailwind-theme-builder` + `web-design-methodology` |
+| **Dashboard / KPIs** | `ceo-dashboard-designer` + `frontend-design` + `ui-design-system` + `directus-api-patterns` |
+| **Nouveau module complet** | `frontend-design` + `ux-researcher-designer` + `web-design-patterns` + `fullstack-guardian` |
+| **Audit UX existant** | `ux-audit` + `web-design-methodology` + `color-contrast-checker` + `accessibility-audit-runner` |
+| **Directus / collections** | `directus-api-patterns` (obligatoire) + MCP Directus pour vérifier les champs |
+| **Finance / TVA Suisse** | `swiss-compliance-engine` + `directus-api-patterns` + `financial-analyst` |
+| **Webhooks Revolut** | `webhook-receiver-generator` + `webhook-signature-validator` + `integration-sync-engine` |
+| **PostgreSQL perf** | `postgresql-directus-optimizer` + `sql-pro` + `cte-query-builder` |
+| **API Express** | `express-route-generator` + `api-design-reviewer` + `senior-backend` |
+| **Sécurité** | `api-key-manager` + `rate-limiter-config` + `secure-code-guardian` |
+| **Tests E2E** | `playwright-expert` + `api-test-generator` + `webapp-testing` |
 
-> 📖 Voir aussi **SKILLS-MAPPING.md** pour les combinaisons recommandées par story ROADMAP  
-> 🔄 Pour régénérer cet index : `bash scripts/generate-skills-index.sh`
+> ⚠️ Voir `SKILLS-MAPPING.md` pour les combinaisons pré-calculées par story de la roadmap.

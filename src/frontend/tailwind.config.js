@@ -7,29 +7,37 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          200: '#BFDBFE',
-          300: '#93C5FD',
-          400: '#60A5FA',
-          500: '#3B82F6',
-          600: '#2563EB',
-          700: '#1D4ED8',
-          800: '#1E40AF',
-          900: '#1E3A8A',
+        apple: {
+          bg: '#F5F5F7',
+          surface: '#FFFFFF',
+          text: '#1D1D1F',
+          'text-secondary': '#6E6E73',
+          'text-tertiary': '#AEAEB2',
+          accent: '#0071E3',
+          'accent-hover': '#0077ED',
+          success: '#34C759',
+          warning: '#FF9500',
+          danger: '#FF3B30',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['-apple-system', 'SF Pro Display', 'Inter', 'sans-serif'],
       },
-      backdropBlur: {
-        xs: '2px',
+      borderRadius: {
+        'card': '12px',
+        'input': '8px',
+        'badge': '6px',
+      },
+      boxShadow: {
+        'ds-sm': '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',
+        'ds-md': '0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)',
+        'ds-lg': '0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)',
+        'ds-focus': '0 0 0 3px rgba(0,113,227,0.20)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
-        'slide-down': 'slideDown 0.3s ease-out',
+        'shimmer': 'shimmer 1.5s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -40,9 +48,9 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        slideDown: {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
     },

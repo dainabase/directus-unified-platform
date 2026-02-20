@@ -90,7 +90,7 @@ const RevendeurDashboard = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <FileText size={14} className="text-orange-400" />
             <span className="text-xs text-gray-500">Devis total</span>
@@ -98,7 +98,7 @@ const RevendeurDashboard = () => {
           <p className="text-2xl font-bold text-gray-900">{kpis.totalQuotes}</p>
           <p className="text-xs text-gray-400 mt-1">{kpis.pendingCount} en attente</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <DollarSign size={14} className="text-green-400" />
             <span className="text-xs text-gray-500">CA accepte</span>
@@ -106,14 +106,14 @@ const RevendeurDashboard = () => {
           <p className="text-2xl font-bold text-green-600">{formatCHF(kpis.acceptedCA)}</p>
           <p className="text-xs text-gray-400 mt-1">{kpis.conversionRate}% conversion</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <Users size={14} className="text-blue-400" />
             <span className="text-xs text-gray-500">Clients</span>
           </div>
           <p className="text-2xl font-bold text-blue-600">{kpis.clientCount}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <Package size={14} className="text-purple-400" />
             <span className="text-xs text-gray-500">Produits</span>
@@ -123,7 +123,7 @@ const RevendeurDashboard = () => {
       </div>
 
       {/* Recent Quotes */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-semibold text-gray-900">Devis recents</h3>
           <span className="text-xs text-gray-400">{quotes.length} devis</span>
@@ -165,7 +165,7 @@ const RevendeurDashboard = () => {
 
       {/* Products Catalogue Preview */}
       {products.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="ds-card">
           <div className="p-4 border-b border-gray-100">
             <h3 className="font-semibold text-gray-900">Catalogue produits</h3>
           </div>

@@ -43,19 +43,22 @@ const RevendeurLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       {/* Topbar */}
-      <header className="fixed top-0 left-64 right-0 h-16 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 z-40">
+      <header
+        className="fixed top-0 left-64 right-0 h-16 ds-glass z-40"
+        style={{ borderBottom: '1px solid var(--border-light)' }}
+      >
         <div className="h-full px-6 flex items-center justify-between">
-          <span className="text-sm text-gray-500">{getBreadcrumb()}</span>
+          <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>{getBreadcrumb()}</span>
           <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-gray-900">{displayName}</p>
-              <p className="text-xs text-gray-500">Revendeur</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{displayName}</p>
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Revendeur</p>
             </div>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center"
-              style={{ background: `linear-gradient(135deg, ${ORANGE}, #c2410c)` }}
+              style={{ background: ORANGE }}
             >
               <UserCircle className="w-5 h-5 text-white" />
             </div>
@@ -71,25 +74,28 @@ const RevendeurLayout = () => {
       </header>
 
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-white/80 backdrop-blur-lg border-r border-gray-200/50 overflow-y-auto z-50">
+      <aside
+        className="fixed left-0 top-0 h-screen w-64 ds-glass overflow-y-auto z-50"
+        style={{ borderRight: '1px solid var(--border-light)' }}
+      >
         <div className="p-4">
           <div className="mb-6 px-3 pt-2">
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
-                style={{ background: `linear-gradient(135deg, ${ORANGE}, #c2410c)` }}
+                style={{ background: ORANGE }}
               >
                 <span className="text-lg font-black text-white">R</span>
               </div>
               <div>
-                <h1 className="text-sm font-bold text-gray-900">HYPERVISUAL</h1>
-                <p className="text-xs text-gray-500">Espace Revendeur</p>
+                <h1 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>HYPERVISUAL</h1>
+                <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Espace Revendeur</p>
               </div>
             </div>
           </div>
 
           <nav className="space-y-1">
-            <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
               Navigation
             </p>
             {NAV_ITEMS.map((item) => {
@@ -121,8 +127,8 @@ const RevendeurLayout = () => {
             })}
           </nav>
 
-          <div className="mt-8 pt-4 border-t border-gray-100">
-            <div className="px-3 text-xs text-gray-400">
+          <div className="mt-8 pt-4" style={{ borderTop: '1px solid var(--border-light)' }}>
+            <div className="px-3 text-xs" style={{ color: 'var(--text-tertiary)' }}>
               <p>Espace Revendeur v1.0</p>
               <p className="mt-1">HYPERVISUAL Switzerland</p>
             </div>

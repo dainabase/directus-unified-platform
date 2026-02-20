@@ -1,196 +1,112 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  Bell,
-  Search,
-  User,
-  Building,
-  ChevronDown,
-  Activity,
-  LogOut
-} from 'lucide-react'
-import { useAuthStore } from '../../stores/authStore'
-import { useNotifications } from '../../hooks/useNotifications'
-import NotificationsCenter from '../notifications/NotificationsCenter'
+import { useLocation } from 'react-router-dom'
+import { Bell, Search, Plus } from 'lucide-react'
 
-const TopBar = ({
-  selectedCompany = 'all',
-  onCompanyChange
-}) => {
+const TopBar = ({ onNewAction }) => {
   const location = useLocation()
-  const navigate = useNavigate()
-  const user = useAuthStore((s) => s.user)
-  const logout = useAuthStore((s) => s.logout)
+  const [searchFocused, setSearchFocused] = useState(false)
+  const [unreadCount] = useState(3)
+  const searchRef = useRef(null)
 
-  const [showNotifications, setShowNotifications] = useState(false)
-  const notifRef = useRef(null)
-
-  const {
-    notifications,
-    unreadCount,
-    isLoading: notifLoading,
-    markRead,
-    markAllRead,
-    isMarkingAllRead
-  } = useNotifications()
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target)) {
-        setShowNotifications(false)
-      }
-    }
-    if (showNotifications) {
-      document.addEventListener('mousedown', handleClick)
-    }
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [showNotifications])
-
-  const currentUser = user
-    ? { name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email, role: user.role || 'SuperAdmin' }
-    : { name: 'Jean-Marie Delaunay', role: 'CEO' }
-
-  const companies = [
-    { value: 'all', label: 'Toutes les entreprises' },
-    { value: '2d6b906a-5b8a-4d9e-a37b-aee8c1281b22', label: 'HYPERVISUAL' },
-    { value: '55483d07-6621-43d4-89a9-5ebbffe86fea', label: 'DAINAMICS' },
-    { value: '6f4bc42a-d083-4df5-ace3-6b910164ae18', label: 'ENKI REALTY' },
-    { value: '8db45f3b-4021-9556-3acaa5f35b3f', label: 'LEXAIA' },
-    { value: 'a1313adf-0347-424b-aff2-c5f0b33c4a05', label: 'TAKEOUT' }
-  ]
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login', { replace: true })
-  }
-
-  // Breadcrumb basé sur la route
-  const getBreadcrumb = () => {
+  const getPageTitle = () => {
     const path = location.pathname
-    const segments = path.split('/').filter(Boolean)
-
-    if (segments.length <= 1) return 'Dashboard'
-
-    const labels = {
-      'banking': 'Finance → Banking',
-      'accounting': 'Finance → Comptabilité',
-      'invoices': 'Finance → Factures',
-      'collection': 'Finance → Recouvrement',
-      'budgets': 'Finance → Budgets',
-      'expenses': 'Finance → Dépenses',
-      'subscriptions': 'Finance → Abonnements',
-      'projects': 'Projets',
-      'deliverables': 'Projets → Livrables',
-      'time-tracking': 'Projets → Time Tracking',
-      'crm': 'CRM',
-      'leads': 'Leads',
-      'quotes': 'Devis',
-      'marketing': 'Marketing',
-      'hr': 'Ressources Humaines',
-      'legal': 'Juridique',
-      'support': 'Support',
-      'settings': 'Paramètres',
+    const map = {
+      '/superadmin': 'Dashboard',
+      '/superadmin/kpis': 'KPIs',
+      '/superadmin/quotes': 'Devis',
+      '/superadmin/projects': 'Projets',
+      '/superadmin/deliverables': 'Livrables',
+      '/superadmin/providers': 'Prestataires',
+      '/superadmin/invoices/clients': 'Factures clients',
+      '/superadmin/invoices/suppliers': 'Factures fournisseurs',
+      '/superadmin/banking': 'Banking',
+      '/superadmin/accounting': 'Comptabilite',
+      '/superadmin/marketing': 'Marketing',
+      '/superadmin/legal': 'Juridique',
+      '/superadmin/support': 'Support',
+      '/superadmin/settings': 'Parametres',
+      '/superadmin/crm/pipeline': 'Pipeline',
+      '/superadmin/subscriptions': 'Abonnements',
+      '/superadmin/time-tracking': 'Time Tracking',
     }
 
-    for (const [key, label] of Object.entries(labels)) {
-      if (path.includes(key)) return label
+    for (const [route, title] of Object.entries(map)) {
+      if (path.startsWith(route) && route !== '/superadmin') return title
     }
-
-    return segments[segments.length - 1]
+    return map[path] || 'Dashboard'
   }
 
   return (
-    <header className="fixed top-0 left-64 right-0 h-16 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 z-40">
-      <div className="h-full px-6 flex items-center justify-between">
-        {/* Left Section - Breadcrumb + Company Selector */}
-        <div className="flex items-center gap-4">
-          {/* Breadcrumb */}
-          <div className="hidden lg:block">
-            <span className="text-sm text-gray-500">{getBreadcrumb()}</span>
-          </div>
+    <header
+      className="ds-glass fixed top-0 right-0 z-[200] flex items-center justify-between"
+      style={{
+        left: 240,
+        height: 52,
+        padding: '0 24px',
+        borderBottom: '1px solid rgba(0,0,0,0.08)',
+      }}
+    >
+      {/* Left — Page title */}
+      <div>
+        <h1 className="ds-page-title">{getPageTitle()}</h1>
+      </div>
 
-          {/* Divider */}
-          <div className="hidden lg:block w-px h-6 bg-gray-200"></div>
+      {/* Right — Search + Notifications + Quick action */}
+      <div className="flex items-center gap-3">
+        {/* Search bar */}
+        <div className="relative">
+          <Search
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2"
+            style={{ color: 'var(--text-tertiary)' }}
+          />
+          <input
+            ref={searchRef}
+            type="search"
+            placeholder="Rechercher..."
+            className="ds-input pl-8 transition-all duration-200"
+            style={{
+              width: searchFocused ? 250 : 200,
+              padding: '6px 10px 6px 32px',
+              fontSize: 13,
+            }}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+          />
+        </div>
 
-          {/* Company Selector */}
-          <div className="flex items-center gap-2 bg-white/60 rounded-lg px-3 py-2 border border-gray-200/50">
-            <Building className="w-4 h-4 text-gray-500" />
-            <select
-              value={selectedCompany}
-              onChange={(e) => onCompanyChange(e.target.value)}
-              className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer min-w-[180px]"
-            >
-              {companies.map(c => (
-                <option key={c.value} value={c.value}>{c.label}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Search */}
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="search"
-              placeholder="Rechercher..."
-              className="pl-10 pr-4 py-2 w-64 lg:w-80 bg-white/60 border border-gray-200/50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+        {/* Notifications */}
+        <button
+          className="relative p-2 rounded-md transition-colors duration-150"
+          style={{ color: 'var(--text-secondary)' }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+        >
+          <Bell size={16} />
+          {unreadCount > 0 && (
+            <span
+              className="absolute flex items-center justify-center"
+              style={{
+                top: 4,
+                right: 4,
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: 'var(--danger)',
+              }}
             />
-          </div>
-        </div>
+          )}
+        </button>
 
-        {/* Right Section */}
-        <div className="flex items-center gap-3">
-          {/* API Status */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
-            <Activity className="w-3.5 h-3.5 text-green-600" />
-            <span className="text-xs font-medium text-green-700">API Connected</span>
-          </div>
-
-          {/* Notifications */}
-          <div className="relative" ref={notifRef}>
-            <button
-              className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setShowNotifications(prev => !prev)}
-            >
-              <Bell size={20} className="text-gray-600" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs font-medium rounded-full flex items-center justify-center">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
-
-            {showNotifications && (
-              <NotificationsCenter
-                notifications={notifications}
-                unreadCount={unreadCount}
-                isLoading={notifLoading}
-                onMarkRead={markRead}
-                onMarkAllRead={markAllRead}
-                onClose={() => setShowNotifications(false)}
-                isMarkingAllRead={isMarkingAllRead}
-              />
-            )}
-          </div>
-
-          {/* User Menu */}
-          <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-gray-900">{currentUser.name}</p>
-              <p className="text-xs text-gray-500">{currentUser.role}</p>
-            </div>
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
-              title="Déconnexion"
-            >
-              <LogOut size={18} />
-            </button>
-          </div>
-        </div>
+        {/* Quick action */}
+        <button
+          className="ds-btn ds-btn-primary"
+          style={{ padding: '6px 12px', fontSize: 12 }}
+          onClick={onNewAction}
+        >
+          <Plus size={14} />
+          Nouveau
+        </button>
       </div>
     </header>
   )

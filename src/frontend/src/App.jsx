@@ -107,6 +107,11 @@ const MilestonesModule = lazy(() => import('./portals/superadmin/projects/Milest
 const CreditsModule = lazy(() => import('./portals/superadmin/invoices/CreditsModule'))
 const ApprovalQueue = lazy(() => import('./portals/superadmin/providers/ApprovalQueue'))
 
+// Phase J — KPI Dashboard + Rapport CEO
+const KPISidebar = lazy(() => import('./portals/superadmin/kpis/KPIWidget'))
+const ThresholdConfig = lazy(() => import('./portals/superadmin/kpis/ThresholdConfig'))
+const TreasuryForecast = lazy(() => import('./portals/superadmin/kpis/TreasuryForecast'))
+
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
   return (
@@ -228,6 +233,11 @@ function App() {
                   {/* Phase I — Finance Avancees */}
                   <Route path="milestones" element={<MilestonesModule selectedCompany={selectedCompany} />} />
                   <Route path="invoices/credits" element={<CreditsModule selectedCompany={selectedCompany} />} />
+
+                  {/* Phase J — KPI Dashboard + Rapport CEO */}
+                  <Route path="kpis" element={<KPISidebar selectedCompany={selectedCompany} />} />
+                  <Route path="kpis/thresholds" element={<ThresholdConfig selectedCompany={selectedCompany} />} />
+                  <Route path="kpis/treasury" element={<TreasuryForecast selectedCompany={selectedCompany} />} />
 
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />

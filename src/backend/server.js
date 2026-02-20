@@ -116,6 +116,33 @@ try {
 }
 
 // ============================================
+// API PHASE J — KPI DASHBOARD + RAPPORT CEO
+// ============================================
+
+try {
+  const kpisRouter = await import('./api/kpis/index.js');
+  const kpisThresholdsRouter = await import('./api/kpis/thresholds.js');
+  const kpisDailyReportRouter = await import('./api/kpis/daily-report.js');
+  const kpisTreasuryRouter = await import('./api/kpis/treasury-forecast.js');
+
+  app.use('/api/kpis', kpisRouter.default);
+  app.use('/api/kpis', kpisThresholdsRouter.default);
+  app.use('/api/kpis', kpisDailyReportRouter.default);
+  app.use('/api/kpis/treasury', kpisTreasuryRouter.default);
+
+  // Start daily CEO report CRON (07h00)
+  const { startDailyCEOReport } = kpisDailyReportRouter;
+  if (startDailyCEOReport) {
+    startDailyCEOReport();
+    console.log('[api] Daily CEO report CRON started (J-03)');
+  }
+
+  console.log('[api] KPIs connected: /api/kpis (J-01 to J-04)');
+} catch (err) {
+  console.warn('[api] KPIs not available:', err.message);
+}
+
+// ============================================
 // API PHASE I — FINANCE AVANCEES (Milestones, Subscriptions, Credits, Supplier Invoices, Time Tracking, Support)
 // ============================================
 

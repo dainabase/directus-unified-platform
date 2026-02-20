@@ -12,6 +12,8 @@ import KPIWidget from './widgets/KPIWidget'
 import AlertsWidget from './widgets/AlertsWidget'
 import PipelineWidget from './widgets/PipelineWidget'
 import TreasuryWidget from './widgets/TreasuryWidget'
+import KPISidebar from './kpis/KPIWidget'
+import TreasuryForecast from './kpis/TreasuryForecast'
 
 const Dashboard = ({ selectedCompany }) => {
   const queryClient = useQueryClient()
@@ -21,6 +23,8 @@ const Dashboard = ({ selectedCompany }) => {
     queryClient.invalidateQueries({ queryKey: ['alerts'] })
     queryClient.invalidateQueries({ queryKey: ['pipeline'] })
     queryClient.invalidateQueries({ queryKey: ['treasury'] })
+    queryClient.invalidateQueries({ queryKey: ['kpis-latest'] })
+    queryClient.invalidateQueries({ queryKey: ['treasury-forecast'] })
   }
 
   return (
@@ -45,22 +49,17 @@ const Dashboard = ({ selectedCompany }) => {
       {/* KPIs Row */}
       <KPIWidget selectedCompany={selectedCompany} />
 
-      {/* Alerts + Pipeline */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Alerts + Pipeline + KPIs Sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AlertsWidget selectedCompany={selectedCompany} maxItems={5} />
         <PipelineWidget selectedCompany={selectedCompany} />
+        <KPISidebar selectedCompany={selectedCompany} />
       </div>
 
       {/* Treasury */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TreasuryWidget selectedCompany={selectedCompany} />
-        {/* Placeholder for future charts */}
-        <div className="glass-card p-6 flex items-center justify-center text-gray-400">
-          <div className="text-center">
-            <p className="text-sm font-medium">Graphique Revenus</p>
-            <p className="text-xs mt-1">Prochaine itération</p>
-          </div>
-        </div>
+        <TreasuryForecast selectedCompany={selectedCompany} />
       </div>
     </div>
   )

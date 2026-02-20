@@ -33,7 +33,7 @@
 - ✅ Portail prestataire fonctionnel (soumettre devis, voir paiements) — **FAIT Phase D**
 - ✅ Facturation par jalons (deliverables → factures) — **FAIT Phase I**
 - ✅ Facturation récurrente automatique — **FAIT Phase I**
-- ❌ KPIs depuis collection `kpis` (240 enregistrements réels)
+- ✅ KPIs depuis collection `kpis` (240 enregistrements réels) — **FAIT Phase J**
 
 ---
 
@@ -377,25 +377,38 @@
 
 ---
 
-## PHASE J — KPI DASHBOARD + RAPPORT CEO
-**Objectif CDC** : CEO voit tout, comprend tout, en 30 secondes  
-**Modules CDC** : Module 7, Module 15  
-**Progression** : 0/4 stories
+## PHASE J — KPI DASHBOARD + RAPPORT CEO ✅ COMPLETE
+**Objectif CDC** : CEO voit tout, comprend tout, en 30 secondes
+**Modules CDC** : Module 7, Module 15
+**Progression** : 4/4 stories
+**Commit** : `feat(phase-j): kpi dashboard + rapport ceo`
 
-- [ ] **J-01** · KPIs depuis collection `kpis` — affichage complet  
-  *CDC* : REQ-KPI-001 à 007  
-  *Base* : 240 enregistrements réels (48 HYPERVISUAL)  
-  *Note* : ARR, MRR, EBITDA, Runway, LTV, CAC, NPS — déjà calculés en base  
+- [V] **J-01** · KPIs depuis collection `kpis` — affichage complet — 2026-02-20
+  *CDC* : REQ-KPI-001 à 007
+  *Fichiers* : `api/kpis/index.js` (GET /latest, /history/:metric, /summary) + `kpis/KPIWidget.jsx` (sidebar + sparkline MRR)
+  *Livré* : 11 métriques en base (MRR, ARR, NPS, LTV_CAC, ACTIVE_PROJECTS, CASH_RUNWAY, etc.), variation vs période précédente, sparkline Recharts LineChart MRR 30j, métriques calculées EBITDA + RUNWAY, intégré dans Dashboard.jsx colonne droite
 
-- [ ] **J-02** · Alertes seuils KPI configurables (MRR < 50K → alerte rouge)  
-  *CDC* : REQ-KPI-005  
+- [V] **J-02** · Alertes seuils KPI configurables (MRR < 50K → alerte rouge) — 2026-02-20
+  *CDC* : REQ-KPI-005
+  *Fichiers* : `api/kpis/thresholds.js` (GET /alerts, PUT /thresholds, GET /thresholds) + `kpis/ThresholdConfig.jsx`
+  *Livré* : 6 seuils configurables (MRR, ARR, RUNWAY, NPS, LTV_CAC, EBITDA), niveaux warning/critical, persistance Directus settings, badges alertes actives, formulaire édition seuils
 
-- [ ] **J-03** · Rapport quotidien CEO automatique par email  
-  *CDC* : REQ-CEO-006  
-  *Dépendance* : Phase E (Mautic) doit être active  
+- [V] **J-03** · Rapport quotidien CEO automatique par email — 2026-02-20
+  *CDC* : REQ-CEO-006
+  *Fichiers* : `api/kpis/daily-report.js` (CRON 07h00 + POST /report/send + GET /report/preview)
+  *Livré* : Email HTML responsive (alertes, KPIs, opérations, trésorerie), envoi via Mautic API, CRON setTimeout 07h00 avec anti-doublon automation_logs, endpoint preview HTML, endpoint envoi manuel
 
-- [ ] **J-04** · Prévision trésorerie 30/60/90 jours  
-  *CDC* : REQ-CEO-004  
+- [V] **J-04** · Prévision trésorerie 30/60/90 jours — 2026-02-20
+  *CDC* : REQ-CEO-004
+  *Fichiers* : `api/kpis/treasury-forecast.js` (GET /treasury) + `kpis/TreasuryForecast.jsx`
+  *Livré* : Algorithme 6 étapes (solde courant, entrées factures, récurrent subscriptions × TVA 8.1%, sorties fournisseurs, burn rate 90j, runway), BarChart Recharts 4 colonnes (bleu si >= actuel, rouge si <), cartes résumé (solde, burn, runway), détails par horizon
+
+### Découvertes Phase J
+- 11 métriques réelles en base kpis (plus que les 5 prévues dans le prompt) : MRR, ARR, NPS, LTV_CAC, ACTIVE_PROJECTS, CASH_RUNWAY, Cash_Runway, CLIENT_RETENTION, EBITDA_MARGIN, PIPELINE_VALUE, TEAM_PRODUCTIVITY
+- 5 entreprises dans kpis : HYPERVISUAL, DAINAMICS, ENKI_REALTY, LEXAIA, TAKEOUT
+- Dashboard.jsx enrichi : grille 3 colonnes (Alertes + Pipeline + KPI sidebar), Treasury + TreasuryForecast côte à côte
+- 4 endpoints backend + 4 sous-routes + 1 CRON = 9 fonctionnalités en 4 fichiers
+- Prévision trésorerie utilise TVA 8.1% pour subscriptions conformément aux normes suisses
 
 ---
 
@@ -482,9 +495,11 @@
 | Stories Phase G (Revolut reconciliation) | 5/5 ✅ |
 | Stories Phase H (DocuSeal signatures) | 3/3 ✅ |
 | Stories Phase I (finance avancees) | 8/8 ✅ |
-| Stories CDC restantes | 5 à faire |
-| Modules CDC couverts | 14/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support) |
-| Dernier commit Phase I | — 2026-02-20 |
+| Stories Phase J (KPI dashboard CEO) | 4/4 ✅ |
+| Stories CDC restantes | 1 (F-02 WhatsApp reporté) |
+| Modules CDC couverts | 16/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support, KPI Dashboard CEO) |
+| Dernier commit Phase J | — 2026-02-20 |
+| **V1 STATUS** | **95/96 stories — COMPLETE** |
 
 ---
 
@@ -500,7 +515,7 @@ La plateforme V1 sera considérée opérationnelle quand :
 6. `[V]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — **FAIT Phase I**
 7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel) + **Phase G** (Revolut webhook auto)
 8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
-9. `[ ]` 240 KPIs existants affichés correctement (REQ-KPI-001) — Phase J
+9. `[V]` 240 KPIs existants affichés correctement (REQ-KPI-001) — **FAIT Phase J** (11 métriques, 5 entreprises, sparkline MRR, alertes seuils, prévision trésorerie)
 10. `[V]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — **FAIT Phase I**
 11. `[V]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — **FAIT Phase G** (scoring 4 critères, seuil auto ≥85%)
 12. `[V]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — **FAIT Phase I**

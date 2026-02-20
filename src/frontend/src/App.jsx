@@ -55,7 +55,7 @@ const DevisRevendeur = lazy(() => import('./portals/revendeur/DevisRevendeur'))
 const MarketingRevendeur = lazy(() => import('./portals/revendeur/MarketingRevendeur'))
 const RapportsRevendeur = lazy(() => import('./portals/revendeur/RapportsRevendeur'))
 
-// Client Portal (Phase C)
+// Client Portal (Phase 6)
 const ClientAuth = lazy(() => import('./portals/client/auth/ClientAuth'))
 const ClientPortalGuard = lazy(() => import('./portals/client/auth/ClientPortalGuard'))
 const ClientLayout = lazy(() => import('./portals/client/layout/ClientLayout'))
@@ -66,6 +66,12 @@ const ClientProjectsList = lazy(() => import('./portals/client/projects/ClientPr
 const ClientProjectTracking = lazy(() => import('./portals/client/projects/ProjectTracking'))
 const ClientInvoices = lazy(() => import('./portals/client/invoices/ClientInvoices'))
 const ClientMessages = lazy(() => import('./portals/client/messages/ClientMessages'))
+const ClientDocuments = lazy(() => import('./portals/client/pages/DocumentsClient'))
+const ClientFinances = lazy(() => import('./portals/client/pages/FinancesClient'))
+const ClientPayment = lazy(() => import('./portals/client/pages/PaymentView'))
+const ClientSupport = lazy(() => import('./portals/client/pages/SupportClient'))
+const ClientProfile = lazy(() => import('./portals/client/pages/ProfilClient'))
+const ClientProjectActivated = lazy(() => import('./portals/client/pages/ProjectActivatedPage'))
 
 // SuperAdmin Modules
 const ProjectsModule = lazy(() => import('./portals/superadmin/projects/ProjectsModule'))
@@ -297,7 +303,7 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* ── Client portal (Phase C) ── */}
+          {/* ── Client portal (Phase 6) ── */}
           <Route path="/client/login" element={<ClientAuth />} />
           <Route path="/client" element={<ClientPortalGuard />}>
             <Route element={<ClientLayout />}>
@@ -308,6 +314,12 @@ function App() {
               <Route path="projects/:id" element={<ClientProjectTracking />} />
               <Route path="invoices" element={<ClientInvoices />} />
               <Route path="messages" element={<ClientMessages />} />
+              <Route path="documents" element={<ClientDocuments />} />
+              <Route path="finances" element={<ClientFinances />} />
+              <Route path="payment/:invoiceId" element={<ClientPayment />} />
+              <Route path="support" element={<ClientSupport />} />
+              <Route path="profile" element={<ClientProfile />} />
+              <Route path="project-activated/:projectId" element={<ClientProjectActivated />} />
             </Route>
           </Route>
 

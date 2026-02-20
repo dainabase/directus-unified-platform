@@ -6,16 +6,19 @@ import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FileText, FolderKanban, Receipt,
-  MessageSquare, LogOut, Building2
+  MessageSquare, LogOut, Building2, FolderOpen, CreditCard,
+  FileCheck, LifeBuoy, User
 } from 'lucide-react'
 import { useClientAuth } from '../hooks/useClientAuth'
 
 const navItems = [
   { path: '/client', label: 'Tableau de bord', icon: LayoutDashboard, end: true },
-  { path: '/client/quotes', label: 'Mes devis', icon: FileText },
-  { path: '/client/projects', label: 'Mes projets', icon: FolderKanban },
-  { path: '/client/invoices', label: 'Mes factures', icon: Receipt },
-  { path: '/client/messages', label: 'Messages', icon: MessageSquare }
+  { path: '/client/projects', label: 'Mes projets', icon: FolderOpen },
+  { path: '/client/documents', label: 'Documents', icon: FileText },
+  { path: '/client/finances', label: 'Finances', icon: CreditCard },
+  { path: '/client/quotes', label: 'Devis', icon: FileCheck },
+  { path: '/client/support', label: 'Support', icon: LifeBuoy },
+  { path: '/client/profile', label: 'Mon profil', icon: User }
 ]
 
 const ClientLayout = () => {

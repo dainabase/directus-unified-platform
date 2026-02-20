@@ -147,6 +147,17 @@ try {
   const integrationsRoutes = await import('./api/integrations/index.js');
   app.use('/api/integrations', authMiddleware, integrationsRoutes.default);
   console.log('[api] Integrations connected: /api/integrations (DocuSeal, Invoice Ninja, Mautic)');
+
+  // Register DocuSeal webhook for local instance (Phase H)
+  try {
+    const { setupDocuSealWebhook } = await import('./services/integrations/docuseal.service.js');
+    if (setupDocuSealWebhook) {
+      await setupDocuSealWebhook();
+      console.log('[docuseal] Webhook registered on local DocuSeal instance');
+    }
+  } catch (whErr) {
+    console.warn('[docuseal] Webhook setup skipped:', whErr.message);
+  }
 } catch (err) {
   console.warn('[api] Integrations not available:', err.message);
 }

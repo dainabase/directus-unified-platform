@@ -3,18 +3,22 @@
  *
  * Electronic signature integration for quotes and contracts
  * Supports SES, AES, and QES signature levels
+ * Phase H: local DocuSeal (http://localhost:3003), HTML templates, deposit invoice trigger
  *
- * @date 15 Décembre 2025
+ * @date 15 Decembre 2025 / Phase H: 20 Fevrier 2026
  */
 
 import axios from 'axios';
 import crypto from 'crypto';
 
-const DOCUSEAL_API_URL = process.env.DOCUSEAL_API_URL || 'https://api.docuseal.co';
+const DOCUSEAL_API_URL = process.env.DOCUSEAL_URL || process.env.DOCUSEAL_API_URL || 'http://localhost:3003';
 const DOCUSEAL_API_KEY = process.env.DOCUSEAL_API_KEY || '';
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN || 'hbQz-9935crJ2YkLul_zpQJDBw2M-y5v';
-const WEBHOOK_BASE_URL = process.env.WEBHOOK_BASE_URL || 'http://localhost:3000';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN || process.env.DIRECTUS_TOKEN || 'hypervisual-admin-static-token-2026';
+const WEBHOOK_BASE_URL = process.env.APP_URL || process.env.WEBHOOK_BASE_URL || 'http://localhost:3000';
+
+// Cached template ID
+let cachedTemplateId = null;
 
 // DocuSeal API client
 const docusealApi = axios.create({
@@ -43,13 +47,14 @@ const SIGNATURE_LEVELS = {
 
 /**
  * Create a signature request from a quote
+ * H-01: Uses local DocuSeal submitters API + HTML template
  */
 export async function createQuoteSignatureRequest(quoteId, options = {}) {
   try {
     // Get quote data
     const quoteRes = await directusApi.get(`/items/quotes/${quoteId}`, {
       params: {
-        fields: '*,contact_id.*,owner_company_id.*,quote_items.*'
+        fields: '*,contact_id.*,owner_company_id.*'
       }
     });
     const quote = quoteRes.data.data;
@@ -62,94 +67,86 @@ export async function createQuoteSignatureRequest(quoteId, options = {}) {
       throw new Error('Contact email is required for signature');
     }
 
-    // Generate PDF or use existing
-    const pdfUrl = quote.pdf_url || await generateQuotePDF(quote);
-
-    // Prepare signers
-    const signers = [
-      {
-        name: `${quote.contact_id.first_name} ${quote.contact_id.last_name}`,
-        email: quote.contact_id.email,
-        role: 'Client'
-      }
-    ];
-
-    // Add company signatory if required
-    if (options.requireCompanySignature) {
-      signers.push({
-        name: quote.owner_company_id?.legal_representative || 'Représentant légal',
-        email: quote.owner_company_id?.email || 'admin@company.com',
-        role: 'Company Representative'
-      });
+    // Already sent?
+    if (quote.docuseal_submission_id) {
+      return {
+        success: true,
+        alreadySent: true,
+        submissionId: quote.docuseal_submission_id,
+        embedUrl: quote.docuseal_embed_url,
+        message: 'Signature request already sent'
+      };
     }
 
-    // Create DocuSeal submission
-    const submission = await docusealApi.post('/submissions', {
-      template_id: options.templateId || getTemplateIdForType('quote'),
+    // Get or create HTML template
+    const templateId = await getOrCreateHtmlTemplate();
+
+    const formatCHF = (v) => new Intl.NumberFormat('fr-CH', { style: 'currency', currency: 'CHF' }).format(v || 0);
+
+    // Create DocuSeal submission with submitters API
+    const submission = await docusealApi.post('/api/submissions', {
+      template_id: templateId,
       send_email: true,
-      signers: signers.map((signer, idx) => ({
-        ...signer,
-        fields: [
-          {
-            name: 'signature',
-            type: 'signature',
-            required: true
-          },
-          {
-            name: 'date',
-            type: 'date',
-            default_value: new Date().toISOString().split('T')[0]
-          }
-        ]
-      })),
-      external_id: `quote-${quoteId}`,
-      metadata: {
-        quote_id: quoteId,
-        quote_number: quote.quote_number,
-        owner_company: quote.owner_company_id?.code,
-        type: 'quote',
-        amount: quote.total,
-        currency: quote.currency
-      },
-      webhook_url: `${WEBHOOK_BASE_URL}/api/commercial/signatures/webhook/docuseal`,
-      documents: [
+      submitters: [
         {
-          name: `Devis_${quote.quote_number}.pdf`,
-          url: pdfUrl
+          name: `${quote.contact_id.first_name || ''} ${quote.contact_id.last_name || ''}`.trim() || quote.contact_id.email,
+          email: quote.contact_id.email,
+          role: 'Client',
+          fields: [
+            { name: 'quote_number', default_value: quote.quote_number || '' },
+            { name: 'total_amount', default_value: formatCHF(quote.total) },
+            { name: 'project_type', default_value: quote.project_type || '' },
+            { name: 'valid_until', default_value: quote.valid_until || '' }
+          ]
         }
       ]
     });
 
+    const submissionData = submission.data;
+    const embedSrc = submissionData.submitters?.[0]?.embed_src
+      || submissionData[0]?.embed_src
+      || null;
+
+    const submissionId = submissionData.id || submissionData[0]?.submission_id;
+
     // Log signature request in Directus
-    await directusApi.post('/items/signature_logs', {
-      quote_id: quoteId,
-      provider: 'docuseal',
-      provider_reference: submission.data.id,
-      status: 'pending',
-      signature_level: options.signatureLevel || 'SES',
-      signers: JSON.stringify(signers),
-      ip_address: options.clientIP,
-      user_agent: options.userAgent
+    try {
+      await directusApi.post('/items/signature_logs', {
+        quote_id: quoteId,
+        provider: 'docuseal',
+        provider_reference: String(submissionId),
+        status: 'pending',
+        signature_level: options.signatureLevel || 'SES',
+        ip_address: options.clientIP,
+        user_agent: options.userAgent
+      });
+    } catch (logErr) {
+      console.error('[DocuSeal] Signature log creation failed:', logErr.message);
+    }
+
+    // Update quote with DocuSeal fields
+    await directusApi.patch(`/items/quotes/${quoteId}`, {
+      status: 'sent',
+      sent_at: new Date().toISOString(),
+      docuseal_submission_id: submissionId,
+      docuseal_embed_url: embedSrc,
+      signature_requested_at: new Date().toISOString()
     });
 
-    // Update quote
-    await directusApi.patch(`/items/quotes/${quoteId}`, {
-      signature_status: 'pending',
-      signature_request_id: submission.data.id,
-      signature_request_date: new Date().toISOString()
-    });
+    console.log(`[H-01] Devis ${quote.quote_number} envoye pour signature — DocuSeal #${submissionId}`);
 
     return {
       success: true,
-      submissionId: submission.data.id,
-      signingUrls: submission.data.signers?.map(s => ({
+      submissionId,
+      embedUrl: embedSrc,
+      signingUrls: submissionData.submitters?.map(s => ({
         email: s.email,
-        url: s.embed_url
-      })),
+        url: s.embed_src
+      })) || [],
       message: 'Signature request created successfully'
     };
   } catch (error) {
-    console.error('❌ DocuSeal createQuoteSignatureRequest error:', error.message);
+    console.error('[DocuSeal] createQuoteSignatureRequest error:', error.message);
     throw error;
   }
 }
@@ -256,10 +253,11 @@ export async function getSignatureStatus(submissionId) {
 
 /**
  * Handle DocuSeal webhook
+ * H-02: Supports form.completed, form.viewed (local DocuSeal) + submission.* events (cloud)
  */
 export async function handleWebhook(payload, signature) {
   try {
-    // Verify webhook signature
+    // Verify webhook signature (optional — skip if no signature in dev)
     if (DOCUSEAL_API_KEY && signature) {
       const expectedSignature = crypto
         .createHmac('sha256', DOCUSEAL_API_KEY)
@@ -272,9 +270,17 @@ export async function handleWebhook(payload, signature) {
     }
 
     const { event_type, data } = payload;
-    console.log(`📨 DocuSeal webhook: ${event_type}`);
+    console.log(`[DocuSeal Webhook] Event: ${event_type}`);
 
     switch (event_type) {
+      // Local DocuSeal events
+      case 'form.completed':
+        await handleFormCompleted(payload);
+        break;
+      case 'form.viewed':
+        await handleFormViewed(payload);
+        break;
+      // Cloud DocuSeal events (backward compat)
       case 'submission.completed':
         await handleSubmissionCompleted(data);
         break;
@@ -288,18 +294,119 @@ export async function handleWebhook(payload, signature) {
         await handleSignerSigned(data);
         break;
       default:
-        console.log(`   ⚠️ Unhandled event type: ${event_type}`);
+        console.log(`[DocuSeal Webhook] Unhandled event: ${event_type}`);
     }
 
     return { success: true };
   } catch (error) {
-    console.error('❌ DocuSeal webhook error:', error.message);
+    console.error('[DocuSeal Webhook] Error:', error.message);
     throw error;
   }
 }
 
 /**
- * Handle submission completed
+ * H-02: Handle form.completed (local DocuSeal event)
+ */
+async function handleFormCompleted(payload) {
+  const submissionId = payload.data?.submission?.id;
+  const signedAt = payload.data?.submission?.completed_at || new Date().toISOString();
+  const pdfUrl = payload.data?.submitter?.documents?.[0]?.url;
+
+  if (!submissionId) {
+    console.error('[DocuSeal H-02] No submission ID in form.completed payload');
+    return;
+  }
+
+  // Find quote by docuseal_submission_id
+  const quotesRes = await directusApi.get('/items/quotes', {
+    params: {
+      filter: { docuseal_submission_id: { _eq: submissionId } },
+      fields: '*',
+      limit: 1
+    }
+  });
+
+  const quote = quotesRes.data.data?.[0];
+  if (!quote) {
+    console.log(`[DocuSeal H-02] No quote found for submission #${submissionId}`);
+    return;
+  }
+
+  // Update quote — mark signed
+  await directusApi.patch(`/items/quotes/${quote.id}`, {
+    status: 'signed',
+    is_signed: true,
+    signed_at: signedAt,
+    docuseal_signed_pdf_url: pdfUrl
+  });
+
+  // Update signature log
+  await updateSignatureLog(String(submissionId), {
+    status: 'completed',
+    completed_at: signedAt
+  });
+
+  console.log(`[H-02] Devis ${quote.quote_number} signe via DocuSeal — PDF: ${pdfUrl || 'N/A'}`);
+
+  // H-02: Generate deposit invoice if deposit_amount > 0
+  if (parseFloat(quote.deposit_amount) > 0) {
+    try {
+      const { createDepositInvoice } = await import('../commercial/deposit.service.js');
+      const result = await createDepositInvoice(quote.id);
+      console.log(`[H-02] Facture acompte generee: ${result.invoice?.invoice_number || 'OK'} (isNew: ${result.isNew})`);
+    } catch (depErr) {
+      console.error(`[H-02] Erreur generation facture acompte: ${depErr.message}`);
+    }
+  }
+
+  // Trigger confirmation email (Phase E)
+  try {
+    await axios.post(`${WEBHOOK_BASE_URL}/api/email/quote-signed`, {
+      quote_id: quote.id
+    }, { headers: { 'Content-Type': 'application/json' } });
+  } catch (emailErr) {
+    console.error(`[H-02] Erreur email confirmation: ${emailErr.message}`);
+  }
+
+  // Log automation
+  try {
+    await directusApi.post('/items/automation_logs', {
+      action: 'quote_signed_docuseal',
+      entity_type: 'quotes',
+      entity_id: quote.id,
+      level: 'info'
+    });
+  } catch (logErr) {
+    // non-critical
+  }
+}
+
+/**
+ * H-02: Handle form.viewed (local DocuSeal event)
+ */
+async function handleFormViewed(payload) {
+  const submissionId = payload.data?.submission?.id;
+  if (!submissionId) return;
+
+  const quotesRes = await directusApi.get('/items/quotes', {
+    params: {
+      filter: { docuseal_submission_id: { _eq: submissionId } },
+      fields: 'id,viewed_at',
+      limit: 1
+    }
+  });
+
+  const quote = quotesRes.data.data?.[0];
+  if (quote && !quote.viewed_at) {
+    await directusApi.patch(`/items/quotes/${quote.id}`, {
+      viewed_at: new Date().toISOString()
+    });
+    console.log(`[H-02] Devis consulte via DocuSeal — submission #${submissionId}`);
+  }
+}
+
+/**
+ * Handle submission completed (cloud DocuSeal — backward compat)
  */
 async function handleSubmissionCompleted(data) {
   const externalId = data.external_id;
@@ -309,19 +416,31 @@ async function handleSubmissionCompleted(data) {
     // Update quote
     await directusApi.patch(`/items/quotes/${id}`, {
       status: 'signed',
-      signature_status: 'completed',
+      is_signed: true,
       signed_at: new Date().toISOString(),
-      signed_document_url: data.documents?.[0]?.url
+      docuseal_signed_pdf_url: data.documents?.[0]?.url
     });
 
     // Update signature log
     await updateSignatureLog(data.id, {
       status: 'completed',
-      completed_at: new Date().toISOString(),
-      signed_document_url: data.documents?.[0]?.url
+      completed_at: new Date().toISOString()
     });
 
-    console.log(`✅ Quote ${id} signed successfully`);
+    // H-02: Generate deposit invoice
+    try {
+      const quoteRes = await directusApi.get(`/items/quotes/${id}`, { params: { fields: 'deposit_amount' } });
+      const quote = quoteRes.data.data;
+      if (quote && parseFloat(quote.deposit_amount) > 0) {
+        const { createDepositInvoice } = await import('../commercial/deposit.service.js');
+        await createDepositInvoice(id);
+        console.log(`[H-02] Deposit invoice triggered for quote ${id}`);
+      }
+    } catch (depErr) {
+      console.error(`[H-02] Deposit invoice error: ${depErr.message}`);
+    }
+
+    console.log(`[H-02] Quote ${id} signed successfully`);
   } else if (type === 'cgv') {
     // Update CGV acceptance
     await directusApi.patch(`/items/cgv_acceptances/${id}`, {
@@ -330,7 +449,7 @@ async function handleSubmissionCompleted(data) {
       signed_document_url: data.documents?.[0]?.url
     });
 
-    console.log(`✅ CGV acceptance ${id} completed`);
+    console.log(`[H-02] CGV acceptance ${id} completed`);
   }
 }
 
@@ -397,15 +516,57 @@ async function updateSignatureLog(providerReference, updates) {
 }
 
 /**
- * Get template ID for document type
+ * H-01: Get or create HTML template in local DocuSeal
  */
-function getTemplateIdForType(type) {
-  const templates = {
-    quote: process.env.DOCUSEAL_TEMPLATE_QUOTE || 'template_quote',
-    cgv: process.env.DOCUSEAL_TEMPLATE_CGV || 'template_cgv',
-    contract: process.env.DOCUSEAL_TEMPLATE_CONTRACT || 'template_contract'
-  };
-  return templates[type] || templates.quote;
+async function getOrCreateHtmlTemplate() {
+  if (cachedTemplateId) return cachedTemplateId;
+
+  try {
+    // Check existing templates
+    const existing = await docusealApi.get('/api/templates');
+    const templates = existing.data?.data || existing.data || [];
+
+    if (Array.isArray(templates) && templates.length > 0) {
+      cachedTemplateId = templates[0].id;
+      return cachedTemplateId;
+    }
+
+    // Create HTML template for quotes
+    const templateRes = await docusealApi.post('/api/templates/html', {
+      name: 'Devis HYPERVISUAL Switzerland',
+      html: `
+        <h1 style="color:#2563eb;margin-bottom:8px">HYPERVISUAL Switzerland</h1>
+        <p style="font-size:18px;font-weight:bold">Devis N\u00b0 {{quote_number}}</p>
+        <table style="width:100%;border-collapse:collapse;margin:20px 0">
+          <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;color:#6b7280">Montant total</td>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold">{{total_amount}}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;color:#6b7280">Type de projet</td>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb">{{project_type}}</td></tr>
+          <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;color:#6b7280">Valable jusqu'au</td>
+              <td style="padding:8px;border-bottom:1px solid #e5e7eb">{{valid_until}}</td></tr>
+        </table>
+        <p style="margin-top:24px">En signant ce document, le client accepte les conditions generales de vente d'HYPERVISUAL Switzerland SA.</p>
+        <br><br>
+        <p style="font-weight:bold">Signature client :</p>
+        {{sig_client}}
+      `,
+      fields: [
+        { name: 'quote_number', type: 'text' },
+        { name: 'total_amount', type: 'text' },
+        { name: 'project_type', type: 'text' },
+        { name: 'valid_until', type: 'text' },
+        { name: 'sig_client', type: 'signature', role: 'Client' }
+      ]
+    });
+
+    cachedTemplateId = templateRes.data?.id || templateRes.data;
+    console.log(`[H-01] DocuSeal HTML template cree: #${cachedTemplateId}`);
+    return cachedTemplateId;
+  } catch (error) {
+    console.error('[H-01] Erreur creation template DocuSeal:', error.message);
+    // Fallback to env var
+    return process.env.DOCUSEAL_TEMPLATE_QUOTE || 1;
+  }
 }
 
 /**
@@ -421,15 +582,6 @@ function mapDocuSealStatus(status) {
     declined: 'declined'
   };
   return statusMap[status] || status;
-}
-
-/**
- * Generate quote PDF (placeholder)
- */
-async function generateQuotePDF(quote) {
-  // In production, this would generate or retrieve the PDF URL
-  // For now, return a placeholder
-  return `${DIRECTUS_URL}/assets/${quote.id}/quote.pdf`;
 }
 
 /**
@@ -483,6 +635,23 @@ export async function getEmbedSigningUrl(submissionId, signerEmail) {
   }
 }
 
+/**
+ * H-02: Setup DocuSeal webhook (call once at startup)
+ */
+export async function setupDocuSealWebhook() {
+  try {
+    const webhookUrl = `${WEBHOOK_BASE_URL}/api/integrations/docuseal/webhook`;
+    await docusealApi.post('/api/webhooks', {
+      url: webhookUrl,
+      events: ['form.completed', 'form.viewed']
+    });
+    console.log(`[H-02] DocuSeal webhook configure: ${webhookUrl}`);
+  } catch (error) {
+    // Non-fatal — webhook may already exist or DocuSeal not running
+    console.warn(`[H-02] DocuSeal webhook setup: ${error.message}`);
+  }
+}
+
 export default {
   createQuoteSignatureRequest,
   createCGVSignatureRequest,
@@ -491,5 +660,6 @@ export default {
   cancelSignatureRequest,
   resendSignatureRequest,
   getEmbedSigningUrl,
+  setupDocuSealWebhook,
   SIGNATURE_LEVELS
 };

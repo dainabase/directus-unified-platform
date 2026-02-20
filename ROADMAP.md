@@ -24,7 +24,7 @@
 - ❌ Cycle de vente opérationnel (boutons qui font des choses)
 - ❌ Génération réelle de factures QR-Invoice v2.3 conformes
 - ❌ Activation automatique projet à paiement Revolut
-- ❌ Signatures électroniques DocuSeal
+- ✅ Signatures électroniques DocuSeal — **FAIT Phase H**
 - ❌ Emails transactionnels via Mautic
 - ❌ Capture leads WordPress / WhatsApp / Ringover
 - ❌ Workflows validation factures fournisseurs
@@ -288,20 +288,33 @@
 
 ---
 
-## PHASE H — SIGNATURES DOCUSEAL + CGV
-**Objectif CDC** : Devis signés électroniquement, conformes CO Art. 14  
-**Modules CDC** : Module 3, Module 4  
-**Progression** : 0/3 stories
+## PHASE H — SIGNATURES DOCUSEAL + CGV *(TERMINÉE)*
+**Objectif CDC** : Devis signés électroniquement, conformes CO Art. 14
+**Modules CDC** : Module 3, Module 4
+**Progression** : 3/3 stories — [V] DONE — 2026-02-20
 
-- [ ] **H-01** · DocuSeal intégration — Envoi devis pour signature  
-  *CDC* : REQ-DEVIS-004 (ZertES-compliant)  
-  *Note* : DocuSeal déjà configuré dans le projet (src/backend/api/)  
+- [V] **H-01** · DocuSeal intégration — Envoi devis pour signature via DocuSeal local — 2026-02-20
+  *CDC* : REQ-DEVIS-004 (ZertES-compliant)
+  *Fichiers* : `src/backend/services/integrations/docuseal.service.js` (rewrite majeur)
+  *Livré* : URL locale http://localhost:3003, création template HTML auto (getOrCreateHtmlTemplate), POST /api/submissions avec submitters, stockage docuseal_submission_id + docuseal_embed_url + signature_requested_at sur quotes, détection alreadySent.
+  *Champs ajoutés* : docuseal_submission_id (integer), docuseal_embed_url (string), docuseal_signed_pdf_url (string), signature_requested_at (timestamp)
 
-- [ ] **H-02** · DocuSeal webhook — Réception signature + transition statut quote  
-  *CDC* : REQ-DEVIS-005 (copie automatique au client)  
+- [V] **H-02** · DocuSeal webhook — Réception signature + transition statut + facture acompte — 2026-02-20
+  *CDC* : REQ-DEVIS-005 (copie automatique au client)
+  *Fichiers* : `docuseal.service.js` (handleFormCompleted + handleFormViewed + setupDocuSealWebhook)
+  *Livré* : form.completed → PATCH quote signed + is_signed + signed_at + docuseal_signed_pdf_url → createDepositInvoice() auto si deposit_amount > 0 → email confirmation Phase E. form.viewed → MAJ viewed_at. Support événements local (form.*) et cloud (submission.*).
 
-- [ ] **H-03** · CGV intégrées au devis signable  
-  *CDC* : REQ-DEVIS-003 (CGV dans le même document)  
+- [V] **H-03** · Bouton signature SuperAdmin + Page signature portail client — 2026-02-20
+  *CDC* : REQ-DEVIS-003 (CGV dans le même document)
+  *Fichiers* : `superadmin/quotes/QuotesModule.jsx` (sendDocuSealMutation), `superadmin/quotes/QuotesList.jsx` (+PenTool/CheckCircle/Receipt buttons), `client/pages/SignaturePage.jsx` (nouveau), `App.jsx` (route /client/quotes/:quoteId/sign)
+  *Livré* : SuperAdmin — bouton PenTool "Envoyer pour signature DocuSeal" (draft/sent), bouton CheckCircle "Marquer signé" (sent), bouton Receipt "Générer facture" (signed). Client — page dédiée /client/quotes/:quoteId/sign avec résumé devis + iframe DocuSeal + gestion états (loading/ready/signing/completed/error).
+
+**Découvertes Phase H** :
+- DocuSeal service existait déjà (495 lignes) mais ciblait l'API cloud (api.docuseal.co) — adapté pour instance locale
+- API DocuSeal locale utilise `submitters` (pas `signers`) et `POST /api/templates/html` pour templates
+- Token Directus était hardcodé incorrectement — corrigé vers DIRECTUS_ADMIN_TOKEN / static token
+- Routes intégrations déjà montées dans server.js — pas besoin de créer de nouveau router
+- setupDocuSealWebhook() ajouté au démarrage server.js pour enregistrer le webhook sur l'instance locale
 
 ---
 
@@ -427,6 +440,10 @@
 | 2026-02-20 | F-all | lead_sources.code existait déjà — pas besoin d'ajouter | OK | Vérifié via MCP avant action |
 | 2026-02-20 | F-all | Projet en ES Modules ("type":"module") — prompt fournissait du CommonJS (require) | Adaptation | Tout converti en import/export ES Modules |
 | 2026-02-20 | F-all | leads.source est uuid→lead_sources (pas un string) — le prompt utilisait lead_source_id | Noms champs | Adapté lead-creator.js pour écrire dans source (uuid) |
+| 2026-02-20 | H-01 | DocuSeal service existait (495 lignes) mais ciblait API cloud — adapté pour local | Architecture | Rewrite partiel vers localhost:3003 + submitters API |
+| 2026-02-20 | H-01 | Token Directus hardcodé incorrectement dans docuseal.service.js | Bug | Corrigé vers DIRECTUS_ADMIN_TOKEN / static token |
+| 2026-02-20 | H-01 | 4 champs manquants sur quotes pour DocuSeal | Enrichi | docuseal_submission_id, docuseal_embed_url, docuseal_signed_pdf_url, signature_requested_at |
+| 2026-02-20 | H-02 | API DocuSeal locale envoie form.completed (pas submission.completed) | Adaptation | Support double : form.* (local) + submission.* (cloud) |
 
 ---
 
@@ -441,9 +458,11 @@
 | Stories Phase D (portail prestataire) | 7/7 ✅ |
 | Stories Phase E (email automation) | 6/6 ✅ |
 | Stories Phase F (lead capture) | 3/4 ✅ (F-02 WhatsApp → Phase F-bis) |
-| Stories CDC restantes | 21 à faire |
-| Modules CDC couverts | 8/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal) |
-| Dernier commit Phase F | — 2026-02-20 |
+| Stories Phase G (Revolut reconciliation) | 5/5 ✅ |
+| Stories Phase H (DocuSeal signatures) | 3/3 ✅ |
+| Stories CDC restantes | 13 à faire |
+| Modules CDC couverts | 9/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques) |
+| Dernier commit Phase H | — 2026-02-20 |
 
 ---
 

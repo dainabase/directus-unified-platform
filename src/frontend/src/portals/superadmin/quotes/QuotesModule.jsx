@@ -110,6 +110,20 @@ const QuotesModule = ({ selectedCompany }) => {
     onError: () => toast.error('Erreur lors de la signature')
   })
 
+  // H-01: Envoyer pour signature DocuSeal
+  const sendDocuSealMutation = useMutation({
+    mutationFn: (quote) => api.post(`/api/integrations/docuseal/signature/quote/${quote.id}`),
+    onSuccess: (res) => {
+      if (res.data?.alreadySent) {
+        toast('Demande de signature deja envoyee', { icon: 'ℹ️' })
+      } else {
+        toast.success('Email de signature envoye au client via DocuSeal')
+      }
+      queryClient.invalidateQueries({ queryKey: ['admin-quotes'] })
+    },
+    onError: (err) => toast.error(`Erreur DocuSeal: ${err.response?.data?.error || err.message}`)
+  })
+
   // --- Handlers -------------------------------------------------------------
 
   const handleSend = (quote) => {
@@ -125,6 +139,12 @@ const QuotesModule = ({ selectedCompany }) => {
   const handleMarkSigned = (quote) => {
     if (window.confirm(`Marquer le devis ${quote.quote_number || ''} comme signe ?`)) {
       markSignedMutation.mutate(quote)
+    }
+  }
+
+  const handleSendDocuSeal = (quote) => {
+    if (window.confirm(`Envoyer le devis ${quote.quote_number || ''} pour signature electronique via DocuSeal ?`)) {
+      sendDocuSealMutation.mutate(quote)
     }
   }
 
@@ -157,6 +177,7 @@ const QuotesModule = ({ selectedCompany }) => {
         onSendQuote={handleSend}
         onDuplicateQuote={handleDuplicate}
         onMarkSigned={handleMarkSigned}
+        onSendDocuSeal={handleSendDocuSeal}
         onGenerateInvoice={handleGenerateInvoice}
       />
 

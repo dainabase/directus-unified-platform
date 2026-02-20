@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { FileText, Plus, Search, Filter, Copy, Archive, Eye, Edit3, Send } from 'lucide-react'
+import { FileText, Plus, Search, Filter, Copy, Archive, Eye, Edit3, Send, PenTool, CheckCircle, Receipt } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import api from '../../../lib/axios'
@@ -68,7 +68,7 @@ const fetchQuotes = async ({ status, ownerCompany, page, limit }) => {
   }
 }
 
-const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, onSendQuote, onDuplicateQuote }) => {
+const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, onSendQuote, onDuplicateQuote, onMarkSigned, onSendDocuSeal, onGenerateInvoice }) => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -247,6 +247,33 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                             title="Envoyer"
                           >
                             <Send size={14} />
+                          </button>
+                        )}
+                        {(q.status === 'draft' || q.status === 'sent') && (
+                          <button
+                            onClick={() => onSendDocuSeal?.(q)}
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+                            title="Envoyer pour signature DocuSeal"
+                          >
+                            <PenTool size={14} />
+                          </button>
+                        )}
+                        {q.status === 'sent' && !q.is_signed && (
+                          <button
+                            onClick={() => onMarkSigned?.(q)}
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-green-600"
+                            title="Marquer comme signé"
+                          >
+                            <CheckCircle size={14} />
+                          </button>
+                        )}
+                        {q.status === 'signed' && (
+                          <button
+                            onClick={() => onGenerateInvoice?.(q)}
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-amber-600"
+                            title="Générer facture"
+                          >
+                            <Receipt size={14} />
                           </button>
                         )}
                         <button

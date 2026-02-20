@@ -45,6 +45,7 @@ const ClientPortalGuard = lazy(() => import('./portals/client/auth/ClientPortalG
 const ClientLayout = lazy(() => import('./portals/client/layout/ClientLayout'))
 const ClientDashboard = lazy(() => import('./portals/client/Dashboard'))
 const ClientQuoteSignature = lazy(() => import('./portals/client/quotes/QuoteSignature'))
+const ClientSignaturePage = lazy(() => import('./portals/client/pages/SignaturePage'))
 const ClientProjectsList = lazy(() => import('./portals/client/projects/ClientProjectsList'))
 const ClientProjectTracking = lazy(() => import('./portals/client/projects/ProjectTracking'))
 const ClientInvoices = lazy(() => import('./portals/client/invoices/ClientInvoices'))
@@ -235,6 +236,7 @@ function App() {
             <Route element={<ClientLayout />}>
               <Route index element={<ClientDashboard />} />
               <Route path="quotes" element={<ClientQuoteSignature />} />
+              <Route path="quotes/:quoteId/sign" element={<ClientSignaturePage />} />
               <Route path="projects" element={<ClientProjectsList />} />
               <Route path="projects/:id" element={<ClientProjectTracking />} />
               <Route path="invoices" element={<ClientInvoices />} />

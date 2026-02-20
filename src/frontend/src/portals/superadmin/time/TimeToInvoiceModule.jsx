@@ -189,7 +189,7 @@ const TimeToInvoiceModule = () => {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Clock className="w-12 h-12 text-gray-200 mx-auto mb-3" />
           <p className="text-sm text-gray-500">Aucune entree a facturer</p>
           <p className="text-xs text-gray-400 mt-1">Toutes les entrees billable sont deja facturees</p>
@@ -197,7 +197,7 @@ const TimeToInvoiceModule = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Table — 2 cols */}
-          <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+          <div className="lg:col-span-2 ds-card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -258,7 +258,7 @@ const TimeToInvoiceModule = () => {
 
           {/* Summary panel — 1 col */}
           <div className="space-y-4">
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5 space-y-4">
+            <div className="ds-card p-5 space-y-4">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                 <FileText size={16} className="text-indigo-500" />
                 Recapitulatif facture

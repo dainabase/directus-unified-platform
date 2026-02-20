@@ -157,7 +157,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
         ].map((kpi, i) => {
           const Icon = kpi.icon
           return (
-            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+            <div key={i} className="ds-card p-4">
               <div className="flex items-center gap-2 mb-1">
                 <Icon size={14} className={kpi.color} />
                 <span className="text-xs text-gray-500">{kpi.label}</span>
@@ -172,7 +172,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
       {/* Charts Row 1: Funnel + Status Pie */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Funnel */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Funnel de conversion</h3>
           {funnelData.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">Aucun lead</p>
@@ -190,7 +190,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
         </div>
 
         {/* Status Pie */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par statut</h3>
           {statusPieData.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">Aucune donnee</p>
@@ -213,7 +213,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
       {/* Charts Row 2: Monthly trend + Source */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly trend */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Tendance mensuelle (6 mois)</h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={monthlyTrend}>
@@ -230,7 +230,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
         </div>
 
         {/* Source distribution */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Leads par source</h3>
           {sourceData.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">Aucune donnee</p>
@@ -249,7 +249,7 @@ const CRMAnalytics = ({ selectedCompany }) => {
       </div>
 
       {/* Priority distribution */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+      <div className="ds-card p-4">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par priorite</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {priorityData.map((p, i) => {

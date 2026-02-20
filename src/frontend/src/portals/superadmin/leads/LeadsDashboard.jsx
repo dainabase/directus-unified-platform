@@ -31,18 +31,18 @@ const getAgeBadge = (dateCreated) => {
   if (diffHours < 24) {
     return {
       label: 'Nouveau',
-      className: 'bg-green-100 text-green-700 border border-green-200'
+      className: 'ds-badge ds-badge-success'
     }
   }
   if (diffHours < 48) {
     return {
       label: '24h+',
-      className: 'bg-amber-100 text-amber-700 border border-amber-200'
+      className: 'ds-badge ds-badge-warning'
     }
   }
   return {
     label: 'URGENT',
-    className: 'bg-red-100 text-red-700 border border-red-200 font-bold'
+    className: 'ds-badge ds-badge-danger font-bold'
   }
 }
 
@@ -94,12 +94,12 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-lg bg-white/90 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl p-6 space-y-5">
+      <div className="relative w-full max-w-lg ds-card p-6 space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <ThermometerSun size={20} className="text-amber-500" />
+              <ThermometerSun size={20} style={{color:'var(--warning)'}} />
               Qualifier le lead
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -127,9 +127,10 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
                   key={qs.value}
                   className={`flex-1 cursor-pointer text-center rounded-xl border-2 py-3 px-2 transition-all ${
                     score === qs.value
-                      ? 'border-blue-500 bg-blue-50 shadow-sm'
+                      ? 'border-gray-200 shadow-sm'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
+                  style={score === qs.value ? {borderColor:'var(--accent)', background:'rgba(0,113,227,0.06)'} : undefined}
                 >
                   <input
                     type="radio"
@@ -140,13 +141,13 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
                     className="sr-only"
                   />
                   <div className={`text-xl font-bold ${
-                    score === qs.value ? 'text-blue-600' : 'text-gray-400'
-                  }`}>
+                    score === qs.value ? '' : 'text-gray-400'
+                  }`} style={score === qs.value ? {color:'var(--accent)'} : undefined}>
                     {qs.value}
                   </div>
                   <div className={`text-xs mt-0.5 ${
-                    score === qs.value ? 'text-blue-600 font-medium' : 'text-gray-500'
-                  }`}>
+                    score === qs.value ? 'font-medium' : 'text-gray-500'
+                  }`} style={score === qs.value ? {color:'var(--accent)'} : undefined}>
                     {qs.label}
                   </div>
                 </label>
@@ -164,7 +165,7 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Observations, contexte, potentiel..."
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none"
+              className="ds-input w-full text-sm resize-none"
             />
           </div>
 
@@ -176,7 +177,7 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
             <select
               value={nextAction}
               onChange={(e) => setNextAction(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="ds-input w-full text-sm"
             >
               {NEXT_ACTIONS.map((na) => (
                 <option key={na.value} value={na.value}>
@@ -198,7 +199,7 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
             >
               {isSaving ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -441,7 +442,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           {canQualify(selectedLead) && (
             <button
               onClick={() => setQualifyingLead(selectedLead)}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0071E3] text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+              className="ds-btn ds-btn-primary text-sm shadow-sm"
             >
               <ThermometerSun size={16} />
               Qualifier
@@ -453,7 +454,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
             <button
               onClick={() => handleConvertToQuote(selectedLead)}
               disabled={convertingLeadId === selectedLead.id}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0071E3] text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
+              className="ds-btn ds-btn-primary text-sm shadow-sm disabled:opacity-50"
             >
               {convertingLeadId === selectedLead.id ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -511,12 +512,12 @@ const LeadsDashboard = ({ selectedCompany }) => {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{color:'var(--danger)'}} />
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur de chargement</h2>
         <p className="text-gray-600 mb-4">{error.message}</p>
         <button
           onClick={() => refetch()}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="ds-btn ds-btn-primary"
         >
           Reessayer
         </button>
@@ -534,7 +535,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           </h1>
           <p className="text-gray-600">
             Pipeline commercial et prospection
-            {isLoading && <span className="ml-2 text-blue-600">Chargement...</span>}
+            {isLoading && <span className="ml-2" style={{color:'var(--accent)'}}>Chargement...</span>}
           </p>
         </div>
 
@@ -554,16 +555,18 @@ const LeadsDashboard = ({ selectedCompany }) => {
             <button
               onClick={() => setView('kanban')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                view === 'kanban' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                view === 'kanban' ? 'bg-white shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              style={view === 'kanban' ? {color:'var(--accent)'} : undefined}
             >
               Kanban
             </button>
             <button
               onClick={() => setView('list')}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                view === 'list' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                view === 'list' ? 'bg-white shadow' : 'text-gray-600 hover:text-gray-900'
               }`}
+              style={view === 'list' ? {color:'var(--accent)'} : undefined}
             >
               Liste
             </button>
@@ -573,7 +576,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           <button
             onClick={handleCreateLead}
             disabled={isCreating}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="ds-btn ds-btn-primary disabled:opacity-50"
           >
             {isCreating ? <Loader2 size={20} className="animate-spin" /> : <Plus size={20} />}
             Nouveau Lead
@@ -595,7 +598,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
               placeholder="Rechercher un lead..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input w-full pl-10 pr-4 py-2"
             />
           </div>
 
@@ -603,7 +606,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="ds-input px-4 py-2"
           >
             <option value="all">Tous les statuts</option>
             <option value="new">Nouveau</option>
@@ -619,7 +622,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           <select
             value={sourceFilter}
             onChange={(e) => setSourceFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="ds-input px-4 py-2"
           >
             <option value="all">Toutes les sources</option>
             <option value="Site Web">Site Web</option>
@@ -647,7 +650,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+            <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" style={{color:'var(--accent)'}} />
             <p className="text-gray-600">Chargement des leads...</p>
           </div>
         </div>

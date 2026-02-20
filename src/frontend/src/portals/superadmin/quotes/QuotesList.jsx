@@ -27,13 +27,22 @@ const OWNER_COMPANIES = [
   { id: 'a1313adf-0347-424b-aff2-c5f0b33c4a05', name: 'TAKEOUT' }
 ]
 
+const STATUS_STYLES = {
+  draft: { background: 'rgba(113,113,122,0.12)', color: '#52525b' },
+  sent: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' },
+  viewed: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' },
+  signed: { background: 'rgba(52,199,89,0.12)', color: '#34C759' },
+  rejected: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' },
+  expired: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' }
+}
+
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  sent: { label: 'Envoyé', color: 'bg-blue-100 text-blue-700' },
-  viewed: { label: 'Consulté', color: 'bg-cyan-100 text-cyan-700' },
-  signed: { label: 'Signé', color: 'bg-green-100 text-green-700' },
-  rejected: { label: 'Refusé', color: 'bg-red-100 text-red-700' },
-  expired: { label: 'Expiré', color: 'bg-yellow-100 text-yellow-700' }
+  draft: { label: 'Brouillon', badgeStyle: STATUS_STYLES.draft },
+  sent: { label: 'Envoyé', badgeStyle: STATUS_STYLES.sent },
+  viewed: { label: 'Consulté', badgeStyle: STATUS_STYLES.viewed },
+  signed: { label: 'Signé', badgeStyle: STATUS_STYLES.signed },
+  rejected: { label: 'Refusé', badgeStyle: STATUS_STYLES.rejected },
+  expired: { label: 'Expiré', badgeStyle: STATUS_STYLES.expired }
 }
 
 const fetchQuotes = async ({ status, ownerCompany, page, limit }) => {
@@ -106,18 +115,18 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="h-64 glass-skeleton rounded-lg" />
+      <div className="ds-card p-6">
+        <div className="h-64 animate-pulse rounded-lg" style={{ background: 'rgba(0,0,0,0.06)' }} />
       </div>
     )
   }
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-blue-600" />
+          <FileText className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Devis clients
           </h3>
@@ -127,7 +136,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
         </div>
         <button
           onClick={onCreateQuote}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="ds-btn ds-btn-primary text-sm"
         >
           <Plus size={16} />
           Nouveau devis
@@ -144,7 +153,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher par N°, client, entreprise..."
-            className="glass-input w-full pl-10"
+            className="ds-input w-full pl-10"
           />
         </div>
 
@@ -156,9 +165,10 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
               onClick={() => { setStatusFilter(f.value); setPage(1) }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 statusFilter === f.value
-                  ? 'bg-blue-600 text-white'
+                  ? 'text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
+              style={statusFilter === f.value ? { background: 'var(--accent)' } : undefined}
             >
               {f.label}
             </button>
@@ -204,7 +214,9 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                     <td className="py-3 text-right text-gray-500">{q.tax_rate || 8.1}%</td>
                     <td className="py-3 text-right font-semibold text-gray-900">{formatCHF(q.total)}</td>
                     <td className="py-3">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+                      <span
+                        style={{ ...config.badgeStyle, fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }}
+                      >
                         {config.label}
                       </span>
                     </td>
@@ -213,11 +225,11 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                     </td>
                     <td className="py-3">
                       {q.is_signed ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600">
+                        <span className="inline-flex items-center gap-1 text-xs font-medium" style={{ color: '#34C759' }}>
                           Signé ✓
                         </span>
                       ) : q.cgv_accepted ? (
-                        <span className="text-xs text-blue-600">CGV ✓</span>
+                        <span className="text-xs" style={{ color: 'var(--accent)' }}>CGV ✓</span>
                       ) : (
                         <span className="text-xs text-gray-400">—</span>
                       )}
@@ -234,7 +246,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         {q.status === 'draft' && (
                           <button
                             onClick={() => onEditQuote?.(q)}
-                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-blue-600"
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                             title="Modifier"
                           >
                             <Edit3 size={14} />
@@ -243,7 +255,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         {q.status === 'draft' && (
                           <button
                             onClick={() => onSendQuote?.(q)}
-                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-green-600"
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                             title="Envoyer"
                           >
                             <Send size={14} />
@@ -252,7 +264,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         {(q.status === 'draft' || q.status === 'sent') && (
                           <button
                             onClick={() => onSendDocuSeal?.(q)}
-                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-indigo-600"
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                             title="Envoyer pour signature DocuSeal"
                           >
                             <PenTool size={14} />
@@ -261,7 +273,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         {q.status === 'sent' && !q.is_signed && (
                           <button
                             onClick={() => onMarkSigned?.(q)}
-                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-green-600"
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                             title="Marquer comme signé"
                           >
                             <CheckCircle size={14} />
@@ -270,7 +282,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         {q.status === 'signed' && (
                           <button
                             onClick={() => onGenerateInvoice?.(q)}
-                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-amber-600"
+                            className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                             title="Générer facture"
                           >
                             <Receipt size={14} />
@@ -278,7 +290,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         )}
                         <button
                           onClick={() => onDuplicateQuote?.(q)}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-blue-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                           title="Dupliquer"
                         >
                           <Copy size={14} />

@@ -32,12 +32,12 @@ const PRIORITY_COLORS = { high: '#EF4444', medium: '#F59E0B', low: '#22C55E' }
 
 // ── Status badge styles (for list view) ──
 const STATUS_BADGE = {
-  draft: { label: 'Brouillon', bg: 'bg-gray-100', text: 'text-gray-600' },
-  planned: { label: 'Planifie', bg: 'bg-gray-100', text: 'text-gray-600' },
-  in_progress: { label: 'En cours', bg: 'bg-blue-100', text: 'text-blue-700' },
-  'in-progress': { label: 'En cours', bg: 'bg-blue-100', text: 'text-blue-700' },
-  review: { label: 'En revue', bg: 'bg-purple-100', text: 'text-purple-700' },
-  completed: { label: 'Termine', bg: 'bg-green-100', text: 'text-green-700' }
+  draft: { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  planned: { label: 'Planifie', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  in_progress: { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  review: { label: 'En revue', bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
+  completed: { label: 'Termine', bg: 'rgba(52,199,89,0.12)', fg: '#34C759' }
 }
 
 // ── Next status transition map ──
@@ -136,7 +136,8 @@ const StatusDropdown = ({ currentStatus, onStatusChange, isPending }) => {
       <button
         onClick={() => setOpen(!open)}
         disabled={isPending}
-        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.text} hover:opacity-80 transition-opacity disabled:opacity-50`}
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity disabled:opacity-50"
+        style={{ background: badge.bg, color: badge.fg }}
       >
         {isPending ? <Loader2 size={12} className="animate-spin" /> : null}
         {badge.label}
@@ -152,8 +153,9 @@ const StatusDropdown = ({ currentStatus, onStatusChange, isPending }) => {
                 key={opt.value}
                 onClick={() => handleSelect(opt.value)}
                 className={`block w-full text-left px-3 py-2 text-xs hover:bg-gray-50 transition-colors ${
-                  opt.value === currentStatus ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-700'
+                  opt.value === currentStatus ? 'font-semibold' : 'text-gray-700'
                 }`}
+                style={opt.value === currentStatus ? { color: 'var(--accent)', background: 'rgba(0,113,227,0.06)' } : undefined}
               >
                 {opt.label}
               </button>
@@ -185,7 +187,7 @@ const TaskListItem = ({ task, onStatusChange, isPending, navigate }) => {
   const overdue = task.status !== 'completed' && isOverdue(task.due_date)
 
   return (
-    <div className="ds-card p-4 hover:border-blue-200 transition-colors">
+    <div className="ds-card p-4 hover:border-[var(--border-light)] transition-colors">
       <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
         {/* Priority dot */}
         <PriorityDot priority={task.priority} />
@@ -194,7 +196,7 @@ const TaskListItem = ({ task, onStatusChange, isPending, navigate }) => {
         <div className="flex-1 min-w-0">
           <button
             onClick={() => projectId && navigate(`/prestataire/missions/${projectId}`)}
-            className="text-sm font-semibold text-gray-900 hover:text-blue-700 transition-colors text-left truncate block w-full"
+            className="text-sm font-semibold text-gray-900 hover:text-[var(--accent)] transition-colors text-left truncate block w-full"
           >
             {task.name}
           </button>
@@ -236,7 +238,7 @@ const KanbanCard = ({ task, onMoveNext, isPending, navigate }) => {
         <div className="flex-1 min-w-0">
           <button
             onClick={() => projectId && navigate(`/prestataire/missions/${projectId}`)}
-            className="text-sm font-medium text-gray-900 hover:text-blue-700 transition-colors text-left truncate block w-full"
+            className="text-sm font-medium text-gray-900 hover:text-[var(--accent)] transition-colors text-left truncate block w-full"
           >
             {task.name}
           </button>
@@ -261,7 +263,8 @@ const KanbanCard = ({ task, onMoveNext, isPending, navigate }) => {
           <button
             onClick={() => onMoveNext({ taskId: task.id, newStatus: nextStatus })}
             disabled={isPending}
-            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors disabled:opacity-50"
+            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium transition-colors disabled:opacity-50 hover:opacity-80"
+            style={{ color: 'var(--accent)', background: 'rgba(0,113,227,0.08)' }}
             title="Passer au statut suivant"
           >
             {isPending ? <Loader2 size={11} className="animate-spin" /> : <ArrowRight size={11} />}
@@ -442,7 +445,7 @@ const TasksPage = () => {
             placeholder="Rechercher une tache..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm bg-white/50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm bg-white/50 focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] transition-colors"
           />
         </div>
 

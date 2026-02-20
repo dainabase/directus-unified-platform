@@ -39,7 +39,7 @@ const OPERATOR_OPTIONS = [
 const SEVERITY_CONFIG = {
   critical: { label: 'Critique', color: 'bg-red-100 text-red-700 border-red-200', icon: AlertTriangle },
   warning: { label: 'Attention', color: 'bg-amber-100 text-amber-700 border-amber-200', icon: AlertTriangle },
-  info: { label: 'Info', color: 'bg-blue-100 text-blue-700 border-blue-200', icon: Activity }
+  info: { label: 'Info', color: 'bg-zinc-100 text-zinc-700 border-zinc-200', icon: Activity }
 }
 
 const formatCHF = (v) =>
@@ -110,7 +110,7 @@ const RuleForm = ({ rule, onSave, onClose, isSaving }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
               <input type="text" value={form.name} required
                 onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-zinc-500"
                 placeholder="Ex: Alerte tresorerie basse" />
             </div>
 
@@ -155,7 +155,7 @@ const RuleForm = ({ rule, onSave, onClose, isSaving }) => {
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={form.active}
                     onChange={e => setForm(p => ({ ...p, active: e.target.checked }))}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    className="w-4 h-4 rounded border-gray-300 text-zinc-900 focus:ring-zinc-500" />
                   <span className="text-sm text-gray-700">Regle active</span>
                 </label>
               </div>
@@ -174,7 +174,7 @@ const RuleForm = ({ rule, onSave, onClose, isSaving }) => {
               Annuler
             </button>
             <button type="submit" disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              className="ds-btn ds-btn-primary flex items-center gap-2 px-4 py-2 text-sm rounded-lg disabled:opacity-50">
               {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
               {rule ? 'Mettre a jour' : 'Creer'}
             </button>
@@ -234,7 +234,7 @@ const KPIAlertsModule = () => {
   if (loadingRules) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
       </div>
     )
   }
@@ -254,7 +254,7 @@ const KPIAlertsModule = () => {
         </div>
         <button
           onClick={() => { setEditingRule(null); setShowForm(true) }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+          className="ds-btn ds-btn-primary flex items-center gap-2 px-4 py-2 rounded-lg text-sm"
         >
           <Plus size={16} /> Nouvelle regle
         </button>
@@ -268,7 +268,7 @@ const KPIAlertsModule = () => {
           </h3>
 
           {rules.length === 0 ? (
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+            <div className="ds-card p-12 text-center">
               <Bell className="w-12 h-12 text-gray-200 mx-auto mb-3" />
               <p className="text-sm text-gray-500">Aucune regle configuree</p>
               <p className="text-xs text-gray-400 mt-1">Creez une premiere regle pour surveiller vos KPIs</p>
@@ -280,7 +280,7 @@ const KPIAlertsModule = () => {
                 const SevIcon = sev.icon
                 return (
                   <div key={rule.id}
-                    className={`bg-white/70 backdrop-blur-sm rounded-xl border shadow-sm p-4 flex items-center justify-between gap-4 ${rule.active !== false ? 'border-gray-200/50' : 'border-gray-200/30 opacity-60'}`}>
+                    className={`ds-card p-4 flex items-center justify-between gap-4 ${rule.active !== false ? 'border-gray-200/50' : 'border-gray-200/30 opacity-60'}`}>
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className={`p-2 rounded-lg ${sev.color}`}>
                         <SevIcon size={16} />
@@ -296,7 +296,7 @@ const KPIAlertsModule = () => {
                     <div className="flex items-center gap-1 flex-shrink-0">
                       <button
                         onClick={() => { setEditingRule(rule); setShowForm(true) }}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors"
                       >
                         <Edit size={14} />
                       </button>
@@ -320,10 +320,10 @@ const KPIAlertsModule = () => {
             Historique alertes
           </h3>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+          <div className="ds-card overflow-hidden">
             {loadingLogs ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+                <Loader2 className="w-6 h-6 text-zinc-400 animate-spin" />
               </div>
             ) : logs.length === 0 ? (
               <div className="p-8 text-center">

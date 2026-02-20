@@ -23,13 +23,13 @@ const formatDate = (d) => {
 }
 
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', bg: 'bg-gray-100', text: 'text-gray-700' },
-  pending: { label: 'En attente', bg: 'bg-amber-100', text: 'text-amber-700' },
-  sent: { label: 'Envoyée', bg: 'bg-blue-100', text: 'text-blue-700' },
-  paid: { label: 'Payée', bg: 'bg-emerald-100', text: 'text-emerald-700' },
-  partial: { label: 'Partielle', bg: 'bg-orange-100', text: 'text-orange-700' },
-  overdue: { label: 'En retard', bg: 'bg-red-100', text: 'text-red-700' },
-  cancelled: { label: 'Annulée', bg: 'bg-gray-100', text: 'text-gray-500' }
+  draft: { label: 'Brouillon', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#52525b' } },
+  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
+  sent: { label: 'Envoyée', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' } },
+  paid: { label: 'Payée', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: '#34C759' } },
+  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
+  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' } },
+  cancelled: { label: 'Annulée', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#71717a' } }
 }
 
 const InvoiceDetailView = () => {
@@ -50,7 +50,7 @@ const InvoiceDetailView = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
       </div>
     )
   }
@@ -58,9 +58,9 @@ const InvoiceDetailView = () => {
   if (error || !invoice) {
     return (
       <div className="text-center py-12">
-        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--danger)' }} />
         <h2 className="text-lg font-semibold text-gray-900 mb-2">Facture introuvable</h2>
-        <button onClick={() => navigate('/superadmin/invoices/clients')} className="text-blue-600 hover:underline">
+        <button onClick={() => navigate('/superadmin/invoices/clients')} style={{ color: 'var(--accent)' }} className="hover:underline">
           ← Retour aux factures
         </button>
       </div>
@@ -82,13 +82,13 @@ const InvoiceDetailView = () => {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <Receipt className="text-blue-600" />
+            <Receipt style={{ color: 'var(--accent)' }} />
             {invoice.invoice_number || 'Facture'}
           </h1>
           <p className="text-gray-500 mt-1">Créée le {formatDate(invoice.date_created)}</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${status.bg} ${status.text}`}>
+          <span className="px-3 py-1 rounded-full text-sm font-medium" style={status.badgeStyle}>
             {status.label}
           </span>
           <button className="p-2 rounded-lg hover:bg-gray-100 text-gray-500" title="Imprimer">
@@ -102,7 +102,7 @@ const InvoiceDetailView = () => {
         {/* Left: Invoice details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Client info */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+          <div className="ds-card p-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">Client</h3>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ const InvoiceDetailView = () => {
           </div>
 
           {/* Amount */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+          <div className="ds-card p-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">Montant</h3>
             <div className="text-center py-6">
               <p className="text-4xl font-bold text-gray-900">{formatCHF(amount)}</p>
@@ -131,7 +131,7 @@ const InvoiceDetailView = () => {
             </div>
             {invoice.invoice_type && (
               <div className="text-center">
-                <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
+                <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(0,113,227,0.12)', color: '#0071E3' }}>
                   {invoice.invoice_type === 'deposit' ? 'Acompte' :
                    invoice.invoice_type === 'balance' ? 'Solde' :
                    invoice.invoice_type === 'full' ? 'Facture complète' : invoice.invoice_type}
@@ -141,7 +141,7 @@ const InvoiceDetailView = () => {
           </div>
 
           {/* Timeline */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+          <div className="ds-card p-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">Historique</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
@@ -150,13 +150,13 @@ const InvoiceDetailView = () => {
               </div>
               {invoice.date_sent && (
                 <div className="flex items-center gap-3 text-sm">
-                  <Send className="w-4 h-4 text-blue-500" />
+                  <Send className="w-4 h-4" style={{ color: 'var(--accent)' }} />
                   <span className="text-gray-600">Envoyée le {formatDate(invoice.date_sent)}</span>
                 </div>
               )}
               {invoice.date_paid && (
                 <div className="flex items-center gap-3 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--success)' }} />
                   <span className="text-gray-600">Payée le {formatDate(invoice.date_paid)}</span>
                 </div>
               )}
@@ -167,7 +167,7 @@ const InvoiceDetailView = () => {
         {/* Right: QR Code & Payment */}
         <div className="space-y-6">
           {/* QR Payment placeholder */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+          <div className="ds-card p-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">Paiement QR</h3>
             <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
               <div className="text-center text-gray-400">
@@ -183,7 +183,7 @@ const InvoiceDetailView = () => {
 
           {/* Notes */}
           {invoice.notes && (
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+            <div className="ds-card p-6">
               <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">Notes</h3>
               <p className="text-sm text-gray-600 whitespace-pre-wrap">{invoice.notes}</p>
             </div>

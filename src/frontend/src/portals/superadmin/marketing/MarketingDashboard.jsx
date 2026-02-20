@@ -26,14 +26,14 @@ import ContentCalendar from './components/ContentCalendar'
 import MarketingAnalytics from './components/MarketingAnalytics'
 import MarketingEvents from './components/MarketingEvents'
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+const COLORS = ['#0071E3', '#34C759', '#FF9500', '#FF3B30', '#8E8E93', '#AF52DE']
 
 const STATUS_CFG = {
   draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
   scheduled: { label: 'Planifiee', color: 'bg-amber-100 text-amber-700' },
   active: { label: 'Active', color: 'bg-green-100 text-green-700' },
-  paused: { label: 'En pause', color: 'bg-blue-100 text-blue-700' },
-  completed: { label: 'Terminee', color: 'bg-purple-100 text-purple-700' },
+  paused: { label: 'En pause', color: 'bg-zinc-100 text-zinc-700' },
+  completed: { label: 'Terminee', color: 'bg-zinc-200 text-zinc-700' },
   cancelled: { label: 'Annulee', color: 'bg-red-100 text-red-700' }
 }
 
@@ -171,18 +171,18 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
-          { label: 'Campagnes', value: kpis.total, icon: Megaphone, color: 'text-blue-500' },
-          { label: 'Actives', value: kpis.active, icon: Target, color: 'text-green-500' },
-          { label: 'Emails envoyes', value: kpis.totalSent.toLocaleString(), icon: Mail, color: 'text-indigo-500' },
-          { label: 'Taux ouverture', value: `${kpis.openRate}%`, icon: Eye, color: 'text-cyan-500' },
-          { label: 'Taux clic', value: `${kpis.clickRate}%`, icon: MousePointer, color: 'text-amber-500' },
-          { label: 'Budget total', value: formatCHF(kpis.totalBudget), icon: TrendingUp, color: 'text-emerald-500' }
+          { label: 'Campagnes', value: kpis.total, icon: Megaphone, color: 'var(--accent)' },
+          { label: 'Actives', value: kpis.active, icon: Target, color: '#34C759' },
+          { label: 'Emails envoyes', value: kpis.totalSent.toLocaleString(), icon: Mail, color: 'var(--accent)' },
+          { label: 'Taux ouverture', value: `${kpis.openRate}%`, icon: Eye, color: 'var(--accent)' },
+          { label: 'Taux clic', value: `${kpis.clickRate}%`, icon: MousePointer, color: '#FF9500' },
+          { label: 'Budget total', value: formatCHF(kpis.totalBudget), icon: TrendingUp, color: 'var(--accent)' }
         ].map((kpi, i) => {
           const Icon = kpi.icon
           return (
-            <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+            <div key={i} className="ds-card rounded-xl border border-gray-200/50 shadow-sm p-4">
               <div className="flex items-center gap-2 mb-1">
-                <Icon size={14} className={kpi.color} />
+                <Icon size={14} style={{ color: kpi.color }} />
                 <span className="text-xs text-gray-500">{kpi.label}</span>
               </div>
               <p className="text-xl font-bold text-gray-900">{kpi.value}</p>
@@ -194,7 +194,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status distribution */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card rounded-xl border border-gray-200/50 shadow-sm p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par statut</h3>
           {statusChartData.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">Aucune campagne</p>
@@ -214,7 +214,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
         </div>
 
         {/* Channel distribution */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card rounded-xl border border-gray-200/50 shadow-sm p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par canal</h3>
           {channelChartData.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8">Aucune donnee</p>
@@ -225,7 +225,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Campagnes" />
+                <Bar dataKey="value" fill="#0071E3" radius={[4, 4, 0, 0]} name="Campagnes" />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -233,10 +233,10 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       </div>
 
       {/* Recent campaigns */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card rounded-xl border border-gray-200/50 shadow-sm">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-semibold text-gray-900">Campagnes recentes</h3>
-          <button onClick={() => setActiveTab('campaigns')} className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+          <button onClick={() => setActiveTab('campaigns')} className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
             Voir toutes
           </button>
         </div>
@@ -284,13 +284,13 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
             placeholder="Rechercher une campagne..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="ds-input w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+          className="ds-input px-3 py-2 border border-gray-300 rounded-lg text-sm"
         >
           <option value="all">Tous les statuts</option>
           {Object.entries(STATUS_CFG).map(([k, v]) => (
@@ -299,14 +299,14 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
         </select>
         <button
           onClick={() => { setEditingCampaign(null); setShowForm(true) }}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+          className="ds-btn ds-btn-primary flex items-center gap-2 px-4 py-2 text-white rounded-lg text-sm" style={{ background: 'var(--accent)' }}
         >
           <Plus size={16} /> Nouvelle campagne
         </button>
       </div>
 
       {/* Campaign list */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card rounded-xl border border-gray-200/50 shadow-sm">
         {campaigns.length === 0 ? (
           <div className="p-12 text-center text-gray-400">
             <Megaphone className="w-12 h-12 mx-auto mb-3 text-gray-200" />
@@ -340,7 +340,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => { setEditingCampaign(c); setShowForm(true) }}
-                        className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-blue-600"
+                        className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-700"
                       >
                         <Edit size={14} />
                       </button>
@@ -364,7 +364,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
   // ── WhatsApp Tab ──
   const renderWhatsApp = () => (
     <div className="space-y-4">
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="ds-card rounded-xl border border-gray-200/50 shadow-sm">
         <div className="p-4 border-b border-gray-100 flex items-center gap-2">
           <MessageSquare size={16} className="text-green-500" />
           <h3 className="font-semibold text-gray-900">Messages WhatsApp</h3>
@@ -390,7 +390,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium text-gray-900">{m.contact_name || m.phone || 'Inconnu'}</p>
-                    <span className={`px-1.5 py-0.5 rounded text-xs ${m.direction === 'outgoing' ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-xs ${m.direction === 'outgoing' ? 'bg-zinc-50 text-zinc-600' : 'bg-gray-100 text-gray-600'}`}>
                       {m.direction === 'outgoing' ? 'Sortant' : 'Entrant'}
                     </span>
                   </div>
@@ -413,7 +413,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Megaphone size={22} className="text-blue-500" />
+            <Megaphone size={22} style={{ color: 'var(--accent)' }} />
             Marketing
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">Campagnes, WhatsApp et analytics</p>
@@ -438,7 +438,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeTab === tab.id ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'
+                activeTab === tab.id ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <Icon size={16} />
@@ -451,7 +451,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       {/* Content */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
         </div>
       ) : (
         <>
@@ -516,7 +516,7 @@ const CampaignFormModal = ({ campaign, onSave, onClose, isSaving }) => {
               type="text"
               value={form.name}
               onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
               placeholder="Ex: Newsletter Fevrier 2026"
             />
           </div>
@@ -526,7 +526,7 @@ const CampaignFormModal = ({ campaign, onSave, onClose, isSaving }) => {
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -594,7 +594,7 @@ const CampaignFormModal = ({ campaign, onSave, onClose, isSaving }) => {
             <button
               type="submit"
               disabled={isSaving}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+              className="ds-btn ds-btn-primary px-4 py-2 text-sm text-white rounded-lg disabled:opacity-50 flex items-center gap-2" style={{ background: 'var(--accent)' }}
             >
               {isSaving && <Loader2 size={14} className="animate-spin" />}
               {campaign ? 'Mettre a jour' : 'Creer'}

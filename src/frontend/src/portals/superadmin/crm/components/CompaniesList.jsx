@@ -80,16 +80,16 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      active: { label: 'Active', classes: 'bg-green-50 text-green-700' },
-      inactive: { label: 'Inactive', classes: 'bg-gray-100 text-gray-600' },
-      prospect: { label: 'Prospect', classes: 'bg-amber-50 text-amber-700' },
-      customer: { label: 'Client', classes: 'bg-blue-50 text-blue-700' },
-      partner: { label: 'Partenaire', classes: 'bg-blue-50 text-blue-600' }
+      active: { label: 'Active', classes: 'ds-badge ds-badge-success' },
+      inactive: { label: 'Inactive', classes: 'ds-badge ds-badge-default' },
+      prospect: { label: 'Prospect', classes: 'ds-badge ds-badge-warning' },
+      customer: { label: 'Client', classes: 'ds-badge ds-badge-info' },
+      partner: { label: 'Partenaire', classes: 'ds-badge ds-badge-info' }
     };
 
     const config = statusConfig[status] || statusConfig.active;
     return (
-      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.classes}`}>
+      <span className={config.classes}>
         {config.label}
       </span>
     );
@@ -180,7 +180,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
         <div className="ml-auto flex gap-2">
           {selectedCompanies.length > 0 && (
             <button
-              className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style={{color:'var(--danger)'}}
               onClick={handleDeleteSelected}
               disabled={deleteCompany.isPending}
             >
@@ -308,7 +308,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
                                   href={company.website}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-gray-500 hover:text-blue-600 transition-colors"
+                                  className="text-gray-500 transition-colors"
                                 >
                                   {company.website.replace(/^https?:\/\//, '')}
                                 </a>
@@ -326,7 +326,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
 
                       <td className="px-4 py-3">
                         {company.industry ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                          <span className="ds-badge ds-badge-info">
                             {company.industry}
                           </span>
                         ) : (
@@ -423,7 +423,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
                                 )}
                                 <div className="border-t border-gray-100 my-1" />
                                 <button
-                                  className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center"
+                                  className="w-full px-3 py-2 text-left text-sm flex items-center hover:bg-gray-50" style={{color:'var(--danger)'}}
                                   onClick={() => {
                                     if (window.confirm('Supprimer cette entreprise ?')) {
                                       deleteCompany.mutate(company.id);
@@ -481,9 +481,10 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
                     key={pageNum}
                     className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                       currentPage === pageNum
-                        ? 'bg-blue-600 text-white'
+                        ? 'text-white'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
+                    style={currentPage === pageNum ? {background:'var(--accent)'} : undefined}
                     onClick={() => setCurrentPage(pageNum)}
                   >
                     {pageNum + 1}

@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
-import { GlassCard, Badge, Button } from '../../../components/ui'
+import { Card, Badge, Button } from '../../../components/ui'
 
 const TimelineView = ({ projects }) => {
   // Get current date and calculate date range
@@ -65,20 +65,20 @@ const TimelineView = ({ projects }) => {
     return acc
   }, {})
 
-  const getStatusColor = (status) => {
+  const getStatusBg = (status) => {
     switch (status) {
-      case 'active': return 'bg-blue-500'
-      case 'completed': return 'bg-green-500'
-      case 'on_hold': return 'bg-yellow-500'
-      case 'pending': return 'bg-gray-400'
-      default: return 'bg-gray-400'
+      case 'active': return 'var(--accent)'
+      case 'completed': return 'var(--success)'
+      case 'on_hold': return 'var(--warning)'
+      case 'pending': return '#AEAEB2'
+      default: return '#AEAEB2'
     }
   }
 
   return (
     <div className="space-y-6">
       {/* Timeline Header */}
-      <GlassCard className="p-4">
+      <Card className="p-4">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <h3 className="text-lg font-semibold text-gray-900">
@@ -111,9 +111,9 @@ const TimelineView = ({ projects }) => {
                   key={day}
                   className={`
                     flex-1 text-center text-xs
-                    ${isToday ? 'font-bold text-blue-600' : 'text-gray-600'}
+                    ${isToday ? 'font-bold' : 'text-gray-600'}
                   `}
-                  style={{ minWidth: '30px' }}
+                  style={isToday ? { minWidth: '30px', color: 'var(--accent)' } : { minWidth: '30px' }}
                 >
                   {day}
                 </div>
@@ -122,7 +122,8 @@ const TimelineView = ({ projects }) => {
           </div>
           {/* Today marker */}
           <div
-            className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-10"
+            className="absolute top-0 bottom-0 w-0.5 z-10"
+            style={{background:'var(--danger)'}}
             style={{ left: `${(today.getDate() / daysInMonth) * 100}%` }}
           />
         </div>
@@ -169,10 +170,10 @@ const TimelineView = ({ projects }) => {
             </div>
           ))}
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Projects List */}
-      <GlassCard className="p-4">
+      <Card className="p-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Détails des projets
         </h3>
@@ -216,7 +217,7 @@ const TimelineView = ({ projects }) => {
               </div>
             ))}
         </div>
-      </GlassCard>
+      </Card>
     </div>
   )
 }

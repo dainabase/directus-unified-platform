@@ -9,7 +9,7 @@ import {
   User,
   Building
 } from 'lucide-react'
-import { GlassCard, Badge, Button } from '../../../components/ui'
+import { Card, Badge, Button } from '../../../components/ui'
 
 const TeamView = ({ people }) => {
   const getRoleColor = (role) => {
@@ -23,19 +23,13 @@ const TeamView = ({ people }) => {
     return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase()
   }
 
+  const avatarColors = [
+    '#0071E3', '#34C759', '#5856D6', '#FF2D55',
+    '#5856D6', '#FF3B30', '#FF9500', '#00C7BE'
+  ]
   const getAvatarColor = (name) => {
-    const colors = [
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-purple-500',
-      'bg-pink-500',
-      'bg-indigo-500',
-      'bg-red-500',
-      'bg-yellow-500',
-      'bg-teal-500'
-    ]
-    const index = (name?.charCodeAt(0) || 0) % colors.length
-    return colors[index]
+    const index = (name?.charCodeAt(0) || 0) % avatarColors.length
+    return avatarColors[index]
   }
 
   // Group people by company
@@ -62,20 +56,19 @@ const TeamView = ({ people }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {companyPeople.map((person) => (
-              <GlassCard
+              <Card
                 key={person.id}
                 hoverable
                 className="p-0 overflow-hidden"
               >
                 {/* Header with Avatar */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4">
+                <div className="p-4" style={{background:'var(--accent-light)'}}>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`
-                        w-12 h-12 rounded-full flex items-center justify-center
-                        text-white font-semibold text-lg
-                        ${getAvatarColor(person.first_name)}
-                      `}>
+                      <div
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-lg"
+                        style={{background: getAvatarColor(person.first_name)}}
+                      >
                         {getInitials(person.first_name, person.last_name)}
                       </div>
                       <div>
@@ -116,7 +109,8 @@ const TeamView = ({ people }) => {
                       <Mail size={14} />
                       <a 
                         href={`mailto:${person.email}`}
-                        className="hover:text-blue-600 transition-colors truncate"
+                        className="transition-colors truncate"
+                        style={{color:'var(--accent)'}}
                       >
                         {person.email}
                       </a>
@@ -201,7 +195,7 @@ const TeamView = ({ people }) => {
                     Message
                   </Button>
                 </div>
-              </GlassCard>
+              </Card>
             ))}
           </div>
         </div>

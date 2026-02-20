@@ -47,19 +47,19 @@ const CompaniesViewSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-28 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="ds-skeleton h-4 w-28 rounded mb-3" />
+          <div className="ds-skeleton h-8 w-16 rounded" />
         </div>
       ))}
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(6)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-24 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
-          <div className="glass-skeleton h-4 w-28 rounded" />
+          <div className="ds-skeleton h-4 w-48 rounded" />
+          <div className="ds-skeleton h-4 w-24 rounded" />
+          <div className="ds-skeleton h-4 w-20 rounded" />
+          <div className="ds-skeleton h-4 w-28 rounded" />
         </div>
       ))}
     </div>
@@ -144,7 +144,7 @@ const CompaniesView = ({ selectedCompany }) => {
     return (
       <div className="p-6">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-6">
-          <Building2 className="w-6 h-6 text-blue-600" />
+          <Building2 className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           Entreprises
         </h2>
         <CompaniesViewSkeleton />
@@ -158,7 +158,7 @@ const CompaniesView = ({ selectedCompany }) => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-blue-600" />
+            <Building2 className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             Entreprises
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -169,28 +169,28 @@ const CompaniesView = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Building2 className="w-5 h-5 text-blue-600" />
+            <Building2 className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Total</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Actives</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.active}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <XCircle className="w-5 h-5 text-gray-500" />
             <span className="text-sm text-gray-500">Inactives</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.inactive}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <UserPlus className="w-5 h-5 text-yellow-600" />
             <span className="text-sm text-gray-500">Prospects</span>
@@ -208,13 +208,13 @@ const CompaniesView = ({ selectedCompany }) => {
             placeholder="Rechercher une entreprise..."
             value={search}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
           />
         </div>
         <select
           value={typeFilter}
           onChange={handleTypeChange}
-          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
         >
           <option value="all">Tous les types</option>
           <option value="client">Client</option>
@@ -225,7 +225,7 @@ const CompaniesView = ({ selectedCompany }) => {
         <select
           value={statusFilter}
           onChange={handleStatusChange}
-          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
         >
           <option value="all">Tous les statuts</option>
           <option value="active">Active</option>
@@ -235,7 +235,7 @@ const CompaniesView = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         {companies.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
             <Building2 size={48} className="mb-3 opacity-40" />
@@ -320,7 +320,7 @@ const CompaniesView = ({ selectedCompany }) => {
                     onClick={() => setPage(pageNum)}
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                       page === pageNum
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-zinc-900 text-white'
                         : 'hover:bg-gray-200/60 text-gray-600'
                     }`}
                   >

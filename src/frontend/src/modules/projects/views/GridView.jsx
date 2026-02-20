@@ -8,7 +8,7 @@ import {
   TrendingUp,
   AlertCircle
 } from 'lucide-react'
-import { GlassCard, Badge, Button } from '../../../components/ui'
+import { Card, Badge, Button } from '../../../components/ui'
 
 const GridView = ({ projects }) => {
   const getPriorityColor = (priority) => {
@@ -47,7 +47,7 @@ const GridView = ({ projects }) => {
         const isOverdue = new Date(project.end_date) < new Date() && project.status !== 'completed'
 
         return (
-          <GlassCard
+          <Card
             key={project.id}
             hoverable
             className="relative overflow-hidden"
@@ -85,7 +85,8 @@ const GridView = ({ projects }) => {
               </div>
               <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-blue-600 transition-all duration-300"
+                  className="h-full transition-all duration-300"
+                  style={{background:'var(--accent)'}}
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -98,7 +99,7 @@ const GridView = ({ projects }) => {
                   <Calendar size={14} />
                   <span>Échéance</span>
                 </div>
-                <span className={`font-medium ${isOverdue ? 'text-red-600' : 'text-gray-900'}`}>
+                <span className="font-medium" style={isOverdue ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
                   {formatDate(project.end_date)}
                 </span>
               </div>
@@ -108,7 +109,7 @@ const GridView = ({ projects }) => {
                   <DollarSign size={14} />
                   <span>Budget</span>
                 </div>
-                <span className={`font-medium ${isOverBudget ? 'text-red-600' : 'text-gray-900'}`}>
+                <span className="font-medium" style={isOverBudget ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
                   {(project.budget / 1000).toFixed(0)}K CHF
                 </span>
               </div>
@@ -130,8 +131,8 @@ const GridView = ({ projects }) => {
             {(isOverBudget || isOverdue) && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-2 text-sm">
-                  <AlertCircle size={14} className="text-red-600" />
-                  <span className="text-red-600">
+                  <AlertCircle size={14} style={{color:'var(--danger)'}} />
+                  <span style={{color:'var(--danger)'}}>
                     {isOverBudget && isOverdue 
                       ? 'Budget dépassé & En retard'
                       : isOverBudget 
@@ -141,7 +142,7 @@ const GridView = ({ projects }) => {
                 </div>
               </div>
             )}
-          </GlassCard>
+          </Card>
         )
       })}
     </div>

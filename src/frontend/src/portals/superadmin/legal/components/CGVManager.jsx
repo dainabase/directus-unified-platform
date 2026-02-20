@@ -13,9 +13,9 @@ import api from '../../../../lib/axios'
 
 // ── Status config ────────────────────────────────────────────────────────────
 const STATUS_CFG = {
-  active:   { label: 'Active',    bg: 'bg-green-100',  text: 'text-green-700' },
-  draft:    { label: 'Brouillon', bg: 'bg-gray-100',   text: 'text-gray-600' },
-  archived: { label: 'Archivee',  bg: 'bg-orange-100', text: 'text-orange-700' }
+  active:   { label: 'Active',    cls: 'ds-badge ds-badge-success' },
+  draft:    { label: 'Brouillon', cls: 'ds-badge ds-badge-default' },
+  archived: { label: 'Archivee',  cls: 'ds-badge ds-badge-warning' }
 }
 
 // ── Skeleton ─────────────────────────────────────────────────────────────────
@@ -23,19 +23,19 @@ const CGVManagerSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-24 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="animate-pulse h-4 w-24 rounded mb-3" style={{ background: 'rgba(0,0,0,0.04)' }} />
+          <div className="animate-pulse h-8 w-16 rounded" style={{ background: 'rgba(0,0,0,0.04)' }} />
         </div>
       ))}
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-16 rounded" />
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
-          <div className="glass-skeleton h-4 w-28 rounded" />
+          <div className="animate-pulse h-4 w-16 rounded" style={{ background: 'rgba(0,0,0,0.04)' }} />
+          <div className="animate-pulse h-4 w-48 rounded" style={{ background: 'rgba(0,0,0,0.04)' }} />
+          <div className="animate-pulse h-4 w-20 rounded" style={{ background: 'rgba(0,0,0,0.04)' }} />
+          <div className="animate-pulse h-4 w-28 rounded" style={{ background: 'rgba(0,0,0,0.04)' }} />
         </div>
       ))}
     </div>
@@ -82,7 +82,7 @@ const CGVManager = ({ selectedCompany }) => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <FileText className="w-6 h-6 text-blue-600" />
+          <FileText className="w-6 h-6 text-[var(--accent)]" />
           <h2 className="text-2xl font-bold text-gray-900">Gestion des CGV</h2>
         </div>
         <CGVManagerSkeleton />
@@ -95,7 +95,7 @@ const CGVManager = ({ selectedCompany }) => {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <FileText className="w-6 h-6 text-blue-600" />
+          <FileText className="w-6 h-6 text-[var(--accent)]" />
           Gestion des CGV
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -105,30 +105,30 @@ const CGVManager = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <FileText className="w-5 h-5 text-blue-600" />
+            <FileText className="w-5 h-5 text-[var(--accent)]" />
             <span className="text-sm text-gray-500">Total versions</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className="w-5 h-5 text-[var(--success)]" />
             <span className="text-sm text-gray-500">Actives</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.active}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-5 h-5 text-gray-500" />
             <span className="text-sm text-gray-500">Brouillons</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.draft}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Archive className="w-5 h-5 text-orange-500" />
+            <Archive className="w-5 h-5 text-[var(--warning)]" />
             <span className="text-sm text-gray-500">Archivees</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.archived}</div>
@@ -136,7 +136,7 @@ const CGVManager = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Versions CGV</h3>
         </div>
@@ -171,7 +171,7 @@ const CGVManager = ({ selectedCompany }) => {
                         {cgv.title || <span className="text-gray-300">-</span>}
                       </td>
                       <td className="px-5 py-3 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+                        <span className={cfg.cls}>
                           {cfg.label}
                         </span>
                       </td>
@@ -191,8 +191,8 @@ const CGVManager = ({ selectedCompany }) => {
 
       {/* Error state */}
       {isError && (
-        <div className="glass-card p-6 text-center">
-          <p className="text-sm text-red-500">
+        <div className="ds-card p-6 text-center">
+          <p className="text-sm" style={{ color: 'var(--danger)' }}>
             Erreur lors du chargement des CGV. Verifiez que la collection cgv_versions existe dans Directus.
           </p>
         </div>

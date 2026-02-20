@@ -146,21 +146,21 @@ const ProjectsDashboard = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <FolderKanban size={14} className="text-gray-400" />
             <span className="text-xs text-gray-500">Total projets</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{projects.length}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <CheckCircle2 size={14} className="text-emerald-400" />
             <span className="text-xs text-gray-500">Taux completion</span>
           </div>
           <p className="text-2xl font-bold text-emerald-600">{completionRate}%</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <AlertTriangle size={14} className="text-red-400" />
             <span className="text-xs text-gray-500">Retard moyen</span>
@@ -168,7 +168,7 @@ const ProjectsDashboard = ({ selectedCompany }) => {
           <p className="text-2xl font-bold text-red-600">{avgDelay}j</p>
           <p className="text-xs text-gray-400">{overdueCount} livrable(s) en retard</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <DollarSign size={14} className="text-blue-400" />
             <span className="text-xs text-gray-500">Budget total</span>
@@ -180,7 +180,7 @@ const ProjectsDashboard = ({ selectedCompany }) => {
       {/* Charts Row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status PieChart */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Repartition par statut</h3>
           {statusData.length > 0 ? (
             <div className="flex items-center gap-4">
@@ -210,7 +210,7 @@ const ProjectsDashboard = ({ selectedCompany }) => {
         </div>
 
         {/* Budget by Company BarChart */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Budget par entreprise</h3>
           {budgetByCompany.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
@@ -233,7 +233,7 @@ const ProjectsDashboard = ({ selectedCompany }) => {
       {/* Charts Row 2 */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Projects by Month LineChart */}
-        <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="lg:col-span-2 ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Projets crees par mois</h3>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={projectsByMonth}>
@@ -247,7 +247,7 @@ const ProjectsDashboard = ({ selectedCompany }) => {
         </div>
 
         {/* Top 5 Budgets */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Top 5 budgets</h3>
           {topBudgets.length > 0 ? (
             <div className="space-y-3">

@@ -51,7 +51,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+        <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
       </div>
     )
   }
@@ -61,7 +61,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
       <div className="text-center py-12 text-gray-400">
         <AlertCircle className="w-8 h-8 mx-auto mb-2" />
         <p>Facture introuvable</p>
-        <button onClick={onBack} className="mt-3 text-sm text-blue-600 underline">Retour</button>
+        <button onClick={onBack} className="mt-3 text-sm underline" style={{ color: 'var(--accent)' }}>Retour</button>
       </div>
     )
   }
@@ -100,14 +100,14 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
         </div>
         <button
           onClick={() => onEdit(invoice)}
-          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium bg-zinc-50 rounded-lg hover:bg-zinc-100" style={{ color: 'var(--accent)' }}
         >
           <Edit3 size={14} /> Modifier
         </button>
       </div>
 
       {/* Status timeline */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+      <div className="ds-card p-5">
         <div className="flex items-center justify-between">
           {TIMELINE_STEPS.map((step, i) => {
             const isCompleted = currentStep >= i
@@ -118,17 +118,21 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
                 <div className="flex flex-col items-center">
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center
-                    ${isCompleted ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'}
-                    ${isCurrent ? 'ring-4 ring-blue-100' : ''}
-                  `}>
+                    ${isCompleted ? 'text-white' : 'bg-gray-100 text-gray-400'}
+                    ${isCurrent ? 'ring-4 ring-zinc-100' : ''}
+                  `}
+                    style={isCompleted ? { background: 'var(--accent)' } : undefined}
+                  >
                     <Icon size={18} />
                   </div>
-                  <span className={`text-xs mt-1.5 ${isCompleted ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
+                  <span className={`text-xs mt-1.5 ${isCompleted ? 'font-medium' : 'text-gray-400'}`}
+                    style={isCompleted ? { color: 'var(--accent)' } : undefined}>
                     {step.label}
                   </span>
                 </div>
                 {i < TIMELINE_STEPS.length - 1 && (
-                  <div className={`flex-1 h-0.5 mx-2 ${currentStep > i ? 'bg-blue-600' : 'bg-gray-200'}`} />
+                  <div className={`flex-1 h-0.5 mx-2 ${currentStep > i ? '' : 'bg-gray-200'}`}
+                    style={currentStep > i ? { background: 'var(--accent)' } : undefined} />
                 )}
               </React.Fragment>
             )
@@ -137,7 +141,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
       </div>
 
       {/* Amounts */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+      <div className="ds-card p-5">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Montant HT</p>
@@ -149,7 +153,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
           </div>
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Total TTC</p>
-            <p className="text-lg font-bold text-blue-600">{displayCHF(invoice.total_ttc)}</p>
+            <p className="text-lg font-bold" style={{ color: 'var(--accent)' }}>{displayCHF(invoice.total_ttc)}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Emise le</p>
@@ -164,7 +168,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
 
       {/* Line items */}
       {invoice.items && invoice.items.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-3">Lignes de facture</h3>
           <table className="w-full text-sm">
             <thead>
@@ -193,7 +197,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
 
       {/* QR Swiss */}
       {creditor.iban && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-4">QR-Facture suisse</h3>
           <QRSwiss
             invoice={invoice}
@@ -208,7 +212,7 @@ const InvoiceDetail = ({ invoiceId, onBack, onEdit }) => {
 
       {/* Notes */}
       {invoice.notes && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-2">Notes</h3>
           <p className="text-sm text-gray-600 whitespace-pre-line">{invoice.notes}</p>
         </div>

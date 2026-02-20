@@ -39,21 +39,21 @@ const formatDate = (dateStr) => {
 
 // ── Status badge configuration ──
 const STATUS_CONFIG = {
-  draft:       { label: 'Brouillon',  color: 'bg-gray-100 text-gray-600',   icon: Clock },
-  pending:     { label: 'En attente', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  active:      { label: 'Actif',      color: 'bg-green-100 text-green-700',  icon: CheckCircle },
-  in_progress: { label: 'En cours',   color: 'bg-blue-100 text-blue-700',   icon: Loader2 },
-  'in-progress': { label: 'En cours', color: 'bg-blue-100 text-blue-700',   icon: Loader2 },
-  completed:   { label: 'Termine',    color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-  cancelled:   { label: 'Annule',     color: 'bg-red-100 text-red-700',     icon: AlertCircle },
-  on_hold:     { label: 'En pause',   color: 'bg-orange-100 text-orange-700', icon: Clock }
+  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)',   icon: Clock },
+  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
+  active:      { label: 'Actif',      bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)',  icon: CheckCircle },
+  in_progress: { label: 'En cours',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)',   icon: Loader2 },
+  'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)',   icon: Loader2 },
+  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle },
+  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)',     icon: AlertCircle },
+  on_hold:     { label: 'En pause',   bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock }
 }
 
 const StatusBadge = ({ status }) => {
-  const config = STATUS_CONFIG[status] || { label: status || 'Inconnu', color: 'bg-gray-100 text-gray-500', icon: Clock }
+  const config = STATUS_CONFIG[status] || { label: status || 'Inconnu', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: Clock }
   const Icon = config.icon
   return (
-    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${config.color}`}>
+    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium" style={{background: config.bg, color: config.fg}}>
       <Icon size={12} />
       {config.label}
     </span>
@@ -62,13 +62,13 @@ const StatusBadge = ({ status }) => {
 
 // ── Deliverable status badge (can differ from project) ──
 const DELIVERABLE_STATUS = {
-  draft:       { label: 'Brouillon',  color: 'bg-gray-100 text-gray-600' },
-  pending:     { label: 'En attente', color: 'bg-yellow-100 text-yellow-700' },
-  in_progress: { label: 'En cours',   color: 'bg-blue-100 text-blue-700' },
-  'in-progress': { label: 'En cours', color: 'bg-blue-100 text-blue-700' },
-  review:      { label: 'En revue',   color: 'bg-purple-100 text-purple-700' },
-  completed:   { label: 'Termine',    color: 'bg-emerald-100 text-emerald-700' },
-  cancelled:   { label: 'Annule',     color: 'bg-red-100 text-red-700' }
+  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)' },
+  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)' },
+  in_progress: { label: 'En cours',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
+  'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
+  review:      { label: 'En revue',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
+  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)' },
+  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)' }
 }
 
 // ── Skeleton loader ──
@@ -228,7 +228,7 @@ const MissionDetailPage = () => {
         {/* Budget */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CreditCard size={16} className="text-blue-500" />
+            <CreditCard size={16} style={{color:"var(--accent)"}} />
             <span className="text-xs text-gray-500 font-medium">Budget</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatCHF(mission.budget)}</p>
@@ -237,7 +237,7 @@ const MissionDetailPage = () => {
         {/* Start date */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={16} className="text-green-500" />
+            <Calendar size={16} style={{color:"var(--success)"}} />
             <span className="text-xs text-gray-500 font-medium">Date de debut</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatDate(mission.start_date)}</p>
@@ -246,7 +246,7 @@ const MissionDetailPage = () => {
         {/* End date */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={16} className="text-red-500" />
+            <Calendar size={16} style={{color:"var(--danger)"}} />
             <span className="text-xs text-gray-500 font-medium">Date de fin</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatDate(mission.end_date)}</p>
@@ -255,7 +255,7 @@ const MissionDetailPage = () => {
         {/* Status */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Briefcase size={16} className="text-purple-500" />
+            <Briefcase size={16} style={{color:"var(--accent)"}} />
             <span className="text-xs text-gray-500 font-medium">Statut</span>
           </div>
           <div className="mt-1">
@@ -266,7 +266,7 @@ const MissionDetailPage = () => {
         {/* Client */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Building2 size={16} className="text-indigo-500" />
+            <Building2 size={16} style={{color:"var(--accent)"}} />
             <span className="text-xs text-gray-500 font-medium">Client</span>
           </div>
           <p className="text-base font-semibold text-gray-900">{clientName || '—'}</p>
@@ -327,7 +327,7 @@ const MissionDetailPage = () => {
               </thead>
               <tbody>
                 {deliverables.map(d => {
-                  const dConfig = DELIVERABLE_STATUS[d.status] || { label: d.status || '—', color: 'bg-gray-100 text-gray-500' }
+                  const dConfig = DELIVERABLE_STATUS[d.status] || { label: d.status || '—', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)' }
                   const isAssignedToMe = d.assigned_provider_id === providerId
 
                   return (
@@ -336,7 +336,7 @@ const MissionDetailPage = () => {
                         <span className="font-medium text-gray-900">{d.name}</span>
                       </td>
                       <td className="py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${dConfig.color}`}>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" style={{background: dConfig.bg, color: dConfig.fg}}>
                           {dConfig.label}
                         </span>
                       </td>
@@ -345,7 +345,7 @@ const MissionDetailPage = () => {
                       </td>
                       <td className="py-3">
                         {isAssignedToMe ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{background:"rgba(0,113,227,0.10)", color:"var(--accent)"}}>
                             <User size={12} />
                             Assigne a moi
                           </span>
@@ -389,11 +389,11 @@ const MissionDetailPage = () => {
               return (
                 <div
                   key={doc.id}
-                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-[var(--border-light)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                      <FileText size={16} className="text-blue-500" />
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{background:"rgba(0,113,227,0.08)"}}>
+                      <FileText size={16} style={{color:"var(--accent)"}} />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">
@@ -410,7 +410,7 @@ const MissionDetailPage = () => {
                       href={getAssetUrl(fileId)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-zinc-50 transition-colors" style={{color:"var(--accent)"}}
                     >
                       <Download size={14} />
                       Telecharger

@@ -436,12 +436,12 @@ const ProviderDashboard = () => {
             {unansweredProposals.map(p => (
               <div
                 key={p.id}
-                className="flex items-center justify-between p-3 rounded-xl bg-blue-50/50 border border-blue-100 hover:bg-blue-50 transition-colors cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-xl transition-colors cursor-pointer" style={{background:"rgba(0,113,227,0.04)", border:"1px solid rgba(0,113,227,0.12)"}}
                 onClick={() => navigate('/prestataire/quotes')}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <FileText size={16} className="text-blue-600" />
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"rgba(0,113,227,0.10)"}}>
+                    <FileText size={16} style={{color:"var(--accent)"}} />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
@@ -453,7 +453,7 @@ const ProviderDashboard = () => {
                     </p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors">
+                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors">
                   Soumettre mon offre <ArrowRight size={14} />
                 </button>
               </div>
@@ -463,19 +463,19 @@ const ProviderDashboard = () => {
             {projectsNeedInvoice.map(p => (
               <div
                 key={p.id}
-                className="flex items-center justify-between p-3 rounded-xl bg-amber-50/50 border border-amber-100 hover:bg-amber-50 transition-colors cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-xl transition-colors cursor-pointer" style={{background:"rgba(255,149,0,0.04)", border:"1px solid rgba(255,149,0,0.12)"}}
                 onClick={() => navigate('/prestataire/invoices')}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-                    <Receipt size={16} className="text-amber-600" />
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"rgba(255,149,0,0.12)"}}>
+                    <Receipt size={16} style={{color:"var(--warning)"}} />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">{p.name}</p>
                     <p className="text-xs text-gray-500">Projet actif sans facture soumise</p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-600 text-white hover:bg-amber-700 transition-colors">
+                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" style={{background:"var(--warning)", color:"white"}}>
                   Soumettre ma facture <ArrowRight size={14} />
                 </button>
               </div>

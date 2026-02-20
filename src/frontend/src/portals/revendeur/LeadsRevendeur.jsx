@@ -29,28 +29,28 @@ const formatCHF = (v) =>
 
 // ── Status config ────────────────────────────────────────
 const STATUS_CONFIG = {
-  new:          { label: 'Nouveau',      color: 'bg-gray-100 text-gray-700' },
-  contacted:    { label: 'Contacte',     color: 'bg-blue-100 text-blue-700' },
-  qualified:    { label: 'Qualifie',     color: 'bg-purple-100 text-purple-700' },
-  proposal:     { label: 'Proposition',  color: 'bg-amber-100 text-amber-700' },
-  negotiation:  { label: 'Negociation',  color: 'bg-orange-100 text-orange-700' },
-  won:          { label: 'Gagne',        color: 'bg-green-100 text-green-700' },
-  lost:         { label: 'Perdu',        color: 'bg-red-100 text-red-700' },
-  inactive:     { label: 'Inactif',      color: 'bg-gray-100 text-gray-500' }
+  new:          { label: 'Nouveau',      bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  contacted:    { label: 'Contacte',     bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  qualified:    { label: 'Qualifie',     bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
+  proposal:     { label: 'Proposition',  bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
+  negotiation:  { label: 'Negociation',  bg: 'rgba(255,149,0,0.15)', fg: '#FF9500' },
+  won:          { label: 'Gagne',        bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  lost:         { label: 'Perdu',        bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  inactive:     { label: 'Inactif',      bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 const PRIORITY_CONFIG = {
-  high:   { label: 'Haute',   dot: 'bg-red-500' },
-  medium: { label: 'Moyenne', dot: 'bg-amber-500' },
-  low:    { label: 'Basse',   dot: 'bg-gray-400' }
+  high:   { label: 'Haute',   dotColor: '#FF3B30' },
+  medium: { label: 'Moyenne', dotColor: '#FF9500' },
+  low:    { label: 'Basse',   dotColor: '#9CA3AF' }
 }
 
 const SOURCE_CONFIG = {
-  wordpress: { label: 'WordPress', color: 'bg-blue-50 text-blue-600' },
-  email:     { label: 'Email',     color: 'bg-gray-50 text-gray-600' },
-  ringover:  { label: 'Ringover',  color: 'bg-green-50 text-green-600' },
-  whatsapp:  { label: 'WhatsApp',  color: 'bg-emerald-50 text-emerald-600' },
-  manual:    { label: 'Manuel',    color: 'bg-slate-50 text-slate-600' }
+  wordpress: { label: 'WordPress', bg: 'rgba(0,113,227,0.08)', fg: '#0071E3' },
+  email:     { label: 'Email',     bg: 'rgba(107,114,128,0.08)', fg: '#6B7280' },
+  ringover:  { label: 'Ringover',  bg: 'rgba(52,199,89,0.08)', fg: '#34C759' },
+  whatsapp:  { label: 'WhatsApp',  bg: 'rgba(52,199,89,0.08)', fg: '#34C759' },
+  manual:    { label: 'Manuel',    bg: 'rgba(107,114,128,0.08)', fg: '#6B7280' }
 }
 
 const STATUS_OPTIONS = [
@@ -191,7 +191,7 @@ const LeadsRevendeur = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
       </div>
     )
   }
@@ -265,7 +265,7 @@ const LeadsRevendeur = () => {
             <span>{filteredLeads.length} resultat{filteredLeads.length !== 1 ? 's' : ''}</span>
             <button
               onClick={() => { setSearch(''); setStatusFilter(''); setPriorityFilter('') }}
-              className="text-blue-600 hover:text-blue-700 underline"
+              className="underline hover:opacity-80" style={{ color: 'var(--accent)' }}
             >
               Effacer les filtres
             </button>
@@ -352,7 +352,7 @@ const LeadsRevendeur = () => {
                         {lead.email ? (
                           <a
                             href={`mailto:${lead.email}`}
-                            className="text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1"
+                            className="hover:underline flex items-center gap-1 hover:opacity-80" style={{ color: 'var(--accent)' }}
                           >
                             <Mail size={12} />
                             {lead.email}
@@ -371,7 +371,8 @@ const LeadsRevendeur = () => {
 
                       {/* Status Badge */}
                       <td className="px-4 py-3 text-center">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${statusCfg.color}`}>
+                        <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: statusCfg.bg, color: statusCfg.fg }}>
                           {statusCfg.label}
                         </span>
                       </td>
@@ -379,14 +380,15 @@ const LeadsRevendeur = () => {
                       {/* Priority Dot */}
                       <td className="px-4 py-3 text-center hidden lg:table-cell">
                         <div className="flex items-center justify-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${priorityCfg.dot}`} />
+                          <span className="w-2 h-2 rounded-full" style={{ background: priorityCfg.dotColor }} />
                           <span className="text-xs text-gray-600">{priorityCfg.label}</span>
                         </div>
                       </td>
 
                       {/* Source Channel Badge */}
                       <td className="px-4 py-3 text-center hidden lg:table-cell">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${sourceCfg.color}`}>
+                        <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: sourceCfg.bg, color: sourceCfg.fg }}>
                           {sourceCfg.label}
                         </span>
                       </td>
@@ -403,7 +405,7 @@ const LeadsRevendeur = () => {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => handleConvertToQuote(lead)}
-                            className="ds-btn ds-btn-ghost text-xs px-2 py-1 flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                            className="ds-btn ds-btn-ghost text-xs px-2 py-1 flex items-center gap-1" style={{ color: 'var(--accent)' }}
                             title="Convertir en devis"
                           >
                             <FileText size={14} />
@@ -491,7 +493,7 @@ const AddLeadModal = ({ onClose, onSubmit, isSubmitting }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={onClose}
       />
 

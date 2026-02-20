@@ -28,12 +28,12 @@ const PAGE_SIZE = 25
 const VAT_RATE = 8.1
 
 const STATUS_CONFIG = {
-  draft:       { label: 'Brouillon',   color: 'bg-gray-100 text-gray-600',    icon: FileText },
-  pending:     { label: 'En attente',  color: 'bg-amber-50 text-amber-700',   icon: Clock },
-  pending_ocr: { label: 'OCR en cours', color: 'bg-blue-50 text-blue-600',    icon: Loader2 },
-  approved:    { label: 'Approuvee',   color: 'bg-green-50 text-green-700',   icon: CheckCircle },
-  paid:        { label: 'Payee',       color: 'bg-emerald-50 text-emerald-700', icon: CreditCard },
-  rejected:    { label: 'Rejetee',     color: 'bg-red-50 text-red-700',       icon: XCircle }
+  draft:       { label: 'Brouillon',   color: 'ds-badge ds-badge-default',  icon: FileText },
+  pending:     { label: 'En attente',  color: 'ds-badge ds-badge-warning',  icon: Clock },
+  pending_ocr: { label: 'OCR en cours', color: 'ds-badge ds-badge-info',   icon: Loader2 },
+  approved:    { label: 'Approuvee',   color: 'ds-badge ds-badge-success',  icon: CheckCircle },
+  paid:        { label: 'Payee',       color: 'ds-badge ds-badge-success',  icon: CreditCard },
+  rejected:    { label: 'Rejetee',     color: 'ds-badge ds-badge-danger',   icon: XCircle }
 }
 
 const STATUS_TABS = [
@@ -73,7 +73,7 @@ const StatusBadge = ({ status }) => {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.draft
   const Icon = cfg.icon
   return (
-    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span className={`inline-flex items-center gap-1 ${cfg.color}`}>
       <Icon size={12} className={status === 'pending_ocr' ? 'animate-spin' : ''} />
       {cfg.label}
     </span>
@@ -380,7 +380,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 flex flex-col items-center justify-center py-10 px-6
                 border-2 border-dashed rounded-xl cursor-pointer transition-all
                 ${isDragging
-                  ? 'border-[#0071E3] bg-blue-50/50'
+                  ? 'border-[#0071E3]'
                   : 'border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-50'
                 }
               `}
@@ -416,10 +416,10 @@ const UploadModal = ({ onClose, selectedCompany }) => {
           {/* OCR error */}
           {ocrStep === 'error' && (
             <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-xl">
-              <AlertCircle size={18} className="text-red-500 mt-0.5 shrink-0" />
+              <AlertCircle size={18} className="text-[var(--danger)] mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-medium text-red-800">Erreur de traitement</p>
-                <p className="text-xs text-red-600 mt-0.5">{ocrError}</p>
+                <p className="text-xs text-[var(--danger)] mt-0.5">{ocrError}</p>
                 <button
                   onClick={() => { setOcrStep('idle'); setSelectedFile(null); setOcrError(null) }}
                   className="text-xs text-red-700 underline mt-2"
@@ -432,13 +432,13 @@ const UploadModal = ({ onClose, selectedCompany }) => {
 
           {/* File attached indicator */}
           {selectedFile && ocrStep === 'done' && (
-            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-xl">
+            <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'var(--accent-light)', border: '1px solid var(--accent)' }}>
               <div className="flex items-center gap-2">
                 <FileText size={16} className="text-[#0071E3]" />
                 <span className="text-sm text-gray-700">{selectedFile.name}</span>
                 <span className="text-xs text-gray-400">({(selectedFile.size / 1024).toFixed(0)} KB)</span>
                 {ocrResult && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                  <span className="ds-badge ds-badge-success inline-flex items-center gap-1">
                     <CheckCircle size={10} /> OCR extrait
                   </span>
                 )}
@@ -450,7 +450,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                   setOcrStep('idle')
                   setOcrResult(null)
                 }}
-                className="text-gray-400 hover:text-red-500"
+                className="text-gray-400 hover:text-[var(--danger)]"
               >
                 <X size={16} />
               </button>
@@ -464,7 +464,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 {/* Supplier name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Fournisseur <span className="text-red-500">*</span>
+                    Fournisseur <span className="text-[var(--danger)]">*</span>
                   </label>
                   <input
                     type="text"
@@ -492,7 +492,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 {/* Amount HT */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Montant HT (CHF) <span className="text-red-500">*</span>
+                    Montant HT (CHF) <span className="text-[var(--danger)]">*</span>
                   </label>
                   <input
                     type="number"
@@ -595,7 +595,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
         {/* Save error */}
         {saveMutation.isError && (
           <div className="px-6 pb-4">
-            <p className="text-xs text-red-600">
+            <p className="text-xs text-[var(--danger)]">
               Erreur : {saveMutation.error?.message || 'Impossible de sauvegarder la facture'}
             </p>
           </div>
@@ -661,13 +661,13 @@ const DetailModal = ({ invoice, onClose }) => {
             {invoice.date_paid && (
               <div className="col-span-2">
                 <p className="text-gray-500">Date de paiement</p>
-                <p className="font-medium text-emerald-700">{formatDate(invoice.date_paid)}</p>
+                <p className="font-medium" style={{ color: 'var(--success)' }}>{formatDate(invoice.date_paid)}</p>
               </div>
             )}
             {invoice.rejection_reason && (
               <div className="col-span-2">
                 <p className="text-gray-500">Motif de rejet</p>
-                <p className="font-medium text-red-700">{invoice.rejection_reason}</p>
+                <p className="font-medium" style={{ color: 'var(--danger)' }}>{invoice.rejection_reason}</p>
               </div>
             )}
           </div>
@@ -713,7 +713,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Approuver',
       icon: CheckCircle,
       action: () => onApprove(invoice.id),
-      color: 'text-green-600'
+      color: 'text-[var(--success)]'
     })
   }
 
@@ -722,7 +722,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Rejeter',
       icon: Ban,
       action: () => onReject(invoice.id),
-      color: 'text-red-600'
+      color: 'text-[var(--danger)]'
     })
   }
 
@@ -731,7 +731,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Marquer payee',
       icon: CreditCard,
       action: () => onPay(invoice.id),
-      color: 'text-emerald-600'
+      color: 'text-[var(--success)]'
     })
   }
 
@@ -740,7 +740,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Supprimer',
       icon: Trash2,
       action: () => onDelete(invoice.id),
-      color: 'text-red-600'
+      color: 'text-[var(--danger)]'
     })
   }
 
@@ -902,8 +902,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Pending */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-amber-50">
-              <Clock size={16} className="text-amber-600" />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--warning-light)' }}>
+              <Clock size={16} style={{ color: 'var(--warning)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">En attente</span>
           </div>
@@ -914,8 +914,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Approved this month */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-green-50">
-              <CheckCircle size={16} className="text-green-600" />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--success-light)' }}>
+              <CheckCircle size={16} style={{ color: 'var(--success)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Approuvees ce mois</span>
           </div>
@@ -926,8 +926,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Rejected this month */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-red-50">
-              <XCircle size={16} className="text-red-600" />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--danger-light)' }}>
+              <XCircle size={16} style={{ color: 'var(--danger)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Rejetees ce mois</span>
           </div>
@@ -1037,7 +1037,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
                   return (
                     <tr
                       key={inv.id}
-                      className={`hover:bg-gray-50/50 transition-colors ${overdue ? 'bg-red-50/30' : ''}`}
+                      className="hover:bg-gray-50/50 transition-colors"
+                      style={overdue ? { background: 'rgba(255,59,48,0.05)' } : undefined}
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1.5">
@@ -1052,9 +1053,9 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
                         {formatDate(inv.date_created)}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={overdue ? 'text-red-600 font-medium' : 'text-gray-500'}>
+                        <span className={overdue ? 'text-[var(--danger)] font-medium' : 'text-gray-500'}>
                           {formatDate(inv.due_date)}
-                          {overdue && <span className="text-[10px] ml-1 text-red-500">EN RETARD</span>}
+                          {overdue && <span className="text-[10px] ml-1 text-[var(--danger)]">EN RETARD</span>}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-gray-900 whitespace-nowrap">

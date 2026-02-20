@@ -1,12 +1,14 @@
 /**
- * ExpensesTracker — Connected to Directus `expenses` collection
- * Expense management and approval workflow.
+ * ExpensesTracker — Connected to Directus
+ * Fetches from `expenses` collection (primary).
+ * Falls back to `bank_transactions` with type=debit if expenses is empty/unavailable.
+ * Includes approval workflow (approve/reject mutations).
  */
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  Receipt, Plus, Edit2, Trash2, Search, Download,
-  CheckCircle, Clock, XCircle, Eye, Calendar, User, Loader2
+  Receipt, Plus, Trash2, Search, Download,
+  CheckCircle, Clock, XCircle, Calendar, Loader2, RefreshCw, AlertCircle
 } from 'lucide-react'
 import {
   BarChart, Bar, PieChart, Pie, Cell,
@@ -16,14 +18,14 @@ import toast from 'react-hot-toast'
 import api from '../../../../lib/axios'
 
 const CATEGORIES = {
-  software: { label: 'Logiciels', color: '#3b82f6' },
-  travel: { label: 'Deplacements', color: '#10b981' },
-  training: { label: 'Formation', color: '#f59e0b' },
-  office: { label: 'Bureau', color: '#6366f1' },
-  meals: { label: 'Repas', color: '#8b5cf6' },
-  infrastructure: { label: 'Infrastructure', color: '#ef4444' },
-  marketing: { label: 'Marketing', color: '#06b6d4' },
-  other: { label: 'Autre', color: '#6b7280' }
+  software: { label: 'Logiciels', color: '#0071E3' },
+  travel: { label: 'Deplacements', color: '#34C759' },
+  training: { label: 'Formation', color: '#FF9500' },
+  office: { label: 'Bureau', color: '#5856D6' },
+  meals: { label: 'Repas', color: '#AF52DE' },
+  infrastructure: { label: 'Infrastructure', color: '#FF3B30' },
+  marketing: { label: 'Marketing', color: '#00C7BE' },
+  other: { label: 'Autre', color: '#6E6E73' }
 }
 
 const formatCHF = (amount) =>
@@ -34,16 +36,60 @@ const formatDate = (dateStr) => {
   return new Date(dateStr).toLocaleDateString('fr-CH')
 }
 
+/**
+ * Fetch expenses from Directus `expenses` collection.
+ * If collection is empty or unavailable, fall back to `bank_transactions` with type=debit.
+ */
 const fetchExpenses = async (company) => {
+  const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
+
+  // Primary: fetch from `expenses` collection
   try {
-    const filter = company && company !== 'all' ? { owner_company: { _eq: company } } : {}
     const res = await api.get('/items/expenses', {
       params: { filter, fields: ['*'], sort: ['-date_created'], limit: -1 }
     })
-    return res.data?.data || []
-  } catch {
-    return []
+    const expenses = res.data?.data || []
+    if (expenses.length > 0) return { source: 'expenses', data: expenses }
+  } catch (err) {
+    console.warn('expenses collection unavailable, trying bank_transactions fallback:', err.message)
   }
+
+  // Fallback: fetch debit bank_transactions as expense proxy
+  // TODO: Once `expenses` collection is populated, remove this fallback
+  try {
+    const sixMonthsAgo = new Date()
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
+
+    const res = await api.get('/items/bank_transactions', {
+      params: {
+        filter: {
+          ...filter,
+          type: { _eq: 'debit' },
+          date: { _gte: sixMonthsAgo.toISOString() }
+        },
+        fields: ['*'],
+        sort: ['-date'],
+        limit: 500
+      }
+    })
+    const transactions = (res.data?.data || []).map(tx => ({
+      id: tx.id,
+      description: tx.description || tx.reference || 'Transaction',
+      vendor: tx.counterparty_name || tx.merchant || '',
+      amount: Math.abs(parseFloat(tx.amount || 0)),
+      category: tx.category || 'other',
+      status: tx.reconciled ? 'approved' : 'pending',
+      date: tx.date,
+      date_created: tx.date_created,
+      owner_company: tx.owner_company,
+      _source: 'bank_transactions'
+    }))
+    return { source: 'bank_transactions', data: transactions }
+  } catch (err) {
+    console.warn('bank_transactions fallback also failed:', err.message)
+  }
+
+  return { source: 'none', data: [] }
 }
 
 const ExpensesTracker = ({ selectedCompany }) => {
@@ -52,15 +98,20 @@ const ExpensesTracker = ({ selectedCompany }) => {
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
 
-  const { data: expenses = [], isLoading } = useQuery({
+  const { data: expensesResult, isLoading, error, refetch } = useQuery({
     queryKey: ['expenses', selectedCompany],
     queryFn: () => fetchExpenses(selectedCompany),
     staleTime: 1000 * 60 * 2
   })
 
+  const expenses = expensesResult?.data || []
+  const dataSource = expensesResult?.source || 'none'
+
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }) => {
-      await api.patch(`/items/expenses/${id}`, data)
+      // Only mutate on the real expenses collection, not on fallback data
+      const collection = dataSource === 'bank_transactions' ? 'bank_transactions' : 'expenses'
+      await api.patch(`/items/${collection}/${id}`, data)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
@@ -69,7 +120,8 @@ const ExpensesTracker = ({ selectedCompany }) => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await api.delete(`/items/expenses/${id}`)
+      const collection = dataSource === 'bank_transactions' ? 'bank_transactions' : 'expenses'
+      await api.delete(`/items/${collection}/${id}`)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['expenses'] })
@@ -88,7 +140,10 @@ const ExpensesTracker = ({ selectedCompany }) => {
   })
 
   const handleApprove = (id) => {
-    updateMutation.mutate({ id, data: { status: 'approved' } }, {
+    const data = dataSource === 'bank_transactions'
+      ? { reconciled: true }
+      : { status: 'approved' }
+    updateMutation.mutate({ id, data }, {
       onSuccess: () => toast.success('Depense approuvee')
     })
   }
@@ -139,94 +194,136 @@ const ExpensesTracker = ({ selectedCompany }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'approved':
-        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} />Approuve</span>
+        return <span className="ds-badge ds-badge-success inline-flex items-center gap-1"><CheckCircle size={12} />Approuve</span>
       case 'pending':
-        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><Clock size={12} />En attente</span>
+        return <span className="ds-badge ds-badge-warning inline-flex items-center gap-1"><Clock size={12} />En attente</span>
       case 'rejected':
-        return <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"><XCircle size={12} />Refuse</span>
+        return <span className="ds-badge ds-badge-danger inline-flex items-center gap-1"><XCircle size={12} />Refuse</span>
       default:
-        return <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{status || 'N/A'}</span>
+        return <span className="ds-badge ds-badge-default">{status || 'N/A'}</span>
     }
   }
 
+  // Error state
+  if (error) {
+    return (
+      <div className="ds-card p-8 text-center">
+        <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
+        <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
+        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+          {error.message || 'Impossible de charger les depenses'}
+        </p>
+        <button
+          onClick={() => refetch()}
+          className="ds-btn ds-btn-primary"
+        >
+          <RefreshCw size={14} /> Reessayer
+        </button>
+      </div>
+    )
+  }
+
+  // Loading state
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="glass-card p-6"><div className="h-12 glass-skeleton rounded-lg" /></div>
-        <div className="grid grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <div key={i} className="glass-card p-6"><div className="h-20 glass-skeleton rounded-lg" /></div>)}
+        <div className="ds-card p-6">
+          <div className="h-12 ds-skeleton rounded-lg" />
         </div>
-        <div className="glass-card p-6"><div className="h-64 glass-skeleton rounded-lg" /></div>
+        <div className="grid grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="ds-card p-6">
+              <div className="h-20 ds-skeleton rounded-lg" />
+            </div>
+          ))}
+        </div>
+        <div className="ds-card p-6">
+          <div className="h-64 ds-skeleton rounded-lg" />
+        </div>
       </div>
     )
   }
 
   return (
     <div className="space-y-6">
+      {/* Data source indicator */}
+      {dataSource === 'bank_transactions' && (
+        <div className="ds-card p-3 flex items-center gap-2" style={{ borderLeft: '3px solid var(--warning)' }}>
+          <Clock size={14} style={{ color: 'var(--warning)' }} />
+          <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+            Donnees depuis <strong>bank_transactions</strong> (collection expenses vide ou indisponible)
+          </span>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Receipt className="w-6 h-6 text-blue-600" />
+          <h2 className="ds-page-title flex items-center gap-2">
+            <Receipt className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             Suivi des Depenses
           </h2>
-          <p className="text-sm text-gray-500 mt-1">Gestion et validation des notes de frais</p>
+          <p className="ds-label mt-1">Gestion et validation des notes de frais</p>
         </div>
         <div className="flex gap-2">
-          <button className="glass-button text-gray-600"><Download size={16} className="mr-1" />Exporter</button>
-          <button className="glass-button bg-blue-600 text-white hover:bg-blue-700"><Plus size={16} className="mr-1" />Nouvelle depense</button>
+          <button className="ds-btn ds-btn-secondary">
+            <Download size={16} />Exporter
+          </button>
+          <button className="ds-btn ds-btn-primary">
+            <Plus size={16} />Nouvelle depense
+          </button>
         </div>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Receipt size={18} className="text-blue-600" />
-            <span className="text-sm text-gray-500">Total depenses</span>
+            <Receipt size={18} style={{ color: 'var(--accent)' }} />
+            <span className="ds-label">Total depenses</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.total)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.total)}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={18} className="text-green-600" />
-            <span className="text-sm text-gray-500">Approuvees</span>
+            <CheckCircle size={18} style={{ color: 'var(--success)' }} />
+            <span className="ds-label">Approuvees</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.approved)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.approved)}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={18} className="text-yellow-600" />
-            <span className="text-sm text-gray-500">En attente</span>
+            <Clock size={18} style={{ color: 'var(--warning)' }} />
+            <span className="ds-label">En attente</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.pending)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.pending)}</p>
         </div>
-        <div className="glass-card p-5 border-l-4 border-yellow-400">
+        <div className="ds-card p-5" style={{ borderLeft: '3px solid var(--warning)' }}>
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={18} className="text-yellow-600" />
-            <span className="text-sm text-gray-500">A approuver</span>
+            <Clock size={18} style={{ color: 'var(--warning)' }} />
+            <span className="ds-label">A approuver</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{stats.pendingCount}</p>
-          {stats.pendingCount > 0 && <p className="text-xs text-yellow-600 mt-1">Necessite validation</p>}
+          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{stats.pendingCount}</p>
+          {stats.pendingCount > 0 && <p className="ds-meta mt-1" style={{ color: 'var(--warning)' }}>Necessite validation</p>}
         </div>
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="glass-card p-5 lg:col-span-2">
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Depenses mensuelles (6 mois)</h3>
+        <div className="ds-card p-5 lg:col-span-2">
+          <h3 className="ds-nav-section mb-4">Depenses mensuelles (6 mois)</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={monthlyExpenses}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="month" />
               <YAxis tickFormatter={(v) => `${v / 1000}k`} />
               <Tooltip formatter={(v) => formatCHF(v)} />
-              <Bar dataKey="amount" fill="#3b82f6" name="Depenses" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="amount" fill="var(--accent)" name="Depenses" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="glass-card p-5">
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Par categorie</h3>
+        <div className="ds-card p-5">
+          <h3 className="ds-nav-section mb-4">Par categorie</h3>
           {categoryBreakdown.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={180}>
@@ -243,13 +340,15 @@ const ExpensesTracker = ({ selectedCompany }) => {
                 {categoryBreakdown.slice(0, 4).map(item => (
                   <div key={item.name} className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-xs text-gray-500">{item.name}</span>
+                    <span className="ds-meta">{item.name}</span>
                   </div>
                 ))}
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-48 text-gray-400 text-sm">Aucune donnee</div>
+            <div className="flex items-center justify-center h-48">
+              <span className="ds-label">Aucune donnee</span>
+            </div>
           )}
         </div>
       </div>
@@ -257,22 +356,22 @@ const ExpensesTracker = ({ selectedCompany }) => {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
           <input
             type="text"
-            className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 bg-white/80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="ds-input pl-9"
             placeholder="Rechercher..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <select className="glass-button text-sm" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+        <select className="ds-input" style={{ width: 'auto' }} value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">Toutes categories</option>
           {Object.entries(CATEGORIES).map(([key, value]) => (
             <option key={key} value={key}>{value.label}</option>
           ))}
         </select>
-        <select className="glass-button text-sm" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+        <select className="ds-input" style={{ width: 'auto' }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
           <option value="all">Tous statuts</option>
           <option value="approved">Approuve</option>
           <option value="pending">En attente</option>
@@ -281,58 +380,64 @@ const ExpensesTracker = ({ selectedCompany }) => {
       </div>
 
       {/* Expenses Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Description</th>
-                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Categorie</th>
-                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Montant</th>
-                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Statut</th>
-                <th className="text-right p-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+              <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+                <th className="text-left p-4 ds-nav-section">Description</th>
+                <th className="text-left p-4 ds-nav-section">Categorie</th>
+                <th className="text-left p-4 ds-nav-section">Date</th>
+                <th className="text-left p-4 ds-nav-section">Montant</th>
+                <th className="text-left p-4 ds-nav-section">Statut</th>
+                <th className="text-right p-4 ds-nav-section">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredExpenses.map(expense => (
                 <tr key={expense.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="p-4">
-                    <span className="font-medium text-gray-900">{expense.description || expense.name || '-'}</span>
-                    {expense.vendor && <span className="block text-xs text-gray-400">{expense.vendor}</span>}
+                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{expense.description || expense.name || '-'}</span>
+                    {expense.vendor && <span className="block ds-meta">{expense.vendor}</span>}
                   </td>
                   <td className="p-4">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                    <span className="ds-badge ds-badge-info">
                       {CATEGORIES[expense.category]?.label || expense.category || '-'}
                     </span>
                   </td>
-                  <td className="p-4 text-gray-500">
+                  <td className="p-4" style={{ color: 'var(--text-secondary)' }}>
                     <span className="flex items-center gap-1"><Calendar size={12} />{formatDate(expense.date || expense.date_created)}</span>
                   </td>
-                  <td className="p-4 font-medium text-gray-900">{formatCHF(expense.amount || 0)}</td>
+                  <td className="p-4 font-medium" style={{ color: 'var(--text-primary)' }}>{formatCHF(expense.amount || 0)}</td>
                   <td className="p-4">{getStatusBadge(expense.status)}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-1">
                       {expense.status === 'pending' && (
                         <>
                           <button
-                            className="p-1.5 rounded-lg hover:bg-green-50 text-green-600 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                            style={{ color: 'var(--success)' }}
                             onClick={() => handleApprove(expense.id)}
                             title="Approuver"
                           >
                             <CheckCircle size={14} />
                           </button>
-                          <button
-                            className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
-                            onClick={() => handleReject(expense.id)}
-                            title="Refuser"
-                          >
-                            <XCircle size={14} />
-                          </button>
+                          {/* Reject only available on real expenses, not bank_transactions fallback */}
+                          {dataSource !== 'bank_transactions' && (
+                            <button
+                              className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                              style={{ color: 'var(--danger)' }}
+                              onClick={() => handleReject(expense.id)}
+                              title="Refuser"
+                            >
+                              <XCircle size={14} />
+                            </button>
+                          )}
                         </>
                       )}
                       <button
-                        className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                        style={{ color: 'var(--danger)' }}
                         onClick={() => { if (window.confirm('Supprimer?')) deleteMutation.mutate(expense.id) }}
                         title="Supprimer"
                       >
@@ -346,9 +451,10 @@ const ExpensesTracker = ({ selectedCompany }) => {
           </table>
         </div>
         {filteredExpenses.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <Receipt size={48} className="mx-auto mb-3 opacity-50" />
-            <p className="text-sm">Aucune depense trouvee</p>
+          <div className="text-center py-12">
+            <Receipt size={48} className="mx-auto mb-3 opacity-30" />
+            <p className="ds-label">Aucune depense trouvee</p>
+            <p className="ds-meta mt-1">Ajoutez une depense ou modifiez les filtres</p>
           </div>
         )}
       </div>

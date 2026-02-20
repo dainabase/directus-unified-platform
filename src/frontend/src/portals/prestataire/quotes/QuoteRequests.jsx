@@ -28,11 +28,11 @@ const formatCHF = (value) =>
 const VAT_RATE = 8.1
 
 const STATUS_CONFIG = {
-  draft: { label: 'Nouveau', color: 'bg-red-100 text-red-700', icon: AlertTriangle },
-  pending: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  submitted: { label: 'Soumis', color: 'bg-blue-100 text-blue-700', icon: FileText },
-  accepted: { label: 'Accepte', color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  rejected: { label: 'Refuse', color: 'bg-gray-100 text-gray-600', icon: XCircle }
+  draft: { label: 'Nouveau', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30', icon: AlertTriangle },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500', icon: Clock },
+  submitted: { label: 'Soumis', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3', icon: FileText },
+  accepted: { label: 'Accepte', bg: 'rgba(52,199,89,0.12)', fg: '#34C759', icon: CheckCircle },
+  rejected: { label: 'Refuse', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280', icon: XCircle }
 }
 
 // -- Submit offer modal --
@@ -77,7 +77,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -91,7 +91,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
         </div>
 
         {/* Mission description */}
-        <div className="px-6 py-4 bg-blue-50/50 border-b border-gray-100">
+        <div className="px-6 py-4 border-b border-gray-100" style={{ background: 'rgba(0,113,227,0.04)' }}>
           <p className="text-xs font-medium text-gray-500 uppercase mb-1">Description de la mission</p>
           <p className="text-sm text-gray-700">{proposal.mission_description || proposal.description || 'Aucune description'}</p>
         </div>
@@ -112,7 +112,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
                   required: 'Le montant est obligatoire',
                   min: { value: 0.01, message: 'Le montant doit etre positif' }
                 })}
-                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50"
                 placeholder="0.00"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">CHF</span>
@@ -132,7 +132,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             </div>
             <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
               <span className="font-semibold text-gray-900">Total TTC</span>
-              <span className="font-bold text-blue-700">{formatCHF(totalTTC)}</span>
+              <span className="font-bold" style={{ color: 'var(--accent)' }}>{formatCHF(totalTTC)}</span>
             </div>
           </div>
 
@@ -144,7 +144,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             <input
               type="date"
               {...register('deadline')}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50"
             />
           </div>
 
@@ -156,7 +156,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             <textarea
               {...register('notes')}
               rows={3}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50 resize-none"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50 resize-none"
               placeholder="Details supplementaires, conditions, remarques..."
             />
           </div>
@@ -173,7 +173,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -298,7 +298,8 @@ const QuoteRequests = () => {
                   const isPending = p.status === 'pending' || p.status === 'draft'
 
                   return (
-                    <tr key={p.id} className={`border-b border-gray-50 hover:bg-gray-50/50 ${isPending ? 'bg-blue-50/20' : ''}`}>
+                    <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50"
+                      style={isPending ? { background: 'rgba(0,113,227,0.03)' } : undefined}>
                       <td className="py-3">
                         <p className="font-medium text-gray-900">{p.name || 'Demande'}</p>
                       </td>
@@ -317,7 +318,8 @@ const QuoteRequests = () => {
                         ) : '—'}
                       </td>
                       <td className="py-3">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: config.bg, color: config.fg }}>
                           {isPending && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />}
                           {config.label}
                         </span>
@@ -326,14 +328,14 @@ const QuoteRequests = () => {
                         {isPending ? (
                           <button
                             onClick={() => setSelectedProposal(p)}
-                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
                           >
                             Soumettre
                           </button>
                         ) : p.status === 'submitted' ? (
-                          <span className="text-xs text-blue-600 font-medium">En revision</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>En revision</span>
                         ) : p.status === 'accepted' ? (
-                          <span className="text-xs text-emerald-600 font-medium">Accepte</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>Accepte</span>
                         ) : null}
                       </td>
                     </tr>

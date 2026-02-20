@@ -20,9 +20,9 @@ import {
 
 const STATUS_CONFIG = {
   todo: { label: 'A faire', color: 'bg-gray-100 text-gray-600', icon: Clock },
-  in_progress: { label: 'En cours', color: 'bg-blue-100 text-blue-700', icon: Target },
+  in_progress: { label: 'En cours', color: 'bg-zinc-100 text-zinc-700', icon: Target },
   review: { label: 'En review', color: 'bg-amber-100 text-amber-700', icon: Eye },
-  done: { label: 'Termine', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle2 }
+  done: { label: 'Termine', color: 'bg-green-50 text-green-700', icon: CheckCircle2 }
 }
 
 const StatusBadge = ({ status }) => {
@@ -133,7 +133,7 @@ const DeliverableForm = ({ deliverable, projects, allDeliverables, onSave, onCan
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">Annuler</button>
-            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
               <Save size={14} /> Sauvegarder
             </button>
           </div>
@@ -164,7 +164,7 @@ const KanbanBoard = ({ deliverables, onEdit, onDelete, projects }) => {
               {items.map(d => {
                 const subtasks = deliverables.filter(s => s.parent_task_id === d.id)
                 return (
-                  <div key={d.id} className="bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 p-3">
+                  <div key={d.id} className="bg-white rounded-lg border border-gray-200/50 p-3">
                     <div className="flex items-start justify-between">
                       <p className="text-sm font-medium text-gray-900">{d.title}</p>
                       <div className="flex gap-0.5">
@@ -276,7 +276,7 @@ const DeliverablesModule = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500 mt-0.5">Gestion des livrables projets</p>
         </div>
         <button onClick={() => { setEditItem(null); setShowForm(true) }}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
           <Plus size={16} /> Nouveau livrable
         </button>
       </div>
@@ -285,11 +285,11 @@ const DeliverablesModule = ({ selectedCompany }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total', value: stats.total, icon: Package, color: 'text-gray-900' },
-          { label: 'En cours', value: stats.inProgress, icon: Target, color: 'text-blue-600' },
+          { label: 'En cours', value: stats.inProgress, icon: Target, color: 'text-zinc-900' },
           { label: 'En retard', value: stats.overdue, icon: AlertTriangle, color: 'text-red-600' },
-          { label: 'Termines', value: stats.done, icon: CheckCircle2, color: 'text-emerald-600' }
+          { label: 'Termines', value: stats.done, icon: CheckCircle2, color: 'text-zinc-900' }
         ].map((kpi, i) => (
-          <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div key={i} className="ds-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <kpi.icon size={14} className="text-gray-400" />
               <span className="text-xs text-gray-500">{kpi.label}</span>
@@ -314,7 +314,7 @@ const DeliverablesModule = ({ selectedCompany }) => {
         <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
           {[{ id: 'list', icon: List, label: 'Liste' }, { id: 'kanban', icon: BarChart3, label: 'Kanban' }].map(v => (
             <button key={v.id} onClick={() => setViewMode(v.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm ${viewMode === v.id ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500'}`}>
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm ${viewMode === v.id ? 'bg-white text-zinc-900 shadow-sm' : 'text-gray-500'}`}>
               <v.icon size={14} /> {v.label}
             </button>
           ))}
@@ -323,12 +323,12 @@ const DeliverablesModule = ({ selectedCompany }) => {
 
       {/* Content */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-blue-500 animate-spin" /></div>
+        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-zinc-400 animate-spin" /></div>
       ) : viewMode === 'kanban' ? (
         <KanbanBoard deliverables={filtered} projects={projects}
           onEdit={(d) => { setEditItem(d); setShowForm(true) }} onDelete={handleDelete} />
       ) : (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -366,7 +366,7 @@ const DeliverablesModule = ({ selectedCompany }) => {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
                         <button onClick={() => { setEditItem(d); setShowForm(true) }}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"><Edit3 size={14} /></button>
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-zinc-900"><Edit3 size={14} /></button>
                         <button onClick={() => handleDelete(d.id)}
                           className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-red-600"><Trash2 size={14} /></button>
                       </div>

@@ -99,13 +99,13 @@ export default function ThresholdConfig({ selectedCompany }) {
     <div className="space-y-6">
       {/* Active Alerts */}
       {alerts.length > 0 && (
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-3">
-            <AlertCircle className="w-5 h-5 text-red-500" />
+            <AlertCircle className="w-5 h-5" style={{ color: 'var(--danger)' }} />
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Alertes KPI actives
             </h3>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+            <span style={{ background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }}>
               {alerts.length}
             </span>
           </div>
@@ -113,18 +113,16 @@ export default function ThresholdConfig({ selectedCompany }) {
             {alerts.map((alert, idx) => (
               <div
                 key={idx}
-                className={`flex items-center gap-3 p-3 rounded-lg border ${
-                  alert.level === 'critical'
-                    ? 'bg-red-50 border-red-200'
-                    : 'bg-amber-50 border-amber-200'
-                }`}
+                className="flex items-center gap-3 p-3 rounded-lg border"
+                style={alert.level === 'critical'
+                  ? { background: 'rgba(255,59,48,0.08)', borderColor: 'rgba(255,59,48,0.2)' }
+                  : { background: 'rgba(255,149,0,0.08)', borderColor: 'rgba(255,149,0,0.2)' }
+                }
               >
-                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                  alert.level === 'critical' ? 'bg-red-500' : 'bg-amber-500'
-                }`} />
-                <span className={`text-sm font-medium ${
-                  alert.level === 'critical' ? 'text-red-700' : 'text-amber-700'
-                }`}>
+                <div className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ background: alert.level === 'critical' ? 'var(--danger)' : 'var(--warning)' }} />
+                <span className="text-sm font-medium"
+                  style={{ color: alert.level === 'critical' ? 'var(--danger)' : 'var(--warning)' }}>
                   {alert.message}
                 </span>
               </div>
@@ -134,19 +132,19 @@ export default function ThresholdConfig({ selectedCompany }) {
       )}
 
       {alerts.length === 0 && (
-        <div className="glass-card p-5 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-500" />
-          <span className="text-sm text-green-700 font-medium">
+        <div className="ds-card p-5 flex items-center gap-3">
+          <CheckCircle className="w-5 h-5" style={{ color: 'var(--success)' }} />
+          <span className="text-sm font-medium" style={{ color: 'var(--success)' }}>
             Tous les KPIs sont dans les normes
           </span>
         </div>
       )}
 
       {/* Threshold Configuration */}
-      <div className="glass-card p-5">
+      <div className="ds-card p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-blue-600" />
+            <Settings className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Configuration des seuils
             </h3>
@@ -164,7 +162,7 @@ export default function ThresholdConfig({ selectedCompany }) {
             <button
               onClick={() => saveMut.mutate(formData)}
               disabled={!isDirty || saveMut.isPending}
-              className="flex items-center gap-1 px-4 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors"
+              className="ds-btn ds-btn-primary text-xs disabled:opacity-50"
             >
               {saveMut.isPending ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
               Sauvegarder
@@ -174,7 +172,7 @@ export default function ThresholdConfig({ selectedCompany }) {
 
         {isLoading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -185,13 +183,13 @@ export default function ThresholdConfig({ selectedCompany }) {
                   <th className="text-left py-3 px-2">Unité</th>
                   <th className="text-center py-3 px-2">
                     <span className="flex items-center justify-center gap-1">
-                      <AlertTriangle size={12} className="text-amber-500" />
+                      <AlertTriangle size={12} style={{ color: 'var(--warning)' }} />
                       Warning
                     </span>
                   </th>
                   <th className="text-center py-3 px-2">
                     <span className="flex items-center justify-center gap-1">
-                      <AlertCircle size={12} className="text-red-500" />
+                      <AlertCircle size={12} style={{ color: 'var(--danger)' }} />
                       Critique
                     </span>
                   </th>
@@ -209,7 +207,7 @@ export default function ThresholdConfig({ selectedCompany }) {
                           type="number"
                           value={threshold.warning ?? ''}
                           onChange={e => handleChange(key, 'warning', e.target.value)}
-                          className="w-full text-center bg-amber-50 border border-amber-200 rounded-lg px-2 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                          className="w-full text-center rounded-lg px-2 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-zinc-200" style={{ background: 'rgba(255,149,0,0.08)', border: '1px solid rgba(255,149,0,0.2)' }}
                         />
                       </td>
                       <td className="py-3 px-2">
@@ -217,7 +215,7 @@ export default function ThresholdConfig({ selectedCompany }) {
                           type="number"
                           value={threshold.critical ?? ''}
                           onChange={e => handleChange(key, 'critical', e.target.value)}
-                          className="w-full text-center bg-red-50 border border-red-200 rounded-lg px-2 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-300"
+                          className="w-full text-center rounded-lg px-2 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-zinc-200" style={{ background: 'rgba(255,59,48,0.08)', border: '1px solid rgba(255,59,48,0.2)' }}
                         />
                       </td>
                     </tr>

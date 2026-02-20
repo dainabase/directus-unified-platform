@@ -137,13 +137,13 @@ const InvoiceGenerator = ({ quote, onClose }) => {
   ]
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <Receipt size={20} className="text-blue-600" />
+            <div className="p-2 bg-zinc-50 rounded-lg">
+              <Receipt size={20} style={{ color: 'var(--accent)' }} />
             </div>
             <h2 className="text-lg font-bold text-gray-900">Generer une facture</h2>
           </div>
@@ -179,7 +179,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
               {depositPercentage > 0 && (
                 <div>
                   <span className="text-gray-500">Acompte ({depositPercentage}%)</span>
-                  <p className="font-medium text-amber-600">{formatCHF(depositAmount)}</p>
+                  <p className="font-medium" style={{ color: 'var(--warning)' }}>{formatCHF(depositAmount)}</p>
                 </div>
               )}
             </div>
@@ -199,7 +199,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
                     ${type.disabled
                       ? 'opacity-40 cursor-not-allowed border-gray-100 bg-gray-50'
                       : selectedType === type.value
-                        ? 'border-blue-500 bg-blue-50/50 ring-1 ring-blue-500/20'
+                        ? 'border-zinc-400 bg-zinc-50/50 ring-1 ring-zinc-200'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     }
                   `}
@@ -211,7 +211,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
                     checked={selectedType === type.value}
                     onChange={() => setSelectedType(type.value)}
                     disabled={type.disabled}
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="w-4 h-4 text-zinc-800 border-gray-300 focus:ring-zinc-300"
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900">{type.label}</p>
@@ -240,7 +240,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
                   value={customAmount}
                   onChange={(e) => setCustomAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
                   autoFocus
                 />
               </div>
@@ -254,9 +254,9 @@ const InvoiceGenerator = ({ quote, onClose }) => {
           </div>
 
           {/* Amount summary */}
-          <div className="flex items-center justify-between py-3 px-4 bg-blue-50 rounded-xl">
-            <span className="text-sm font-medium text-blue-700">Montant de la facture</span>
-            <span className="text-lg font-bold text-blue-700">{formatCHF(selectedAmount)}</span>
+          <div className="flex items-center justify-between py-3 px-4 bg-zinc-50 rounded-xl">
+            <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>Montant de la facture</span>
+            <span className="text-lg font-bold" style={{ color: 'var(--accent)' }}>{formatCHF(selectedAmount)}</span>
           </div>
         </div>
 
@@ -272,7 +272,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
           <button
             onClick={handleGenerate}
             disabled={createInvoice.isPending || selectedAmount <= 0}
-            className="inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 transition-colors"
+            className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
           >
             {createInvoice.isPending ? (
               <Loader2 size={16} className="animate-spin" />

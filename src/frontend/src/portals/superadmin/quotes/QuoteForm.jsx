@@ -406,8 +406,8 @@ const QuoteForm = ({ quote, onClose }) => {
 
         {/* Lead prefill indicator */}
         {isStandalone && leadData && (
-          <div className="mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200">
-            <p className="text-sm text-blue-700">
+          <div className="mb-4 p-3 rounded-lg bg-zinc-50 border border-zinc-200">
+            <p className="text-sm text-gray-700">
               <span className="font-medium">Pr\u00e9-rempli depuis le lead :</span>{' '}
               {[leadData.first_name, leadData.last_name].filter(Boolean).join(' ')}
               {leadData.company_name && ` (${leadData.company_name})`}
@@ -419,9 +419,9 @@ const QuoteForm = ({ quote, onClose }) => {
           {/* Entreprise emettrice */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Entreprise \u00e9mettrice <span className="text-red-500">*</span>
+              Entreprise \u00e9mettrice <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
-            <select {...register('owner_company_id', { required: true })} className="glass-input w-full">
+            <select {...register('owner_company_id', { required: true })} className="ds-input w-full">
               {OWNER_COMPANIES.map(c => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -431,7 +431,7 @@ const QuoteForm = ({ quote, onClose }) => {
           {/* Type de projet */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Type de projet</label>
-            <select {...register('project_type')} className="glass-input w-full">
+            <select {...register('project_type')} className="ds-input w-full">
               {PROJECT_TYPES.map(t => (
                 <option key={t.value} value={t.value}>{t.label}</option>
               ))}
@@ -447,7 +447,7 @@ const QuoteForm = ({ quote, onClose }) => {
               onChange={(e) => { setContactSearch(e.target.value); setShowContactDropdown(true) }}
               onFocus={() => setShowContactDropdown(true)}
               placeholder="Rechercher un contact..."
-              className="glass-input w-full"
+              className="ds-input w-full"
             />
             {showContactDropdown && contactResults && contactResults.length > 0 && (
               <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg max-h-40 overflow-y-auto">
@@ -479,7 +479,7 @@ const QuoteForm = ({ quote, onClose }) => {
               onChange={(e) => { setCompanySearch(e.target.value); setShowCompanyDropdown(true) }}
               onFocus={() => setShowCompanyDropdown(true)}
               placeholder="Rechercher une entreprise..."
-              className="glass-input w-full"
+              className="ds-input w-full"
             />
             {showCompanyDropdown && companyResults && companyResults.length > 0 && (
               <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg max-h-40 overflow-y-auto">
@@ -507,7 +507,7 @@ const QuoteForm = ({ quote, onClose }) => {
             <textarea
               {...register('description')}
               rows={2}
-              className="glass-input w-full resize-none"
+              className="ds-input w-full resize-none"
               placeholder="Description du devis..."
             />
           </div>
@@ -515,7 +515,7 @@ const QuoteForm = ({ quote, onClose }) => {
           {/* Validite */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Valide jusqu'au</label>
-            <input type="date" {...register('valid_until')} className="glass-input w-full" />
+            <input type="date" {...register('valid_until')} className="ds-input w-full" />
           </div>
         </div>
       </div>
@@ -529,7 +529,7 @@ const QuoteForm = ({ quote, onClose }) => {
           <button
             type="button"
             onClick={() => append({ description: '', quantity: 1, unit_price: 0 })}
-            className="flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-600 hover:bg-blue-100"
+            className="flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium bg-zinc-50 hover:bg-zinc-100" style={{ color: 'var(--accent)' }}
           >
             <Plus size={14} /> Ajouter une ligne
           </button>
@@ -555,7 +555,7 @@ const QuoteForm = ({ quote, onClose }) => {
                 <div className="col-span-5">
                   <input
                     {...register(`items.${index}.description`)}
-                    className="glass-input w-full text-sm"
+                    className="ds-input w-full text-sm"
                     placeholder="Description"
                   />
                 </div>
@@ -565,7 +565,7 @@ const QuoteForm = ({ quote, onClose }) => {
                     min="0"
                     step="0.5"
                     {...register(`items.${index}.quantity`)}
-                    className="glass-input w-full text-sm text-right"
+                    className="ds-input w-full text-sm text-right"
                   />
                 </div>
                 <div className="col-span-2">
@@ -574,7 +574,7 @@ const QuoteForm = ({ quote, onClose }) => {
                     min="0"
                     step="0.01"
                     {...register(`items.${index}.unit_price`)}
-                    className="glass-input w-full text-sm text-right"
+                    className="ds-input w-full text-sm text-right"
                   />
                 </div>
                 <div className="col-span-2 text-right text-sm font-medium text-gray-700 pr-1">
@@ -585,7 +585,7 @@ const QuoteForm = ({ quote, onClose }) => {
                     <button
                       type="button"
                       onClick={() => remove(index)}
-                      className="p-1 rounded hover:bg-red-50 text-gray-400 hover:text-red-500"
+                      className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -609,7 +609,7 @@ const QuoteForm = ({ quote, onClose }) => {
                 type="number"
                 step="0.1"
                 {...register('tax_rate')}
-                className="glass-input w-16 text-xs text-center py-1"
+                className="ds-input w-16 text-xs text-center py-1"
               />
               <span className="text-xs text-gray-400">%</span>
             </div>
@@ -617,7 +617,7 @@ const QuoteForm = ({ quote, onClose }) => {
           </div>
           <div className="flex justify-between text-base font-semibold border-t border-gray-200 pt-2">
             <span>Total TTC</span>
-            <span className="text-blue-700">{formatCHF(totals.total)}</span>
+            <span style={{ color: 'var(--accent)' }}>{formatCHF(totals.total)}</span>
           </div>
         </div>
       </div>
@@ -635,7 +635,7 @@ const QuoteForm = ({ quote, onClose }) => {
               min="0"
               max="100"
               {...register('deposit_percentage')}
-              className="glass-input w-full"
+              className="ds-input w-full"
             />
             <p className="text-xs text-gray-500 mt-1">
               Acompte : {formatCHF(totals.depositAmount)}
@@ -646,7 +646,7 @@ const QuoteForm = ({ quote, onClose }) => {
             <textarea
               {...register('notes')}
               rows={2}
-              className="glass-input w-full resize-none"
+              className="ds-input w-full resize-none"
               placeholder="Conditions suppl\u00e9mentaires..."
             />
           </div>
@@ -683,7 +683,7 @@ const QuoteForm = ({ quote, onClose }) => {
           type="button"
           disabled={saveMutation.isPending}
           onClick={handleSubmit((data) => onSubmit(data, 'sent'))}
-          className="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+          className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
         >
           {saveMutation.isPending ? (
             <Loader2 size={16} className="animate-spin" />
@@ -740,7 +740,7 @@ const QuoteForm = ({ quote, onClose }) => {
   // MODAL MODE — original behavior with overlay backdrop
   // ──────────────────────────────────────────────────────────────────────────
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10">

@@ -131,7 +131,7 @@ const TicketsToInvoiceModule = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
       </div>
     )
   }
@@ -141,7 +141,7 @@ const TicketsToInvoiceModule = () => {
       {/* Header */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <Receipt size={20} className="text-emerald-500" />
+          <Receipt size={20} style={{ color: 'var(--accent)' }} />
           Facturation hors contrat
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
@@ -150,7 +150,7 @@ const TicketsToInvoiceModule = () => {
       </div>
 
       {tickets.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Headphones className="w-12 h-12 text-gray-200 mx-auto mb-3" />
           <p className="text-sm text-gray-500">Aucun ticket a facturer</p>
           <p className="text-xs text-gray-400 mt-1">Les tickets resolus non factures apparaitront ici</p>
@@ -158,13 +158,13 @@ const TicketsToInvoiceModule = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Tickets table — 2 cols */}
-          <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+          <div className="lg:col-span-2 ds-card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
                     <th className="px-4 py-3 w-10">
-                      <button onClick={toggleSelectAll} className="text-gray-400 hover:text-blue-600">
+                      <button onClick={toggleSelectAll} className="text-gray-400 hover:text-zinc-900">
                         {selected.size === tickets.length && tickets.length > 0 ? <CheckSquare size={16} /> : <Square size={16} />}
                       </button>
                     </th>
@@ -176,10 +176,10 @@ const TicketsToInvoiceModule = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {tickets.map(t => (
-                    <tr key={t.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(t.id) ? 'bg-blue-50/30' : ''}`}>
+                    <tr key={t.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(t.id) ? 'bg-zinc-50/50' : ''}`}>
                       <td className="px-4 py-3">
-                        <button onClick={() => toggleSelect(t.id)} className="text-gray-400 hover:text-blue-600">
-                          {selected.has(t.id) ? <CheckSquare size={16} className="text-blue-600" /> : <Square size={16} />}
+                        <button onClick={() => toggleSelect(t.id)} className="text-gray-400 hover:text-zinc-900">
+                          {selected.has(t.id) ? <CheckSquare size={16} style={{ color: 'var(--accent)' }} /> : <Square size={16} />}
                         </button>
                       </td>
                       <td className="px-4 py-3">
@@ -204,9 +204,9 @@ const TicketsToInvoiceModule = () => {
 
           {/* Billing panel — 1 col */}
           <div className="space-y-4">
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5 space-y-4">
+            <div className="ds-card p-5 space-y-4">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <FileText size={16} className="text-emerald-500" />
+                <FileText size={16} style={{ color: 'var(--accent)' }} />
                 Facturation
               </h3>
 
@@ -280,7 +280,7 @@ const TicketsToInvoiceModule = () => {
                 </div>
                 <div className="border-t border-gray-100 pt-2 flex justify-between">
                   <span className="text-gray-700 font-medium">Total TTC</span>
-                  <span className="font-bold text-lg text-emerald-600">{formatCHF(ttc)}</span>
+                  <span className="font-bold text-lg text-gray-900">{formatCHF(ttc)}</span>
                 </div>
               </div>
 
@@ -292,7 +292,7 @@ const TicketsToInvoiceModule = () => {
                     type="text"
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500"
                     placeholder="Nom du client"
                   />
                 </div>
@@ -302,7 +302,7 @@ const TicketsToInvoiceModule = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500"
                     placeholder="Intervention support..."
                   />
                 </div>
@@ -311,7 +311,7 @@ const TicketsToInvoiceModule = () => {
               <button
                 onClick={() => generateMutation.mutate()}
                 disabled={selected.size === 0 || !clientName.trim() || computedAmount <= 0 || generateMutation.isPending}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors"
+                className="ds-btn ds-btn-primary w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors"
               >
                 {generateMutation.isPending ? (
                   <Loader2 size={16} className="animate-spin" />

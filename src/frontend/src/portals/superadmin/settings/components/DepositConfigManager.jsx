@@ -60,7 +60,7 @@ const EditRow = ({ config, onSave, onCancel }) => {
   const update = (field, value) => setForm(prev => ({ ...prev, [field]: value }))
 
   return (
-    <tr className="bg-blue-50/50">
+    <tr className="bg-zinc-50/50">
       <td className="px-4 py-2">
         <select
           value={form.owner_company}
@@ -130,7 +130,7 @@ const EditRow = ({ config, onSave, onCancel }) => {
           type="checkbox"
           checked={form.is_active}
           onChange={(e) => update('is_active', e.target.checked)}
-          className="rounded border-gray-300 text-blue-600"
+          className="rounded border-gray-300 text-zinc-900"
         />
       </td>
       <td className="px-4 py-2">
@@ -207,8 +207,8 @@ const DepositConfigManager = ({ selectedCompany }) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <CreditCard className="w-5 h-5 text-blue-600" />
+          <div className="p-2 bg-zinc-50 rounded-lg">
+            <CreditCard className="w-5 h-5 text-zinc-900" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">Configuration des acomptes</h3>
@@ -218,18 +218,18 @@ const DepositConfigManager = ({ selectedCompany }) => {
         <button
           onClick={() => setIsCreating(true)}
           disabled={isCreating}
-          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white ds-btn-primary bg-[var(--accent)] hover:opacity-90 rounded-lg disabled:opacity-50"
         >
           <Plus size={14} /> Ajouter
         </button>
       </div>
 
       {/* Info banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 flex items-start gap-3">
-        <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-        <div className="text-sm text-blue-800">
+      <div className="bg-zinc-50 border border-blue-200 rounded-lg px-4 py-3 flex items-start gap-3">
+        <AlertCircle className="w-5 h-5 text-zinc-500 flex-shrink-0 mt-0.5" />
+        <div className="text-sm text-zinc-800">
           <p className="font-medium">Comment fonctionne la configuration des acomptes</p>
-          <p className="mt-1 text-blue-600">
+          <p className="mt-1 text-zinc-900">
             Lorsqu'un devis est cree, le systeme cherche une configuration active correspondant a
             l'entreprise et au type de projet. Si aucune n'est trouvee, l'acompte par defaut de 30% est applique.
             Les montants min/max permettent de plafonner l'acompte.
@@ -238,10 +238,10 @@ const DepositConfigManager = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+            <Loader2 className="w-6 h-6 text-zinc-500 animate-spin" />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -291,7 +291,7 @@ const DepositConfigManager = ({ selectedCompany }) => {
                         </td>
                         <td className="px-4 py-3 text-gray-600">{typeLabel(cfg.project_type)}</td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-zinc-50 text-zinc-700 rounded-full text-xs font-bold">
                             {cfg.deposit_percentage}%
                           </span>
                         </td>
@@ -304,7 +304,7 @@ const DepositConfigManager = ({ selectedCompany }) => {
                         <td className="px-4 py-3 text-gray-500 text-xs">{cfg.description || '—'}</td>
                         <td className="px-4 py-3 text-center">
                           {cfg.is_active !== false ? (
-                            <CheckCircle2 size={16} className="text-emerald-500 inline" />
+                            <CheckCircle2 size={16} className="inline" style={{ color: "var(--success)" }} />
                           ) : (
                             <X size={16} className="text-gray-300 inline" />
                           )}
@@ -313,7 +313,7 @@ const DepositConfigManager = ({ selectedCompany }) => {
                           <div className="flex items-center justify-center gap-1">
                             <button
                               onClick={() => setEditId(cfg.id)}
-                              className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
+                              className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-zinc-900"
                               title="Modifier"
                             >
                               <Edit3 size={14} />

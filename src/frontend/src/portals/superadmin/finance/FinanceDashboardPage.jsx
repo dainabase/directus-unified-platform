@@ -233,8 +233,8 @@ function KPICard({ label, value, trend, icon: Icon, iconColor }) {
           <span
             className={`inline-flex items-center gap-0.5 text-xs font-semibold px-2 py-0.5 rounded-full ${
               isPositive
-                ? 'bg-green-50 text-green-700'
-                : 'bg-red-50 text-red-700'
+                ? 'ds-badge ds-badge-success'
+                : 'ds-badge ds-badge-danger'
             }`}
           >
             <TrendIcon size={12} />
@@ -254,18 +254,18 @@ function KPICard({ label, value, trend, icon: Icon, iconColor }) {
 
 function AlertItem({ severity, message, detail }) {
   const config = {
-    red: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-800', icon: Ban, iconColor: 'text-red-500' },
-    amber: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-800', icon: AlertTriangle, iconColor: 'text-amber-500' },
-    blue: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-800', icon: AlertCircle, iconColor: 'text-blue-500' }
+    red: { bgStyle: { background: 'var(--danger-light)', borderColor: 'var(--danger)' }, textStyle: { color: 'var(--text-primary)' }, icon: Ban, iconStyle: { color: 'var(--danger)' } },
+    amber: { bgStyle: { background: 'var(--warning-light)', borderColor: 'var(--warning)' }, textStyle: { color: 'var(--text-primary)' }, icon: AlertTriangle, iconStyle: { color: 'var(--warning)' } },
+    blue: { bgStyle: { background: 'var(--accent-light)', borderColor: 'var(--accent)' }, textStyle: { color: 'var(--text-primary)' }, icon: AlertCircle, iconStyle: { color: 'var(--accent)' } }
   }
   const s = config[severity] || config.blue
   const IconComp = s.icon
 
   return (
-    <div className={`flex items-start gap-3 px-4 py-3 rounded-lg border ${s.bg} ${s.border}`}>
-      <IconComp size={16} className={`mt-0.5 flex-shrink-0 ${s.iconColor}`} />
+    <div className="flex items-start gap-3 px-4 py-3 rounded-lg border" style={s.bgStyle}>
+      <IconComp size={16} className="mt-0.5 flex-shrink-0" style={s.iconStyle} />
       <div className="min-w-0 flex-1">
-        <p className={`text-sm font-medium ${s.text}`}>{message}</p>
+        <p className="text-sm font-medium" style={s.textStyle}>{message}</p>
         {detail && <p className="text-xs text-gray-500 mt-0.5">{detail}</p>}
       </div>
     </div>
@@ -887,16 +887,14 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
                         <td className="px-5 py-3 font-medium text-gray-900 truncate max-w-[200px]">
                           {tx.description || 'Transaction'}
                         </td>
-                        <td className={`px-5 py-3 text-right whitespace-nowrap font-semibold ${
-                          isCredit ? 'text-green-600' : 'text-red-600'
-                        }`}>
+                        <td className="px-5 py-3 text-right whitespace-nowrap font-semibold" style={{ color: isCredit ? 'var(--success)' : 'var(--danger)' }}>
                           {isCredit ? '+' : '-'}{formatCHF(Math.abs(amount))}
                         </td>
                         <td className="px-5 py-3 text-center whitespace-nowrap">
-                          <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
+                          <span className={`inline-flex items-center gap-1 ${
                             isCredit
-                              ? 'bg-green-50 text-green-700'
-                              : 'bg-red-50 text-red-700'
+                              ? 'ds-badge ds-badge-success'
+                              : 'ds-badge ds-badge-danger'
                           }`}>
                             {isCredit
                               ? <ArrowDownRight size={12} />
@@ -952,12 +950,12 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
                         {formatCHF(parseFloat(inv.total_ttc || 0))}
                       </td>
                       <td className="px-5 py-3 text-right whitespace-nowrap">
-                        <span className={`inline-flex items-center text-xs font-medium px-2 py-1 rounded-full ${
+                        <span className={`inline-flex items-center ${
                           inv.daysOverdue > 30
-                            ? 'bg-red-100 text-red-700'
+                            ? 'ds-badge ds-badge-danger'
                             : inv.daysOverdue > 14
-                              ? 'bg-orange-100 text-orange-700'
-                              : 'bg-amber-100 text-amber-700'
+                              ? 'ds-badge ds-badge-warning'
+                              : 'ds-badge ds-badge-warning'
                         }`}>
                           {inv.daysOverdue}j
                         </span>

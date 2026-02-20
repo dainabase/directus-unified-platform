@@ -386,25 +386,25 @@ const CustomerSuccess = ({ selectedCompany }) => {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="glass-card p-6">
-          <div className="h-12 glass-skeleton rounded-lg" />
+        <div className="ds-card p-6">
+          <div className="h-12 ds-skeleton rounded-lg" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="glass-card p-6">
-              <div className="h-20 glass-skeleton rounded-lg" />
+            <div key={i} className="ds-card p-6">
+              <div className="h-20 ds-skeleton rounded-lg" />
             </div>
           ))}
         </div>
         <div className="grid grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="glass-card p-6">
-              <div className="h-48 glass-skeleton rounded-lg" />
+            <div key={i} className="ds-card p-6">
+              <div className="h-48 ds-skeleton rounded-lg" />
             </div>
           ))}
         </div>
-        <div className="glass-card p-6">
-          <div className="h-64 glass-skeleton rounded-lg" />
+        <div className="ds-card p-6">
+          <div className="h-64 ds-skeleton rounded-lg" />
         </div>
       </div>
     );
@@ -413,7 +413,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
   // ── Error state ──
   if (hasError) {
     return (
-      <div className="glass-card p-8 text-center">
+      <div className="ds-card p-8 text-center">
         <AlertTriangle size={48} className="mx-auto mb-4 text-red-400" />
         <h3 className="text-lg font-semibold text-gray-700 mb-2">Erreur de chargement</h3>
         <p className="text-sm text-gray-500 mb-4">
@@ -421,7 +421,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
         </p>
         <button
           onClick={handleRefresh}
-          className="glass-button bg-blue-600 text-white hover:bg-blue-700"
+          className="ds-btn ds-btn-primary" style={{ background: 'var(--accent)' }}
         >
           <RefreshCw size={16} className="mr-1 inline" />
           Reessayer
@@ -442,11 +442,11 @@ const CustomerSuccess = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500 mt-1">Satisfaction et retention clients</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={handleRefresh} className="glass-button text-gray-600">
+          <button onClick={handleRefresh} className="ds-btn ds-btn-secondary text-gray-600">
             <RefreshCw size={16} className="mr-1 inline" />
             Actualiser
           </button>
-          <button className="glass-button bg-blue-600 text-white hover:bg-blue-700">
+          <button className="ds-btn ds-btn-primary" style={{ background: 'var(--accent)' }}>
             <Calendar size={16} className="mr-1 inline" />
             Planifier review
           </button>
@@ -455,7 +455,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Heart size={18} className="text-green-600" />
             <span className="text-sm text-gray-500">Health Score moyen</span>
@@ -468,16 +468,16 @@ const CustomerSuccess = ({ selectedCompany }) => {
           </p>
         </div>
 
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={18} className="text-blue-600" />
+            <TrendingUp size={18} style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">MRR total</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(stats.totalMrr)}</p>
           <p className="text-xs text-gray-400 mt-1">Abonnements actifs</p>
         </div>
 
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={18} className="text-red-500" />
             <span className="text-sm text-gray-500">Clients a risque</span>
@@ -488,9 +488,9 @@ const CustomerSuccess = ({ selectedCompany }) => {
           </p>
         </div>
 
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={18} className="text-indigo-500" />
+            <Calendar size={18} style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Renouvellements</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.upcomingRenewals}</p>
@@ -501,7 +501,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Health Trend */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Health Score (6 mois)</h3>
           {healthTrend.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
@@ -534,7 +534,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
         </div>
 
         {/* Status Distribution */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Distribution sante</h3>
           {statusDistribution.length > 0 ? (
             <>
@@ -585,7 +585,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
         </div>
 
         {/* Retention */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Retention (6 mois)</h3>
           {retentionData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
@@ -618,7 +618,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
         <div className="flex gap-2 items-center">
           <Filter size={16} className="text-gray-400" />
           <select
-            className="glass-button text-sm"
+            className="ds-btn ds-btn-secondary text-sm"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
@@ -634,7 +634,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
       </div>
 
       {/* Customers Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -652,7 +652,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
               {filteredCustomers.map((customer) => (
                 <tr
                   key={customer.id}
-                  className="border-b border-gray-100 hover:bg-blue-50/30 transition-colors"
+                  className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
                 >
                   <td className="px-4 py-3">
                     <div className="font-medium text-gray-900">{customer.name}</div>
@@ -699,14 +699,14 @@ const CustomerSuccess = ({ selectedCompany }) => {
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
                       <button
-                        className="p-1.5 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
                         title="Appeler"
                         onClick={() => toast.success(`Appel vers ${customer.name}`)}
                       >
                         <Phone size={14} />
                       </button>
                       <button
-                        className="p-1.5 rounded-lg hover:bg-blue-100 text-gray-500 hover:text-blue-600 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
                         title="Email"
                         onClick={() => toast.success(`Email a ${customer.name}`)}
                       >
@@ -750,7 +750,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
           onClick={() => setShowActionModal(false)}
         >
           <div
-            className="glass-card p-6 w-full max-w-md mx-4"
+            className="ds-card p-6 w-full max-w-md mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -793,35 +793,35 @@ const CustomerSuccess = ({ selectedCompany }) => {
 
             <div className="flex flex-col gap-2">
               <button
-                className="glass-button text-left text-sm text-gray-700 hover:text-blue-600 flex items-center gap-2"
+                className="ds-btn ds-btn-secondary text-left text-sm text-gray-700 hover:text-gray-900 flex items-center gap-2"
                 onClick={() => handleAction('Planifier call de suivi', selectedCustomer)}
               >
                 <Phone size={16} />
                 Planifier call de suivi
               </button>
               <button
-                className="glass-button text-left text-sm text-gray-700 hover:text-blue-600 flex items-center gap-2"
+                className="ds-btn ds-btn-secondary text-left text-sm text-gray-700 hover:text-gray-900 flex items-center gap-2"
                 onClick={() => handleAction('Envoyer enquete satisfaction', selectedCustomer)}
               >
                 <Mail size={16} />
                 Envoyer enquete satisfaction
               </button>
               <button
-                className="glass-button text-left text-sm text-green-700 hover:text-green-800 flex items-center gap-2"
+                className="ds-btn ds-btn-secondary text-left text-sm text-green-700 hover:text-green-800 flex items-center gap-2"
                 onClick={() => handleAction('Proposer upsell', selectedCustomer)}
               >
                 <TrendingUp size={16} />
                 Proposer upsell
               </button>
               <button
-                className="glass-button text-left text-sm text-yellow-700 hover:text-yellow-800 flex items-center gap-2"
+                className="ds-btn ds-btn-secondary text-left text-sm text-yellow-700 hover:text-yellow-800 flex items-center gap-2"
                 onClick={() => handleAction('Creer plan de retention', selectedCustomer)}
               >
                 <AlertTriangle size={16} />
                 Creer plan de retention
               </button>
               <button
-                className="glass-button text-left text-sm text-indigo-700 hover:text-indigo-800 flex items-center gap-2"
+                className="ds-btn ds-btn-secondary text-left text-sm text-zinc-700 hover:text-zinc-800 flex items-center gap-2"
                 onClick={() => handleAction('Planifier review trimestrielle', selectedCustomer)}
               >
                 <Calendar size={16} />
@@ -831,7 +831,7 @@ const CustomerSuccess = ({ selectedCompany }) => {
 
             <div className="mt-4 text-right">
               <button
-                className="glass-button text-gray-600 text-sm"
+                className="ds-btn ds-btn-secondary text-gray-600 text-sm"
                 onClick={() => setShowActionModal(false)}
               >
                 Fermer

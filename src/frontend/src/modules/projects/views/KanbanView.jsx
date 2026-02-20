@@ -7,7 +7,7 @@ import {
   AlertCircle,
   Plus
 } from 'lucide-react'
-import { GlassCard, Badge, Button } from '../../../components/ui'
+import { Card, Badge, Button } from '../../../components/ui'
 
 const KanbanView = ({ projects }) => {
   const [draggingProject, setDraggingProject] = useState(null)
@@ -52,13 +52,13 @@ const KanbanView = ({ projects }) => {
     })
   }
 
-  const getPriorityColor = (priority) => {
+  const getPriorityStyle = (priority) => {
     switch (priority) {
-      case 'critical': return 'text-red-600 bg-red-50'
-      case 'high': return 'text-orange-600 bg-orange-50'
-      case 'medium': return 'text-blue-600 bg-blue-50'
-      case 'low': return 'text-gray-600 bg-gray-50'
-      default: return 'text-gray-600 bg-gray-50'
+      case 'critical': return { color: 'var(--danger)', background: 'var(--danger-light)' }
+      case 'high': return { color: 'var(--warning)', background: 'var(--warning-light)' }
+      case 'medium': return { color: 'var(--accent)', background: 'var(--accent-light)' }
+      case 'low': return { color: '#6E6E73', background: 'rgba(0,0,0,0.04)' }
+      default: return { color: '#6E6E73', background: 'rgba(0,0,0,0.04)' }
     }
   }
 
@@ -93,7 +93,7 @@ const KanbanView = ({ projects }) => {
               const progress = project.completion_percentage || 0
 
               return (
-                <GlassCard
+                <Card
                   key={project.id}
                   className="cursor-move p-4"
                   draggable
@@ -111,10 +111,10 @@ const KanbanView = ({ projects }) => {
 
                   {/* Priority Badge */}
                   <div className="mb-3">
-                    <span className={`
-                      inline-flex items-center px-2 py-1 rounded-md text-xs font-medium
-                      ${getPriorityColor(project.priority)}
-                    `}>
+                    <span
+                      className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                      style={getPriorityStyle(project.priority)}
+                    >
                       {project.priority}
                     </span>
                   </div>
@@ -126,14 +126,15 @@ const KanbanView = ({ projects }) => {
                       <span className="font-medium">{progress}%</span>
                     </div>
                     <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full transition-all duration-300 ${
-                          column.color === 'blue' ? 'bg-blue-600' :
-                          column.color === 'green' ? 'bg-green-600' :
-                          column.color === 'yellow' ? 'bg-yellow-600' :
-                          'bg-gray-600'
-                        }`}
-                        style={{ width: `${progress}%` }}
+                      <div
+                        className="h-full transition-all duration-300"
+                        style={{
+                          width: `${progress}%`,
+                          background: column.color === 'blue' ? 'var(--accent)' :
+                            column.color === 'green' ? 'var(--success)' :
+                            column.color === 'yellow' ? 'var(--warning)' :
+                            '#6E6E73'
+                        }}
                       />
                     </div>
                   </div>
@@ -145,7 +146,7 @@ const KanbanView = ({ projects }) => {
                         <Calendar size={14} />
                         <span>Échéance</span>
                       </div>
-                      <span className={`font-medium ${isOverdue ? 'text-red-600' : 'text-gray-900'}`}>
+                      <span className="font-medium" style={isOverdue ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
                         {formatDate(project.end_date)}
                       </span>
                     </div>
@@ -178,13 +179,13 @@ const KanbanView = ({ projects }) => {
                   {/* Warning */}
                   {isOverdue && (
                     <div className="mt-3 pt-3 border-t border-gray-200">
-                      <div className="flex items-center gap-1 text-xs text-red-600">
+                      <div className="flex items-center gap-1 text-xs" style={{color:'var(--danger)'}}>
                         <AlertCircle size={12} />
                         <span>En retard</span>
                       </div>
                     </div>
                   )}
-                </GlassCard>
+                </Card>
               )
             })}
 

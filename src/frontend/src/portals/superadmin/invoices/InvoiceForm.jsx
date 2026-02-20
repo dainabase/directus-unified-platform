@@ -97,14 +97,14 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* General info */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-4">Informations generales</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">N° facture *</label>
               <input
                 {...register('invoice_number', { required: true })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
                 placeholder="FAC-2026-001"
               />
             </div>
@@ -112,7 +112,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <label className="block text-xs font-medium text-gray-700 mb-1">Entreprise *</label>
               <select
                 {...register('owner_company', { required: true })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               >
                 <option value="">Selectionner...</option>
                 {COMPANIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
@@ -122,7 +122,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <label className="block text-xs font-medium text-gray-700 mb-1">Nom client *</label>
               <input
                 {...register('client_name', { required: true })}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               />
             </div>
             <div>
@@ -130,7 +130,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <input
                 {...register('client_email')}
                 type="email"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               />
             </div>
             <div>
@@ -138,7 +138,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <input
                 {...register('date_issued')}
                 type="date"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               />
             </div>
             <div>
@@ -146,7 +146,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <input
                 {...register('due_date')}
                 type="date"
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               />
             </div>
           </div>
@@ -155,19 +155,19 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
             <textarea
               {...register('client_address')}
               rows={2}
-              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none"
+              className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none resize-none"
             />
           </div>
         </div>
 
         {/* Line items */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900">Lignes de facture</h3>
             <button
               type="button"
               onClick={() => append({ description: '', quantity: 1, unit_price: 0 })}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium bg-zinc-50 rounded-lg hover:bg-zinc-100" style={{ color: 'var(--accent)' }}
             >
               <Plus size={14} /> Ajouter ligne
             </button>
@@ -180,7 +180,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                   <input
                     {...register(`items.${idx}.description`, { required: true })}
                     placeholder="Description"
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
                   />
                 </div>
                 <div className="w-20">
@@ -190,7 +190,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                     step="0.01"
                     min="0"
                     placeholder="Qte"
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-right"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none text-right"
                   />
                 </div>
                 <div className="w-32">
@@ -200,7 +200,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                     step="0.01"
                     min="0"
                     placeholder="Prix unit."
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-right"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none text-right"
                   />
                 </div>
                 <div className="w-28 text-right py-2 text-sm font-medium text-gray-700">
@@ -209,7 +209,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                 <button
                   type="button"
                   onClick={() => fields.length > 1 && remove(idx)}
-                  className="p-2 text-gray-400 hover:text-red-500 disabled:opacity-30"
+                  className="p-2 text-gray-400 hover:text-gray-600 disabled:opacity-30"
                   disabled={fields.length <= 1}
                 >
                   <Trash2 size={14} />
@@ -241,7 +241,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                 </div>
                 <div className="flex justify-between text-base font-bold border-t border-gray-200 pt-2">
                   <span>Total TTC</span>
-                  <span className="text-blue-600">{formatCHF(totals.total_ttc)}</span>
+                  <span style={{ color: 'var(--accent)' }}>{formatCHF(totals.total_ttc)}</span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-gray-500 flex items-center gap-2">
@@ -256,7 +256,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                     />
                     %
                   </span>
-                  <span className="font-medium text-amber-600">{formatCHF(totals.deposit_amount)}</span>
+                  <span className="font-medium" style={{ color: 'var(--warning)' }}>{formatCHF(totals.deposit_amount)}</span>
                 </div>
               </div>
             </div>
@@ -264,14 +264,14 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
         </div>
 
         {/* Notes & conditions */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <h3 className="font-semibold text-gray-900 mb-4">Conditions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Conditions de paiement</label>
               <input
                 {...register('payment_terms')}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
               />
             </div>
             <div>
@@ -279,7 +279,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
               <textarea
                 {...register('notes')}
                 rows={2}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none resize-none"
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none resize-none"
               />
             </div>
           </div>
@@ -297,7 +297,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
           <button
             type="submit"
             disabled={saveMutation.isPending}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg disabled:opacity-50 transition-colors"
+            className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
           >
             {saveMutation.isPending ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
             {isEdit ? 'Enregistrer' : 'Creer la facture'}

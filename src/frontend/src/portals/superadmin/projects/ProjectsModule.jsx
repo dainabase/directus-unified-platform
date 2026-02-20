@@ -21,12 +21,12 @@ import {
 } from '../../../services/api/projects'
 
 const STATUS_CONFIG = {
-  active: { label: 'Actif', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle2 },
+  active: { label: 'Actif', color: 'bg-green-50 text-green-700', icon: CheckCircle2 },
   on_hold: { label: 'En pause', color: 'bg-amber-100 text-amber-700', icon: PauseCircle },
-  completed: { label: 'Termine', color: 'bg-blue-100 text-blue-700', icon: CheckCircle2 },
+  completed: { label: 'Termine', color: 'bg-zinc-100 text-zinc-700', icon: CheckCircle2 },
   cancelled: { label: 'Annule', color: 'bg-red-100 text-red-700', icon: XCircle },
   planning: { label: 'Planification', color: 'bg-gray-100 text-gray-600', icon: Clock },
-  in_progress: { label: 'En cours', color: 'bg-indigo-100 text-indigo-700', icon: BarChart3 }
+  in_progress: { label: 'En cours', color: 'bg-zinc-200 text-zinc-700', icon: BarChart3 }
 }
 
 const StatusBadge = ({ status }) => {
@@ -122,7 +122,7 @@ const ProjectForm = ({ project, onSave, onCancel }) => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">Annuler</button>
-            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
               <Save size={14} /> Sauvegarder
             </button>
           </div>
@@ -160,7 +160,7 @@ const ProjectDetail = ({ project, onBack, onEdit }) => {
       </div>
 
       {/* Header */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-6">
+      <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm p-6">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900">{project.name}</h2>
@@ -196,7 +196,7 @@ const ProjectDetail = ({ project, onBack, onEdit }) => {
             <p className="text-xs text-gray-500">Avancement</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                <div className="h-full bg-blue-600 rounded-full" style={{ width: `${progress}%` }} />
+                <div className="h-full rounded-full" style={{ background: "var(--accent)", width: `${progress}%` }} />
               </div>
               <span className="text-sm font-bold text-gray-900">{progress}%</span>
             </div>
@@ -205,7 +205,7 @@ const ProjectDetail = ({ project, onBack, onEdit }) => {
       </div>
 
       {/* Deliverables */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+      <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm">
         <div className="p-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Livrables ({totalDel})</h3>
         </div>
@@ -235,7 +235,7 @@ const ProjectDetail = ({ project, onBack, onEdit }) => {
 
       {/* Signatures */}
       {signatures.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm">
+        <div className="bg-white rounded-xl border border-gray-200/50 shadow-sm">
           <div className="p-4 border-b border-gray-100">
             <h3 className="font-semibold text-gray-900">Signatures</h3>
           </div>
@@ -269,14 +269,14 @@ const KanbanView = ({ projects, onView }) => {
         const items = projects.filter(p => p.status === col.id)
         return (
           <div key={col.id} className="space-y-2">
-            <div className={`border-t-2 ${col.color} bg-white/70 backdrop-blur-sm rounded-t-lg px-3 py-2`}>
+            <div className={`border-t-2 ${col.color} bg-white rounded-t-lg px-3 py-2`}>
               <span className="text-sm font-medium text-gray-700">{col.label}</span>
               <span className="ml-2 text-xs text-gray-400">{items.length}</span>
             </div>
             <div className="space-y-2 min-h-[200px]">
               {items.map(p => (
                 <div key={p.id} onClick={() => onView(p)}
-                  className="bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 p-3 cursor-pointer hover:shadow-md transition-shadow">
+                  className="bg-white rounded-lg border border-gray-200/50 p-3 cursor-pointer hover:shadow-md transition-shadow">
                   <p className="text-sm font-medium text-gray-900 mb-1">{p.name}</p>
                   {p.owner_company && (
                     <span className="text-xs text-gray-500">{companyLabel(p.owner_company)}</span>
@@ -389,7 +389,7 @@ const ProjectsModuleNew = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500 mt-0.5">Gestion des projets multi-entreprises</p>
         </div>
         <button onClick={() => { setEditProject(null); setView('form') }}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
           <Plus size={16} /> Nouveau projet
         </button>
       </div>
@@ -398,11 +398,11 @@ const ProjectsModuleNew = ({ selectedCompany }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total projets', value: stats.total, icon: FolderKanban, color: 'text-gray-900' },
-          { label: 'Actifs', value: stats.active, icon: CheckCircle2, color: 'text-emerald-600' },
-          { label: 'Budget total', value: formatCHF(stats.budget), icon: DollarSign, color: 'text-blue-600' },
-          { label: 'Budget moyen', value: formatCHF(stats.avgBudget), icon: BarChart3, color: 'text-indigo-600' }
+          { label: 'Actifs', value: stats.active, icon: CheckCircle2, color: 'text-zinc-900' },
+          { label: 'Budget total', value: formatCHF(stats.budget), icon: DollarSign, color: 'text-zinc-900' },
+          { label: 'Budget moyen', value: formatCHF(stats.avgBudget), icon: BarChart3, color: 'text-zinc-900' }
         ].map((kpi, i) => (
-          <div key={i} className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+          <div key={i} className="ds-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <kpi.icon size={14} className="text-gray-400" />
               <span className="text-xs text-gray-500">{kpi.label}</span>
@@ -430,7 +430,7 @@ const ProjectsModuleNew = ({ selectedCompany }) => {
             { id: 'kanban', icon: BarChart3, label: 'Kanban' }
           ].map(v => (
             <button key={v.id} onClick={() => setView(v.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm ${view === v.id ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm ${view === v.id ? 'bg-white text-zinc-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
               <v.icon size={14} /> {v.label}
             </button>
           ))}
@@ -440,12 +440,12 @@ const ProjectsModuleNew = ({ selectedCompany }) => {
       {/* Content */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
         </div>
       ) : view === 'kanban' ? (
         <KanbanView projects={filtered} onView={(p) => { setSelectedProject(p); setView('detail') }} />
       ) : (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -484,11 +484,11 @@ const ProjectsModuleNew = ({ selectedCompany }) => {
                     <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-center gap-1">
                         <button onClick={() => { setSelectedProject(p); setView('detail') }}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600" title="Voir">
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-zinc-900" title="Voir">
                           <Eye size={14} />
                         </button>
                         <button onClick={() => { setEditProject(p); setView('form') }}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600" title="Modifier">
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-zinc-900" title="Modifier">
                           <Edit3 size={14} />
                         </button>
                         <button onClick={() => handleDelete(p.id)}

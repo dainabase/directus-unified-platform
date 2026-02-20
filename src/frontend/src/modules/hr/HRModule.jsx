@@ -11,7 +11,7 @@ import {
   Download,
   Mail
 } from 'lucide-react'
-import { Button, Input, Select, Badge, GlassCard } from '../../components/ui'
+import { Button, Input, Select, Badge, Card } from '../../components/ui'
 import TeamView from './views/TeamView'
 import TalentsView from './views/TalentsView'
 import PerformanceView from './views/PerformanceView'
@@ -90,25 +90,25 @@ const HRModule = ({ selectedCompany }) => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Users className="w-8 h-8 text-blue-600" />
+            <Users className="w-8 h-8" style={{color:'var(--accent)'}} />
             <Badge variant="primary" size="sm">Total</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.totalEmployees}</p>
           <p className="text-sm text-gray-600">Employés</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Users className="w-8 h-8 text-green-600" />
+            <Users className="w-8 h-8" style={{color:'var(--success)'}} />
             <Badge variant="success" size="sm">Actifs</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.activeEmployees}</p>
           <p className="text-sm text-gray-600">Collaborateurs actifs</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Départements</p>
           <p className="text-2xl font-bold text-gray-900">{stats.departments}</p>
           <div className="mt-2 flex gap-1">
@@ -118,23 +118,23 @@ const HRModule = ({ selectedCompany }) => {
               </Badge>
             ))}
           </div>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Ancienneté moy.</p>
           <p className="text-2xl font-bold text-gray-900">{stats.averageTenure}</p>
-          <p className="text-xs text-green-600 mt-1">↑ 15% vs année dernière</p>
-        </GlassCard>
+          <p className="text-xs mt-1" style={{color:'var(--success)'}}>↑ 15% vs année dernière</p>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Turnover</p>
           <p className="text-2xl font-bold text-gray-900">{stats.turnoverRate}</p>
-          <p className="text-xs text-red-600 mt-1">↑ 3% vs Q1</p>
-        </GlassCard>
+          <p className="text-xs mt-1" style={{color:'var(--danger)'}}>↑ 3% vs Q1</p>
+        </Card>
       </div>
 
       {/* View Tabs */}
-      <GlassCard className="p-1">
+      <Card className="p-1">
         <div className="flex">
           {viewTabs.map(tab => (
             <button
@@ -143,20 +143,21 @@ const HRModule = ({ selectedCompany }) => {
               className={`
                 flex-1 flex items-center justify-center gap-2
                 px-4 py-3 rounded-md transition-all duration-200
-                ${currentView === tab.id 
-                  ? 'bg-blue-600 text-white shadow-lg' 
-                  : 'hover:bg-gray-100 text-gray-700'}
+                ${currentView === tab.id
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700'}
               `}
+              style={currentView === tab.id ? {background:'var(--accent)'} : {}}
             >
               {tab.icon}
               <span className="font-medium">{tab.label}</span>
             </button>
           ))}
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Filters */}
-      <GlassCard className="p-4">
+      <Card className="p-4">
         <div className="flex flex-col lg:flex-row gap-4">
           <Input
             type="search"
@@ -200,13 +201,13 @@ const HRModule = ({ selectedCompany }) => {
             Exporter
           </Button>
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Content View */}
       <div className="min-h-[600px]">
         {isLoading ? (
           <div className="flex items-center justify-center h-96">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{borderColor:'var(--accent)'}}></div>
           </div>
         ) : (
           <>

@@ -38,22 +38,22 @@ const formatDate = (dateStr) => {
 
 // ── Quote status config ──
 const QUOTE_STATUS = {
-  draft:    { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  sent:     { label: 'Envoye',    color: 'bg-blue-100 text-blue-700' },
-  accepted: { label: 'Accepte',   color: 'bg-green-100 text-green-700' },
-  signed:   { label: 'Signe',     color: 'bg-emerald-100 text-emerald-700' },
-  rejected: { label: 'Refuse',    color: 'bg-red-100 text-red-700' },
-  expired:  { label: 'Expire',    color: 'bg-gray-100 text-gray-500' }
+  draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  signed:   { label: 'Signe',     bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  expired:  { label: 'Expire',    bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 // ── Invoice status config ──
 const INVOICE_STATUS = {
-  draft:    { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  sent:     { label: 'Envoyee',   color: 'bg-blue-100 text-blue-700' },
-  paid:     { label: 'Payee',     color: 'bg-green-100 text-green-700' },
-  overdue:  { label: 'En retard', color: 'bg-red-100 text-red-700' },
-  partial:  { label: 'Partielle', color: 'bg-yellow-100 text-yellow-700' },
-  cancelled:{ label: 'Annulee',   color: 'bg-gray-100 text-gray-500' }
+  draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  sent:     { label: 'Envoyee',   bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  paid:     { label: 'Payee',     bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  overdue:  { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  partial:  { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
+  cancelled:{ label: 'Annulee',   bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 // ── Tab definitions ──
@@ -194,8 +194,8 @@ const ClientDetailRevendeur = () => {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Building2 size={20} className="text-blue-600" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(0,113,227,0.08)' }}>
+                <Building2 size={20} style={{ color: 'var(--accent)' }} />
               </div>
               <h1 className="text-2xl font-bold text-gray-900">{company.name}</h1>
             </div>
@@ -224,7 +224,7 @@ const ClientDetailRevendeur = () => {
                   href={company.website.startsWith('http') ? company.website : `https://${company.website}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-blue-600 hover:underline"
+                  className="flex items-center gap-1.5 hover:underline" style={{ color: 'var(--accent)' }}
                 >
                   <Globe size={14} />
                   {company.website}
@@ -233,11 +233,10 @@ const ClientDetailRevendeur = () => {
             </div>
           </div>
           {company.status && (
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-              company.status === 'active'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-600'
-            }`}>
+            <span className="px-3 py-1 rounded-full text-xs font-medium"
+              style={company.status === 'active'
+                ? { background: 'rgba(52,199,89,0.12)', color: '#34C759' }
+                : { background: 'rgba(107,114,128,0.12)', color: '#6B7280' }}>
               {company.status === 'active' ? 'Actif' : company.status}
             </span>
           )}
@@ -248,7 +247,7 @@ const ClientDetailRevendeur = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <FileText size={16} className="text-blue-500" />
+            <FileText size={16} style={{ color: 'var(--accent)' }} />
             <span className="text-xs text-gray-500 font-medium">Total devis</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatCHF(stats.totalDevis)}</p>
@@ -256,7 +255,7 @@ const ClientDetailRevendeur = () => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Receipt size={16} className="text-green-500" />
+            <Receipt size={16} style={{ color: 'var(--success)' }} />
             <span className="text-xs text-gray-500 font-medium">Total factures</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatCHF(stats.totalFactures)}</p>
@@ -264,10 +263,10 @@ const ClientDetailRevendeur = () => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={16} className="text-emerald-500" />
+            <TrendingUp size={16} style={{ color: 'var(--success)' }} />
             <span className="text-xs text-gray-500 font-medium">Montant encaisse</span>
           </div>
-          <p className="text-xl font-bold text-emerald-600">{formatCHF(stats.totalPaid)}</p>
+          <p className="text-xl font-bold" style={{ color: 'var(--success)' }}>{formatCHF(stats.totalPaid)}</p>
           <p className="text-xs text-gray-400 mt-1">
             {stats.totalFactures > 0
               ? `${Math.round((stats.totalPaid / stats.totalFactures) * 100)}% encaisse`
@@ -297,15 +296,17 @@ const ClientDetailRevendeur = () => {
                 {tab.label}
                 {tab.id === 'devis' && quotes.length > 0 && (
                   <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${
-                    isActive ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
-                  }`}>
+                    isActive ? '' : 'bg-gray-100 text-gray-500'
+                  }`}
+                  style={isActive ? { background: 'rgba(0,113,227,0.12)', color: 'var(--accent)' } : undefined}>
                     {quotes.length}
                   </span>
                 )}
                 {tab.id === 'factures' && invoices.length > 0 && (
                   <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${
-                    isActive ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
-                  }`}>
+                    isActive ? '' : 'bg-gray-100 text-gray-500'
+                  }`}
+                  style={isActive ? { background: 'rgba(0,113,227,0.12)', color: 'var(--accent)' } : undefined}>
                     {invoices.length}
                   </span>
                 )}
@@ -343,7 +344,7 @@ const ClientDetailRevendeur = () => {
                   </thead>
                   <tbody>
                     {quotes.map((q) => {
-                      const cfg = QUOTE_STATUS[q.status] || { label: q.status || '\u2014', color: 'bg-gray-100 text-gray-500' }
+                      const cfg = QUOTE_STATUS[q.status] || { label: q.status || '\u2014', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
                       const dateStr = q.signed_at || q.sent_at || q.created_at
                       return (
                         <tr key={q.id} className="border-b border-gray-50 hover:bg-gray-50/50">
@@ -357,7 +358,8 @@ const ClientDetailRevendeur = () => {
                             {formatCHF(q.total || q.subtotal)}
                           </td>
                           <td className="py-3">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                              style={{ background: cfg.bg, color: cfg.fg }}>
                               {cfg.label}
                             </span>
                           </td>
@@ -399,7 +401,7 @@ const ClientDetailRevendeur = () => {
                   </thead>
                   <tbody>
                     {invoices.map((inv) => {
-                      const cfg = INVOICE_STATUS[inv.status] || { label: inv.status || '\u2014', color: 'bg-gray-100 text-gray-500' }
+                      const cfg = INVOICE_STATUS[inv.status] || { label: inv.status || '\u2014', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
                       return (
                         <tr key={inv.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                           <td className="py-3 font-medium text-gray-900">
@@ -409,7 +411,8 @@ const ClientDetailRevendeur = () => {
                             {formatCHF(inv.amount)}
                           </td>
                           <td className="py-3">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                              style={{ background: cfg.bg, color: cfg.fg }}>
                               {cfg.label}
                             </span>
                           </td>
@@ -448,7 +451,7 @@ const ClientDetailRevendeur = () => {
                       href={company.website.startsWith('http') ? company.website : `https://${company.website}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-600 hover:underline"
+                      className="text-sm hover:underline" style={{ color: 'var(--accent)' }}
                     >
                       {company.website}
                     </a>

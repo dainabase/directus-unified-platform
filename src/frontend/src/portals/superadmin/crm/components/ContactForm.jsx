@@ -177,7 +177,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                       <label className="text-sm font-medium text-gray-700 mb-1 block">Prénom <span className="text-red-500">*</span></label>
                       <input
                         type="text"
-                        className={`ds-input w-full ${errors.first_name ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full ${errors.first_name ? 'ds-input-error' : ''}`}
                         value={formData.first_name}
                         onChange={(e) => setFormData({...formData, first_name: e.target.value})}
                         disabled={saveContact.isPending}
@@ -191,7 +191,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                       <label className="text-sm font-medium text-gray-700 mb-1 block">Nom <span className="text-red-500">*</span></label>
                       <input
                         type="text"
-                        className={`ds-input w-full ${errors.last_name ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full ${errors.last_name ? 'ds-input-error' : ''}`}
                         value={formData.last_name}
                         onChange={(e) => setFormData({...formData, last_name: e.target.value})}
                         disabled={saveContact.isPending}
@@ -210,7 +210,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                       </span>
                       <input
                         type="email"
-                        className={`ds-input w-full pl-10 ${errors.email ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full pl-10 ${errors.email ? 'ds-input-error' : ''}`}
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         disabled={saveContact.isPending}
@@ -230,7 +230,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                         </span>
                         <input
                           type="tel"
-                          className={`ds-input w-full pl-10 ${errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                          className={`ds-input w-full pl-10 ${errors.phone ? 'ds-input-error' : ''}`}
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           placeholder="+41 21 123 45 67"
@@ -398,7 +398,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                     <label className="text-sm font-medium text-gray-700 mb-1 block">NPA</label>
                     <input
                       type="text"
-                      className={`ds-input w-full ${errors.postal_code ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                      className={`ds-input w-full ${errors.postal_code ? 'ds-input-error' : ''}`}
                       value={formData.postal_code}
                       onChange={(e) => setFormData({...formData, postal_code: e.target.value})}
                       placeholder="1000"
@@ -453,7 +453,7 @@ const ContactForm = ({ contact, onClose, companies }) => {
                   <label className="text-sm font-medium text-gray-700 mb-1 block">Tags</label>
                   <div className="mb-2 flex flex-wrap gap-1">
                     {formData.tags.map(tag => (
-                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-600 text-white">
+                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white" style={{background:'var(--accent)'}}>
                         {tag}
                         <button
                           type="button"

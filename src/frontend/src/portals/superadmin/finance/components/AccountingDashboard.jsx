@@ -48,20 +48,20 @@ const shortMonth = (dateStr) =>
 // ── Status & type config ──
 
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', bg: 'bg-gray-100', text: 'text-gray-700' },
-  pending: { label: 'En attente', bg: 'bg-amber-100', text: 'text-amber-700' },
-  validated: { label: 'Valide', bg: 'bg-green-100', text: 'text-green-700' },
-  cancelled: { label: 'Annule', bg: 'bg-red-100', text: 'text-red-700' }
+  draft: { label: 'Brouillon', cls: 'ds-badge ds-badge-default' },
+  pending: { label: 'En attente', cls: 'ds-badge ds-badge-warning' },
+  validated: { label: 'Valide', cls: 'ds-badge ds-badge-success' },
+  cancelled: { label: 'Annule', cls: 'ds-badge ds-badge-danger' }
 }
 
 const TYPE_CONFIG = {
-  debit: { label: 'Debit', bg: 'bg-red-100', text: 'text-red-700' },
-  credit: { label: 'Credit', bg: 'bg-green-100', text: 'text-green-700' }
+  debit: { label: 'Debit', cls: 'ds-badge ds-badge-danger' },
+  credit: { label: 'Credit', cls: 'ds-badge ds-badge-success' }
 }
 
 const PIE_COLORS = [
-  '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
-  '#06b6d4', '#ec4899', '#84cc16', '#f97316', '#6366f1'
+  '#0071E3', '#34C759', '#FF9500', '#FF3B30', '#AF52DE',
+  '#5856D6', '#00C7BE', '#FF2D55', '#5AC8FA', '#FFCC00'
 ]
 
 // ── Data fetcher ──
@@ -144,21 +144,21 @@ function SkeletonLoader() {
     <div className="space-y-6 animate-pulse">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="glass-card p-5 h-28 glass-skeleton" />
+          <div key={i} className="ds-card p-5 h-28 animate-pulse" style={{ background: 'rgba(0,0,0,0.04)' }} />
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="glass-card p-6 h-80 glass-skeleton" />
-        <div className="glass-card p-6 h-80 glass-skeleton" />
+        <div className="ds-card p-6 h-80 animate-pulse" style={{ background: 'rgba(0,0,0,0.04)' }} />
+        <div className="ds-card p-6 h-80 animate-pulse" style={{ background: 'rgba(0,0,0,0.04)' }} />
       </div>
-      <div className="glass-card p-6 h-64 glass-skeleton" />
+      <div className="ds-card p-6 h-64 animate-pulse" style={{ background: 'rgba(0,0,0,0.04)' }} />
     </div>
   )
 }
 
 function EmptyState() {
   return (
-    <div className="glass-card p-12 flex flex-col items-center justify-center text-center">
+    <div className="ds-card p-12 flex flex-col items-center justify-center text-center">
       <Inbox className="w-12 h-12 text-gray-300 mb-4" />
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucune ecriture comptable</h3>
       <p className="text-sm text-gray-500 max-w-md">
@@ -169,12 +169,19 @@ function EmptyState() {
   )
 }
 
+const KPI_ICON_MAP = {
+  'accent': { bg: 'var(--accent)', text: '#fff' },
+  'danger': { bg: 'var(--danger)', text: '#fff' },
+  'success': { bg: 'var(--success)', text: '#fff' }
+}
+
 function KPICard({ icon: Icon, label, value, formatted, color }) {
+  const mapped = KPI_ICON_MAP[color] || { bg: 'var(--accent)', text: '#fff' }
   return (
-    <div className="glass-card p-5">
+    <div className="ds-card p-5">
       <div className="flex items-center gap-3 mb-2">
-        <div className={`p-2 rounded-lg ${color}`}>
-          <Icon size={18} className="text-white" />
+        <div className="p-2 rounded-lg" style={{ backgroundColor: mapped.bg }}>
+          <Icon size={18} style={{ color: mapped.text }} />
         </div>
         <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</span>
       </div>
@@ -213,7 +220,7 @@ const PieTooltip = ({ active, payload }) => {
 function StatusBadge({ status }) {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.draft
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+    <span className={cfg.cls}>
       {cfg.label}
     </span>
   )
@@ -222,7 +229,7 @@ function StatusBadge({ status }) {
 function TypeBadge({ type }) {
   const cfg = TYPE_CONFIG[type] || TYPE_CONFIG.debit
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
+    <span className={cfg.cls}>
       {cfg.label}
     </span>
   )
@@ -248,15 +255,15 @@ function AccountingDashboard({ selectedCompany }) {
   // ── Error state ──
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-        <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-        <h3 className="font-semibold text-red-800 mb-2">Erreur de chargement</h3>
-        <p className="text-sm text-red-600 mb-4">
+      <div className="ds-card p-6 text-center" style={{ background: 'var(--danger-light)', border: '1px solid var(--danger)' }}>
+        <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
+        <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
+        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
           {error.message || 'Impossible de charger les ecritures comptables'}
         </p>
         <button
           onClick={() => refetch()}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg"
+          className="ds-btn ds-btn-primary"
         >
           <RefreshCw size={14} /> Reessayer
         </button>
@@ -290,32 +297,32 @@ function AccountingDashboard({ selectedCompany }) {
           icon={BookOpen}
           label="Total ecritures"
           formatted={kpis.totalEntries.toLocaleString('fr-CH')}
-          color="bg-blue-600"
+          color="accent"
         />
         <KPICard
           icon={TrendingDown}
           label="Total debits"
           formatted={formatCHF(kpis.totalDebits)}
-          color="bg-red-500"
+          color="danger"
         />
         <KPICard
           icon={TrendingUp}
           label="Total credits"
           formatted={formatCHF(kpis.totalCredits)}
-          color="bg-green-500"
+          color="success"
         />
         <KPICard
           icon={Scale}
           label="Solde"
           formatted={formatCHF(kpis.balance)}
-          color={kpis.balance >= 0 ? 'bg-emerald-600' : 'bg-red-600'}
+          color={kpis.balance >= 0 ? 'success' : 'danger'}
         />
       </div>
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly debit vs credit */}
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Debits vs Credits (6 derniers mois)</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={monthlyData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
@@ -329,14 +336,14 @@ function AccountingDashboard({ selectedCompany }) {
               />
               <Tooltip content={<ChartTooltip />} />
               <Legend />
-              <Bar dataKey="debit" name="Debits" fill="#ef4444" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="credit" name="Credits" fill="#10b981" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="debit" name="Debits" fill="#FF3B30" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="credit" name="Credits" fill="#34C759" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Pie chart by account_code */}
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Repartition par compte</h3>
           {accountData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
@@ -369,7 +376,7 @@ function AccountingDashboard({ selectedCompany }) {
       </div>
 
       {/* Recent entries table */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200/50">
           <h3 className="text-sm font-semibold text-gray-700">Ecritures recentes</h3>
         </div>

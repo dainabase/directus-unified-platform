@@ -10,7 +10,7 @@ import {
   Briefcase,
   Search
 } from 'lucide-react'
-import { GlassCard, Badge, Button, Table } from '../../../components/ui'
+import { Card, Badge, Button, Table } from '../../../components/ui'
 
 const RecruitmentView = ({ selectedCompany }) => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -91,16 +91,16 @@ const RecruitmentView = ({ selectedCompany }) => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <GlassCard key={i} className="p-4">
+            <Card key={i} className="p-4">
               <div className="animate-pulse space-y-3">
                 <div className="h-8 w-8 bg-gray-200 rounded" />
                 <div className="h-6 w-16 bg-gray-200 rounded" />
                 <div className="h-4 w-24 bg-gray-200 rounded" />
               </div>
-            </GlassCard>
+            </Card>
           ))}
         </div>
-        <GlassCard>
+        <Card>
           <div className="animate-pulse space-y-4">
             <div className="h-6 w-48 bg-gray-200 rounded" />
             <div className="h-10 w-full bg-gray-100 rounded" />
@@ -108,7 +108,7 @@ const RecruitmentView = ({ selectedCompany }) => {
               <div key={i} className="h-12 w-full bg-gray-50 rounded" />
             ))}
           </div>
-        </GlassCard>
+        </Card>
       </div>
     )
   }
@@ -116,10 +116,10 @@ const RecruitmentView = ({ selectedCompany }) => {
   // Error state
   if (isError) {
     return (
-      <GlassCard className="p-8 text-center">
-        <p className="text-red-600 font-medium mb-2">Erreur de chargement</p>
+      <Card className="p-8 text-center">
+        <p className="font-medium mb-2" style={{color:'var(--danger)'}}>Erreur de chargement</p>
         <p className="text-sm text-gray-500">{error?.message || 'Impossible de charger les candidats.'}</p>
-      </GlassCard>
+      </Card>
     )
   }
 
@@ -127,34 +127,34 @@ const RecruitmentView = ({ selectedCompany }) => {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Users className="w-8 h-8 text-blue-600" />
+            <Users className="w-8 h-8" style={{color:'var(--accent)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
           <p className="text-sm text-gray-600">Total candidats</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Briefcase className="w-8 h-8 text-green-600" />
+            <Briefcase className="w-8 h-8" style={{color:'var(--success)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.uniquePositions}</p>
           <p className="text-sm text-gray-600">Postes distincts</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Calendar className="w-8 h-8 text-purple-600" />
+            <Calendar className="w-8 h-8" style={{color:'var(--accent)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.recentCount}</p>
           <p className="text-sm text-gray-600">Ajouts (30 derniers jours)</p>
-        </GlassCard>
+        </Card>
       </div>
 
       {/* Positions breakdown */}
       {Object.keys(stats.positionCounts).length > 0 && (
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Repartition par poste</h3>
           <div className="flex flex-wrap gap-2">
             {Object.entries(stats.positionCounts)
@@ -166,11 +166,11 @@ const RecruitmentView = ({ selectedCompany }) => {
                 </Badge>
               ))}
           </div>
-        </GlassCard>
+        </Card>
       )}
 
       {/* Candidates Table */}
-      <GlassCard className="p-0">
+      <Card className="p-0">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <h2 className="text-lg font-semibold text-gray-900">
@@ -183,7 +183,7 @@ const RecruitmentView = ({ selectedCompany }) => {
                 placeholder="Rechercher..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2 rounded-lg border border-gray-200 bg-white/70 backdrop-blur-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                className="ds-input pl-9 pr-4 py-2 text-sm w-64"
               />
             </div>
           </div>
@@ -223,7 +223,8 @@ const RecruitmentView = ({ selectedCompany }) => {
                     {candidate.email ? (
                       <a
                         href={`mailto:${candidate.email}`}
-                        className="text-blue-600 hover:underline text-sm"
+                        className="hover:underline text-sm"
+                        style={{color:'var(--accent)'}}
                       >
                         {candidate.email}
                       </a>
@@ -266,7 +267,7 @@ const RecruitmentView = ({ selectedCompany }) => {
             {searchTerm && ` sur ${candidates.length} au total`}
           </div>
         )}
-      </GlassCard>
+      </Card>
     </div>
   )
 }

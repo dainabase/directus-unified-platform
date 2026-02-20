@@ -258,7 +258,7 @@ const PermissionsManager = () => {
             const isAdmin = role.admin_access === true;
 
             return (
-              <div className="card glass-card mb-3" key={role.id}>
+              <div className="card ds-card mb-3" key={role.id}>
                 <div
                   className="card-header d-flex align-items-center"
                   onClick={() => toggleRole(role.id)}
@@ -327,7 +327,7 @@ const PermissionsManager = () => {
         </div>
       ) : (
         /* Flat table view */
-        <div className="card glass-card">
+        <div className="card ds-card">
           <div className="table-responsive">
             <table className="table table-hover table-vcenter mb-0">
               <thead>

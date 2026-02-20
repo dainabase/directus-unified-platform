@@ -10,7 +10,7 @@ import {
   Download,
   MoreVertical
 } from 'lucide-react'
-import { Button, Input, Select, Badge, GlassCard } from '../../components/ui'
+import { Button, Input, Select, Badge, Card } from '../../components/ui'
 import GridView from './views/GridView'
 import ListView from './views/ListView'
 import KanbanView from './views/KanbanView'
@@ -71,28 +71,28 @@ const ProjectsModule = ({ selectedCompany }) => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <p className="text-sm text-gray-600">Total Projets</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
-        </GlassCard>
-        <GlassCard className="p-4">
+        </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600">Projets Actifs</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.active}</p>
-        </GlassCard>
-        <GlassCard className="p-4">
+          <p className="text-2xl font-bold mt-1" style={{color:'var(--accent)'}}>{stats.active}</p>
+        </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600">Terminés</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">{stats.completed}</p>
-        </GlassCard>
-        <GlassCard className="p-4">
+          <p className="text-2xl font-bold mt-1" style={{color:'var(--success)'}}>{stats.completed}</p>
+        </Card>
+        <Card className="p-4">
           <p className="text-sm text-gray-600">Budget Total</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">
             {(stats.totalBudget / 1000).toFixed(0)}K CHF
           </p>
-        </GlassCard>
+        </Card>
       </div>
 
       {/* Filters and View Switcher */}
-      <GlassCard className="p-4">
+      <Card className="p-4">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <Input
@@ -134,7 +134,7 @@ const ProjectsModule = ({ selectedCompany }) => {
           </div>
 
           {/* View Switcher */}
-          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+          <div className="flex gap-1 p-1 rounded-lg" style={{background:'rgba(0,0,0,0.04)'}}>
             {viewOptions.map(view => (
               <button
                 key={view.id}
@@ -142,10 +142,11 @@ const ProjectsModule = ({ selectedCompany }) => {
                 className={`
                   flex items-center gap-2 px-3 py-2 rounded-md
                   transition-all duration-200
-                  ${currentView === view.id 
-                    ? 'bg-white text-blue-600 shadow-sm' 
+                  ${currentView === view.id
+                    ? 'bg-white shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'}
                 `}
+                style={currentView === view.id ? {color:'var(--accent)'} : {}}
               >
                 {view.icon}
                 <span className="text-sm font-medium">{view.label}</span>
@@ -153,13 +154,13 @@ const ProjectsModule = ({ selectedCompany }) => {
             ))}
           </div>
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Projects View */}
       <div className="min-h-[600px]">
         {isLoading ? (
           <div className="flex items-center justify-center h-96">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{borderColor:'var(--accent)'}}></div>
           </div>
         ) : (
           <>

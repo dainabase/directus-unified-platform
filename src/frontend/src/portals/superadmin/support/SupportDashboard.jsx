@@ -18,9 +18,9 @@ import { fetchTickets, createTicket, updateTicket, deleteTicket } from '../../..
 import TicketsToInvoiceModule from './TicketsToInvoiceModule'
 
 const STATUS_CONFIG = {
-  open: { label: 'Ouvert', color: 'bg-blue-100 text-blue-700' },
+  open: { label: 'Ouvert', color: 'bg-zinc-100 text-zinc-700' },
   in_progress: { label: 'En cours', color: 'bg-amber-100 text-amber-700' },
-  pending: { label: 'En attente', color: 'bg-purple-100 text-purple-700' },
+  pending: { label: 'En attente', color: 'bg-zinc-200 text-zinc-700' },
   resolved: { label: 'Resolu', color: 'bg-green-100 text-green-700' },
   closed: { label: 'Ferme', color: 'bg-gray-100 text-gray-600' }
 }
@@ -71,7 +71,7 @@ const TicketForm = ({ ticket, onSave, onClose, isSaving }) => {
               <input
                 type="text" value={form.subject} required
                 onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 text-sm"
               />
             </div>
             <div>
@@ -79,7 +79,7 @@ const TicketForm = ({ ticket, onSave, onClose, isSaving }) => {
               <textarea
                 rows={3} value={form.description}
                 onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 text-sm"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -115,7 +115,7 @@ const TicketForm = ({ ticket, onSave, onClose, isSaving }) => {
               Annuler
             </button>
             <button type="submit" disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              className="ds-btn ds-btn-primary flex items-center gap-2 px-4 py-2 text-sm rounded-lg disabled:opacity-50">
               {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
               {ticket ? 'Mettre a jour' : 'Creer'}
             </button>
@@ -204,7 +204,7 @@ const SupportDashboard = ({ selectedCompany, view }) => {
         {activeTab !== 'billing' && (
           <button
             onClick={() => { setEditingTicket(null); setShowForm(true) }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+            className="ds-btn ds-btn-primary flex items-center gap-2 px-4 py-2 rounded-lg text-sm"
           >
             <Plus size={16} /> Nouveau ticket
           </button>
@@ -215,13 +215,13 @@ const SupportDashboard = ({ selectedCompany, view }) => {
       <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab !== 'billing' ? 'bg-white shadow text-blue-600' : 'text-gray-600 hover:text-gray-900'}`}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab !== 'billing' ? 'bg-white shadow text-zinc-900' : 'text-gray-600 hover:text-gray-900'}`}
         >
           <Headphones size={16} /> Tickets
         </button>
         <button
           onClick={() => setActiveTab('billing')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'billing' ? 'bg-white shadow text-emerald-600' : 'text-gray-600 hover:text-gray-900'}`}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'billing' ? 'bg-white shadow text-zinc-900' : 'text-gray-600 hover:text-gray-900'}`}
         >
           <Receipt size={16} /> Facturation hors contrat
         </button>
@@ -234,35 +234,35 @@ const SupportDashboard = ({ selectedCompany, view }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <MessageSquare size={14} className="text-gray-400" />
             <span className="text-xs text-gray-500">Total</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{kpis.total}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
-            <AlertCircle size={14} className="text-blue-400" />
+            <AlertCircle size={14} style={{ color: 'var(--accent)' }} />
             <span className="text-xs text-gray-500">Ouverts</span>
           </div>
-          <p className="text-2xl font-bold text-blue-600">{kpis.open}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{kpis.open}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <CheckCircle size={14} className="text-green-400" />
             <span className="text-xs text-gray-500">Resolus</span>
           </div>
-          <p className="text-2xl font-bold text-green-600">{kpis.resolved}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--success)' }}>{kpis.resolved}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <AlertCircle size={14} className="text-red-400" />
             <span className="text-xs text-gray-500">Critiques</span>
           </div>
           <p className="text-2xl font-bold text-red-600">{kpis.critical}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
             <Clock size={14} className="text-amber-400" />
             <span className="text-xs text-gray-500">Age moyen</span>
@@ -279,7 +279,7 @@ const SupportDashboard = ({ selectedCompany, view }) => {
             type="text" value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Rechercher..."
-            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-zinc-500"
           />
         </div>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
@@ -298,16 +298,16 @@ const SupportDashboard = ({ selectedCompany, view }) => {
       {/* Tickets Table */}
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
         </div>
       ) : displayTickets.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Headphones className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">Aucun ticket de support</p>
           <p className="text-sm text-gray-400 mt-1">Creez un premier ticket pour commencer</p>
         </div>
       ) : (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200/50">
@@ -335,7 +335,7 @@ const SupportDashboard = ({ selectedCompany, view }) => {
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-1">
                       <button onClick={() => { setEditingTicket(t); setShowForm(true) }}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                        className="p-1.5 text-gray-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors">
                         <Edit size={14} />
                       </button>
                       <button onClick={() => { if (window.confirm('Supprimer ce ticket ?')) deleteMut.mutate(t.id) }}

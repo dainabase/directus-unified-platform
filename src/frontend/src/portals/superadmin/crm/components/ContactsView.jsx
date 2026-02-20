@@ -48,19 +48,19 @@ const ContactsViewSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {[...Array(3)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-28 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="ds-skeleton h-4 w-28 rounded mb-3" />
+          <div className="ds-skeleton h-8 w-16 rounded" />
         </div>
       ))}
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(6)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-40 rounded" />
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-28 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
+          <div className="ds-skeleton h-4 w-40 rounded" />
+          <div className="ds-skeleton h-4 w-48 rounded" />
+          <div className="ds-skeleton h-4 w-28 rounded" />
+          <div className="ds-skeleton h-4 w-20 rounded" />
         </div>
       ))}
     </div>
@@ -142,7 +142,7 @@ const ContactsView = ({ selectedCompany }) => {
     return (
       <div className="p-6">
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-6">
-          <Users className="w-6 h-6 text-blue-600" />
+          <Users className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           Contacts
         </h2>
         <ContactsViewSkeleton />
@@ -156,7 +156,7 @@ const ContactsView = ({ selectedCompany }) => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Users className="w-6 h-6 text-blue-600" />
+            <Users className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             Contacts
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -167,21 +167,21 @@ const ContactsView = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Users className="w-5 h-5 text-blue-600" />
+            <Users className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Total contacts</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <UserCheck className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Employes</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.employees}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <UserX className="w-5 h-5 text-orange-600" />
             <span className="text-sm text-gray-500">Contacts externes</span>
@@ -199,13 +199,13 @@ const ContactsView = ({ selectedCompany }) => {
             placeholder="Rechercher par nom, prenom, email..."
             value={search}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
           />
         </div>
         <select
           value={typeFilter}
           onChange={handleTypeChange}
-          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
         >
           <option value="all">Tous les types</option>
           <option value="employees">Employes</option>
@@ -214,7 +214,7 @@ const ContactsView = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         {contacts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
             <Users size={48} className="mb-3 opacity-40" />
@@ -246,7 +246,7 @@ const ContactsView = ({ selectedCompany }) => {
                     </td>
                     <td className="px-5 py-3 text-gray-600 whitespace-nowrap">
                       {contact.email ? (
-                        <a href={`mailto:${contact.email}`} className="hover:text-blue-600 transition-colors">
+                        <a href={`mailto:${contact.email}`} className="hover:text-zinc-900 transition-colors">
                           {contact.email}
                         </a>
                       ) : (
@@ -255,7 +255,7 @@ const ContactsView = ({ selectedCompany }) => {
                     </td>
                     <td className="px-5 py-3 text-gray-600 whitespace-nowrap">
                       {contact.phone ? (
-                        <a href={`tel:${contact.phone}`} className="hover:text-blue-600 transition-colors">
+                        <a href={`tel:${contact.phone}`} className="hover:text-zinc-900 transition-colors">
                           {contact.phone}
                         </a>
                       ) : (
@@ -319,7 +319,7 @@ const ContactsView = ({ selectedCompany }) => {
                     onClick={() => setPage(pageNum)}
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                       page === pageNum
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-zinc-900 text-white'
                         : 'hover:bg-gray-200/60 text-gray-600'
                     }`}
                   >

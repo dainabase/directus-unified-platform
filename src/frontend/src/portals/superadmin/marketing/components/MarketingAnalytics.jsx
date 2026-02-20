@@ -10,14 +10,14 @@ import {
 } from 'recharts'
 import api from '../../../../lib/axios'
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+const COLORS = ['#0071E3', '#34C759', '#FF9500', '#FF3B30', '#8E8E93', '#AF52DE']
 
 const STATUS_CFG = {
   draft:     { label: 'Brouillon',  bg: 'bg-gray-100',   text: 'text-gray-600' },
   scheduled: { label: 'Planifiee',  bg: 'bg-amber-100',  text: 'text-amber-700' },
   active:    { label: 'Active',     bg: 'bg-green-100',  text: 'text-green-700' },
-  paused:    { label: 'En pause',   bg: 'bg-blue-100',   text: 'text-blue-700' },
-  completed: { label: 'Terminee',   bg: 'bg-purple-100', text: 'text-purple-700' },
+  paused:    { label: 'En pause',   bg: 'bg-zinc-100',   text: 'text-zinc-700' },
+  completed: { label: 'Terminee',   bg: 'bg-zinc-200', text: 'text-zinc-700' },
   cancelled: { label: 'Annulee',    bg: 'bg-red-100',    text: 'text-red-700' }
 }
 
@@ -31,28 +31,28 @@ const AnalyticsSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {[...Array(3)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-28 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="ds-skeleton h-4 w-28 rounded mb-3" />
+          <div className="ds-skeleton h-8 w-16 rounded" />
         </div>
       ))}
     </div>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="glass-card p-5">
-        <div className="glass-skeleton h-5 w-40 rounded mb-4" />
-        <div className="glass-skeleton h-[250px] w-full rounded" />
+      <div className="ds-card p-5">
+        <div className="ds-skeleton h-5 w-40 rounded mb-4" />
+        <div className="ds-skeleton h-[250px] w-full rounded" />
       </div>
-      <div className="glass-card p-5">
-        <div className="glass-skeleton h-5 w-40 rounded mb-4" />
-        <div className="glass-skeleton h-[250px] w-full rounded" />
+      <div className="ds-card p-5">
+        <div className="ds-skeleton h-5 w-40 rounded mb-4" />
+        <div className="ds-skeleton h-[250px] w-full rounded" />
       </div>
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-24 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
+          <div className="ds-skeleton h-4 w-48 rounded" />
+          <div className="ds-skeleton h-4 w-24 rounded" />
+          <div className="ds-skeleton h-4 w-20 rounded" />
         </div>
       ))}
     </div>
@@ -181,7 +181,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-blue-600" />
+          <BarChart3 className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           <h2 className="text-2xl font-bold text-gray-900">Analytics Marketing</h2>
         </div>
         <AnalyticsSkeleton />
@@ -194,7 +194,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-blue-600" />
+          <BarChart3 className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           Analytics Marketing
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -204,21 +204,21 @@ const MarketingAnalytics = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Megaphone className="w-5 h-5 text-blue-600" />
+            <Megaphone className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Total campagnes</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.totalCampaigns}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <MessageSquare className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Messages WhatsApp</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.totalWhatsapp}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-5 h-5 text-amber-500" />
             <span className="text-sm text-gray-500">Campagnes actives</span>
@@ -230,7 +230,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Bar chart: campaigns by month */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Campagnes par mois</h3>
           {monthlyData.length === 0 ? (
             <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
@@ -243,14 +243,14 @@ const MarketingAnalytics = ({ selectedCompany }) => {
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Campagnes" />
+                <Bar dataKey="count" fill="#0071E3" radius={[4, 4, 0, 0]} name="Campagnes" />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
 
         {/* Pie chart: campaigns by status */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Repartition par statut</h3>
           {statusData.length === 0 ? (
             <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
@@ -281,7 +281,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
       </div>
 
       {/* WhatsApp summary */}
-      <div className="glass-card p-5">
+      <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-2">
           <MessageSquare className="w-5 h-5 text-green-500" />
           <h3 className="text-sm font-semibold text-gray-900">Resume WhatsApp</h3>
@@ -294,7 +294,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
       </div>
 
       {/* Recent campaigns table */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Campagnes recentes</h3>
         </div>

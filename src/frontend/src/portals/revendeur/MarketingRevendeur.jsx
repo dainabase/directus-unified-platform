@@ -53,10 +53,10 @@ function getFileTypeIcon(mimeType) {
 function getFileTypeBadge(mimeType) {
   const cat = getFileTypeCategory(mimeType)
   switch (cat) {
-    case 'image': return { label: 'Image', color: 'bg-blue-100 text-blue-700' }
-    case 'pdf': return { label: 'PDF', color: 'bg-red-100 text-red-700' }
-    case 'video': return { label: 'Video', color: 'bg-purple-100 text-purple-700' }
-    default: return { label: 'Fichier', color: 'bg-gray-100 text-gray-600' }
+    case 'image': return { label: 'Image', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' }
+    case 'pdf': return { label: 'PDF', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' }
+    case 'video': return { label: 'Video', bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' }
+    default: return { label: 'Fichier', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
   }
 }
 
@@ -162,7 +162,7 @@ const MarketingRevendeur = () => {
       {/* Assets Grid */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
         </div>
       ) : hasFiles ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -196,7 +196,7 @@ const MarketingRevendeur = () => {
                         {displayName}
                       </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: badge.bg, color: badge.fg }}>
                           {badge.label}
                         </span>
                         <span className="text-xs text-gray-400">{formatFileSize(file.filesize)}</span>
@@ -234,8 +234,8 @@ const MarketingRevendeur = () => {
           {MOCK_CAMPAIGNS.map((campaign) => (
             <div key={campaign.id} className="ds-card p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <Mail size={20} className="text-blue-500" />
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0,113,227,0.08)' }}>
+                  <Mail size={20} style={{ color: 'var(--accent)' }} />
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-sm font-semibold text-gray-900 truncate">{campaign.name}</h3>

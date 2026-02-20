@@ -166,7 +166,7 @@ const IntegrationsManager = () => {
       {/* Quick Stats */}
       <div className="row g-3 mb-4">
         <div className="col-md-4">
-          <div className="card glass-card">
+          <div className="card ds-card">
             <div className="card-body p-3 text-center">
               <div className="h2 mb-0 text-success">{stats.active}</div>
               <small className="text-muted">Actives</small>
@@ -174,7 +174,7 @@ const IntegrationsManager = () => {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card glass-card">
+          <div className="card ds-card">
             <div className="card-body p-3 text-center">
               <div className="h2 mb-0 text-info">{stats.configured}</div>
               <small className="text-muted">Configurees</small>
@@ -182,7 +182,7 @@ const IntegrationsManager = () => {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card glass-card">
+          <div className="card ds-card">
             <div className="card-body p-3 text-center">
               <div className="h2 mb-0 text-secondary">{stats.inactive}</div>
               <small className="text-muted">Inactives</small>
@@ -214,7 +214,7 @@ const IntegrationsManager = () => {
           const IntegrationIcon = integration.Icon;
           return (
             <div className="col-md-6 col-lg-4" key={integration.id}>
-              <div className="card glass-card h-100">
+              <div className="card ds-card h-100">
                 <div className="card-body p-4">
                   {/* Icon + Status */}
                   <div className="d-flex justify-content-between align-items-start mb-3">

@@ -201,7 +201,7 @@ const CompanyForm = ({ company, onClose }) => {
                       </span>
                       <input
                         type="text"
-                        className={`ds-input w-full pl-10 ${errors.name ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full pl-10 ${errors.name ? 'ds-input-error' : ''}`}
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         disabled={saveCompany.isPending}
@@ -258,7 +258,7 @@ const CompanyForm = ({ company, onClose }) => {
                         </span>
                         <input
                           type="url"
-                          className={`ds-input w-full pl-10 ${errors.website ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                          className={`ds-input w-full pl-10 ${errors.website ? 'ds-input-error' : ''}`}
                           value={formData.website}
                           onChange={(e) => setFormData({...formData, website: e.target.value})}
                           disabled={saveCompany.isPending}
@@ -298,7 +298,7 @@ const CompanyForm = ({ company, onClose }) => {
                     <label className="text-sm font-medium text-gray-700 mb-1 block">Email</label>
                     <input
                       type="email"
-                      className={`ds-input w-full ${errors.email ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                      className={`ds-input w-full ${errors.email ? 'ds-input-error' : ''}`}
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       disabled={saveCompany.isPending}
@@ -317,7 +317,7 @@ const CompanyForm = ({ company, onClose }) => {
                       </span>
                       <input
                         type="tel"
-                        className={`ds-input w-full pl-10 ${errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full pl-10 ${errors.phone ? 'ds-input-error' : ''}`}
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         disabled={saveCompany.isPending}
@@ -334,7 +334,7 @@ const CompanyForm = ({ company, onClose }) => {
                       <label className="text-sm font-medium text-gray-700 mb-1 block">Numéro TVA</label>
                       <input
                         type="text"
-                        className={`ds-input w-full ${errors.vat_number ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                        className={`ds-input w-full ${errors.vat_number ? 'ds-input-error' : ''}`}
                         value={formData.vat_number}
                         onChange={(e) => setFormData({...formData, vat_number: e.target.value})}
                         disabled={saveCompany.isPending}
@@ -354,7 +354,7 @@ const CompanyForm = ({ company, onClose }) => {
                         </span>
                         <input
                           type="number"
-                          className={`ds-input w-full pl-10 ${errors.annual_revenue ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                          className={`ds-input w-full pl-10 ${errors.annual_revenue ? 'ds-input-error' : ''}`}
                           value={formData.annual_revenue}
                           onChange={(e) => setFormData({...formData, annual_revenue: e.target.value})}
                           disabled={saveCompany.isPending}
@@ -400,7 +400,7 @@ const CompanyForm = ({ company, onClose }) => {
                     <label className="text-sm font-medium text-gray-700 mb-1 block">NPA</label>
                     <input
                       type="text"
-                      className={`ds-input w-full ${errors.postal_code ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
+                      className={`ds-input w-full ${errors.postal_code ? 'ds-input-error' : ''}`}
                       value={formData.postal_code}
                       onChange={(e) => setFormData({...formData, postal_code: e.target.value})}
                       disabled={saveCompany.isPending}
@@ -455,7 +455,7 @@ const CompanyForm = ({ company, onClose }) => {
                   <label className="text-sm font-medium text-gray-700 mb-1 block">Tags</label>
                   <div className="mb-2 flex flex-wrap gap-1">
                     {formData.tags.map(tag => (
-                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-600 text-white">
+                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-white" style={{background:'var(--accent)'}}>
                         {tag}
                         <button
                           type="button"

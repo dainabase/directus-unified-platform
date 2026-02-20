@@ -1,11 +1,18 @@
 /**
  * Revolut Business API Service
  * Integration Revolut Banking - ES Modules
- * @version 2.0.0
+ *
+ * Uses TokenManager for automatic token refresh (40min expiry).
+ * Before each API call, the token is validated and refreshed if needed.
+ * On 401, a force-refresh + single retry is attempted.
+ *
+ * @version 3.0.0
+ * @date 2026-02-20
  */
 
 import axios from 'axios';
 import crypto from 'crypto';
+import { getValidToken, storeToken, forceRefresh } from './token-manager.js';
 
 class RevolutAPI {
   constructor(config) {
@@ -15,45 +22,69 @@ class RevolutAPI {
     this.privateKey = config.privateKey;
     this.accessToken = config.accessToken;
     this.sandbox = config.sandbox || false;
+    this.companyId = config.companyId || 'default';
+
+    // Bootstrap the token manager with the initial env token
+    if (this.accessToken) {
+      storeToken(this.companyId, {
+        access_token: this.accessToken,
+        refresh_token: config.refreshToken || process.env.REVOLUT_REFRESH_TOKEN || null,
+        expires_in: 40 * 60 // 40 minutes default
+      }).catch(err => console.warn('[RevolutAPI] Bootstrap storeToken error:', err.message));
+    }
 
     this.api = axios.create({
       baseURL: this.sandbox ? this.sandboxURL : this.baseURL,
       headers: {
-        'Authorization': `Bearer ${this.accessToken}`,
         'Content-Type': 'application/json'
-      }
+      },
+      timeout: 15000
     });
 
-    // Interceptor pour refresh token
+    // Request interceptor: inject fresh token before each call
+    this.api.interceptors.request.use(async (reqConfig) => {
+      try {
+        const tokenResult = await getValidToken(this.companyId);
+        reqConfig.headers['Authorization'] = `Bearer ${tokenResult.access_token}`;
+
+        if (tokenResult.warning) {
+          console.warn(`[RevolutAPI] Token warning for ${this.companyId}: ${tokenResult.warning}`);
+        }
+        if (tokenResult.source === 'refreshed') {
+          console.log(`[RevolutAPI] Token auto-refreshed for ${this.companyId}`);
+        }
+      } catch (tokenErr) {
+        // Fallback: use the last known access token from constructor
+        if (this.accessToken) {
+          reqConfig.headers['Authorization'] = `Bearer ${this.accessToken}`;
+        }
+        console.warn(`[RevolutAPI] Token retrieval failed, using fallback: ${tokenErr.message}`);
+      }
+      return reqConfig;
+    });
+
+    // Response interceptor: on 401, force-refresh and retry once
     this.api.interceptors.response.use(
       response => response,
       async error => {
-        if (error.response?.status === 401 && this.refreshToken) {
-          await this.refreshAccessToken();
-          return this.api.request(error.config);
+        const originalRequest = error.config;
+        if (error.response?.status === 401 && !originalRequest._tokenRetry) {
+          originalRequest._tokenRetry = true;
+          try {
+            console.log(`[RevolutAPI] 401 received — force-refreshing token for ${this.companyId}`);
+            const newToken = await forceRefresh(this.companyId);
+            originalRequest.headers['Authorization'] = `Bearer ${newToken.access_token}`;
+            return this.api.request(originalRequest);
+          } catch (refreshErr) {
+            console.error(`[RevolutAPI] Force refresh failed for ${this.companyId}:`, refreshErr.message);
+            // Attach metadata so route handlers can detect token failure
+            error._tokenRefreshFailed = true;
+            return Promise.reject(error);
+          }
         }
         return Promise.reject(error);
       }
     );
-  }
-
-  // === AUTHENTIFICATION ===
-  async refreshAccessToken() {
-    try {
-      const response = await axios.post(`${this.baseURL}/auth/token`, {
-        grant_type: 'refresh_token',
-        refresh_token: this.refreshToken,
-        client_id: this.clientId
-      });
-
-      this.accessToken = response.data.access_token;
-      this.api.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`;
-
-      return response.data;
-    } catch (error) {
-      console.error('Erreur refresh token Revolut:', error.message);
-      throw error;
-    }
   }
 
   // === COMPTES ===

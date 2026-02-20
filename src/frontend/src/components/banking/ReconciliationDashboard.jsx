@@ -12,7 +12,7 @@ import {
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import api from '../../lib/axios'
-import GlassCard from '../ui/GlassCard'
+
 import Badge from '../ui/Badge'
 
 const formatCHF = (amount, currency = 'CHF') =>
@@ -83,7 +83,7 @@ const StatusBadge = ({ status }) => {
 // ── KPI Card ──
 
 const KPICard = ({ title, value, subtitle, icon: Icon, color }) => (
-  <GlassCard className="flex items-start gap-4">
+  <div className="ds-card flex items-start gap-4">
     <div className={`p-3 rounded-xl ${color}`}>
       <Icon className="w-6 h-6 text-white" />
     </div>
@@ -92,7 +92,7 @@ const KPICard = ({ title, value, subtitle, icon: Icon, color }) => (
       <p className="text-2xl font-bold text-white">{value}</p>
       {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
     </div>
-  </GlassCard>
+  </div>
 )
 
 // ── Reconciliation Modal ──
@@ -115,7 +115,7 @@ const ReconcileModal = ({ transaction, invoices, onClose, onReconcile, isLoading
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <GlassCard className="w-full max-w-2xl max-h-[80vh] overflow-y-auto m-4">
+      <div className="ds-card w-full max-w-2xl max-h-[80vh] overflow-y-auto m-4">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-white">Rapprochement manuel</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
@@ -196,7 +196,7 @@ const ReconcileModal = ({ transaction, invoices, onClose, onReconcile, isLoading
             Aucune facture en attente de paiement
           </p>
         )}
-      </GlassCard>
+      </div>
     </div>
   )
 }
@@ -287,7 +287,7 @@ export default function ReconciliationDashboard({ selectedCompany }) {
           <button
             onClick={() => syncMutation.mutate()}
             disabled={syncMutation.isPending}
-            className="glass-button flex items-center gap-2 px-4 py-2 text-sm"
+            className="ds-btn flex items-center gap-2 px-4 py-2 text-sm"
           >
             <RefreshCw className={`w-4 h-4 ${syncMutation.isPending ? 'animate-spin' : ''}`} />
             Sync Revolut
@@ -302,33 +302,33 @@ export default function ReconciliationDashboard({ selectedCompany }) {
           value={unmatchedCount}
           subtitle={`${formatCHF(pendingAmount)} en attente`}
           icon={AlertTriangle}
-          color="bg-yellow-500/80"
+          color="bg-zinc-500"
         />
         <KPICard
           title="Rapprochement auto"
           value={autoMatchedCount}
           subtitle={`Taux auto : ${autoRate}%`}
           icon={Zap}
-          color="bg-green-500/80"
+          color="bg-zinc-600"
         />
         <KPICard
           title="Rapprochement manuel"
           value={manualMatchedCount}
           subtitle={`${reconciliations.length} total historique`}
           icon={Link2}
-          color="bg-blue-500/80"
+          color="bg-zinc-700"
         />
         <KPICard
           title="Factures en attente"
           value={pendingInvoices.length}
           subtitle="sent / partial"
           icon={ArrowUpRight}
-          color="bg-purple-500/80"
+          color="bg-zinc-800"
         />
       </div>
 
       {/* Filters */}
-      <GlassCard padding="p-4">
+      <div className="ds-card p-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -337,13 +337,13 @@ export default function ReconciliationDashboard({ selectedCompany }) {
               placeholder="Rechercher ref, description, montant..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="glass-input w-full pl-10 pr-4 py-2 text-sm"
+              className="ds-input w-full pl-10 pr-4 py-2 text-sm"
             />
           </div>
 
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="glass-button flex items-center gap-2 px-3 py-2 text-sm"
+            className="ds-btn flex items-center gap-2 px-3 py-2 text-sm"
           >
             <Filter className="w-4 h-4" />
             Filtres
@@ -364,7 +364,7 @@ export default function ReconciliationDashboard({ selectedCompany }) {
                 onClick={() => setStatusFilter(opt.value)}
                 className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
                   statusFilter === opt.value
-                    ? 'bg-blue-500/30 text-blue-300 border border-blue-400/30'
+                    ? 'bg-zinc-700 text-white border border-zinc-600'
                     : 'bg-white/5 text-gray-400 hover:bg-white/10'
                 }`}
               >
@@ -373,10 +373,10 @@ export default function ReconciliationDashboard({ selectedCompany }) {
             ))}
           </div>
         )}
-      </GlassCard>
+      </div>
 
       {/* Transactions Table */}
-      <GlassCard padding="p-0">
+      <div className="ds-card p-0">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -449,7 +449,7 @@ export default function ReconciliationDashboard({ selectedCompany }) {
                     {tx.reconciliation_status === 'unmatched' && (
                       <button
                         onClick={() => setSelectedTx(tx)}
-                        className="glass-button px-3 py-1.5 text-xs flex items-center gap-1 ml-auto"
+                        className="ds-btn px-3 py-1.5 text-xs flex items-center gap-1 ml-auto"
                       >
                         <Link2 className="w-3 h-3" />
                         Rapprocher
@@ -470,11 +470,11 @@ export default function ReconciliationDashboard({ selectedCompany }) {
           <span>{filtered.length} transaction(s) affichee(s)</span>
           <span>Total : {transactions.length}</span>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Recent reconciliations */}
       {reconciliations.length > 0 && (
-        <GlassCard>
+        <div className="ds-card">
           <h3 className="text-md font-semibold text-white mb-4">
             Derniers rapprochements
           </h3>
@@ -498,7 +498,7 @@ export default function ReconciliationDashboard({ selectedCompany }) {
               </div>
             ))}
           </div>
-        </GlassCard>
+        </div>
       )}
 
       {/* Reconciliation Modal */}

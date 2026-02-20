@@ -410,16 +410,16 @@ function getYearOptions() {
 function SkeletonLoader() {
   return (
     <div className="space-y-6 animate-pulse">
-      <div className="glass-card p-6 h-16 glass-skeleton" />
-      <div className="glass-card p-6 h-12 glass-skeleton" />
-      <div className="glass-card p-6 h-96 glass-skeleton" />
+      <div className="ds-card p-6 h-16 animate-pulse" />
+      <div className="ds-card p-6 h-12 animate-pulse" />
+      <div className="ds-card p-6 h-96 animate-pulse" />
     </div>
   )
 }
 
 function EmptyState({ message }) {
   return (
-    <div className="glass-card p-12 flex flex-col items-center justify-center text-center">
+    <div className="ds-card p-12 flex flex-col items-center justify-center text-center">
       <Inbox className="w-12 h-12 text-gray-300 mb-4" />
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucune ecriture comptable</h3>
       <p className="text-sm text-gray-500 max-w-md">
@@ -440,17 +440,17 @@ function BalanceTab({ entries }) {
   }
 
   return (
-    <div className="glass-card overflow-hidden">
+    <div className="ds-card overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200/50 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-700">Balance des comptes</h3>
         {!isBalanced && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
+          <span className="ds-badge ds-badge-warning inline-flex items-center gap-1.5">
             <AlertCircle size={12} />
             Ecart: {formatCHF(Math.abs(balance.grandTotalDebit - balance.grandTotalCredit))}
           </span>
         )}
         {isBalanced && (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+          <span className="ds-badge ds-badge-success inline-flex items-center gap-1.5">
             Equilibre
           </span>
         )}
@@ -490,7 +490,7 @@ function BalanceTab({ entries }) {
                       <td className="px-4 py-2.5 text-right font-mono text-gray-700">
                         {acc.credit > 0 ? formatCHF(acc.credit) : ''}
                       </td>
-                      <td className={`px-4 py-2.5 text-right font-mono font-medium ${solde >= 0 ? 'text-gray-900' : 'text-red-600'}`}>
+                      <td className={`px-4 py-2.5 text-right font-mono font-medium ${solde >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
                         {formatCHF(Math.abs(solde))} {solde < 0 ? '(C)' : solde > 0 ? '(D)' : ''}
                       </td>
                     </tr>
@@ -591,7 +591,7 @@ function JournalTab({ entries }) {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="glass-card p-4">
+      <div className="ds-card p-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -636,7 +636,7 @@ function JournalTab({ entries }) {
       </div>
 
       {/* Table */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -670,14 +670,14 @@ function JournalTab({ entries }) {
                     </td>
                     <td className="px-4 py-2.5 font-mono text-xs">
                       {entry.type === 'debit' ? (
-                        <span className="text-red-700">{entry.account_code}</span>
+                        <span className="text-[var(--danger)]">{entry.account_code}</span>
                       ) : (
                         <span className="text-gray-400">{entry.counterpart_code || '--'}</span>
                       )}
                     </td>
                     <td className="px-4 py-2.5 font-mono text-xs">
                       {entry.type === 'credit' ? (
-                        <span className="text-green-700">{entry.account_code}</span>
+                        <span className="text-[var(--success)]">{entry.account_code}</span>
                       ) : (
                         <span className="text-gray-400">{entry.counterpart_code || '--'}</span>
                       )}
@@ -768,7 +768,7 @@ function ComptesTab({ entries }) {
   return (
     <div className="space-y-4">
       {/* Account selector */}
-      <div className="glass-card p-4">
+      <div className="ds-card p-4">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2 flex-1 min-w-[280px]">
             <ChevronsUpDown size={16} className="text-gray-400 flex-shrink-0" />
@@ -790,7 +790,7 @@ function ComptesTab({ entries }) {
               <span className="text-gray-500">
                 {ledger.length} mouvement{ledger.length !== 1 ? 's' : ''}
               </span>
-              <span className={`font-semibold font-mono ${closingBalance >= 0 ? 'text-gray-900' : 'text-red-600'}`}>
+              <span className={`font-semibold font-mono ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
                 Solde: {formatCHF(Math.abs(closingBalance))} {closingBalance < 0 ? '(C)' : closingBalance > 0 ? '(D)' : ''}
               </span>
             </div>
@@ -800,7 +800,7 @@ function ComptesTab({ entries }) {
 
       {/* Account ledger */}
       {!selectedAccount ? (
-        <div className="glass-card p-12 flex flex-col items-center justify-center text-center">
+        <div className="ds-card p-12 flex flex-col items-center justify-center text-center">
           <BookOpen className="w-10 h-10 text-gray-300 mb-3" />
           <p className="text-sm text-gray-500">
             Selectionnez un compte pour afficher les mouvements et le solde progressif.
@@ -809,12 +809,12 @@ function ComptesTab({ entries }) {
       ) : ledger.length === 0 ? (
         <EmptyState message={`Aucun mouvement pour le compte ${selectedLabel}.`} />
       ) : (
-        <div className="glass-card overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200/50 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-gray-700">
               Compte {selectedLabel}
             </h3>
-            <span className={`text-sm font-mono font-semibold ${closingBalance >= 0 ? 'text-gray-900' : 'text-red-600'}`}>
+            <span className={`text-sm font-mono font-semibold ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
               Solde final: {formatCHF(Math.abs(closingBalance))}
             </span>
           </div>
@@ -857,13 +857,13 @@ function ComptesTab({ entries }) {
                     <td className="px-4 py-2.5 font-mono text-gray-500 text-xs">
                       {entry.counterpart_code || '--'}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-mono text-red-700 text-xs">
+                    <td className="px-4 py-2.5 text-right font-mono text-[var(--danger)] text-xs">
                       {entry.type === 'debit' ? formatCHF(parseFloat(entry.amount || 0)) : ''}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-mono text-green-700 text-xs">
+                    <td className="px-4 py-2.5 text-right font-mono text-[var(--success)] text-xs">
                       {entry.type === 'credit' ? formatCHF(parseFloat(entry.amount || 0)) : ''}
                     </td>
-                    <td className={`px-4 py-2.5 text-right font-mono font-medium text-xs ${entry.runningBalance >= 0 ? 'text-gray-900' : 'text-red-600'}`}>
+                    <td className={`px-4 py-2.5 text-right font-mono font-medium text-xs ${entry.runningBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
                       {formatCHF(Math.abs(entry.runningBalance))}
                     </td>
                   </tr>
@@ -996,15 +996,15 @@ function AccountingPage({ selectedCompany }) {
           isLoading={isLoading}
           hasEntries={false}
         />
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
-          <h3 className="font-semibold text-red-800 mb-2">Erreur de chargement</h3>
-          <p className="text-sm text-red-600 mb-4">
+        <div className="ds-card p-6 text-center" style={{ background: 'var(--danger-light)', border: '1px solid var(--danger)' }}>
+          <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
+          <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
             {error.message || 'Impossible de charger les donnees comptables'}
           </p>
           <button
             onClick={handleRefresh}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg"
+            className="ds-btn ds-btn-primary"
           >
             <RefreshCw size={14} /> Reessayer
           </button>
@@ -1046,11 +1046,11 @@ function AccountingPage({ selectedCompany }) {
 
       {/* Fallback notice */}
       {isFallback && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex items-start gap-3">
-          <AlertCircle size={16} className="text-amber-600 mt-0.5 flex-shrink-0" />
+        <div className="ds-card rounded-lg px-4 py-3 flex items-start gap-3" style={{ background: 'var(--warning-light)', border: '1px solid var(--warning)' }}>
+          <AlertCircle size={16} className="mt-0.5 flex-shrink-0" style={{ color: 'var(--warning)' }} />
           <div className="text-sm">
-            <p className="font-medium text-amber-800">Donnees reconstituees</p>
-            <p className="text-amber-700 mt-0.5">
+            <p className="font-medium" style={{ color: 'var(--text-primary)' }}>Donnees reconstituees</p>
+            <p className="mt-0.5" style={{ color: 'var(--text-secondary)' }}>
               Aucune ecriture comptable native trouvee. Les donnees sont reconstituees a partir
               des factures clients, factures fournisseurs et transactions bancaires.
             </p>

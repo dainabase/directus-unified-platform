@@ -28,14 +28,14 @@ const formatCHF = (value) =>
 // ── Status mapping ──
 
 const STATUS_MAP = {
-  draft:    { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  active:   { label: 'Envoye',    color: 'bg-blue-100 text-blue-700' },
-  sent:     { label: 'Envoye',    color: 'bg-blue-100 text-blue-700' },
-  viewed:   { label: 'Consulte',  color: 'bg-purple-100 text-purple-700' },
-  accepted: { label: 'Accepte',   color: 'bg-green-100 text-green-700' },
-  signed:   { label: 'Accepte',   color: 'bg-green-100 text-green-700' },
-  rejected: { label: 'Refuse',    color: 'bg-red-100 text-red-700' },
-  expired:  { label: 'Expire',    color: 'bg-gray-100 text-gray-500' }
+  draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
+  active:   { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  viewed:   { label: 'Consulte',  bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
+  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  signed:   { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
+  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  expired:  { label: 'Expire',    bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 const FILTER_PILLS = [
@@ -302,7 +302,8 @@ const DevisRevendeur = () => {
 
                       {/* Status badge */}
                       <td className="py-3 px-4">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusCfg.color}`}>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: statusCfg.bg, color: statusCfg.fg }}>
                           {statusCfg.label}
                         </span>
                       </td>
@@ -330,7 +331,7 @@ const DevisRevendeur = () => {
                           {canRelance && (
                             <button
                               onClick={() => handleRelance(q)}
-                              className="ds-btn-ghost p-1.5 rounded-lg text-blue-600"
+                              className="ds-btn-ghost p-1.5 rounded-lg" style={{ color: 'var(--accent)' }}
                               title="Relancer"
                             >
                               <Send className="w-4 h-4" />

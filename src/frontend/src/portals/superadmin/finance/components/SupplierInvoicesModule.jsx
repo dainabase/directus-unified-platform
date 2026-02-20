@@ -15,11 +15,11 @@ import api from '../../../../lib/axios'
 const PAGE_SIZE = 25
 
 const STATUS_CONFIG = {
-  draft:    { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  pending:  { label: 'En attente', color: 'bg-amber-50 text-amber-700' },
-  approved: { label: 'Approuvee', color: 'bg-green-50 text-green-700' },
-  paid:     { label: 'Payee', color: 'bg-emerald-50 text-emerald-700' },
-  rejected: { label: 'Rejetee', color: 'bg-red-50 text-red-700' }
+  draft:    { label: 'Brouillon', color: 'ds-badge ds-badge-default' },
+  pending:  { label: 'En attente', color: 'ds-badge ds-badge-warning' },
+  approved: { label: 'Approuvee', color: 'ds-badge ds-badge-success' },
+  paid:     { label: 'Payee', color: 'ds-badge ds-badge-success' },
+  rejected: { label: 'Rejetee', color: 'ds-badge ds-badge-danger' }
 }
 
 const formatCHF = (value) => {
@@ -42,7 +42,7 @@ const formatDate = (d) => {
 const StatusBadge = ({ status }) => {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.draft
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span className={cfg.color}>
       {cfg.label}
     </span>
   )
@@ -156,11 +156,11 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
           <button
             key={key}
             onClick={() => { setStatusFilter(key === statusFilter ? 'all' : key); setPage(1) }}
-            className={`p-3 rounded-lg border text-center transition-colors ${
-              statusFilter === key
-                ? 'border-blue-300 bg-blue-50'
-                : 'border-gray-200 bg-white/70 hover:bg-gray-50'
-            }`}
+            className="p-3 rounded-lg border text-center transition-colors"
+            style={statusFilter === key
+              ? { borderColor: 'var(--accent)', background: 'var(--accent-light)' }
+              : { borderColor: 'var(--border-light)', background: 'var(--bg-surface)' }
+            }
           >
             <p className="text-lg font-bold text-gray-900">{statusCounts[key] || 0}</p>
             <p className="text-xs text-gray-500">{cfg.label}</p>
@@ -177,7 +177,7 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
             placeholder="Rechercher ref. ou fournisseur..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+            className="ds-input w-full pl-9 pr-3 py-2 text-sm"
           />
         </div>
         {statusFilter !== 'all' && (
@@ -191,7 +191,7 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <table className="w-full text-sm">
             <thead>
@@ -247,7 +247,8 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1">
                       <button
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500"
+                        style={{ '--hover-color': 'var(--accent)' }}
                         title="Voir"
                       >
                         <Eye size={14} />
@@ -256,7 +257,7 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
                         <button
                           onClick={() => approveMutation.mutate(inv.id)}
                           disabled={approveMutation.isPending}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-green-600 disabled:opacity-40"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 disabled:opacity-40"
                           title="Approuver"
                         >
                           <CheckCircle size={14} />
@@ -265,7 +266,7 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
                       <button
                         onClick={() => handleDelete(inv.id)}
                         disabled={deleteMutation.isPending}
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-red-600 disabled:opacity-40"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 disabled:opacity-40"
                         title="Supprimer"
                       >
                         <Trash2 size={14} />

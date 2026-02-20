@@ -28,11 +28,11 @@ const formatCHF = (value) =>
 const VAT_RATE = 8.1
 
 const STATUS_CONFIG = {
-  pending: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  approved: { label: 'Approuvee', color: 'bg-blue-100 text-blue-700', icon: CheckCircle },
-  paid: { label: 'Payee', color: 'bg-green-100 text-green-700', icon: CreditCard },
-  rejected: { label: 'Refusee', color: 'bg-red-100 text-red-700', icon: AlertCircle },
-  cancelled: { label: 'Annulee', color: 'bg-gray-100 text-gray-500', icon: X }
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500', icon: Clock },
+  approved: { label: 'Approuvee', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3', icon: CheckCircle },
+  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: '#34C759', icon: CreditCard },
+  rejected: { label: 'Refusee', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30', icon: AlertCircle },
+  cancelled: { label: 'Annulee', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280', icon: X }
 }
 
 // -- New invoice modal --
@@ -113,7 +113,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -134,7 +134,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </label>
             <input
               {...register('invoice_number', { required: 'Le numero de facture est obligatoire' })}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50"
               placeholder="FAC-2026-001"
             />
             {errors.invoice_number && <p className="text-xs text-red-600 mt-1">{errors.invoice_number.message}</p>}
@@ -147,7 +147,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </label>
             <select
               {...register('project_id')}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50"
             >
               <option value="">Selectionner un projet...</option>
               {projects.map(p => (
@@ -170,7 +170,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
                   required: 'Le montant est obligatoire',
                   min: { value: 0.01, message: 'Le montant doit etre positif' }
                 })}
-                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
+                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)] bg-white/50"
                 placeholder="0.00"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">CHF</span>
@@ -190,7 +190,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </div>
             <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
               <span className="font-semibold text-gray-900">Total TTC</span>
-              <span className="font-bold text-blue-700">{formatCHF(totalTTC)}</span>
+              <span className="font-bold" style={{ color: 'var(--accent)' }}>{formatCHF(totalTTC)}</span>
             </div>
           </div>
 
@@ -207,9 +207,9 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
               onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
             />
             {selectedFile ? (
-              <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-xl">
+              <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'rgba(0,113,227,0.06)', border: '1px solid rgba(0,113,227,0.2)' }}>
                 <div className="flex items-center gap-2">
-                  <FileText size={16} className="text-blue-600" />
+                  <FileText size={16} style={{ color: 'var(--accent)' }} />
                   <span className="text-sm text-gray-700">{selectedFile.name}</span>
                   <span className="text-xs text-gray-400">({(selectedFile.size / 1024).toFixed(0)} KB)</span>
                 </div>
@@ -225,7 +225,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-blue-300 hover:text-blue-600 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
               >
                 <Upload size={18} />
                 Joindre le PDF de la facture
@@ -245,7 +245,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -316,7 +316,7 @@ const ProviderInvoices = () => {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
         >
           <Plus size={18} />
           Soumettre une facture
@@ -327,14 +327,14 @@ const ProviderInvoices = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={16} className="text-amber-500" />
+            <Clock size={16} style={{ color: 'var(--warning)' }} />
             <span className="text-xs text-gray-500 font-medium">En attente de paiement</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(totalPending)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={16} className="text-emerald-500" />
+            <CheckCircle size={16} style={{ color: 'var(--success)' }} />
             <span className="text-xs text-gray-500 font-medium">Total paye</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(totalPaid)}</p>
@@ -349,7 +349,7 @@ const ProviderInvoices = () => {
             <p className="text-sm text-gray-500">Aucune facture soumise</p>
             <button
               onClick={() => setShowNew(true)}
-              className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="mt-4 text-sm font-medium hover:opacity-80" style={{ color: 'var(--accent)' }}
             >
               Soumettre votre premiere facture
             </button>
@@ -376,7 +376,7 @@ const ProviderInvoices = () => {
                     <tr key={inv.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                       <td className="py-3">
                         <div className="flex items-center gap-2">
-                          {inv.file_id && <FileText size={14} className="text-blue-500" />}
+                          {inv.file_id && <FileText size={14} style={{ color: 'var(--accent)' }} />}
                           <span className="font-medium text-gray-900">{inv.invoice_number || '—'}</span>
                         </div>
                       </td>
@@ -390,28 +390,29 @@ const ProviderInvoices = () => {
                         {inv.total_ttc ? formatCHF(inv.total_ttc) : '—'}
                       </td>
                       <td className="py-3">
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+                          style={{ background: config.bg, color: config.fg }}>
                           <StatusIcon size={12} />
                           {config.label}
                         </span>
                       </td>
                       <td className="py-3">
                         {inv.status === 'approved' && (
-                          <span className="text-xs text-blue-600 font-medium">En cours Revolut</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>En cours Revolut</span>
                         )}
                         {inv.status === 'paid' && inv.date_paid && (
-                          <span className="text-xs text-emerald-600 font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>
                             Paye le {format(new Date(inv.date_paid), 'dd.MM.yyyy', { locale: fr })}
                           </span>
                         )}
                         {inv.status === 'paid' && !inv.date_paid && (
-                          <span className="text-xs text-emerald-600 font-medium">Paye</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>Paye</span>
                         )}
                         {inv.status === 'pending' && (
                           <span className="text-xs text-gray-400">En attente de validation</span>
                         )}
                         {inv.status === 'rejected' && (
-                          <span className="text-xs text-red-600 font-medium">Refusee</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--danger)' }}>Refusee</span>
                         )}
                       </td>
                     </tr>

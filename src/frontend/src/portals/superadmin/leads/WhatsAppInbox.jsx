@@ -14,10 +14,10 @@ import {
 import api from '../../../lib/axios'
 
 const STATUS_BADGES = {
-  received: { label: 'Recu', icon: ArrowDownLeft, className: 'bg-zinc-100 text-zinc-700' },
-  processed: { label: 'Traite', icon: CheckCircle, className: 'bg-emerald-50 text-emerald-700' },
-  sent: { label: 'Envoye', icon: ArrowUpRight, className: 'bg-blue-50 text-blue-700' },
-  failed: { label: 'Echec', icon: AlertCircle, className: 'bg-red-50 text-red-700' }
+  received: { label: 'Recu', icon: ArrowDownLeft, className: 'ds-badge ds-badge-default' },
+  processed: { label: 'Traite', icon: CheckCircle, className: 'ds-badge ds-badge-success' },
+  sent: { label: 'Envoye', icon: ArrowUpRight, className: 'ds-badge ds-badge-info' },
+  failed: { label: 'Echec', icon: AlertCircle, className: 'ds-badge ds-badge-danger' }
 }
 
 function formatDate(iso) {
@@ -110,7 +110,7 @@ export default function WhatsAppInbox() {
           placeholder="Rechercher par telephone ou contenu..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent"
+          className="ds-input w-full pl-10 pr-4 py-2.5 text-sm"
         />
       </div>
 

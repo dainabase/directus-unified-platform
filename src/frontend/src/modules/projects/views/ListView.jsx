@@ -7,7 +7,7 @@ import {
   MoreVertical,
   ExternalLink
 } from 'lucide-react'
-import { GlassCard, Table, Badge, Button } from '../../../components/ui'
+import { Card, Table, Badge, Button } from '../../../components/ui'
 
 const ListView = ({ projects }) => {
   const getPriorityColor = (priority) => {
@@ -48,7 +48,7 @@ const ListView = ({ projects }) => {
   }
 
   return (
-    <GlassCard className="p-0 overflow-hidden">
+    <Card className="p-0 overflow-hidden">
       <Table>
         <Table.Head>
           <Table.Row>
@@ -110,7 +110,8 @@ const ListView = ({ projects }) => {
                     </div>
                     <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-blue-600 transition-all duration-300"
+                        className="h-full transition-all duration-300"
+                        style={{background:'var(--accent)'}}
                         style={{ width: `${progress}%` }}
                       />
                     </div>
@@ -119,11 +120,12 @@ const ListView = ({ projects }) => {
                 <Table.Cell>
                   <div className="flex items-center gap-1">
                     <Calendar size={14} className="text-gray-400" />
-                    <span className={`text-sm ${
-                      new Date(project.end_date) < new Date() && project.status !== 'completed'
-                        ? 'text-red-600 font-medium' 
-                        : 'text-gray-700'
-                    }`}>
+                    <span
+                      className="text-sm"
+                      style={new Date(project.end_date) < new Date() && project.status !== 'completed'
+                        ? {color:'var(--danger)', fontWeight:500}
+                        : {color:'#1D1D1F'}}
+                    >
                       {formatDate(project.end_date)}
                     </span>
                   </div>
@@ -135,11 +137,12 @@ const ListView = ({ projects }) => {
                 </Table.Cell>
                 <Table.Cell align="right">
                   <div className="text-right">
-                    <p className={`text-sm font-medium ${
-                      budgetUtilization > 90 ? 'text-red-600' : 
-                      budgetUtilization > 75 ? 'text-yellow-600' : 
-                      'text-gray-700'
-                    }`}>
+                    <p
+                      className="text-sm font-medium"
+                      style={budgetUtilization > 90 ? {color:'var(--danger)'} :
+                        budgetUtilization > 75 ? {color:'var(--warning)'} :
+                        {color:'#1D1D1F'}}
+                    >
                       {formatCurrency(project.spent_amount || 0)}
                     </p>
                     <p className="text-xs text-gray-500">
@@ -162,7 +165,7 @@ const ListView = ({ projects }) => {
           })}
         </Table.Body>
       </Table>
-    </GlassCard>
+    </Card>
   )
 }
 

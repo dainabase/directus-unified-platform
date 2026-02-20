@@ -16,19 +16,20 @@ import api from '../../../lib/axios'
 import { useAuthStore } from '../../../stores/authStore'
 
 const STATUS_CONFIG = {
-  active: { label: 'Actif', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle2 },
-  in_progress: { label: 'En cours', color: 'bg-indigo-100 text-indigo-700', icon: BarChart3 },
-  on_hold: { label: 'En pause', color: 'bg-amber-100 text-amber-700', icon: PauseCircle },
-  completed: { label: 'Termine', color: 'bg-blue-100 text-blue-700', icon: CheckCircle2 },
-  cancelled: { label: 'Annule', color: 'bg-red-100 text-red-700', icon: XCircle },
-  planning: { label: 'Planification', color: 'bg-gray-100 text-gray-600', icon: Clock }
+  active: { label: 'Actif', bg: 'var(--success-light)', fg: 'var(--success)', icon: CheckCircle2 },
+  in_progress: { label: 'En cours', bg: 'var(--accent-light)', fg: 'var(--accent)', icon: BarChart3 },
+  on_hold: { label: 'En pause', bg: 'var(--warning-light)', fg: 'var(--warning)', icon: PauseCircle },
+  completed: { label: 'Termine', bg: 'var(--accent-light)', fg: 'var(--accent)', icon: CheckCircle2 },
+  cancelled: { label: 'Annule', bg: 'var(--danger-light)', fg: 'var(--danger)', icon: XCircle },
+  planning: { label: 'Planification', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock }
 }
 
 const StatusBadge = ({ status }) => {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.active
   const Icon = cfg.icon
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+      style={{background: cfg.bg, color: cfg.fg}}>
       <Icon size={12} /> {cfg.label}
     </span>
   )
@@ -99,35 +100,35 @@ const ProjectDetail = ({ project, onBack }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <button onClick={onBack} className="px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">Retour</button>
-        <ChevronRight size={14} className="text-gray-400" />
-        <span className="text-sm font-medium text-gray-900">{project.name}</span>
+        <button onClick={onBack} className="ds-btn ds-btn-ghost px-3 py-1.5 text-sm">Retour</button>
+        <ChevronRight size={14} style={{color:'var(--text-tertiary)'}} />
+        <span className="text-sm font-medium" style={{color:'var(--text-primary)'}}>{project.name}</span>
       </div>
 
       {/* Header */}
       <div className="ds-card p-6">
-        <h2 className="text-xl font-bold text-gray-900">{project.name}</h2>
-        {project.description && <p className="text-sm text-gray-500 mt-1">{project.description}</p>}
+        <h2 className="text-xl font-bold" style={{color:'var(--text-primary)'}}>{project.name}</h2>
+        {project.description && <p className="text-sm mt-1" style={{color:'var(--text-tertiary)'}}>{project.description}</p>}
         <div className="flex items-center gap-3 mt-3">
           <StatusBadge status={project.status} />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
           <div>
-            <p className="text-xs text-gray-500">Debut</p>
-            <p className="font-semibold text-gray-900">{project.start_date ? format(new Date(project.start_date), 'dd MMM yyyy', { locale: fr }) : '—'}</p>
+            <p className="text-xs" style={{color:'var(--text-tertiary)'}}>Debut</p>
+            <p className="font-semibold" style={{color:'var(--text-primary)'}}>{project.start_date ? format(new Date(project.start_date), 'dd MMM yyyy', { locale: fr }) : '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">Fin prevue</p>
-            <p className="font-semibold text-gray-900">{project.end_date ? format(new Date(project.end_date), 'dd MMM yyyy', { locale: fr }) : '—'}</p>
+            <p className="text-xs" style={{color:'var(--text-tertiary)'}}>Fin prevue</p>
+            <p className="font-semibold" style={{color:'var(--text-primary)'}}>{project.end_date ? format(new Date(project.end_date), 'dd MMM yyyy', { locale: fr }) : '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500">Avancement</p>
+            <p className="text-xs" style={{color:'var(--text-tertiary)'}}>Avancement</p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                <div className="h-full bg-[#0071E3] rounded-full" style={{ width: `${progress}%` }} />
+              <div className="flex-1 h-2 rounded-full" style={{background:'rgba(0,0,0,0.08)'}}>
+                <div className="h-full rounded-full" style={{ width: `${progress}%`, background:'var(--accent)' }} />
               </div>
-              <span className="text-sm font-bold text-gray-900">{progress}%</span>
+              <span className="text-sm font-bold" style={{color:'var(--text-primary)'}}>{progress}%</span>
             </div>
           </div>
         </div>
@@ -135,23 +136,23 @@ const ProjectDetail = ({ project, onBack }) => {
 
       {/* Deliverables (read-only) */}
       <div className="ds-card">
-        <div className="p-4 border-b border-gray-100">
-          <h3 className="font-semibold text-gray-900">Livrables ({totalDel})</h3>
+        <div className="p-4" style={{borderBottom:'1px solid var(--border-light)'}}>
+          <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>Livrables ({totalDel})</h3>
         </div>
         {isLoading ? (
-          <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto" /></div>
+          <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto" style={{color:'var(--accent)'}} /></div>
         ) : deliverables.length === 0 ? (
-          <div className="p-8 text-center text-gray-400 text-sm">Aucun livrable pour ce projet</div>
+          <div className="p-8 text-center text-sm" style={{color:'var(--text-tertiary)'}}>Aucun livrable pour ce projet</div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y" style={{borderColor:'var(--border-light)'}}>
             {deliverables.map(d => (
               <div key={d.id} className="px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <StatusBadge status={d.status} />
-                  <span className="text-sm text-gray-900">{d.title}</span>
+                  <span className="text-sm" style={{color:'var(--text-primary)'}}>{d.title}</span>
                 </div>
                 {d.due_date && (
-                  <span className={`text-xs ${new Date(d.due_date) < new Date() && d.status !== 'done' ? 'text-red-500' : 'text-gray-500'}`}>
+                  <span className="text-xs" style={{color: new Date(d.due_date) < new Date() && d.status !== 'done' ? 'var(--danger)' : 'var(--text-tertiary)'}}>
                     {format(new Date(d.due_date), 'dd MMM yyyy', { locale: fr })}
                   </span>
                 )}
@@ -164,18 +165,18 @@ const ProjectDetail = ({ project, onBack }) => {
       {/* Timeline */}
       {timeline.length > 0 && (
         <div className="ds-card">
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-900">Timeline</h3>
+          <div className="p-4" style={{borderBottom:'1px solid var(--border-light)'}}>
+            <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>Timeline</h3>
           </div>
           <div className="p-4">
             <div className="relative pl-6 space-y-4">
-              <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-gray-200" />
+              <div className="absolute left-2 top-2 bottom-2 w-0.5" style={{background:'var(--border-light)'}} />
               {timeline.map(d => (
                 <div key={d.id} className="relative">
-                  <div className={`absolute -left-4 w-3 h-3 rounded-full border-2 border-white ${d.status === 'done' ? 'bg-emerald-500' : 'bg-gray-300'}`} />
+                  <div className="absolute -left-4 w-3 h-3 rounded-full border-2 border-white" style={{background: d.status === 'done' ? 'var(--success)' : '#D1D5DB'}} />
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">{d.title}</span>
-                    <span className="text-xs text-gray-400">{format(new Date(d.date_created), 'dd MMM yyyy', { locale: fr })}</span>
+                    <span className="text-sm" style={{color:'var(--text-secondary)'}}>{d.title}</span>
+                    <span className="text-xs" style={{color:'var(--text-tertiary)'}}>{format(new Date(d.date_created), 'dd MMM yyyy', { locale: fr })}</span>
                   </div>
                 </div>
               ))}
@@ -208,16 +209,16 @@ const ClientProjectsModule = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Mes projets</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Suivi de vos projets en cours</p>
+        <h1 className="text-xl font-bold" style={{color:'var(--text-primary)'}}>Mes projets</h1>
+        <p className="text-sm mt-0.5" style={{color:'var(--text-tertiary)'}}>Suivi de vos projets en cours</p>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin" style={{color:'var(--accent)'}} /></div>
       ) : projects.length === 0 ? (
         <div className="ds-card p-12 text-center">
-          <FolderKanban className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">Aucun projet pour le moment</p>
+          <FolderKanban className="w-10 h-10 mx-auto mb-3" style={{color:'var(--text-tertiary)'}} />
+          <p style={{color:'var(--text-tertiary)'}}>Aucun projet pour le moment</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -225,11 +226,11 @@ const ClientProjectsModule = () => {
             <div key={p.id} onClick={() => setSelectedProject(p)}
               className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
-                <h3 className="font-semibold text-gray-900">{p.name}</h3>
+                <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>{p.name}</h3>
                 <StatusBadge status={p.status} />
               </div>
-              {p.description && <p className="text-xs text-gray-500 mb-3 line-clamp-2">{p.description}</p>}
-              <div className="flex items-center gap-4 text-xs text-gray-400">
+              {p.description && <p className="text-xs mb-3 line-clamp-2" style={{color:'var(--text-tertiary)'}}>{p.description}</p>}
+              <div className="flex items-center gap-4 text-xs" style={{color:'var(--text-tertiary)'}}>
                 {p.start_date && (
                   <span className="flex items-center gap-1">
                     <Calendar size={12} /> {format(new Date(p.start_date), 'dd MMM yyyy', { locale: fr })}

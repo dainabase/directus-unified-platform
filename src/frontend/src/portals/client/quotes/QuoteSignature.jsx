@@ -18,11 +18,11 @@ const formatCHF = (v) => new Intl.NumberFormat('fr-CH', { style: 'currency', cur
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
 const STATUS_CONFIG = {
-  sent: { label: 'En attente', color: 'bg-blue-100 text-blue-700', icon: Clock },
-  viewed: { label: 'Consulté', color: 'bg-purple-100 text-purple-700', icon: Eye },
-  signed: { label: 'Signé', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-  rejected: { label: 'Refusé', color: 'bg-red-100 text-red-700', icon: XCircle },
-  expired: { label: 'Expiré', color: 'bg-gray-100 text-gray-600', icon: Clock }
+  sent: { label: 'En attente', bg: 'var(--accent-light)', fg: 'var(--accent)', icon: Clock },
+  viewed: { label: 'Consulté', bg: 'rgba(175,82,222,0.12)', fg: '#AF52DE', icon: Eye },
+  signed: { label: 'Signé', bg: 'var(--success-light)', fg: 'var(--success)', icon: CheckCircle },
+  rejected: { label: 'Refusé', bg: 'var(--danger-light)', fg: 'var(--danger)', icon: XCircle },
+  expired: { label: 'Expiré', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock }
 }
 
 const QuoteSignature = () => {
@@ -174,7 +174,7 @@ const QuoteSignature = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin" style={{color:'var(--accent)'}} />
       </div>
     )
   }
@@ -182,15 +182,15 @@ const QuoteSignature = () => {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Mes devis</h1>
-        <p className="text-gray-500 text-sm mt-1">Consultez et signez vos devis</p>
+        <h1 className="text-2xl font-bold" style={{color:'var(--text-primary)'}}>Mes devis</h1>
+        <p className="text-sm mt-1" style={{color:'var(--text-tertiary)'}}>Consultez et signez vos devis</p>
       </div>
 
       {/* Quotes list */}
       {quotes.length === 0 ? (
         <div className="ds-card p-12 text-center">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">Aucun devis pour le moment</p>
+          <FileText className="w-12 h-12 mx-auto mb-3" style={{color:'var(--text-tertiary)'}} />
+          <p style={{color:'var(--text-tertiary)'}}>Aucun devis pour le moment</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -204,29 +204,30 @@ const QuoteSignature = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="font-semibold text-gray-900">{quote.quote_number}</h3>
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                      <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>{quote.quote_number}</h3>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium"
+                        style={{background: cfg.bg, color: cfg.fg}}>
                         <Icon size={12} /> {cfg.label}
                       </span>
                     </div>
                     {quote.description && (
-                      <p className="text-sm text-gray-500 mb-2 line-clamp-2">{quote.description}</p>
+                      <p className="text-sm mb-2 line-clamp-2" style={{color:'var(--text-tertiary)'}}>{quote.description}</p>
                     )}
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-4 text-sm" style={{color:'var(--text-tertiary)'}}>
                       <span>Créé le {formatDate(quote.created_at)}</span>
                       {quote.valid_until && <span>Valide jusqu'au {formatDate(quote.valid_until)}</span>}
                     </div>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="text-lg font-bold text-gray-900">{formatCHF(quote.total)}</p>
-                    <p className="text-xs text-gray-500">TVA {quote.tax_rate || 8.1}% incluse</p>
+                    <p className="text-lg font-bold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total)}</p>
+                    <p className="text-xs" style={{color:'var(--text-tertiary)'}}>TVA {quote.tax_rate || 8.1}% incluse</p>
                     {canSign ? (
                       <button onClick={() => handleOpenQuote(quote)}
-                        className="mt-2 flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors">
+                        className="ds-btn ds-btn-primary mt-2 flex items-center gap-1 px-4 py-2 text-sm font-medium">
                         <PenTool size={14} /> Signer
                       </button>
                     ) : quote.status === 'signed' ? (
-                      <p className="mt-2 text-xs text-blue-600 font-medium">Signé le {formatDate(quote.signed_at)}</p>
+                      <p className="mt-2 text-xs font-medium" style={{color:'var(--accent)'}}>Signé le {formatDate(quote.signed_at)}</p>
                     ) : null}
                   </div>
                 </div>
@@ -238,42 +239,42 @@ const QuoteSignature = () => {
 
       {/* Sign Modal */}
       {showSignModal && selectedQuote && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             {/* Modal header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl z-10">
+            <div className="flex items-center justify-between p-6 sticky top-0 rounded-t-2xl z-10" style={{borderBottom:'1px solid var(--border-light)', background:'var(--bg-surface)'}}>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Signer le devis {selectedQuote.quote_number}</h2>
-                <p className="text-sm text-gray-500">Relisez les détails et signez</p>
+                <h2 className="text-lg font-semibold" style={{color:'var(--text-primary)'}}>Signer le devis {selectedQuote.quote_number}</h2>
+                <p className="text-sm" style={{color:'var(--text-tertiary)'}}>Relisez les détails et signez</p>
               </div>
               <button onClick={() => { setShowSignModal(false); setCgvAccepted(false) }}
-                className="p-2 rounded-lg hover:bg-gray-100 text-gray-400">
+                className="ds-btn ds-btn-ghost p-2" style={{color:'var(--text-tertiary)'}}>
                 <X size={20} />
               </button>
             </div>
 
             <div className="p-6 space-y-6">
               {/* Quote summary */}
-              <div className="bg-gray-50 rounded-xl p-5">
-                <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">Résumé du devis</h3>
+              <div className="rounded-xl p-5" style={{background:'rgba(0,0,0,0.02)'}}>
+                <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{color:'var(--text-secondary)'}}>Résumé du devis</h3>
                 {selectedQuote.description && (
-                  <p className="text-sm text-gray-600 mb-4">{selectedQuote.description}</p>
+                  <p className="text-sm mb-4" style={{color:'var(--text-secondary)'}}>{selectedQuote.description}</p>
                 )}
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Sous-total HT</span>
+                    <span style={{color:'var(--text-tertiary)'}}>Sous-total HT</span>
                     <span className="font-medium">{formatCHF(selectedQuote.subtotal)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">TVA ({selectedQuote.tax_rate || 8.1}%)</span>
+                    <span style={{color:'var(--text-tertiary)'}}>TVA ({selectedQuote.tax_rate || 8.1}%)</span>
                     <span className="font-medium">{formatCHF(selectedQuote.tax_amount)}</span>
                   </div>
-                  <div className="flex justify-between text-base font-bold border-t border-gray-200 pt-2 mt-2">
+                  <div className="flex justify-between text-base font-bold pt-2 mt-2" style={{borderTop:'1px solid var(--border-light)'}}>
                     <span>Total TTC</span>
-                    <span className="text-gray-900">{formatCHF(selectedQuote.total)}</span>
+                    <span style={{color:'var(--text-primary)'}}>{formatCHF(selectedQuote.total)}</span>
                   </div>
                   {selectedQuote.deposit_percentage > 0 && (
-                    <div className="flex justify-between text-sm text-blue-600 pt-1">
+                    <div className="flex justify-between text-sm pt-1" style={{color:'var(--accent)'}}>
                       <span>Acompte ({selectedQuote.deposit_percentage}%)</span>
                       <span className="font-medium">{formatCHF(selectedQuote.deposit_amount)}</span>
                     </div>
@@ -282,27 +283,27 @@ const QuoteSignature = () => {
               </div>
 
               {/* CGV Section */}
-              <div className="border border-gray-200 rounded-xl overflow-hidden">
+              <div className="rounded-xl overflow-hidden" style={{border:'1px solid var(--border-light)'}}>
                 <button onClick={() => setCgvExpanded(!cgvExpanded)}
-                  className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                  className="w-full flex items-center justify-between p-4 ds-btn-ghost transition-colors" style={{background:'rgba(0,0,0,0.02)'}}>
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-blue-600" />
-                    <span className="font-medium text-gray-900">
+                    <Shield className="w-5 h-5" style={{color:'var(--accent)'}} />
+                    <span className="font-medium" style={{color:'var(--text-primary)'}}>
                       Conditions Générales de Vente
-                      {activeCgv && <span className="text-xs text-gray-500 ml-2">({activeCgv.version})</span>}
+                      {activeCgv && <span className="text-xs ml-2" style={{color:'var(--text-tertiary)'}}>({activeCgv.version})</span>}
                     </span>
                   </div>
                   {cgvExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                 </button>
                 {cgvExpanded && (
-                  <div className="p-4 max-h-80 overflow-y-auto border-t border-gray-200">
+                  <div className="p-4 max-h-80 overflow-y-auto" style={{borderTop:'1px solid var(--border-light)'}}>
                     {activeCgv?.content_html ? (
-                      <div className="prose prose-sm max-w-none text-gray-600"
+                      <div className="prose prose-sm max-w-none" style={{color:'var(--text-secondary)'}}
                         dangerouslySetInnerHTML={{ __html: activeCgv.content_html }} />
                     ) : activeCgv?.summary ? (
-                      <p className="text-sm text-gray-600 whitespace-pre-wrap">{activeCgv.summary}</p>
+                      <p className="text-sm whitespace-pre-wrap" style={{color:'var(--text-secondary)'}}>{activeCgv.summary}</p>
                     ) : (
-                      <div className="text-center py-6 text-amber-600">
+                      <div className="text-center py-6" style={{color:'var(--warning)'}}>
                         <AlertTriangle className="w-8 h-8 mx-auto mb-2" />
                         <p className="text-sm">CGV en cours de mise à jour — contactez HYPERVISUAL</p>
                       </div>
@@ -313,15 +314,15 @@ const QuoteSignature = () => {
 
               {/* CGV checkbox */}
               {!activeCgv ? (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-700 text-sm flex items-center gap-2">
+                <div className="rounded-lg p-4 text-sm flex items-center gap-2" style={{background:'var(--warning-light)', border:'1px solid var(--warning)', color:'var(--warning)'}}>
                   <AlertTriangle size={16} />
                   CGV en cours de mise à jour — signature temporairement désactivée
                 </div>
               ) : (
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                  <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                    className="mt-1 w-4 h-4 rounded" style={{borderColor:'var(--border-light)', accentColor:'var(--accent)'}} />
+                  <span className="text-sm" style={{color:'var(--text-secondary)'}}>
                     J'ai lu et j'accepte les <strong>Conditions Générales de Vente</strong> ({activeCgv.version}) d'HYPERVISUAL Switzerland
                   </span>
                 </label>
@@ -329,10 +330,10 @@ const QuoteSignature = () => {
 
               {/* Signature field */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium mb-1" style={{color:'var(--text-secondary)'}}>
                   Signature électronique
                 </label>
-                <p className="text-xs text-gray-500 mb-2">
+                <p className="text-xs mb-2" style={{color:'var(--text-tertiary)'}}>
                   Tapez votre nom complet pour signer (signature simple conforme CO Art. 14)
                 </p>
                 <input
@@ -340,7 +341,8 @@ const QuoteSignature = () => {
                   value={signerName}
                   onChange={(e) => setSignerName(e.target.value)}
                   placeholder="Prénom Nom"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-serif text-lg italic text-gray-900"
+                  className="ds-input w-full px-4 py-3 rounded-xl font-serif text-lg italic"
+                  style={{color:'var(--text-primary)'}}
                 />
               </div>
 
@@ -348,7 +350,7 @@ const QuoteSignature = () => {
               <button
                 onClick={handleSign}
                 disabled={!cgvAccepted || !signerName.trim() || signMutation.isPending || !activeCgv}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-[#0071E3] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="ds-btn ds-btn-primary w-full flex items-center justify-center gap-2 py-3 px-4 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {signMutation.isPending ? (
                   <><Loader2 size={18} className="animate-spin" /> Signature en cours...</>
@@ -357,7 +359,7 @@ const QuoteSignature = () => {
                 )}
               </button>
 
-              <p className="text-xs text-gray-400 text-center">
+              <p className="text-xs text-center" style={{color:'var(--text-tertiary)'}}>
                 En signant, vous acceptez les conditions du devis et les CGV. Un email de confirmation vous sera envoyé.
               </p>
             </div>

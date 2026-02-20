@@ -13,13 +13,13 @@ import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 const TYPE_CONFIG = {
-  quote: { icon: FileText, color: 'text-blue-500 bg-blue-50' },
+  quote: { icon: FileText, color: 'text-zinc-500 bg-zinc-50' },
   invoice: { icon: DollarSign, color: 'text-green-500 bg-green-50' },
-  payment: { icon: DollarSign, color: 'text-emerald-500 bg-emerald-50' },
-  lead: { icon: Users, color: 'text-purple-500 bg-purple-50' },
+  payment: { icon: DollarSign, color: 'text-green-500 bg-green-50' },
+  lead: { icon: Users, color: 'text-gray-500 bg-gray-50' },
   ticket: { icon: AlertCircle, color: 'text-red-500 bg-red-50' },
   order: { icon: ShoppingCart, color: 'text-orange-500 bg-orange-50' },
-  message: { icon: MessageSquare, color: 'text-indigo-500 bg-indigo-50' },
+  message: { icon: MessageSquare, color: 'text-zinc-500 bg-zinc-50' },
   reminder: { icon: Calendar, color: 'text-amber-500 bg-amber-50' },
   system: { icon: Bell, color: 'text-gray-500 bg-gray-50' }
 }

@@ -33,19 +33,19 @@ const formatDate = (d) => {
 }
 
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-  pending: { label: 'En attente', color: 'bg-amber-50 text-amber-700' },
-  sent: { label: 'Envoyee', color: 'bg-blue-50 text-blue-700' },
-  paid: { label: 'Payee', color: 'bg-emerald-50 text-emerald-700' },
-  partial: { label: 'Partielle', color: 'bg-orange-50 text-orange-700' },
-  overdue: { label: 'En retard', color: 'bg-red-50 text-red-700' },
-  cancelled: { label: 'Annulee', color: 'bg-gray-100 text-gray-500' }
+  draft: { label: 'Brouillon', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#52525b' } },
+  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
+  sent: { label: 'Envoyee', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' } },
+  paid: { label: 'Payee', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: '#34C759' } },
+  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
+  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' } },
+  cancelled: { label: 'Annulee', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#71717a' } }
 }
 
 const StatusBadge = ({ status }) => {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.draft
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span style={{ ...cfg.badgeStyle, fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }}>
       {cfg.label}
     </span>
   )
@@ -248,7 +248,7 @@ const InvoicesModule = ({ selectedCompany }) => {
         </div>
         <button
           onClick={() => { setEditInvoice(null); setView('form') }}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+          className="ds-btn ds-btn-primary text-sm"
         >
           <Plus size={16} /> Nouvelle facture
         </button>
@@ -264,8 +264,8 @@ const InvoicesModule = ({ selectedCompany }) => {
               onClick={() => setStatusFilter(key === statusFilter ? 'all' : key)}
               className={`p-3 rounded-lg border text-center transition-colors ${
                 statusFilter === key
-                  ? 'border-blue-300 bg-blue-50'
-                  : 'border-gray-200 bg-white/70 hover:bg-gray-50'
+                  ? 'border-zinc-300 bg-zinc-50'
+                  : 'border-gray-200 bg-white hover:bg-gray-50'
               }`}
             >
               <p className="text-lg font-bold text-gray-900">{count}</p>
@@ -284,7 +284,7 @@ const InvoicesModule = ({ selectedCompany }) => {
             placeholder="Rechercher ref. ou client..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 outline-none"
           />
         </div>
         {statusFilter !== 'all' && (
@@ -298,10 +298,10 @@ const InvoicesModule = ({ selectedCompany }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
           </div>
         ) : invoices.length === 0 ? (
           <div className="py-12 text-center text-gray-400">
@@ -336,14 +336,14 @@ const InvoicesModule = ({ selectedCompany }) => {
                     <div className="flex items-center justify-center gap-1">
                       <button
                         onClick={() => { setViewInvoice(inv.id); setView('detail') }}
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                         title="Voir"
                       >
                         <Eye size={14} />
                       </button>
                       <button
                         onClick={() => { setEditInvoice(inv); setView('form') }}
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                         title="Modifier"
                       >
                         <Edit3 size={14} />
@@ -351,7 +351,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                       {inv.status === 'draft' && (
                         <button
                           onClick={() => sendMutation.mutate(inv.id)}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-green-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                           title="Envoyer"
                         >
                           <Send size={14} />
@@ -361,7 +361,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                         <button
                           onClick={() => markPaidMutation.mutate(inv)}
                           disabled={markPaidMutation.isPending}
-                          className="p-1.5 rounded hover:bg-emerald-50 text-gray-500 hover:text-emerald-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                           title="Marquer payee"
                         >
                           <CheckCircle2 size={14} />
@@ -371,7 +371,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                         <button
                           onClick={() => reminderMutation.mutate(inv.id)}
                           disabled={reminderMutation.isPending}
-                          className="p-1.5 rounded hover:bg-amber-50 text-gray-500 hover:text-amber-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                           title="Relancer"
                         >
                           <Mail size={14} />
@@ -379,7 +379,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                       )}
                       <button
                         onClick={() => duplicateMutation.mutate(inv.id)}
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                         title="Dupliquer"
                       >
                         <Copy size={14} />
@@ -388,7 +388,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                         <button
                           onClick={() => creditNoteMutation.mutate(inv.id)}
                           disabled={creditNoteMutation.isPending}
-                          className="p-1.5 rounded hover:bg-red-50 text-gray-500 hover:text-red-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                           title="Avoir"
                         >
                           <FileX size={14} />
@@ -397,7 +397,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                       {inv.status === 'draft' && (
                         <button
                           onClick={() => handleDelete(inv.id)}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-red-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-gray-600"
                           title="Supprimer"
                         >
                           <Trash2 size={14} />

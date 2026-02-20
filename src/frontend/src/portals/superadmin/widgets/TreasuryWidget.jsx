@@ -1,11 +1,23 @@
 /**
  * TreasuryWidget — S-01-07 — Apple Premium Design System
  * Revolut treasury overview with graceful degradation.
+ *
+ * Token refresh handling:
+ * - Detects 401 / token_expired responses from backend
+ * - Shows "Token expire" badge with warning color
+ * - Provides "Reconnecter" button to trigger POST /api/revolut/refresh
+ * - Shows spinner while token is being refreshed
+ *
+ * @version 2.0.0
+ * @date 2026-02-20
  */
 
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Wallet, TrendingUp, TrendingDown, AlertCircle, RefreshCw, Loader2, ArrowUpRight, ArrowDownLeft, Clock } from 'lucide-react'
+import {
+  Wallet, TrendingUp, TrendingDown, AlertCircle, RefreshCw,
+  Loader2, ArrowUpRight, ArrowDownLeft, Clock, ShieldAlert, Link2
+} from 'lucide-react'
 import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { formatDistanceToNow, format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -32,17 +44,46 @@ const formatCurrency = (value, currency = 'CHF') => {
 
 const fetchTreasury = async (company) => {
   try {
-    const { data } = await api.get('/api/revolut/balance')
+    const { data } = await api.get('/api/revolut/balance', {
+      params: { company: company && company !== 'all' ? company : undefined }
+    })
+
+    // Detect token expiry from backend response
+    if (data?.token_expired) {
+      return {
+        source: data.source || 'directus',
+        tokenExpired: true,
+        balance: data.balance || 0,
+        accounts: data.accounts || [],
+        lastSync: null,
+        currencyBreakdown: [],
+        inflows: 0,
+        outflows: 0,
+        dailyData: []
+      }
+    }
+
     if (data && (data.accounts || data.balance !== undefined)) {
       return {
-        source: 'revolut',
+        source: data.source || 'revolut',
+        tokenExpired: false,
         balance: data.balance || data.accounts?.reduce((sum, a) => sum + (a.balance || 0), 0) || 0,
         accounts: data.accounts || [],
         lastSync: data.lastSync || new Date().toISOString()
       }
     }
-  } catch {
-    // Revolut API unavailable, fallback to Directus
+  } catch (err) {
+    // Check if error is a 401 (token expired)
+    if (err.response?.status === 401 || err.response?.data?.token_expired) {
+      return {
+        source: 'directus',
+        tokenExpired: true,
+        balance: 0,
+        accounts: [],
+        lastSync: null
+      }
+    }
+    // Other Revolut API errors — fallback to Directus
   }
 
   try {
@@ -109,6 +150,7 @@ const fetchTreasury = async (company) => {
 
     return {
       source: 'directus',
+      tokenExpired: false,
       balance: totalBalance,
       accounts,
       currencyBreakdown,
@@ -118,12 +160,13 @@ const fetchTreasury = async (company) => {
       lastSync: null
     }
   } catch {
-    return { source: 'offline', balance: 0, accounts: [], currencyBreakdown: [], inflows: 0, outflows: 0, dailyData: [] }
+    return { source: 'offline', tokenExpired: false, balance: 0, accounts: [], currencyBreakdown: [], inflows: 0, outflows: 0, dailyData: [] }
   }
 }
 
 const TreasuryWidget = ({ selectedCompany }) => {
   const queryClient = useQueryClient()
+  const [isReconnecting, setIsReconnecting] = useState(false)
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['treasury', selectedCompany],
@@ -179,10 +222,36 @@ const TreasuryWidget = ({ selectedCompany }) => {
       queryClient.invalidateQueries({ queryKey: ['banking'] })
       toast.success('Synchronisation Revolut terminee')
     },
-    onError: () => {
-      toast.error('Erreur lors de la synchronisation')
+    onError: (err) => {
+      if (err.response?.status === 401 || err.response?.data?.token_expired) {
+        toast.error('Token Revolut expire — utilisez Reconnecter')
+        // Re-fetch to update tokenExpired state
+        refetch()
+      } else {
+        toast.error('Erreur lors de la synchronisation')
+      }
     }
   })
+
+  // Token reconnect handler
+  const handleReconnect = useCallback(async () => {
+    setIsReconnecting(true)
+    try {
+      const company = selectedCompany && selectedCompany !== 'all' ? selectedCompany : 'HYPERVISUAL'
+      await api.post('/api/revolut/refresh', { company })
+      toast.success('Token Revolut rafraichi avec succes')
+      // Invalidate all treasury queries to re-fetch with new token
+      queryClient.invalidateQueries({ queryKey: ['treasury'] })
+      queryClient.invalidateQueries({ queryKey: ['treasury-recent-tx'] })
+      queryClient.invalidateQueries({ queryKey: ['treasury-last-sync'] })
+      queryClient.invalidateQueries({ queryKey: ['banking'] })
+    } catch (err) {
+      const detail = err.response?.data?.message || err.message
+      toast.error(`Echec du rafraichissement: ${detail}`)
+    } finally {
+      setIsReconnecting(false)
+    }
+  }, [selectedCompany, queryClient])
 
   if (isLoading) {
     return (
@@ -194,6 +263,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
 
   const {
     source = 'offline',
+    tokenExpired = false,
     balance = 0,
     currencyBreakdown = [],
     inflows = 0,
@@ -212,13 +282,30 @@ const TreasuryWidget = ({ selectedCompany }) => {
           <span className="ds-card-title">Tresorerie</span>
         </div>
         <div className="flex items-center gap-2">
-          {source === 'revolut' ? (
+          {/* Token expired badge */}
+          {tokenExpired && (
+            <span
+              className="ds-badge"
+              style={{
+                background: 'var(--warning-light)',
+                color: 'var(--warning)',
+                fontWeight: 600
+              }}
+            >
+              <ShieldAlert size={11} style={{ marginRight: 3 }} />
+              Token expire
+            </span>
+          )}
+
+          {/* Source badge */}
+          {source === 'revolut' && !tokenExpired ? (
             <span className="ds-badge ds-badge-success">Revolut</span>
           ) : source === 'directus' ? (
             <span className="ds-badge ds-badge-info">Directus</span>
-          ) : (
+          ) : source === 'offline' ? (
             <span className="ds-badge">Offline</span>
-          )}
+          ) : null}
+
           <button
             onClick={() => refetch()}
             className="p-1 rounded-md transition-colors duration-150"
@@ -229,6 +316,49 @@ const TreasuryWidget = ({ selectedCompany }) => {
           </button>
         </div>
       </div>
+
+      {/* Token expired banner with Reconnect button */}
+      {tokenExpired && (
+        <div
+          className="mb-4 flex items-center justify-between gap-3 p-3 rounded-lg"
+          style={{
+            background: 'var(--warning-light)',
+            border: '1px solid var(--warning)',
+            borderRadius: 'var(--radius-input)'
+          }}
+        >
+          <div className="flex items-center gap-2" style={{ fontSize: 12, color: 'var(--warning)' }}>
+            <AlertCircle size={14} style={{ flexShrink: 0 }} />
+            <span>Token Revolut expire -- donnees Directus affichees</span>
+          </div>
+          <button
+            onClick={handleReconnect}
+            disabled={isReconnecting}
+            className="ds-btn ds-btn-ghost flex items-center gap-1.5 !py-1 !px-2.5"
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              color: 'var(--accent)',
+              border: '1px solid var(--accent)',
+              borderRadius: 'var(--radius-badge)',
+              flexShrink: 0,
+              opacity: isReconnecting ? 0.7 : 1
+            }}
+          >
+            {isReconnecting ? (
+              <>
+                <Loader2 size={12} className="animate-spin" />
+                Rafraichissement...
+              </>
+            ) : (
+              <>
+                <Link2 size={12} />
+                Reconnecter
+              </>
+            )}
+          </button>
+        </div>
+      )}
 
       {/* Balance */}
       <div className="mb-4">
@@ -389,7 +519,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
           style={{ background: 'var(--warning-light)', fontSize: 12, color: 'var(--warning)' }}
         >
           <AlertCircle size={14} />
-          <span>Donnees indisponibles — verifier la connexion</span>
+          <span>Donnees indisponibles -- verifier la connexion</span>
         </div>
       )}
     </div>

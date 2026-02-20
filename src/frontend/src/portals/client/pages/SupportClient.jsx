@@ -205,7 +205,7 @@ const SupportClient = () => {
   if (ticketsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin" style={{color:"var(--accent)"}} />
       </div>
     )
   }
@@ -340,7 +340,7 @@ const SupportClient = () => {
                             onChange={(e) => setReplyText(e.target.value)}
                             placeholder="Votre message..."
                             rows={3}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
                             style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
                           />
                           <div className="flex items-center gap-3">
@@ -378,7 +378,7 @@ const SupportClient = () => {
 
       {/* ── New Ticket Modal ── */}
       {showNewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
             {/* Modal header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -404,7 +404,7 @@ const SupportClient = () => {
                   onChange={(e) => setNewSubject(e.target.value)}
                   placeholder="Décrivez brièvement votre demande"
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
                   style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
                 />
               </div>
@@ -421,7 +421,7 @@ const SupportClient = () => {
                   rows={5}
                   required
                   minLength={20}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
                   style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
                 />
                 <p className="text-xs text-gray-400 mt-1">
@@ -435,7 +435,7 @@ const SupportClient = () => {
                 <select
                   value={newPriority}
                   onChange={(e) => setNewPriority(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 appearance-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] appearance-none"
                   style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
                 >
                   <option value="low">Basse</option>
@@ -452,7 +452,7 @@ const SupportClient = () => {
                 <select
                   value={newProjectId}
                   onChange={(e) => setNewProjectId(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 appearance-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] appearance-none"
                   style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
                 >
                   <option value="">Aucun projet</option>

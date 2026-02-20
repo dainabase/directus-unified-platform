@@ -79,10 +79,10 @@ const KPICard = ({ icon: Icon, label, value, subtitle, trend, trendLabel }) => {
           <>
             <TrendIcon
               size={14}
-              className={isPositive ? 'text-emerald-500' : 'text-red-500'}
+              style={{ color: isPositive ? 'var(--success)' : 'var(--danger)' }}
             />
             <span
-              className={`text-xs font-medium ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}
+              className="text-xs font-medium" style={{ color: isPositive ? 'var(--success)' : 'var(--danger)' }}
             >
               {isPositive ? '+' : ''}{typeof trend === 'number' ? trend.toFixed(1) : trend}%
             </span>
@@ -371,7 +371,7 @@ const RapportsRevendeur = () => {
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-            className="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)]"
           >
             {months.map(m => (
               <option key={m.value} value={m.value}>{m.label}</option>
@@ -380,7 +380,7 @@ const RapportsRevendeur = () => {
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            className="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-[var(--accent)] focus:border-[var(--accent)]"
           >
             {years.map(y => (
               <option key={y} value={y}>{y}</option>
@@ -529,15 +529,16 @@ const RapportsRevendeur = () => {
                   <tr
                     key={row.key}
                     className={`border-b border-gray-50 hover:bg-gray-50/50 ${
-                      isCurrentMonth ? 'bg-blue-50/30 font-medium' : ''
+                      isCurrentMonth ? 'font-medium' : ''
                     }`}
+                    style={isCurrentMonth ? { background: 'rgba(0,113,227,0.04)' } : undefined}
                   >
                     <td className="py-3 text-gray-900 capitalize">{row.mois}</td>
                     <td className="py-3 text-right text-gray-700">{row.leads}</td>
                     <td className="py-3 text-right text-gray-700">{row.leadsConvertis}</td>
                     <td className="py-3 text-right text-gray-700">{formatCHF(row.pipeline)}</td>
                     <td className="py-3 text-right text-gray-700">{row.devisSignes}</td>
-                    <td className="py-3 text-right text-emerald-600 font-medium">
+                    <td className="py-3 text-right font-medium" style={{ color: 'var(--success)' }}>
                       {formatCHF(row.commissions)}
                     </td>
                   </tr>
@@ -559,7 +560,7 @@ const RapportsRevendeur = () => {
                 <td className="py-3 text-right font-semibold text-gray-900">
                   {chartData.reduce((s, r) => s + r.devisSignes, 0)}
                 </td>
-                <td className="py-3 text-right font-semibold text-emerald-700">
+                <td className="py-3 text-right font-semibold" style={{ color: 'var(--success)' }}>
                   {formatCHF(chartData.reduce((s, r) => s + r.commissions, 0))}
                 </td>
               </tr>

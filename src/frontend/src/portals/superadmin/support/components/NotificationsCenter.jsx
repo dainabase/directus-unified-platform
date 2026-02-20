@@ -26,7 +26,7 @@ import api from '../../../../lib/axios'
 const NOTIFICATION_TYPES = {
   alert:   { icon: AlertCircle,   bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-700',    badge: 'bg-red-100 text-red-700',    label: 'Alerte' },
   warning: { icon: AlertTriangle, bg: 'bg-amber-50',  border: 'border-amber-200',  text: 'text-amber-700',  badge: 'bg-amber-100 text-amber-700',  label: 'Avertissement' },
-  info:    { icon: Info,          bg: 'bg-blue-50',   border: 'border-blue-200',   text: 'text-blue-700',   badge: 'bg-blue-100 text-blue-700',   label: 'Information' },
+  info:    { icon: Info,          bg: 'bg-zinc-50',   border: 'border-zinc-200',   text: 'text-zinc-700',   badge: 'bg-zinc-100 text-zinc-700',   label: 'Information' },
   success: { icon: CheckCircle,   bg: 'bg-green-50',  border: 'border-green-200',  text: 'text-green-700',  badge: 'bg-green-100 text-green-700',  label: 'Succes' }
 }
 
@@ -281,24 +281,24 @@ const NotificationsCenter = ({ selectedCompany }) => {
         {/* Stats skeleton */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="glass-card p-4">
-              <div className="glass-skeleton h-4 w-20 rounded mb-2" />
-              <div className="glass-skeleton h-8 w-12 rounded" />
+            <div key={i} className="ds-card p-4">
+              <div className="animate-pulse rounded h-4 w-20 mb-2" style={{ background: 'rgba(0,0,0,0.06)' }} />
+              <div className="animate-pulse rounded h-8 w-12" style={{ background: 'rgba(0,0,0,0.06)' }} />
             </div>
           ))}
         </div>
         {/* Filters skeleton */}
-        <div className="glass-card p-4">
+        <div className="ds-card p-4">
           <div className="flex gap-3">
-            <div className="glass-skeleton h-9 w-40 rounded-lg" />
-            <div className="glass-skeleton h-9 w-40 rounded-lg" />
-            <div className="glass-skeleton h-9 w-32 rounded-lg" />
+            <div className="animate-pulse rounded-lg h-9 w-40" style={{ background: 'rgba(0,0,0,0.06)' }} />
+            <div className="animate-pulse rounded-lg h-9 w-40" style={{ background: 'rgba(0,0,0,0.06)' }} />
+            <div className="animate-pulse rounded-lg h-9 w-32" style={{ background: 'rgba(0,0,0,0.06)' }} />
           </div>
         </div>
         {/* Notifications skeleton */}
-        <div className="glass-card p-6 space-y-3">
+        <div className="ds-card p-6 space-y-3">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="glass-skeleton h-20 rounded-lg" />
+            <div key={i} className="animate-pulse rounded-lg h-20" style={{ background: 'rgba(0,0,0,0.06)' }} />
           ))}
         </div>
       </div>
@@ -310,29 +310,29 @@ const NotificationsCenter = ({ selectedCompany }) => {
 
       {/* ── Stats Row ────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-card p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider">Total</p>
               <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
             </div>
-            <div className="p-2.5 bg-blue-50 rounded-lg">
-              <Bell size={18} className="text-blue-600" />
+            <div className="p-2.5 bg-zinc-50 rounded-lg">
+              <Bell size={18} style={{ color: 'var(--accent)' }} />
             </div>
           </div>
         </div>
-        <div className="glass-card p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider">Non lues</p>
-              <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.unread}</p>
+              <p className="text-2xl font-bold text-zinc-900 mt-1">{stats.unread}</p>
             </div>
-            <div className="p-2.5 bg-indigo-50 rounded-lg">
-              <Mail size={18} className="text-indigo-600" />
+            <div className="p-2.5 bg-zinc-50 rounded-lg">
+              <Mail size={18} className="text-zinc-900" />
             </div>
           </div>
         </div>
-        <div className="glass-card p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider">Alertes</p>
@@ -343,7 +343,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             </div>
           </div>
         </div>
-        <div className="glass-card p-4">
+        <div className="ds-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider">Avertissements</p>
@@ -357,7 +357,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
       </div>
 
       {/* ── Filters & Actions Bar ────────────────────────────── */}
-      <div className="glass-card p-4">
+      <div className="ds-card p-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           {/* Filters */}
           <div className="flex items-center gap-3 flex-wrap">
@@ -368,7 +368,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-white/80 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input px-3 py-1.5 text-sm"
             >
               <option value="all">Tous les types</option>
               {Object.entries(NOTIFICATION_TYPES).map(([key, val]) => (
@@ -378,7 +378,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-white/80 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input px-3 py-1.5 text-sm"
             >
               <option value="all">Toutes les categories</option>
               {Object.entries(CATEGORIES).map(([key, val]) => (
@@ -388,7 +388,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             <select
               value={filterRead}
               onChange={(e) => setFilterRead(e.target.value)}
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-white/80 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="ds-input px-3 py-1.5 text-sm"
             >
               <option value="all">Toutes</option>
               <option value="unread">Non lues</option>
@@ -401,7 +401,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             <button
               onClick={markAllAsRead}
               disabled={stats.unread === 0}
-              className="glass-button flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="ds-btn ds-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed" style={{ color: 'var(--accent)' }}
             >
               <CheckCheck size={14} />
               <span className="hidden sm:inline">Tout marquer lu</span>
@@ -409,7 +409,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
             <button
               onClick={clearAll}
               disabled={notifications.length === 0}
-              className="glass-button flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="ds-btn ds-btn-secondary flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Trash2 size={14} />
               <span className="hidden sm:inline">Tout supprimer</span>
@@ -419,7 +419,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
       </div>
 
       {/* ── Notifications List ────────────────────────────────── */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {filteredNotifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
             <Bell size={48} className="mb-3 opacity-40" />
@@ -443,7 +443,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
                   key={notification.id}
                   className={`flex items-start gap-3 p-4 transition-colors group ${
                     !notification.read
-                      ? 'bg-blue-50/30 hover:bg-blue-50/50'
+                      ? 'bg-zinc-50/50 hover:bg-zinc-100/50'
                       : 'hover:bg-gray-50/50'
                   }`}
                 >
@@ -460,7 +460,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
                           {notification.title}
                         </h4>
                         {!notification.read && (
-                          <span className="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500 text-white">
+                          <span style={{ background: 'var(--accent)', color: '#fff', fontSize: '10px', fontWeight: 600, padding: '2px 6px', borderRadius: '9999px', display: 'inline-flex' }}>
                             Nouveau
                           </span>
                         )}
@@ -499,7 +499,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
                         {notification.actionUrl && (
                           <a
                             href={notification.actionUrl}
-                            className="px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="px-2 py-1 text-xs font-medium hover:bg-zinc-50 rounded-lg transition-colors" style={{ color: 'var(--accent)' }}
                             title="Voir le detail"
                           >
                             Voir
@@ -535,7 +535,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
       </div>
 
       {/* ── Notification Preferences ──────────────────────────── */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="flex items-center gap-2 px-6 py-4 border-b border-gray-100/80">
           <Settings size={16} className="text-gray-400" />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
@@ -561,7 +561,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
                     <input
                       type="checkbox"
                       defaultChecked
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-gray-300 text-zinc-900 focus:ring-zinc-500"
                     />
                     <item.icon size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                     <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
@@ -589,7 +589,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
                     <input
                       type="checkbox"
                       defaultChecked={item.defaultOn}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-gray-300 text-zinc-900 focus:ring-zinc-500"
                     />
                     <Calendar size={14} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                     <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
@@ -604,7 +604,7 @@ const NotificationsCenter = ({ selectedCompany }) => {
           <div className="mt-6 pt-4 border-t border-gray-100/80">
             <button
               onClick={() => toast.success('Preferences enregistrees')}
-              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="ds-btn ds-btn-primary px-4 py-2 text-sm font-medium rounded-lg transition-colors"
             >
               Enregistrer les preferences
             </button>

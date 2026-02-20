@@ -97,7 +97,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
     <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building className="w-5 h-5 text-blue-600" />
+          <Building className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Informations générales
           </h3>
@@ -112,7 +112,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         ) : (
           <button
             onClick={handleSubmit(onSubmit)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
           >
             <Save size={14} /> Sauvegarder
           </button>
@@ -243,9 +243,9 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'validated': return <CheckCircle size={14} className="text-green-600" />
-      case 'rejected': return <XCircle size={14} className="text-red-600" />
-      default: return <Clock size={14} className="text-yellow-600" />
+      case 'validated': return <CheckCircle size={14} style={{ color: 'var(--success)' }} />
+      case 'rejected': return <XCircle size={14} style={{ color: 'var(--danger)' }} />
+      default: return <Clock size={14} style={{ color: 'var(--warning)' }} />
     }
   }
 
@@ -263,7 +263,7 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
   return (
     <div className="ds-card p-6">
       <div className="flex items-center gap-2 mb-4">
-        <Shield className="w-5 h-5 text-blue-600" />
+        <Shield className="w-5 h-5" style={{ color: 'var(--accent)' }} />
         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
           Documents
         </h3>
@@ -303,17 +303,15 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
                 </div>
 
                 {hasDoc ? (
-                  <span className={`text-xs font-medium ${
-                    existing[0].status === 'validated' ? 'text-green-600' :
-                    existing[0].status === 'rejected' ? 'text-red-600' : 'text-yellow-600'
-                  }`}>
+                  <span className="text-xs font-medium" style={{ color: existing[0].status === 'validated' ? 'var(--success)' : existing[0].status === 'rejected' ? 'var(--danger)' : 'var(--warning)' }}>
                     {getStatusLabel(existing[0].status)}
                   </span>
                 ) : (
                   <button
                     onClick={() => triggerUpload(docType.key)}
                     disabled={uploadMutation.isPending}
-                    className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium hover:opacity-80 transition-colors disabled:opacity-50"
+                    style={{ background: 'rgba(0,113,227,0.12)', color: 'var(--accent)' }}
                   >
                     {uploadMutation.isPending && uploadType === docType.key ? (
                       <Loader2 size={12} className="animate-spin" />
@@ -398,14 +396,14 @@ const SpecialtiesSection = ({ profile, onSave }) => {
     <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Tag className="w-5 h-5 text-blue-600" />
+          <Tag className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Spécialités & Zones
           </h3>
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
         >
           <Save size={14} /> Sauvegarder
         </button>
@@ -461,51 +459,51 @@ const StatistiquesSection = ({ stats, isLoading }) => {
       label: 'Total missions',
       value: stats?.totalProjects || 0,
       icon: Briefcase,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
+      fg: 'var(--accent)',
+      bg: 'rgba(0,113,227,0.06)'
     },
     {
       label: 'Total facturé',
       value: formatCHF(stats?.totalInvoiced || 0),
       icon: Receipt,
-      color: 'text-green-600',
-      bg: 'bg-green-50'
+      fg: 'var(--success)',
+      bg: 'rgba(52,199,89,0.06)'
     },
     {
       label: 'Nb factures',
       value: stats?.invoiceCount || 0,
       icon: FileCheck,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50'
+      fg: 'var(--accent)',
+      bg: 'rgba(0,113,227,0.06)'
     },
     {
       label: 'Livrables terminés',
       value: stats?.completedDeliverables || 0,
       icon: PackageCheck,
-      color: 'text-orange-600',
-      bg: 'bg-orange-50'
+      fg: 'var(--warning)',
+      bg: 'rgba(255,149,0,0.06)'
     }
   ]
 
   return (
     <div className="ds-card p-6">
       <div className="flex items-center gap-2 mb-4">
-        <BarChart3 className="w-5 h-5 text-blue-600" />
+        <BarChart3 className="w-5 h-5" style={{ color: 'var(--accent)' }} />
         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
           Statistiques
         </h3>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {statItems.map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className={`${bg} rounded-xl p-4 flex flex-col items-center gap-2`}>
-            <div className={`w-10 h-10 rounded-full ${bg} flex items-center justify-center`}>
-              <Icon size={20} className={color} />
+        {statItems.map(({ label, value, icon: Icon, fg, bg }) => (
+          <div key={label} className="rounded-xl p-4 flex flex-col items-center gap-2" style={{ background: bg }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: bg }}>
+              <Icon size={20} style={{ color: fg }} />
             </div>
             {isLoading ? (
               <div className="h-6 w-16 ds-skeleton rounded" />
             ) : (
-              <p className={`text-lg font-bold ${color}`}>{value}</p>
+              <p className="text-lg font-bold" style={{ color: fg }}>{value}</p>
             )}
             <p className="text-xs text-gray-500 text-center">{label}</p>
           </div>
@@ -553,14 +551,14 @@ const NotificationsSection = () => {
     <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Bell className="w-5 h-5 text-blue-600" />
+          <Bell className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Notifications
           </h3>
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
         >
           <Save size={14} /> Sauvegarder
         </button>
@@ -578,7 +576,7 @@ const NotificationsSection = () => {
               role="switch"
               aria-checked={prefs[key]}
               onClick={() => togglePref(key)}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 ${
                 prefs[key] ? 'bg-[#0071E3]' : 'bg-gray-300'
               }`}
             >

@@ -15,20 +15,20 @@ import toast from 'react-hot-toast';
 
 // ── Constants ──────────────────────────────────────────────────────
 const CONTRACT_TYPES = {
-  service: { label: 'Service', color: '#3b82f6' },
-  license: { label: 'Licence', color: '#10b981' },
-  maintenance: { label: 'Maintenance', color: '#f59e0b' },
-  nda: { label: 'NDA', color: '#8b5cf6' },
-  partnership: { label: 'Partenariat', color: '#ef4444' },
-  supplier: { label: 'Fournisseur', color: '#6b7280' }
+  service: { label: 'Service', color: '#0071E3' },
+  license: { label: 'Licence', color: '#34C759' },
+  maintenance: { label: 'Maintenance', color: '#FF9500' },
+  nda: { label: 'NDA', color: '#AF52DE' },
+  partnership: { label: 'Partenariat', color: '#FF3B30' },
+  supplier: { label: 'Fournisseur', color: '#6E6E73' }
 };
 
 const STATUS_CONFIG = {
-  active: { label: 'Actif', bg: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-  'pending-signature': { label: 'En attente signature', bg: 'bg-amber-100 text-amber-700', icon: Clock },
-  'expiring-soon': { label: 'Expire bientot', bg: 'bg-red-100 text-red-700', icon: AlertTriangle },
-  expired: { label: 'Expire', bg: 'bg-gray-100 text-gray-500', icon: AlertTriangle },
-  draft: { label: 'Brouillon', bg: 'bg-gray-100 text-gray-500', icon: Edit2 }
+  active: { label: 'Actif', cls: 'ds-badge ds-badge-success', icon: CheckCircle },
+  'pending-signature': { label: 'En attente signature', cls: 'ds-badge ds-badge-warning', icon: Clock },
+  'expiring-soon': { label: 'Expire bientot', cls: 'ds-badge ds-badge-danger', icon: AlertTriangle },
+  expired: { label: 'Expire', cls: 'ds-badge ds-badge-default', icon: AlertTriangle },
+  draft: { label: 'Brouillon', cls: 'ds-badge ds-badge-default', icon: Edit2 }
 };
 
 const MONTH_NAMES = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -49,32 +49,32 @@ const SkeletonLoader = () => (
     {/* KPI skeletons */}
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-24 mb-3 rounded" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="animate-pulse h-4 w-24 mb-3 rounded" />
+          <div className="animate-pulse h-8 w-16 rounded" />
         </div>
       ))}
     </div>
     {/* Charts skeletons */}
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <div className="lg:col-span-2 glass-card p-6">
-        <div className="glass-skeleton h-4 w-48 mb-4 rounded" />
-        <div className="glass-skeleton h-56 w-full rounded" />
+      <div className="lg:col-span-2 ds-card p-6">
+        <div className="animate-pulse h-4 w-48 mb-4 rounded" />
+        <div className="animate-pulse h-56 w-full rounded" />
       </div>
-      <div className="glass-card p-6">
-        <div className="glass-skeleton h-4 w-32 mb-4 rounded" />
-        <div className="glass-skeleton h-44 w-full rounded-full mx-auto" style={{ maxWidth: 180 }} />
+      <div className="ds-card p-6">
+        <div className="animate-pulse h-4 w-32 mb-4 rounded" />
+        <div className="animate-pulse h-44 w-full rounded-full mx-auto" style={{ maxWidth: 180 }} />
       </div>
     </div>
     {/* Table skeleton */}
-    <div className="glass-card p-6">
-      <div className="glass-skeleton h-4 w-40 mb-4 rounded" />
+    <div className="ds-card p-6">
+      <div className="animate-pulse h-4 w-40 mb-4 rounded" />
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="flex gap-4 mb-3">
-          <div className="glass-skeleton h-4 flex-1 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
-          <div className="glass-skeleton h-4 w-28 rounded" />
-          <div className="glass-skeleton h-4 w-24 rounded" />
+          <div className="animate-pulse h-4 flex-1 rounded" />
+          <div className="animate-pulse h-4 w-20 rounded" />
+          <div className="animate-pulse h-4 w-28 rounded" />
+          <div className="animate-pulse h-4 w-24 rounded" />
         </div>
       ))}
     </div>
@@ -261,11 +261,11 @@ const ContractsManager = ({ selectedCompany }) => {
   // ── Badges ───────────────────────────────────────────────────────
   const getStatusBadge = (status) => {
     const config = STATUS_CONFIG[status];
-    if (!config) return <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">{status}</span>;
+    if (!config) return <span className="ds-badge ds-badge-default">{status}</span>;
     const Icon = config.icon;
     return (
-      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${config.bg}`}>
-        <Icon size={12} />
+      <span className={config.cls}>
+        <Icon size={12} className="mr-1" />
         {config.label}
       </span>
     );
@@ -299,7 +299,7 @@ const ContractsManager = ({ selectedCompany }) => {
         <p className="text-lg font-medium mb-2">Erreur de chargement</p>
         <p className="text-sm mb-4">{contractsQuery.error?.message || 'Impossible de charger les contrats'}</p>
         <button
-          className="glass-button glass-button-primary px-4 py-2 text-sm rounded-lg"
+          className="ds-btn ds-btn-primary px-4 py-2 text-sm rounded-lg"
           onClick={() => contractsQuery.refetch()}
         >
           <RefreshCw size={14} className="mr-1 inline" />
@@ -315,7 +315,7 @@ const ContractsManager = ({ selectedCompany }) => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <FileText size={24} className="text-blue-600" />
+            <FileText size={24} className="text-[var(--accent)]" />
             Gestion des Contrats
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -324,19 +324,19 @@ const ContractsManager = ({ selectedCompany }) => {
         </div>
         <div className="flex items-center gap-2">
           <button
-            className="glass-button flex items-center gap-1.5 text-sm"
+            className="ds-btn ds-btn-secondary flex items-center gap-1.5 text-sm"
             onClick={() => contractsQuery.refetch()}
             disabled={contractsQuery.isFetching}
           >
             <RefreshCw size={14} className={contractsQuery.isFetching ? 'animate-spin' : ''} />
             Actualiser
           </button>
-          <button className="glass-button flex items-center gap-1.5 text-sm">
+          <button className="ds-btn ds-btn-secondary flex items-center gap-1.5 text-sm">
             <Download size={14} />
             Exporter
           </button>
           <button
-            className="glass-button glass-button-primary flex items-center gap-1.5 text-sm"
+            className="ds-btn ds-btn-primary flex items-center gap-1.5 text-sm"
             onClick={() => setShowNewModal(true)}
           >
             <Plus size={14} />
@@ -348,13 +348,13 @@ const ContractsManager = ({ selectedCompany }) => {
       {/* ── KPIs ───────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { icon: FileText, color: 'text-blue-600', label: 'Total contrats', value: stats.total },
-          { icon: CheckCircle, color: 'text-emerald-600', label: 'Actifs', value: stats.active },
-          { icon: Clock, color: 'text-amber-500', label: 'En attente', value: stats.pendingSignature },
-          { icon: AlertTriangle, color: 'text-red-500', label: 'Expirent bientot', value: stats.expiringSoon },
-          { icon: DollarSign, color: 'text-blue-500', label: 'Valeur active', value: formatCurrency(stats.totalValue), wide: true }
+          { icon: FileText, color: 'text-[var(--accent)]', label: 'Total contrats', value: stats.total },
+          { icon: CheckCircle, color: 'text-[var(--success)]', label: 'Actifs', value: stats.active },
+          { icon: Clock, color: 'text-[var(--warning)]', label: 'En attente', value: stats.pendingSignature },
+          { icon: AlertTriangle, color: 'text-[var(--danger)]', label: 'Expirent bientot', value: stats.expiringSoon },
+          { icon: DollarSign, color: 'text-[var(--accent)]', label: 'Valeur active', value: formatCurrency(stats.totalValue), wide: true }
         ].map((kpi, i) => (
-          <div key={i} className={`glass-card p-5 ${kpi.wide ? 'col-span-2 md:col-span-1' : ''}`}>
+          <div key={i} className={`ds-card p-5 ${kpi.wide ? 'col-span-2 md:col-span-1' : ''}`}>
             <div className="flex items-center gap-2 mb-2">
               <kpi.icon size={18} className={kpi.color} />
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">{kpi.label}</span>
@@ -367,7 +367,7 @@ const ContractsManager = ({ selectedCompany }) => {
       {/* ── Charts ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Bar Chart - Monthly value */}
-        <div className="lg:col-span-2 glass-card p-6">
+        <div className="lg:col-span-2 ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Valeur mensuelle des contrats</h3>
           {monthlyValue.some((m) => m.value > 0) ? (
             <ResponsiveContainer width="100%" height={250}>
@@ -390,7 +390,7 @@ const ContractsManager = ({ selectedCompany }) => {
         </div>
 
         {/* Pie Chart - Type distribution */}
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 mb-4">Repartition par type</h3>
           {typeDistribution.length > 0 ? (
             <>
@@ -438,14 +438,14 @@ const ContractsManager = ({ selectedCompany }) => {
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            className="glass-input w-full pl-9 pr-4 py-2 text-sm"
+            className="ds-input w-full pl-9 pr-4 py-2 text-sm"
             placeholder="Rechercher un contrat..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <select
-          className="glass-input py-2 px-3 text-sm"
+          className="ds-input py-2 px-3 text-sm"
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
@@ -455,7 +455,7 @@ const ContractsManager = ({ selectedCompany }) => {
           ))}
         </select>
         <select
-          className="glass-input py-2 px-3 text-sm"
+          className="ds-input py-2 px-3 text-sm"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -467,7 +467,7 @@ const ContractsManager = ({ selectedCompany }) => {
       </div>
 
       {/* ── Contracts Table ────────────────────────────────────────── */}
-      <div className="glass-table overflow-hidden">
+      <div className="ds-card overflow-hidden overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -530,11 +530,11 @@ const ContractsManager = ({ selectedCompany }) => {
                           <span
                             className={`text-xs font-medium ${
                               daysLeft <= 0
-                                ? 'text-red-600'
+                                ? 'text-[var(--danger)]'
                                 : daysLeft <= 30
-                                ? 'text-red-500'
+                                ? 'text-[var(--danger)]'
                                 : daysLeft <= 90
-                                ? 'text-amber-500'
+                                ? 'text-[var(--warning)]'
                                 : 'text-gray-500'
                             }`}
                           >
@@ -548,7 +548,7 @@ const ContractsManager = ({ selectedCompany }) => {
                       <td>
                         <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                           <button
-                            className="p-1.5 rounded-lg hover:bg-blue-50 text-gray-500 hover:text-blue-600 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
                             onClick={() => setSelectedContract(contract)}
                             title="Voir"
                           >
@@ -556,7 +556,7 @@ const ContractsManager = ({ selectedCompany }) => {
                           </button>
                           {contract.computedStatus === 'pending-signature' && (
                             <button
-                              className="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-500 hover:text-emerald-600 transition-colors"
+                              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
                               onClick={() => handleSendForSignature(contract)}
                               title="Envoyer pour signature"
                             >
@@ -564,7 +564,7 @@ const ContractsManager = ({ selectedCompany }) => {
                             </button>
                           )}
                           <button
-                            className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-[var(--danger)] transition-colors"
                             onClick={() => handleDelete(contract.id)}
                             disabled={deleteMutation.isPending}
                             title="Supprimer"
@@ -609,9 +609,9 @@ const ContractsManager = ({ selectedCompany }) => {
 
 // ── Detail Modal ───────────────────────────────────────────────────
 const ContractDetailModal = ({ contract, clientName, onClose, getTypeBadge, getStatusBadge }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center glass-modal-overlay" onClick={onClose}>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
     <div
-      className="glass-modal w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
+      className="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Header */}
@@ -645,7 +645,7 @@ const ContractDetailModal = ({ contract, clientName, onClose, getTypeBadge, getS
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Valeur</p>
-              <span className="text-xl font-bold text-emerald-600">
+              <span className="text-xl font-bold text-[var(--success)]">
                 {contract.value ? formatCurrency(contract.value) : 'N/A'}
               </span>
             </div>
@@ -677,7 +677,7 @@ const ContractDetailModal = ({ contract, clientName, onClose, getTypeBadge, getS
         {contract.description && (
           <div className="mt-6">
             <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Description</p>
-            <div className="glass-light rounded-lg p-4 text-sm text-gray-700">
+            <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
               {contract.description}
             </div>
           </div>
@@ -686,10 +686,10 @@ const ContractDetailModal = ({ contract, clientName, onClose, getTypeBadge, getS
 
       {/* Footer */}
       <div className="flex items-center justify-end gap-2 p-6 border-t border-gray-100">
-        <button className="glass-button text-sm" onClick={onClose}>
+        <button className="ds-btn ds-btn-secondary text-sm" onClick={onClose}>
           Fermer
         </button>
-        <button className="glass-button flex items-center gap-1.5 text-sm">
+        <button className="ds-btn ds-btn-secondary flex items-center gap-1.5 text-sm">
           <Download size={14} />
           Telecharger PDF
         </button>
@@ -730,9 +730,9 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center glass-modal-overlay" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="glass-modal w-full max-w-xl mx-4 max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl shadow-xl w-full max-w-xl mx-4 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <form onSubmit={handleSubmit}>
@@ -752,11 +752,11 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Titre du contrat <span className="text-red-500">*</span>
+                Titre du contrat <span className="text-[var(--danger)]">*</span>
               </label>
               <input
                 type="text"
-                className="glass-input w-full text-sm"
+                className="ds-input w-full text-sm"
                 placeholder="ex: Contrat de service - Client"
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
@@ -768,7 +768,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select
-                  className="glass-input w-full text-sm"
+                  className="ds-input w-full text-sm"
                   value={formData.type}
                   onChange={(e) => handleChange('type', e.target.value)}
                 >
@@ -780,7 +780,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
                 <select
-                  className="glass-input w-full text-sm"
+                  className="ds-input w-full text-sm"
                   value={formData.status}
                   onChange={(e) => handleChange('status', e.target.value)}
                 >
@@ -794,7 +794,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Client / Fournisseur</label>
               <select
-                className="glass-input w-full text-sm"
+                className="ds-input w-full text-sm"
                 value={formData.client_id}
                 onChange={(e) => handleChange('client_id', e.target.value)}
               >
@@ -811,7 +811,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
                 type="number"
                 step="0.01"
                 min="0"
-                className="glass-input w-full text-sm"
+                className="ds-input w-full text-sm"
                 placeholder="0.00"
                 value={formData.value}
                 onChange={(e) => handleChange('value', e.target.value)}
@@ -823,7 +823,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
                 <label className="block text-sm font-medium text-gray-700 mb-1">Date de debut</label>
                 <input
                   type="date"
-                  className="glass-input w-full text-sm"
+                  className="ds-input w-full text-sm"
                   value={formData.start_date}
                   onChange={(e) => handleChange('start_date', e.target.value)}
                 />
@@ -832,7 +832,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
                 <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
                 <input
                   type="date"
-                  className="glass-input w-full text-sm"
+                  className="ds-input w-full text-sm"
                   value={formData.end_date}
                   onChange={(e) => handleChange('end_date', e.target.value)}
                 />
@@ -842,7 +842,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Renouvellement</label>
               <select
-                className="glass-input w-full text-sm"
+                className="ds-input w-full text-sm"
                 value={formData.renewal_type}
                 onChange={(e) => handleChange('renewal_type', e.target.value)}
               >
@@ -856,7 +856,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
-                className="glass-input w-full text-sm"
+                className="ds-input w-full text-sm"
                 rows="3"
                 placeholder="Description du contrat..."
                 value={formData.description}
@@ -867,12 +867,12 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
 
           {/* Footer */}
           <div className="flex items-center justify-end gap-2 p-6 border-t border-gray-100">
-            <button type="button" className="glass-button text-sm" onClick={onClose}>
+            <button type="button" className="ds-btn ds-btn-secondary text-sm" onClick={onClose}>
               Annuler
             </button>
             <button
               type="submit"
-              className="glass-button glass-button-primary flex items-center gap-1.5 text-sm"
+              className="ds-btn ds-btn-primary flex items-center gap-1.5 text-sm"
               disabled={isLoading}
             >
               {isLoading ? (

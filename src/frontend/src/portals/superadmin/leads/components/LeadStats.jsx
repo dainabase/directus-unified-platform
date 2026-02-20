@@ -65,14 +65,14 @@ const LeadStats = ({ stats, isLoading }) => {
     }
   ]
 
-  const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600',
-    cyan: 'bg-cyan-100 text-cyan-600',
-    green: 'bg-green-100 text-green-600',
-    emerald: 'bg-emerald-100 text-emerald-600',
-    yellow: 'bg-yellow-100 text-yellow-600',
-    amber: 'bg-amber-100 text-amber-600',
-    red: 'bg-red-100 text-red-600'
+  const colorStyles = {
+    blue: { background: 'rgba(0,113,227,0.08)', color: 'var(--accent)' },
+    cyan: { background: 'rgba(0,113,227,0.08)', color: 'var(--accent)' },
+    green: { background: 'rgba(52,199,89,0.08)', color: 'var(--success)' },
+    emerald: { background: 'rgba(52,199,89,0.08)', color: 'var(--success)' },
+    yellow: { background: 'rgba(255,149,0,0.08)', color: 'var(--warning)' },
+    amber: { background: 'rgba(255,149,0,0.08)', color: 'var(--warning)' },
+    red: { background: 'rgba(255,59,48,0.08)', color: 'var(--danger)' }
   }
 
   if (isLoading) {
@@ -95,7 +95,7 @@ const LeadStats = ({ stats, isLoading }) => {
         const Icon = stat.icon
         return (
           <div key={index} className="ds-card p-4 hover:shadow-lg transition-shadow">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${colorClasses[stat.color]}`}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style={colorStyles[stat.color]}>
               <Icon size={20} />
             </div>
             <p className="text-2xl font-bold text-gray-900">

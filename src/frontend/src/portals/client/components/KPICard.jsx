@@ -21,7 +21,7 @@ const KPICard = ({ title, value, subtitle, icon: Icon, trend, onClick }) => (
         </div>
       )}
       {trend != null && trend !== 0 && (
-        <div className={`flex items-center gap-1 text-xs font-medium ${trend > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+        <div className="flex items-center gap-1 text-xs font-medium" style={{color: trend > 0 ? 'var(--success)' : 'var(--danger)'}}>
           {trend > 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
           {Math.abs(trend)}%
         </div>

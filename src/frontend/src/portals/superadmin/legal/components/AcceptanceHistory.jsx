@@ -45,10 +45,10 @@ const AcceptanceHistory = ({ company, acceptances = [], onRefresh }) => {
   
   const getMethodBadge = (method) => {
     const badges = {
-      click: { class: 'bg-blue-lt', label: 'Clic acceptation', icon: CheckCircle },
-      signature: { class: 'bg-green-lt', label: 'Signature électronique', icon: Shield },
-      form: { class: 'bg-purple-lt', label: 'Formulaire', icon: FileText },
-      api: { class: 'bg-orange-lt', label: 'API', icon: Globe }
+      click: { class: 'bg-zinc-100', label: 'Clic acceptation', icon: CheckCircle },
+      signature: { class: 'bg-zinc-50', label: 'Signature électronique', icon: Shield },
+      form: { class: 'bg-zinc-200', label: 'Formulaire', icon: FileText },
+      api: { class: 'bg-zinc-100', label: 'API', icon: Globe }
     };
     const badge = badges[method] || badges.click;
     const Icon = badge.icon;
@@ -225,7 +225,7 @@ const AcceptanceHistory = ({ company, acceptances = [], onRefresh }) => {
                 <td>
                   <div className="btn-list flex-nowrap">
                     <button 
-                      className="btn btn-sm btn-ghost-primary"
+                      className="ds-btn ds-btn-secondary text-sm"
                       onClick={() => setSelectedAcceptance(acceptance)}
                       title="Voir détails"
                     >
@@ -398,7 +398,7 @@ const AcceptanceDetailsModal = ({ acceptance, onClose }) => {
             </button>
             <button 
               type="button" 
-              className="btn btn-primary"
+              className="ds-btn ds-btn-primary"
             >
               <Download size={16} className="me-1" />
               Télécharger preuve

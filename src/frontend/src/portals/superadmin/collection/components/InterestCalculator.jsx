@@ -255,7 +255,7 @@ const InterestCalculator = ({ company }) => {
                           <td>{type.label}</td>
                           <td className="text-muted small">{type.description}</td>
                           <td>
-                            <span className="badge bg-blue-lt">
+                            <span className="badge bg-zinc-100">
                               {(getCurrentBNSRate() + type.baseRate).toFixed(2)}%
                             </span>
                           </td>
@@ -275,7 +275,7 @@ const InterestCalculator = ({ company }) => {
         {result ? (
           <div className="card">
             <div className="card-header">
-              <h4 className="card-title text-success">
+              <h4 className="card-title text-zinc-900">
                 <CheckCircle size={20} className="me-2" />
                 Résultat du Calcul
               </h4>
@@ -286,7 +286,7 @@ const InterestCalculator = ({ company }) => {
                 <div className="col-6">
                   <div className="card card-sm">
                     <div className="card-body text-center">
-                      <div className="h1 mb-0 text-primary">
+                      <div className="h1 mb-0 text-zinc-900">
                         {result.interestAmount.toLocaleString('fr-CH', {
                           style: 'currency',
                           currency: 'CHF'
@@ -299,7 +299,7 @@ const InterestCalculator = ({ company }) => {
                 <div className="col-6">
                   <div className="card card-sm">
                     <div className="card-body text-center">
-                      <div className="h1 mb-0 text-success">
+                      <div className="h1 mb-0 text-zinc-900">
                         {result.totalAmount.toLocaleString('fr-CH', {
                           style: 'currency',
                           currency: 'CHF'
@@ -349,22 +349,22 @@ const InterestCalculator = ({ company }) => {
                 <h6 className="text-muted mb-3">DÉCOMPOSITION DU TAUX</h6>
                 <div className="progress-stacked">
                   <div 
-                    className="progress-bar bg-blue" 
+                    className="progress-bar bg-zinc-700" 
                     style={{ width: `${(result.bnsRate / result.effectiveRate) * 100}%` }}
                     title={`Taux BNS: ${result.bnsRate}%`}
                   ></div>
                   <div 
-                    className="progress-bar bg-purple" 
+                    className="progress-bar bg-zinc-500" 
                     style={{ width: `${((result.effectiveRate - result.bnsRate) / result.effectiveRate) * 100}%` }}
                     title={`Marge: ${(result.effectiveRate - result.bnsRate).toFixed(2)}%`}
                   ></div>
                 </div>
                 <div className="row mt-2 text-small">
                   <div className="col">
-                    <span className="badge bg-blue-lt">BNS: {result.bnsRate}%</span>
+                    <span className="badge bg-zinc-100">BNS: {result.bnsRate}%</span>
                   </div>
                   <div className="col text-end">
-                    <span className="badge bg-purple-lt">
+                    <span className="badge bg-zinc-200">
                       Marge: {(result.effectiveRate - result.bnsRate).toFixed(2)}%
                     </span>
                   </div>
@@ -412,15 +412,15 @@ const InterestCalculator = ({ company }) => {
           <div className="card-body">
             <ul className="list-unstyled">
               <li className="mb-2">
-                <CheckCircle size={16} className="text-success me-2" />
+                <CheckCircle size={16} className="text-zinc-900 me-2" />
                 <strong>Art. 104 CO:</strong> Intérêts moratoires 5% minimum
               </li>
               <li className="mb-2">
-                <CheckCircle size={16} className="text-success me-2" />
+                <CheckCircle size={16} className="text-zinc-900 me-2" />
                 <strong>Créances commerciales:</strong> Taux BNS + marge raisonnable
               </li>
               <li className="mb-2">
-                <CheckCircle size={16} className="text-success me-2" />
+                <CheckCircle size={16} className="text-zinc-900 me-2" />
                 <strong>Procédure LP:</strong> Intérêts calculés jusqu'au paiement
               </li>
               <li className="mb-2">

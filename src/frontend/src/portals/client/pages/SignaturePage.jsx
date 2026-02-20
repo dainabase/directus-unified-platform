@@ -113,10 +113,10 @@ const SignaturePage = () => {
   // --- Loading ---
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{background:'var(--bg-primary)'}}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Preparation de la signature...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{borderColor:'var(--accent)'}} />
+          <p style={{color:'var(--text-secondary)'}}>Preparation de la signature...</p>
         </div>
       </div>
     )
@@ -125,21 +125,23 @@ const SignaturePage = () => {
   // --- Error ---
   if (status === 'error') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg-primary)'}}>
+        <div className="ds-card rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-4xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Erreur</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <h2 className="text-xl font-bold mb-2" style={{color:'var(--text-primary)'}}>Erreur</h2>
+          <p className="mb-6" style={{color:'var(--text-secondary)'}}>
+            {error}
+          </p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={loadQuoteAndSignature}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="ds-btn ds-btn-primary px-4 py-2"
             >
               Reessayer
             </button>
             <button
               onClick={() => navigate('/client/quotes')}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="ds-btn ds-btn-ghost px-4 py-2"
             >
               Retour aux devis
             </button>
@@ -152,24 +154,24 @@ const SignaturePage = () => {
   // --- Completed ---
   if (status === 'completed') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg-primary)'}}>
+        <div className="ds-card rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-5xl mb-4">✅</div>
-          <h2 className="text-xl font-bold text-green-700 mb-2">Devis signe</h2>
-          <p className="text-gray-600 mb-2">
+          <h2 className="text-xl font-bold mb-2" style={{color:'var(--success)'}}>Devis signe</h2>
+          <p className="mb-2" style={{color:'var(--text-secondary)'}}>
             Votre signature a ete enregistree avec succes.
           </p>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm mb-6" style={{color:'var(--text-tertiary)'}}>
             Vous recevrez une confirmation par email avec le document signe.
           </p>
           {quote && (
-            <div className="bg-green-50 rounded-lg p-4 mb-6 text-left text-sm">
-              <p className="font-medium text-green-800">Devis {quote.quote_number}</p>
-              <p className="text-green-700">
+            <div className="rounded-lg p-4 mb-6 text-left text-sm" style={{background:'var(--success-light)'}}>
+              <p className="font-medium" style={{color:'var(--success)'}}>Devis {quote.quote_number}</p>
+              <p style={{color:'var(--success)'}}>
                 Montant : {formatCHF(quote.total)} {quote.currency || 'CHF'}
               </p>
               {quote.deposit_amount > 0 && (
-                <p className="text-green-700 mt-1">
+                <p className="mt-1" style={{color:'var(--success)'}}>
                   Acompte de {formatCHF(quote.deposit_amount)} a regler
                 </p>
               )}
@@ -177,7 +179,7 @@ const SignaturePage = () => {
           )}
           <button
             onClick={() => navigate('/client')}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="ds-btn ds-btn-primary px-6 py-2"
           >
             Retour au portail
           </button>
@@ -188,20 +190,20 @@ const SignaturePage = () => {
 
   // --- Ready / Signing — afficher resume + iframe ---
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{background:'var(--bg-primary)'}}>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3">
+      <div className="ds-glass px-4 py-3" style={{borderBottom:'1px solid var(--border-light)'}}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold text-gray-900">Signature electronique</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-lg font-bold" style={{color:'var(--text-primary)'}}>Signature electronique</h1>
+            <p className="text-sm" style={{color:'var(--text-tertiary)'}}>
               {quote?.quote_number ? `Devis ${quote.quote_number}` : 'Devis'}
               {quote?.company_id?.name ? ` — ${quote.company_id.name}` : ''}
             </p>
           </div>
           <button
             onClick={() => navigate('/client/quotes')}
-            className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            className="ds-btn ds-btn-ghost px-3 py-1.5 text-sm"
           >
             Retour
           </button>
@@ -211,34 +213,34 @@ const SignaturePage = () => {
       <div className="max-w-5xl mx-auto p-4 space-y-4">
         {/* Resume du devis */}
         {quote && (
-          <div className="bg-white rounded-xl shadow-sm p-4 flex flex-wrap gap-6 text-sm">
+          <div className="ds-card p-4 flex flex-wrap gap-6 text-sm">
             <div>
-              <span className="text-gray-500">Client</span>
-              <p className="font-medium text-gray-900">
+              <span style={{color:'var(--text-tertiary)'}}>Client</span>
+              <p className="font-medium" style={{color:'var(--text-primary)'}}>
                 {quote.contact_id
                   ? `${quote.contact_id.first_name || ''} ${quote.contact_id.last_name || ''}`.trim()
                   : '—'}
               </p>
             </div>
             <div>
-              <span className="text-gray-500">Entreprise</span>
-              <p className="font-medium text-gray-900">{quote.company_id?.name || '—'}</p>
+              <span style={{color:'var(--text-tertiary)'}}>Entreprise</span>
+              <p className="font-medium" style={{color:'var(--text-primary)'}}>{quote.company_id?.name || '—'}</p>
             </div>
             <div>
-              <span className="text-gray-500">Montant TTC</span>
-              <p className="font-semibold text-gray-900">{formatCHF(quote.total)} {quote.currency || 'CHF'}</p>
+              <span style={{color:'var(--text-tertiary)'}}>Montant TTC</span>
+              <p className="font-semibold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total)} {quote.currency || 'CHF'}</p>
             </div>
             {quote.deposit_amount > 0 && (
               <div>
-                <span className="text-gray-500">Acompte</span>
-                <p className="font-medium text-amber-600">
+                <span style={{color:'var(--text-tertiary)'}}>Acompte</span>
+                <p className="font-medium" style={{color:'var(--warning)'}}>
                   {formatCHF(quote.deposit_amount)} ({quote.deposit_percentage || 30}%)
                 </p>
               </div>
             )}
             <div>
-              <span className="text-gray-500">Statut</span>
-              <p className="font-medium text-blue-600">
+              <span style={{color:'var(--text-tertiary)'}}>Statut</span>
+              <p className="font-medium" style={{color:'var(--accent)'}}>
                 {status === 'signing' ? 'Signature en cours...' : 'Pret a signer'}
               </p>
             </div>
@@ -247,7 +249,7 @@ const SignaturePage = () => {
 
         {/* DocuSeal Iframe */}
         {embedUrl && (
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden" style={{ minHeight: '700px' }}>
+          <div className="ds-card overflow-hidden" style={{ minHeight: '700px' }}>
             <iframe
               ref={iframeRef}
               src={embedUrl}
@@ -261,7 +263,7 @@ const SignaturePage = () => {
         )}
 
         {/* Legal notice */}
-        <div className="bg-gray-100 rounded-lg p-3 text-xs text-gray-500">
+        <div className="rounded-lg p-3 text-xs" style={{background:'rgba(0,0,0,0.04)', color:'var(--text-tertiary)'}}>
           <strong>Signature electronique securisee</strong> — Ce document est signe
           electroniquement conformement aux normes suisses (ZertES/SCSE).
           Votre signature a la meme valeur juridique qu'une signature manuscrite.

@@ -23,30 +23,30 @@ const STAGES = [
 ]
 
 const STAGE_BG = {
-  blue: 'bg-blue-50 border-blue-200',
-  cyan: 'bg-cyan-50 border-cyan-200',
+  blue: 'bg-zinc-50 border-zinc-200',
+  cyan: 'bg-sky-50 border-sky-200',
   green: 'bg-green-50 border-green-200',
   yellow: 'bg-yellow-50 border-yellow-200',
   orange: 'bg-orange-50 border-orange-200',
-  emerald: 'bg-emerald-50 border-emerald-200',
+  emerald: 'bg-green-50 border-green-200',
 }
 
 const STAGE_DOT = {
-  blue: 'bg-blue-500',
-  cyan: 'bg-cyan-500',
+  blue: 'bg-zinc-500',
+  cyan: 'bg-sky-500',
   green: 'bg-green-500',
   yellow: 'bg-yellow-500',
   orange: 'bg-orange-500',
-  emerald: 'bg-emerald-500',
+  emerald: 'bg-green-500',
 }
 
 const STAGE_BADGE = {
-  blue: 'bg-blue-100 text-blue-700',
-  cyan: 'bg-cyan-100 text-cyan-700',
+  blue: 'bg-zinc-100 text-zinc-700',
+  cyan: 'bg-sky-100 text-sky-700',
   green: 'bg-green-100 text-green-700',
   yellow: 'bg-yellow-100 text-yellow-700',
   orange: 'bg-orange-100 text-orange-700',
-  emerald: 'bg-emerald-100 text-emerald-700',
+  emerald: 'bg-green-100 text-green-700',
 }
 
 // ---------------------------------------------------------------------------
@@ -92,9 +92,9 @@ const PipelineSkeleton = () => (
     {/* KPI skeleton */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-24 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-32 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="ds-skeleton h-4 w-24 rounded mb-3" />
+          <div className="ds-skeleton h-8 w-32 rounded" />
         </div>
       ))}
     </div>
@@ -102,10 +102,10 @@ const PipelineSkeleton = () => (
     <div className="flex gap-4 overflow-x-auto pb-4">
       {[...Array(6)].map((_, i) => (
         <div key={i} className="flex-shrink-0 w-72">
-          <div className="glass-skeleton h-16 rounded-lg mb-3" />
+          <div className="ds-skeleton h-16 rounded-lg mb-3" />
           <div className="space-y-3">
             {[...Array(2)].map((_, j) => (
-              <div key={j} className="glass-skeleton h-32 rounded-lg" />
+              <div key={j} className="ds-skeleton h-32 rounded-lg" />
             ))}
           </div>
         </div>
@@ -241,7 +241,7 @@ const PipelineView = ({ selectedCompany }) => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Target className="w-6 h-6 text-blue-600" />
+              <Target className="w-6 h-6" style={{ color: 'var(--accent)' }} />
               Pipeline Commercial
             </h2>
             <p className="text-sm text-gray-500 mt-1">Chargement des opportunites...</p>
@@ -258,7 +258,7 @@ const PipelineView = ({ selectedCompany }) => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Target className="w-6 h-6 text-blue-600" />
+            <Target className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             Pipeline Commercial
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -270,16 +270,16 @@ const PipelineView = ({ selectedCompany }) => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Total Pipeline */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="w-5 h-5 text-blue-600" />
+            <DollarSign className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Pipeline total</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{formatCHF(kpis.totalValue)}</div>
         </div>
 
         {/* Weighted Value */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Valeur ponderee</span>
@@ -288,7 +288,7 @@ const PipelineView = ({ selectedCompany }) => {
         </div>
 
         {/* Total Leads */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-5 h-5 text-yellow-600" />
             <span className="text-sm text-gray-500">Total leads</span>
@@ -297,9 +297,9 @@ const PipelineView = ({ selectedCompany }) => {
         </div>
 
         {/* Won / Closing */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Award className="w-5 h-5 text-emerald-600" />
+            <Award className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Gagne</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{formatCHF(kpis.wonValue)}</div>
@@ -308,7 +308,7 @@ const PipelineView = ({ selectedCompany }) => {
 
       {/* Error banner */}
       {isError && (
-        <div className="glass-card p-4 mb-4 border border-red-200 bg-red-50 text-red-700 text-sm rounded-lg">
+        <div className="ds-card p-4 mb-4 border border-red-200 bg-red-50 text-red-700 text-sm rounded-lg">
           Impossible de charger les donnees du pipeline. Verifiez la connexion a Directus.
         </div>
       )}
@@ -324,7 +324,7 @@ const PipelineView = ({ selectedCompany }) => {
             <div
               key={stage.id}
               className={`flex-shrink-0 w-72 rounded-xl transition-all duration-200 ${
-                isDropTarget ? 'ring-2 ring-blue-400 ring-offset-2' : ''
+                isDropTarget ? 'ring-2 ring-zinc-400 ring-offset-2' : ''
               }`}
               onDragOver={(e) => handleDragOver(e, stage.id)}
               onDragLeave={handleDragLeave}
@@ -356,7 +356,7 @@ const PipelineView = ({ selectedCompany }) => {
                   return (
                     <div
                       key={lead.id}
-                      className="glass-card p-4 cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
+                      className="ds-card p-4 cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
                       draggable
                       onDragStart={(e) => handleDragStart(e, lead, stage.id)}
                       onClick={() => setSelectedDeal({ ...lead, _stage: stage.id })}
@@ -398,7 +398,7 @@ const PipelineView = ({ selectedCompany }) => {
 
                       {/* Value + days */}
                       <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-                        <span className="font-bold text-blue-600 text-sm">
+                        <span className="font-bold text-sm" style={{ color: 'var(--accent)' }}>
                           {formatCHF(lead.estimated_value)}
                         </span>
                         <span className="flex items-center gap-1 text-xs text-gray-400">
@@ -431,7 +431,7 @@ const PipelineView = ({ selectedCompany }) => {
           onClick={() => setSelectedDeal(null)}
         >
           <div
-            className="glass-card w-full max-w-md mx-4 p-0 overflow-hidden"
+            className="ds-card w-full max-w-md mx-4 p-0 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal header */}
@@ -476,7 +476,7 @@ const PipelineView = ({ selectedCompany }) => {
               {/* Value */}
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Valeur estimee</label>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>
                   {formatCHF(selectedDeal.estimated_value)}
                 </div>
               </div>
@@ -524,7 +524,7 @@ const PipelineView = ({ selectedCompany }) => {
                 {selectedDeal.phone && (
                   <a
                     href={`tel:${selectedDeal.phone}`}
-                    className="glass-button flex items-center gap-1.5 px-3 py-2 text-sm flex-1 justify-center"
+                    className="ds-btn ds-btn-secondary flex items-center gap-1.5 px-3 py-2 text-sm flex-1 justify-center"
                   >
                     <Phone size={14} /> Appeler
                   </a>
@@ -532,7 +532,7 @@ const PipelineView = ({ selectedCompany }) => {
                 {selectedDeal.email && (
                   <a
                     href={`mailto:${selectedDeal.email}`}
-                    className="glass-button flex items-center gap-1.5 px-3 py-2 text-sm flex-1 justify-center"
+                    className="ds-btn ds-btn-secondary flex items-center gap-1.5 px-3 py-2 text-sm flex-1 justify-center"
                   >
                     <Mail size={14} /> Email
                   </a>
@@ -543,7 +543,7 @@ const PipelineView = ({ selectedCompany }) => {
             {/* Modal footer */}
             <div className="flex items-center justify-end gap-3 p-5 border-t border-gray-100 bg-gray-50/50">
               <button
-                className="glass-button px-4 py-2 text-sm"
+                className="ds-btn ds-btn-secondary px-4 py-2 text-sm"
                 onClick={() => setSelectedDeal(null)}
               >
                 Fermer
@@ -554,7 +554,7 @@ const PipelineView = ({ selectedCompany }) => {
                 const nextStage = hasNext ? STAGES[currentIdx + 1] : null
                 return hasNext ? (
                   <button
-                    className="glass-button glass-button-primary flex items-center gap-1.5 px-4 py-2 text-sm"
+                    className="ds-btn ds-btn-primary flex items-center gap-1.5 px-4 py-2 text-sm"
                     onClick={handleAdvanceDeal}
                     disabled={updateStatusMutation.isPending}
                   >
@@ -562,7 +562,7 @@ const PipelineView = ({ selectedCompany }) => {
                     {updateStatusMutation.isPending ? 'Deplacement...' : `Vers ${nextStage.label}`}
                   </button>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-sm text-emerald-600 font-medium">
+                  <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
                     <Award size={14} /> Gagne
                   </span>
                 )

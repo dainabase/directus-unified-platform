@@ -71,7 +71,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
   })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">Creer une demande de devis</h2>
@@ -84,18 +84,18 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
           {/* Provider */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Prestataire <span className="text-red-500">*</span>
+              Prestataire <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <select
               {...register('provider_id', { required: 'Selectionnez un prestataire' })}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white"
             >
               <option value="">Selectionner...</option>
               {providers.map(p => (
                 <option key={p.id} value={p.id}>{p.name} {p.specialty ? `(${p.specialty})` : ''}</option>
               ))}
             </select>
-            {errors.provider_id && <p className="text-xs text-red-600 mt-1">{errors.provider_id.message}</p>}
+            {errors.provider_id && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.provider_id.message}</p>}
           </div>
 
           {/* Project */}
@@ -103,7 +103,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Projet associe</label>
             <select
               {...register('project_id')}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white"
             >
               <option value="">Aucun projet specifique</option>
               {projects.map(p => (
@@ -115,28 +115,28 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Titre de la demande <span className="text-red-500">*</span>
+              Titre de la demande <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <input
               {...register('name', { required: 'Le titre est obligatoire' })}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white"
               placeholder="Installation LED facade..."
             />
-            {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name.message}</p>}
+            {errors.name && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.name.message}</p>}
           </div>
 
           {/* Mission description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description de la mission <span className="text-red-500">*</span>
+              Description de la mission <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <textarea
               {...register('mission_description', { required: 'La description est obligatoire' })}
               rows={4}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white resize-none"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white resize-none"
               placeholder="Decrire en detail ce qui est attendu du prestataire..."
             />
-            {errors.mission_description && <p className="text-xs text-red-600 mt-1">{errors.mission_description.message}</p>}
+            {errors.mission_description && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.mission_description.message}</p>}
           </div>
 
           {/* Actions */}
@@ -147,7 +147,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
             >
               {createMutation.isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               Envoyer la demande
@@ -246,7 +246,7 @@ const ProvidersModule = ({ selectedCompany }) => {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="ds-btn ds-btn-primary text-sm"
         >
           <Plus size={18} />
           Creer demande de devis
@@ -255,17 +255,17 @@ const ProvidersModule = ({ selectedCompany }) => {
 
       {/* Alert: new offers submitted */}
       {submittedCount > 0 && (
-        <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+        <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'rgba(255,149,0,0.08)', border: '1px solid rgba(255,149,0,0.2)' }}>
+          <AlertTriangle className="w-5 h-5 shrink-0" style={{ color: 'var(--warning)' }} />
           <div className="flex-1">
-            <p className="text-sm font-medium text-amber-800">
+            <p className="text-sm font-medium" style={{ color: 'var(--warning)' }}>
               {submittedCount} nouvelle{submittedCount > 1 ? 's' : ''} offre{submittedCount > 1 ? 's' : ''} soumise{submittedCount > 1 ? 's' : ''}
             </p>
-            <p className="text-xs text-amber-700 mt-0.5">Cliquez sur "Offres" pour les examiner</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--warning)' }}>Cliquez sur "Offres" pour les examiner</p>
           </div>
           <button
             onClick={() => setActiveTab('proposals')}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-600 text-white hover:bg-amber-700"
+            className="px-3 py-1.5 rounded-lg text-xs font-medium text-white" style={{ background: 'var(--warning)' }}
           >
             Voir les offres
           </button>
@@ -292,7 +292,7 @@ const ProvidersModule = ({ selectedCompany }) => {
           <FileText size={16} className="inline mr-1.5" />
           Offres ({proposals.length})
           {submittedCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 w-5 h-5 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: 'var(--danger)' }}>
               {submittedCount}
             </span>
           )}
@@ -301,7 +301,7 @@ const ProvidersModule = ({ selectedCompany }) => {
 
       {/* Providers tab */}
       {activeTab === 'providers' && (
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           {providersLoading ? (
             <div className="h-48 animate-pulse bg-gray-100 rounded-lg" />
           ) : providers.length === 0 ? (
@@ -330,11 +330,12 @@ const ProvidersModule = ({ selectedCompany }) => {
                       <td className="py-3 text-gray-600">{p.email || '—'}</td>
                       <td className="py-3 text-gray-600">{p.specialty || '—'}</td>
                       <td className="py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          p.status === 'active' ? 'bg-green-100 text-green-700' :
-                          p.status === 'suspended' ? 'bg-red-100 text-red-700' :
-                          'bg-gray-100 text-gray-500'
-                        }`}>
+                        <span className="inline-flex items-center rounded-full text-xs font-medium"
+                          style={
+                            p.status === 'active' ? { background: 'rgba(52,199,89,0.12)', color: '#34C759', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                            p.status === 'suspended' ? { background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                            { background: 'rgba(113,113,122,0.12)', color: '#71717a', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }
+                          }>
                           {p.status === 'active' ? 'Actif' : p.status === 'suspended' ? 'Suspendu' : p.status || 'N/A'}
                         </span>
                       </td>
@@ -349,7 +350,7 @@ const ProvidersModule = ({ selectedCompany }) => {
 
       {/* Proposals tab */}
       {activeTab === 'proposals' && (
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           {proposalsLoading ? (
             <div className="h-48 animate-pulse bg-gray-100 rounded-lg" />
           ) : proposals.length === 0 ? (
@@ -367,20 +368,21 @@ const ProvidersModule = ({ selectedCompany }) => {
                   <div
                     key={p.id}
                     className={`border rounded-xl p-5 ${
-                      isSubmitted ? 'border-amber-200 bg-amber-50/30' : 'border-gray-100'
+                      isSubmitted ? 'border-gray-200' : 'border-gray-100'
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-base font-semibold text-gray-900">{p.name}</h3>
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                            p.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                            p.status === 'submitted' ? 'bg-blue-100 text-blue-700' :
-                            p.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                            p.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                            'bg-gray-100 text-gray-500'
-                          }`}>
+                          <span className="inline-flex items-center rounded-full text-xs font-medium"
+                            style={
+                              p.status === 'pending' ? { background: 'rgba(255,149,0,0.12)', color: '#FF9500', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'submitted' ? { background: 'rgba(0,113,227,0.12)', color: '#0071E3', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'accepted' ? { background: 'rgba(52,199,89,0.12)', color: '#34C759', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'rejected' ? { background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              { background: 'rgba(113,113,122,0.12)', color: '#71717a', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }
+                            }>
                             {p.status === 'pending' ? 'En attente' :
                              p.status === 'submitted' ? 'Offre soumise' :
                              p.status === 'accepted' ? 'Accepte' :
@@ -416,7 +418,7 @@ const ProvidersModule = ({ selectedCompany }) => {
                           <button
                             onClick={() => acceptMutation.mutate(p)}
                             disabled={acceptMutation.isPending}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-green-600 text-white hover:bg-green-700 transition-colors disabled:opacity-50"
+                            className="ds-btn ds-btn-primary text-sm disabled:opacity-50"
                           >
                             <CheckCircle size={16} />
                             Accepter
@@ -426,7 +428,7 @@ const ProvidersModule = ({ selectedCompany }) => {
                               if (window.confirm('Refuser cette offre ?')) rejectMutation.mutate(p.id)
                             }}
                             disabled={rejectMutation.isPending}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50" style={{ color: 'var(--danger)' }}
                           >
                             <XCircle size={16} />
                             Refuser

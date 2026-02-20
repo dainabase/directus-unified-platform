@@ -73,7 +73,7 @@ const ProductsList = ({ companyId }) => {
           <Package size={20} className="me-2" />
           Produits et Services
         </h4>
-        <button className="btn btn-primary" onClick={handleCreate}>
+        <button className="ds-btn ds-btn-primary" onClick={handleCreate}>
           <Plus size={16} className="me-1" />
           Nouveau produit
         </button>
@@ -124,7 +124,7 @@ const ProductsList = ({ companyId }) => {
           </p>
           {!searchQuery && typeFilter === 'all' && (
             <div className="empty-action">
-              <button className="btn btn-primary" onClick={handleCreate}>
+              <button className="ds-btn ds-btn-primary" onClick={handleCreate}>
                 <Plus size={16} className="me-1" />
                 Nouveau produit
               </button>
@@ -158,9 +158,9 @@ const ProductsList = ({ companyId }) => {
                   </td>
                   <td>
                     <span className={`badge ${
-                      product.type === 'product' ? 'bg-blue-lt' :
-                      product.type === 'service' ? 'bg-green-lt' :
-                      'bg-purple-lt'
+                      product.type === 'product' ? 'bg-zinc-100' :
+                      product.type === 'service' ? 'bg-zinc-50' :
+                      'bg-zinc-200'
                     }`}>
                       {product.type === 'product' ? 'Produit' :
                        product.type === 'service' ? 'Service' :
@@ -182,14 +182,14 @@ const ProductsList = ({ companyId }) => {
                   <td>
                     <div className="btn-list flex-nowrap">
                       <button
-                        className="btn btn-sm btn-ghost-primary"
+                        className="ds-btn ds-btn-secondary text-sm"
                         onClick={() => handleEdit(product)}
                         title="Modifier"
                       >
                         <Edit size={16} />
                       </button>
                       <button
-                        className="btn btn-sm btn-ghost-danger"
+                        className="ds-btn ds-btn-secondary text-sm text-red-600"
                         onClick={() => handleDelete(product)}
                         title="Supprimer"
                         disabled={deleteProduct.isPending}

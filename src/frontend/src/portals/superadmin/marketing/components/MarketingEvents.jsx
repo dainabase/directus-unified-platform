@@ -16,20 +16,20 @@ const MONTHS_FR = [
 // ── Skeleton ─────────────────────────────────────────────────────────────────
 const EventsSkeleton = () => (
   <div className="space-y-6">
-    <div className="glass-card p-5">
-      <div className="glass-skeleton h-4 w-28 rounded mb-3" />
-      <div className="glass-skeleton h-8 w-16 rounded" />
+    <div className="ds-card p-5">
+      <div className="ds-skeleton h-4 w-28 rounded mb-3" />
+      <div className="ds-skeleton h-8 w-16 rounded" />
     </div>
-    <div className="glass-card p-5">
-      <div className="glass-skeleton h-5 w-40 rounded mb-4" />
-      <div className="glass-skeleton h-[250px] w-full rounded" />
+    <div className="ds-card p-5">
+      <div className="ds-skeleton h-5 w-40 rounded mb-4" />
+      <div className="ds-skeleton h-[250px] w-full rounded" />
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-24 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
+          <div className="ds-skeleton h-4 w-48 rounded" />
+          <div className="ds-skeleton h-4 w-24 rounded" />
+          <div className="ds-skeleton h-4 w-20 rounded" />
         </div>
       ))}
     </div>
@@ -114,7 +114,7 @@ const MarketingEvents = ({ selectedCompany }) => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <CalendarDays className="w-6 h-6 text-blue-600" />
+          <CalendarDays className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           <h2 className="text-2xl font-bold text-gray-900">Evenements</h2>
         </div>
         <EventsSkeleton />
@@ -127,7 +127,7 @@ const MarketingEvents = ({ selectedCompany }) => {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <CalendarDays className="w-6 h-6 text-blue-600" />
+          <CalendarDays className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           Evenements
         </h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -136,16 +136,16 @@ const MarketingEvents = ({ selectedCompany }) => {
       </div>
 
       {/* KPI */}
-      <div className="glass-card p-5 max-w-xs">
+      <div className="ds-card p-5 max-w-xs">
         <div className="flex items-center gap-2 mb-2">
-          <Calendar className="w-5 h-5 text-blue-600" />
+          <Calendar className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <span className="text-sm text-gray-500">Total evenements</span>
         </div>
         <div className="text-2xl font-bold text-gray-900">{events.length}</div>
       </div>
 
       {/* Chart: events by month */}
-      <div className="glass-card p-5">
+      <div className="ds-card p-5">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Evenements par mois</h3>
         {monthlyData.length === 0 ? (
           <div className="flex items-center justify-center py-16 text-gray-400 text-sm">
@@ -158,14 +158,14 @@ const MarketingEvents = ({ selectedCompany }) => {
               <XAxis dataKey="label" tick={{ fontSize: 11 }} />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Evenements" />
+              <Bar dataKey="count" fill="#0071E3" radius={[4, 4, 0, 0]} name="Evenements" />
             </BarChart>
           </ResponsiveContainer>
         )}
       </div>
 
       {/* Table: all events */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Liste des evenements</h3>
         </div>
@@ -205,7 +205,7 @@ const MarketingEvents = ({ selectedCompany }) => {
 
       {/* Error state */}
       {isError && (
-        <div className="glass-card p-6 text-center">
+        <div className="ds-card p-6 text-center">
           <p className="text-sm text-red-500">
             Erreur lors du chargement des evenements. Verifiez que la collection events existe dans Directus.
           </p>

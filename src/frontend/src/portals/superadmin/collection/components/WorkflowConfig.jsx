@@ -17,8 +17,8 @@ const WorkflowConfig = ({ company }) => {
         <span className="text-sm text-gray-500">{company}</span>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-700">
+      <div className="bg-zinc-50 border border-blue-200 rounded-lg p-4">
+        <p className="text-sm text-zinc-700">
           Configuration du workflow de recouvrement automatisé selon la législation suisse (LP).
         </p>
       </div>
@@ -26,7 +26,7 @@ const WorkflowConfig = ({ company }) => {
       <div className="space-y-4">
         {steps.map((step, index) => (
           <div key={step.id} className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-lg">
-            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-medium">
+            <div className="w-8 h-8 rounded-full bg-zinc-100 text-zinc-900 flex items-center justify-center font-medium">
               {index + 1}
             </div>
             <div className="flex-1">
@@ -39,7 +39,7 @@ const WorkflowConfig = ({ company }) => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" defaultChecked={step.active} className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-checked:bg-blue-600 rounded-full peer-focus:ring-4 peer-focus:ring-blue-300"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-checked:bg-zinc-900 rounded-full peer-focus:ring-4 peer-focus:ring-zinc-300"></div>
             </label>
           </div>
         ))}

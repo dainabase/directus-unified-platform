@@ -10,7 +10,7 @@ import {
   ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend
 } from 'recharts'
 import toast from 'react-hot-toast'
-import { GlassCard, Badge, Table } from '../../../components/ui'
+import { Card, Badge, Table } from '../../../components/ui'
 
 const MONTH_LABELS = [
   'Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun',
@@ -18,9 +18,9 @@ const MONTH_LABELS = [
 ]
 
 const CHART_COLORS = [
-  '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6',
-  '#ef4444', '#06b6d4', '#ec4899', '#f97316',
-  '#14b8a6', '#6366f1', '#84cc16', '#a855f7'
+  '#0071E3', '#34C759', '#FF9500', '#5856D6',
+  '#FF3B30', '#00C7BE', '#FF2D55', '#FF9500',
+  '#34C759', '#5856D6', '#30D158', '#AF52DE'
 ]
 
 const TrainingsView = ({ selectedCompany }) => {
@@ -132,23 +132,23 @@ const TrainingsView = ({ selectedCompany }) => {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <GlassCard key={i} className="p-4">
+            <Card key={i} className="p-4">
               <div className="animate-pulse space-y-3">
                 <div className="h-8 w-8 bg-gray-200 rounded" />
                 <div className="h-6 w-16 bg-gray-200 rounded" />
                 <div className="h-4 w-24 bg-gray-200 rounded" />
               </div>
-            </GlassCard>
+            </Card>
           ))}
         </div>
-        <GlassCard>
+        <Card>
           <div className="animate-pulse space-y-4">
             <div className="h-6 w-48 bg-gray-200 rounded" />
             {[1, 2, 3, 4, 5].map(i => (
               <div key={i} className="h-12 w-full bg-gray-50 rounded" />
             ))}
           </div>
-        </GlassCard>
+        </Card>
       </div>
     )
   }
@@ -156,11 +156,11 @@ const TrainingsView = ({ selectedCompany }) => {
   // Error state
   if (isError) {
     return (
-      <GlassCard className="p-8 text-center">
+      <Card className="p-8 text-center">
         <GraduationCap size={48} className="mx-auto mb-4 text-gray-300" />
-        <p className="text-red-600 font-medium mb-2">Erreur de chargement</p>
+        <p className="font-medium mb-2" style={{color:'var(--danger)'}}>Erreur de chargement</p>
         <p className="text-sm text-gray-500">{error?.message || 'Impossible de charger les formations.'}</p>
-      </GlassCard>
+      </Card>
     )
   }
 
@@ -179,33 +179,33 @@ const TrainingsView = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <BookOpen className="w-8 h-8 text-blue-600" />
+            <BookOpen className="w-8 h-8" style={{color:'var(--accent)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{trainings.length}</p>
           <p className="text-sm text-gray-600">Total formations</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="w-8 h-8 text-green-600" />
+            <TrendingUp className="w-8 h-8" style={{color:'var(--success)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{dynamicFields.length}</p>
           <p className="text-sm text-gray-600">Champs disponibles</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Calendar className="w-8 h-8 text-purple-600" />
+            <Calendar className="w-8 h-8" style={{color:'var(--accent)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{monthlyData.length}</p>
           <p className="text-sm text-gray-600">Mois avec formations</p>
-        </GlassCard>
+        </Card>
       </div>
 
       {/* Tabs */}
-      <GlassCard className="p-1">
+      <Card className="p-1">
         <div className="flex">
           {[
             { id: 'catalogue', label: 'Catalogue', icon: <BookOpen size={18} /> },
@@ -218,8 +218,9 @@ const TrainingsView = ({ selectedCompany }) => {
                 flex-1 flex items-center justify-center gap-2
                 px-4 py-3 rounded-md transition-all duration-200
                 ${activeTab === tab.id
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'hover:bg-gray-100 text-gray-700'}
+                  ? 'text-white shadow-lg'
+                  : 'text-gray-700'}
+                style={activeTab === tab.id ? {background:'var(--accent)'} : {}}
               `}
             >
               {tab.icon}
@@ -227,13 +228,13 @@ const TrainingsView = ({ selectedCompany }) => {
             </button>
           ))}
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Catalogue Tab */}
       {activeTab === 'catalogue' && (
         <>
           {/* Search */}
-          <GlassCard className="p-4">
+          <Card className="p-4">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -241,13 +242,13 @@ const TrainingsView = ({ selectedCompany }) => {
                 placeholder="Rechercher dans les formations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 bg-white/70 backdrop-blur-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="ds-input w-full pl-9 pr-4 py-2 text-sm"
               />
             </div>
-          </GlassCard>
+          </Card>
 
           {/* Trainings Table */}
-          <GlassCard className="p-0">
+          <Card className="p-0">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
                 Liste des formations ({filteredTrainings.length})
@@ -324,7 +325,7 @@ const TrainingsView = ({ selectedCompany }) => {
                 {searchTerm && ` sur ${trainings.length} au total`}
               </div>
             )}
-          </GlassCard>
+          </Card>
         </>
       )}
 
@@ -332,7 +333,7 @@ const TrainingsView = ({ selectedCompany }) => {
       {activeTab === 'analytics' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Trainings by month BarChart */}
-          <GlassCard>
+          <Card>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Formations par mois
             </h3>
@@ -354,7 +355,7 @@ const TrainingsView = ({ selectedCompany }) => {
                   <Bar
                     dataKey="count"
                     name="Formations"
-                    fill="#3b82f6"
+                    fill="var(--accent)"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
@@ -364,10 +365,10 @@ const TrainingsView = ({ selectedCompany }) => {
                 <p>Pas de donnees temporelles disponibles</p>
               </div>
             )}
-          </GlassCard>
+          </Card>
 
           {/* Category PieChart (if category data detected) */}
-          <GlassCard>
+          <Card>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Repartition par categorie
             </h3>
@@ -408,7 +409,7 @@ const TrainingsView = ({ selectedCompany }) => {
                 <p>Aucun champ de categorie detecte dans les donnees</p>
               </div>
             )}
-          </GlassCard>
+          </Card>
         </div>
       )}
     </div>

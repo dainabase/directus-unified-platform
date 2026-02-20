@@ -29,19 +29,20 @@ const daysUntil = (d) => {
 
 // --- Status config ---
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600', icon: Clock },
-  pending: { label: 'En attente', color: 'bg-amber-50 text-amber-700', icon: Clock },
-  sent: { label: 'Envoyee', color: 'bg-blue-50 text-blue-700', icon: Receipt },
-  paid: { label: 'Payee', color: 'bg-emerald-50 text-emerald-700', icon: CheckCircle2 },
-  partial: { label: 'Partielle', color: 'bg-orange-50 text-orange-700', icon: AlertCircle },
-  overdue: { label: 'En retard', color: 'bg-red-50 text-red-700', icon: XCircle },
-  cancelled: { label: 'Annulee', color: 'bg-gray-100 text-gray-500', icon: XCircle }
+  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
+  sent: { label: 'Envoyee', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)', icon: Receipt },
+  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle2 },
+  partial: { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: AlertCircle },
+  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)', icon: XCircle },
+  cancelled: { label: 'Annulee', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: XCircle }
 }
 
 const StatusBadge = ({ status }) => {
   const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
+      style={{background: cfg.bg, color: cfg.fg}}>
       <cfg.icon size={12} />
       {cfg.label}
     </span>
@@ -104,15 +105,15 @@ const SummaryCards = ({ invoices }) => {
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En attente</p>
-        <p className="text-xl font-bold text-amber-600 mt-1">{pendingCount}</p>
+        <p className="text-xl font-bold mt-1" style={{color:"var(--warning)"}}>{pendingCount}</p>
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En retard</p>
-        <p className="text-xl font-bold text-red-600 mt-1">{overdueCount}</p>
+        <p className="text-xl font-bold mt-1" style={{color:"var(--danger)"}}>{overdueCount}</p>
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">Payees</p>
-        <p className="text-xl font-bold text-blue-600 mt-1">{paidCount}</p>
+        <p className="text-xl font-bold mt-1" style={{color:"var(--accent)"}}>{paidCount}</p>
       </div>
     </div>
   )
@@ -312,7 +313,7 @@ const InvoicesModule = () => {
             placeholder="Rechercher..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] outline-none"
           />
         </div>
         <div className="flex gap-1">

@@ -28,10 +28,10 @@ const COMPLIANCE_TYPES = {
 }
 
 const STATUS_CONFIG = {
-  compliant: { label: 'Conforme', color: 'green', badgeClass: 'glass-badge-success', icon: CheckCircle },
-  partial: { label: 'Partiellement', color: 'yellow', badgeClass: 'glass-badge-warning', icon: AlertTriangle },
-  'non-compliant': { label: 'Non conforme', color: 'red', badgeClass: 'glass-badge-danger', icon: XCircle },
-  'in-progress': { label: 'En cours', color: 'blue', badgeClass: 'glass-badge-primary', icon: Clock }
+  compliant: { label: 'Conforme', badgeClass: 'ds-badge ds-badge-success', icon: CheckCircle },
+  partial: { label: 'Partiellement', badgeClass: 'ds-badge ds-badge-warning', icon: AlertTriangle },
+  'non-compliant': { label: 'Non conforme', badgeClass: 'ds-badge ds-badge-danger', icon: XCircle },
+  'in-progress': { label: 'En cours', badgeClass: 'ds-badge ds-badge-info', icon: Clock }
 }
 
 const SCORE_MAP = {
@@ -42,10 +42,10 @@ const SCORE_MAP = {
 }
 
 const PIE_COLORS = {
-  compliant: '#10b981',
-  partial: '#f59e0b',
-  'non-compliant': '#ef4444',
-  'in-progress': '#3b82f6'
+  compliant: '#34C759',
+  partial: '#FF9500',
+  'non-compliant': '#FF3B30',
+  'in-progress': '#0071E3'
 }
 
 const PIE_LABELS = {
@@ -73,22 +73,22 @@ const fetchCompliance = async (company) => {
 
 // ── Helpers ────────────────────────────────────────────────
 
-const getScoreColor = (score) => {
-  if (score >= 90) return 'text-green-600'
-  if (score >= 70) return 'text-yellow-600'
-  return 'text-red-600'
+const getScoreColorStyle = (score) => {
+  if (score >= 90) return { color: 'var(--success)' }
+  if (score >= 70) return { color: 'var(--warning)' }
+  return { color: 'var(--danger)' }
 }
 
-const getScoreBarColor = (score) => {
-  if (score >= 90) return 'bg-green-500'
-  if (score >= 70) return 'bg-yellow-500'
-  return 'bg-red-500'
+const getScoreBarStyle = (score) => {
+  if (score >= 90) return { backgroundColor: 'var(--success)' }
+  if (score >= 70) return { backgroundColor: 'var(--warning)' }
+  return { backgroundColor: 'var(--danger)' }
 }
 
 const getRadialFill = (score) => {
-  if (score >= 80) return '#10b981'
-  if (score >= 60) return '#f59e0b'
-  return '#ef4444'
+  if (score >= 80) return '#34C759'
+  if (score >= 60) return '#FF9500'
+  return '#FF3B30'
 }
 
 // ── Component ──────────────────────────────────────────────
@@ -172,10 +172,10 @@ const ComplianceManager = ({ selectedCompany }) => {
 
   const renderStatusBadge = (status) => {
     const config = STATUS_CONFIG[status]
-    if (!config) return <span className="glass-badge">{status}</span>
+    if (!config) return <span className="ds-badge ds-badge-default">{status}</span>
     const Icon = config.icon
     return (
-      <span className={`glass-badge ${config.badgeClass}`}>
+      <span className={config.badgeClass}>
         <Icon size={12} className="mr-1" />
         {config.label}
       </span>
@@ -185,13 +185,13 @@ const ComplianceManager = ({ selectedCompany }) => {
   const renderTypeBadge = (type) => {
     const config = COMPLIANCE_TYPES[type]
     const colorMap = {
-      blue: 'glass-badge-primary',
-      green: 'glass-badge-success',
-      yellow: 'glass-badge-warning',
-      indigo: 'glass-badge-primary'
+      blue: 'ds-badge ds-badge-info',
+      green: 'ds-badge ds-badge-success',
+      yellow: 'ds-badge ds-badge-warning',
+      indigo: 'ds-badge ds-badge-info'
     }
     return (
-      <span className={`glass-badge ${colorMap[config?.color] || ''}`}>
+      <span className={colorMap[config?.color] || 'ds-badge ds-badge-default'}>
         {config?.label || type}
       </span>
     )
@@ -202,28 +202,28 @@ const ComplianceManager = ({ selectedCompany }) => {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="glass-card p-6">
-          <div className="h-10 glass-skeleton rounded-lg w-64" />
+        <div className="ds-card p-6">
+          <div className="h-10 animate-pulse rounded-lg w-64" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="glass-card p-5">
-              <div className="h-4 glass-skeleton rounded mb-3 w-24" />
-              <div className="h-8 glass-skeleton rounded w-16" />
+            <div key={i} className="ds-card p-5">
+              <div className="h-4 animate-pulse rounded mb-3 w-24" />
+              <div className="h-8 animate-pulse rounded w-16" />
             </div>
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-5">
-              <div className="h-48 glass-skeleton rounded-lg" />
+            <div key={i} className="ds-card p-5">
+              <div className="h-48 animate-pulse rounded-lg" />
             </div>
           ))}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="glass-card p-5">
-              <div className="h-40 glass-skeleton rounded-lg" />
+            <div key={i} className="ds-card p-5">
+              <div className="h-40 animate-pulse rounded-lg" />
             </div>
           ))}
         </div>
@@ -239,7 +239,7 @@ const ComplianceManager = ({ selectedCompany }) => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Shield className="w-6 h-6 text-blue-600" />
+            <Shield className="w-6 h-6 text-[var(--accent)]" />
             Conformite & Compliance
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -247,15 +247,15 @@ const ComplianceManager = ({ selectedCompany }) => {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className="glass-button text-gray-600" onClick={handleRefresh}>
+          <button className="ds-btn ds-btn-secondary" onClick={handleRefresh}>
             <RefreshCw size={16} className="mr-1 inline" />
             Actualiser
           </button>
-          <button className="glass-button text-gray-600">
+          <button className="ds-btn ds-btn-secondary">
             <Download size={16} className="mr-1 inline" />
             Rapport
           </button>
-          <button className="glass-button bg-blue-600 text-white hover:bg-blue-700">
+          <button className="ds-btn ds-btn-primary">
             <Plus size={16} className="mr-1 inline" />
             Nouvel audit
           </button>
@@ -264,16 +264,16 @@ const ComplianceManager = ({ selectedCompany }) => {
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Shield size={18} className="text-blue-600" />
+            <Shield size={18} className="text-[var(--accent)]" />
             <span className="text-sm text-gray-500">Reglementations</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={18} className="text-green-600" />
+            <CheckCircle size={18} className="text-[var(--success)]" />
             <span className="text-sm text-gray-500">Conformes</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.compliant}</p>
@@ -283,31 +283,31 @@ const ComplianceManager = ({ selectedCompany }) => {
             </p>
           )}
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={18} className="text-blue-600" />
+            <TrendingUp size={18} className="text-[var(--accent)]" />
             <span className="text-sm text-gray-500">Score moyen</span>
           </div>
-          <p className={`text-2xl font-bold ${getScoreColor(stats.avgScore)}`}>
+          <p className="text-2xl font-bold" style={getScoreColorStyle(stats.avgScore)}>
             {stats.avgScore}%
           </p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={18} className="text-yellow-600" />
+            <Calendar size={18} className="text-[var(--warning)]" />
             <span className="text-sm text-gray-500">Audits proches</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.pendingAudits}</p>
           <p className="text-xs text-gray-500 mt-1">Dans 60 jours</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <AlertOctagon size={18} className="text-red-600" />
+            <AlertOctagon size={18} className="text-[var(--danger)]" />
             <span className="text-sm text-gray-500">Non conformes</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.nonCompliant}</p>
           {stats.nonCompliant > 0 && (
-            <p className="text-xs text-red-500 mt-1">Action requise</p>
+            <p className="text-xs text-[var(--danger)] mt-1">Action requise</p>
           )}
         </div>
       </div>
@@ -315,7 +315,7 @@ const ComplianceManager = ({ selectedCompany }) => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Radial Bar — Global Score */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
             Score Global
           </h3>
@@ -340,7 +340,7 @@ const ComplianceManager = ({ selectedCompany }) => {
               </RadialBarChart>
             </ResponsiveContainer>
             <div className="text-center -mt-10">
-              <p className={`text-3xl font-bold ${getScoreColor(stats.avgScore)}`}>
+              <p className="text-3xl font-bold" style={getScoreColorStyle(stats.avgScore)}>
                 {stats.avgScore}%
               </p>
               <p className="text-sm text-gray-500">Conformite globale</p>
@@ -349,7 +349,7 @@ const ComplianceManager = ({ selectedCompany }) => {
         </div>
 
         {/* Pie Chart — Status Distribution */}
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
             Repartition par statut
           </h3>
@@ -402,7 +402,7 @@ const ComplianceManager = ({ selectedCompany }) => {
           <Filter size={16} className="text-gray-400" />
         </div>
         <select
-          className="glass-button text-sm"
+          className="ds-btn ds-btn-secondary text-sm"
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
         >
@@ -412,7 +412,7 @@ const ComplianceManager = ({ selectedCompany }) => {
           ))}
         </select>
         <select
-          className="glass-button text-sm"
+          className="ds-btn ds-btn-secondary text-sm"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -428,9 +428,8 @@ const ComplianceManager = ({ selectedCompany }) => {
         {filteredItems.map(item => (
           <div
             key={item.id}
-            className={`glass-card p-5 cursor-pointer ${
-              item.status === 'non-compliant' ? 'border-red-300' : ''
-            }`}
+            className="ds-card p-5 cursor-pointer"
+            style={item.status === 'non-compliant' ? { borderColor: 'var(--danger)' } : undefined}
             onClick={() => setSelectedItem(item)}
           >
             {/* Card Header */}
@@ -439,7 +438,8 @@ const ComplianceManager = ({ selectedCompany }) => {
                 {item.title}
               </h4>
               <button
-                className="p-1.5 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors flex-shrink-0"
+                className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
+                style={{ color: 'var(--accent)' }}
                 onClick={(e) => { e.stopPropagation(); setSelectedItem(item) }}
                 title="Voir details"
               >
@@ -459,10 +459,10 @@ const ComplianceManager = ({ selectedCompany }) => {
                 <Target size={14} className="text-gray-400" />
                 <span className="text-xs text-gray-500">Risque:</span>
                 <span className={`text-xs font-medium ${
-                  item.risk_level === 'critical' ? 'text-red-600' :
-                  item.risk_level === 'high' ? 'text-orange-600' :
-                  item.risk_level === 'medium' ? 'text-yellow-600' :
-                  'text-green-600'
+                  item.risk_level === 'critical' ? 'text-[var(--danger)]' :
+                  item.risk_level === 'high' ? 'text-[var(--warning)]' :
+                  item.risk_level === 'medium' ? 'text-[var(--warning)]' :
+                  'text-[var(--success)]'
                 }`}>
                   {item.risk_level === 'critical' ? 'Critique' :
                    item.risk_level === 'high' ? 'Eleve' :
@@ -475,14 +475,14 @@ const ComplianceManager = ({ selectedCompany }) => {
             <div className="mb-3">
               <div className="flex justify-between mb-1">
                 <span className="text-xs text-gray-500">Score de conformite</span>
-                <span className={`text-xs font-medium ${getScoreColor(item.score)}`}>
+                <span className="text-xs font-medium" style={getScoreColorStyle(item.score)}>
                   {item.score}%
                 </span>
               </div>
               <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all ${getScoreBarColor(item.score)}`}
-                  style={{ width: `${item.score}%` }}
+                  className="h-full rounded-full transition-all"
+                  style={{ ...getScoreBarStyle(item.score), width: `${item.score}%` }}
                 />
               </div>
             </div>
@@ -508,7 +508,7 @@ const ComplianceManager = ({ selectedCompany }) => {
 
       {/* Empty state */}
       {filteredItems.length === 0 && !isLoading && (
-        <div className="glass-card p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Shield size={48} className="mx-auto mb-3 text-gray-300" />
           <p className="text-sm text-gray-400">Aucune reglementation trouvee</p>
           <p className="text-xs text-gray-400 mt-1">
@@ -520,11 +520,11 @@ const ComplianceManager = ({ selectedCompany }) => {
       {/* Detail Modal */}
       {selectedItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center glass-modal-overlay"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={() => setSelectedItem(null)}
         >
           <div
-            className="glass-modal w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -535,12 +535,12 @@ const ComplianceManager = ({ selectedCompany }) => {
                   {renderTypeBadge(selectedItem.compliance_type)}
                   {renderStatusBadge(selectedItem.status)}
                   {selectedItem.risk_level && (
-                    <span className={`glass-badge ${
+                    <span className={`ds-badge ${
                       selectedItem.risk_level === 'critical' || selectedItem.risk_level === 'high'
-                        ? 'glass-badge-danger'
+                        ? 'ds-badge-danger'
                         : selectedItem.risk_level === 'medium'
-                        ? 'glass-badge-warning'
-                        : 'glass-badge-success'
+                        ? 'ds-badge-warning'
+                        : 'ds-badge-success'
                     }`}>
                       <Target size={12} className="mr-1" />
                       {selectedItem.risk_level === 'critical' ? 'Critique' :
@@ -571,11 +571,11 @@ const ComplianceManager = ({ selectedCompany }) => {
                     <div className="flex items-center gap-3">
                       <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${getScoreBarColor(selectedItem.score)}`}
-                          style={{ width: `${selectedItem.score}%` }}
+                          className="h-full rounded-full"
+                          style={{ ...getScoreBarStyle(selectedItem.score), width: `${selectedItem.score}%` }}
                         />
                       </div>
-                      <span className={`text-xl font-bold ${getScoreColor(selectedItem.score)}`}>
+                      <span className="text-xl font-bold" style={getScoreColorStyle(selectedItem.score)}>
                         {selectedItem.score}%
                       </span>
                     </div>
@@ -619,11 +619,11 @@ const ComplianceManager = ({ selectedCompany }) => {
                     </div>
                   )}
                   <div className="flex flex-col gap-2 pt-2">
-                    <button className="glass-button text-sm text-gray-600 w-full flex items-center justify-center gap-2">
+                    <button className="ds-btn ds-btn-secondary text-sm text-gray-600 w-full flex items-center justify-center gap-2">
                       <FileText size={14} />
                       Voir documentation
                     </button>
-                    <button className="glass-button text-sm text-gray-600 w-full flex items-center justify-center gap-2">
+                    <button className="ds-btn ds-btn-secondary text-sm text-gray-600 w-full flex items-center justify-center gap-2">
                       <Calendar size={14} />
                       Planifier audit
                     </button>
@@ -635,12 +635,12 @@ const ComplianceManager = ({ selectedCompany }) => {
             {/* Modal Footer */}
             <div className="flex items-center justify-end gap-2 p-6 border-t border-gray-100">
               <button
-                className="glass-button text-gray-600"
+                className="ds-btn ds-btn-secondary"
                 onClick={() => setSelectedItem(null)}
               >
                 Fermer
               </button>
-              <button className="glass-button bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-1">
+              <button className="ds-btn ds-btn-primary flex items-center gap-1">
                 <Edit2 size={14} />
                 Gerer exigences
               </button>

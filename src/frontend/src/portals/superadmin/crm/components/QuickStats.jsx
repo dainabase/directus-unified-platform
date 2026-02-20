@@ -48,7 +48,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--accent)', color:'#fff'}}>
                   <Users size={24} />
                 </div>
               </div>
@@ -60,7 +60,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                   {stats?.totalContacts || 0}
                 </div>
                 <div className="text-gray-500 text-sm">
-                  <span className="text-green-600 inline-flex items-center">
+                  <span className="inline-flex items-center" style={{color:'var(--success)'}}>
                     +{stats?.newContactsThisWeek || 0}
                   </span>
                   {' '}cette semaine
@@ -74,7 +74,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--success)', color:'#fff'}}>
                   <Building2 size={24} />
                 </div>
               </div>
@@ -86,7 +86,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                   {stats?.totalCompanies || 0}
                 </div>
                 <div className="text-gray-500 text-sm">
-                  <span className="text-green-600 inline-flex items-center">
+                  <span className="inline-flex items-center" style={{color:'var(--success)'}}>
                     +{stats?.newCompaniesThisWeek || 0}
                   </span>
                   {' '}cette semaine
@@ -100,7 +100,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--warning)', color:'#fff'}}>
                   <Activity size={24} />
                 </div>
               </div>
@@ -123,7 +123,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--accent)', color:'#fff'}}>
                   <TrendingUp size={24} />
                 </div>
               </div>
@@ -219,53 +219,53 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <Mail size={16} className="text-blue-600 mr-2" />
+                          <Mail size={16} className="mr-2" style={{color:'var(--accent)'}} />
                           Emails envoyés
                         </div>
                       </td>
                       <td className="px-4 py-3 text-gray-500">124</td>
                       <td className="px-4 py-3 text-gray-500">98</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">+26.5%</span>
+                        <span className="ds-badge ds-badge-success">+26.5%</span>
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <Phone size={16} className="text-green-600 mr-2" />
+                          <Phone size={16} className="mr-2" style={{color:'var(--success)'}} />
                           Appels effectués
                         </div>
                       </td>
                       <td className="px-4 py-3 text-gray-500">67</td>
                       <td className="px-4 py-3 text-gray-500">72</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">-6.9%</span>
+                        <span className="ds-badge ds-badge-danger">-6.9%</span>
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <UserCheck size={16} className="text-blue-600 mr-2" />
+                          <UserCheck size={16} className="mr-2" style={{color:'var(--accent)'}} />
                           Rendez-vous fixés
                         </div>
                       </td>
                       <td className="px-4 py-3 text-gray-500">23</td>
                       <td className="px-4 py-3 text-gray-500">19</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">+21.1%</span>
+                        <span className="ds-badge ds-badge-success">+21.1%</span>
                       </td>
                     </tr>
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <Activity size={16} className="text-amber-500 mr-2" />
+                          <Activity size={16} className="mr-2" style={{color:'var(--warning)'}} />
                           Opportunités créées
                         </div>
                       </td>
                       <td className="px-4 py-3 text-gray-500">8</td>
                       <td className="px-4 py-3 text-gray-500">6</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">+33.3%</span>
+                        <span className="ds-badge ds-badge-success">+33.3%</span>
                       </td>
                     </tr>
                   </tbody>
@@ -284,7 +284,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
               <div className="divide-y divide-gray-50">
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-medium">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--accent)', color:'#fff'}}>
                       AS
                     </div>
                   </div>
@@ -293,13 +293,13 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <div className="text-gray-500 text-xs">Score: 95/100</div>
                   </div>
                   <div className="text-right">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">Chaud</span>
+                    <span className="ds-badge ds-badge-success">Chaud</span>
                   </div>
                 </div>
 
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-medium">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--success)', color:'#fff'}}>
                       IT
                     </div>
                   </div>
@@ -308,13 +308,13 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <div className="text-gray-500 text-xs">Score: 87/100</div>
                   </div>
                   <div className="text-right">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">Tiède</span>
+                    <span className="ds-badge ds-badge-warning">Tiède</span>
                   </div>
                 </div>
 
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--accent)', color:'#fff'}}>
                       DS
                     </div>
                   </div>
@@ -323,13 +323,13 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <div className="text-gray-500 text-xs">Score: 76/100</div>
                   </div>
                   <div className="text-right">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">Qualifié</span>
+                    <span className="ds-badge ds-badge-info">Qualifié</span>
                   </div>
                 </div>
 
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-medium">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--warning)', color:'#fff'}}>
                       BC
                     </div>
                   </div>
@@ -338,7 +338,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <div className="text-gray-500 text-xs">Score: 68/100</div>
                   </div>
                   <div className="text-right">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Froid</span>
+                    <span className="ds-badge ds-badge-default">Froid</span>
                   </div>
                 </div>
               </div>
@@ -355,27 +355,27 @@ const QuickStats = ({ company, stats, isLoading }) => {
           </div>
           <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="border border-green-200 rounded-xl p-3 text-center">
-                <UserCheck size={32} className="text-green-600 mb-2 mx-auto" />
-                <h4 className="text-green-600 font-bold mb-1">23</h4>
+              <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(52,199,89,0.2)'}}>
+                <UserCheck size={32} className="mb-2 mx-auto" style={{color:'var(--success)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--success)'}}>23</h4>
                 <p className="text-gray-500 text-sm mb-0">Contacts à relancer</p>
               </div>
 
-              <div className="border border-amber-200 rounded-xl p-3 text-center">
-                <Phone size={32} className="text-amber-500 mb-2 mx-auto" />
-                <h4 className="text-amber-500 font-bold mb-1">12</h4>
+              <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(255,149,0,0.2)'}}>
+                <Phone size={32} className="mb-2 mx-auto" style={{color:'var(--warning)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--warning)'}}>12</h4>
                 <p className="text-gray-500 text-sm mb-0">Appels en attente</p>
               </div>
 
-              <div className="border border-blue-200 rounded-xl p-3 text-center">
-                <Mail size={32} className="text-blue-600 mb-2 mx-auto" />
-                <h4 className="text-blue-600 font-bold mb-1">8</h4>
+              <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(0,113,227,0.2)'}}>
+                <Mail size={32} className="mb-2 mx-auto" style={{color:'var(--accent)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--accent)'}}>8</h4>
                 <p className="text-gray-500 text-sm mb-0">Emails à traiter</p>
               </div>
 
-              <div className="border border-red-200 rounded-xl p-3 text-center">
-                <Activity size={32} className="text-red-600 mb-2 mx-auto" />
-                <h4 className="text-red-600 font-bold mb-1">5</h4>
+              <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(255,59,48,0.2)'}}>
+                <Activity size={32} className="mb-2 mx-auto" style={{color:'var(--danger)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--danger)'}}>5</h4>
                 <p className="text-gray-500 text-sm mb-0">Tâches urgentes</p>
               </div>
             </div>

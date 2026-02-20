@@ -16,12 +16,12 @@ const formatCHF = (v) => new Intl.NumberFormat('fr-CH', { style: 'currency', cur
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
 const STATUS_CONFIG = {
-  pending: { label: 'En attente', color: 'bg-amber-100 text-amber-700', icon: Clock },
-  paid: { label: 'Payée', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-  overdue: { label: 'En retard', color: 'bg-red-100 text-red-700', icon: AlertTriangle },
-  cancelled: { label: 'Annulée', color: 'bg-gray-100 text-gray-500', icon: AlertCircle },
-  draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600', icon: Receipt },
-  sent: { label: 'Envoyée', color: 'bg-blue-100 text-blue-700', icon: Receipt }
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
+  paid: { label: 'Payée', bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle },
+  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)', icon: AlertTriangle },
+  cancelled: { label: 'Annulée', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: AlertCircle },
+  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Receipt },
+  sent: { label: 'Envoyée', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)', icon: Receipt }
 }
 
 const ClientInvoices = () => {
@@ -79,7 +79,7 @@ const ClientInvoices = () => {
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
+    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 animate-spin" style={{color:"var(--accent)"}} /></div>
   }
 
   return (
@@ -91,12 +91,12 @@ const ClientInvoices = () => {
 
       {/* Outstanding total */}
       {totalOutstanding > 0 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 flex items-center justify-between">
+        <div className="rounded-xl p-5 flex items-center justify-between" style={{background:"rgba(255,149,0,0.08)", border:"1px solid rgba(255,149,0,0.25)"}}>
           <div>
-            <p className="text-sm font-medium text-amber-800">Montant total à régler</p>
-            <p className="text-xs text-amber-600">{unpaid.length} facture(s) en attente</p>
+            <p className="text-sm font-medium" style={{color:"var(--warning)"}}>Montant total à régler</p>
+            <p className="text-xs" style={{color:"var(--warning)"}}>{unpaid.length} facture(s) en attente</p>
           </div>
-          <p className="text-2xl font-bold text-amber-700">{formatCHF(totalOutstanding)}</p>
+          <p className="text-2xl font-bold" style={{color:"var(--warning)"}}>{formatCHF(totalOutstanding)}</p>
         </div>
       )}
 
@@ -128,19 +128,19 @@ const ClientInvoices = () => {
                     <td className="px-5 py-3 text-gray-500">{formatDate(inv.date_created)}</td>
                     <td className="px-5 py-3 text-right font-semibold">{formatCHF(inv.amount)}</td>
                     <td className="px-5 py-3 text-center">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.color}`}>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium" style={{background: cfg.bg, color: cfg.fg}}>
                         <Icon size={12} /> {cfg.label}
                       </span>
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center justify-center gap-2">
                         <button onClick={() => setSelectedInvoice(inv)}
-                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-blue-600" title="Voir / Imprimer">
+                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[var(--accent)]" title="Voir / Imprimer">
                           <Printer size={14} />
                         </button>
                         {inv.status === 'overdue' && (
                           <button onClick={() => navigate('/client/messages')}
-                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-blue-600" title="Contacter HYPERVISUAL">
+                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[var(--accent)]" title="Contacter HYPERVISUAL">
                             <MessageSquare size={14} />
                           </button>
                         )}
@@ -156,7 +156,7 @@ const ClientInvoices = () => {
 
       {/* Invoice detail modal */}
       {selectedInvoice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg" ref={printRef}>
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900">Facture {selectedInvoice.invoice_number}</h2>
@@ -190,7 +190,7 @@ const ClientInvoices = () => {
             </div>
             <div className="flex items-center gap-3 p-6 border-t border-gray-100">
               <button onClick={handlePrint}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-[#0071E3] hover:bg-blue-700">
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-[#0071E3] hover:opacity-90">
                 <Printer size={16} /> Imprimer
               </button>
               <button onClick={() => setSelectedInvoice(null)}

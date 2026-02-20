@@ -233,7 +233,7 @@ const UsersManager = () => {
           )}
         </div>
       ) : (
-        <div className="card glass-card">
+        <div className="card ds-card">
           <div className="table-responsive">
             <table className="table table-hover table-vcenter mb-0">
               <thead>

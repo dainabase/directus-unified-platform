@@ -88,11 +88,11 @@ const BankingDashboard = ({ selectedCompany }) => {
   if (accountsLoading || transactionsLoading) {
     return (
       <div className="space-y-4">
-        <div className="glass-card p-8"><div className="h-32 glass-skeleton rounded-lg" /></div>
+        <div className="ds-card p-8"><div className="h-32 ds-skeleton rounded-lg" /></div>
         <div className="grid grid-cols-3 gap-4">
-          {[1,2,3].map(i => <div key={i} className="glass-card p-6"><div className="h-24 glass-skeleton rounded-lg" /></div>)}
+          {[1,2,3].map(i => <div key={i} className="ds-card p-6"><div className="h-24 ds-skeleton rounded-lg" /></div>)}
         </div>
-        <div className="glass-card p-6"><div className="h-64 glass-skeleton rounded-lg" /></div>
+        <div className="ds-card p-6"><div className="h-64 ds-skeleton rounded-lg" /></div>
       </div>
     )
   }
@@ -105,17 +105,17 @@ const BankingDashboard = ({ selectedCompany }) => {
           <h1 className="text-2xl font-bold text-gray-900">Banking Dashboard</h1>
           <p className="text-gray-500">Revolut Business - Comptes multi-devises</p>
         </div>
-        <button className="glass-button bg-blue-600 text-white hover:bg-blue-700 flex items-center gap-2">
+        <button className="ds-btn ds-btn-primary flex items-center gap-2">
           <RefreshCw size={16} />
           Synchroniser
         </button>
       </div>
 
       {/* Main Balance Card */}
-      <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-8 text-white shadow-xl">
+      <div className="bg-zinc-900 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-blue-100 text-sm font-medium uppercase tracking-wider">Solde Total</p>
+            <p className="text-zinc-400 text-sm font-medium uppercase tracking-wider">Solde Total</p>
             <h2 className="text-4xl font-bold mt-2">{formatCHF(totalBalanceCHF)}</h2>
             <div className="flex items-center gap-2 mt-3">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/20 text-sm">
@@ -136,13 +136,13 @@ const BankingDashboard = ({ selectedCompany }) => {
               onClick={() => setSelectedCurrency(account.currency || 'CHF')}
               className={`p-6 rounded-xl border-2 transition-all text-left ${
                 selectedCurrency === (account.currency || 'CHF')
-                  ? 'border-blue-500 bg-blue-50 shadow-lg'
-                  : 'border-gray-200 bg-white/80 backdrop-blur hover:border-blue-300'
+                  ? 'border-zinc-900 bg-zinc-50 shadow-lg'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                  selectedCurrency === (account.currency || 'CHF') ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'
+                  selectedCurrency === (account.currency || 'CHF') ? 'bg-zinc-900 text-white' : 'bg-gray-100 text-gray-600'
                 }`}>
                   <CurrencyIcon currency={account.currency || 'CHF'} className="w-6 h-6" />
                 </div>
@@ -158,8 +158,8 @@ const BankingDashboard = ({ selectedCompany }) => {
               )}
               <div className="mt-4 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-blue-600 rounded-full"
-                  style={{ width: `${Math.min((parseFloat(account.balance || 0) / 200000) * 100, 100)}%` }}
+                  className="h-full rounded-full"
+                  style={{ background: 'var(--accent)', width: `${Math.min((parseFloat(account.balance || 0) / 200000) * 100, 100)}%` }}
                 />
               </div>
             </button>
@@ -169,7 +169,7 @@ const BankingDashboard = ({ selectedCompany }) => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
               <CreditCard className="w-5 h-5 text-red-600" />
@@ -178,7 +178,7 @@ const BankingDashboard = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500">Depenses du jour</p>
           <p className="text-xl font-bold text-gray-900">{formatCHF(todayExpenses)}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-green-600" />
@@ -187,19 +187,19 @@ const BankingDashboard = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500">Revenus recents</p>
           <p className="text-xl font-bold text-green-600">+{formatCHF(monthRevenue)}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Wallet className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center">
+              <Wallet className="w-5 h-5 text-zinc-600" />
             </div>
           </div>
           <p className="text-sm text-gray-500">Transactions</p>
           <p className="text-xl font-bold text-gray-900">{transactions.length}</p>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-              <Clock className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-zinc-600" />
             </div>
           </div>
           <p className="text-sm text-gray-500">Derniere sync</p>
@@ -208,7 +208,7 @@ const BankingDashboard = ({ selectedCompany }) => {
       </div>
 
       {/* Transactions List */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-semibold text-gray-900">Transactions recentes</h3>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
@@ -223,7 +223,7 @@ const BankingDashboard = ({ selectedCompany }) => {
             return (
               <div
                 key={tx.id}
-                className={`p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${index === 0 ? 'bg-blue-50/50' : ''}`}
+                className={`p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${index === 0 ? 'bg-zinc-50/50' : ''}`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isCredit ? 'bg-green-100' : 'bg-red-100'}`}>
@@ -254,7 +254,7 @@ const BankingDashboard = ({ selectedCompany }) => {
         </div>
         {transactions.length > 0 && (
           <div className="p-4 bg-gray-50 text-center">
-            <button className="text-blue-600 text-sm font-medium hover:text-blue-700">
+            <button className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
               Voir toutes les transactions
             </button>
           </div>

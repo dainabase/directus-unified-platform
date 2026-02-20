@@ -8,7 +8,7 @@ import {
   GraduationCap,
   Zap
 } from 'lucide-react'
-import { GlassCard, Badge, Button, Table } from '../../../components/ui'
+import { Card, Badge, Button, Table } from '../../../components/ui'
 
 const TalentsView = ({ people }) => {
   // Mock talents data with skills and certifications
@@ -41,7 +41,7 @@ const TalentsView = ({ people }) => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {keyTalents.map((talent) => (
-            <GlassCard key={talent.id} hoverable>
+            <Card key={talent.id} hoverable>
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="font-semibold text-gray-900">
@@ -65,10 +65,12 @@ const TalentsView = ({ people }) => {
                         key={level}
                         className={`w-2 h-8 rounded-sm transition-all ${
                           level <= talent.potential
-                            ? 'bg-gradient-to-t from-blue-600 to-blue-400'
+                            ? ''
                             : 'bg-gray-200'
                         }`}
-                        style={{ height: `${level * 20}%` }}
+                        style={level <= talent.potential
+                          ? { height: `${level * 20}%`, background: 'linear-gradient(to top, var(--accent), var(--accent-light))' }
+                          : { height: `${level * 20}%` }}
                       />
                     ))}
                   </div>
@@ -76,7 +78,7 @@ const TalentsView = ({ people }) => {
 
                 {/* Ready for Promotion */}
                 {talent.readinessForPromotion && (
-                  <div className="flex items-center gap-2 text-sm text-green-600">
+                  <div className="flex items-center gap-2 text-sm" style={{color:'var(--success)'}}>
                     <TrendingUp size={14} />
                     <span>Prêt pour promotion</span>
                   </div>
@@ -91,13 +93,13 @@ const TalentsView = ({ people }) => {
                   ))}
                 </div>
               </div>
-            </GlassCard>
+            </Card>
           ))}
         </div>
       </div>
 
       {/* Skills Matrix */}
-      <GlassCard>
+      <Card>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
           Matrice des Compétences
         </h2>
@@ -107,18 +109,19 @@ const TalentsView = ({ people }) => {
             .map(([skill, count]) => (
               <div
                 key={skill}
-                className="p-3 bg-gray-50 rounded-lg text-center hover:bg-blue-50 transition-colors"
+                className="p-3 rounded-lg text-center transition-colors"
+                style={{background:'rgba(0,0,0,0.04)'}}
               >
                 <p className="font-medium text-gray-900">{skill}</p>
-                <p className="text-2xl font-bold text-blue-600 mt-1">{count}</p>
+                <p className="text-2xl font-bold mt-1" style={{color:'var(--accent)'}}>{count}</p>
                 <p className="text-xs text-gray-500">employés</p>
               </div>
             ))}
         </div>
-      </GlassCard>
+      </Card>
 
       {/* Talent Pipeline */}
-      <GlassCard className="p-0">
+      <Card className="p-0">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">
             Pipeline de Talents
@@ -213,11 +216,11 @@ const TalentsView = ({ people }) => {
             ))}
           </Table.Body>
         </Table>
-      </GlassCard>
+      </Card>
 
       {/* Certifications Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <GlassCard>
+        <Card>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
               Certifications
@@ -233,8 +236,8 @@ const TalentsView = ({ people }) => {
                   <div className="flex items-center gap-2">
                     <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-600"
-                        style={{ width: `${(count / talentsData.length) * 100}%` }}
+                        className="h-full"
+                        style={{ background: 'var(--accent)', width: `${(count / talentsData.length) * 100}%` }}
                       />
                     </div>
                     <span className="text-sm font-medium text-gray-900 w-8">
@@ -245,9 +248,9 @@ const TalentsView = ({ people }) => {
               )
             })}
           </div>
-        </GlassCard>
+        </Card>
 
-        <GlassCard>
+        <Card>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
               Potentiel de Croissance
@@ -255,32 +258,32 @@ const TalentsView = ({ people }) => {
             <Zap className="w-5 h-5 text-gray-400" />
           </div>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-              <span className="text-sm font-medium text-green-700">
+            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--success-light)'}}>
+              <span className="text-sm font-medium" style={{color:'var(--success)'}}>
                 Haute Performance
               </span>
-              <span className="text-lg font-bold text-green-700">
+              <span className="text-lg font-bold" style={{color:'var(--success)'}}>
                 {talentsData.filter(t => t.potential >= 4).length}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-              <span className="text-sm font-medium text-blue-700">
+            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--accent-light)'}}>
+              <span className="text-sm font-medium" style={{color:'var(--accent)'}}>
                 Prêts pour promotion
               </span>
-              <span className="text-lg font-bold text-blue-700">
+              <span className="text-lg font-bold" style={{color:'var(--accent)'}}>
                 {talentsData.filter(t => t.readinessForPromotion).length}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-              <span className="text-sm font-medium text-yellow-700">
+            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--warning-light)'}}>
+              <span className="text-sm font-medium" style={{color:'var(--warning)'}}>
                 Talents clés
               </span>
-              <span className="text-lg font-bold text-yellow-700">
+              <span className="text-lg font-bold" style={{color:'var(--warning)'}}>
                 {keyTalents.length}
               </span>
             </div>
           </div>
-        </GlassCard>
+        </Card>
       </div>
     </div>
   )

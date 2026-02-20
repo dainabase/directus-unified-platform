@@ -52,7 +52,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
             <div className="card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
-                  <FileText size={24} className="text-blue" />
+                  <FileText size={24} className="text-zinc-700" />
                 </div>
                 <div className="col">
                   <div className="font-weight-medium">Documents Légaux</div>
@@ -63,7 +63,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
               </div>
               <div className="progress progress-sm mt-2">
                 <div 
-                  className="progress-bar bg-blue" 
+                  className="progress-bar bg-zinc-700" 
                   style={{ width: `${Math.min(100, (stats?.activeCGV / Math.max(1, stats?.totalCGV)) * 100)}%` }}
                 ></div>
               </div>
@@ -76,7 +76,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
             <div className="card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
-                  <Shield size={24} className="text-green" />
+                  <Shield size={24} className="text-zinc-700" />
                 </div>
                 <div className="col">
                   <div className="font-weight-medium">Signatures Électroniques</div>
@@ -87,7 +87,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
               </div>
               <div className="progress progress-sm mt-2">
                 <div 
-                  className="progress-bar bg-green" 
+                  className="progress-bar bg-zinc-500" 
                   style={{ width: '85%' }}
                 ></div>
               </div>
@@ -100,7 +100,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
             <div className="card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
-                  <Users size={24} className="text-purple" />
+                  <Users size={24} className="text-zinc-700" />
                 </div>
                 <div className="col">
                   <div className="font-weight-medium">Clients Conformes</div>
@@ -111,7 +111,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
               </div>
               <div className="progress progress-sm mt-2">
                 <div 
-                  className="progress-bar bg-purple" 
+                  className="progress-bar bg-zinc-400" 
                   style={{ width: '92%' }}
                 ></div>
               </div>
@@ -124,7 +124,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
             <div className="card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
-                  <Award size={24} className="text-yellow" />
+                  <Award size={24} className="text-zinc-700" />
                 </div>
                 <div className="col">
                   <div className="font-weight-medium">Score Conformité</div>
@@ -135,7 +135,7 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
               </div>
               <div className="progress progress-sm mt-2">
                 <div 
-                  className="progress-bar bg-yellow" 
+                  className="progress-bar bg-zinc-300" 
                   style={{ width: `${stats?.complianceScore || 100}%` }}
                 ></div>
               </div>
@@ -335,8 +335,8 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       {/* Résumé légal */}
       <div className="row mt-4">
         <div className="col-lg-12">
-          <div className="card border-primary">
-            <div className="card-header bg-primary-lt">
+          <div className="card border-zinc-200">
+            <div className="card-header bg-zinc-50">
               <h3 className="card-title">
                 <Shield size={20} className="me-2" />
                 Résumé Conformité Légale Suisse

@@ -17,14 +17,14 @@ import { useProviderAuth } from '../hooks/useProviderAuth'
 
 // -- Category colors (shared with KnowledgeBasePage) --
 const CATEGORY_COLORS = {
-  guides: { bg: 'bg-blue-100', text: 'text-blue-700' },
-  procedures: { bg: 'bg-purple-100', text: 'text-purple-700' },
-  technique: { bg: 'bg-amber-100', text: 'text-amber-700' },
-  administration: { bg: 'bg-green-100', text: 'text-green-700' }
+  guides: { bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
+  procedures: { bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
+  technique: { bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
+  administration: { bg: 'rgba(52,199,89,0.12)', fg: '#34C759' }
 }
 
 const getCategoryStyle = (category) =>
-  CATEGORY_COLORS[category] || { bg: 'bg-gray-100', text: 'text-gray-600' }
+  CATEGORY_COLORS[category] || { bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 
 // -- Basic HTML sanitization (strip script tags, event handlers) --
 const sanitizeHTML = (html) => {
@@ -94,7 +94,7 @@ const KnowledgeArticlePage = () => {
       <div className="space-y-6">
         <button
           onClick={() => navigate('/prestataire/knowledge')}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#0071E3] transition-colors"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[var(--accent)] transition-colors"
         >
           <ArrowLeft size={16} />
           Base de connaissances
@@ -110,7 +110,7 @@ const KnowledgeArticlePage = () => {
           </p>
           <button
             onClick={() => navigate('/prestataire/knowledge')}
-            className="text-sm text-[#0071E3] hover:text-blue-700 font-medium"
+            className="text-sm font-medium hover:opacity-80" style={{ color: 'var(--accent)' }}
           >
             Retour a la base de connaissances
           </button>
@@ -128,7 +128,7 @@ const KnowledgeArticlePage = () => {
       {/* Back link */}
       <button
         onClick={() => navigate('/prestataire/knowledge')}
-        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#0071E3] transition-colors"
+        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[var(--accent)] transition-colors"
       >
         <ArrowLeft size={16} />
         Base de connaissances
@@ -140,7 +140,8 @@ const KnowledgeArticlePage = () => {
           {/* Category + date */}
           <div className="flex items-center gap-3 mb-4">
             {article.category && (
-              <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium ${catStyle.bg} ${catStyle.text}`}>
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium"
+                style={{ background: catStyle.bg, color: catStyle.fg }}>
                 {article.category.charAt(0).toUpperCase() + article.category.slice(1)}
               </span>
             )}

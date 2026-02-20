@@ -25,7 +25,7 @@ async function fetchCEOReport(companyId) {
 }
 
 const KPICard = ({ icon: Icon, label, value, subtitle, color = 'text-gray-900', iconColor = 'text-blue-500' }) => (
-  <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+  <div className="ds-card p-4">
     <div className="flex items-center gap-2 mb-2">
       <Icon size={16} className={iconColor} />
       <span className="text-xs text-gray-500 uppercase tracking-wide">{label}</span>
@@ -92,7 +92,7 @@ const CEOReportModule = () => {
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
       ) : !report ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
           <p className="text-sm text-gray-500">Rapport non disponible</p>
           <p className="text-xs text-gray-400 mt-1">Le backend n'est peut-etre pas demarre</p>
@@ -170,7 +170,7 @@ const CEOReportModule = () => {
           {/* Details panels */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Top overdue invoices */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+            <div className="ds-card overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-100">
                 <h3 className="text-sm font-semibold text-gray-700">Factures en retard (top 5)</h3>
               </div>
@@ -194,7 +194,7 @@ const CEOReportModule = () => {
             </div>
 
             {/* Recent open tickets */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+            <div className="ds-card overflow-hidden">
               <div className="px-4 py-3 border-b border-gray-100">
                 <h3 className="text-sm font-semibold text-gray-700">Tickets recents (top 5)</h3>
               </div>

@@ -10,7 +10,7 @@ import api from '../../../../lib/axios'
 // ── Status config ────────────────────────────────────────────────────────────
 const STATUS_CFG = {
   draft:     { label: 'Brouillon',  bg: 'bg-gray-100',   text: 'text-gray-600' },
-  scheduled: { label: 'Planifie',   bg: 'bg-blue-100',   text: 'text-blue-700' },
+  scheduled: { label: 'Planifie',   bg: 'bg-zinc-100',   text: 'text-zinc-700' },
   published: { label: 'Publie',     bg: 'bg-green-100',  text: 'text-green-700' },
   archived:  { label: 'Archive',    bg: 'bg-orange-100',  text: 'text-orange-700' }
 }
@@ -20,27 +20,27 @@ const ContentCalendarSkeleton = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-card p-5">
-          <div className="glass-skeleton h-4 w-24 rounded mb-3" />
-          <div className="glass-skeleton h-8 w-16 rounded" />
+        <div key={i} className="ds-card p-5">
+          <div className="ds-skeleton h-4 w-24 rounded mb-3" />
+          <div className="ds-skeleton h-8 w-16 rounded" />
         </div>
       ))}
     </div>
-    <div className="glass-card p-6">
-      <div className="glass-skeleton h-6 w-48 rounded mb-4" />
+    <div className="ds-card p-6">
+      <div className="ds-skeleton h-6 w-48 rounded mb-4" />
       <div className="grid grid-cols-7 gap-2">
         {[...Array(35)].map((_, i) => (
-          <div key={i} className="glass-skeleton h-20 rounded" />
+          <div key={i} className="ds-skeleton h-20 rounded" />
         ))}
       </div>
     </div>
-    <div className="glass-card p-0 overflow-hidden">
+    <div className="ds-card p-0 overflow-hidden">
       {[...Array(5)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-5 py-4 border-b border-gray-100">
-          <div className="glass-skeleton h-4 w-48 rounded" />
-          <div className="glass-skeleton h-4 w-24 rounded" />
-          <div className="glass-skeleton h-4 w-20 rounded" />
-          <div className="glass-skeleton h-4 w-28 rounded" />
+          <div className="ds-skeleton h-4 w-48 rounded" />
+          <div className="ds-skeleton h-4 w-24 rounded" />
+          <div className="ds-skeleton h-4 w-20 rounded" />
+          <div className="ds-skeleton h-4 w-28 rounded" />
         </div>
       ))}
     </div>
@@ -138,7 +138,7 @@ const ContentCalendar = ({ selectedCompany }) => {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-2">
-          <Calendar className="w-6 h-6 text-blue-600" />
+          <Calendar className="w-6 h-6" style={{ color: 'var(--accent)' }} />
           <h2 className="text-2xl font-bold text-gray-900">Calendrier de contenu</h2>
         </div>
         <ContentCalendarSkeleton />
@@ -152,7 +152,7 @@ const ContentCalendar = ({ selectedCompany }) => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Calendar className="w-6 h-6 text-blue-600" />
+            <Calendar className="w-6 h-6" style={{ color: 'var(--accent)' }} />
             Calendrier de contenu
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -163,28 +163,28 @@ const ContentCalendar = ({ selectedCompany }) => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <FileText className="w-5 h-5 text-blue-600" />
+            <FileText className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Total</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.total}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-5 h-5 text-gray-500" />
             <span className="text-sm text-gray-500">Brouillons</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.draft}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar className="w-5 h-5 text-blue-500" />
+            <Calendar className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span className="text-sm text-gray-500">Planifies</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.scheduled}</div>
         </div>
-        <div className="glass-card p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Eye className="w-5 h-5 text-green-600" />
             <span className="text-sm text-gray-500">Publies</span>
@@ -198,7 +198,7 @@ const ContentCalendar = ({ selectedCompany }) => {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
         >
           <option value="all">Tous les statuts</option>
           {Object.entries(STATUS_CFG).map(([k, v]) => (
@@ -208,7 +208,7 @@ const ContentCalendar = ({ selectedCompany }) => {
         <select
           value={filterChannel}
           onChange={(e) => setFilterChannel(e.target.value)}
-          className="px-3 py-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400/40"
         >
           <option value="all">Tous les canaux</option>
           {channels.map(ch => (
@@ -218,7 +218,7 @@ const ContentCalendar = ({ selectedCompany }) => {
       </div>
 
       {/* Calendar navigation */}
-      <div className="glass-card p-5">
+      <div className="ds-card p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button
@@ -239,7 +239,7 @@ const ContentCalendar = ({ selectedCompany }) => {
           </div>
           <button
             onClick={goToday}
-            className="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+            className="px-3 py-1.5 text-sm font-medium rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors" style={{ color: 'var(--accent)' }}
           >
             Aujourd'hui
           </button>
@@ -268,14 +268,14 @@ const ContentCalendar = ({ selectedCompany }) => {
                 className={`min-h-[80px] rounded-lg border p-1.5 transition-colors ${
                   isValid
                     ? isToday
-                      ? 'border-blue-300 bg-blue-50/50'
+                      ? 'border-zinc-300 bg-zinc-50/50'
                       : 'border-gray-100 bg-white/50 hover:bg-gray-50/60'
                     : 'border-transparent bg-gray-50/30'
                 }`}
               >
                 {isValid && (
                   <>
-                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-blue-600' : 'text-gray-500'}`}>
+                    <div className={`text-xs font-medium mb-1 ${isToday ? 'text-zinc-900 font-semibold' : 'text-gray-500'}`}>
                       {day}
                     </div>
                     <div className="flex flex-col gap-0.5">
@@ -306,7 +306,7 @@ const ContentCalendar = ({ selectedCompany }) => {
       </div>
 
       {/* Table listing */}
-      <div className="glass-card p-0 overflow-hidden">
+      <div className="ds-card p-0 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h3 className="font-semibold text-gray-900">Tous les contenus</h3>
         </div>
@@ -371,7 +371,7 @@ const ContentCalendar = ({ selectedCompany }) => {
 
       {/* Error state */}
       {isError && (
-        <div className="glass-card p-6 text-center">
+        <div className="ds-card p-6 text-center">
           <p className="text-sm text-red-500">
             Erreur lors du chargement des donnees. Verifiez que la collection content_calendar existe dans Directus.
           </p>

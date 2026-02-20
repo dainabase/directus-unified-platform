@@ -39,11 +39,11 @@
 
 ---
 
-## PHASE 1 — DESIGN SYSTEM ⚠️
+## PHASE 1 — DESIGN SYSTEM ✅
 
 **Objectif** : Appliquer le Design System Apple Premium Monochromatic (CDC §14) sur toute la plateforme.
 **Référence** : `docs/CDC_v1.3_Design_System_Consolidation.md`
-**Audit** : Février 2026 — 6/9 stories conformes, résidus dans portails + SuperAdmin
+**Complété** : 2026-02-20 — 9/9 stories, 261 corrections DS dans ~65 fichiers
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
@@ -53,28 +53,28 @@
 | 1.4 | Topbar redesign | 🔥 | 🟢 | Search dynamique, actions, notifications dot |
 | 1.5 | Dashboard SuperAdmin — appliquer Design System | 🔥 | 🟢 | KPIs + Operations + Commercial + Finance + KPI Sidebar |
 | 1.6 | Créer composants réutilisables : `StatusDot`, `KPICard`, `DataTable`, `ProgressBar` | ⚡ | 🟢 | Utilisés dans tous les portails |
-| 1.7 | Appliquer Design System — Portail Client | ⚡ | 🟡 | Layout DS OK. 3 fichiers legacy Bootstrap (ClientPortalDashboard, ClientPortalApp, LoginPage) — LoginPage corrigé, 2 legacy non routés |
-| 1.8 | Appliquer Design System — Portail Prestataire | ⚡ | 🟡 | Layout DS OK. Résidus Tailwind colors (bg-blue-50, bg-amber-50) dans 3 fichiers |
-| 1.9 | Appliquer Design System — Portail Revendeur | ⚡ | 🟡 | Layout DS OK. Ancien Dashboard.jsx 100% Bootstrap (non routé). PipelineRevendeur: Tailwind colors |
+| 1.7 | Appliquer Design System — Portail Client | ⚡ | 🟢 | 2026-02-20 — 6 fichiers corrigés : statuts inline styles DS, focus rings, backdrop-blur nettoyé |
+| 1.8 | Appliquer Design System — Portail Prestataire | ⚡ | 🟢 | 2026-02-20 — 9 fichiers corrigés : STATUS_CONFIG→inline styles, bg-blue→var(--accent), glass→ds |
+| 1.9 | Appliquer Design System — Portail Revendeur | ⚡ | 🟢 | 2026-02-20 — 5 fichiers corrigés : statuts inline styles DS, priority dots, source badges |
 
-**Résidus globaux** : 64× bg-blue-600, 107× GlassCard, 45× glass-card, 45× glass-button dans ~50 fichiers SuperAdmin
-**Critère de sortie** : ⚠️ Core DS (tokens, composants, layouts) conforme. Résidus dans fichiers SuperAdmin hérités.
+**Résidus globaux** : 0 violations. 261 corrections appliquées dans ~65 fichiers (SuperAdmin + Client + Prestataire + Revendeur).
+**Critère de sortie** : ✅ Design System Apple Premium Monochromatic conforme sur tous les portails. Build 0 erreurs.
 
 ---
 
-## PHASE 2 — CONNEXION DONNÉES RÉELLES ⚠️
+## PHASE 2 — CONNEXION DONNÉES RÉELLES ✅
 
 **Objectif** : Brancher React ↔ Directus sur les pages déjà structurées.
-**Audit** : Février 2026 — 10/12 stories réelles, 2 partielles
+**Complété** : 2026-02-20 — 12/12 stories réelles
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
 | 2.1 | Service layer Directus (`src/services/directus.js`) | 🔥 | 🟢 | Dual impl (SDK + axios), JWT interceptor, CRUD complet |
 | 2.2 | Authentification multi-portails JWT | 🔥 | 🟢 | authStore Zustand, login/logout/refresh, route guards |
-| 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🟡 | Finance KPIs réels (useFinance), MAIS BudgetsManager + ExpensesTracker encore mockés |
+| 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🟢 | 2026-02-20 — BudgetsManager + ExpensesTracker connectés Directus (cascading fallback budgets→dashboard_kpis→bank_transactions) |
 | 2.4 | Dashboard CEO — Projets actifs en temps réel | 🔥 | 🟢 | projects + deliverables, CRUD, status filter |
 | 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🟢 | PipelineView: leads Directus, drag-drop Kanban, weighted KPIs |
-| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟡 | Revolut API primary + Directus fallback OK, MAIS token refresh 40min manquant |
+| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟢 | 2026-02-20 — token-manager.js (431 lignes) : refresh automatique 5min avant expiry, Redis persistence, 401 interceptor avec retry |
 | 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🟢 | client_invoices overdue, supplier_invoices upcoming, projects inactive, leads unfollowed |
 | 2.8 | CRM — Companies (connecté Directus) | ⚡ | 🟢 | CRUD complet via crmApi.js + useCRMData |
 | 2.9 | CRM — Contacts (connecté Directus) | ⚡ | 🟢 | people collection, CRUD, company autocomplete |
@@ -82,7 +82,7 @@
 | 2.11 | Projets — Liste + détail (connecté Directus) | ⚡ | 🟢 | ProjectsDashboard analytics, deliverables, 30s staleTime |
 | 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🟢 | usePolling (Page Visibility API, 30s) + useRealtimeDashboard (7 query keys) |
 
-**Critère de sortie** : ⚠️ CEO voit vrais KPIs, projets et trésorerie. 2 stories partielles : budgets mockés + Revolut token refresh.
+**Critère de sortie** : ✅ CEO voit vrais KPIs, projets et trésorerie. Budgets connectés Directus. Revolut token refresh automatique.
 
 ---
 

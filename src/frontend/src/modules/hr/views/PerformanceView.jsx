@@ -8,7 +8,7 @@ import {
   Users,
   BarChart3
 } from 'lucide-react'
-import { GlassCard, Badge, Button, Table } from '../../../components/ui'
+import { Card, Badge, Button, Table } from '../../../components/ui'
 
 const PerformanceView = ({ people }) => {
   // Mock performance data
@@ -52,8 +52,8 @@ const PerformanceView = ({ people }) => {
   }
 
   const getTrendIcon = (trend) => {
-    if (trend === 'up') return <TrendingUp size={14} className="text-green-600" />
-    if (trend === 'down') return <TrendingUp size={14} className="text-red-600 rotate-180" />
+    if (trend === 'up') return <TrendingUp size={14} style={{color:'var(--success)'}} />
+    if (trend === 'down') return <TrendingUp size={14} className="rotate-180" style={{color:'var(--danger)'}} />
     return <div className="w-3.5 h-0.5 bg-gray-400" />
   }
 
@@ -61,55 +61,55 @@ const PerformanceView = ({ people }) => {
     <div className="space-y-6">
       {/* Performance Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Award className="w-8 h-8 text-green-600" />
+            <Award className="w-8 h-8" style={{color:'var(--success)'}} />
             <Badge variant="success" size="sm">Excellent</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
             {performanceDistribution.excellent}
           </p>
           <p className="text-sm text-gray-600">Score ≥ 4.5</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Target className="w-8 h-8 text-blue-600" />
+            <Target className="w-8 h-8" style={{color:'var(--accent)'}} />
             <Badge variant="primary" size="sm">Bon</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
             {performanceDistribution.good}
           </p>
           <p className="text-sm text-gray-600">Score 3.5-4.5</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <BarChart3 className="w-8 h-8 text-yellow-600" />
+            <BarChart3 className="w-8 h-8" style={{color:'var(--warning)'}} />
             <Badge variant="warning" size="sm">Satisfaisant</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
             {performanceDistribution.satisfactory}
           </p>
           <p className="text-sm text-gray-600">Score 2.5-3.5</p>
-        </GlassCard>
+        </Card>
 
-        <GlassCard className="p-4">
+        <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <AlertCircle className="w-8 h-8 text-red-600" />
+            <AlertCircle className="w-8 h-8" style={{color:'var(--danger)'}} />
             <Badge variant="error" size="sm">À améliorer</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
             {performanceDistribution.needsImprovement}
           </p>
           <p className="text-sm text-gray-600">Score &lt; 2.5</p>
-        </GlassCard>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Performance Rankings */}
         <div className="lg:col-span-2">
-          <GlassCard className="p-0">
+          <Card className="p-0">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">
                 Évaluations de Performance
@@ -191,13 +191,13 @@ const PerformanceView = ({ people }) => {
                   ))}
               </Table.Body>
             </Table>
-          </GlassCard>
+          </Card>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Upcoming Reviews */}
-          <GlassCard>
+          <Card>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
                 Prochaines Évaluations
@@ -238,10 +238,10 @@ const PerformanceView = ({ people }) => {
             <Button variant="secondary" fullWidth className="mt-4">
               Voir toutes les évaluations
             </Button>
-          </GlassCard>
+          </Card>
 
           {/* Performance Insights */}
-          <GlassCard>
+          <Card>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
                 Insights Performance
@@ -249,43 +249,43 @@ const PerformanceView = ({ people }) => {
               <TrendingUp className="w-5 h-5 text-gray-400" />
             </div>
             <div className="space-y-3">
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-3 rounded-lg" style={{background:'var(--success-light)'}}>
                 <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="w-4 h-4 text-green-600" />
-                  <span className="text-sm font-medium text-green-700">
+                  <TrendingUp className="w-4 h-4" style={{color:'var(--success)'}} />
+                  <span className="text-sm font-medium" style={{color:'var(--success)'}}>
                     Progression globale
                   </span>
                 </div>
-                <p className="text-xs text-green-600">
+                <p className="text-xs" style={{color:'var(--success)'}}>
                   +12% vs trimestre précédent
                 </p>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded-lg">
+              <div className="p-3 rounded-lg" style={{background:'var(--accent-light)'}}>
                 <div className="flex items-center gap-2 mb-1">
-                  <Target className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-700">
+                  <Target className="w-4 h-4" style={{color:'var(--accent)'}} />
+                  <span className="text-sm font-medium" style={{color:'var(--accent)'}}>
                     Objectifs atteints
                   </span>
                 </div>
-                <p className="text-xs text-blue-600">
+                <p className="text-xs" style={{color:'var(--accent)'}}>
                   78% des objectifs Q4 complétés
                 </p>
               </div>
 
-              <div className="p-3 bg-yellow-50 rounded-lg">
+              <div className="p-3 rounded-lg" style={{background:'var(--warning-light)'}}>
                 <div className="flex items-center gap-2 mb-1">
-                  <AlertCircle className="w-4 h-4 text-yellow-600" />
-                  <span className="text-sm font-medium text-yellow-700">
+                  <AlertCircle className="w-4 h-4" style={{color:'var(--warning)'}} />
+                  <span className="text-sm font-medium" style={{color:'var(--warning)'}}>
                     Attention requise
                   </span>
                 </div>
-                <p className="text-xs text-yellow-600">
+                <p className="text-xs" style={{color:'var(--warning)'}}>
                   {performanceDistribution.needsImprovement} employés nécessitent un suivi
                 </p>
               </div>
             </div>
-          </GlassCard>
+          </Card>
         </div>
       </div>
     </div>

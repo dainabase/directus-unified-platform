@@ -1,11 +1,19 @@
 /**
  * Revolut Router - ES Modules
  * Routes API pour l'integration Revolut Business
- * @version 2.0.0
+ *
+ * Token management: automatic refresh via token-manager.js
+ * On 401 from Revolut, force-refresh + retry once.
+ * On persistent failure, fallback to Directus data with source='directus'.
+ *
+ * @version 3.0.0
+ * @date 2026-02-20
  */
 
 import express from 'express';
+import axios from 'axios';
 import RevolutAPI from './revolut-api.js';
+import { getValidToken, storeToken, forceRefresh, getTokenStatus, getAllTokenStatuses } from './token-manager.js';
 import webhookReceiver from './webhook-receiver.js';
 import { syncRecentTransactions } from './sync-transactions.js';
 import { reconcileTransaction, applyReconciliation } from './reconciliation.js';
@@ -13,12 +21,131 @@ import { startAlertsMonitor, checkUnmatchedTransactions } from './alerts.js';
 
 const router = express.Router();
 
-// Initialiser Revolut API
+const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
+const DIRECTUS_HEADERS = {
+  Authorization: `Bearer ${DIRECTUS_TOKEN}`,
+  'Content-Type': 'application/json'
+};
+
+// Initialiser Revolut API (with token manager integration)
 const revolut = new RevolutAPI({
   baseURL: process.env.REVOLUT_API_URL || 'https://b2b.revolut.com/api/1.0',
   clientId: process.env.REVOLUT_CLIENT_ID,
   accessToken: process.env.REVOLUT_ACCESS_TOKEN,
+  refreshToken: process.env.REVOLUT_REFRESH_TOKEN,
+  companyId: 'HYPERVISUAL',
   sandbox: process.env.REVOLUT_SANDBOX === 'true'
+});
+
+/**
+ * Helper: fetch Directus fallback data for treasury / balance
+ */
+async function getDirectusFallbackBalance(companyFilter) {
+  try {
+    const params = companyFilter
+      ? { 'filter[owner_company][_eq]': companyFilter, fields: '*', limit: 20 }
+      : { fields: '*', limit: 20 };
+
+    const [accountsRes, transactionsRes] = await Promise.all([
+      axios.get(`${DIRECTUS_URL}/items/bank_accounts`, { headers: DIRECTUS_HEADERS, params }),
+      axios.get(`${DIRECTUS_URL}/items/bank_transactions`, {
+        headers: DIRECTUS_HEADERS,
+        params: { ...params, sort: '-date', limit: 30, fields: 'amount,type,date,description,currency' }
+      })
+    ]);
+
+    const accounts = accountsRes.data?.data || [];
+    const transactions = transactionsRes.data?.data || [];
+    const balance = accounts.reduce((sum, a) => sum + parseFloat(a.balance || a.current_balance || 0), 0);
+
+    return {
+      source: 'directus',
+      balance,
+      accounts,
+      transactions,
+      lastSync: null
+    };
+  } catch (err) {
+    console.error('[Revolut] Directus fallback also failed:', err.message);
+    return { source: 'offline', balance: 0, accounts: [], transactions: [] };
+  }
+}
+
+// === TOKEN MANAGEMENT ===
+
+// Token status (diagnostic)
+router.get('/token-status', (req, res) => {
+  const companyId = req.query.company || 'HYPERVISUAL';
+  const status = getTokenStatus(companyId);
+  res.json({ success: true, data: status });
+});
+
+// All token statuses
+router.get('/token-status/all', (req, res) => {
+  const statuses = getAllTokenStatuses();
+  res.json({ success: true, data: statuses });
+});
+
+// Force token refresh
+router.post('/refresh', async (req, res) => {
+  const companyId = req.body.company || 'HYPERVISUAL';
+  try {
+    const result = await forceRefresh(companyId);
+    res.json({
+      success: true,
+      message: `Token refreshed for ${companyId}`,
+      source: result.source
+    });
+  } catch (error) {
+    res.status(502).json({
+      success: false,
+      error: error.message,
+      message: `Token refresh failed for ${companyId}. Please re-authenticate via Revolut OAuth2.`
+    });
+  }
+});
+
+// Store a new token (called after OAuth2 flow completes)
+router.post('/token', async (req, res) => {
+  const { company, access_token, refresh_token, expires_in } = req.body;
+  if (!access_token) {
+    return res.status(400).json({ success: false, error: 'access_token is required' });
+  }
+  const companyId = company || 'HYPERVISUAL';
+  try {
+    await storeToken(companyId, { access_token, refresh_token, expires_in });
+    res.json({ success: true, message: `Token stored for ${companyId}` });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// === BALANCE (Treasury widget main endpoint) ===
+
+router.get('/balance', async (req, res) => {
+  const companyId = req.query.company || 'HYPERVISUAL';
+  try {
+    const accounts = await revolut.getAccounts();
+    const balance = (accounts || []).reduce((sum, a) => sum + (a.balance || 0), 0);
+    res.json({
+      success: true,
+      source: 'revolut',
+      balance,
+      accounts,
+      lastSync: new Date().toISOString()
+    });
+  } catch (error) {
+    if (error._tokenRefreshFailed || error.response?.status === 401) {
+      console.warn(`[Revolut] Token expired for balance — falling back to Directus`);
+      const fallback = await getDirectusFallbackBalance(companyId);
+      return res.json({ success: true, token_expired: true, ...fallback });
+    }
+    // Other errors — still try Directus fallback
+    console.error('[Revolut] Balance error:', error.message);
+    const fallback = await getDirectusFallbackBalance(companyId);
+    res.json({ success: true, ...fallback });
+  }
 });
 
 // === COMPTES ===
@@ -29,6 +156,10 @@ router.get('/accounts', async (req, res) => {
     const accounts = await revolut.getAccounts();
     res.json({ success: true, data: accounts });
   } catch (error) {
+    if (error._tokenRefreshFailed || error.response?.status === 401) {
+      const fallback = await getDirectusFallbackBalance(req.query.company);
+      return res.json({ success: true, source: 'directus', token_expired: true, data: fallback.accounts });
+    }
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -60,8 +191,25 @@ router.get('/transactions', async (req, res) => {
   try {
     const { from, to, count, type } = req.query;
     const transactions = await revolut.getTransactions({ from, to, count, type });
-    res.json({ success: true, data: transactions });
+    res.json({ success: true, source: 'revolut', data: transactions });
   } catch (error) {
+    if (error._tokenRefreshFailed || error.response?.status === 401) {
+      // Fallback to Directus bank_transactions
+      try {
+        const params = { sort: '-date', limit: count || 50, fields: '*' };
+        const directusRes = await axios.get(`${DIRECTUS_URL}/items/bank_transactions`, {
+          headers: DIRECTUS_HEADERS, params
+        });
+        return res.json({
+          success: true,
+          source: 'directus',
+          token_expired: true,
+          data: directusRes.data?.data || []
+        });
+      } catch (fbErr) {
+        return res.status(500).json({ success: false, source: 'offline', error: fbErr.message });
+      }
+    }
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -210,6 +358,31 @@ router.post('/sync-transactions', async (req, res) => {
     const result = await syncRecentTransactions(revolut, hours);
     res.json({ success: true, ...result });
   } catch (error) {
+    if (error._tokenRefreshFailed || error.response?.status === 401) {
+      return res.status(401).json({
+        success: false,
+        token_expired: true,
+        error: 'Token expired. Please refresh via POST /api/revolut/refresh'
+      });
+    }
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Sync endpoint for TreasuryWidget
+router.post('/sync', async (req, res) => {
+  try {
+    const hours = req.body.hours || 24;
+    const result = await syncRecentTransactions(revolut, hours);
+    res.json({ success: true, ...result });
+  } catch (error) {
+    if (error._tokenRefreshFailed || error.response?.status === 401) {
+      return res.status(401).json({
+        success: false,
+        token_expired: true,
+        error: 'Token expired. Please refresh via POST /api/revolut/refresh'
+      });
+    }
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -258,10 +431,20 @@ router.post('/check-alerts', async (req, res) => {
 // === HEALTH CHECK ===
 
 router.get('/health', (req, res) => {
+  const companyId = req.query.company || 'HYPERVISUAL';
+  const tokenStatus = getTokenStatus(companyId);
+
   res.json({
     success: true,
     status: 'healthy',
     service: 'revolut',
+    token: {
+      hasToken: tokenStatus.hasToken,
+      expired: tokenStatus.expired,
+      expiresInMinutes: tokenStatus.expiresInMinutes,
+      warning: tokenStatus.warning,
+      redisAvailable: tokenStatus.redisAvailable
+    },
     phase_g: {
       'G-01-webhook': 'active',
       'G-02-reconciliation': 'active',

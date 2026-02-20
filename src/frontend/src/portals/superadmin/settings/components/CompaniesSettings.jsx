@@ -189,7 +189,7 @@ const CompaniesSettings = ({ companyId }) => {
           return (
             <div className="col-md-4 col-lg" key={company.id}>
               <div
-                className={`card glass-card ${isSelected ? 'border-primary' : ''}`}
+                className={`card ds-card ${isSelected ? 'border-primary' : ''}`}
                 style={{
                   borderLeft: `4px solid ${company.color || '#6c757d'}`,
                   opacity: isSelected ? 1 : 0.75,
@@ -222,7 +222,7 @@ const CompaniesSettings = ({ companyId }) => {
 
       {/* Selected Company Details */}
       {selectedCompany ? (
-        <div className="card glass-card">
+        <div className="card ds-card">
           <div className="card-header d-flex justify-content-between align-items-center">
             <h5 className="card-title mb-0">
               <span

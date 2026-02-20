@@ -90,7 +90,7 @@ const TimeEntryForm = ({ entry, projects, onSave, onCancel }) => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50">Annuler</button>
-            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
               <Save size={14} /> Enregistrer
             </button>
           </div>
@@ -206,7 +206,7 @@ const TimeTrackingModule = ({ selectedCompany }) => {
           <button onClick={() => setActiveTab('tracking')} className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900">
             <Clock size={16} /> Saisie du temps
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-blue-600">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-zinc-900">
             <Receipt size={16} /> Facturation en regie
           </button>
         </div>
@@ -224,14 +224,14 @@ const TimeTrackingModule = ({ selectedCompany }) => {
           <p className="text-sm text-gray-500 mt-0.5">Suivi du temps de travail</p>
         </div>
         <button onClick={() => { setEditEntry(null); setShowForm(true) }}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white ds-btn-primary rounded-lg">
           <Plus size={16} /> Nouvelle entree
         </button>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
-        <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-blue-600">
+        <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-white shadow text-zinc-900">
           <Clock size={16} /> Saisie du temps
         </button>
         <button onClick={() => setActiveTab('billing')} className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-900">
@@ -241,23 +241,23 @@ const TimeTrackingModule = ({ selectedCompany }) => {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <p className="text-xs text-gray-500 mb-1">Total heures (periode)</p>
           <p className="text-2xl font-bold text-gray-900">{totalHours.toFixed(1)}h</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <p className="text-xs text-gray-500 mb-1">Entrees</p>
-          <p className="text-2xl font-bold text-blue-600">{filtered.length}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{filtered.length}</p>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <p className="text-xs text-gray-500 mb-1">Moyenne / entree</p>
-          <p className="text-2xl font-bold text-indigo-600">{filtered.length > 0 ? (totalHours / filtered.length).toFixed(1) : 0}h</p>
+          <p className="text-2xl font-bold text-zinc-900">{filtered.length > 0 ? (totalHours / filtered.length).toFixed(1) : 0}h</p>
         </div>
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Heures par projet (top 5)</h3>
           {byProject.length > 0 ? (
             <ResponsiveContainer width="100%" height={220}>
@@ -266,14 +266,14 @@ const TimeTrackingModule = ({ selectedCompany }) => {
                 <XAxis dataKey="name" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip formatter={(v) => `${v}h`} />
-                <Bar dataKey="hours" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="hours" fill="#0071E3" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
             <div className="text-center text-gray-400 py-12 text-sm">Aucune donnee</div>
           )}
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-4">
+        <div className="ds-card p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">Heures par semaine (6 dernieres)</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={byWeek}>
@@ -302,9 +302,9 @@ const TimeTrackingModule = ({ selectedCompany }) => {
 
       {/* Table */}
       {isLoading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-blue-500 animate-spin" /></div>
+        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-zinc-400 animate-spin" /></div>
       ) : (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -328,7 +328,7 @@ const TimeTrackingModule = ({ selectedCompany }) => {
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900">{e.project_name || '—'}</td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-bold">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-zinc-100 text-zinc-700 rounded-full text-xs font-bold">
                         {e.hours}h
                       </span>
                     </td>
@@ -336,7 +336,7 @@ const TimeTrackingModule = ({ selectedCompany }) => {
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
                         <button onClick={() => { setEditEntry(e); setShowForm(true) }}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"><Edit3 size={14} /></button>
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-zinc-900"><Edit3 size={14} /></button>
                         <button onClick={() => handleDelete(e.id)}
                           className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-red-600"><Trash2 size={14} /></button>
                       </div>

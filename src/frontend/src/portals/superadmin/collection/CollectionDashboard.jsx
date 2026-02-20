@@ -59,14 +59,14 @@ function fetchInvoices(ownerCompany) {
 
 // ── Skeleton loader ──
 function Skeleton({ className = '' }) {
-  return <div className={`glass-skeleton ${className}`} />
+  return <div className={`animate-pulse rounded ${className}`} />
 }
 
 function KPISkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-card p-5 space-y-3">
+        <div key={i} className="ds-card p-5 space-y-3">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="h-8 w-32" />
           <Skeleton className="h-3 w-20" />
@@ -78,7 +78,7 @@ function KPISkeleton() {
 
 function ChartSkeleton() {
   return (
-    <div className="glass-card p-6 space-y-4">
+    <div className="ds-card p-6 space-y-4">
       <Skeleton className="h-5 w-40" />
       <Skeleton className="h-64 w-full" />
     </div>
@@ -88,7 +88,7 @@ function ChartSkeleton() {
 // ── Empty state ──
 function EmptyState() {
   return (
-    <div className="glass-card p-12 text-center">
+    <div className="ds-card p-12 text-center">
       <Inbox className="w-12 h-12 text-gray-300 mx-auto mb-4" />
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucune facture</h3>
       <p className="text-sm text-gray-500">
@@ -242,7 +242,7 @@ const CollectionDashboard = ({ selectedCompany }) => {
   }
 
   return (
-    <div className="space-y-6 glass-fade-in">
+    <div className="space-y-6 ">
       <DashboardHeader isLoading={isLoading} onRefresh={refetch} />
 
       {/* KPIs */}
@@ -253,7 +253,7 @@ const CollectionDashboard = ({ selectedCompany }) => {
           value={formatCHF(computed.totalOverdue)}
           sub={`${computed.overdueCount} facture${computed.overdueCount > 1 ? 's' : ''} en retard`}
           color="text-red-600"
-          bg="glass-danger"
+          bg="ds-card border-red-200"
         />
         <KPICard
           icon={FileText}
@@ -261,30 +261,30 @@ const CollectionDashboard = ({ selectedCompany }) => {
           value={computed.overdueCount}
           sub={`sur ${computed.totalInvoices} factures totales`}
           color="text-amber-600"
-          bg="glass-warning"
+          bg="ds-card border-amber-200"
         />
         <KPICard
           icon={Clock}
           label="Age moyen"
           value={`${computed.avgAge}j`}
           sub="des factures en souffrance"
-          color="text-blue-600"
-          bg="glass-primary"
+          color="text-zinc-900"
+          bg="ds-card"
         />
         <KPICard
           icon={TrendingUp}
           label="Taux de recouvrement"
           value={`${computed.recoveryRate}%`}
           sub={`${formatCHF(computed.totalPaid)} recouvres`}
-          color="text-emerald-600"
-          bg="glass-success"
+          color="text-zinc-900"
+          bg="ds-card border-green-200"
         />
       </div>
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Aging chart */}
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">
             Vieillissement des creances
           </h3>
@@ -309,7 +309,7 @@ const CollectionDashboard = ({ selectedCompany }) => {
         </div>
 
         {/* Status distribution */}
-        <div className="glass-card p-6">
+        <div className="ds-card p-6">
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">
             Repartition par statut
           </h3>
@@ -344,7 +344,7 @@ const CollectionDashboard = ({ selectedCompany }) => {
       </div>
 
       {/* Top debtors table */}
-      <div className="glass-card overflow-hidden">
+      <div className="ds-card overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100">
           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide flex items-center gap-2">
             <Users size={16} />
@@ -373,7 +373,7 @@ const CollectionDashboard = ({ selectedCompany }) => {
                   const age = daysSince(d.oldest)
                   const urgency = age > 90 ? 'text-red-600 font-semibold' : age > 60 ? 'text-orange-600' : age > 30 ? 'text-amber-600' : 'text-gray-600'
                   return (
-                    <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
+                    <tr key={idx} className="hover:bg-zinc-50/30 transition-colors">
                       <td className="px-6 py-3 text-gray-400 font-mono">{idx + 1}</td>
                       <td className="px-6 py-3 font-medium text-gray-900">{d.client_name}</td>
                       <td className="px-6 py-3 text-right font-semibold text-gray-900">{formatCHF(d.total)}</td>
@@ -423,7 +423,7 @@ function DashboardHeader({ isLoading, onRefresh }) {
 
 function KPICard({ icon: Icon, label, value, sub, color, bg }) {
   return (
-    <div className={`glass-card p-5 ${bg}`}>
+    <div className={`ds-card p-5 ${bg}`}>
       <div className="flex items-center gap-3 mb-2">
         <div className={`p-2 rounded-lg bg-white/60 ${color}`}>
           <Icon size={18} />

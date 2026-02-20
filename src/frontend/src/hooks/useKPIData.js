@@ -179,7 +179,7 @@ export function useKPIData(options = {}) {
     if (prefetchOnMount) {
       // Get list of companies from overview data
       if (overview.data?.summary) {
-        const companies = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI REALTY', 'TAKEOUT']
+        const companies = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'TAKEOUT']
         prefetchAll(companies)
       }
     }

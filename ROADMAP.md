@@ -440,6 +440,22 @@
 - 4 endpoints backend + 4 sous-routes + 1 CRON = 9 fonctionnalités en 4 fichiers
 - Prévision trésorerie utilise TVA 8.1% pour subscriptions conformément aux normes suisses
 
+### Audit Phase J — 2026-02-20
+**[A] AUDITED** — 5 bugs corrigés + 1 amélioration null-safety
+
+| Bug | Sévérité | Fichier | Description | Fix |
+|-----|----------|---------|-------------|-----|
+| BUG-J01 | HAUTE | `useKPIData.js:182` | `'ENKI REALTY'` (espace) vs `'ENKI_REALTY'` (underscore) en base | Corrigé → `'ENKI_REALTY'` |
+| BUG-J02 | CRITIQUE | `daily-report.js:93-98` | Trésorerie CEO report = faux multiplicateurs (×1.05/×0.95/×0.88) au lieu du vrai algorithme 6 étapes | Remplacé par appel API `/api/kpis/treasury` + fallback solde |
+| BUG-J03 | HAUTE | `daily-report.js:43-47` | Seulement 3 seuils hardcodés (MRR/ARR/NPS) au lieu de 6 | Élargi à 6 métriques (+ RUNWAY, LTV_CAC, EBITDA) |
+| BUG-J04 | WARNING | `daily-report.js:257-266` | Mautic send endpoint manque contactId dans URL | Noté — dépendance externe, graceful fail |
+| BUG-J05 | BASSE | `kpis/index.js:18` | Constante `TRACKED_METRICS` inutilisée (dead code) | Supprimée |
+
+**Null-safety** : Template email trésorerie — `d30/d60/d90` affichent "N/D" si null (fallback mode)
+**TVA scan** : TVA_RATE = 1.081 ✓ — aucun ancien taux (7.7%) trouvé
+**Recharts** : Confirmé LineChart + BarChart — aucun ApexCharts
+**Glassmorphism** : `glass-card` CSS class utilisée ✓
+
 ---
 
 ## PHASE K — MULTI-ENTREPRISES (POST V1)
@@ -529,6 +545,7 @@
 | Stories CDC restantes | 0 |
 | Modules CDC couverts | 16/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support, KPI Dashboard CEO) |
 | Dernier commit Phase J | — 2026-02-20 |
+| Audit Phase J | [A] 5 bugs corrigés — 2026-02-20 |
 | **V1 STATUS** | **96/96 stories — COMPLETE** |
 
 ---

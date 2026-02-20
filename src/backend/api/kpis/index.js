@@ -14,9 +14,6 @@ import { directusGet } from '../../lib/financeUtils.js';
 
 const router = Router();
 
-// ── Distinct metric names we track ──
-const TRACKED_METRICS = ['MRR', 'ARR', 'NPS', 'LTV_CAC', 'ACTIVE_PROJECTS'];
-
 /**
  * GET /api/kpis/latest
  * Returns the latest value for each metric_name for a given company (default HYPERVISUAL).

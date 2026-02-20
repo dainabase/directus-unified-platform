@@ -38,12 +38,15 @@ async function buildReportData(company = 'HYPERVISUAL') {
     }
   }
 
-  // 2. Alerts (simple threshold check)
+  // 2. Alerts (threshold check — same 6 metrics as thresholds.js)
   const alerts = [];
   const thresholds = {
-    MRR: { warning: 60000, critical: 40000 },
-    ARR: { warning: 700000, critical: 500000 },
-    NPS: { warning: 50, critical: 30 }
+    MRR:     { warning: 60000,  critical: 40000 },
+    ARR:     { warning: 700000, critical: 500000 },
+    RUNWAY:  { warning: 6,      critical: 3 },
+    NPS:     { warning: 50,     critical: 30 },
+    LTV_CAC: { warning: 3,      critical: 2 },
+    EBITDA:  { warning: 0,      critical: -10000 }
   };
 
   for (const [metric, thresh] of Object.entries(thresholds)) {
@@ -79,26 +82,41 @@ async function buildReportData(company = 'HYPERVISUAL') {
     }).catch(() => [{ count: { id: 0 } }])
   ]);
 
-  // 4. Treasury forecast (simplified)
+  // 4. Treasury forecast — call internal API logic
   let treasuryData = null;
   try {
-    const lastTx = await directusGet('/items/bank_transactions', {
-      'filter[owner_company][_eq]': company,
-      sort: '-date',
-      limit: 1,
-      fields: 'balance_after'
+    const axios = (await import('axios')).default;
+    const port = process.env.UNIFIED_PORT || process.env.PORT || 3000;
+    const treasuryRes = await axios.get(`http://localhost:${port}/api/kpis/treasury`, {
+      params: { company },
+      timeout: 5000
     });
-    if (lastTx && lastTx.length > 0) {
-      const balance = parseFloat(lastTx[0].balance_after || 0);
+    if (treasuryRes.data) {
       treasuryData = {
-        current_balance: balance,
-        d30: Math.round(balance * 1.05),
-        d60: Math.round(balance * 0.95),
-        d90: Math.round(balance * 0.88)
+        current_balance: treasuryRes.data.current_balance || 0,
+        d30: treasuryRes.data.d30?.balance || 0,
+        d60: treasuryRes.data.d60?.balance || 0,
+        d90: treasuryRes.data.d90?.balance || 0,
+        burn_rate: treasuryRes.data.burn_rate_monthly || 0,
+        runway: treasuryRes.data.runway_months || 0
       };
     }
   } catch {
-    // Treasury data unavailable
+    // Treasury API unavailable — fallback to basic balance
+    try {
+      const lastTx = await directusGet('/items/bank_transactions', {
+        'filter[owner_company][_eq]': company,
+        sort: '-date',
+        limit: 1,
+        fields: 'balance_after'
+      });
+      if (lastTx && lastTx.length > 0) {
+        const balance = parseFloat(lastTx[0].balance_after || 0);
+        treasuryData = { current_balance: balance, d30: null, d60: null, d90: null };
+      }
+    } catch {
+      // Treasury data completely unavailable
+    }
   }
 
   return {
@@ -212,15 +230,15 @@ function generateEmailHTML(data) {
       </tr>
       <tr>
         <td style="padding:10px;border-bottom:1px solid #e2e8f0;">+30 jours</td>
-        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtCHF(data.treasury.d30)}</td>
+        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${data.treasury.d30 != null ? fmtCHF(data.treasury.d30) : '<span style="color:#94a3b8;">N/D</span>'}</td>
       </tr>
       <tr style="background:#f8fafc;">
         <td style="padding:10px;border-bottom:1px solid #e2e8f0;">+60 jours</td>
-        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtCHF(data.treasury.d60)}</td>
+        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${data.treasury.d60 != null ? fmtCHF(data.treasury.d60) : '<span style="color:#94a3b8;">N/D</span>'}</td>
       </tr>
       <tr>
         <td style="padding:10px;border-bottom:1px solid #e2e8f0;">+90 jours</td>
-        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${fmtCHF(data.treasury.d90)}</td>
+        <td style="padding:10px;border-bottom:1px solid #e2e8f0;text-align:right;">${data.treasury.d90 != null ? fmtCHF(data.treasury.d90) : '<span style="color:#94a3b8;">N/D</span>'}</td>
       </tr>
     </table>` : ''}
   </div>

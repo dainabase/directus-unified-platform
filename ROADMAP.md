@@ -344,7 +344,7 @@
 ## PHASE I — MODULES FINANCE AVANCÉS (CDC V1.2) *(TERMINÉE)*
 **Objectif CDC** : Couverture complète du cycle finance
 **Modules CDC** : Module 9, 10, 11, 12, 13, 14
-**Progression** : 8/8 stories — [V] DONE — 2026-02-20
+**Progression** : 8/8 stories — [A] AUDITED — audit 2026-02-20
 
 - [V] **I-01** · Module 9 — Facturation par jalons (deliverables → factures) — 2026-02-20
   *CDC* : REQ-JALON-001 à 006
@@ -397,6 +397,13 @@
 - Utilitaires partagés créés dans `src/backend/lib/financeUtils.js` (directus helpers, date utils, invoice number generators, automation log)
 - Frontend existant déjà connecté pour SubscriptionsModule, TimeTrackingModule, SupportDashboard (phases précédentes) — ajouté 3 nouveaux composants (MilestonesModule, CreditsModule, ApprovalQueue)
 - 7 routers ajoutés dans server.js avec try/catch pattern cohérent
+
+**Bugs corrigés audit Phase I (5 bugs)** :
+- BUG-I01: milestones/index.js — Pas de garde `billable !== false` sur POST invoice, un livrable non-facturable pouvait être facturé → guard ajouté
+- BUG-I02: milestones/index.js — `amount` nullable (confirmé MCP: null sur sample), `parseFloat(null)` = NaN cascade dans tax_amount/total → guard `amount <= 0` ajouté
+- BUG-I03: financeUtils.js — `DIRECTUS_TOKEN` sans fallback `DIRECTUS_TOKEN`, si `DIRECTUS_ADMIN_TOKEN` absent tous les endpoints Phase I échouent → fallback ajouté
+- BUG-I04: 6 fichiers (milestones, billing-cron, credits×2, time-tracking, support×2) — `total = amount + taxAmount` sans arrondi 2 décimales, IEEE 754 peut donner 1081.0000000001 → `Math.round((…)*100)/100` ajouté sur 7 occurrences
+- BUG-I05: legacy/load-test.js.bak — Ancien taux TVA 7.7% (devrait être 8.1%) → corrigé
 
 ---
 

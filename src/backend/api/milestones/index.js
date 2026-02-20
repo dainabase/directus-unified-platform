@@ -25,6 +25,9 @@ router.post('/:deliverableId/invoice', async (req, res) => {
     if (deliverable.invoice_id) {
       return res.status(409).json({ error: 'Deja facture', invoice_id: deliverable.invoice_id });
     }
+    if (deliverable.billable === false) {
+      return res.status(400).json({ error: 'Livrable non facturable (billable=false)' });
+    }
 
     // Recuperer le projet pour le client
     let clientName = '';
@@ -38,9 +41,12 @@ router.post('/:deliverableId/invoice', async (req, res) => {
     }
 
     const amount = parseFloat(deliverable.amount || 0);
+    if (amount <= 0) {
+      return res.status(400).json({ error: 'Montant livrable invalide (amount <= 0 ou null)' });
+    }
     const taxRate = 8.1;
     const taxAmount = Math.round(amount * taxRate) / 100;
-    const total = amount + taxAmount;
+    const total = Math.round((amount + taxAmount) * 100) / 100;
     const invoiceNumber = await generateInvoiceNumber('JAL');
 
     const invoice = await directusPost('/items/client_invoices', {

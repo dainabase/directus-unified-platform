@@ -134,7 +134,7 @@ router.post('/invoice', async (req, res) => {
     const invoiceNumber = await generateInvoiceNumber('REG');
     const taxRate = 8.1;
     const taxAmount = Math.round(totalAmount * taxRate) / 100;
-    const total = totalAmount + taxAmount;
+    const total = Math.round((totalAmount + taxAmount) * 100) / 100;
 
     // Recuperer info projet
     let ownerCompany = entries[0].owner_company || 'HYPERVISUAL';

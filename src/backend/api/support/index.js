@@ -122,7 +122,7 @@ router.post('/tickets/:id/close', async (req, res) => {
       const invoiceNumber = await generateInvoiceNumber('SUP');
       const taxRate = 8.1;
       const taxAmount = Math.round(amount * taxRate) / 100;
-      const total = amount + taxAmount;
+      const total = Math.round((amount + taxAmount) * 100) / 100;
 
       invoice = await directusPost('/items/client_invoices', {
         invoice_number: invoiceNumber,
@@ -187,7 +187,7 @@ router.post('/tickets/:id/bill', async (req, res) => {
     const invoiceNumber = await generateInvoiceNumber('SUP');
     const taxRate = 8.1;
     const taxAmount = Math.round(amount * taxRate) / 100;
-    const total = amount + taxAmount;
+    const total = Math.round((amount + taxAmount) * 100) / 100;
 
     const invoice = await directusPost('/items/client_invoices', {
       invoice_number: invoiceNumber,

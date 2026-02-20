@@ -7,7 +7,7 @@
 import axios from 'axios';
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
-const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN || process.env.DIRECTUS_TOKEN;
 
 // ── Directus HTTP helpers ──
 

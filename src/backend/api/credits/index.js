@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
     const taxRate = parseFloat(invoice.tax_rate || 8.1);
     const taxAmount = Math.round(creditAmount * taxRate) / 100;
-    const total = creditAmount + taxAmount;
+    const total = Math.round((creditAmount + taxAmount) * 100) / 100;
     const creditNumber = await generateCreditNumber();
 
     const credit = await directusPost('/items/credits', {
@@ -110,14 +110,14 @@ router.post('/:id/apply', async (req, res) => {
     });
 
     // Reduire le montant de la facture cible
-    const newAmount = Math.max(0, parseFloat(targetInvoice.amount || 0) - parseFloat(credit.amount || 0));
+    const newAmount = Math.round(Math.max(0, parseFloat(targetInvoice.amount || 0) - parseFloat(credit.amount || 0)) * 100) / 100;
     const taxRate = parseFloat(targetInvoice.tax_rate || 8.1);
     const newTax = Math.round(newAmount * taxRate) / 100;
 
     await directusPatch(`/items/client_invoices/${target_invoice_id}`, {
       amount: newAmount,
       tax_amount: newTax,
-      total: newAmount + newTax,
+      total: Math.round((newAmount + newTax) * 100) / 100,
       credit_id: String(req.params.id)
     });
 

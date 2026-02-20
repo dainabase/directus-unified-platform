@@ -9,11 +9,19 @@
 
 ## 📚 SKILLS OBLIGATOIRES — LIRE EN PREMIER
 
+**Étape 1 — Consulter le routeur de skills du projet :**
+```bash
+cat SKILLS-MAPPING.md
+```
+
+**Étape 2 — Lire les skills de base Phase I :**
 ```bash
 cat ~/.claude/skills-repos/backend-api/SKILL.md
 cat ~/.claude/skills-repos/directus-integration/SKILL.md
 cat ~/.claude/skills-repos/swiss-accounting/SKILL.md
 ```
+
+**Étape 3 — Lire les skills spécialisés selon SKILLS-MAPPING.md pour chaque story avant de la coder.**
 
 ---
 

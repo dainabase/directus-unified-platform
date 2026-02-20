@@ -29,7 +29,7 @@ import {
   ChevronUp, ChevronDown, Clock, AlertTriangle, Ban,
   ArrowDownRight
 } from 'lucide-react'
-import api from '../../../../lib/axios'
+import api from '../../../lib/axios'
 
 // ────────────────────────────────────────────────────────────────────────────
 // Constants

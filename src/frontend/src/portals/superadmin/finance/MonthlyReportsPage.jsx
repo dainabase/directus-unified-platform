@@ -30,7 +30,7 @@ import {
   FileText,
   Inbox
 } from 'lucide-react'
-import api from '../../../../lib/axios'
+import api from '../../../lib/axios'
 
 // ── Constants ──
 

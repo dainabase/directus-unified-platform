@@ -68,6 +68,20 @@ const CollectionDashboard = lazy(() => import('./portals/superadmin/collection/C
 const BudgetsManager = lazy(() => import('./portals/superadmin/finance/components/BudgetsManager'))
 const ExpensesTracker = lazy(() => import('./portals/superadmin/finance/components/ExpensesTracker'))
 
+// Phase 3 — Finance Complète
+const FinanceDashboardPage = lazy(() => import('./portals/superadmin/finance/FinanceDashboardPage'))
+const InvoicesPage = lazy(() => import('./portals/superadmin/finance/components/InvoicesPage'))
+const InvoiceDetail = lazy(() => import('./portals/superadmin/finance/components/InvoiceDetail'))
+const InvoiceForm = lazy(() => import('./portals/superadmin/finance/components/InvoiceForm'))
+const SupplierInvoicesPage = lazy(() => import('./portals/superadmin/finance/SupplierInvoicesPage'))
+const AccountingPage = lazy(() => import('./portals/superadmin/finance/AccountingPage'))
+const BankingPage = lazy(() => import('./portals/superadmin/finance/BankingPage'))
+const MonthlyReportsPage = lazy(() => import('./portals/superadmin/finance/MonthlyReportsPage'))
+const VATReportsPage = lazy(() => import('./portals/superadmin/finance/VATReportsPage'))
+const ExpensesPage = lazy(() => import('./portals/superadmin/finance/ExpensesPage'))
+const QRInvoiceGenerator = lazy(() => import('./portals/superadmin/finance/QRInvoiceGenerator'))
+const MilestoneInvoicingPage = lazy(() => import('./portals/superadmin/finance/MilestoneInvoicingPage'))
+
 // CRM Module
 const CRMDashboard = lazy(() => import('./portals/superadmin/crm/CRMDashboard'))
 const PipelineView = lazy(() => import('./portals/superadmin/crm/components/PipelineView'))
@@ -168,7 +182,7 @@ function App() {
                 <Routes>
                   <Route index element={<SuperAdminDashboard selectedCompany={selectedCompany} />} />
 
-                  {/* Finance */}
+                  {/* Finance — Legacy routes (backward compat) */}
                   <Route path="banking" element={<BankingDashboard selectedCompany={selectedCompany} />} />
                   <Route path="reconciliation" element={<ReconciliationDashboard selectedCompany={selectedCompany} />} />
                   <Route path="accounting" element={<FinanceDashboard selectedCompany={selectedCompany} view="accounting" />} />
@@ -178,6 +192,21 @@ function App() {
                   <Route path="collection" element={<CollectionDashboard selectedCompany={selectedCompany} />} />
                   <Route path="budgets" element={<BudgetsManager selectedCompany={selectedCompany} />} />
                   <Route path="expenses" element={<ExpensesTracker selectedCompany={selectedCompany} />} />
+
+                  {/* Finance — Phase 3 routes */}
+                  <Route path="finance" element={<FinanceDashboardPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoices" element={<InvoicesPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoices/new" element={<InvoiceForm selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoices/:id" element={<InvoiceDetail selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoices/:id/edit" element={<InvoiceForm selectedCompany={selectedCompany} />} />
+                  <Route path="finance/suppliers" element={<SupplierInvoicesPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/accounting" element={<AccountingPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/banking" element={<BankingPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/reports/monthly" element={<MonthlyReportsPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/reports/vat" element={<VATReportsPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/expenses" element={<ExpensesPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/qr-invoice" element={<QRInvoiceGenerator selectedCompany={selectedCompany} />} />
+                  <Route path="finance/milestones" element={<MilestoneInvoicingPage selectedCompany={selectedCompany} />} />
 
                   {/* Projets */}
                   <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />

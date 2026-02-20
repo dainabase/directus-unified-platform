@@ -42,7 +42,7 @@ import {
 import {
   PieChart, Pie, Cell, ResponsiveContainer
 } from 'recharts'
-import api from '../../../../lib/axios'
+import api from '../../../lib/axios'
 
 // ── Swiss VAT rates — NEVER change without AFC directive ──
 

@@ -20,7 +20,7 @@ import {
   Loader2, AlertCircle, CheckCircle2, CreditCard,
   Building2, User, Info, RefreshCw, Scissors
 } from 'lucide-react'
-import api from '../../../../lib/axios'
+import api from '../../../lib/axios'
 
 // ── Constants ──
 

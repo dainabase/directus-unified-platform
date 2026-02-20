@@ -19,6 +19,14 @@ import {
   Headphones,
   Clock,
   Settings,
+  TrendingUp,
+  Wallet,
+  BarChart3,
+  FileCheck,
+  QrCode,
+  Milestone,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react'
 
 const companies = [
@@ -50,10 +58,17 @@ const navSections = [
   {
     label: 'FINANCE',
     items: [
-      { label: 'Factures clients', icon: Receipt, path: '/superadmin/invoices/clients' },
-      { label: 'Factures fournisseurs', icon: ShoppingCart, path: '/superadmin/invoices/suppliers' },
-      { label: 'Banking', icon: CreditCard, path: '/superadmin/banking' },
-      { label: 'Comptabilite', icon: BookOpen, path: '/superadmin/accounting' },
+      { label: 'Vue d\'ensemble', icon: TrendingUp, path: '/superadmin/finance' },
+      { label: 'Factures clients', icon: Receipt, path: '/superadmin/finance/invoices' },
+      { label: 'Factures fournisseurs', icon: ShoppingCart, path: '/superadmin/finance/suppliers' },
+      { label: 'Banking', icon: CreditCard, path: '/superadmin/finance/banking' },
+      { label: 'Comptabilite', icon: BookOpen, path: '/superadmin/finance/accounting' },
+      { label: 'Depenses', icon: Wallet, path: '/superadmin/finance/expenses' },
+      { label: 'Rapport mensuel', icon: BarChart3, path: '/superadmin/finance/reports/monthly' },
+      { label: 'TVA / AFC', icon: FileCheck, path: '/superadmin/finance/reports/vat' },
+      { label: 'QR-Invoice', icon: QrCode, path: '/superadmin/finance/qr-invoice' },
+      { label: 'Jalons', icon: Milestone, path: '/superadmin/finance/milestones' },
+      { label: 'Recouvrement', icon: Shield, path: '/superadmin/collection' },
     ],
   },
   {

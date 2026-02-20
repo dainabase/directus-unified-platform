@@ -35,7 +35,7 @@ import {
   Printer,
   Shield
 } from 'lucide-react'
-import api from '../../../../lib/axios'
+import api from '../../../lib/axios'
 
 // ── Swiss VAT rates — NEVER change these without AFC directive ──
 

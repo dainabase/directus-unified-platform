@@ -39,11 +39,11 @@
 
 ---
 
-## PHASE 1 — DESIGN SYSTEM ✅
+## PHASE 1 — DESIGN SYSTEM ⚠️
 
 **Objectif** : Appliquer le Design System Apple Premium Monochromatic (CDC §14) sur toute la plateforme.
 **Référence** : `docs/CDC_v1.3_Design_System_Consolidation.md`
-**Complété** : Février 2026 — 10 commits
+**Audit** : Février 2026 — 6/9 stories conformes, résidus dans portails + SuperAdmin
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
@@ -53,35 +53,36 @@
 | 1.4 | Topbar redesign | 🔥 | 🟢 | Search dynamique, actions, notifications dot |
 | 1.5 | Dashboard SuperAdmin — appliquer Design System | 🔥 | 🟢 | KPIs + Operations + Commercial + Finance + KPI Sidebar |
 | 1.6 | Créer composants réutilisables : `StatusDot`, `KPICard`, `DataTable`, `ProgressBar` | ⚡ | 🟢 | Utilisés dans tous les portails |
-| 1.7 | Appliquer Design System — Portail Client | ⚡ | 🟢 | |
-| 1.8 | Appliquer Design System — Portail Prestataire | ⚡ | 🟢 | |
-| 1.9 | Appliquer Design System — Portail Revendeur | ⚡ | 🟢 | |
+| 1.7 | Appliquer Design System — Portail Client | ⚡ | 🟡 | Layout DS OK. 3 fichiers legacy Bootstrap (ClientPortalDashboard, ClientPortalApp, LoginPage) — LoginPage corrigé, 2 legacy non routés |
+| 1.8 | Appliquer Design System — Portail Prestataire | ⚡ | 🟡 | Layout DS OK. Résidus Tailwind colors (bg-blue-50, bg-amber-50) dans 3 fichiers |
+| 1.9 | Appliquer Design System — Portail Revendeur | ⚡ | 🟡 | Layout DS OK. Ancien Dashboard.jsx 100% Bootstrap (non routé). PipelineRevendeur: Tailwind colors |
 
-**Critère de sortie** : ✅ Tous les portails respectent le Design System. Zéro couleur décorative. Seuls les badges de statut utilisent les couleurs sémantiques.
+**Résidus globaux** : 64× bg-blue-600, 107× GlassCard, 45× glass-card, 45× glass-button dans ~50 fichiers SuperAdmin
+**Critère de sortie** : ⚠️ Core DS (tokens, composants, layouts) conforme. Résidus dans fichiers SuperAdmin hérités.
 
 ---
 
-## PHASE 2 — CONNEXION DONNÉES RÉELLES ✅
+## PHASE 2 — CONNEXION DONNÉES RÉELLES ⚠️
 
 **Objectif** : Brancher React ↔ Directus sur les pages déjà structurées.
-**Complété** : Février 2026 — 47 fichiers, 2696 insertions
+**Audit** : Février 2026 — 10/12 stories réelles, 2 partielles
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
-| 2.1 | Service layer Directus (`src/services/directus.js`) | 🔥 | 🟢 | Auth + CRUD + error handling |
-| 2.2 | Authentification multi-portails JWT | 🔥 | 🟢 | 4 rôles : superadmin, client, prestataire, revendeur |
-| 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🟢 | Collections : kpis, client_invoices, payments, projects |
-| 2.4 | Dashboard CEO — Projets actifs en temps réel | 🔥 | 🟢 | Collection : projects, deliverables |
-| 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🟢 | PipelineWidget: KPIs + funnel + 5 derniers leads/devis + badges statut |
-| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟢 | TreasuryWidget: currencies, 5 dernières tx, sync Revolut, dernière sync |
-| 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🟢 | AlertsWidget: 8 règles (factures retard, paiements 48h, projets inactifs 7j, leads sans suivi 3j) |
-| 2.8 | CRM — Companies (connecté Directus) | ⚡ | 🟢 | CompaniesList + CompanyForm DS |
-| 2.9 | CRM — Contacts (connecté Directus) | ⚡ | 🟢 | ContactsList + ContactForm DS |
-| 2.10 | Leads — Liste + pipeline (connecté Directus) | ⚡ | 🟢 | LeadKanban + LeadsList DS |
-| 2.11 | Projets — Liste + détail (connecté Directus) | ⚡ | 🟢 | ProjectsModule DS |
-| 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🟢 | usePolling + useRealtimeDashboard (30s, Page Visibility API, auto-pause) |
+| 2.1 | Service layer Directus (`src/services/directus.js`) | 🔥 | 🟢 | Dual impl (SDK + axios), JWT interceptor, CRUD complet |
+| 2.2 | Authentification multi-portails JWT | 🔥 | 🟢 | authStore Zustand, login/logout/refresh, route guards |
+| 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🟡 | Finance KPIs réels (useFinance), MAIS BudgetsManager + ExpensesTracker encore mockés |
+| 2.4 | Dashboard CEO — Projets actifs en temps réel | 🔥 | 🟢 | projects + deliverables, CRUD, status filter |
+| 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🟢 | PipelineView: leads Directus, drag-drop Kanban, weighted KPIs |
+| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟡 | Revolut API primary + Directus fallback OK, MAIS token refresh 40min manquant |
+| 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🟢 | client_invoices overdue, supplier_invoices upcoming, projects inactive, leads unfollowed |
+| 2.8 | CRM — Companies (connecté Directus) | ⚡ | 🟢 | CRUD complet via crmApi.js + useCRMData |
+| 2.9 | CRM — Contacts (connecté Directus) | ⚡ | 🟢 | people collection, CRUD, company autocomplete |
+| 2.10 | Leads — Liste + pipeline (connecté Directus) | ⚡ | 🟢 | Kanban drag-drop, qualification, convert to quote |
+| 2.11 | Projets — Liste + détail (connecté Directus) | ⚡ | 🟢 | ProjectsDashboard analytics, deliverables, 30s staleTime |
+| 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🟢 | usePolling (Page Visibility API, 30s) + useRealtimeDashboard (7 query keys) |
 
-**Critère de sortie** : ✅ Le CEO peut voir ses vrais KPIs, projets et trésorerie sur le dashboard sans données mockées.
+**Critère de sortie** : ⚠️ CEO voit vrais KPIs, projets et trésorerie. 2 stories partielles : budgets mockés + Revolut token refresh.
 
 ---
 
@@ -228,8 +229,8 @@
 | Phase | Stories | Statut global |
 |-------|---------|--------------|
 | Phase 0 — Fondation + V1 backend | 10 | ✅ 100% complété |
-| Phase 1 — Design System | 9 | ✅ 100% complété (Fév 2026) |
-| Phase 2 — Données réelles | 12 | ✅ 100% complété (Fév 2026) |
+| Phase 1 — Design System | 9 | ⚠️ 67% (6/9 OK, 3 résidus portails + ~50 fichiers SuperAdmin bg-blue-600/GlassCard) |
+| Phase 2 — Données réelles | 12 | ⚠️ 83% (10/12 OK, budgets mockés + Revolut token refresh manquant) |
 | Phase 3 — Finance complète | 11 | ✅ 100% complété (2026-02-20) |
 | Phase 4 — Prestataire | 9 | ✅ 100% complété (2026-02-20) |
 | Phase 5 — Revendeur | 8 | ✅ 100% complété (2026-02-20) |
@@ -237,7 +238,7 @@
 | Phase 7 — Automation & IA | 12 | 🔴 ~5% |
 | Phase 8 — Qualité | 9 | 🟡 ~10% |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~71% global** |
+| **TOTAL** | **96 stories** | **~66% global** |
 
 ---
 

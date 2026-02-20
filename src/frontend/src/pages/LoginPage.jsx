@@ -1,9 +1,6 @@
 /**
  * LoginPage — Unified login for all portals.
- * Glassmorphism design, portal selector, JWT auth.
- *
- * @version 1.0.0
- * @date 2026-02-19
+ * Apple Premium Design System — #0071E3 accent only.
  */
 
 import React, { useState } from 'react'
@@ -12,10 +9,10 @@ import { useAuthStore } from '../stores/authStore'
 import { Eye, EyeOff, LogIn, AlertCircle, Loader2 } from 'lucide-react'
 
 const PORTALS = [
-  { value: 'superadmin', label: 'SuperAdmin', color: 'blue' },
-  { value: 'client', label: 'Client', color: 'green' },
-  { value: 'prestataire', label: 'Prestataire', color: 'purple' },
-  { value: 'revendeur', label: 'Revendeur', color: 'orange' }
+  { value: 'superadmin', label: 'SuperAdmin' },
+  { value: 'client', label: 'Client' },
+  { value: 'prestataire', label: 'Prestataire' },
+  { value: 'revendeur', label: 'Revendeur' }
 ]
 
 const LoginPage = () => {
@@ -50,26 +47,35 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
-
-      <div className="w-full max-w-md relative z-10">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: 'var(--bg-primary, #F5F5F7)' }}
+    >
+      <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg mb-4">
+          <div
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
+            style={{ background: '#0071E3', boxShadow: 'var(--shadow-md)' }}
+          >
             <span className="text-2xl font-black text-white">H</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">HYPERVISUAL</h1>
-          <p className="text-sm text-gray-500 mt-1">Unified Platform</p>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+            HYPERVISUAL
+          </h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+            Unified Platform
+          </p>
         </div>
 
         {/* Login Card */}
-        <div className="glass-card p-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Connexion</h2>
+        <div className="ds-card p-8">
+          <h2
+            className="text-lg font-semibold mb-6"
+            style={{ color: 'var(--text-primary, #1D1D1F)' }}
+          >
+            Connexion
+          </h2>
 
           {/* Portal Selector */}
           <div className="grid grid-cols-4 gap-2 mb-6">
@@ -78,11 +84,12 @@ const LoginPage = () => {
                 key={p.value}
                 type="button"
                 onClick={() => setPortal(p.value)}
-                className={`py-2 px-2 rounded-lg text-xs font-medium transition-all ${
+                className="py-2 px-2 rounded-lg text-xs font-medium transition-all"
+                style={
                   portal === p.value
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                    ? { background: '#0071E3', color: '#FFFFFF', boxShadow: 'var(--shadow-sm)' }
+                    : { background: 'rgba(0,0,0,0.04)', color: 'var(--text-secondary, #6E6E73)' }
+                }
               >
                 {p.label}
               </button>
@@ -91,7 +98,10 @@ const LoginPage = () => {
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            <div
+              className="flex items-center gap-2 p-3 mb-4 rounded-lg text-sm"
+              style={{ background: 'rgba(255,59,48,0.08)', border: '1px solid rgba(255,59,48,0.2)', color: '#FF3B30' }}
+            >
               <AlertCircle size={16} />
               <span>{error}</span>
             </div>
@@ -100,7 +110,10 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="ds-label"
+              >
                 Email
               </label>
               <input
@@ -110,14 +123,17 @@ const LoginPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="jean@hypervisual.ch"
-                className="glass-input w-full"
+                className="ds-input w-full"
                 autoComplete="email"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="ds-label"
+              >
                 Mot de passe
               </label>
               <div className="relative">
@@ -128,13 +144,14 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="glass-input w-full pr-10"
+                  className="ds-input w-full pr-10"
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: 'var(--text-tertiary, #AEAEB2)' }}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -145,7 +162,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="ds-btn ds-btn-primary w-full flex items-center justify-center gap-2 py-2.5"
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />
@@ -158,8 +175,11 @@ const LoginPage = () => {
 
           {/* Dev hint */}
           {import.meta.env.DEV && (
-            <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
-              <p className="text-xs text-gray-500">
+            <div
+              className="mt-4 p-3 rounded-lg"
+              style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--border-light)' }}
+            >
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
                 <strong>Dev:</strong> Utilisez les identifiants Directus admin
               </p>
             </div>
@@ -167,7 +187,7 @@ const LoginPage = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6">
+        <p className="text-center text-xs mt-6" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
           HYPERVISUAL Switzerland — Fribourg, Suisse
         </p>
       </div>

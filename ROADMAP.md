@@ -1,1 +1,264 @@
-IyBST0FETUFQIHYyLjAg4oCUIERJUkVDVFVTIFVOSUZJRUQgUExBVEZPUk0KIyMgSFlQRVJWSVNVQUwgU3dpdHplcmxhbmQKCioqVmVyc2lvbioqIDogMi4wICAKKipEYXRlKiogOiBGw6l2cmllciAyMDI2ICAKKipNw6l0aG9kZSoqIDogU3RvcnktYnktc3RvcnksIENsYXVkZSBDb2RlIGV4w6ljdXRlIHN1ciBpbnN0cnVjdGlvbnMgZGUgbCdBcmNoaXRlY3RlICAKKipSZXBvKiogOiBnaXRodWIuY29tL2RhaW5hYmFzZS9kaXJlY3R1cy11bmlmaWVkLXBsYXRmb3JtICAKCi0tLQoKIyMgTMOJR0VOREUKCmBgYArwn5+iIEZhaXQgLyBFbiBwcm9kCvCfn6EgRW4gY291cnMgLyBQYXJ0aWVsbGVtZW50IGZhaXQK8J+UtCDDgCBmYWlyZQrwn5S1IFLDqWN1cMOpcsOpIGRlcHVpcyBhbmNpZW4gcmVwbyAow6AgY29udmVydGlyIFJlYWN0ICsgRGlyZWN0dXMpCuKaqyBTdXBwcmltw6kgKGTDqWNpc2lvbiB2YWxpZMOpZSkKYGBgCgoqKlByaW9yaXTDqXMqKiA6IPCflKUgQ3JpdGlxdWUgwrcg4pqhIEhpZ2ggwrcg8J+TjCBNZWRpdW0gwrcg8J+SoSBMb3cKCi0tLQoKIyMgUEhBU0UgMCDigJQgRk9OREFUSU9OIOKchSAoQ29tcGzDqXTDqSkKCnwgIyB8IFN0b3J5IHwgU3RhdHV0IHwgTm90ZXMgfAp8LS0tfC0tLS0tLS18LS0tLS0tLS18LS0tLS0tLXwKfCAwLjEgfCBEb2NrZXIgOiBEaXJlY3R1cyArIFBvc3RncmVTUUwgKyBSZWRpcyB8IPCfn6IgfCB8CnwgMC4yIHwgODIrIGNvbGxlY3Rpb25zIERpcmVjdHVzIGNyw6nDqWVzIHwg8J+foiB8IHwKfCAwLjMgfCBPQ1IgT3BlbkFJIFZpc2lvbiB8IPCfn6IgfCAxMDAlIGZvbmN0aW9ubmVsIHwKfCAwLjQgfCBJbnTDqWdyYXRpb24gSW52b2ljZSBOaW5qYSB2NSB8IPCfn6IgfCB8CnwgMC41IHwgSW50w6lncmF0aW9uIFJldm9sdXQgQnVzaW5lc3MgQVBJIHwg8J+foiB8IHwKfCAwLjYgfCBJbnTDqWdyYXRpb24gRVJQTmV4dCB2MTUgfCDwn5+iIHwgfAp8IDAuNyB8IEludMOpZ3JhdGlvbiBNYXV0aWMgNS54IHwg8J+foiB8IHwKfCAwLjggfCBTY2FmZm9sZCBSZWFjdCAxOC4yICsgVml0ZSB8IPCfn6IgfCB8CnwgMC45IHwgNCBwb3J0YWlscyBzdHJ1Y3R1csOpcyB8IPCfn6IgfCBTdXBlckFkbWluLCBDbGllbnQsIFByZXN0YXRhaXJlLCBSZXZlbmRldXIgfAoKLS0tCgojIyBQSEFTRSAxIOKAlCBERVNJR04gU1lTVEVNIPCflKUKCioqT2JqZWN0aWYqKiA6IEFwcGxpcXVlciBsZSBEZXNpZ24gU3lzdGVtIEFwcGxlIFByZW1pdW0gTW9ub2Nocm9tYXRpYyBzdXIgdG91dGUgbGEgcGxhdGVmb3JtZSBhdmFudCB0b3V0ZSBub3V2ZWxsZSBmb25jdGlvbm5hbGl0w6kuICAKKipEdXLDqWUgZXN0aW3DqWUqKiA6IDEgc2VtYWluZSAoQ2xhdWRlIENvZGUgZW4gY29udGludSkKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IE5vdGVzIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tfAp8IDEuMSB8IENyw6llciBgc3JjL3N0eWxlcy9kZXNpZ24tc3lzdGVtLmNzc2AgKHRva2VucyBDU1MgY29tcGxldHMpIHwg8J+UpSB8IPCflLQgfCBWYXJpYWJsZXMgQ1NTIGNvbmZvcm1lcyBDREMgwqcxNCB8CnwgMS4yIHwgQ3LDqWVyIGNvbXBvc2FudHMgVUkgZGUgYmFzZSA6IGBCdXR0b25gLCBgQmFkZ2VgLCBgQ2FyZGAsIGBJbnB1dGAgfCDwn5SlIHwg8J+UtCB8IExpYiBpbnRlcm5lIOKAlCBwYXMgZGUgZMOpcGVuZGFuY2UgZXh0ZXJuZSB8CnwgMS4zIHwgU2lkZWJhciByZWRlc2lnbiBjb21wbGV0IHwg8J+UpSB8IPCflLQgfCBHbGFzc21vcnBoaXNtLCBjb21wYW55IHN3aXRjaGVyIDUgZW50aXTDqXMsIG5hdiBzdHJ1Y3R1cmUgfAp8IDEuNCB8IFRvcGJhciByZWRlc2lnbiB8IPCflKUgfCDwn5S0IHwgU2VhcmNoIGR5bmFtaXF1ZSwgYWN0aW9ucywgbm90aWZpY2F0aW9ucyBkb3QgfAp8IDEuNSB8IERhc2hib2FyZCBTdXBlckFkbWluIOKAlCBhcHBsaXF1ZXIgRGVzaWduIFN5c3RlbSB8IPCflKUgfCDwn5S0IHwgTGF5b3V0IHZhbGlkw6kgQ0RDIMKnMTQgfAp8IDEuNiB8IENyw6llciBjb21wb3NhbnRzIHLDqXV0aWxpc2FibGVzIDogYFN0YXR1c0RvdGAsIGBLUElDYXJkYCwgYERhdGFUYWJsZWAsIGBQcm9ncmVzc0JhcmAgfCDimqEgfCDwn5S0IHwgVXRpbGlzw6lzIGRhbnMgdG91cyBsZXMgcG9ydGFpbHMgfAp8IDEuNyB8IEFwcGxpcXVlciBEZXNpZ24gU3lzdGVtIOKAlCBQb3J0YWlsIENsaWVudCB8IOKaoSB8IPCflLQgfCB8CnwgMS44IHwgQXBwbGlxdWVyIERlc2lnbiBTeXN0ZW0g4oCUIFBvcnRhaWwgUHJlc3RhdGFpcmUgfCDimqEgfCDwn5S0IHwgfAp8IDEuOSB8IEFwcGxpcXVlciBEZXNpZ24gU3lzdGVtIOKAlCBQb3J0YWlsIFJldmVuZGV1ciB8IOKaoSB8IPCflLQgfCB8CgoqKkNyaXTDqHJlIGRlIHNvcnRpZSoqIDogVG91cyBsZXMgcG9ydGFpbHMgcmVzcGVjdGVudCBsZSBEZXNpZ24gU3lzdGVtLiBaw6lybyBjb3VsZXVyIGTDqWNvcmF0aXZlLiBTZXVscyBsZXMgYmFkZ2VzIGRlIHN0YXR1dCB1dGlsaXNlbnQgbGVzIGNvdWxldXJzIHPDqW1hbnRpcXVlcy4KCi0tLQoKIyMgUEhBU0UgMiDigJQgQ09OTkVYSU9OIERPTk7DiUVTIFLDiUVMTEVTIPCflKUKCioqT2JqZWN0aWYqKiA6IEJyYW5jaGVyIFJlYWN0IOKGlCBEaXJlY3R1cyBzdXIgbGVzIHBhZ2VzIGTDqWrDoCBzdHJ1Y3R1csOpZXMuICAKKipEdXLDqWUgZXN0aW3DqWUqKiA6IDEtMiBzZW1haW5lcwoKfCAjIHwgU3RvcnkgfCBQcmlvIHwgU3RhdHV0IHwgTm90ZXMgfAp8LS0tfC0tLS0tLS18LS0tLS0tfC0tLS0tLS0tfC0tLS0tLS18CnwgMi4xIHwgU2VydmljZSBsYXllciBEaXJlY3R1cyAoYHNyYy9zZXJ2aWNlcy9kaXJlY3R1cy5qc2ApIHwg8J+UpSB8IPCfn6EgfCBBdXRoICsgQ1JVRCArIGVycm9yIGhhbmRsaW5nIHwKfCAyLjIgfCBBdXRoZW50aWZpY2F0aW9uIG11bHRpLXBvcnRhaWxzIEpXVCB8IPCflKUgfCDwn5+hIHwgNCByw7RsZXMgOiBzdXBlcmFkbWluLCBjbGllbnQsIHByZXN0YXRhaXJlLCByZXZlbmRldXIgfAp8IDIuMyB8IERhc2hib2FyZCBDRU8g4oCUIEtQSXMgZGVwdWlzIHZyYWllcyBkb25uw6llcyB8IPCflKUgfCDwn5S0IHwgQ29sbGVjdGlvbnMgOiBrcGlzLCBjbGllbnRfaW52b2ljZXMsIHBheW1lbnRzLCBwcm9qZWN0cyB8CnwgMi40IHwgRGFzaGJvYXJkIENFTyDigJQgUHJvamV0cyBhY3RpZnMgZW4gdGVtcHMgcsOpZWwgfCDwn5SlIHwg8J+UtCB8IENvbGxlY3Rpb24gOiBwcm9qZWN0cywgZGVsaXZlcmFibGVzIHwKfCAyLjUgfCBEYXNoYm9hcmQgQ0VPIOKAlCBQaXBlbGluZSBjb21tZXJjaWFsIHwg8J+UpSB8IPCflLQgfCBDb2xsZWN0aW9uIDogbGVhZHMsIHF1b3RlcyB8CnwgMi42IHwgRGFzaGJvYXJkIENFTyDigJQgVHLDqXNvcmVyaWUgUmV2b2x1dCBsaXZlIHwg8J+UpSB8IPCflLQgfCBBUEkgUmV2b2x1dCDihpIgYmFsYW5jZSArIGRlcm5pw6hyZXMgdHJhbnNhY3Rpb25zIHwKfCAyLjcgfCBEYXNoYm9hcmQgQ0VPIOKAlCBBbGVydGVzIGludGVsbGlnZW50ZXMgfCDimqEgfCDwn5S0IHwgRmFjdHVyZXMgcmV0YXJkLCBwYWllbWVudHMgZW4gYXR0ZW50ZSwgcHJvamV0cyBibG9xdcOpcyB8CnwgMi44IHwgQ1JNIOKAlCBDb21wYW5pZXMgKGNvbm5lY3TDqSBEaXJlY3R1cykgfCDimqEgfCDwn5S0IHwgUsOpY3Vww6lyZXIgVUkgYW5jaWVuIHJlcG8gKyBkYXRhIERpcmVjdHVzIHwKfCAyLjkgfCBDUk0g4oCUIENvbnRhY3RzIChjb25uZWN0w6kgRGlyZWN0dXMpIHwg4pqhIHwg8J+UtCB8IHwKfCAyLjEwIHwgTGVhZHMg4oCUIExpc3RlICsgcGlwZWxpbmUgKGNvbm5lY3TDqSBEaXJlY3R1cykgfCDimqEgfCDwn5S0IHwgfAp8IDIuMTEgfCBQcm9qZXRzIOKAlCBMaXN0ZSArIGTDqXRhaWwgKGNvbm5lY3TDqSBEaXJlY3R1cykgfCDimqEgfCDwn5S0IHwgfAp8IDIuMTIgfCBXZWJTb2NrZXQgLyBwb2xsaW5nIHRlbXBzIHLDqWVsICgzMHMpIHwg8J+TjCB8IPCflLQgfCBQb3VyIGRhc2hib2FyZCBDRU8gfAoKKipDcml0w6hyZSBkZSBzb3J0aWUqKiA6IExlIENFTyBwZXV0IHZvaXIgc2VzIHZyYWlzIEtQSXMsIHByb2pldHMgZXQgdHLDqXNvcmVyaWUgc3VyIGxlIGRhc2hib2FyZCBzYW5zIGRvbm7DqWVzIG1vY2vDqWVzLgoKLS0tCgojIyBQSEFTRSAzIOKAlCBGSU5BTkNFIENPTVBMw4hURSDimqEKCioqT2JqZWN0aWYqKiA6IE1vZHVsZSBGaW5hbmNlIGV4aGF1c3RpZiDigJQgdG91dGVzIGxlcyBwYWdlcyByw6ljdXDDqXLDqWVzIGRlIGwnYW5jaWVuIHJlcG8gKyBub3V2ZWxsZXMuICAKKipEdXLDqWUgZXN0aW3DqWUqKiA6IDIgc2VtYWluZXMKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IE5vdGVzIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tfAp8IDMuMSB8IEZpbmFuY2Ug4oCUIEZhY3R1cmVzIGNsaWVudHMgKGxpc3RlICsgZMOpdGFpbCArIGNyw6lhdGlvbikgfCDwn5SlIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA0OUtCICsgY29ubmVjdGVyIERpcmVjdHVzIHwKfCAzLjIgfCBGaW5hbmNlIOKAlCBGYWN0dXJlcyBmb3Vybmlzc2V1cnMgKGxpc3RlICsgT0NSICsgdmFsaWRhdGlvbikgfCDwn5SlIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA0NEtCIHwKfCAzLjMgfCBGaW5hbmNlIOKAlCBDb21wdGFiaWxpdMOpIChwbGFuIFBNRSBLw6RmZXIpIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA3OUtCIOKAlCB0csOocyBjb21wbGV0IHwKfCAzLjQgfCBGaW5hbmNlIOKAlCBCYW5raW5nIFJldm9sdXQgKHRyYW5zYWN0aW9ucyArIHJhcHByb2NoZW1lbnQpIHwg8J+UpSB8IPCfn6EgfCBCYW5raW5nRGFzaGJvYXJkIGV4aXN0YW50IOKGkiBjb21wbMOpdGVyIHwKfCAzLjUgfCAqKk1vZHVsZSAxNyoqIOKAlCBSYXBwb3J0cyBNZW5zdWVscyBQJkwgfCDimqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDk4S0IgfAp8IDMuNiB8ICoqTW9kdWxlIDE4Kiog4oCUIFJhcHBvcnRzIFRWQSBTdWlzc2UgKEZvcm11bGFpcmUgMjAwKSB8IPCflKUgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDcwS0Ig4oCUIG9ibGlnYXRpb24gbMOpZ2FsZSB8CnwgMy43IHwgKipNb2R1bGUgMTkqKiDigJQgRMOpcGVuc2VzIChzYWlzaWUgKyBjYXTDqWdvcmlzYXRpb24gKyBPQ1IpIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiAzOUtCIHwKfCAzLjggfCBRUi1JbnZvaWNlIGfDqW7DqXJhdGlvbiAoSVNPIDIwMDIyIHYyLjMpIHwg8J+UpSB8IPCfn6EgfCBWw6lyaWZpZXIgdGF1eCBUVkEgOC4xLzIuNi8zLjggfAp8IDMuOSB8IE1vZHVsZSA5IOKAlCBGYWN0dXJhdGlvbiBwYXIgamFsb25zIHwg4pqhIHwg8J+UtCB8IGRlbGl2ZXJhYmxlcyDihpIgZmFjdHVyZXMgYXV0byB8CnwgMy4xMCB8IE1vZHVsZSAxMCDigJQgQ29udHJhdHMgcsOpY3VycmVudHMgYXZhbmPDqXMgfCDwn5OMIHwg8J+UtCB8IE1SUi9BUlIgfAp8IDMuMTEgfCBNb2R1bGUgMTEg4oCUIEF2b2lycyAmIFJlbWJvdXJzZW1lbnRzIHwg8J+TjCB8IPCflLQgfCB8CnwgMy4xMiB8IE1vZHVsZSAxMiDigJQgVmFsaWRhdGlvbiBmYWN0dXJlcyBmb3Vybmlzc2V1cnMgfCDimqEgfCDwn5S0IHwgV29ya2Zsb3cgT0NSIOKGkiBDRU8g4oaSIFJldm9sdXQgfAp8IDMuMTMgfCBNb2R1bGUgMTUg4oCUIERhc2hib2FyZCBLUEkgRmluYW5jZSB8IOKaoSB8IPCfn6EgfCAyNDAgS1BJcyBkw6lqw6AgZW4gYmFzZSB8CnwgMy4xNCB8IE1vZHVsZSAxNiDigJQgUmFwcHJvY2hlbWVudCBiYW5jYWlyZSByZW5mb3Jjw6kgfCDimqEgfCDwn5+hIHwg4omlODUlIGF1dG8tbWF0Y2ggfAoKKipDcml0w6hyZSBkZSBzb3J0aWUqKiA6IFRvdXRlIGxhIGZpbmFuY2UgYWNjZXNzaWJsZSBkZXB1aXMgbGEgcGxhdGVmb3JtZS4gWsOpcm8gYmVzb2luIGQnYWxsZXIgc3VyIEludm9pY2UgTmluamEgb3UgUmV2b2x1dCBkaXJlY3RlbWVudC4KCi0tLQoKIyMgUEhBU0UgNCDigJQgUE9SVEFJTCBQUkVTVEFUQUlSRSBDT01QTEVUIOKaoQoKKipEdXLDqWUgZXN0aW3DqWUqKiA6IDEgc2VtYWluZQoKfCAjIHwgU3RvcnkgfCBQcmlvIHwgU3RhdHV0IHwgTm90ZXMgfAp8LS0tfC0tLS0tLS18LS0tLS0tfC0tLS0tLS0tfC0tLS0tLS18CnwgNC4xIHwgRGFzaGJvYXJkIHByZXN0YXRhaXJlIOKAlCBkb25uw6llcyByw6llbGxlcyB8IPCflKUgfCDwn5+hIHwgfAp8IDQuMiB8IE1pc3Npb25zIOKAlCBsaXN0ZSAoY29ubmVjdMOpIERpcmVjdHVzKSB8IPCflKUgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDY0S0IgfAp8IDQuMyB8IE1pc3Npb24g4oCUIGTDqXRhaWwgKGJyaWVmICsgbWF0w6lyaWVsICsgY29udGFjdCkgfCDwn5SlIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA3NUtCIHwKfCA0LjQgfCBUw6JjaGVzIHByZXN0YXRhaXJlIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA2NUtCIHwKfCA0LjUgfCAqKk1vZHVsZSAyMyoqIOKAlCBDYWxlbmRyaWVyIG1pc3Npb25zIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA1MktCICsgZXhwb3J0IGlDYWwgfAp8IDQuNiB8ICoqTW9kdWxlIDI0Kiog4oCUIE1lc3NhZ2VyaWUgQ0VPIOKGlCBQcmVzdGF0YWlyZSB8IPCfk4wgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDQ2S0IgfAp8IDQuNyB8ICoqTW9kdWxlIDIyKiog4oCUIEJhc2UgZGUgY29ubmFpc3NhbmNlcyB8IPCfkqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDUwS0IgKyBhcnRpY2xlIDQ5S0IgfAp8IDQuOCB8IFByb2ZpbCBwcmVzdGF0YWlyZSB8IPCfk4wgfCDwn5+hIHwgfAp8IDQuOSB8IFVwbG9hZCBmYWN0dXJlIHByZXN0YXRhaXJlICsgT0NSIGF1dG8gfCDwn5SlIHwg8J+UtCB8IETDqWNsZW5jaGV1ciDihpIgTW9kdWxlIDEyIHwKfCB+fjQuMTB+fiB8IH5+UGVyZm9ybWFuY2V+fiB8IOKaqyB8IOKaqyB8IFN1cHByaW3DqSB8Cnwgfn40LjExfn4gfCB+flLDqWNvbXBlbnNlc35+IHwg4pqrIHwg4pqrIHwgU3VwcHJpbcOpIHwKCi0tLQoKIyMgUEhBU0UgNSDigJQgUE9SVEFJTCBSRVZFTkRFVVIgQ09NUExFVCDimqEKCioqRHVyw6llIGVzdGltw6llKiogOiAxIHNlbWFpbmUKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IE5vdGVzIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tfAp8IDUuMSB8IERhc2hib2FyZCByZXZlbmRldXIg4oCUIGRvbm7DqWVzIHLDqWVsbGVzIHwg8J+UpSB8IPCfn6EgfCB8CnwgNS4yIHwgUGlwZWxpbmUgcmV2ZW5kZXVyIChLYW5iYW4gKyBsaXN0ZSkgfCDimqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDU5S0IgfAp8IDUuMyB8IExlYWRzIHJldmVuZGV1ciB8IOKaoSB8IPCflLUgfCBSw6ljdXDDqXJlciBhbmNpZW4gNThLQiB8CnwgNS40IHwgQ2xpZW50cyByZXZlbmRldXIgKyBkw6l0YWlsIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiA1MUtCICsgNjlLQiB8CnwgNS41IHwgKipNb2R1bGUgMjUqKiDigJQgQ29tbWlzc2lvbnMgfCDimqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDU1S0IgfAp8IDUuNiB8IERldmlzIHJldmVuZGV1ciB8IOKaoSB8IPCfn6EgfCBxdW90ZXMvIGV4aXN0YW50IOKGkiBjb21wbMOpdGVyIHwKfCA1LjcgfCBNYXJrZXRpbmcgcmV2ZW5kZXVyIChhc3NldHMgKyBjYW1wYWduZXMpIHwg8J+TjCB8IPCflLUgfCBSw6ljdXDDqXJlciBhbmNpZW4gNTRLQiB8CnwgNS44IHwgUmFwcG9ydHMgcmV2ZW5kZXVyIHwg8J+TjCB8IPCflLUgfCBSw6ljdXDDqXJlciBhbmNpZW4gNTJLQiB8CgotLS0KCiMjIFBIQVNFIDYg4oCUIFBPUlRBSUwgQ0xJRU5UIENPTVBMRVQg4pqhCgoqKkR1csOpZSBlc3RpbcOpZSoqIDogMSBzZW1haW5lCgp8ICMgfCBTdG9yeSB8IFByaW8gfCBTdGF0dXQgfCBOb3RlcyB8CnwtLS18LS0tLS0tLXwtLS0tLS18LS0tLS0tLS18LS0tLS0tLXwKfCA2LjEgfCBEYXNoYm9hcmQgY2xpZW50IOKAlCBzdWl2aSBwcm9qZXQgdGVtcHMgcsOpZWwgfCDwn5SlIHwg8J+foSB8IHwKfCA2LjIgfCBQcm9qZXRzIGNsaWVudCDigJQgc3RhdHV0ICsgamFsb25zIHwg8J+UpSB8IPCflLQgfCB8CnwgNi4zIHwgRG9jdW1lbnRzIGNsaWVudCAoZGV2aXMsIGNvbnRyYXRzLCBmYWN0dXJlcykgfCDimqEgfCDwn5S1IHwgQ29tYmluZXIgYW5jaWVuICsgRGlyZWN0dXMgfAp8IDYuNCB8IEZpbmFuY2VzIGNsaWVudCAoZmFjdHVyZXMgKyBzb2xkZSkgfCDimqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIHwKfCA2LjUgfCBQYWllbWVudCBjbGllbnQgKFFSLUludm9pY2UgKyBSZXZvbHV0IGxpbmspIHwg8J+UpSB8IPCfn6EgfCB8CnwgNi42IHwgU2lnbmF0dXJlIGRldmlzIERvY3VTZWFsIHwg8J+UpSB8IPCfn6EgfCB8CnwgNi43IHwgQWN0aXZhdGlvbiBwcm9qZXQgYXV0b21hdGlxdWUgw6AgcGFpZW1lbnQgfCDwn5SlIHwg8J+UtCB8IFJldm9sdXQgd2ViaG9vayDihpIgRGlyZWN0dXMgfAp8IDYuOCB8IFN1cHBvcnQvVGlja2V0cyBjbGllbnQgfCDwn5OMIHwg8J+foSB8IHwKfCA2LjkgfCBQcm9maWwgY2xpZW50IHwg8J+TjCB8IPCfn6EgfCB8CgotLS0KCiMjIFBIQVNFIDcg4oCUIEFVVE9NQVRJT04gJiBJQSDimqEKCioqRHVyw6llIGVzdGltw6llKiogOiAxLTIgc2VtYWluZXMKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IE5vdGVzIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tfAp8IDcuMSB8ICoqTW9kdWxlIDIwKiog4oCUIEVtYWlsIFRlbXBsYXRlcyAow6lkaXRldXIgKyBNYXV0aWMgc3luYykgfCDimqEgfCDwn5S1IHwgUsOpY3Vww6lyZXIgYW5jaWVuIDE4S0IgfAp8IDcuMiB8ICoqTW9kdWxlIDIxKiog4oCUIFdvcmtmbG93cyB2aXN1ZWxzIChsaXN0ZSArIGhpc3RvcmlxdWUpIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiAxOUtCIHwKfCA3LjMgfCBXb3JrZmxvdyA6IExlYWQgZW50cmFudCDihpIgcXVhbGlmaWNhdGlvbiBMTE0gfCDwn5SlIHwg8J+UtCB8IENsYXVkZSBBUEkgfAp8IDcuNCB8IFdvcmtmbG93IDogU2lnbmF0dXJlIOKGkiBmYWN0dXJlIGFjb21wdGUgYXV0byB8IPCflKUgfCDwn5S0IHwgfAp8IDcuNSB8IFdvcmtmbG93IDogUGFpZW1lbnQg4oaSIGFjdGl2YXRpb24gcHJvamV0IGF1dG8gfCDwn5SlIHwg8J+UtCB8IFJldm9sdXQgd2ViaG9vayB8CnwgNy42IHwgV29ya2Zsb3cgOiBSZWxhbmNlcyBhdXRvbWF0aXF1ZXMgKEorNywgSisxNCwgSiszMCkgfCDimqEgfCDwn5S0IHwgVmlhIE1hdXRpYyB8CnwgNy43IHwgV29ya2Zsb3cgOiBSYXBwb3J0IG1lbnN1ZWwgQ0VPICgxZXIgZHUgbW9pcykgfCDwn5OMIHwg8J+UtCB8IHwKfCA3LjggfCBOb3RpZmljYXRpb24g4oCUIEF1dG9tYXRpb24gKGh1YiArIGhpc3RvcmlxdWUpIHwg4pqhIHwg8J+UtSB8IFLDqWN1cMOpcmVyIGFuY2llbiAyOEtCIHwKfCA3LjkgfCBNb2R1bGUgMTMg4oCUIFRpbWUgdHJhY2tpbmcg4oaSIGZhY3R1cmF0aW9uIHLDqWdpZSB8IPCfk4wgfCDwn5S0IHwgfAp8IDcuMTAgfCBNb2R1bGUgMTQg4oCUIFRpY2tldHMgc3VwcG9ydCDihpIgZmFjdHVyYXRpb24gaG9ycyBjb250cmF0IHwg8J+TjCB8IPCflLQgfCB8CnwgNy4xMSB8IEludMOpZ3JhdGlvbiBXaGF0c0FwcCBCdXNpbmVzcyDihpIgTGVhZCBhdXRvIHwg8J+SoSB8IPCflLQgfCB8CnwgNy4xMiB8IEludMOpZ3JhdGlvbiBSaW5nb3ZlciArIHLDqXN1bcOpIExMTSBhcHBlbHMgfCDwn5KhIHwg8J+UtCB8IHwKCi0tLQoKIyMgUEhBU0UgOCDigJQgUVVBTElUw4kgJiBQUk9EVUNUSU9OIPCfk4wKCioqRHVyw6llIGVzdGltw6llKiogOiAxIHNlbWFpbmUKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IE5vdGVzIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tfAp8IDguMSB8IFRlc3RzIGVuZC10by1lbmQgY3ljbGUgY29tcGxldCAoTGVhZCDihpIgUGFpZW1lbnQpIHwg8J+UpSB8IPCflLQgfCB8CnwgOC4yIHwgQ29ycmVjdGlvbiB0YXV4IFRWQSBPQ1IgKDcuN+KGkjguMSwgMi414oaSMi42LCAzLjfihpIzLjgpIHwg8J+UpSB8IPCflLQgfCBUT0RPIHVyZ2VudCBleGlzdGFudCB8CnwgOC4zIHwgUGVybWlzc2lvbnMgZ3JhbnVsYWlyZXMgUkJBQyAoNCByw7RsZXMpIHwg4pqhIHwg8J+foSB8IHwKfCA4LjQgfCBBdWRpdCBzw6ljdXJpdMOpIChKV1QgZXhwaXJ5LCBIVFRQUywgcmF0ZSBsaW1pdGluZykgfCDimqEgfCDwn5S0IHwgfAp8IDguNSB8IFBlcmZvcm1hbmNlIChsYXp5IGxvYWRpbmcsIHBhZ2luYXRpb24sIGNhY2hlIFJlZGlzKSB8IOKaoSB8IPCflLQgfCB8CnwgOC42IHwgUmVzcG9uc2l2ZSBtb2JpbGUgKGRhc2hib2FyZCBDRU8gZW4gdGFibGV0KSB8IPCfk4wgfCDwn5S0IHwgfAp8IDguNyB8IERvY3VtZW50YXRpb24gQVBJIGRlcyAxNTYgZW5kcG9pbnRzIGN1c3RvbSB8IPCfk4wgfCDwn5S0IHwgfAp8IDguOCB8IEdyYWZhbmEgbW9uaXRvcmluZyAoZGFzaGJvYXJkcyBleGlzdGFudHMpIHwg8J+TjCB8IPCfn6EgfCB8CnwgOC45IHwgTWlzZSDDoCBqb3VyIFJPQURNQVAubWQgYXByw6hzIGNoYXF1ZSBzdG9yeSB8IPCflKUgfCDwn5S0IHwgUsOoZ2xlIENsYXVkZSBDb2RlIHwKCi0tLQoKIyMgUEhBU0UgOSDigJQgTVVMVEktRU5UUkVQUklTRVMg8J+TjAoKKipEw6ljbGVuY2hldXIqKiA6IEhZUEVSVklTVUFMIFN3aXR6ZXJsYW5kIFYxIHZhbGlkw6llIGV0IHN0YWJsZQoKfCAjIHwgU3RvcnkgfCBQcmlvIHwgU3RhdHV0IHwgTm90ZXMgfAp8LS0tfC0tLS0tLS18LS0tLS0tfC0tLS0tLS0tfC0tLS0tLS18CnwgOS4xIHwgQXJjaGl0ZWN0dXJlIGlzb2xhdGlvbiBkb25uw6llcyBwYXIgZW50cmVwcmlzZSB8IPCflKUgfCDwn5S0IHwgY29tcGFueV9pZCBzdXIgdG91dGVzIGNvbGxlY3Rpb25zIHwKfCA5LjIgfCBEQUlOQU1JQ1Mg4oCUIG9uYm9hcmRpbmcgfCDwn5OMIHwg8J+UtCB8IHwKfCA5LjMgfCBMRVhBSUEg4oCUIG9uYm9hcmRpbmcgfCDwn5OMIHwg8J+UtCB8IHwKfCA5LjQgfCBFTktJIFJFQUxUWSDigJQgb25ib2FyZGluZyB8IPCfk4wgfCDwn5S0IHwgb3J0aG9ncmFwaGUgZXhhY3RlIHwKfCA5LjUgfCBUQUtFT1VUIOKAlCBvbmJvYXJkaW5nIHwg8J+TjCB8IPCflLQgfCB8CnwgOS42IHwgRGFzaGJvYXJkIENFTyBtdWx0aS1lbnRyZXByaXNlcyAodnVlIGNvbnNvbGlkw6llKSB8IOKaoSB8IPCflLQgfCB8CgotLS0KCiMjIFLDiUNBUElUVUxBVElGIENISUZGUsOJCgp8IFBoYXNlIHwgU3RvcmllcyB8IFN0YXR1dCBnbG9iYWwgfAp8LS0tLS0tLXwtLS0tLS0tLS18LS0tLS0tLS0tLS0tLS18CnwgUGhhc2UgMCDigJQgRm9uZGF0aW9uIHwgOSB8IOKchSAxMDAlIGNvbXBsw6l0w6kgfAp8IFBoYXNlIDEg4oCUIERlc2lnbiBTeXN0ZW0gfCA5IHwg8J+UtCAwJSDigJQgcHJpb3JpdMOpIGFic29sdWUgfAp8IFBoYXNlIDIg4oCUIERvbm7DqWVzIHLDqWVsbGVzIHwgMTIgfCDwn5+hIH4xNSUgfAp8IFBoYXNlIDMg4oCUIEZpbmFuY2UgfCAxNCB8IPCfn6EgfjI1JSB8CnwgUGhhc2UgNCDigJQgUHJlc3RhdGFpcmUgfCA5IHwg8J+foSB+MjAlIHwKfCBQaGFzZSA1IOKAlCBSZXZlbmRldXIgfCA4IHwg8J+foSB+MTUlIHwKfCBQaGFzZSA2IOKAlCBDbGllbnQgfCA5IHwg8J+foSB+MzAlIHwKfCBQaGFzZSA3IOKAlCBBdXRvbWF0aW9uICYgSUEgfCAxMiB8IPCflLQgfjUlIHwKfCBQaGFzZSA4IOKAlCBRdWFsaXTDqSB8IDkgfCDwn5+hIH4xMCUgfAp8IFBoYXNlIDkg4oCUIE11bHRpLWVudHJlcHJpc2VzIHwgNiB8IPCflLQgMCUgfAp8ICoqVE9UQUwqKiB8ICoqOTcgc3RvcmllcyoqIHwgKip+MjAlIGdsb2JhbCoqIHwKCi0tLQoKIyMgUsOIR0xFUyBQT1VSIENMQVVERSBDT0RFIChSQVBQRUwpCgpDaGFxdWUgcHJvbXB0IENsYXVkZSBDb2RlIGRvaXQgb2JsaWdhdG9pcmVtZW50IGluY2x1cmUgOgoKMS4gKipTa2lsbHMgw6AgbGlyZSoqIDogY2hlbWlucyBgfi8uY2xhdWRlL3NraWxscy1yZXBvcy9gIHBlcnRpbmVudHMKMi4gKipWw6lyaWZpY2F0aW9uIERpcmVjdHVzKiogOiB1dGlsaXNlciBNQ1AgcG91ciBjb25maXJtZXIgbGVzIGNoYW1wcyBhdmFudCBkZSBjb2RlcgozLiAqKk1BSiBST0FETUFQLm1kKiogOiBtYXJxdWVyIGxhIHN0b3J5IGNvbW1lIGNvbXBsw6l0w6llIGFwcsOocyBjaGFxdWUgbGl2cmFpc29uCjQuICoqRGVzaWduIFN5c3RlbSoqIDogcsOpZsOpcmVuY2VyIGBzcmMvc3R5bGVzL2Rlc2lnbi1zeXN0ZW0uY3NzYCAodG9rZW5zIENTUykKNS4gKipDb21taXQgY2xhaXIqKiA6IGBmZWF0KHBoYXNlLVgpOiBzdG9yeSBYLlgg4oCUIGRlc2NyaXB0aW9uYAoKLS0tCgoqUm9hZG1hcCB2Mi4wIOKAlCBGw6l2cmllciAyMDI2KgoqUmVtcGxhY2UgbGEgcm9hZG1hcCBpbmNsdXNlIGRhbnMgQ0RDIHYxLjIgwqcxMSoKKjk3IHN0b3JpZXMgaWRlbnRpZmnDqWVzIOKAlCB+MjAlIGdsb2JhbCBjb21wbMOpdMOpKgo=
+# ROADMAP v2.0 — DIRECTUS UNIFIED PLATFORM
+## HYPERVISUAL Switzerland
+
+**Version** : 2.0  
+**Date** : Février 2026  
+**Méthode** : Story-by-story, Claude Code exécute sur instructions de l'Architecte  
+**Repo** : github.com/dainabase/directus-unified-platform  
+
+---
+
+## LÉGENDE
+
+```
+🟢 Fait / En prod
+🟡 En cours / Partiellement fait
+🔴 À faire
+🔵 Récupéré depuis ancien repo (à convertir React + Directus)
+⚫ Supprimé (décision validée)
+```
+
+**Priorités** : 🔥 Critique · ⚡ High · 📌 Medium · 💡 Low
+
+---
+
+## PHASE 0 — FONDATION ✅ (Complété V1)
+
+| # | Story | Statut | Notes |
+|---|-------|--------|-------|
+| 0.1 | Docker : Directus + PostgreSQL + Redis | 🟢 | |
+| 0.2 | 82+ collections Directus créées | 🟢 | |
+| 0.3 | OCR OpenAI Vision | 🟢 | 100% fonctionnel |
+| 0.4 | Intégration Invoice Ninja v5 | 🟢 | |
+| 0.5 | Intégration Revolut Business API | 🟢 | Audité phase G |
+| 0.6 | Intégration ERPNext v15 | 🟢 | |
+| 0.7 | Intégration Mautic 5.x | 🟢 | |
+| 0.8 | Scaffold React 18.2 + Vite | 🟢 | |
+| 0.9 | 4 portails structurés | 🟢 | SuperAdmin, Client, Prestataire, Revendeur |
+| 0.10 | Backend Finance (16 modules, phases A-J) | 🟢 | 96/96 stories auditées — 28 bugs corrigés |
+
+---
+
+## PHASE 1 — DESIGN SYSTEM 🔥
+
+**Objectif** : Appliquer le Design System Apple Premium Monochromatic (CDC §14) sur toute la plateforme avant toute nouvelle fonctionnalité.  
+**Référence** : `docs/CDC_v1.3_Design_System_Consolidation.md`  
+**Durée estimée** : 1 semaine (Claude Code en continu)
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 1.1 | Créer `src/styles/design-system.css` (tokens CSS complets) | 🔥 | 🔴 | Variables CSS conformes CDC §14 — palette monochromatic + accent #0071E3 |
+| 1.2 | Créer composants UI de base : `Button`, `Badge`, `Card`, `Input` | 🔥 | 🔴 | Lib interne — pas de dépendance externe |
+| 1.3 | Sidebar redesign complet | 🔥 | 🔴 | Glassmorphism, company switcher 5 entités, nav structure |
+| 1.4 | Topbar redesign | 🔥 | 🔴 | Search dynamique, actions, notifications dot |
+| 1.5 | Dashboard SuperAdmin — appliquer Design System | 🔥 | 🔴 | Layout validé CDC §14 |
+| 1.6 | Créer composants réutilisables : `StatusDot`, `KPICard`, `DataTable`, `ProgressBar` | ⚡ | 🔴 | Utilisés dans tous les portails |
+| 1.7 | Appliquer Design System — Portail Client | ⚡ | 🔴 | |
+| 1.8 | Appliquer Design System — Portail Prestataire | ⚡ | 🔴 | |
+| 1.9 | Appliquer Design System — Portail Revendeur | ⚡ | 🔴 | |
+
+**Critère de sortie** : Tous les portails respectent le Design System. Zéro couleur décorative. Seuls les badges de statut utilisent les couleurs sémantiques.
+
+---
+
+## PHASE 2 — CONNEXION DONNÉES RÉELLES 🔥
+
+**Objectif** : Brancher React ↔ Directus sur les pages déjà structurées.  
+**Durée estimée** : 1-2 semaines
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 2.1 | Service layer Directus (`src/services/directus.js`) | 🔥 | 🟡 | Auth + CRUD + error handling |
+| 2.2 | Authentification multi-portails JWT | 🔥 | 🟡 | 4 rôles : superadmin, client, prestataire, revendeur |
+| 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🔴 | Collections : kpis, client_invoices, payments, projects |
+| 2.4 | Dashboard CEO — Projets actifs en temps réel | 🔥 | 🔴 | Collection : projects, deliverables |
+| 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🔴 | Collection : leads, quotes |
+| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🔴 | API Revolut → balance + dernières transactions |
+| 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🔴 | Factures retard, paiements en attente, projets bloqués |
+| 2.8 | CRM — Companies (connecté Directus) | ⚡ | 🔴 | Récupérer UI ancien repo + data Directus |
+| 2.9 | CRM — Contacts (connecté Directus) | ⚡ | 🔴 | |
+| 2.10 | Leads — Liste + pipeline (connecté Directus) | ⚡ | 🔴 | |
+| 2.11 | Projets — Liste + détail (connecté Directus) | ⚡ | 🔴 | |
+| 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🔴 | Pour dashboard CEO |
+
+**Critère de sortie** : Le CEO peut voir ses vrais KPIs, projets et trésorerie sur le dashboard sans données mockées.
+
+---
+
+## PHASE 3 — FINANCE COMPLÈTE ⚡
+
+**Objectif** : Module Finance exhaustif — toutes les pages récupérées de l'ancien repo + nouvelles.  
+**Durée estimée** : 2 semaines
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 3.1 | Finance — Factures clients (liste + détail + création) | 🔥 | 🔵 | Récupérer ancien 49KB + connecter Directus |
+| 3.2 | Finance — Factures fournisseurs (liste + OCR + validation) | 🔥 | 🔵 | Récupérer ancien 44KB |
+| 3.3 | Finance — Comptabilité (plan PME Käfer) | ⚡ | 🔵 | Récupérer ancien 79KB — très complet |
+| 3.4 | Finance — Banking Revolut (transactions + rapprochement) | 🔥 | 🟡 | BankingDashboard existant → compléter |
+| 3.5 | **Module 17** — Rapports Mensuels P&L | ⚡ | 🔵 | Récupérer ancien 98KB |
+| 3.6 | **Module 18** — Rapports TVA Suisse (Formulaire 200) | 🔥 | 🔵 | Récupérer ancien 70KB — obligation légale — taux 8.1/2.6/3.8 |
+| 3.7 | **Module 19** — Dépenses (saisie + catégorisation + OCR) | ⚡ | 🔵 | Récupérer ancien 39KB |
+| 3.8 | QR-Invoice génération (ISO 20022 v2.3) | 🔥 | 🟡 | Taux TVA confirmés 8.1/2.6/3.8 |
+| 3.9 | Module 9 — Facturation par jalons | ⚡ | 🔴 | deliverables → factures auto |
+| 3.10 | Module 10 — Contrats récurrents avancés | 📌 | 🔴 | MRR/ARR |
+| 3.11 | Module 11 — Avoirs & Remboursements | 📌 | 🔴 | |
+| 3.12 | Module 12 — Validation factures fournisseurs | ⚡ | 🔴 | Workflow OCR → CEO → Revolut |
+| 3.13 | Module 15 — Dashboard KPI Finance | ⚡ | 🟡 | 240 KPIs déjà en base |
+| 3.14 | Module 16 — Rapprochement bancaire renforcé | ⚡ | 🟡 | ≥85% auto-match |
+
+**Critère de sortie** : Toute la finance accessible depuis la plateforme. Zéro besoin d'aller sur Invoice Ninja ou Revolut directement.
+
+---
+
+## PHASE 4 — PORTAIL PRESTATAIRE COMPLET ⚡
+
+**Durée estimée** : 1 semaine
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 4.1 | Dashboard prestataire — données réelles | 🔥 | 🟡 | |
+| 4.2 | Missions — liste (connecté Directus) | 🔥 | 🔵 | Récupérer ancien 64KB |
+| 4.3 | Mission — détail (brief + matériel + contact) | 🔥 | 🔵 | Récupérer ancien 75KB |
+| 4.4 | Tâches prestataire | ⚡ | 🔵 | Récupérer ancien 65KB |
+| 4.5 | **Module 23** — Calendrier missions | ⚡ | 🔵 | Récupérer ancien 52KB + export iCal |
+| 4.6 | **Module 24** — Messagerie CEO ↔ Prestataire | 📌 | 🔵 | Récupérer ancien 46KB |
+| 4.7 | **Module 22** — Base de connaissances | 💡 | 🔵 | Récupérer ancien 50KB + article 49KB |
+| 4.8 | Profil prestataire | 📌 | 🟡 | |
+| 4.9 | Upload facture prestataire + OCR auto | 🔥 | 🔴 | Déclencheur → Module 12 |
+| ~~4.10~~ | ~~Performance~~ | ⚫ | ⚫ | Supprimé — non pertinent |
+| ~~4.11~~ | ~~Récompenses~~ | ⚫ | ⚫ | Supprimé — non pertinent |
+
+---
+
+## PHASE 5 — PORTAIL REVENDEUR COMPLET ⚡
+
+**Durée estimée** : 1 semaine
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 5.1 | Dashboard revendeur — données réelles | 🔥 | 🟡 | |
+| 5.2 | Pipeline revendeur (Kanban + liste) | ⚡ | 🔵 | Récupérer ancien 59KB |
+| 5.3 | Leads revendeur | ⚡ | 🔵 | Récupérer ancien 58KB |
+| 5.4 | Clients revendeur + détail | ⚡ | 🔵 | Récupérer ancien 51KB + 69KB |
+| 5.5 | **Module 25** — Commissions | ⚡ | 🔵 | Récupérer ancien 55KB |
+| 5.6 | Devis revendeur | ⚡ | 🟡 | quotes/ existant → compléter |
+| 5.7 | Marketing revendeur (assets + campagnes) | 📌 | 🔵 | Récupérer ancien 54KB |
+| 5.8 | Rapports revendeur | 📌 | 🔵 | Récupérer ancien 52KB |
+
+---
+
+## PHASE 6 — PORTAIL CLIENT COMPLET ⚡
+
+**Durée estimée** : 1 semaine
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 6.1 | Dashboard client — suivi projet temps réel | 🔥 | 🟡 | |
+| 6.2 | Projets client — statut + jalons | 🔥 | 🔴 | |
+| 6.3 | Documents client (devis, contrats, factures) | ⚡ | 🔵 | Combiner ancien + Directus |
+| 6.4 | Finances client (factures + solde) | ⚡ | 🔵 | Récupérer ancien |
+| 6.5 | Paiement client (QR-Invoice + Revolut link) | 🔥 | 🟡 | |
+| 6.6 | Signature devis DocuSeal | 🔥 | 🟡 | Audité phase H |
+| 6.7 | Activation projet automatique à paiement | 🔥 | 🔴 | Revolut webhook → Directus |
+| 6.8 | Support/Tickets client | 📌 | 🟡 | |
+| 6.9 | Profil client | 📌 | 🟡 | |
+
+---
+
+## PHASE 7 — AUTOMATION & IA ⚡
+
+**Durée estimée** : 1-2 semaines
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 7.1 | **Module 20** — Email Templates (éditeur + Mautic sync) | ⚡ | 🔵 | Récupérer ancien 18KB |
+| 7.2 | **Module 21** — Workflows visuels (liste + historique) | ⚡ | 🔵 | Récupérer ancien 19KB |
+| 7.3 | Workflow : Lead entrant → qualification LLM | 🔥 | 🔴 | Claude API |
+| 7.4 | Workflow : Signature → facture acompte auto | 🔥 | 🔴 | |
+| 7.5 | Workflow : Paiement → activation projet auto | 🔥 | 🔴 | Revolut webhook |
+| 7.6 | Workflow : Relances automatiques (J+7, J+14, J+30) | ⚡ | 🔴 | Via Mautic |
+| 7.7 | Workflow : Rapport mensuel CEO (1er du mois) | 📌 | 🔴 | |
+| 7.8 | Notification — Automation (hub + historique) | ⚡ | 🔵 | Récupérer ancien 28KB |
+| 7.9 | Module 13 — Time tracking → facturation régie | 📌 | 🔴 | |
+| 7.10 | Module 14 — Tickets support → facturation hors contrat | 📌 | 🔴 | |
+| 7.11 | Intégration WhatsApp Business → Lead auto | 💡 | 🔴 | Déféré |
+| 7.12 | Intégration Ringover + résumé LLM appels | 💡 | 🔴 | |
+
+---
+
+## PHASE 8 — QUALITÉ & PRODUCTION 📌
+
+**Durée estimée** : 1 semaine
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 8.1 | Tests end-to-end cycle complet (Lead → Paiement) | 🔥 | 🔴 | |
+| 8.2 | Correction taux TVA OCR (7.7→8.1, 2.5→2.6, 3.7→3.8) | 🔥 | 🔴 | TODO urgent — fichiers : finance-ocr-ai.js, ocr-hybrid-processor.js, expenses-notion.js |
+| 8.3 | Permissions granulaires RBAC (4 rôles) | ⚡ | 🟡 | |
+| 8.4 | Audit sécurité (JWT expiry, HTTPS, rate limiting) | ⚡ | 🔴 | |
+| 8.5 | Performance (lazy loading, pagination, cache Redis) | ⚡ | 🔴 | |
+| 8.6 | Responsive mobile (dashboard CEO en tablet) | 📌 | 🔴 | |
+| 8.7 | Documentation API des 156 endpoints custom | 📌 | 🔴 | |
+| 8.8 | Grafana monitoring (dashboards existants) | 📌 | 🟡 | |
+| 8.9 | Mise à jour ROADMAP.md après chaque story | 🔥 | 🟢 | Règle Claude Code — en cours |
+
+---
+
+## PHASE 9 — MULTI-ENTREPRISES 📌
+
+**Déclencheur** : HYPERVISUAL Switzerland V2 validée et stable
+
+| # | Story | Prio | Statut | Notes |
+|---|-------|------|--------|-------|
+| 9.1 | Architecture isolation données par entreprise | 🔥 | 🔴 | company_id sur toutes collections |
+| 9.2 | DAINAMICS — onboarding | 📌 | 🔴 | |
+| 9.3 | LEXAIA — onboarding | 📌 | 🔴 | |
+| 9.4 | ENKI REALTY — onboarding | 📌 | 🔴 | orthographe exacte : ENKI REALTY |
+| 9.5 | TAKEOUT — onboarding | 📌 | 🔴 | |
+| 9.6 | Dashboard CEO multi-entreprises (vue consolidée) | ⚡ | 🔴 | |
+
+---
+
+## RÉCAPITULATIF CHIFFRÉ
+
+| Phase | Stories | Statut global |
+|-------|---------|--------------|
+| Phase 0 — Fondation + V1 backend | 10 | ✅ 100% complété |
+| Phase 1 — Design System | 9 | 🔴 0% — priorité absolue |
+| Phase 2 — Données réelles | 12 | 🟡 ~15% |
+| Phase 3 — Finance UI | 14 | 🟡 ~25% |
+| Phase 4 — Prestataire | 9 | 🟡 ~20% |
+| Phase 5 — Revendeur | 8 | 🟡 ~15% |
+| Phase 6 — Client | 9 | 🟡 ~30% |
+| Phase 7 — Automation & IA | 12 | 🔴 ~5% |
+| Phase 8 — Qualité | 9 | 🟡 ~10% |
+| Phase 9 — Multi-entreprises | 6 | 🔴 0% |
+| **TOTAL** | **98 stories** | **~20% global** |
+
+---
+
+## RÈGLES POUR CLAUDE CODE (RAPPEL)
+
+Chaque prompt Claude Code doit obligatoirement inclure :
+
+1. **Skills à lire** : chemins `~/.claude/skills-repos/` pertinents
+2. **Vérification Directus** : utiliser MCP pour confirmer les champs avant de coder
+3. **MAJ ROADMAP.md** : marquer la story comme complétée après chaque livraison
+4. **Design System** : référencer `src/styles/design-system.css` (tokens CSS)
+5. **Commit clair** : `feat(phase-X): story X.X — description`
+
+## POINTS D'ATTENTION CRITIQUES
+
+- **ENKI REALTY** : orthographe exacte (pas ENKY, pas ENKI seul)
+- **Recharts** pour les graphiques (PAS ApexCharts)
+- **Design System §14** : monochromatic, accent #0071E3 uniquement, zéro couleur décorative
+- **TVA Suisse** : 8.1% / 2.6% / 3.8% (pas 7.7/2.5/3.7)
+- **Projet démarre** uniquement après signature DocuSeal + paiement Revolut confirmé
+- **Mautic** pour TOUS les emails (marketing + transactionnels)
+
+---
+
+*Roadmap v2.0 — Février 2026*  
+*Remplace ROADMAP.md V1 (phases A-J archivé dans docs/archive/)*  
+*98 stories identifiées — Phase 1 (Design System) : PRIORITÉ ABSOLUE*

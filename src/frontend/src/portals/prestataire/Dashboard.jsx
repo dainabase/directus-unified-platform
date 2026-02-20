@@ -26,18 +26,11 @@ const formatCHF = (value) =>
 
 // -- Stat card component --
 const StatCard = ({ icon: Icon, label, value, subtitle, color = 'violet' }) => {
-  const colorMap = {
-    violet: 'from-violet-500 to-indigo-600',
-    blue: 'from-blue-500 to-blue-600',
-    emerald: 'from-emerald-500 to-emerald-600',
-    amber: 'from-amber-500 to-amber-600'
-  }
-
   return (
-    <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-5">
+    <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-gray-500 font-medium">{label}</span>
-        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorMap[color]} flex items-center justify-center`}>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center`} style={{ background: color === 'violet' ? '#7C3AED' : color === 'blue' ? 'var(--accent)' : color === 'emerald' ? 'var(--success)' : 'var(--warning)' }}>
           <Icon size={16} className="text-white" />
         </div>
       </div>
@@ -194,7 +187,7 @@ const ProviderDashboard = () => {
 
       {/* Section "A faire" */}
       {(unansweredProposals.length > 0 || projectsNeedInvoice.length > 0) && (
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+        <div className="ds-card p-6">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="w-5 h-5 text-amber-500" />
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
@@ -257,7 +250,7 @@ const ProviderDashboard = () => {
 
       {/* Empty state */}
       {unansweredProposals.length === 0 && projectsNeedInvoice.length === 0 && pendingProposals === 0 && activeProjects === 0 && (
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Clock className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-700">Aucune action en attente</h3>
           <p className="text-sm text-gray-500 mt-2">

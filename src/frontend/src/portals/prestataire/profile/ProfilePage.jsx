@@ -103,7 +103,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
   }
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Building className="w-5 h-5 text-purple-600" />
@@ -132,7 +132,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Nom entreprise</label>
           {isEditing ? (
-            <input {...register('company_name')} className="glass-input w-full" />
+            <input {...register('company_name')} className="ds-input w-full" />
           ) : (
             <p className="text-sm font-medium text-gray-900">{profile?.company_name || '—'}</p>
           )}
@@ -143,7 +143,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
           {isEditing ? (
             <input
               {...register('ide_number')}
-              className="glass-input w-full"
+              className="ds-input w-full"
               placeholder="CHE-123.456.789"
             />
           ) : (
@@ -154,7 +154,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         <div className="md:col-span-2">
           <label className="block text-xs font-medium text-gray-500 mb-1">Adresse</label>
           {isEditing ? (
-            <input {...register('address')} className="glass-input w-full" />
+            <input {...register('address')} className="ds-input w-full" />
           ) : (
             <p className="text-sm text-gray-900">{profile?.address || '—'}</p>
           )}
@@ -163,7 +163,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Téléphone</label>
           {isEditing ? (
-            <input {...register('phone')} className="glass-input w-full" type="tel" />
+            <input {...register('phone')} className="ds-input w-full" type="tel" />
           ) : (
             <p className="text-sm text-gray-900">{profile?.phone || '—'}</p>
           )}
@@ -172,7 +172,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Email</label>
           {isEditing ? (
-            <input {...register('email')} className="glass-input w-full" type="email" />
+            <input {...register('email')} className="ds-input w-full" type="email" />
           ) : (
             <p className="text-sm text-gray-900">{profile?.email || '—'}</p>
           )}
@@ -186,7 +186,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
                 type="number"
                 min="0"
                 {...register('daily_rate')}
-                className="glass-input w-full pr-12"
+                className="ds-input w-full pr-12"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">CHF/j</span>
             </div>
@@ -270,7 +270,7 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
   const uploadedTypes = new Set(documents.map(d => d.document_type))
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-6">
       <div className="flex items-center gap-2 mb-4">
         <Shield className="w-5 h-5 text-purple-600" />
         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
@@ -404,7 +404,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
   }
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Tag className="w-5 h-5 text-purple-600" />
@@ -508,8 +508,8 @@ const ProfilePage = () => {
   if (profileLoading) {
     return (
       <div className="space-y-6">
-        <div className="glass-card p-6"><div className="h-48 glass-skeleton rounded-lg" /></div>
-        <div className="glass-card p-6"><div className="h-48 glass-skeleton rounded-lg" /></div>
+        <div className="ds-card p-6"><div className="h-48 ds-skeleton rounded-lg" /></div>
+        <div className="ds-card p-6"><div className="h-48 ds-skeleton rounded-lg" /></div>
       </div>
     )
   }

@@ -31,11 +31,11 @@ const ProviderAuth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--bg-primary)' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 text-white mb-4 shadow-lg shadow-violet-200">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-600 text-white mb-4">
             <Wrench size={32} />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Espace Prestataire</h1>
@@ -43,7 +43,7 @@ const ProviderAuth = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8">
+        <div className="ds-card p-8">
           {step === 'success' ? (
             <div className="text-center py-6">
               <CheckCircle className="w-16 h-16 text-violet-500 mx-auto mb-4" />
@@ -86,7 +86,7 @@ const ProviderAuth = () => {
                 <button
                   type="submit"
                   disabled={step === 'loading' || !email.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-violet-200"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {step === 'loading' ? (
                     <><Loader2 size={18} className="animate-spin" /> Connexion en cours...</>

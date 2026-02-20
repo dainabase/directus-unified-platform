@@ -245,7 +245,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all disabled:opacity-50 shadow-lg shadow-violet-200"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -297,7 +297,7 @@ const ProviderInvoices = () => {
     return (
       <div className="space-y-6">
         <div><h1 className="text-2xl font-bold text-gray-900">Mes factures</h1></div>
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+        <div className="ds-card p-6">
           <div className="h-64 animate-pulse bg-gray-100 rounded-lg" />
         </div>
       </div>
@@ -316,7 +316,7 @@ const ProviderInvoices = () => {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-200"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors"
         >
           <Plus size={18} />
           Soumettre une facture
@@ -325,14 +325,14 @@ const ProviderInvoices = () => {
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <Clock size={16} className="text-amber-500" />
             <span className="text-xs text-gray-500 font-medium">En attente de paiement</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(totalPending)}</p>
         </div>
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle size={16} className="text-emerald-500" />
             <span className="text-xs text-gray-500 font-medium">Total paye</span>
@@ -342,7 +342,7 @@ const ProviderInvoices = () => {
       </div>
 
       {/* Invoices list */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+      <div className="ds-card p-6">
         {invoices.length === 0 ? (
           <div className="text-center py-12">
             <Receipt className="w-12 h-12 text-gray-300 mx-auto mb-4" />

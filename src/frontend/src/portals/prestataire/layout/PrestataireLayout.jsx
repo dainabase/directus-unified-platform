@@ -32,18 +32,21 @@ const PrestataireLayout = () => {
   const initials = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50/30 to-gray-50">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white/80 backdrop-blur-xl border-r border-gray-200/50 flex flex-col z-30">
+      <aside
+        className="fixed left-0 top-0 bottom-0 w-64 ds-glass flex flex-col z-30"
+        style={{ borderRight: '1px solid var(--border-light)' }}
+      >
         {/* Logo */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6" style={{ borderBottom: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-violet-600 flex items-center justify-center shadow-sm">
               <Wrench className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">HYPERVISUAL</p>
-              <p className="text-xs text-gray-500">Espace Prestataire</p>
+              <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>HYPERVISUAL</p>
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Espace Prestataire</p>
             </div>
           </div>
         </div>
@@ -55,13 +58,12 @@ const PrestataireLayout = () => {
               key={item.path}
               to={item.path}
               end={item.end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-violet-50 text-violet-700 shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`
-              }
+              style={({ isActive }) => ({
+                background: isActive ? 'rgba(139, 92, 246, 0.08)' : 'transparent',
+                color: isActive ? '#7C3AED' : 'var(--text-secondary)',
+                transition: 'all 0.15s ease'
+              })}
+              className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
             >
               <item.icon size={18} />
               {item.label}
@@ -70,14 +72,14 @@ const PrestataireLayout = () => {
         </nav>
 
         {/* User section */}
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center">
               <span className="text-sm font-bold text-white">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{displayName}</p>
-              <p className="text-xs text-gray-500 truncate">{provider?.email}</p>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{displayName}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{provider?.email}</p>
             </div>
           </div>
           <button

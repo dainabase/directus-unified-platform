@@ -173,7 +173,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all disabled:opacity-50 shadow-lg shadow-violet-200"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -233,7 +233,7 @@ const QuoteRequests = () => {
     return (
       <div className="space-y-6">
         <div><h1 className="text-2xl font-bold text-gray-900">Demandes de devis</h1></div>
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+        <div className="ds-card p-6">
           <div className="h-64 animate-pulse bg-gray-100 rounded-lg" />
         </div>
       </div>
@@ -259,7 +259,7 @@ const QuoteRequests = () => {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               statusFilter === f.value
                 ? 'bg-violet-600 text-white'
-                : 'bg-white/80 text-gray-600 hover:bg-gray-100 border border-gray-200'
+                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
             }`}
           >
             {f.label}
@@ -273,7 +273,7 @@ const QuoteRequests = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+      <div className="ds-card p-6">
         {proposals.length === 0 ? (
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />

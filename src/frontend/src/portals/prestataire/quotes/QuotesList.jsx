@@ -85,8 +85,8 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
 
   if (isLoading) {
     return (
-      <div className="glass-card p-6">
-        <div className="h-64 glass-skeleton rounded-lg" />
+      <div className="ds-card p-6">
+        <div className="h-64 ds-skeleton rounded-lg" />
       </div>
     )
   }
@@ -101,7 +101,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
   ]
 
   return (
-    <div className="glass-card p-6">
+    <div className="ds-card p-6">
       {/* Header + Filtres */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">

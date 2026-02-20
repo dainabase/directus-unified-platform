@@ -147,7 +147,7 @@ const QuoteResponseForm = ({ proposal, onClose }) => {
                   required: 'Le prix est obligatoire',
                   min: { value: 0, message: 'Le prix doit être positif' }
                 })}
-                className="glass-input w-full pr-12"
+                className="ds-input w-full pr-12"
                 placeholder="0.00"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">CHF</span>
@@ -169,7 +169,7 @@ const QuoteResponseForm = ({ proposal, onClose }) => {
                 required: 'Le délai est obligatoire',
                 min: { value: 1, message: 'Minimum 1 jour' }
               })}
-              className="glass-input w-full"
+              className="ds-input w-full"
               placeholder="Ex: 15"
             />
             {errors.proposed_delay_days && (
@@ -185,7 +185,7 @@ const QuoteResponseForm = ({ proposal, onClose }) => {
             <input
               type="date"
               {...register('availability_date')}
-              className="glass-input w-full"
+              className="ds-input w-full"
             />
           </div>
 
@@ -197,7 +197,7 @@ const QuoteResponseForm = ({ proposal, onClose }) => {
             <textarea
               {...register('notes')}
               rows={3}
-              className="glass-input w-full resize-none"
+              className="ds-input w-full resize-none"
               placeholder="Détails supplémentaires, conditions, remarques..."
             />
           </div>

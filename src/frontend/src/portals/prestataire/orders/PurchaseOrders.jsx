@@ -125,7 +125,7 @@ const PurchaseOrders = () => {
     return (
       <div className="space-y-6">
         <div><h1 className="text-2xl font-bold text-gray-900">Bons de commande</h1></div>
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+        <div className="ds-card p-6">
           <div className="h-64 animate-pulse bg-gray-100 rounded-lg" />
         </div>
       </div>
@@ -143,7 +143,7 @@ const PurchaseOrders = () => {
       </div>
 
       {/* Orders list */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/50 shadow-sm p-6">
+      <div className="ds-card p-6">
         {projects.length === 0 ? (
           <div className="text-center py-12">
             <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -210,7 +210,7 @@ const PurchaseOrders = () => {
                         <button
                           onClick={() => confirmMutation.mutate(project.id)}
                           disabled={confirmMutation.isPending}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all disabled:opacity-50 shadow-lg shadow-violet-200"
+                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
                         >
                           {confirmMutation.isPending ? (
                             <Loader2 size={16} className="animate-spin" />

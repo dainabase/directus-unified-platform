@@ -1,12 +1,15 @@
 /**
  * SuperAdmin Dashboard — Apple Premium Design System
- * Story 1.5 — KPIs + Operations + Commercial + Finance + KPI Sidebar
+ * Story 1.5 + 2.12 — KPIs + Operations + Commercial + Finance + KPI Sidebar
+ * Unified 30s polling via useRealtimeDashboard with Page Visibility API
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { RefreshCw } from 'lucide-react'
-import { useQueryClient, useIsFetching } from '@tanstack/react-query'
-import useLastUpdated from '../../hooks/useLastUpdated'
+import { useIsFetching } from '@tanstack/react-query'
+import { formatDistanceToNow } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { useRealtimeDashboard } from '../../hooks/useRealtimeDashboard'
 
 import KPIWidget from './widgets/KPIWidget'
 import AlertsWidget from './widgets/AlertsWidget'
@@ -17,37 +20,34 @@ import KPISidebar from './kpis/KPIWidget'
 import TreasuryForecast from './kpis/TreasuryForecast'
 
 const Dashboard = ({ selectedCompany }) => {
-  const queryClient = useQueryClient()
   const isFetching = useIsFetching()
-  const { label: lastUpdatedLabel, markUpdated } = useLastUpdated(15_000)
+  const { lastUpdated, isRefreshing, forceRefresh } = useRealtimeDashboard(selectedCompany)
 
-  useEffect(() => {
-    if (isFetching === 0) markUpdated()
-  }, [isFetching, markUpdated])
-
-  const handleRefreshAll = () => {
-    queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] })
-    queryClient.invalidateQueries({ queryKey: ['alerts'] })
-    queryClient.invalidateQueries({ queryKey: ['pipeline'] })
-    queryClient.invalidateQueries({ queryKey: ['treasury'] })
-    queryClient.invalidateQueries({ queryKey: ['active-projects'] })
-    queryClient.invalidateQueries({ queryKey: ['kpis-latest'] })
-    queryClient.invalidateQueries({ queryKey: ['treasury-forecast'] })
-  }
+  const lastUpdatedLabel = lastUpdated
+    ? formatDistanceToNow(lastUpdated, { addSuffix: true, locale: fr })
+    : ''
 
   return (
     <div className="space-y-6 ds-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="ds-page-title">Dashboard</h1>
+          <h1 className="ds-page-title">
+            Dashboard
+            {isRefreshing && (
+              <span
+                className="inline-block ml-2 w-2 h-2 rounded-full bg-blue-500 animate-pulse align-middle"
+                title="Actualisation en cours..."
+              />
+            )}
+          </h1>
           <p className="ds-meta mt-0.5">
             Vue d'ensemble {selectedCompany && selectedCompany !== 'all' ? selectedCompany : 'toutes entreprises'}
-            {lastUpdatedLabel && <span className="ml-2 text-gray-400">· {lastUpdatedLabel}</span>}
+            {lastUpdatedLabel && <span className="ml-2 text-gray-400">&middot; {lastUpdatedLabel}</span>}
           </p>
         </div>
         <button
-          onClick={handleRefreshAll}
+          onClick={forceRefresh}
           className="ds-btn ds-btn-ghost"
           disabled={isFetching > 0}
         >

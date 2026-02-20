@@ -4,15 +4,27 @@
  */
 
 import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Wallet, TrendingUp, TrendingDown, AlertCircle, RefreshCw } from 'lucide-react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Wallet, TrendingUp, TrendingDown, AlertCircle, RefreshCw, Loader2, ArrowUpRight, ArrowDownLeft, Clock } from 'lucide-react'
 import { BarChart, Bar, XAxis, ResponsiveContainer, Tooltip } from 'recharts'
+import { formatDistanceToNow, format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import toast from 'react-hot-toast'
 import api from '../../../lib/axios'
 
 const formatCHF = (value) => {
   return new Intl.NumberFormat('fr-CH', {
     style: 'currency',
     currency: 'CHF',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value || 0)
+}
+
+const formatCurrency = (value, currency = 'CHF') => {
+  return new Intl.NumberFormat('fr-CH', {
+    style: 'currency',
+    currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(value || 0)
@@ -55,6 +67,17 @@ const fetchTreasury = async (company) => {
 
     const totalBalance = accounts.reduce((sum, a) => sum + parseFloat(a.balance || a.current_balance || 0), 0)
 
+    // Group balances by currency
+    const currencyMap = {}
+    accounts.forEach(a => {
+      const cur = (a.currency || 'CHF').toUpperCase()
+      const bal = parseFloat(a.balance || a.current_balance || 0)
+      currencyMap[cur] = (currencyMap[cur] || 0) + bal
+    })
+    const currencyBreakdown = Object.entries(currencyMap)
+      .map(([currency, balance]) => ({ currency, balance }))
+      .sort((a, b) => b.balance - a.balance)
+
     const now = new Date()
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
     const recentTx = transactions.filter(t => new Date(t.date) >= weekAgo)
@@ -88,22 +111,77 @@ const fetchTreasury = async (company) => {
       source: 'directus',
       balance: totalBalance,
       accounts,
+      currencyBreakdown,
       inflows,
       outflows,
       dailyData,
       lastSync: null
     }
   } catch {
-    return { source: 'offline', balance: 0, accounts: [], inflows: 0, outflows: 0, dailyData: [] }
+    return { source: 'offline', balance: 0, accounts: [], currencyBreakdown: [], inflows: 0, outflows: 0, dailyData: [] }
   }
 }
 
 const TreasuryWidget = ({ selectedCompany }) => {
+  const queryClient = useQueryClient()
+
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['treasury', selectedCompany],
     queryFn: () => fetchTreasury(selectedCompany),
     staleTime: 1000 * 60 * 2,
     refetchInterval: 1000 * 60 * 5
+  })
+
+  // Fetch 5 latest transactions
+  const { data: recentTransactions = [] } = useQuery({
+    queryKey: ['treasury-recent-tx', selectedCompany],
+    queryFn: async () => {
+      const filter = selectedCompany && selectedCompany !== 'all'
+        ? { owner_company: { _eq: selectedCompany } }
+        : {}
+      const { data: res } = await api.get('/items/bank_transactions', {
+        params: {
+          filter,
+          fields: ['id', 'date', 'description', 'amount', 'currency', 'type'],
+          sort: ['-date'],
+          limit: 5
+        }
+      })
+      return res?.data || []
+    },
+    staleTime: 1000 * 60 * 2
+  })
+
+  // Fetch last sync log
+  const { data: lastSyncData } = useQuery({
+    queryKey: ['treasury-last-sync'],
+    queryFn: async () => {
+      const { data: res } = await api.get('/items/revolut_sync_logs', {
+        params: {
+          fields: ['id', 'synced_at'],
+          sort: ['-synced_at'],
+          limit: 1
+        }
+      })
+      const logs = res?.data || []
+      return logs.length > 0 ? logs[0] : null
+    },
+    staleTime: 1000 * 30
+  })
+
+  // Sync mutation
+  const syncMutation = useMutation({
+    mutationFn: () => api.post('/api/revolut/sync'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['treasury'] })
+      queryClient.invalidateQueries({ queryKey: ['treasury-recent-tx'] })
+      queryClient.invalidateQueries({ queryKey: ['treasury-last-sync'] })
+      queryClient.invalidateQueries({ queryKey: ['banking'] })
+      toast.success('Synchronisation Revolut terminee')
+    },
+    onError: () => {
+      toast.error('Erreur lors de la synchronisation')
+    }
   })
 
   if (isLoading) {
@@ -117,6 +195,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
   const {
     source = 'offline',
     balance = 0,
+    currencyBreakdown = [],
     inflows = 0,
     outflows = 0,
     dailyData = []
@@ -166,6 +245,19 @@ const TreasuryWidget = ({ selectedCompany }) => {
             -{formatCHF(outflows)} (7j)
           </span>
         </div>
+        {/* Per-currency breakdown */}
+        {currencyBreakdown.length > 1 && (
+          <p className="ds-meta mt-2" style={{ fontSize: 12 }}>
+            {currencyBreakdown.map((c, i) => (
+              <span key={c.currency}>
+                {i > 0 && <span style={{ color: 'var(--text-tertiary)', margin: '0 4px' }}>&middot;</span>}
+                <span style={{ fontWeight: 500, color: 'var(--text-secondary)' }}>
+                  {formatCurrency(c.balance, c.currency)}
+                </span>
+              </span>
+            ))}
+          </p>
+        )}
       </div>
 
       {/* Mini bar chart */}
@@ -203,6 +295,92 @@ const TreasuryWidget = ({ selectedCompany }) => {
         }}>
           {runway > 0 ? `${runway} mois` : 'N/A'}
         </span>
+      </div>
+
+      {/* 5 dernieres transactions */}
+      {recentTransactions.length > 0 && (
+        <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
+          <p className="ds-meta mb-2" style={{ fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            5 dernieres transactions
+          </p>
+          <div className="space-y-1">
+            {recentTransactions.map((tx) => {
+              const amount = parseFloat(tx.amount || 0)
+              const isPositive = amount >= 0
+              const txDate = tx.date ? format(new Date(tx.date), 'dd.MM', { locale: fr }) : '--'
+              const desc = tx.description
+                ? (tx.description.length > 28 ? tx.description.slice(0, 28) + '...' : tx.description)
+                : 'Transaction'
+
+              return (
+                <div
+                  key={tx.id}
+                  className="flex items-center gap-2 py-1.5 px-2 rounded-md transition-colors duration-100"
+                  style={{ fontSize: 12 }}
+                >
+                  {isPositive ? (
+                    <ArrowDownLeft size={12} style={{ color: 'var(--success)', flexShrink: 0 }} />
+                  ) : (
+                    <ArrowUpRight size={12} style={{ color: 'var(--danger)', flexShrink: 0 }} />
+                  )}
+                  <span className="ds-meta" style={{ width: 38, flexShrink: 0 }}>{txDate}</span>
+                  <span
+                    className="flex-1 truncate"
+                    style={{ color: 'var(--text-secondary)' }}
+                    title={tx.description}
+                  >
+                    {desc}
+                  </span>
+                  <span
+                    style={{
+                      fontWeight: 600,
+                      flexShrink: 0,
+                      fontVariantNumeric: 'tabular-nums',
+                      color: isPositive ? 'var(--success)' : 'var(--danger)'
+                    }}
+                  >
+                    {isPositive ? '+' : ''}{formatCurrency(amount, tx.currency || 'CHF')}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Derniere sync & Sync maintenant */}
+      <div
+        className="mt-3 pt-3 flex items-center justify-between"
+        style={{ borderTop: '1px solid var(--border-light)', fontSize: 12 }}
+      >
+        <span className="flex items-center gap-1.5" style={{ color: 'var(--text-tertiary)' }}>
+          <Clock size={12} />
+          {lastSyncData?.synced_at ? (
+            <span>
+              Derniere sync : {formatDistanceToNow(new Date(lastSyncData.synced_at), { addSuffix: false, locale: fr })}
+            </span>
+          ) : (
+            <span>Aucune synchronisation</span>
+          )}
+        </span>
+        <button
+          onClick={() => syncMutation.mutate()}
+          disabled={syncMutation.isPending}
+          className="ds-btn ds-btn-ghost !py-1 !px-2"
+          style={{ fontSize: 11, color: 'var(--accent)' }}
+        >
+          {syncMutation.isPending ? (
+            <>
+              <Loader2 size={12} className="animate-spin" />
+              Sync...
+            </>
+          ) : (
+            <>
+              <RefreshCw size={12} />
+              Sync maintenant
+            </>
+          )}
+        </button>
       </div>
 
       {source === 'offline' && (

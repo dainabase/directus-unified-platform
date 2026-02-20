@@ -72,14 +72,14 @@
 | 2.2 | Authentification multi-portails JWT | 🔥 | 🟢 | 4 rôles : superadmin, client, prestataire, revendeur |
 | 2.3 | Dashboard CEO — KPIs depuis vraies données | 🔥 | 🟢 | Collections : kpis, client_invoices, payments, projects |
 | 2.4 | Dashboard CEO — Projets actifs en temps réel | 🔥 | 🟢 | Collection : projects, deliverables |
-| 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🟢 | PipelineWidget connecté Directus |
-| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟢 | TreasuryWidget + TreasuryForecast |
-| 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🟢 | AlertsWidget connecté Directus |
+| 2.5 | Dashboard CEO — Pipeline commercial | 🔥 | 🟢 | PipelineWidget: KPIs + funnel + 5 derniers leads/devis + badges statut |
+| 2.6 | Dashboard CEO — Trésorerie Revolut live | 🔥 | 🟢 | TreasuryWidget: currencies, 5 dernières tx, sync Revolut, dernière sync |
+| 2.7 | Dashboard CEO — Alertes intelligentes | ⚡ | 🟢 | AlertsWidget: 8 règles (factures retard, paiements 48h, projets inactifs 7j, leads sans suivi 3j) |
 | 2.8 | CRM — Companies (connecté Directus) | ⚡ | 🟢 | CompaniesList + CompanyForm DS |
 | 2.9 | CRM — Contacts (connecté Directus) | ⚡ | 🟢 | ContactsList + ContactForm DS |
 | 2.10 | Leads — Liste + pipeline (connecté Directus) | ⚡ | 🟢 | LeadKanban + LeadsList DS |
 | 2.11 | Projets — Liste + détail (connecté Directus) | ⚡ | 🟢 | ProjectsModule DS |
-| 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🟢 | useLastUpdated hook (15s refresh) |
+| 2.12 | WebSocket / polling temps réel (30s) | 📌 | 🟢 | usePolling + useRealtimeDashboard (30s, Page Visibility API, auto-pause) |
 
 **Critère de sortie** : ✅ Le CEO peut voir ses vrais KPIs, projets et trésorerie sur le dashboard sans données mockées.
 

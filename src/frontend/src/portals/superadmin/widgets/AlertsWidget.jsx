@@ -30,16 +30,23 @@ const fetchAlerts = async (company) => {
   const leadsCompanyFilter = company && company !== 'all' ? { company: { _eq: company } } : {}
   const now = new Date()
   const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString()
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString()
   const alerts = []
 
   try {
-    const [overdueInvoices, urgentLeads, openTickets, expiringQuotes, depositPendingProjects] = await Promise.all([
+    const [
+      overdueInvoices, urgentLeads, openTickets, expiringQuotes, depositPendingProjects,
+      pendingPayments, inactiveProjects, unfollowedLeads
+    ] = await Promise.all([
+      // Factures en retard (due_date depasse de > 7 jours)
       api.get('/items/client_invoices', {
         params: {
-          filter: { ...companyFilter, status: { _eq: 'pending' } },
-          fields: ['id', 'invoice_number', 'client_name', 'amount', 'date_created', 'owner_company'],
-          sort: ['-date_created'],
-          limit: 5
+          filter: { ...companyFilter, status: { _in: ['sent', 'pending'] }, due_date: { _lt: sevenDaysAgo } },
+          fields: ['id', 'invoice_number', 'client_name', 'amount', 'due_date', 'date_created', 'owner_company'],
+          sort: ['due_date'],
+          limit: 20
         }
       }).catch(() => ({ data: { data: [] } })),
 
@@ -75,24 +82,58 @@ const fetchAlerts = async (company) => {
           fields: ['id', 'name', 'total_revenue', 'date_created'],
           limit: 5
         }
+      }).catch(() => ({ data: { data: [] } })),
+
+      // Paiements en attente > 48h
+      api.get('/items/payments', {
+        params: {
+          filter: { ...companyFilter, status: { _eq: 'pending' }, date_created: { _lt: twoDaysAgo } },
+          fields: ['id', 'reference', 'amount', 'date_created'],
+          sort: ['date_created'],
+          limit: 10
+        }
+      }).catch(() => ({ data: { data: [] } })),
+
+      // Projets sans activite depuis 7 jours
+      api.get('/items/projects', {
+        params: {
+          filter: { ...companyFilter, status: { _in: ['active', 'in_progress'] }, date_updated: { _lt: sevenDaysAgo } },
+          fields: ['id', 'name', 'date_updated'],
+          sort: ['date_updated'],
+          limit: 10
+        }
+      }).catch(() => ({ data: { data: [] } })),
+
+      // Leads sans suivi depuis 3 jours
+      api.get('/items/leads', {
+        params: {
+          filter: { ...leadsCompanyFilter, status: { _eq: 'new' }, date_updated: { _lt: threeDaysAgo } },
+          fields: ['id', 'first_name', 'last_name', 'date_updated', 'date_created'],
+          sort: ['date_updated'],
+          limit: 10
+        }
       }).catch(() => ({ data: { data: [] } }))
     ])
 
+    // --- Factures en retard (due_date based) ---
     const invoiceData = overdueInvoices.data?.data || []
-    invoiceData.forEach(inv => {
-      const daysOld = Math.floor((now - new Date(inv.date_created)) / (1000 * 60 * 60 * 24))
-      if (daysOld > 30) {
-        alerts.push({
-          id: `inv-${inv.id}`,
-          priority: daysOld > 60 ? 'critical' : 'high',
-          title: `Facture en retard: ${inv.invoice_number}`,
-          description: `${inv.client_name} — ${CHF(inv.amount)} — ${daysOld}j`,
-          date_created: inv.date_created,
-          action: { label: 'Voir facture', path: '/superadmin/invoices/clients' }
-        })
-      }
-    })
+    if (invoiceData.length > 0) {
+      const totalAmount = invoiceData.reduce((sum, inv) => sum + (inv.amount || 0), 0)
+      const maxDaysOverdue = Math.max(...invoiceData.map(inv => {
+        const dueDate = inv.due_date ? new Date(inv.due_date) : new Date(inv.date_created)
+        return Math.floor((now - dueDate) / (1000 * 60 * 60 * 24))
+      }))
+      alerts.push({
+        id: 'inv-overdue-summary',
+        priority: maxDaysOverdue > 30 ? 'critical' : 'high',
+        title: `${invoiceData.length} facture(s) en retard — Total ${CHF(totalAmount)}`,
+        description: `Retard max: ${maxDaysOverdue}j — ${invoiceData.map(i => i.invoice_number).slice(0, 3).join(', ')}${invoiceData.length > 3 ? '...' : ''}`,
+        date_created: invoiceData[0]?.due_date || invoiceData[0]?.date_created,
+        action: { label: 'Voir factures', path: '/superadmin/finance/invoices' }
+      })
+    }
 
+    // --- Leads urgents ---
     const leadData = urgentLeads.data?.data || []
     leadData.forEach(lead => {
       alerts.push({
@@ -105,6 +146,7 @@ const fetchAlerts = async (company) => {
       })
     })
 
+    // --- Tickets support ---
     const ticketData = openTickets.data?.data || []
     ticketData.forEach(ticket => {
       alerts.push({
@@ -117,6 +159,7 @@ const fetchAlerts = async (company) => {
       })
     })
 
+    // --- Devis expirants ---
     const quoteData = expiringQuotes.data?.data || []
     quoteData.forEach(quote => {
       const validUntil = new Date(quote.valid_until)
@@ -134,6 +177,7 @@ const fetchAlerts = async (company) => {
       })
     })
 
+    // --- Projets en attente d'acompte ---
     const projectData = depositPendingProjects.data?.data || []
     projectData.forEach(project => {
       alerts.push({
@@ -143,6 +187,45 @@ const fetchAlerts = async (company) => {
         description: `Montant projet: ${CHF(project.total_revenue)}`,
         date_created: project.date_created,
         action: { label: 'Voir projet', path: '/superadmin/projects' }
+      })
+    })
+
+    // --- Paiements en attente > 48h ---
+    const paymentData = pendingPayments.data?.data || []
+    paymentData.forEach(payment => {
+      alerts.push({
+        id: `pay-${payment.id}`,
+        priority: 'high',
+        title: `Paiement en attente: ${payment.reference || `#${payment.id}`}`,
+        description: `${CHF(payment.amount)} — en attente depuis ${formatDistanceToNow(new Date(payment.date_created), { locale: fr })}`,
+        date_created: payment.date_created,
+        action: { label: 'Voir paiement', path: '/superadmin/finance/banking' }
+      })
+    })
+
+    // --- Projets sans activite depuis 7 jours ---
+    const inactiveProjectData = inactiveProjects.data?.data || []
+    inactiveProjectData.forEach(project => {
+      alerts.push({
+        id: `proj-inactive-${project.id}`,
+        priority: 'medium',
+        title: `Projet sans MAJ: ${project.name}`,
+        description: `Derniere MAJ: ${formatDistanceToNow(new Date(project.date_updated), { addSuffix: true, locale: fr })}`,
+        date_created: project.date_updated,
+        action: { label: 'Voir projet', path: '/superadmin/projects' }
+      })
+    })
+
+    // --- Leads sans suivi depuis 3 jours ---
+    const unfollowedLeadData = unfollowedLeads.data?.data || []
+    unfollowedLeadData.forEach(lead => {
+      alerts.push({
+        id: `lead-nofollow-${lead.id}`,
+        priority: 'low',
+        title: `Lead sans suivi: ${lead.first_name} ${lead.last_name}`,
+        description: `Aucun suivi depuis ${formatDistanceToNow(new Date(lead.date_updated), { locale: fr })}`,
+        date_created: lead.date_updated || lead.date_created,
+        action: { label: 'Voir lead', path: '/superadmin/leads' }
       })
     })
 

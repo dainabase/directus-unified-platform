@@ -6,18 +6,21 @@
 import React from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, FileText, Package, ShoppingCart,
-  Users, BarChart3, LogOut, ChevronRight, UserCircle
+  LayoutDashboard, FileText, Kanban, UserPlus,
+  Users, BarChart3, LogOut, ChevronRight, UserCircle,
+  DollarSign, Megaphone
 } from 'lucide-react'
 import { useAuthStore } from '../../../stores/authStore'
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, path: '/revendeur' },
-  { id: 'quotes', label: 'Devis', icon: FileText, path: '/revendeur/quotes' },
-  { id: 'orders', label: 'Commandes', icon: ShoppingCart, path: '/revendeur/orders' },
-  { id: 'catalogue', label: 'Catalogue', icon: Package, path: '/revendeur/catalogue' },
+  { id: 'pipeline', label: 'Pipeline', icon: Kanban, path: '/revendeur/pipeline' },
+  { id: 'leads', label: 'Leads', icon: UserPlus, path: '/revendeur/leads' },
   { id: 'clients', label: 'Mes Clients', icon: Users, path: '/revendeur/clients' },
-  { id: 'analytics', label: 'Statistiques', icon: BarChart3, path: '/revendeur/analytics' }
+  { id: 'commissions', label: 'Commissions', icon: DollarSign, path: '/revendeur/commissions' },
+  { id: 'devis', label: 'Devis', icon: FileText, path: '/revendeur/devis' },
+  { id: 'marketing', label: 'Marketing', icon: Megaphone, path: '/revendeur/marketing' },
+  { id: 'rapports', label: 'Rapports', icon: BarChart3, path: '/revendeur/rapports' }
 ]
 
 const ACCENT = '#0071E3'

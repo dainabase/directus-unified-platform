@@ -43,10 +43,17 @@ const ProviderKnowledgeArticle = lazy(() => import('./portals/prestataire/knowle
 const ProviderProfile = lazy(() => import('./portals/prestataire/profile/ProfilePage'))
 const ProviderUploadInvoice = lazy(() => import('./portals/prestataire/invoices/UploadInvoicePage'))
 
-// Revendeur Portal
+// Revendeur Portal (Phase 5)
 const RevendeurLayout = lazy(() => import('./portals/revendeur/layout/RevendeurLayout'))
 const RevendeurDashboard = lazy(() => import('./portals/revendeur/RevendeurDashboard'))
-const RevendeurPlaceholder = lazy(() => import('./portals/revendeur/pages/PlaceholderPage'))
+const PipelineRevendeur = lazy(() => import('./portals/revendeur/PipelineRevendeur'))
+const LeadsRevendeur = lazy(() => import('./portals/revendeur/LeadsRevendeur'))
+const ClientsRevendeur = lazy(() => import('./portals/revendeur/ClientsRevendeur'))
+const ClientDetailRevendeur = lazy(() => import('./portals/revendeur/ClientDetailRevendeur'))
+const CommissionsRevendeur = lazy(() => import('./portals/revendeur/CommissionsRevendeur'))
+const DevisRevendeur = lazy(() => import('./portals/revendeur/DevisRevendeur'))
+const MarketingRevendeur = lazy(() => import('./portals/revendeur/MarketingRevendeur'))
+const RapportsRevendeur = lazy(() => import('./portals/revendeur/RapportsRevendeur'))
 
 // Client Portal (Phase C)
 const ClientAuth = lazy(() => import('./portals/client/auth/ClientAuth'))
@@ -325,18 +332,21 @@ function App() {
             </Route>
           </Route>
 
-          {/* ── Revendeur portal ── */}
+          {/* ── Revendeur portal (Phase 5) ── */}
           <Route path="/revendeur" element={
             <ProtectedRoute allowedPortals={['revendeur']}>
               <RevendeurLayout />
             </ProtectedRoute>
           }>
             <Route index element={<RevendeurDashboard />} />
-            <Route path="quotes" element={<RevendeurPlaceholder title="Devis" description="Module devis revendeur — Phase 6" />} />
-            <Route path="orders" element={<RevendeurPlaceholder title="Commandes" description="Module commandes — Phase 6" />} />
-            <Route path="catalogue" element={<RevendeurPlaceholder title="Catalogue" description="Catalogue produits — Phase 6" />} />
-            <Route path="clients" element={<RevendeurPlaceholder title="Mes Clients" description="Gestion clients — Phase 6" />} />
-            <Route path="analytics" element={<RevendeurPlaceholder title="Statistiques" description="Analytiques revendeur — Phase 6" />} />
+            <Route path="pipeline" element={<PipelineRevendeur />} />
+            <Route path="leads" element={<LeadsRevendeur />} />
+            <Route path="clients" element={<ClientsRevendeur />} />
+            <Route path="clients/:id" element={<ClientDetailRevendeur />} />
+            <Route path="commissions" element={<CommissionsRevendeur />} />
+            <Route path="devis" element={<DevisRevendeur />} />
+            <Route path="marketing" element={<MarketingRevendeur />} />
+            <Route path="rapports" element={<RapportsRevendeur />} />
           </Route>
 
           {/* Fallback */}

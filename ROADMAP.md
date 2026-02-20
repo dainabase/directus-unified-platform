@@ -130,20 +130,22 @@
 
 ---
 
-## PHASE 5 — PORTAIL REVENDEUR COMPLET ⚡
+## PHASE 5 — PORTAIL REVENDEUR COMPLET ✅
 
-**Durée estimée** : 1 semaine
+**Complété** : 2026-02-20 — 10 JSX files, ~4200 lignes, build OK
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
-| 5.1 | Dashboard revendeur — données réelles | 🔥 | 🟡 | |
-| 5.2 | Pipeline revendeur (Kanban + liste) | ⚡ | 🔵 | Récupérer ancien 59KB |
-| 5.3 | Leads revendeur | ⚡ | 🔵 | Récupérer ancien 58KB |
-| 5.4 | Clients revendeur + détail | ⚡ | 🔵 | Récupérer ancien 51KB + 69KB |
-| 5.5 | **Module 25** — Commissions | ⚡ | 🔵 | Récupérer ancien 55KB |
-| 5.6 | Devis revendeur | ⚡ | 🟡 | quotes/ existant → compléter |
-| 5.7 | Marketing revendeur (assets + campagnes) | 📌 | 🔵 | Récupérer ancien 54KB |
-| 5.8 | Rapports revendeur | 📌 | 🔵 | Récupérer ancien 52KB |
+| 5.1 | Dashboard revendeur — données réelles | 🔥 | 🟢 | 364 lignes — 4 KPIs, top 5 deals, commissions mock, Recharts BarChart, polling 60s |
+| 5.2 | Pipeline revendeur (Kanban + liste) | ⚡ | 🟢 | 489 lignes — 4 colonnes Kanban, toggle list/kanban, status mutation, search + priority filter |
+| 5.3 | Leads revendeur | ⚡ | 🟢 | 655 lignes — table + add modal (react-hook-form), archive, convert to devis, assigned_to filter |
+| 5.4 | Clients revendeur + détail | ⚡ | 🟢 | ClientsRevendeur + ClientDetailRevendeur — won leads → companies, tabs devis/factures/info |
+| 5.5 | **Module 25** — Commissions | ⚡ | 🟢 | 237 lignes — MOCK data (collection inexistante), 3 KPIs, table commissions, TODO Directus |
+| 5.6 | Devis revendeur | ⚡ | 🟢 | 368 lignes — quotes table, status filter pills, duplicate mutation, relance action |
+| 5.7 | Marketing revendeur (assets + campagnes) | 📌 | 🟢 | 264 lignes — Directus /files API, file type detection, 3 mock campaign templates (Mautic TODO) |
+| 5.8 | Rapports revendeur | 📌 | 🟢 | 575 lignes — Recharts ComposedChart, month/year selector, CSV export UTF-8 BOM |
+
+**Critère de sortie** : ✅ Portail revendeur complet avec 9 routes, sidebar 8 entrées. Build production OK.
 
 ---
 
@@ -228,12 +230,12 @@
 | Phase 2 — Données réelles | 12 | ✅ 100% complété (Fév 2026) |
 | Phase 3 — Finance complète | 11 | ✅ 100% complété (2026-02-20) |
 | Phase 4 — Prestataire | 9 | ✅ 100% complété (2026-02-20) |
-| Phase 5 — Revendeur | 8 | 🟡 ~15% |
+| Phase 5 — Revendeur | 8 | ✅ 100% complété (2026-02-20) |
 | Phase 6 — Client | 9 | 🟡 ~30% |
 | Phase 7 — Automation & IA | 12 | 🔴 ~5% |
 | Phase 8 — Qualité | 9 | 🟡 ~10% |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~55% global** |
+| **TOTAL** | **96 stories** | **~62% global** |
 
 ---
 

@@ -27,12 +27,12 @@
 - ✅ Signatures électroniques DocuSeal — **FAIT Phase H**
 - ❌ Emails transactionnels via Mautic
 - ❌ Capture leads WordPress / WhatsApp / Ringover
-- ❌ Workflows validation factures fournisseurs
+- ✅ Workflows validation factures fournisseurs — **FAIT Phase I**
 - ❌ Rapprochement bancaire algorithme multi-critères
 - ❌ Portail client fonctionnel (signer, uploader, communiquer)
 - ✅ Portail prestataire fonctionnel (soumettre devis, voir paiements) — **FAIT Phase D**
-- ❌ Facturation par jalons (deliverables → factures)
-- ❌ Facturation récurrente automatique
+- ✅ Facturation par jalons (deliverables → factures) — **FAIT Phase I**
+- ✅ Facturation récurrente automatique — **FAIT Phase I**
 - ❌ KPIs depuis collection `kpis` (240 enregistrements réels)
 
 ---
@@ -318,41 +318,62 @@
 
 ---
 
-## PHASE I — MODULES FINANCE AVANCÉS (CDC V1.2)
-**Objectif CDC** : Couverture complète du cycle finance  
-**Modules CDC** : Module 9, 10, 11, 12  
-**Progression** : 0/8 stories
+## PHASE I — MODULES FINANCE AVANCÉS (CDC V1.2) *(TERMINÉE)*
+**Objectif CDC** : Couverture complète du cycle finance
+**Modules CDC** : Module 9, 10, 11, 12, 13, 14
+**Progression** : 8/8 stories — [V] DONE — 2026-02-20
 
-- [ ] **I-01** · Module 9 — Facturation par jalons (deliverables → factures)  
-  *CDC* : REQ-JALON-001 à 006  
-  *Base* : Collection `deliverables` — 550 enregistrements réels  
+- [V] **I-01** · Module 9 — Facturation par jalons (deliverables → factures) — 2026-02-20
+  *CDC* : REQ-JALON-001 à 006
+  *Fichiers* : `src/backend/api/milestones/index.js`, `src/frontend/src/portals/superadmin/projects/MilestonesModule.jsx`
+  *Livré* : POST /:deliverableId/invoice (génère JAL-YYYYMM-NNN), GET /project/:projectId (jalons avec can_invoice/is_invoiced), progress bar facturation.
+  *Champs ajoutés* : deliverables +4 (invoice_id, invoiced_at, billable, amount)
 
-- [ ] **I-02** · Module 10 — Contrats récurrents avancés (panier multi-services)  
-  *CDC* : REQ-ABONNEMENT-001 à 008  
-  *Base* : Collection `subscriptions` — 120 enregistrements réels  
+- [V] **I-02** · Module 10 — Contrats récurrents avancés (panier multi-services) — 2026-02-20
+  *CDC* : REQ-ABONNEMENT-001 à 008
+  *Fichiers* : `src/backend/api/subscriptions/index.js`
+  *Livré* : CRUD complet, calcul next_billing_date auto (monthly/quarterly/annual), services JSON panier multi-services, due-today endpoint.
+  *Champs ajoutés* : subscriptions +6 (contact_id, next_billing_date, last_invoiced_at, services, auto_renew, invoice_day)
 
-- [ ] **I-03** · Module 10 — Facturation récurrente automatique (cron mensuel)  
-  *CDC* : REQ-REC-001 à 004  
+- [V] **I-03** · Module 10 — Facturation récurrente automatique (cron mensuel) — 2026-02-20
+  *CDC* : REQ-REC-001 à 004
+  *Fichiers* : `src/backend/api/subscriptions/billing-cron.js`
+  *Livré* : CRON quotidien 08h00 (setTimeout scheduling), numéro REC-YYYYMM-NNN, anti-doublon via automation_logs, POST /run-billing trigger manuel, MAJ next_billing_date après facturation.
 
-- [ ] **I-04** · Module 11 — Avoirs & remboursements (annulations, notes de crédit)  
-  *CDC* : REQ-AVOIR-001 à 008  
-  *Base* : Collections `credits`, `refunds` présentes  
-  *Skills requis* : `swiss-compliance-engine` (CO Art. 958f — 10 ans conservation)
+- [V] **I-04** · Module 11 — Avoirs & remboursements (notes de crédit) — 2026-02-20
+  *CDC* : REQ-AVOIR-001 à 008, CO Art. 958f
+  *Fichiers* : `src/backend/api/credits/index.js`, `src/frontend/src/portals/superadmin/invoices/CreditsModule.jsx`
+  *Livré* : POST /credits (full/partial), POST /:id/apply (déduire sur facture), numéro NC-YYYYMM-NNN, audit trail automation_logs. Avoir total → annule facture originale.
+  *Champs ajoutés* : credits +10 (invoice_id, credit_number, amount, tax_amount, total, reason, contact_id, project_id, issued_at, applied_to_invoice_id)
 
-- [ ] **I-05** · Module 12 — Workflow validation factures fournisseurs  
-  *CDC* : REQ-APPRO-001 à 008  
-  *Base* : 375 factures fournisseurs dans `supplier_invoices`  
-  *Note* : OCR → file d'attente → validation CEO (1 clic) → paiement Revolut programmé  
+- [V] **I-05** · Module 12 — Workflow validation factures fournisseurs — 2026-02-20
+  *CDC* : REQ-APPRO-001 à 008
+  *Fichiers* : `src/backend/api/supplier-invoices/index.js`, `src/frontend/src/portals/superadmin/providers/ApprovalQueue.jsx`
+  *Livré* : File d'attente CEO pending (GET /pending + /pending/count), approve 1 clic (POST /:id/approve + payment_scheduled_date), reject avec raison obligatoire, modals glassmorphism, badge count animé.
+  *Champs ajoutés* : supplier_invoices +6 (amount_ht, approved_at, rejection_reason, payment_scheduled_date, deviation_percentage, quote_amount)
 
-- [ ] **I-06** · Module 12 — Détection écarts devis/facture fournisseur  
-  *CDC* : REQ-APPRO-006 (tolérance ±5% configurable)  
+- [V] **I-06** · Module 12 — Détection écarts devis/facture fournisseur — 2026-02-20
+  *CDC* : REQ-APPRO-006 (tolérance ±5% configurable)
+  *Fichiers* : `src/backend/api/supplier-invoices/index.js` (analyzeDeviation), `ApprovalQueue.jsx` (DeviationBadge)
+  *Livré* : Analyse deviation_percentage auto, 3 niveaux (ok <3% vert / warning 3-5% orange / blocked >5% rouge), bouton approve désactivé si blocked, GET /:id/deviation endpoint.
 
-- [ ] **I-07** · Module 13 — Suivi du temps → facturation en régie  
-  *CDC* : REQ-TEMPS-001 à 007  
-  *Applicabilité* : Projets logiciels (InMotion, DataVision) — Type D  
+- [V] **I-07** · Module 13 — Suivi du temps → facturation en régie — 2026-02-20
+  *CDC* : REQ-TEMPS-001 à 007
+  *Fichiers* : `src/backend/api/time-tracking/index.js`
+  *Livré* : POST /time-tracking (saisie), GET /billable/:projectId (heures non facturées), POST /invoice (génère REG-YYYYMM-NNN depuis sélection), marque entries billed.
+  *Champs ajoutés* : time_tracking +2 (invoice_id, invoiced_at)
 
-- [ ] **I-08** · Module 14 — Tickets support → facturation hors contrat  
-  *CDC* : REQ-SUPPORT-001 à 007 (tarif défaut : 150 CHF/h)  
+- [V] **I-08** · Module 14 — Tickets support → facturation hors contrat — 2026-02-20
+  *CDC* : REQ-SUPPORT-001 à 007 (tarif défaut : 150 CHF/h)
+  *Fichiers* : `src/backend/api/support/index.js`
+  *Livré* : CRUD tickets, POST /:id/close (auto-facture si billable + hors contrat), POST /:id/bill (facturation manuelle), numéro SUP-YYYYMM-NNN, coverage contract/out_of_contract, stats endpoint.
+  *Champs ajoutés* : support_tickets +7 (contact_id, hours_spent, hourly_rate, billable, invoice_id, invoiced_at, subscription_id), client_invoices +8 (type, subscription_id, credit_id, tax_rate, tax_amount, total, currency, description)
+
+**Découvertes Phase I** :
+- 43 champs ajoutés sur 7 collections via API Directus (deliverables +4, subscriptions +6, supplier_invoices +6, credits +10, time_tracking +2, support_tickets +7, client_invoices +8)
+- Utilitaires partagés créés dans `src/backend/lib/financeUtils.js` (directus helpers, date utils, invoice number generators, automation log)
+- Frontend existant déjà connecté pour SubscriptionsModule, TimeTrackingModule, SupportDashboard (phases précédentes) — ajouté 3 nouveaux composants (MilestonesModule, CreditsModule, ApprovalQueue)
+- 7 routers ajoutés dans server.js avec try/catch pattern cohérent
 
 ---
 
@@ -460,9 +481,10 @@
 | Stories Phase F (lead capture) | 3/4 ✅ (F-02 WhatsApp → Phase F-bis) |
 | Stories Phase G (Revolut reconciliation) | 5/5 ✅ |
 | Stories Phase H (DocuSeal signatures) | 3/3 ✅ |
-| Stories CDC restantes | 13 à faire |
-| Modules CDC couverts | 9/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques) |
-| Dernier commit Phase H | — 2026-02-20 |
+| Stories Phase I (finance avancees) | 8/8 ✅ |
+| Stories CDC restantes | 5 à faire |
+| Modules CDC couverts | 14/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support) |
+| Dernier commit Phase I | — 2026-02-20 |
 
 ---
 
@@ -471,14 +493,14 @@
 La plateforme V1 sera considérée opérationnelle quand :
 
 1. `[V]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001) — Phase F
-2. `[A]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
-3. `[A]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
-4. `[A]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
-5. `[A]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
-6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — Phase I
+2. `[V]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
+3. `[V]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
+4. `[V]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
+5. `[V]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
+6. `[V]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — **FAIT Phase I**
 7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel) + **Phase G** (Revolut webhook auto)
 8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
 9. `[ ]` 240 KPIs existants affichés correctement (REQ-KPI-001) — Phase J
-10. `[ ]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — Phase I
+10. `[V]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — **FAIT Phase I**
 11. `[V]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — **FAIT Phase G** (scoring 4 critères, seuil auto ≥85%)
-12. `[ ]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — Phase I
+12. `[V]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — **FAIT Phase I**

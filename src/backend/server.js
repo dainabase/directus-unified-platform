@@ -116,6 +116,70 @@ try {
 }
 
 // ============================================
+// API PHASE I — FINANCE AVANCEES (Milestones, Subscriptions, Credits, Supplier Invoices, Time Tracking, Support)
+// ============================================
+
+try {
+  const milestonesRouter = await import('./api/milestones/index.js');
+  app.use('/api/milestones', milestonesRouter.default);
+  console.log('[api] Milestones connected: /api/milestones (I-01)');
+} catch (err) {
+  console.warn('[api] Milestones not available:', err.message);
+}
+
+try {
+  const subscriptionsApiRouter = await import('./api/subscriptions/index.js');
+  app.use('/api/subscriptions', subscriptionsApiRouter.default);
+  console.log('[api] Subscriptions API connected: /api/subscriptions (I-02)');
+} catch (err) {
+  console.warn('[api] Subscriptions API not available:', err.message);
+}
+
+try {
+  const billingCronRouter = await import('./api/subscriptions/billing-cron.js');
+  app.use('/api/subscriptions', billingCronRouter.default);
+  const { startRecurringBillingCron } = billingCronRouter;
+  if (startRecurringBillingCron) {
+    startRecurringBillingCron();
+    console.log('[api] Recurring billing CRON started (I-03)');
+  }
+} catch (err) {
+  console.warn('[api] Billing CRON not available:', err.message);
+}
+
+try {
+  const creditsRouter = await import('./api/credits/index.js');
+  app.use('/api/credits', creditsRouter.default);
+  console.log('[api] Credits connected: /api/credits (I-04)');
+} catch (err) {
+  console.warn('[api] Credits not available:', err.message);
+}
+
+try {
+  const supplierInvoicesRouter = await import('./api/supplier-invoices/index.js');
+  app.use('/api/supplier-invoices', supplierInvoicesRouter.default);
+  console.log('[api] Supplier invoices connected: /api/supplier-invoices (I-05/I-06)');
+} catch (err) {
+  console.warn('[api] Supplier invoices not available:', err.message);
+}
+
+try {
+  const timeTrackingApiRouter = await import('./api/time-tracking/index.js');
+  app.use('/api/time-tracking', timeTrackingApiRouter.default);
+  console.log('[api] Time tracking API connected: /api/time-tracking (I-07)');
+} catch (err) {
+  console.warn('[api] Time tracking API not available:', err.message);
+}
+
+try {
+  const supportApiRouter = await import('./api/support/index.js');
+  app.use('/api/support', supportApiRouter.default);
+  console.log('[api] Support API connected: /api/support (I-08)');
+} catch (err) {
+  console.warn('[api] Support API not available:', err.message);
+}
+
+// ============================================
 // API LEAD CAPTURE - Phase F (WordPress, IMAP, Ringover)
 // ============================================
 

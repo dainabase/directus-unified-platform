@@ -102,6 +102,11 @@ const SettingsDashboard = lazy(() => import('./portals/superadmin/settings/Setti
 // Providers Module (Phase D-07)
 const ProvidersModule = lazy(() => import('./portals/superadmin/providers/ProvidersModule'))
 
+// Phase I — Finance Avancees
+const MilestonesModule = lazy(() => import('./portals/superadmin/projects/MilestonesModule'))
+const CreditsModule = lazy(() => import('./portals/superadmin/invoices/CreditsModule'))
+const ApprovalQueue = lazy(() => import('./portals/superadmin/providers/ApprovalQueue'))
+
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
   return (
@@ -218,6 +223,11 @@ function App() {
 
                   {/* Prestataires (Phase D-07) */}
                   <Route path="providers" element={<ProvidersModule selectedCompany={selectedCompany} />} />
+                  <Route path="providers/approval" element={<ApprovalQueue selectedCompany={selectedCompany} />} />
+
+                  {/* Phase I — Finance Avancees */}
+                  <Route path="milestones" element={<MilestonesModule selectedCompany={selectedCompany} />} />
+                  <Route path="invoices/credits" element={<CreditsModule selectedCompany={selectedCompany} />} />
 
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />

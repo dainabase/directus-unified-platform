@@ -26,7 +26,7 @@
 - ❌ Activation automatique projet à paiement Revolut
 - ✅ Signatures électroniques DocuSeal — **FAIT Phase H**
 - ❌ Emails transactionnels via Mautic
-- ❌ Capture leads WordPress / WhatsApp / Ringover
+- ✅ Capture leads WordPress / WhatsApp / Ringover — **FAIT Phase F** (4/4 canaux)
 - ✅ Workflows validation factures fournisseurs — **FAIT Phase I**
 - ❌ Rapprochement bancaire algorithme multi-critères
 - ❌ Portail client fonctionnel (signer, uploader, communiquer)
@@ -226,19 +226,20 @@
 
 ---
 
-## PHASE F — CAPTURE LEADS MULTICANAL *(3/4 stories — F-02 reporté Phase F-bis)*
+## PHASE F — CAPTURE LEADS MULTICANAL *(TERMINÉE)*
 **Objectif CDC** : Leads créés automatiquement depuis tous les canaux
 **Modules CDC** : Module 1 (Sources entrantes)
-**Progression** : 3/4 stories — [V] DONE — 2026-02-20
+**Progression** : 4/4 stories — [V] DONE — 2026-02-20
 
 - [V] **F-01** · WordPress → Lead Directus (webhook Fluent Form Pro #17) — 2026-02-20
   *CDC* : REQ-LEAD-001
   *Fichiers* : `src/backend/api/leads/wp-webhook.js`, `lead-creator.js`, `index.js`
-  *Livré* : POST /api/leads/wp-webhook — validation HMAC optionnelle, mapping flexible champs Fluent Form, anti-doublon 30min, upsert lead par email.
+  *Livré* : POST /api/leads/wp-webhook — validation HMAC optionnelle, mapping flexible champs Fluent Form, anti-doublon 30min, upsert lead par email. Qualification score 1-5 (budget, date, completude, type). lead_activity auto. Email confirmation best-effort.
 
-- [ ] **F-02** · WhatsApp Business → Lead Directus (API Meta + LLM résumé) — **REPORTÉ Phase F-bis**
+- [V] **F-02** · WhatsApp Business → Lead Directus (API Meta + LLM Claude/OpenAI) — 2026-02-20
   *CDC* : REQ-LEAD-002
-  *Dépendance* : Compte WhatsApp Business API non disponible actuellement
+  *Fichiers* : `src/backend/api/leads/whatsapp-webhook.js`, `llm-lead-extractor.js`, `index.js`, `src/frontend/src/portals/superadmin/leads/WhatsAppInbox.jsx`
+  *Livré* : GET /api/leads/whatsapp-webhook (Meta verification hub.mode), POST /api/leads/whatsapp-webhook (message reception), LLM extraction Claude Haiku primary + GPT-4o-mini fallback, stockage whatsapp_messages, lead_activity auto, anti-doublon par message_id, frontend inbox monochromatic (zinc/slate), route /superadmin/leads/whatsapp.
 
 - [V] **F-03** · Email info@hypervisual.ch → Lead Directus (LLM extraction GPT-4o-mini) — 2026-02-20
   *CDC* : REQ-LEAD-004
@@ -249,6 +250,13 @@
   *CDC* : REQ-LEAD-003
   *Fichiers* : `src/backend/api/leads/ringover-polling.js`
   *Livré* : Polling 15min API Ringover v2 → analyse LLM des métadonnées appels → lead si pertinent. Skip numéros internes (+4178327*). Anti-doublon par call_id.
+
+**Découvertes Phase F** :
+- Service LLM partagé créé (`llm-lead-extractor.js`) — Claude Haiku primary, GPT-4o-mini fallback
+- 3 extracteurs spécialisés : WhatsApp, Email, Appels (scoring 1-5, urgence, langue)
+- WhatsApp webhook suit pattern Meta standard (GET verify + POST receive)
+- `formatPhone()` normalise les numéros WhatsApp (ajoute +)
+- Frontend WhatsApp Inbox utilise design monochromatic (zinc/slate) distinct du glassmorphism
 
 ---
 
@@ -491,15 +499,15 @@
 | Stories Phase C (portail client) | 8/8 ✅ |
 | Stories Phase D (portail prestataire) | 7/7 ✅ |
 | Stories Phase E (email automation) | 6/6 ✅ |
-| Stories Phase F (lead capture) | 3/4 ✅ (F-02 WhatsApp → Phase F-bis) |
+| Stories Phase F (lead capture) | 4/4 ✅ |
 | Stories Phase G (Revolut reconciliation) | 5/5 ✅ |
 | Stories Phase H (DocuSeal signatures) | 3/3 ✅ |
 | Stories Phase I (finance avancees) | 8/8 ✅ |
 | Stories Phase J (KPI dashboard CEO) | 4/4 ✅ |
-| Stories CDC restantes | 1 (F-02 WhatsApp reporté) |
+| Stories CDC restantes | 0 |
 | Modules CDC couverts | 16/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support, KPI Dashboard CEO) |
 | Dernier commit Phase J | — 2026-02-20 |
-| **V1 STATUS** | **95/96 stories — COMPLETE** |
+| **V1 STATUS** | **96/96 stories — COMPLETE** |
 
 ---
 

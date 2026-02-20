@@ -91,13 +91,13 @@ export default function CreditsModule({ selectedCompany }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-purple-400" />
+          <CreditCard className="w-5 h-5 text-blue-400" />
           <h2 className="text-white font-semibold">Avoirs & Notes de Credit</h2>
           <span className="text-gray-400 text-sm">({credits.length})</span>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
+          className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
         >
           <Plus className="w-4 h-4" /> Emettre un avoir
         </button>
@@ -160,7 +160,7 @@ export default function CreditsModule({ selectedCompany }) {
           <button
             onClick={() => createMut.mutate(form)}
             disabled={!form.invoice_id || !form.reason || createMut.isPending}
-            className="bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            className="bg-[#0071E3] hover:bg-blue-700 disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
           >
             {createMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
             Emettre l'avoir
@@ -172,7 +172,7 @@ export default function CreditsModule({ selectedCompany }) {
       <div className="bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center p-8">
-            <Loader2 className="w-6 h-6 text-purple-400 animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
           </div>
         ) : credits.length === 0 ? (
           <p className="text-gray-400 text-sm p-6 text-center">Aucun avoir emis.</p>

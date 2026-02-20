@@ -2,7 +2,7 @@ import React from 'react'
 import {
   UserPlus, Users, Target, TrendingUp, DollarSign, Star, CheckCircle, XCircle, Loader2
 } from 'lucide-react'
-import { GlassCard, Badge } from '../../../../components/ui'
+import { Badge } from '../../../../components/ui'
 
 const LeadStats = ({ stats, isLoading }) => {
   const formatCurrency = (value) => {
@@ -31,7 +31,7 @@ const LeadStats = ({ stats, isLoading }) => {
       label: 'Qualifiés',
       value: stats?.qualified ?? 0,
       icon: Target,
-      color: 'purple'
+      color: 'blue'
     },
     {
       label: 'Conversion',
@@ -49,7 +49,7 @@ const LeadStats = ({ stats, isLoading }) => {
       label: 'Score Moyen',
       value: stats?.avgScore ?? 0,
       icon: Star,
-      color: 'orange'
+      color: 'amber'
     },
     {
       label: 'Gagnés',
@@ -69,10 +69,9 @@ const LeadStats = ({ stats, isLoading }) => {
     blue: 'bg-blue-100 text-blue-600',
     cyan: 'bg-cyan-100 text-cyan-600',
     green: 'bg-green-100 text-green-600',
-    purple: 'bg-purple-100 text-purple-600',
     emerald: 'bg-emerald-100 text-emerald-600',
     yellow: 'bg-yellow-100 text-yellow-600',
-    orange: 'bg-orange-100 text-orange-600',
+    amber: 'bg-amber-100 text-amber-600',
     red: 'bg-red-100 text-red-600'
   }
 
@@ -80,11 +79,11 @@ const LeadStats = ({ stats, isLoading }) => {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
         {statCards.map((_, index) => (
-          <GlassCard key={index} className="p-4 animate-pulse">
+          <div key={index} className="ds-card p-4 animate-pulse">
             <div className="w-10 h-10 rounded-lg bg-gray-200 mb-3" />
             <div className="h-8 bg-gray-200 rounded w-16 mb-2" />
             <div className="h-4 bg-gray-200 rounded w-20" />
-          </GlassCard>
+          </div>
         ))}
       </div>
     )
@@ -95,7 +94,7 @@ const LeadStats = ({ stats, isLoading }) => {
       {statCards.map((stat, index) => {
         const Icon = stat.icon
         return (
-          <GlassCard key={index} className="p-4 hover:shadow-lg transition-shadow">
+          <div key={index} className="ds-card p-4 hover:shadow-lg transition-shadow">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${colorClasses[stat.color]}`}>
               <Icon size={20} />
             </div>
@@ -103,7 +102,7 @@ const LeadStats = ({ stats, isLoading }) => {
               {stat.value}
             </p>
             <p className="text-sm text-gray-600">{stat.label}</p>
-          </GlassCard>
+          </div>
         )
       })}
     </div>

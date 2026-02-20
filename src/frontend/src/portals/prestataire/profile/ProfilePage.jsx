@@ -106,7 +106,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
     <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building className="w-5 h-5 text-purple-600" />
+          <Building className="w-5 h-5 text-blue-600" />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Informations générales
           </h3>
@@ -121,7 +121,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         ) : (
           <button
             onClick={handleSubmit(onSubmit)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
           >
             <Save size={14} /> Sauvegarder
           </button>
@@ -272,7 +272,7 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
   return (
     <div className="ds-card p-6">
       <div className="flex items-center gap-2 mb-4">
-        <Shield className="w-5 h-5 text-purple-600" />
+        <Shield className="w-5 h-5 text-blue-600" />
         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
           Documents
         </h3>
@@ -322,7 +322,7 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
                   <button
                     onClick={() => triggerUpload(docType.key)}
                     disabled={uploadMutation.isPending}
-                    className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors disabled:opacity-50"
+                    className="flex items-center gap-1 px-3 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors disabled:opacity-50"
                   >
                     {uploadMutation.isPending && uploadType === docType.key ? (
                       <Loader2 size={12} className="animate-spin" />
@@ -407,14 +407,14 @@ const SpecialtiesSection = ({ profile, onSave }) => {
     <div className="ds-card p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Tag className="w-5 h-5 text-purple-600" />
+          <Tag className="w-5 h-5 text-blue-600" />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Spécialités & Zones
           </h3>
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
         >
           <Save size={14} /> Sauvegarder
         </button>
@@ -430,7 +430,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
               onClick={() => toggleSpecialty(s)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 selectedSpecialties.includes(s)
-                  ? 'bg-purple-600 text-white'
+                  ? 'bg-[#0071E3] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -450,7 +450,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
               onClick={() => toggleCanton(c)}
               className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 selectedCantons.includes(c)
-                  ? 'bg-purple-600 text-white'
+                  ? 'bg-[#0071E3] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >

@@ -114,7 +114,7 @@ const ClientDashboard = () => {
   if (!contactId) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
       </div>
     )
   }
@@ -143,7 +143,7 @@ const ClientDashboard = () => {
         <div className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow"
              onClick={() => navigate('/client/projects')}>
           <div className="flex items-center justify-between mb-3">
-            <FolderKanban className="w-8 h-8 text-emerald-500" />
+            <FolderKanban className="w-8 h-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">{activeProjects.length}</span>
           </div>
           <p className="text-sm text-gray-600">Projets actifs</p>
@@ -160,7 +160,7 @@ const ClientDashboard = () => {
 
         <div className="ds-card p-5">
           <div className="flex items-center justify-between mb-3">
-            <Calendar className="w-8 h-8 text-purple-500" />
+            <Calendar className="w-8 h-8 text-blue-500" />
             <span className="text-sm font-medium text-gray-900">{nextDeadline ? formatDate(nextDeadline.date) : '—'}</span>
           </div>
           <p className="text-sm text-gray-600">{nextDeadline ? nextDeadline.label : 'Aucune échéance'}</p>
@@ -182,7 +182,7 @@ const ClientDashboard = () => {
                   <p className="text-xs text-gray-500">Valide jusqu'au {formatDate(q.valid_until)}</p>
                 </div>
                 <button onClick={() => navigate(`/client/quotes?sign=${q.id}`)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700">
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700">
                   <PenTool size={14} /> Signer
                 </button>
               </div>
@@ -211,7 +211,7 @@ const ClientDashboard = () => {
               <p className="text-xs text-gray-500">Projet en cours</p>
             </div>
             <button onClick={() => navigate(`/client/projects/${latestProject.id}`)}
-              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
               Voir détails <ChevronRight size={14} />
             </button>
           </div>
@@ -222,7 +222,7 @@ const ClientDashboard = () => {
               <span className="font-medium text-gray-900">{progressPct}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-emerald-500 h-2.5 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
+              <div className="bg-[#0071E3] h-2.5 rounded-full transition-all" style={{ width: `${progressPct}%` }} />
             </div>
           </div>
           {/* Deliverables */}
@@ -230,7 +230,7 @@ const ClientDashboard = () => {
             {deliverables.slice(0, 5).map(d => (
               <div key={d.id} className="flex items-center gap-3 text-sm">
                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                  d.status === 'completed' ? 'bg-emerald-500' :
+                  d.status === 'completed' ? 'bg-[#0071E3]' :
                   d.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300'
                 }`} />
                 <span className={d.status === 'completed' ? 'text-gray-400 line-through' : 'text-gray-700'}>

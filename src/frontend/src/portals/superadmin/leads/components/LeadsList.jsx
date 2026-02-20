@@ -2,7 +2,7 @@ import React from 'react'
 import {
   Phone, Mail, Building, Clock, Star, MoreVertical, Edit, Trash2, Eye
 } from 'lucide-react'
-import { GlassCard, Badge, Table } from '../../../../components/ui'
+import { Badge, Table } from '../../../../components/ui'
 
 const LeadsList = ({ leads, onEdit, onDelete }) => {
   const formatCurrency = (value) => {
@@ -137,7 +137,7 @@ const LeadsList = ({ leads, onEdit, onDelete }) => {
       key: 'followup',
       label: 'Prochain RDV',
       render: (row) => (
-        <span className={`text-sm ${row.next_followup_at ? 'text-orange-600' : 'text-gray-400'}`}>
+        <span className={`text-sm ${row.next_followup_at ? 'text-amber-600' : 'text-gray-400'}`}>
           {formatDate(row.next_followup_at)}
         </span>
       )
@@ -170,7 +170,7 @@ const LeadsList = ({ leads, onEdit, onDelete }) => {
   ]
 
   return (
-    <GlassCard>
+    <div className="ds-card">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -205,7 +205,7 @@ const LeadsList = ({ leads, onEdit, onDelete }) => {
           </div>
         )}
       </div>
-    </GlassCard>
+    </div>
   )
 }
 

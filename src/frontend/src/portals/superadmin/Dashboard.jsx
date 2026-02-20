@@ -3,25 +3,34 @@
  * Story 1.5 — KPIs + Operations + Commercial + Finance + KPI Sidebar
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RefreshCw } from 'lucide-react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useIsFetching } from '@tanstack/react-query'
+import useLastUpdated from '../../hooks/useLastUpdated'
 
 import KPIWidget from './widgets/KPIWidget'
 import AlertsWidget from './widgets/AlertsWidget'
 import PipelineWidget from './widgets/PipelineWidget'
 import TreasuryWidget from './widgets/TreasuryWidget'
+import ActiveProjectsWidget from './widgets/ActiveProjectsWidget'
 import KPISidebar from './kpis/KPIWidget'
 import TreasuryForecast from './kpis/TreasuryForecast'
 
 const Dashboard = ({ selectedCompany }) => {
   const queryClient = useQueryClient()
+  const isFetching = useIsFetching()
+  const { label: lastUpdatedLabel, markUpdated } = useLastUpdated(15_000)
+
+  useEffect(() => {
+    if (isFetching === 0) markUpdated()
+  }, [isFetching, markUpdated])
 
   const handleRefreshAll = () => {
     queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] })
     queryClient.invalidateQueries({ queryKey: ['alerts'] })
     queryClient.invalidateQueries({ queryKey: ['pipeline'] })
     queryClient.invalidateQueries({ queryKey: ['treasury'] })
+    queryClient.invalidateQueries({ queryKey: ['active-projects'] })
     queryClient.invalidateQueries({ queryKey: ['kpis-latest'] })
     queryClient.invalidateQueries({ queryKey: ['treasury-forecast'] })
   }
@@ -34,13 +43,15 @@ const Dashboard = ({ selectedCompany }) => {
           <h1 className="ds-page-title">Dashboard</h1>
           <p className="ds-meta mt-0.5">
             Vue d'ensemble {selectedCompany && selectedCompany !== 'all' ? selectedCompany : 'toutes entreprises'}
+            {lastUpdatedLabel && <span className="ml-2 text-gray-400">· {lastUpdatedLabel}</span>}
           </p>
         </div>
         <button
           onClick={handleRefreshAll}
           className="ds-btn ds-btn-ghost"
+          disabled={isFetching > 0}
         >
-          <RefreshCw size={14} />
+          <RefreshCw size={14} className={isFetching > 0 ? 'animate-spin' : ''} />
           Actualiser
         </button>
       </div>
@@ -54,6 +65,9 @@ const Dashboard = ({ selectedCompany }) => {
         <PipelineWidget selectedCompany={selectedCompany} />
         <KPISidebar selectedCompany={selectedCompany} />
       </div>
+
+      {/* Active Projects */}
+      <ActiveProjectsWidget selectedCompany={selectedCompany} />
 
       {/* Treasury */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

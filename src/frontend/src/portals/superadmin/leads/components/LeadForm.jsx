@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { X, Save, User, Building, Mail, Phone, Globe, DollarSign, Tag } from 'lucide-react'
-import { GlassCard, Badge, Button, Input, Select } from '../../../../components/ui'
 
 const LeadForm = ({ lead, onSave, onClose }) => {
   const [formData, setFormData] = useState({
@@ -99,7 +98,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <GlassCard className="w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <div className="ds-card w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <form onSubmit={handleSubmit}>
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -384,14 +383,14 @@ const LeadForm = ({ lead, onSave, onClose }) => {
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="ds-btn ds-btn-primary flex items-center gap-2"
             >
               <Save size={20} />
               {lead ? 'Mettre à jour' : 'Créer le Lead'}
             </button>
           </div>
         </form>
-      </GlassCard>
+      </div>
     </div>
   )
 }

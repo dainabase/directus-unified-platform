@@ -79,7 +79,7 @@ const ClientInvoices = () => {
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-emerald-500 animate-spin" /></div>
+    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
   }
 
   return (
@@ -140,7 +140,7 @@ const ClientInvoices = () => {
                         </button>
                         {inv.status === 'overdue' && (
                           <button onClick={() => navigate('/client/messages')}
-                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-emerald-600" title="Contacter HYPERVISUAL">
+                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-blue-600" title="Contacter HYPERVISUAL">
                             <MessageSquare size={14} />
                           </button>
                         )}
@@ -190,7 +190,7 @@ const ClientInvoices = () => {
             </div>
             <div className="flex items-center gap-3 p-6 border-t border-gray-100">
               <button onClick={handlePrint}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-emerald-600 hover:bg-emerald-700">
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-[#0071E3] hover:bg-blue-700">
                 <Printer size={16} /> Imprimer
               </button>
               <button onClick={() => setSelectedInvoice(null)}

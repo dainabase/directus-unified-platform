@@ -53,7 +53,7 @@ const ClientProjectsList = () => {
   })
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-emerald-500 animate-spin" /></div>
+    return <div className="flex items-center justify-center min-h-[50vh]"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
   }
 
   return (
@@ -96,7 +96,7 @@ const ClientProjectsList = () => {
                       )}
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-emerald-500 transition-colors" />
+                  <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-600 transition-colors" />
                 </div>
               </div>
             )

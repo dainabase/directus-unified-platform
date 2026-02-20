@@ -306,7 +306,7 @@ const QuoteDetail = ({ quoteId, onBack }) => {
                 id="cgv-accept"
                 checked={cgvChecked}
                 onChange={(e) => setCgvChecked(e.target.checked)}
-                className="mt-1 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor="cgv-accept" className="text-sm text-gray-700">
                 J'ai lu et j'accepte les Conditions Generales de Vente (v{cgv.version}).
@@ -332,11 +332,11 @@ const QuoteDetail = ({ quoteId, onBack }) => {
 
       {/* CGV already accepted badge */}
       {quote.cgv_accepted && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3 flex items-center gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+        <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-blue-600" />
           <div>
-            <p className="text-sm font-medium text-emerald-800">CGV acceptees</p>
-            <p className="text-xs text-emerald-600">{formatDate(quote.cgv_accepted_at)}</p>
+            <p className="text-sm font-medium text-blue-800">CGV acceptees</p>
+            <p className="text-xs text-blue-600">{formatDate(quote.cgv_accepted_at)}</p>
           </div>
         </div>
       )}
@@ -370,11 +370,11 @@ const QuoteDetail = ({ quoteId, onBack }) => {
 
       {/* Already signed */}
       {quote.status === 'signed' && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-3 flex items-center gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+        <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-blue-600" />
           <div>
-            <p className="text-sm font-medium text-emerald-800">Devis signe</p>
-            <p className="text-xs text-emerald-600">{formatDate(quote.signed_at)}</p>
+            <p className="text-sm font-medium text-blue-800">Devis signe</p>
+            <p className="text-xs text-blue-600">{formatDate(quote.signed_at)}</p>
           </div>
         </div>
       )}
@@ -480,7 +480,7 @@ const QuotesModule = () => {
                         </p>
                         <StatusBadge status={isExpired && q.status !== 'signed' ? 'expired' : q.status} />
                         {q.cgv_accepted && (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600">
+                          <span className="inline-flex items-center gap-1 text-xs text-blue-600">
                             <Shield size={10} /> CGV
                           </span>
                         )}

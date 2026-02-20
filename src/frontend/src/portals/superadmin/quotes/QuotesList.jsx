@@ -278,7 +278,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                         )}
                         <button
                           onClick={() => onDuplicateQuote?.(q)}
-                          className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-purple-600"
+                          className="p-1.5 rounded hover:bg-gray-100 text-gray-400 hover:text-blue-600"
                           title="Dupliquer"
                         >
                           <Copy size={14} />

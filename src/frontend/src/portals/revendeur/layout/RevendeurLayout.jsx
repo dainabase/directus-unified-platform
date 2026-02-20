@@ -1,6 +1,6 @@
 /**
  * RevendeurLayout — S-05-04
- * Layout portail revendeur avec sidebar orange (#ea580c).
+ * Layout portail revendeur avec sidebar blue (#0071E3).
  */
 
 import React from 'react'
@@ -20,7 +20,7 @@ const NAV_ITEMS = [
   { id: 'analytics', label: 'Statistiques', icon: BarChart3, path: '/revendeur/analytics' }
 ]
 
-const ORANGE = '#ea580c'
+const ACCENT = '#0071E3'
 
 const RevendeurLayout = () => {
   const location = useLocation()
@@ -58,7 +58,7 @@ const RevendeurLayout = () => {
             </div>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center"
-              style={{ background: ORANGE }}
+              style={{ background: ACCENT }}
             >
               <UserCircle className="w-5 h-5 text-white" />
             </div>
@@ -83,7 +83,7 @@ const RevendeurLayout = () => {
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
-                style={{ background: ORANGE }}
+                style={{ background: ACCENT }}
               >
                 <span className="text-lg font-black text-white">R</span>
               </div>
@@ -117,7 +117,7 @@ const RevendeurLayout = () => {
                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                     }
                   `}
-                  style={isActive ? { backgroundColor: ORANGE } : undefined}
+                  style={isActive ? { backgroundColor: ACCENT } : undefined}
                 >
                   <Icon size={20} className={isActive ? 'text-white' : 'text-gray-500'} />
                   <span className="font-medium text-sm">{item.label}</span>

@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-import { GlassCard, Badge } from '../../../components/ui'
+import { Badge } from '../../../components/ui'
 import api from '../../../lib/axios'
 import LeadsList from './components/LeadsList'
 import LeadForm from './components/LeadForm'
@@ -37,7 +37,7 @@ const getAgeBadge = (dateCreated) => {
   if (diffHours < 48) {
     return {
       label: '24h+',
-      className: 'bg-orange-100 text-orange-700 border border-orange-200'
+      className: 'bg-amber-100 text-amber-700 border border-amber-200'
     }
   }
   return {
@@ -99,7 +99,7 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <ThermometerSun size={20} className="text-orange-500" />
+              <ThermometerSun size={20} className="text-amber-500" />
               Qualifier le lead
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -441,7 +441,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
           {canQualify(selectedLead) && (
             <button
               onClick={() => setQualifyingLead(selectedLead)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-[#0071E3] text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
             >
               <ThermometerSun size={16} />
               Qualifier
@@ -453,7 +453,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
             <button
               onClick={() => handleConvertToQuote(selectedLead)}
               disabled={convertingLeadId === selectedLead.id}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-[#0071E3] text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-50"
             >
               {convertingLeadId === selectedLead.id ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -585,7 +585,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
       <LeadStats stats={displayStats} isLoading={statsLoading} />
 
       {/* Filters */}
-      <GlassCard className="p-4">
+      <div className="ds-card p-4">
         <div className="flex items-center gap-4 flex-wrap">
           {/* Search */}
           <div className="relative flex-1 min-w-64">
@@ -641,7 +641,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
             )}
           </span>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Content */}
       {isLoading ? (

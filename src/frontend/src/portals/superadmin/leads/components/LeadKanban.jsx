@@ -2,15 +2,15 @@ import React from 'react'
 import {
   Phone, Mail, Building, Clock, Star, MoreVertical, User, Calendar
 } from 'lucide-react'
-import { GlassCard, Badge } from '../../../../components/ui'
+import { Badge } from '../../../../components/ui'
 
 const LeadKanban = ({ leads, onEdit, onDelete, onStatusChange }) => {
   const columns = [
     { id: 'new', label: 'Nouveau', color: 'bg-gray-500' },
     { id: 'contacted', label: 'Contacté', color: 'bg-blue-500' },
-    { id: 'qualified', label: 'Qualifié', color: 'bg-purple-500' },
+    { id: 'qualified', label: 'Qualifié', color: 'bg-blue-500' },
     { id: 'proposal', label: 'Proposition', color: 'bg-yellow-500' },
-    { id: 'negotiation', label: 'Négociation', color: 'bg-orange-500' },
+    { id: 'negotiation', label: 'Négociation', color: 'bg-amber-500' },
     { id: 'won', label: 'Gagné', color: 'bg-green-500' },
     { id: 'lost', label: 'Perdu', color: 'bg-red-500' }
   ]
@@ -96,9 +96,9 @@ const LeadKanban = ({ leads, onEdit, onDelete, onStatusChange }) => {
             {/* Cards */}
             <div className="space-y-3">
               {columnLeads.map(lead => (
-                <GlassCard
+                <div
                   key={lead.id}
-                  className="p-4 cursor-pointer hover:shadow-md transition-shadow"
+                  className="ds-card p-4 cursor-pointer hover:shadow-md transition-shadow"
                   draggable
                   onDragStart={(e) => handleDragStart(e, lead.id)}
                   onClick={() => onEdit(lead)}
@@ -177,13 +177,13 @@ const LeadKanban = ({ leads, onEdit, onDelete, onStatusChange }) => {
                       </div>
                     )}
                     {lead.next_followup_at && (
-                      <div className="flex items-center gap-1 text-xs text-orange-600">
+                      <div className="flex items-center gap-1 text-xs text-amber-600">
                         <Calendar size={12} />
                         {formatDate(lead.next_followup_at)}
                       </div>
                     )}
                   </div>
-                </GlassCard>
+                </div>
               ))}
 
               {/* Empty state */}

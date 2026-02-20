@@ -25,12 +25,12 @@ const formatCHF = (value) =>
   }).format(value || 0)
 
 // -- Stat card component --
-const StatCard = ({ icon: Icon, label, value, subtitle, color = 'violet' }) => {
+const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue' }) => {
   return (
     <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-gray-500 font-medium">{label}</span>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center`} style={{ background: color === 'violet' ? '#7C3AED' : color === 'blue' ? 'var(--accent)' : color === 'emerald' ? 'var(--success)' : 'var(--warning)' }}>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center`} style={{ background: color === 'blue' ? 'var(--accent)' : color === 'emerald' ? 'var(--success)' : 'var(--warning)' }}>
           <Icon size={16} className="text-white" />
         </div>
       </div>
@@ -160,7 +160,7 @@ const ProviderDashboard = () => {
           label="Demandes en attente"
           value={pendingProposals}
           subtitle="Devis a soumettre"
-          color="violet"
+          color="blue"
         />
         <StatCard
           icon={FolderKanban}
@@ -200,12 +200,12 @@ const ProviderDashboard = () => {
             {unansweredProposals.map(p => (
               <div
                 key={p.id}
-                className="flex items-center justify-between p-3 rounded-xl bg-violet-50/50 border border-violet-100 hover:bg-violet-50 transition-colors cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-xl bg-blue-50/50 border border-blue-100 hover:bg-blue-50 transition-colors cursor-pointer"
                 onClick={() => navigate('/prestataire/quotes')}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
-                    <FileText size={16} className="text-violet-600" />
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <FileText size={16} className="text-blue-600" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">
@@ -217,7 +217,7 @@ const ProviderDashboard = () => {
                     </p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors">
+                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors">
                   Soumettre mon offre <ArrowRight size={14} />
                 </button>
               </div>

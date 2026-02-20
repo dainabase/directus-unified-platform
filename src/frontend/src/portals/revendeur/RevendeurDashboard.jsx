@@ -76,7 +76,7 @@ const RevendeurDashboard = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
       </div>
     )
   }
@@ -92,7 +92,7 @@ const RevendeurDashboard = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
-            <FileText size={14} className="text-orange-400" />
+            <FileText size={14} className="text-blue-400" />
             <span className="text-xs text-gray-500">Devis total</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{kpis.totalQuotes}</p>
@@ -115,10 +115,10 @@ const RevendeurDashboard = () => {
         </div>
         <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">
-            <Package size={14} className="text-purple-400" />
+            <Package size={14} className="text-blue-400" />
             <span className="text-xs text-gray-500">Produits</span>
           </div>
-          <p className="text-2xl font-bold text-purple-600">{kpis.productCount}</p>
+          <p className="text-2xl font-bold text-blue-600">{kpis.productCount}</p>
         </div>
       </div>
 
@@ -171,11 +171,11 @@ const RevendeurDashboard = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             {products.slice(0, 6).map(p => (
-              <div key={p.id} className="p-3 rounded-lg border border-gray-100 hover:border-orange-200 transition-colors">
+              <div key={p.id} className="p-3 rounded-lg border border-gray-100 hover:border-blue-200 transition-colors">
                 <p className="text-sm font-medium text-gray-900">{p.name}</p>
                 {p.description && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{p.description}</p>}
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-sm font-bold text-orange-600">{formatCHF(p.price || p.unit_price)}</span>
+                  <span className="text-sm font-bold text-blue-600">{formatCHF(p.price || p.unit_price)}</span>
                   {p.category && <span className="text-xs text-gray-400">{p.category}</span>}
                 </div>
               </div>

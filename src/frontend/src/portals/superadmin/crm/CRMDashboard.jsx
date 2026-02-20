@@ -1,7 +1,7 @@
 // src/frontend/src/portals/superadmin/crm/CRMDashboard.jsx
 import React, { useState } from 'react';
-import { 
-  Users, Building2, Activity, Plus, 
+import {
+  Users, Building2, Activity, Plus,
   Search, RefreshCw, Filter, Download,
   Mail, Phone, MapPin, Calendar
 } from 'lucide-react';
@@ -23,16 +23,17 @@ const CRMDashboard = ({ selectedCompany: propCompany, view }) => {
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
   const [editingCompany, setEditingCompany] = useState(null);
-  
+  const [showNewMenu, setShowNewMenu] = useState(false);
+
   const company = selectedCompany === 'all' ? null : selectedCompany;
-  const { 
-    stats, 
-    recentActivities, 
-    recentContacts, 
-    recentCompanies, 
-    isLoading 
+  const {
+    stats,
+    recentActivities,
+    recentContacts,
+    recentCompanies,
+    isLoading
   } = useCRMData(company);
-  
+
   const companies = [
     { id: 'all', name: 'Toutes les sociétés' },
     { id: 'HYPERVISUAL', name: 'HYPERVISUAL SA' },
@@ -75,312 +76,299 @@ const CRMDashboard = ({ selectedCompany: propCompany, view }) => {
   };
 
   return (
-    <div className="page">
-      <div className="page-header d-print-none">
-        <div className="container-xl">
-          <div className="row g-2 align-items-center">
-            <div className="col">
-              <div className="page-pretitle">Portail Superadmin</div>
-              <h2 className="page-title">
-                <Users size={24} className="me-2" />
-                CRM - Gestion des Relations Client
-              </h2>
-            </div>
-            
-            {/* Actions principales */}
-            <div className="col-auto ms-auto d-print-none">
-              <div className="btn-list">
-                <button 
-                  className="btn btn-outline-primary"
-                  onClick={handleRefresh}
-                  disabled={isLoading}
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <div className="text-xs text-gray-400 uppercase tracking-wide">Portail Superadmin</div>
+            <h2 className="ds-page-title flex items-center gap-2">
+              <Users size={24} />
+              CRM - Gestion des Relations Client
+            </h2>
+          </div>
+
+          {/* Actions principales */}
+          <div className="ml-auto shrink-0">
+            <div className="flex items-center gap-2">
+              <button
+                className="ds-btn ds-btn-ghost"
+                onClick={handleRefresh}
+                disabled={isLoading}
+              >
+                <RefreshCw size={16} className={`mr-1 ${isLoading ? 'animate-spin' : ''}`} />
+                Actualiser
+              </button>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowNewMenu(!showNewMenu)}
+                  className="ds-btn ds-btn-primary"
                 >
-                  <RefreshCw size={16} className={`me-1 ${isLoading ? 'animate-spin' : ''}`} />
-                  Actualiser
+                  <Plus size={14} className="mr-1" />
+                  Nouveau
                 </button>
-                
-                <div className="dropdown">
-                  <button className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                    <Plus size={16} className="me-1" />
-                    Nouveau
-                  </button>
-                  <div className="dropdown-menu">
-                    <button 
-                      className="dropdown-item"
-                      onClick={() => setShowContactForm(true)}
+                {showNewMenu && (
+                  <div className="absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                    <button
+                      onClick={() => { setShowContactForm(true); setShowNewMenu(false); }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                     >
-                      <Users size={16} className="me-2" />
+                      <Users size={14} />
                       Contact
                     </button>
-                    <button 
-                      className="dropdown-item"
-                      onClick={() => setShowCompanyForm(true)}
+                    <button
+                      onClick={() => { setShowCompanyForm(true); setShowNewMenu(false); }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                     >
-                      <Building2 size={16} className="me-2" />
+                      <Building2 size={14} />
                       Entreprise
                     </button>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
-          
-          {/* Filtres et sélecteurs */}
-          <div className="row g-2 align-items-center mt-3">
-            <div className="col-auto">
-              <select 
-                className="form-select"
-                value={selectedCompany}
-                onChange={(e) => setSelectedCompany(e.target.value)}
-              >
-                {companies.map(comp => (
-                  <option key={comp.id} value={comp.id}>
-                    {comp.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="col">
-              <div className="input-icon">
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="Rechercher contacts, entreprises..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <span className="input-icon-addon">
-                  <Search size={16} />
-                </span>
-              </div>
+        </div>
+
+        {/* Filtres et sélecteurs */}
+        <div className="flex items-center gap-2 mt-3">
+          <div className="shrink-0">
+            <select
+              className="ds-input"
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
+            >
+              {companies.map(comp => (
+                <option key={comp.id} value={comp.id}>
+                  {comp.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex-1">
+            <div className="relative">
+              <input
+                type="text"
+                className="ds-input pl-10 w-full"
+                placeholder="Rechercher contacts, entreprises..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <Search size={16} />
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation par onglets */}
-      <div className="page-body">
-        <div className="container-xl">
-          <div className="row">
-            <div className="col-12">
-              <div className="card">
-                <div className="card-header">
-                  <ul className="nav nav-tabs card-header-tabs">
-                    {tabs.map(tab => {
-                      const IconComponent = tab.icon;
-                      return (
-                        <li key={tab.id} className="nav-item">
-                          <button
-                            className={`nav-link ${activeTab === tab.id ? 'active' : ''}`}
-                            onClick={() => setActiveTab(tab.id)}
-                          >
-                            <IconComponent size={16} className="me-1" />
-                            {tab.label}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-                
-                <div className="card-body">
-                  {/* Contenu selon l'onglet actif */}
-                  {activeTab === 'dashboard' && (
-                    <div>
-                      {/* Statistiques rapides */}
-                      <QuickStats 
-                        company={company}
-                        stats={stats.data}
-                        isLoading={stats.isLoading}
-                      />
-                      
-                      {/* Activités récentes et aperçus */}
-                      <div className="row mt-4">
-                        {/* Contacts récents */}
-                        <div className="col-lg-4">
-                          <div className="card">
-                            <div className="card-header">
-                              <h3 className="card-title">
-                                <Users size={16} className="me-1" />
-                                Contacts Récents
-                              </h3>
-                            </div>
-                            <div className="card-body p-0">
-                              {recentContacts.isLoading ? (
-                                <div className="text-center py-4">
-                                  <RefreshCw size={20} className="animate-spin text-muted" />
-                                </div>
-                              ) : recentContacts.data?.data?.length ? (
-                                <div className="list-group list-group-flush">
-                                  {recentContacts.data.data.slice(0, 5).map(contact => (
-                                    <div key={contact.id} className="list-group-item">
-                                      <div className="row align-items-center">
-                                        <div className="col-auto">
-                                          <div className="avatar avatar-sm">
-                                            {contact.first_name?.[0]}{contact.last_name?.[0]}
-                                          </div>
-                                        </div>
-                                        <div className="col text-truncate">
-                                          <div className="text-reset d-block">
-                                            {contact.first_name} {contact.last_name}
-                                          </div>
-                                          <div className="d-block text-muted text-truncate mt-n1">
-                                            {contact.email}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <div className="text-center py-4 text-muted">
-                                  Aucun contact récent
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Entreprises récentes */}
-                        <div className="col-lg-4">
-                          <div className="card">
-                            <div className="card-header">
-                              <h3 className="card-title">
-                                <Building2 size={16} className="me-1" />
-                                Entreprises Récentes
-                              </h3>
-                            </div>
-                            <div className="card-body p-0">
-                              {recentCompanies.isLoading ? (
-                                <div className="text-center py-4">
-                                  <RefreshCw size={20} className="animate-spin text-muted" />
-                                </div>
-                              ) : recentCompanies.data?.data?.length ? (
-                                <div className="list-group list-group-flush">
-                                  {recentCompanies.data.data.slice(0, 5).map(company => (
-                                    <div key={company.id} className="list-group-item">
-                                      <div className="row align-items-center">
-                                        <div className="col-auto">
-                                          <div className="avatar avatar-sm">
-                                            <Building2 size={16} />
-                                          </div>
-                                        </div>
-                                        <div className="col text-truncate">
-                                          <div className="text-reset d-block">
-                                            {company.name}
-                                          </div>
-                                          <div className="d-block text-muted text-truncate mt-n1">
-                                            {company.industry}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <div className="text-center py-4 text-muted">
-                                  Aucune entreprise récente
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Activités récentes */}
-                        <div className="col-lg-4">
-                          <div className="card">
-                            <div className="card-header">
-                              <h3 className="card-title">
-                                <Activity size={16} className="me-1" />
-                                Activités Récentes
-                              </h3>
-                            </div>
-                            <div className="card-body p-0">
-                              {recentActivities.isLoading ? (
-                                <div className="text-center py-4">
-                                  <RefreshCw size={20} className="animate-spin text-muted" />
-                                </div>
-                              ) : recentActivities.data?.data?.length ? (
-                                <div className="list-group list-group-flush">
-                                  {recentActivities.data.data.slice(0, 5).map(activity => (
-                                    <div key={activity.id} className="list-group-item">
-                                      <div className="row align-items-center">
-                                        <div className="col-auto">
-                                          <div className="avatar avatar-sm">
-                                            {activity.type === 'email' && <Mail size={16} />}
-                                            {activity.type === 'call' && <Phone size={16} />}
-                                            {activity.type === 'meeting' && <Calendar size={16} />}
-                                            {activity.type === 'note' && <Activity size={16} />}
-                                          </div>
-                                        </div>
-                                        <div className="col text-truncate">
-                                          <div className="text-reset d-block">
-                                            {activity.subject || activity.type}
-                                          </div>
-                                          <div className="d-block text-muted text-truncate mt-n1">
-                                            {new Date(activity.date).toLocaleDateString('fr-CH')}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <div className="text-center py-4 text-muted">
-                                  Aucune activité récente
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+      <div>
+        <div className="ds-card">
+          <div className="flex gap-1 border-b border-gray-100 px-4">
+            {tabs.map(tab => {
+              const IconComponent = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                    activeTab === tab.id
+                      ? 'border-[#0071E3] text-[#0071E3]'
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <IconComponent size={14} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="p-4">
+            {/* Contenu selon l'onglet actif */}
+            {activeTab === 'dashboard' && (
+              <div>
+                {/* Statistiques rapides */}
+                <QuickStats
+                  company={company}
+                  stats={stats.data}
+                  isLoading={stats.isLoading}
+                />
+
+                {/* Activités récentes et aperçus */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-4">
+                  {/* Contacts récents */}
+                  <div className="ds-card">
+                    <div className="p-4 border-b border-gray-100">
+                      <h3 className="ds-card-title flex items-center gap-1.5">
+                        <Users size={16} />
+                        Contacts Récents
+                      </h3>
                     </div>
-                  )}
-                  
-                  {activeTab === 'contacts' && (
-                    <ContactsList 
-                      company={company}
-                      searchQuery={searchQuery}
-                      onEdit={handleEditContact}
-                    />
-                  )}
-                  
-                  {activeTab === 'companies' && (
-                    <CompaniesList 
-                      company={company}
-                      searchQuery={searchQuery}
-                      onEdit={handleEditCompany}
-                    />
-                  )}
-                  
-                  {activeTab === 'activities' && (
-                    <div className="text-center py-5">
-                      <Activity size={48} className="text-muted mb-3" />
-                      <h4 className="text-muted">Module Activités</h4>
-                      <p className="text-muted">
-                        La gestion détaillée des activités sera disponible dans une future version.
-                      </p>
+                    <div className="p-0">
+                      {recentContacts.isLoading ? (
+                        <div className="text-center py-4">
+                          <RefreshCw size={20} className="animate-spin text-gray-400" />
+                        </div>
+                      ) : recentContacts.data?.data?.length ? (
+                        <div className="divide-y divide-gray-50">
+                          {recentContacts.data.data.slice(0, 5).map(contact => (
+                            <div key={contact.id} className="px-4 py-3 flex items-center gap-3">
+                              <div className="shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
+                                  {contact.first_name?.[0]}{contact.last_name?.[0]}
+                                </div>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {contact.first_name} {contact.last_name}
+                                </div>
+                                <div className="text-xs text-gray-400 truncate">
+                                  {contact.email}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-gray-400">
+                          Aucun contact récent
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
+
+                  {/* Entreprises récentes */}
+                  <div className="ds-card">
+                    <div className="p-4 border-b border-gray-100">
+                      <h3 className="ds-card-title flex items-center gap-1.5">
+                        <Building2 size={16} />
+                        Entreprises Récentes
+                      </h3>
+                    </div>
+                    <div className="p-0">
+                      {recentCompanies.isLoading ? (
+                        <div className="text-center py-4">
+                          <RefreshCw size={20} className="animate-spin text-gray-400" />
+                        </div>
+                      ) : recentCompanies.data?.data?.length ? (
+                        <div className="divide-y divide-gray-50">
+                          {recentCompanies.data.data.slice(0, 5).map(company => (
+                            <div key={company.id} className="px-4 py-3 flex items-center gap-3">
+                              <div className="shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
+                                  <Building2 size={16} />
+                                </div>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {company.name}
+                                </div>
+                                <div className="text-xs text-gray-400 truncate">
+                                  {company.industry}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-gray-400">
+                          Aucune entreprise récente
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Activités récentes */}
+                  <div className="ds-card">
+                    <div className="p-4 border-b border-gray-100">
+                      <h3 className="ds-card-title flex items-center gap-1.5">
+                        <Activity size={16} />
+                        Activités Récentes
+                      </h3>
+                    </div>
+                    <div className="p-0">
+                      {recentActivities.isLoading ? (
+                        <div className="text-center py-4">
+                          <RefreshCw size={20} className="animate-spin text-gray-400" />
+                        </div>
+                      ) : recentActivities.data?.data?.length ? (
+                        <div className="divide-y divide-gray-50">
+                          {recentActivities.data.data.slice(0, 5).map(activity => (
+                            <div key={activity.id} className="px-4 py-3 flex items-center gap-3">
+                              <div className="shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
+                                  {activity.type === 'email' && <Mail size={16} />}
+                                  {activity.type === 'call' && <Phone size={16} />}
+                                  {activity.type === 'meeting' && <Calendar size={16} />}
+                                  {activity.type === 'note' && <Activity size={16} />}
+                                </div>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {activity.subject || activity.type}
+                                </div>
+                                <div className="text-xs text-gray-400 truncate">
+                                  {new Date(activity.date).toLocaleDateString('fr-CH')}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-gray-400">
+                          Aucune activité récente
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {activeTab === 'contacts' && (
+              <ContactsList
+                company={company}
+                searchQuery={searchQuery}
+                onEdit={handleEditContact}
+              />
+            )}
+
+            {activeTab === 'companies' && (
+              <CompaniesList
+                company={company}
+                searchQuery={searchQuery}
+                onEdit={handleEditCompany}
+              />
+            )}
+
+            {activeTab === 'activities' && (
+              <div className="text-center py-12">
+                <Activity size={48} className="text-gray-400 mb-3 mx-auto" />
+                <h4 className="text-base font-semibold text-gray-400">Module Activités</h4>
+                <p className="text-gray-500">
+                  La gestion détaillée des activités sera disponible dans une future version.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Modals */}
       {showContactForm && (
-        <ContactForm 
+        <ContactForm
           contact={editingContact}
           onClose={handleCloseContactForm}
           companies={companies.filter(c => c.id !== 'all')}
         />
       )}
-      
+
       {showCompanyForm && (
-        <CompanyForm 
+        <CompanyForm
           company={editingCompany}
           onClose={handleCloseCompanyForm}
         />

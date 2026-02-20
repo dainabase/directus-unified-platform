@@ -1,6 +1,6 @@
 /**
  * PrestataireLayout — Phase D-06
- * Layout portail prestataire avec sidebar 4 items, accent violet/indigo.
+ * Layout portail prestataire avec sidebar 4 items, accent blue (#0071E3).
  * Auth via useProviderAuth (magic-link comme client portal).
  */
 
@@ -41,7 +41,7 @@ const PrestataireLayout = () => {
         {/* Logo */}
         <div className="p-6" style={{ borderBottom: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-violet-600 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#0071E3] flex items-center justify-center shadow-sm">
               <Wrench className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -59,8 +59,8 @@ const PrestataireLayout = () => {
               to={item.path}
               end={item.end}
               style={({ isActive }) => ({
-                background: isActive ? 'rgba(139, 92, 246, 0.08)' : 'transparent',
-                color: isActive ? '#7C3AED' : 'var(--text-secondary)',
+                background: isActive ? 'var(--accent-light)' : 'transparent',
+                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
                 transition: 'all 0.15s ease'
               })}
               className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
@@ -74,7 +74,7 @@ const PrestataireLayout = () => {
         {/* User section */}
         <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-[#0071E3] flex items-center justify-center">
               <span className="text-sm font-bold text-white">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">

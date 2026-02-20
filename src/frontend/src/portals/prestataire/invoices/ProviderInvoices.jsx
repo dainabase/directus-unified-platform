@@ -134,7 +134,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </label>
             <input
               {...register('invoice_number', { required: 'Le numero de facture est obligatoire' })}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white/50"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
               placeholder="FAC-2026-001"
             />
             {errors.invoice_number && <p className="text-xs text-red-600 mt-1">{errors.invoice_number.message}</p>}
@@ -147,7 +147,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </label>
             <select
               {...register('project_id')}
-              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white/50"
+              className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
             >
               <option value="">Selectionner un projet...</option>
               {projects.map(p => (
@@ -170,7 +170,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
                   required: 'Le montant est obligatoire',
                   min: { value: 0.01, message: 'Le montant doit etre positif' }
                 })}
-                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white/50"
+                className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50"
                 placeholder="0.00"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">CHF</span>
@@ -190,7 +190,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             </div>
             <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
               <span className="font-semibold text-gray-900">Total TTC</span>
-              <span className="font-bold text-violet-700">{formatCHF(totalTTC)}</span>
+              <span className="font-bold text-blue-700">{formatCHF(totalTTC)}</span>
             </div>
           </div>
 
@@ -207,9 +207,9 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
               onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
             />
             {selectedFile ? (
-              <div className="flex items-center justify-between p-3 bg-violet-50 border border-violet-200 rounded-xl">
+              <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-xl">
                 <div className="flex items-center gap-2">
-                  <FileText size={16} className="text-violet-600" />
+                  <FileText size={16} className="text-blue-600" />
                   <span className="text-sm text-gray-700">{selectedFile.name}</span>
                   <span className="text-xs text-gray-400">({(selectedFile.size / 1024).toFixed(0)} KB)</span>
                 </div>
@@ -225,7 +225,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-violet-300 hover:text-violet-600 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-blue-300 hover:text-blue-600 transition-colors"
               >
                 <Upload size={18} />
                 Joindre le PDF de la facture
@@ -245,7 +245,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -316,7 +316,7 @@ const ProviderInvoices = () => {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
         >
           <Plus size={18} />
           Soumettre une facture
@@ -349,7 +349,7 @@ const ProviderInvoices = () => {
             <p className="text-sm text-gray-500">Aucune facture soumise</p>
             <button
               onClick={() => setShowNew(true)}
-              className="mt-4 text-sm text-violet-600 hover:text-violet-700 font-medium"
+              className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
               Soumettre votre premiere facture
             </button>
@@ -376,7 +376,7 @@ const ProviderInvoices = () => {
                     <tr key={inv.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                       <td className="py-3">
                         <div className="flex items-center gap-2">
-                          {inv.file_id && <FileText size={14} className="text-violet-500" />}
+                          {inv.file_id && <FileText size={14} className="text-blue-500" />}
                           <span className="font-medium text-gray-900">{inv.invoice_number || '—'}</span>
                         </div>
                       </td>

@@ -56,7 +56,7 @@ const CEOReportModule = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <FileText size={20} className="text-violet-500" />
+            <FileText size={20} className="text-blue-500" />
             Rapport CEO quotidien
           </h2>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -89,7 +89,7 @@ const CEOReportModule = () => {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-violet-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
       ) : !report ? (
         <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-12 text-center">
@@ -128,8 +128,8 @@ const CEOReportModule = () => {
               label="Pipeline"
               value={formatCHF(report.kpis.pipeline_value)}
               subtitle={`${report.kpis.open_leads} lead(s) actif(s)`}
-              iconColor="text-violet-500"
-              color="text-violet-600"
+              iconColor="text-blue-500"
+              color="text-blue-600"
             />
           </div>
 

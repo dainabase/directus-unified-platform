@@ -379,7 +379,7 @@ const InvoicesModule = ({ selectedCompany }) => {
                       )}
                       <button
                         onClick={() => duplicateMutation.mutate(inv.id)}
-                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-purple-600"
+                        className="p-1.5 rounded hover:bg-gray-100 text-gray-500 hover:text-blue-600"
                         title="Dupliquer"
                       >
                         <Copy size={14} />

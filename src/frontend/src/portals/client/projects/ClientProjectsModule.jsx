@@ -125,7 +125,7 @@ const ProjectDetail = ({ project, onBack }) => {
             <p className="text-xs text-gray-500">Avancement</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-gray-200 rounded-full">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${progress}%` }} />
+                <div className="h-full bg-[#0071E3] rounded-full" style={{ width: `${progress}%` }} />
               </div>
               <span className="text-sm font-bold text-gray-900">{progress}%</span>
             </div>
@@ -139,7 +139,7 @@ const ProjectDetail = ({ project, onBack }) => {
           <h3 className="font-semibold text-gray-900">Livrables ({totalDel})</h3>
         </div>
         {isLoading ? (
-          <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin text-emerald-500 mx-auto" /></div>
+          <div className="p-8 text-center"><Loader2 className="w-6 h-6 animate-spin text-blue-600 mx-auto" /></div>
         ) : deliverables.length === 0 ? (
           <div className="p-8 text-center text-gray-400 text-sm">Aucun livrable pour ce projet</div>
         ) : (
@@ -213,7 +213,7 @@ const ClientProjectsModule = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-emerald-500 animate-spin" /></div>
+        <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 text-blue-600 animate-spin" /></div>
       ) : projects.length === 0 ? (
         <div className="ds-card p-12 text-center">
           <FolderKanban className="w-10 h-10 text-gray-300 mx-auto mb-3" />

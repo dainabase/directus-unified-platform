@@ -1,6 +1,6 @@
 /**
  * ClientLayout — Portal client layout — Apple Premium DS
- * Emerald accent, ds-glass sidebar
+ * Blue accent (#0071E3), ds-glass sidebar
  */
 import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
@@ -34,7 +34,7 @@ const ClientLayout = () => {
         {/* Logo */}
         <div className="p-6" style={{ borderBottom: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#0071E3] flex items-center justify-center">
               <Building2 className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -66,8 +66,8 @@ const ClientLayout = () => {
         {/* User section */}
         <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center">
-              <span className="text-sm font-bold text-emerald-700">
+            <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+              <span className="text-sm font-bold text-blue-700">
                 {client?.first_name?.[0]}{client?.last_name?.[0]}
               </span>
             </div>

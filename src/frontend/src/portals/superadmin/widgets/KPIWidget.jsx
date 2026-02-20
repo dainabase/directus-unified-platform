@@ -22,7 +22,7 @@ const formatCHF = (value) => {
 }
 
 const fetchDashboardKPIs = async (company) => {
-  const kpisRes = await api.get('/items/dashboard_kpis', {
+  const kpisRes = await api.get('/items/kpis', {
     params: {
       filter: company && company !== 'all' ? { owner_company: { _eq: company } } : {},
       sort: ['sort_order'],

@@ -174,7 +174,7 @@ const QuoteSignature = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
       </div>
     )
   }
@@ -222,11 +222,11 @@ const QuoteSignature = () => {
                     <p className="text-xs text-gray-500">TVA {quote.tax_rate || 8.1}% incluse</p>
                     {canSign ? (
                       <button onClick={() => handleOpenQuote(quote)}
-                        className="mt-2 flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+                        className="mt-2 flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors">
                         <PenTool size={14} /> Signer
                       </button>
                     ) : quote.status === 'signed' ? (
-                      <p className="mt-2 text-xs text-emerald-600 font-medium">Signé le {formatDate(quote.signed_at)}</p>
+                      <p className="mt-2 text-xs text-blue-600 font-medium">Signé le {formatDate(quote.signed_at)}</p>
                     ) : null}
                   </div>
                 </div>
@@ -270,7 +270,7 @@ const QuoteSignature = () => {
                   </div>
                   <div className="flex justify-between text-base font-bold border-t border-gray-200 pt-2 mt-2">
                     <span>Total TTC</span>
-                    <span className="text-emerald-700">{formatCHF(selectedQuote.total)}</span>
+                    <span className="text-gray-900">{formatCHF(selectedQuote.total)}</span>
                   </div>
                   {selectedQuote.deposit_percentage > 0 && (
                     <div className="flex justify-between text-sm text-blue-600 pt-1">
@@ -286,7 +286,7 @@ const QuoteSignature = () => {
                 <button onClick={() => setCgvExpanded(!cgvExpanded)}
                   className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-emerald-600" />
+                    <Shield className="w-5 h-5 text-blue-600" />
                     <span className="font-medium text-gray-900">
                       Conditions Générales de Vente
                       {activeCgv && <span className="text-xs text-gray-500 ml-2">({activeCgv.version})</span>}
@@ -320,7 +320,7 @@ const QuoteSignature = () => {
               ) : (
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                    className="mt-1 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
                   <span className="text-sm text-gray-700 group-hover:text-gray-900">
                     J'ai lu et j'accepte les <strong>Conditions Générales de Vente</strong> ({activeCgv.version}) d'HYPERVISUAL Switzerland
                   </span>
@@ -340,7 +340,7 @@ const QuoteSignature = () => {
                   value={signerName}
                   onChange={(e) => setSignerName(e.target.value)}
                   placeholder="Prénom Nom"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-serif text-lg italic text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-serif text-lg italic text-gray-900"
                 />
               </div>
 
@@ -348,7 +348,7 @@ const QuoteSignature = () => {
               <button
                 onClick={handleSign}
                 disabled={!cgvAccepted || !signerName.trim() || signMutation.isPending || !activeCgv}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-[#0071E3] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {signMutation.isPending ? (
                   <><Loader2 size={18} className="animate-spin" /> Signature en cours...</>

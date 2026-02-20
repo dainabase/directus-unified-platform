@@ -1,16 +1,16 @@
 // src/frontend/src/portals/superadmin/crm/components/ContactsList.jsx
 import React, { useState } from 'react';
-import { 
-  Users, Search, Filter, Download, 
+import {
+  Users, Search, Filter, Download,
   Plus, Edit, Trash2, Mail, Phone,
   Building2, MapPin, Tag, RefreshCw,
   ChevronLeft, ChevronRight, MoreVertical
 } from 'lucide-react';
-import { 
-  useContacts, 
-  useDeleteContact, 
+import {
+  useContacts,
+  useDeleteContact,
   useExportContacts,
-  useGlobalCRMSearch 
+  useGlobalCRMSearch
 } from '../hooks/useCRMData';
 
 const ContactsList = ({ company, searchQuery, onEdit }) => {
@@ -24,7 +24,8 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [sortField, setSortField] = useState('date_created');
   const [sortDirection, setSortDirection] = useState('desc');
-  
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
   const contactsQuery = useContacts({
     limit: pageSize,
     offset: currentPage * pageSize,
@@ -34,16 +35,16 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
     ...filters.source !== 'all' && { source: filters.source },
     ...searchQuery && { search: searchQuery }
   });
-  
+
   const deleteContact = useDeleteContact();
   const exportContacts = useExportContacts();
   const globalSearch = useGlobalCRMSearch(searchQuery, !!searchQuery);
-  
+
   // Utiliser les résultats de recherche si disponibles
   const contacts = searchQuery ? globalSearch.contacts : contactsQuery.data?.data || [];
   const totalContacts = searchQuery ? globalSearch.contacts.length : contactsQuery.data?.meta?.filter_count || 0;
   const totalPages = Math.ceil(totalContacts / pageSize);
-  
+
   const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -53,7 +54,7 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
     }
     setCurrentPage(0);
   };
-  
+
   const handleSelectContact = (contactId, checked) => {
     if (checked) {
       setSelectedContacts([...selectedContacts, contactId]);
@@ -61,7 +62,7 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
       setSelectedContacts(selectedContacts.filter(id => id !== contactId));
     }
   };
-  
+
   const handleSelectAll = (checked) => {
     if (checked) {
       setSelectedContacts(contacts.map(c => c.id));
@@ -69,7 +70,7 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
       setSelectedContacts([]);
     }
   };
-  
+
   const handleDeleteSelected = async () => {
     if (window.confirm(`Supprimer ${selectedContacts.length} contact(s) sélectionné(s) ?`)) {
       for (const contactId of selectedContacts) {
@@ -78,7 +79,7 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
       setSelectedContacts([]);
     }
   };
-  
+
   const handleExport = () => {
     const exportFilters = {
       ...company && { company },
@@ -87,18 +88,18 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
     };
     exportContacts.mutate(exportFilters);
   };
-  
+
   const getStatusBadge = (status) => {
     const statusConfig = {
-      active: { label: 'Actif', class: 'bg-success' },
-      inactive: { label: 'Inactif', class: 'bg-secondary' },
-      lead: { label: 'Prospect', class: 'bg-warning' },
-      customer: { label: 'Client', class: 'bg-primary' }
+      active: { label: 'Actif', classes: 'bg-green-50 text-green-700' },
+      inactive: { label: 'Inactif', classes: 'bg-gray-100 text-gray-600' },
+      lead: { label: 'Prospect', classes: 'bg-amber-50 text-amber-700' },
+      customer: { label: 'Client', classes: 'bg-blue-50 text-blue-700' }
     };
-    
+
     const config = statusConfig[status] || statusConfig.active;
     return (
-      <span className={`badge ${config.class}`}>
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.classes}`}>
         {config.label}
       </span>
     );
@@ -107,10 +108,10 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
   return (
     <div>
       {/* Filtres et actions */}
-      <div className="row g-2 align-items-center mb-3">
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={filters.status}
             onChange={(e) => {
               setFilters({...filters, status: e.target.value});
@@ -124,10 +125,10 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
             <option value="inactive">Inactifs</option>
           </select>
         </div>
-        
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={filters.source}
             onChange={(e) => {
               setFilters({...filters, source: e.target.value});
@@ -143,10 +144,10 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
             <option value="social">Réseaux sociaux</option>
           </select>
         </div>
-        
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={pageSize}
             onChange={(e) => {
               setPageSize(parseInt(e.target.value));
@@ -158,145 +159,143 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
             <option value="100">100 par page</option>
           </select>
         </div>
-        
-        <div className="col-auto ms-auto">
-          <div className="btn-group" role="group">
-            {selectedContacts.length > 0 && (
-              <button 
-                className="btn btn-outline-danger btn-sm"
-                onClick={handleDeleteSelected}
-                disabled={deleteContact.isPending}
-              >
-                <Trash2 size={14} className="me-1" />
-                Supprimer ({selectedContacts.length})
-              </button>
-            )}
-            
-            <button 
-              className="btn btn-outline-secondary btn-sm"
-              onClick={handleExport}
-              disabled={exportContacts.isPending}
+
+        <div className="ml-auto flex gap-2">
+          {selectedContacts.length > 0 && (
+            <button
+              className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              onClick={handleDeleteSelected}
+              disabled={deleteContact.isPending}
             >
-              <Download size={14} className="me-1" />
-              Exporter
+              <Trash2 size={14} className="mr-1 inline" />
+              Supprimer ({selectedContacts.length})
             </button>
-          </div>
+          )}
+
+          <button
+            className="ds-btn ds-btn-ghost text-sm py-1.5"
+            onClick={handleExport}
+            disabled={exportContacts.isPending}
+          >
+            <Download size={14} className="mr-1 inline" />
+            Exporter
+          </button>
         </div>
       </div>
-      
+
       {/* Tableau des contacts */}
-      <div className="card">
-        <div className="card-body p-0">
+      <div className="ds-card">
+        <div className="p-0">
           {contactsQuery.isLoading || globalSearch.isLoading ? (
             <div className="text-center py-4">
-              <RefreshCw size={24} className="animate-spin text-muted" />
-              <p className="text-muted mt-2">Chargement des contacts...</p>
+              <RefreshCw size={24} className="animate-spin text-gray-400 mx-auto" />
+              <p className="text-gray-500 mt-2">Chargement des contacts...</p>
             </div>
           ) : contacts.length === 0 ? (
             <div className="text-center py-5">
-              <Users size={48} className="text-muted mb-3" />
-              <h4 className="text-muted">Aucun contact trouvé</h4>
-              <p className="text-muted">
-                {searchQuery ? 
+              <Users size={48} className="text-gray-400 mb-3 mx-auto" />
+              <h4 className="text-gray-500 font-medium">Aucun contact trouvé</h4>
+              <p className="text-gray-400">
+                {searchQuery ?
                   'Aucun contact ne correspond à vos critères de recherche.' :
                   'Commencez par ajouter votre premier contact.'
                 }
               </p>
             </div>
           ) : (
-            <div className="table-responsive">
-              <table className="table table-vcenter table-mobile-md card-table">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
                 <thead>
-                  <tr>
-                    <th className="w-1">
+                  <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                    <th className="px-4 py-3 w-8">
                       <input
                         type="checkbox"
-                        className="form-check-input"
+                        className="rounded border-gray-300"
                         checked={selectedContacts.length === contacts.length && contacts.length > 0}
                         onChange={(e) => handleSelectAll(e.target.checked)}
                       />
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('first_name')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Contact
                         {sortField === 'first_name' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('email')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Email
                         {sortField === 'email' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th>Téléphone</th>
-                    <th>Entreprise</th>
-                    <th 
-                      className="cursor-pointer"
+                    <th className="px-4 py-3">Téléphone</th>
+                    <th className="px-4 py-3">Entreprise</th>
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('status')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Statut
                         {sortField === 'status' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('date_created')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Créé le
                         {sortField === 'date_created' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th className="w-1">Actions</th>
+                    <th className="px-4 py-3 w-8">Actions</th>
                   </tr>
                 </thead>
-                
-                <tbody>
+
+                <tbody className="divide-y divide-gray-50">
                   {contacts.map(contact => (
-                    <tr key={contact.id}>
-                      <td>
+                    <tr key={contact.id} className="hover:bg-gray-50/50">
+                      <td className="px-4 py-3">
                         <input
                           type="checkbox"
-                          className="form-check-input"
+                          className="rounded border-gray-300"
                           checked={selectedContacts.includes(contact.id)}
                           onChange={(e) => handleSelectContact(contact.id, e.target.checked)}
                         />
                       </td>
-                      
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-sm me-3">
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600 mr-3">
                             {contact.first_name?.[0]}{contact.last_name?.[0]}
                           </div>
                           <div>
-                            <div className="font-weight-medium">
+                            <div className="font-medium text-gray-900">
                               {contact.first_name} {contact.last_name}
                             </div>
                             {contact.position && (
-                              <div className="text-muted small">
+                              <div className="text-gray-500 text-xs">
                                 {contact.position}
                                 {contact.department && ` - ${contact.department}`}
                               </div>
@@ -304,13 +303,13 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
                             {contact.tags?.length > 0 && (
                               <div className="mt-1">
                                 {contact.tags.slice(0, 2).map(tag => (
-                                  <span key={tag} className="badge bg-blue-lt me-1">
-                                    <Tag size={10} className="me-1" />
+                                  <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 mr-1">
+                                    <Tag size={10} className="mr-1" />
                                     {tag}
                                   </span>
                                 ))}
                                 {contact.tags.length > 2 && (
-                                  <span className="text-muted small">
+                                  <span className="text-gray-400 text-xs">
                                     +{contact.tags.length - 2}
                                   </span>
                                 )}
@@ -319,96 +318,104 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
                           </div>
                         </div>
                       </td>
-                      
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <Mail size={16} className="text-muted me-2" />
-                          <a href={`mailto:${contact.email}`} className="text-reset">
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <Mail size={16} className="text-gray-400 mr-2" />
+                          <a href={`mailto:${contact.email}`} className="text-gray-700 hover:text-blue-600 transition-colors">
                             {contact.email}
                           </a>
                         </div>
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {contact.phone ? (
-                          <div className="d-flex align-items-center">
-                            <Phone size={16} className="text-muted me-2" />
-                            <a href={`tel:${contact.phone}`} className="text-reset">
+                          <div className="flex items-center">
+                            <Phone size={16} className="text-gray-400 mr-2" />
+                            <a href={`tel:${contact.phone}`} className="text-gray-700 hover:text-blue-600 transition-colors">
                               {contact.phone}
                             </a>
                           </div>
                         ) : (
-                          <span className="text-muted">-</span>
+                          <span className="text-gray-400">-</span>
                         )}
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {contact.company?.name ? (
-                          <div className="d-flex align-items-center">
-                            <Building2 size={16} className="text-muted me-2" />
-                            <span>{contact.company.name}</span>
+                          <div className="flex items-center">
+                            <Building2 size={16} className="text-gray-400 mr-2" />
+                            <span className="text-gray-700">{contact.company.name}</span>
                           </div>
                         ) : (
-                          <span className="text-muted">-</span>
+                          <span className="text-gray-400">-</span>
                         )}
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {getStatusBadge(contact.status)}
                       </td>
-                      
-                      <td>
-                        <span className="text-muted">
+
+                      <td className="px-4 py-3">
+                        <span className="text-gray-500">
                           {new Date(contact.date_created).toLocaleDateString('fr-CH')}
                         </span>
                       </td>
-                      
-                      <td>
-                        <div className="dropdown">
-                          <button 
-                            className="btn btn-ghost-secondary btn-sm"
-                            data-bs-toggle="dropdown"
+
+                      <td className="px-4 py-3">
+                        <div className="relative">
+                          <button
+                            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            onClick={() => setOpenDropdownId(openDropdownId === contact.id ? null : contact.id)}
                           >
                             <MoreVertical size={16} />
                           </button>
-                          <div className="dropdown-menu">
-                            <button
-                              className="dropdown-item"
-                              onClick={() => onEdit(contact)}
-                            >
-                              <Edit size={16} className="me-2" />
-                              Modifier
-                            </button>
-                            <div className="dropdown-divider" />
-                            <a
-                              className="dropdown-item"
-                              href={`mailto:${contact.email}`}
-                            >
-                              <Mail size={16} className="me-2" />
-                              Envoyer un email
-                            </a>
-                            {contact.phone && (
-                              <a
-                                className="dropdown-item"
-                                href={`tel:${contact.phone}`}
-                              >
-                                <Phone size={16} className="me-2" />
-                                Appeler
-                              </a>
-                            )}
-                            <div className="dropdown-divider" />
-                            <button
-                              className="dropdown-item text-danger"
-                              onClick={() => {
-                                if (window.confirm('Supprimer ce contact ?')) {
-                                  deleteContact.mutate(contact.id);
-                                }
-                              }}
-                            >
-                              <Trash2 size={16} className="me-2" />
-                              Supprimer
-                            </button>
-                          </div>
+                          {openDropdownId === contact.id && (
+                            <>
+                              <div className="fixed inset-0 z-40" onClick={() => setOpenDropdownId(null)} />
+                              <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                                <button
+                                  className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                  onClick={() => { onEdit(contact); setOpenDropdownId(null); }}
+                                >
+                                  <Edit size={16} className="mr-2" />
+                                  Modifier
+                                </button>
+                                <div className="border-t border-gray-100 my-1" />
+                                <a
+                                  className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                  href={`mailto:${contact.email}`}
+                                  onClick={() => setOpenDropdownId(null)}
+                                >
+                                  <Mail size={16} className="mr-2" />
+                                  Envoyer un email
+                                </a>
+                                {contact.phone && (
+                                  <a
+                                    className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                    href={`tel:${contact.phone}`}
+                                    onClick={() => setOpenDropdownId(null)}
+                                  >
+                                    <Phone size={16} className="mr-2" />
+                                    Appeler
+                                  </a>
+                                )}
+                                <div className="border-t border-gray-100 my-1" />
+                                <button
+                                  className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center"
+                                  onClick={() => {
+                                    if (window.confirm('Supprimer ce contact ?')) {
+                                      deleteContact.mutate(contact.id);
+                                    }
+                                    setOpenDropdownId(null);
+                                  }}
+                                >
+                                  <Trash2 size={16} className="mr-2" />
+                                  Supprimer
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -418,26 +425,24 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
             </div>
           )}
         </div>
-        
+
         {/* Pagination */}
         {!searchQuery && totalPages > 1 && (
-          <div className="card-footer d-flex align-items-center">
-            <p className="m-0 text-muted">
+          <div className="p-4 border-t border-gray-100 flex items-center">
+            <p className="m-0 text-gray-500 text-sm">
               Affichage de {currentPage * pageSize + 1} à {Math.min((currentPage + 1) * pageSize, totalContacts)} sur {totalContacts} contacts
             </p>
-            
-            <ul className="pagination m-0 ms-auto">
-              <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
-                <button 
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 0}
-                >
-                  <ChevronLeft size={16} />
-                  Précédent
-                </button>
-              </li>
-              
+
+            <div className="flex items-center gap-1 m-0 ml-auto">
+              <button
+                className={`ds-btn ds-btn-ghost text-sm py-1.5 px-3 ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                <ChevronLeft size={16} className="mr-1 inline" />
+                Précédent
+              </button>
+
               {[...Array(Math.min(5, totalPages))].map((_, i) => {
                 let pageNum;
                 if (totalPages <= 5) {
@@ -449,33 +454,31 @@ const ContactsList = ({ company, searchQuery, onEdit }) => {
                 } else {
                   pageNum = currentPage - 2 + i;
                 }
-                
+
                 return (
-                  <li 
+                  <button
                     key={pageNum}
-                    className={`page-item ${currentPage === pageNum ? 'active' : ''}`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                      currentPage === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                    onClick={() => setCurrentPage(pageNum)}
                   >
-                    <button 
-                      className="page-link"
-                      onClick={() => setCurrentPage(pageNum)}
-                    >
-                      {pageNum + 1}
-                    </button>
-                  </li>
+                    {pageNum + 1}
+                  </button>
                 );
               })}
-              
-              <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
-                <button 
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages - 1}
-                >
-                  Suivant
-                  <ChevronRight size={16} />
-                </button>
-              </li>
-            </ul>
+
+              <button
+                className={`ds-btn ds-btn-ghost text-sm py-1.5 px-3 ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages - 1}
+              >
+                Suivant
+                <ChevronRight size={16} className="ml-1 inline" />
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -1,15 +1,15 @@
 // src/frontend/src/portals/superadmin/crm/components/CompaniesList.jsx
 import React, { useState } from 'react';
-import { 
-  Building2, Search, Filter, Download, 
+import {
+  Building2, Search, Filter, Download,
   Plus, Edit, Trash2, Globe, Phone,
   Users, MapPin, RefreshCw, MoreVertical,
   ChevronLeft, ChevronRight
 } from 'lucide-react';
-import { 
-  useCompanies, 
-  useDeleteCompany, 
-  useGlobalCRMSearch 
+import {
+  useCompanies,
+  useDeleteCompany,
+  useGlobalCRMSearch
 } from '../hooks/useCRMData';
 
 const CompaniesList = ({ company, searchQuery, onEdit }) => {
@@ -23,7 +23,8 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
   const [selectedCompanies, setSelectedCompanies] = useState([]);
   const [sortField, setSortField] = useState('date_created');
   const [sortDirection, setSortDirection] = useState('desc');
-  
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
   const companiesQuery = useCompanies({
     limit: pageSize,
     offset: currentPage * pageSize,
@@ -33,15 +34,15 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
     ...filters.size !== 'all' && { size: filters.size },
     ...searchQuery && { search: searchQuery }
   });
-  
+
   const deleteCompany = useDeleteCompany();
   const globalSearch = useGlobalCRMSearch(searchQuery, !!searchQuery);
-  
+
   // Utiliser les résultats de recherche si disponibles
   const companies = searchQuery ? globalSearch.companies : companiesQuery.data?.data || [];
   const totalCompanies = searchQuery ? globalSearch.companies.length : companiesQuery.data?.meta?.filter_count || 0;
   const totalPages = Math.ceil(totalCompanies / pageSize);
-  
+
   const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -51,7 +52,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
     }
     setCurrentPage(0);
   };
-  
+
   const handleSelectCompany = (companyId, checked) => {
     if (checked) {
       setSelectedCompanies([...selectedCompanies, companyId]);
@@ -59,7 +60,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
       setSelectedCompanies(selectedCompanies.filter(id => id !== companyId));
     }
   };
-  
+
   const handleSelectAll = (checked) => {
     if (checked) {
       setSelectedCompanies(companies.map(c => c.id));
@@ -67,7 +68,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
       setSelectedCompanies([]);
     }
   };
-  
+
   const handleDeleteSelected = async () => {
     if (window.confirm(`Supprimer ${selectedCompanies.length} entreprise(s) sélectionnée(s) ?`)) {
       for (const companyId of selectedCompanies) {
@@ -76,24 +77,24 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
       setSelectedCompanies([]);
     }
   };
-  
+
   const getStatusBadge = (status) => {
     const statusConfig = {
-      active: { label: 'Active', class: 'bg-success' },
-      inactive: { label: 'Inactive', class: 'bg-secondary' },
-      prospect: { label: 'Prospect', class: 'bg-warning' },
-      customer: { label: 'Client', class: 'bg-primary' },
-      partner: { label: 'Partenaire', class: 'bg-info' }
+      active: { label: 'Active', classes: 'bg-green-50 text-green-700' },
+      inactive: { label: 'Inactive', classes: 'bg-gray-100 text-gray-600' },
+      prospect: { label: 'Prospect', classes: 'bg-amber-50 text-amber-700' },
+      customer: { label: 'Client', classes: 'bg-blue-50 text-blue-700' },
+      partner: { label: 'Partenaire', classes: 'bg-blue-50 text-blue-600' }
     };
-    
+
     const config = statusConfig[status] || statusConfig.active;
     return (
-      <span className={`badge ${config.class}`}>
+      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.classes}`}>
         {config.label}
       </span>
     );
   };
-  
+
   const formatRevenue = (revenue) => {
     if (!revenue) return '-';
     return new Intl.NumberFormat('fr-CH', {
@@ -106,10 +107,10 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
   return (
     <div>
       {/* Filtres et actions */}
-      <div className="row g-2 align-items-center mb-3">
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={filters.status}
             onChange={(e) => {
               setFilters({...filters, status: e.target.value});
@@ -124,10 +125,10 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
             <option value="inactive">Inactives</option>
           </select>
         </div>
-        
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={filters.industry}
             onChange={(e) => {
               setFilters({...filters, industry: e.target.value});
@@ -142,10 +143,10 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
             <option value="Consulting">Consulting</option>
           </select>
         </div>
-        
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={filters.size}
             onChange={(e) => {
               setFilters({...filters, size: e.target.value});
@@ -160,10 +161,10 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
             <option value="1000+">1000+ employés</option>
           </select>
         </div>
-        
-        <div className="col-auto">
-          <select 
-            className="form-select form-select-sm"
+
+        <div className="shrink-0">
+          <select
+            className="ds-input text-sm py-1.5 px-3"
             value={pageSize}
             onChange={(e) => {
               setPageSize(parseInt(e.target.value));
@@ -175,261 +176,267 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
             <option value="100">100 par page</option>
           </select>
         </div>
-        
-        <div className="col-auto ms-auto">
-          <div className="btn-group" role="group">
-            {selectedCompanies.length > 0 && (
-              <button 
-                className="btn btn-outline-danger btn-sm"
-                onClick={handleDeleteSelected}
-                disabled={deleteCompany.isPending}
-              >
-                <Trash2 size={14} className="me-1" />
-                Supprimer ({selectedCompanies.length})
-              </button>
-            )}
-          </div>
+
+        <div className="ml-auto flex gap-2">
+          {selectedCompanies.length > 0 && (
+            <button
+              className="px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              onClick={handleDeleteSelected}
+              disabled={deleteCompany.isPending}
+            >
+              <Trash2 size={14} className="mr-1 inline" />
+              Supprimer ({selectedCompanies.length})
+            </button>
+          )}
         </div>
       </div>
-      
+
       {/* Tableau des entreprises */}
-      <div className="card">
-        <div className="card-body p-0">
+      <div className="ds-card">
+        <div className="p-0">
           {companiesQuery.isLoading || globalSearch.isLoading ? (
             <div className="text-center py-4">
-              <RefreshCw size={24} className="animate-spin text-muted" />
-              <p className="text-muted mt-2">Chargement des entreprises...</p>
+              <RefreshCw size={24} className="animate-spin text-gray-400 mx-auto" />
+              <p className="text-gray-500 mt-2">Chargement des entreprises...</p>
             </div>
           ) : companies.length === 0 ? (
             <div className="text-center py-5">
-              <Building2 size={48} className="text-muted mb-3" />
-              <h4 className="text-muted">Aucune entreprise trouvée</h4>
-              <p className="text-muted">
-                {searchQuery ? 
+              <Building2 size={48} className="text-gray-400 mb-3 mx-auto" />
+              <h4 className="text-gray-500 font-medium">Aucune entreprise trouvée</h4>
+              <p className="text-gray-400">
+                {searchQuery ?
                   'Aucune entreprise ne correspond à vos critères de recherche.' :
                   'Commencez par ajouter votre première entreprise.'
                 }
               </p>
             </div>
           ) : (
-            <div className="table-responsive">
-              <table className="table table-vcenter table-mobile-md card-table">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
                 <thead>
-                  <tr>
-                    <th className="w-1">
+                  <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                    <th className="px-4 py-3 w-8">
                       <input
                         type="checkbox"
-                        className="form-check-input"
+                        className="rounded border-gray-300"
                         checked={selectedCompanies.length === companies.length && companies.length > 0}
                         onChange={(e) => handleSelectAll(e.target.checked)}
                       />
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('name')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Entreprise
                         {sortField === 'name' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('industry')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Secteur
                         {sortField === 'industry' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th>Taille</th>
-                    <th>Contact</th>
-                    <th>CA annuel</th>
-                    <th 
-                      className="cursor-pointer"
+                    <th className="px-4 py-3">Taille</th>
+                    <th className="px-4 py-3">Contact</th>
+                    <th className="px-4 py-3">CA annuel</th>
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('status')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Statut
                         {sortField === 'status' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th 
-                      className="cursor-pointer"
+                    <th
+                      className="px-4 py-3 cursor-pointer"
                       onClick={() => handleSort('date_created')}
                     >
-                      <div className="d-flex align-items-center">
+                      <div className="flex items-center">
                         Créée le
                         {sortField === 'date_created' && (
-                          <span className="ms-1">
+                          <span className="ml-1">
                             {sortDirection === 'asc' ? '↑' : '↓'}
                           </span>
                         )}
                       </div>
                     </th>
-                    <th className="w-1">Actions</th>
+                    <th className="px-4 py-3 w-8">Actions</th>
                   </tr>
                 </thead>
-                
-                <tbody>
+
+                <tbody className="divide-y divide-gray-50">
                   {companies.map(company => (
-                    <tr key={company.id}>
-                      <td>
+                    <tr key={company.id} className="hover:bg-gray-50/50">
+                      <td className="px-4 py-3">
                         <input
                           type="checkbox"
-                          className="form-check-input"
+                          className="rounded border-gray-300"
                           checked={selectedCompanies.includes(company.id)}
                           onChange={(e) => handleSelectCompany(company.id, e.target.checked)}
                         />
                       </td>
-                      
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-sm me-3">
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600 mr-3">
                             <Building2 size={20} />
                           </div>
                           <div>
-                            <div className="font-weight-medium">{company.name}</div>
+                            <div className="font-medium text-gray-900">{company.name}</div>
                             {company.website && (
-                              <div className="text-muted small d-flex align-items-center">
-                                <Globe size={12} className="me-1" />
-                                <a 
-                                  href={company.website} 
-                                  target="_blank" 
+                              <div className="text-gray-500 text-xs flex items-center">
+                                <Globe size={12} className="mr-1" />
+                                <a
+                                  href={company.website}
+                                  target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-reset"
+                                  className="text-gray-500 hover:text-blue-600 transition-colors"
                                 >
                                   {company.website.replace(/^https?:\/\//, '')}
                                 </a>
                               </div>
                             )}
                             {company.address && (
-                              <div className="text-muted small d-flex align-items-center">
-                                <MapPin size={12} className="me-1" />
+                              <div className="text-gray-500 text-xs flex items-center">
+                                <MapPin size={12} className="mr-1" />
                                 {company.city}, {company.country}
                               </div>
                             )}
                           </div>
                         </div>
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {company.industry ? (
-                          <span className="badge bg-blue-lt">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
                             {company.industry}
                           </span>
                         ) : (
-                          <span className="text-muted">-</span>
+                          <span className="text-gray-400">-</span>
                         )}
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {company.size ? (
-                          <div className="d-flex align-items-center">
-                            <Users size={16} className="text-muted me-2" />
-                            <span>{company.size}</span>
+                          <div className="flex items-center">
+                            <Users size={16} className="text-gray-400 mr-2" />
+                            <span className="text-gray-700">{company.size}</span>
                           </div>
                         ) : (
-                          <span className="text-muted">-</span>
+                          <span className="text-gray-400">-</span>
                         )}
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         <div>
                           {company.email && (
-                            <div className="text-muted small">
+                            <div className="text-gray-500 text-xs">
                               {company.email}
                             </div>
                           )}
                           {company.phone && (
-                            <div className="text-muted small">
+                            <div className="text-gray-500 text-xs">
                               {company.phone}
                             </div>
                           )}
                           {!company.email && !company.phone && (
-                            <span className="text-muted">-</span>
+                            <span className="text-gray-400">-</span>
                           )}
                         </div>
                       </td>
-                      
-                      <td>
-                        <span className="text-muted">
+
+                      <td className="px-4 py-3">
+                        <span className="text-gray-500">
                           {formatRevenue(company.annual_revenue)}
                         </span>
                       </td>
-                      
-                      <td>
+
+                      <td className="px-4 py-3">
                         {getStatusBadge(company.status)}
                       </td>
-                      
-                      <td>
-                        <span className="text-muted">
+
+                      <td className="px-4 py-3">
+                        <span className="text-gray-500">
                           {new Date(company.date_created).toLocaleDateString('fr-CH')}
                         </span>
                       </td>
-                      
-                      <td>
-                        <div className="dropdown">
-                          <button 
-                            className="btn btn-ghost-secondary btn-sm"
-                            data-bs-toggle="dropdown"
+
+                      <td className="px-4 py-3">
+                        <div className="relative">
+                          <button
+                            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                            onClick={() => setOpenDropdownId(openDropdownId === company.id ? null : company.id)}
                           >
                             <MoreVertical size={16} />
                           </button>
-                          <div className="dropdown-menu">
-                            <button
-                              className="dropdown-item"
-                              onClick={() => onEdit(company)}
-                            >
-                              <Edit size={16} className="me-2" />
-                              Modifier
-                            </button>
-                            <div className="dropdown-divider" />
-                            {company.website && (
-                              <a
-                                className="dropdown-item"
-                                href={company.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Globe size={16} className="me-2" />
-                                Visiter le site
-                              </a>
-                            )}
-                            {company.email && (
-                              <a
-                                className="dropdown-item"
-                                href={`mailto:${company.email}`}
-                              >
-                                <Phone size={16} className="me-2" />
-                                Envoyer un email
-                              </a>
-                            )}
-                            <div className="dropdown-divider" />
-                            <button
-                              className="dropdown-item text-danger"
-                              onClick={() => {
-                                if (window.confirm('Supprimer cette entreprise ?')) {
-                                  deleteCompany.mutate(company.id);
-                                }
-                              }}
-                            >
-                              <Trash2 size={16} className="me-2" />
-                              Supprimer
-                            </button>
-                          </div>
+                          {openDropdownId === company.id && (
+                            <>
+                              <div className="fixed inset-0 z-40" onClick={() => setOpenDropdownId(null)} />
+                              <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                                <button
+                                  className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                  onClick={() => { onEdit(company); setOpenDropdownId(null); }}
+                                >
+                                  <Edit size={16} className="mr-2" />
+                                  Modifier
+                                </button>
+                                <div className="border-t border-gray-100 my-1" />
+                                {company.website && (
+                                  <a
+                                    className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                    href={company.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => setOpenDropdownId(null)}
+                                  >
+                                    <Globe size={16} className="mr-2" />
+                                    Visiter le site
+                                  </a>
+                                )}
+                                {company.email && (
+                                  <a
+                                    className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+                                    href={`mailto:${company.email}`}
+                                    onClick={() => setOpenDropdownId(null)}
+                                  >
+                                    <Phone size={16} className="mr-2" />
+                                    Envoyer un email
+                                  </a>
+                                )}
+                                <div className="border-t border-gray-100 my-1" />
+                                <button
+                                  className="w-full px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center"
+                                  onClick={() => {
+                                    if (window.confirm('Supprimer cette entreprise ?')) {
+                                      deleteCompany.mutate(company.id);
+                                    }
+                                    setOpenDropdownId(null);
+                                  }}
+                                >
+                                  <Trash2 size={16} className="mr-2" />
+                                  Supprimer
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -439,26 +446,24 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
             </div>
           )}
         </div>
-        
+
         {/* Pagination */}
         {!searchQuery && totalPages > 1 && (
-          <div className="card-footer d-flex align-items-center">
-            <p className="m-0 text-muted">
+          <div className="p-4 border-t border-gray-100 flex items-center">
+            <p className="m-0 text-gray-500 text-sm">
               Affichage de {currentPage * pageSize + 1} à {Math.min((currentPage + 1) * pageSize, totalCompanies)} sur {totalCompanies} entreprises
             </p>
-            
-            <ul className="pagination m-0 ms-auto">
-              <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
-                <button 
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 0}
-                >
-                  <ChevronLeft size={16} />
-                  Précédent
-                </button>
-              </li>
-              
+
+            <div className="flex items-center gap-1 m-0 ml-auto">
+              <button
+                className={`ds-btn ds-btn-ghost text-sm py-1.5 px-3 ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                <ChevronLeft size={16} className="mr-1 inline" />
+                Précédent
+              </button>
+
               {[...Array(Math.min(5, totalPages))].map((_, i) => {
                 let pageNum;
                 if (totalPages <= 5) {
@@ -470,33 +475,31 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
                 } else {
                   pageNum = currentPage - 2 + i;
                 }
-                
+
                 return (
-                  <li 
+                  <button
                     key={pageNum}
-                    className={`page-item ${currentPage === pageNum ? 'active' : ''}`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                      currentPage === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                    onClick={() => setCurrentPage(pageNum)}
                   >
-                    <button 
-                      className="page-link"
-                      onClick={() => setCurrentPage(pageNum)}
-                    >
-                      {pageNum + 1}
-                    </button>
-                  </li>
+                    {pageNum + 1}
+                  </button>
                 );
               })}
-              
-              <li className={`page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`}>
-                <button 
-                  className="page-link"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages - 1}
-                >
-                  Suivant
-                  <ChevronRight size={16} />
-                </button>
-              </li>
-            </ul>
+
+              <button
+                className={`ds-btn ds-btn-ghost text-sm py-1.5 px-3 ${currentPage === totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages - 1}
+              >
+                Suivant
+                <ChevronRight size={16} className="ml-1 inline" />
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -70,7 +70,7 @@ const ProjectTracking = () => {
   if (projectLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
       </div>
     )
   }
@@ -80,7 +80,7 @@ const ProjectTracking = () => {
       <div className="text-center py-12">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <p className="text-gray-600">Projet introuvable</p>
-        <button onClick={() => navigate('/client/projects')} className="mt-4 text-emerald-600 hover:underline">
+        <button onClick={() => navigate('/client/projects')} className="mt-4 text-blue-600 hover:underline">
           ← Retour aux projets
         </button>
       </div>
@@ -100,7 +100,7 @@ const ProjectTracking = () => {
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <FolderKanban className="w-6 h-6 text-emerald-600" />
+              <FolderKanban className="w-6 h-6 text-blue-600" />
               <h1 className="text-xl font-bold text-gray-900">{project.name}</h1>
             </div>
             <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${statusCfg.color}`}>
@@ -121,10 +121,10 @@ const ProjectTracking = () => {
       <div className="ds-card p-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900">Progression globale</h3>
-          <span className="text-lg font-bold text-emerald-700">{progressPct}%</span>
+          <span className="text-lg font-bold text-blue-700">{progressPct}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3">
-          <div className="bg-emerald-500 h-3 rounded-full transition-all duration-500" style={{ width: `${progressPct}%` }} />
+          <div className="bg-[#0071E3] h-3 rounded-full transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
         <p className="text-sm text-gray-500 mt-2">{completed} sur {total} livrables terminés</p>
       </div>

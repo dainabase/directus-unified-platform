@@ -105,7 +105,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
       {/* Header + Filtres */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-purple-600" />
+          <FileText className="w-5 h-5 text-blue-600" />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Demandes de devis
           </h3>
@@ -123,7 +123,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
             onClick={() => setStatusFilter(f.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               statusFilter === f.value
-                ? 'bg-purple-600 text-white'
+                ? 'bg-[#0071E3] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -159,7 +159,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
                 return (
                   <tr
                     key={p.id}
-                    className={`border-b border-gray-50 hover:bg-gray-50/50 cursor-pointer ${isNew ? 'bg-purple-50/30' : ''}`}
+                    className={`border-b border-gray-50 hover:bg-gray-50/50 cursor-pointer ${isNew ? 'bg-blue-50/30' : ''}`}
                     onClick={() => handleRowClick(p)}
                   >
                     <td className="py-3 text-gray-500 font-mono text-xs">
@@ -198,7 +198,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
                       {(p.status === 'new' || p.status === 'pending') && (
                         <button
                           onClick={(e) => { e.stopPropagation(); onRespondQuote?.(p) }}
-                          className="px-3 py-1 rounded-lg text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                          className="px-3 py-1 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
                         >
                           Répondre
                         </button>

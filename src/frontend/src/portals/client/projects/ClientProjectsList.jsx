@@ -64,7 +64,7 @@ const ClientProjectsList = () => {
       </div>
 
       {projects.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <FolderKanban className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">Aucun projet en cours</p>
         </div>
@@ -75,7 +75,7 @@ const ClientProjectsList = () => {
             return (
               <div key={project.id}
                 onClick={() => navigate(`/client/projects/${project.id}`)}
-                className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 hover:shadow-md transition-shadow cursor-pointer group">
+                className="ds-card p-5 hover:shadow-md transition-shadow cursor-pointer group">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">

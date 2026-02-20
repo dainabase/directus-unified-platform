@@ -30,7 +30,7 @@ const ClientAuth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -42,7 +42,7 @@ const ClientAuth = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8">
+        <div className="ds-card p-8">
           {step === 'success' ? (
             <div className="text-center py-6">
               <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />

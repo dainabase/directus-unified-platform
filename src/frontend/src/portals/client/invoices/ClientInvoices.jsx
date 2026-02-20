@@ -102,12 +102,12 @@ const ClientInvoices = () => {
 
       {/* Invoices list */}
       {invoices.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <Receipt className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">Aucune facture</p>
         </div>
       ) : (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 overflow-hidden">
+        <div className="ds-card overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">

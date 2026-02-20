@@ -96,7 +96,7 @@ const ProjectTracking = () => {
       </button>
 
       {/* Project header */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+      <div className="ds-card p-6">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -118,7 +118,7 @@ const ProjectTracking = () => {
       </div>
 
       {/* Progress */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+      <div className="ds-card p-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900">Progression globale</h3>
           <span className="text-lg font-bold text-emerald-700">{progressPct}%</span>
@@ -130,7 +130,7 @@ const ProjectTracking = () => {
       </div>
 
       {/* Deliverables */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+      <div className="ds-card p-6">
         <h3 className="font-semibold text-gray-900 mb-4">Livrables</h3>
         {deliverables.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-6">Aucun livrable défini</p>

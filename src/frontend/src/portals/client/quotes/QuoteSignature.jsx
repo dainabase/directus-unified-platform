@@ -188,7 +188,7 @@ const QuoteSignature = () => {
 
       {/* Quotes list */}
       {quotes.length === 0 ? (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-12 text-center">
+        <div className="ds-card p-12 text-center">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-500">Aucun devis pour le moment</p>
         </div>
@@ -200,7 +200,7 @@ const QuoteSignature = () => {
             const canSign = quote.status === 'sent' || quote.status === 'viewed'
             return (
               <div key={quote.id}
-                className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 hover:shadow-md transition-shadow">
+                className="ds-card p-5 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">

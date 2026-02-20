@@ -131,7 +131,7 @@ const ClientDashboard = () => {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+        <div className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow"
              onClick={() => navigate('/client/quotes')}>
           <div className="flex items-center justify-between mb-3">
             <FileText className="w-8 h-8 text-blue-500" />
@@ -140,7 +140,7 @@ const ClientDashboard = () => {
           <p className="text-sm text-gray-600">Devis à signer</p>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+        <div className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow"
              onClick={() => navigate('/client/projects')}>
           <div className="flex items-center justify-between mb-3">
             <FolderKanban className="w-8 h-8 text-emerald-500" />
@@ -149,7 +149,7 @@ const ClientDashboard = () => {
           <p className="text-sm text-gray-600">Projets actifs</p>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5 cursor-pointer hover:shadow-md transition-shadow"
+        <div className="ds-card p-5 cursor-pointer hover:shadow-md transition-shadow"
              onClick={() => navigate('/client/invoices')}>
           <div className="flex items-center justify-between mb-3">
             <Receipt className="w-8 h-8 text-amber-500" />
@@ -158,7 +158,7 @@ const ClientDashboard = () => {
           <p className="text-sm text-gray-600">{unpaidInvoices.length} facture(s) à régler</p>
         </div>
 
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-5">
+        <div className="ds-card p-5">
           <div className="flex items-center justify-between mb-3">
             <Calendar className="w-8 h-8 text-purple-500" />
             <span className="text-sm font-medium text-gray-900">{nextDeadline ? formatDate(nextDeadline.date) : '—'}</span>
@@ -204,7 +204,7 @@ const ClientDashboard = () => {
 
       {/* Project Timeline */}
       {latestProject && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6">
+        <div className="ds-card p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold text-gray-900">{latestProject.name}</h3>

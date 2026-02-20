@@ -88,7 +88,7 @@ const ClientMessages = () => {
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200/50 flex flex-col overflow-hidden">
+      <div className="flex-1 ds-card flex flex-col overflow-hidden">
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">

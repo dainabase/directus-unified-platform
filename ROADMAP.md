@@ -62,40 +62,40 @@
 - ✅ Un lead peut être qualifié et converti en devis en < 3 minutes (REQ-CEO)  
 - ✅ Une facture QR conforme est générée depuis un devis signé en 2 clics  
 - ✅ Un projet s'active automatiquement à la confirmation de paiement (REQ-FACT-006)  
-**Progression** : 8/8 stories — [V] DONE — commit 5926787 — 2026-02-19
+**Progression** : 8/8 stories — [A] AUDITED — commit 5926787 — auditée 2026-02-20
 
 ### Stories
 
-- [V] **B-01** · Leads — Actions qualify/convert/archive avec transitions état Directus — 2026-02-19  
+- [A] **B-01** · Leads — Actions qualify/convert/archive avec transitions état Directus — 2026-02-19  
   *Fichiers* : `LeadsDashboard.jsx` 311→702 lignes  
   *Livré* : Qualify modal (score 1-5 + notes + next action), convert-to-quote (crée projet + navigate), archive avec confirmation, badges ancienneté (Nouveau/24h+/URGENT)
 
-- [V] **B-02** · QuoteForm — Formulaire devis multi-lignes avec calculs TVA suisse — 2026-02-19  
+- [A] **B-02** · QuoteForm — Formulaire devis multi-lignes avec calculs TVA suisse — 2026-02-19  
   *Fichiers* : `quotes/QuoteForm.jsx` 472→761 lignes  
   *Livré* : Mode page standalone via URL params, pre-fill depuis lead (?lead_id=&project_id=), numéro auto DEV-YYYYMM-NNN, Save draft + Save & send, PATCH lead/project à la sauvegarde
 
-- [V] **B-03** · Quotes — Actions sur devis (marquer signé, → facture) — 2026-02-19  
+- [A] **B-03** · Quotes — Actions sur devis (marquer signé, → facture) — 2026-02-19  
   *Fichiers* : `QuotesModule.jsx` 134→184 lignes  
   *Livré* : Mutation "Mark signed", action "Generate invoice" (lazy InvoiceGenerator), navigate vers form standalone
 
-- [V] **B-04** · InvoiceGenerator — Génération factures acompte/solde depuis devis — 2026-02-19  
+- [A] **B-04** · InvoiceGenerator — Génération factures acompte/solde depuis devis — 2026-02-19  
   *Fichiers* : `invoices/InvoiceGenerator.jsx` 278 lignes (NOUVEAU)  
   *Livré* : Wizard modal deposit/balance/full/custom, numéro auto FA-YYYYMM-NNN, POST vers client_invoices
 
-- [V] **B-05** · InvoiceDetailView — Vue facture complète avec QR code — 2026-02-19  
+- [A] **B-05** · InvoiceDetailView — Vue facture complète avec QR code — 2026-02-19  
   *Fichiers* : `invoices/InvoiceDetailView.jsx` 197 lignes (NOUVEAU)  
   *Livré* : Page complète /superadmin/invoices/:id, QR placeholder suisse, timeline statuts, badges
 
-- [V] **B-06** · Activation projet — Marquer payé + activation projet en cascade — 2026-02-19  
+- [A] **B-06** · Activation projet — Marquer payé + activation projet en cascade — 2026-02-19  
   *Fichiers* : `lib/projectActivation.js` 90 lignes (NOUVEAU), `InvoicesModule.jsx` 335→442 lignes  
   *Livré* : Utilitaire réutilisable, MAJ statut projet, création 5 livrables par défaut (REQ-FACT-006)  
   *Note* : Activation manuelle maintenant. Revolut webhook automatique en Phase G.
 
-- [V] **B-07** · AlertsWidget — Alertes actionnables avec données réelles Directus — 2026-02-19  
+- [A] **B-07** · AlertsWidget — Alertes actionnables avec données réelles Directus — 2026-02-19  
   *Fichiers* : `widgets/AlertsWidget.jsx` 237→327 lignes  
   *Livré* : 5 sources de données (factures, leads, tickets, devis, projets), boutons action avec navigation
 
-- [V] **B-08** · KPIWidget — KPIs depuis collection kpis — 2026-02-19  
+- [A] **B-08** · KPIWidget — KPIs depuis collection kpis — 2026-02-19  
   *Fichiers* : `widgets/KPIWidget.jsx` 167→233 lignes  
   *Livré* : Fetch depuis dashboard_kpis en priorité, fallback KPIs calculés, support sparkline réel  
 
@@ -109,37 +109,37 @@
 - ✅ Client suit l'avancement de son projet en temps réel (REQ-CLIENT-002)  
 - ✅ Client télécharge/imprime ses factures (REQ-CLIENT-003/005)  
 - ✅ Client communique avec HYPERVISUAL via messagerie  
-**Progression** : 8/8 stories — [V] DONE — commit f488d28 — 2026-02-19
+**Progression** : 8/8 stories — [A] AUDITED — commit f488d28 — auditée 2026-02-20
 
-- [V] **C-00** · Fix format numéro facture INV-YYYY-NN — 2026-02-19  
+- [A] **C-00** · Fix format numéro facture INV-YYYY-NN — 2026-02-19  
   *Fichiers* : `InvoiceGenerator.jsx`  
   *Livré* : Séquence auto via count Directus
 
-- [V] **C-01** · Auth portail client (magic link token localStorage) — 2026-02-19  
+- [A] **C-01** · Auth portail client (magic link token localStorage) — 2026-02-19  
   *Fichiers* : `ClientAuth.jsx`, `hooks/useClientAuth.js`, `ClientPortalGuard.jsx` (3 nouveaux)  
   *Livré* : Login email → token → accès données client. Guard sur /client/*
 
-- [V] **C-02** · Dashboard client connecté Directus — 2026-02-19  
+- [A] **C-02** · Dashboard client connecté Directus — 2026-02-19  
   *Fichiers* : `Dashboard.jsx` (réécriture complète)  
   *Livré* : 4 cartes statut, section "Action requise", timeline projet (tout filtré contact_id)
 
-- [V] **C-03** · Signature devis en ligne avec CGV intégrée — 2026-02-19  
+- [A] **C-03** · Signature devis en ligne avec CGV intégrée — 2026-02-19  
   *Fichiers* : `QuoteSignature.jsx` (nouveau)  
   *Livré* : Flow 3 étapes atomique : CGV acceptance → signature_log → PATCH quote
 
-- [V] **C-04** · Suivi projet temps réel — 2026-02-19  
+- [A] **C-04** · Suivi projet temps réel — 2026-02-19  
   *Fichiers* : `ClientProjectsList.jsx`, `ProjectTracking.jsx` (2 nouveaux)  
   *Livré* : Liste projets + détail avec progression deliverables
 
-- [V] **C-05** · Historique factures + impression — 2026-02-19  
+- [A] **C-05** · Historique factures + impression — 2026-02-19  
   *Fichiers* : `ClientInvoices.jsx` (nouveau)  
   *Livré* : Tableau statuts, solde outstanding, print via window.open
 
-- [V] **C-06** · Messagerie client ↔ HYPERVISUAL — 2026-02-19  
+- [A] **C-06** · Messagerie client ↔ HYPERVISUAL — 2026-02-19  
   *Fichiers* : `ClientMessages.jsx` (nouveau)  
   *Livré* : Chat UI sur collection comments, polling 15s
 
-- [V] **C-07** · Navigation et layout portail client — 2026-02-19  
+- [A] **C-07** · Navigation et layout portail client — 2026-02-19  
   *Fichiers* : `ClientLayout.jsx` (réécriture)  
   *Livré* : Sidebar 5 items emerald, header logo + prénom + logout
 
@@ -149,39 +149,39 @@
 **Objectif CDC** : Un prestataire peut recevoir une demande, soumettre un devis, voir ses paiements
 **Modules CDC** : Module 2 (Portail Prestataire)
 **Critères d'acceptation** :
-- ✅ Prestataire soumets son devis en < 5 minutes (REQ-PREST-003)
+- ✅ Prestataire soumet son devis en < 5 minutes (REQ-PREST-003)
 - ✅ Prestataire voit le bon de commande une fois projet activé (REQ-PREST-006)
 - ✅ Prestataire voit le statut paiement de sa prestation (REQ-PREST-007)
-**Progression** : 7/7 stories — [V] DONE — 2026-02-19
+**Progression** : 7/7 stories — [A] AUDITED — commit 9d57c20 — auditée 2026-02-20
 
-- [V] **D-01** · Auth portail prestataire (magic link email → token localStorage) — 2026-02-19
+- [A] **D-01** · Auth portail prestataire (magic link email → token localStorage) — 2026-02-19
   *Fichiers* : `hooks/useProviderAuth.js`, `auth/ProviderAuth.jsx`, `auth/ProviderPortalGuard.jsx` (3 nouveaux)
   *Livré* : Login email → lookup providers → token localStorage → guard /prestataire/*. Thème violet/indigo.
 
-- [V] **D-02** · Dashboard prestataire connecté Directus — 2026-02-19
+- [A] **D-02** · Dashboard prestataire connecté Directus — 2026-02-19
   *Fichiers* : `Dashboard.jsx` (réécriture complète)
   *Livré* : 4 cartes KPI (devis en attente, projets actifs, factures à soumettre, paiements en attente), section "Actions requises" avec liens directs.
 
-- [V] **D-03** · Demandes de devis + soumission offre avec TVA 8.1% auto — 2026-02-19
+- [A] **D-03** · Demandes de devis + soumission offre avec TVA 8.1% auto — 2026-02-19
   *Fichiers* : `quotes/QuoteRequests.jsx` (nouveau)
   *CDC* : REQ-PREST-001, REQ-PREST-002, REQ-PREST-003
   *Livré* : Table proposals filtrée provider_id, filtres statut, modal SubmitOfferModal (montant HT + TVA 8.1% auto + deadline + notes), PATCH proposals.
 
-- [V] **D-04** · Bons de commande — 2026-02-19
+- [A] **D-04** · Bons de commande — 2026-02-19
   *Fichiers* : `orders/PurchaseOrders.jsx` (nouveau)
   *CDC* : REQ-PREST-006
   *Livré* : Projets où main_provider_id = provider.id, bouton "Confirmer réception BC", création/MAJ order record.
 
-- [V] **D-05** · Factures fournisseur + upload PDF + suivi paiement — 2026-02-19
+- [A] **D-05** · Factures fournisseur + upload PDF + suivi paiement — 2026-02-19
   *Fichiers* : `invoices/ProviderInvoices.jsx` (nouveau)
   *CDC* : REQ-PREST-007
   *Livré* : Liste supplier_invoices, cards résumé (en attente/payées), modal création facture avec upload PDF (FormData → Directus files), TVA auto, suivi statut paiement.
 
-- [V] **D-06** · Navigation portail prestataire — 2026-02-19
-  *Fichiers* : `layout/PrestataireLayout.jsx` (réécriture complète)
+- [A] **D-06** · Navigation portail prestataire — 2026-02-19
+  *Fichiers* : `layout/PrestatireLayout.jsx` (réécriture complète)
   *Livré* : Sidebar 4 items violet (Dashboard, Devis, Commandes, Factures), header logo + nom prestataire + logout.
 
-- [V] **D-07** · SuperAdmin — Gestion prestataires + envoi demande devis — 2026-02-19
+- [A] **D-07** · SuperAdmin — Gestion prestataires + envoi demande devis — 2026-02-19
   *Fichiers* : `superadmin/providers/ProvidersModule.jsx` (nouveau), `Sidebar.jsx` (entrée Prestataires)
   *CDC* : REQ-PREST-005
   *Livré* : Onglets Prestataires/Offres reçues, envoi demande devis (POST proposals), Accept/Reject offres soumises (accept → MAJ project.main_provider_id), badge alerte nouvelles soumissions.
@@ -189,37 +189,37 @@
 
 ---
 
-## PHASE E — AUTOMATISATIONS EMAIL (MAUTIC) *(TERMINÉE)*
+## PHASE E — AUTOMATIONS EMAIL (MAUTIC) *(TERMINÉE)*
 **Objectif CDC** : Zéro email manuel pour HYPERVISUAL
 **Modules CDC** : Module 1, 3, 5, 8
 **Note technique** : Mautic 5.x gère TOUS les emails (marketing + transactionnels)
-**Progression** : 6/6 stories — [V] DONE — 2026-02-19
+**Progression** : 6/6 stories — [A] AUDITED — commit 9ab20a9 — auditée 2026-02-20
 
-- [V] **E-01** · Email confirmation lead (REQ-LEAD-007 — dans les 5 minutes) — 2026-02-19
+- [A] **E-01** · Email confirmation lead (REQ-LEAD-007 — dans les 5 minutes) — 2026-02-19
   *Fichiers* : `api/email/lead-confirmation.js`, `api/email/templates.js`
   *Livré* : Directus Flow items.create leads → POST /api/email/lead-confirmation → Mautic upsert + send. Anti-doublon via automation_logs.
 
-- [V] **E-02** · Email devis envoyé au client avec PDF — 2026-02-19
+- [A] **E-02** · Email devis envoyé au client avec PDF — 2026-02-19
   *Fichiers* : `api/email/quote-sent.js`
   *CDC* : REQ-FACT-004
   *Livré* : Flow items.update quotes status=sent → email client avec lien signature portail + montant TTC CHF.
 
-- [V] **E-03** · Email accusé de réception paiement + activation projet — 2026-02-19
+- [A] **E-03** · Email accusé de réception paiement + activation projet — 2026-02-19
   *Fichiers* : `api/email/payment-confirmed.js`
   *CDC* : REQ-FACT-006
   *Livré* : Flow items.update payments status=completed → chaîne payment→invoice→contact → email confirmation + lien portail projet.
 
-- [V] **E-04** · Rappels automatiques factures impayées (J+7, J+14, J+30) — 2026-02-19
+- [A] **E-04** · Rappels automatiques factures impayées (J+7, J+14, J+30) — 2026-02-19
   *Fichiers* : `api/email/invoice-reminders.js`
   *CDC* : REQ-FACT-010 (procédure recouvrement suisse SchKG/LP)
   *Livré* : CRON quotidien 09h00 → 3 paliers (courtois/ferme/mise en demeure SchKG Art. 67). Anti-doublon par level. Champ due_date ajouté à client_invoices.
 
-- [V] **E-05** · Notification prestataire approbation facture + date paiement — 2026-02-19
+- [A] **E-05** · Notification prestataire approbation facture + date paiement — 2026-02-19
   *Fichiers* : `api/email/supplier-approved.js`
   *CDC* : REQ-APPRO-005
   *Livré* : Flow items.update supplier_invoices status=approved → email prestataire avec date paiement prévue (date_paid ou J+30).
 
-- [V] **E-06** · Rappel prestataire si pas de réponse sous 24h — 2026-02-19
+- [A] **E-06** · Rappel prestataire si pas de réponse sous 24h — 2026-02-19
   *Fichiers* : `api/email/provider-reminder.js`
   *CDC* : REQ-PREST-004
   *Livré* : CRON horaire → proposals pending/active > 24h sans submitted_at → max 1 rappel par proposal via automation_logs.
@@ -418,11 +418,11 @@
 | Métrique | Valeur |
 |----------|--------|
 | Collections Directus | 83 actives |
-| Stories Phase A (infra+display) | 47/47 ✅ |
-| Stories Phase B (cycle vente) | 8/8 ✅ |
-| Stories Phase C (portail client) | 8/8 ✅ |
-| Stories Phase D (portail prestataire) | 7/7 ✅ |
-| Stories Phase E (email automation) | 6/6 ✅ |
+| Stories Phase A (infra+display) | 47/47 [A] |
+| Stories Phase B (cycle vente) | 8/8 [A] |
+| Stories Phase C (portail client) | 8/8 [A] |
+| Stories Phase D (portail prestataire) | 7/7 [A] |
+| Stories Phase E (email automation) | 6/6 [A] |
 | Stories CDC restantes | 24 à faire |
 | Modules CDC couverts | 7/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation) |
 | Dernier commit Phase E | — 2026-02-19 |
@@ -434,12 +434,12 @@
 La plateforme V1 sera considérée opérationnelle quand :
 
 1. `[V]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001) — Phase F
-2. `[V]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
-3. `[V]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
-4. `[V]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
-5. `[V]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
+2. `[A]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
+3. `[A]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
+4. `[A]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
+5. `[A]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
 6. `[ ]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — Phase I
-7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel, Revolut webhook Phase G)
+7. `[A]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel, Revolut webhook Phase G)
 8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
 9. `[ ]` 240 KPIs existants affichés correctement (REQ-KPI-001) — Phase J
 10. `[ ]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — Phase I

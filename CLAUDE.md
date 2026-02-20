@@ -34,7 +34,9 @@
 - API Directus via `src/frontend/src/api/directus.js`
 - Hooks custom : `useDirectusQuery`, `useCompanies`, `useFinances`, `useProjects`, `usePeople`
 
-## REGLE DE SECURITE — BLOCAGE SI NON RESPECTE
+---
+
+## ⚠️ REGLE DE SECURITE — BLOCAGE SI NON RESPECTE
 
 > Si le prompt recu ne mentionne pas de skills a lire, Claude Code DOIT :
 > 1. NE PAS commencer a coder
@@ -44,24 +46,56 @@
 >
 > Cette regle protege la qualite du code. Elle n'est JAMAIS sautee.
 
+---
+
 ## PROTOCOLE OBLIGATOIRE — A EXECUTER AVANT CHAQUE TACHE
 
 > Ce protocol s'applique SANS EXCEPTION a chaque story, chaque composant, chaque feature.
 > Il n'est jamais saute, meme pour une "petite" modification.
 
-### ETAPE 0 — Lire la roadmap et lancer le skill-router
+### 🔴 ETAPE 0a BLOQUANT — Générer et lire l'index complet des skills
 
-**0a. Roadmap :**
+**Cette étape est OBLIGATOIRE avant toute autre action. Sans elle, Claude Code n'a accès qu'aux skills qu'il "connaît déjà" — les 939 skills restants sont invisibles.**
+
+```bash
+# TOUJOURS exécuter en premier
+bash scripts/generate-skills-index.sh
+```
+
+Ce script :
+1. Scanne `~/.claude/skills-repos/` (939+ skills spécialisés)
+2. Scanne `.claude/skills/` (8 skills projet HYPERVISUAL)
+3. Met à jour `SKILLS-INDEX.md` avec les chemins réels
+4. Affiche le compte total
+
+**Après exécution du script :**
+1. Lire `SKILLS-INDEX.md` EN ENTIER (toutes les catégories)
+2. Identifier les 3-6 skills les plus pertinents pour CETTE tâche précise
+3. Lire leurs fichiers `SKILL.md` complets
+4. **SEULEMENT ALORS** commencer à coder
+
+> ⚠️ Si le script échoue (répertoire absent, permissions) :
+> - Lire `SKILLS-INDEX.md` statique comme fallback
+> - Consulter `SKILLS-MAPPING.md` pour les combinaisons pré-sélectionnées par story
+> - NE PAS ignorer cette étape — continuer sans skills = code de qualité médiocre
+
+---
+
+### ETAPE 0b — Lire la roadmap et confirmer la story
+
+**0b-1. Roadmap :**
 1. Lire `ROADMAP.md` → identifier la story en cours
 2. Lire `SKILLS-MAPPING.md` → combinaisons pre-selectionnees par story
 
-**0b. Skill-router (scanne les 939 skills) :**
+**0b-2. Skill-router (verification supplementaire) :**
 1. Lire `.claude/skills/skill-router/SKILL.md`
 2. Lire `.claude/skills/skill-router/references/REGISTRY.md`
 3. Identifier les categories pertinentes pour cette tache (Frontend ? API ? Database ? Security ?)
 4. Lire `references/categories/<categorie>.md` pour chaque categorie pertinente
 5. Choisir les 2-4 skills les plus adaptes avec leurs chemins complets
 → Ce processus garantit que les 939 skills sont consideres, pas seulement les 3-4 connus.
+
+---
 
 ### ETAPE 1 — Lire les skills (OBLIGATOIRE — minimum 2 skills)
 
@@ -75,9 +109,9 @@ Selon le type de tache, lire dans `.claude/skills/` :
 - Integrations : `.claude/skills/integration-sync-engine/SKILL.md`
 
 **1b. Skills specialises UI/UX (OBLIGATOIRE pour tout composant visuel) :**
-Racine : `/Users/jean-mariedelaunay/.claude/skills-repos/`
+Racine : `/Users/jean-marieddelaunay/.claude/skills-repos/`
 
-⚡ **DESIGN SYSTEM APPLE PREMIUM — STACK UI OBLIGATOIRE** ⚡
+⚠️ **DESIGN SYSTEM APPLE PREMIUM — STACK UI OBLIGATOIRE** ⚠️
 
 Pour tout composant React avec UI (SANS EXCEPTION) :
 ```
@@ -85,7 +119,7 @@ Pour tout composant React avec UI (SANS EXCEPTION) :
 ~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md
 
 # 2. DESIGN SYSTEM & TOKENS (couleurs, spacing, typographie)
-~/.claude/skills-repos/aliregarezvan i-claude-skills/product-team/ui-design-system/SKILL.md
+~/.claude/skills-repos/alirezarezvani-claude-skills/product-team/ui-design-system/SKILL.md
 
 # 3. REACT 18 PATTERNS (hooks, performance, composition)
 ~/.claude/skills-repos/jeffallan-claude-skills/skills/react-expert/SKILL.md
@@ -133,13 +167,13 @@ JAMAIS supposer un nom de champ — toujours `directus:get_collection_items(coll
 > ```bash
 > # Lister les champs d'une collection
 > curl -s "http://localhost:8055/items/COLLECTION?limit=1" \
->   -H "Authorization: Bearer hypervisual-admin-static-token-2026"
+>    -H "Authorization: Bearer hypervisual-admin-static-token-2026"
 >
 > # Creer un champ
 > curl -s -X POST "http://localhost:8055/fields/COLLECTION" \
->   -H "Authorization: Bearer hypervisual-admin-static-token-2026" \
->   -H "Content-Type: application/json" \
->   -d '{"field":"nom_champ","type":"string"}'
+>    -H "Authorization: Bearer hypervisual-admin-static-token-2026" \
+>    -H "Content-Type: application/json" \
+>    -d '{"field":"nom_champ","type":"string"}'
 > ```
 > Le token statique est valide pour jmd@hypervisual.ch (admin).
 
@@ -151,7 +185,8 @@ JAMAIS supposer un nom de champ — toujours `directus:get_collection_items(coll
 ## Tool Discovery — Ressources
 - **6 MCP Servers** : PostgreSQL, Directus, ESLint, Playwright, Context7, Sequential Thinking
 - **8 Custom Skills projet** : `.claude/skills/`
-- **939 Skills specialises** : `/Users/jean-mariedelaunay/.claude/skills-repos/`
+- **939 Skills specialises** : `/Users/jean-marieddelaunay/.claude/skills-repos/`
+- **Index complet** : `SKILLS-INDEX.md` (regénérer avec `bash scripts/generate-skills-index.sh`)
 - **Mapping complet** : `SKILLS-MAPPING.md` (combinaisons recommandees par story)
 
 ## Swiss Compliance (Critical)
@@ -192,7 +227,7 @@ Le Superadmin React orchestre tout. Les outils specialises sont integres en ifra
 
 ### Les 5 entreprises (owner_companies)
 | # | Entreprise | Domaine |
-|---|------------|--------|
+|---|------------|---------|
 | 1 | HYPERVISUAL | Digital signage / LED / Totems / Hologrammes |
 | 2 | DAINAMICS | Technologie / SaaS |
 | 3 | LEXAIA | Services juridiques |
@@ -207,67 +242,68 @@ Toutes les donnees sont filtrees par `owner_company` via un selecteur global dan
 
 ```
 directus-unified-platform/
-├── CLAUDE.md                                → CE FICHIER
-├── .mcp.json                                → MCP servers config (postgres, directus, eslint)
-├── docker-compose.yml                       → Directus 11.10 + PostgreSQL
-├── .env                                     → Config (JAMAIS commiter)
-├── package.json                             → pnpm monorepo
+├── CLAUDE.md                               → CE FICHIER
+├── .mcp.json                               → MCP servers config (postgres, directus, eslint)
+├── docker-compose.yml                      → Directus 11.10 + PostgreSQL
+├── .env                                    → Config (JAMAIS commiter)
+├── package.json                            → pnpm monorepo
 │
-├── .claude/skills/                          → 8 custom skills Claude Code
+├── .claude/skills/                         → 8 custom skills Claude Code
 │
 ├── src/
-│   ├── backend/                             → Express API (port 3000)
-│   │   ├── server.js                        → Point d'entree, routes, proxy Directus
+│   ├── backend/                            → Express API (port 3000)
+│   │   ├── server.js                       → Point d'entree, routes, proxy Directus
 │   │   ├── api/
-│   │   │   ├── auth/                        → JWT authentication middleware
-│   │   │   ├── finance/                     → 80+ endpoints finance
-│   │   │   ├── commercial/                  → Workflow Lead→Quote→CGV→Signature→Acompte→Projet
-│   │   │   ├── collection/                  → Recouvrement de creances
-│   │   │   ├── legal/                       → Juridique / CGV
-│   │   │   ├── invoice-ninja/               → Sync facturation
-│   │   │   ├── revolut/                     → Sync bancaire (5 comptes)
-│   │   │   ├── mautic/                      → Marketing automation
-│   │   │   └── erpnext/                     → Comptabilite
+│   │   │   ├── auth/                       → JWT authentication middleware
+│   │   │   ├── finance/                    → 80+ endpoints finance
+│   │   │   ├── commercial/                 → Workflow Lead→Quote→CGV→Signature→Acompte→Projet
+│   │   │   ├── collection/                 → Recouvrement de creances
+│   │   │   ├── legal/                      → Juridique / CGV
+│   │   │   ├── invoice-ninja/              → Sync facturation
+│   │   │   ├── revolut/                    → Sync bancaire (5 comptes)
+│   │   │   ├── mautic/                     → Marketing automation
+│   │   │   └── erpnext/                    → Comptabilite
 │   │   ├── services/
-│   │   │   ├── commercial/                  → 7 services (workflow, quotes, cgv, signatures, deposits...)
-│   │   │   ├── finance/                     → 6 services
-│   │   │   ├── collection/                  → 5 services (recouvrement)
-│   │   │   ├── legal/                       → 2 services
-│   │   │   └── integrations/                → 3 services
+│   │   │   ├── commercial/                 → 7 services (workflow, quotes, cgv, signatures, deposits...)
+│   │   │   ├── finance/                    → 6 services
+│   │   │   ├── collection/                 → 5 services (recouvrement)
+│   │   │   ├── legal/                      → 2 services
+│   │   │   └── integrations/              → 3 services
 │   │   └── modules/
-│   │       └── accounting/                  → Moteur comptable suisse
-│   │           ├── core/                    → Plan comptable PME (Kafer)
-│   │           ├── swiss-compliance/        → TVA 2025, codes AFC, Form 200
-│   │           ├── services/                → QR-Invoice, export handlers
-│   │           └── browser/                 → Version navigateur
+│   │       └── accounting/                 → Moteur comptable suisse
+│   │           ├── core/                   → Plan comptable PME (Kafer)
+│   │           ├── swiss-compliance/       → TVA 2025, codes AFC, Form 200
+│   │           ├── services/               → QR-Invoice, export handlers
+│   │           └── browser/               → Version navigateur
 │   │
 │   └── frontend/
 │       ├── vite.config.js
-│       ├── package.json                     → React 18, Vite 6, TanStack Query, Zustand, Tailwind
+│       ├── package.json                    → React 18, Vite 6, TanStack Query, Zustand, Tailwind
 │       └── src/
-│           ├── App.jsx                      → ~50 routes, layout avec Sidebar + TopBar
-│           ├── main.jsx                     → Entry point React
-│           ├── api/                         → API layer (config.js, directus.js)
-│           ├── hooks/                       → useDirectusQuery, useCompanies, useFinances, useProjects, usePeople
+│           ├── App.jsx                     → ~50 routes, layout avec Sidebar + TopBar
+│           ├── main.jsx                    → Entry point React
+│           ├── api/                        → API layer (config.js, directus.js)
+│           ├── hooks/                      → useDirectusQuery, useCompanies, useFinances, useProjects, usePeople
 │           ├── components/
-│           │   ├── layout/                  → Sidebar.jsx, TopBar.jsx
-│           │   ├── ui/                      → Badge, Button, GlassCard, Input, Select, Table
-│           │   └── banking/                 → BankingDashboard.jsx
-│           ├── services/                    → API services partages
-│           ├── stores/                      → Zustand stores
-│           ├── utils/                       → Helpers, formatters
-│           ├── styles/                      → design-system.css, apple-premium.css
+│           │   ├── layout/                 → Sidebar.jsx, TopBar.jsx
+│           │   ├── ui/                     → Badge, Button, GlassCard, Input, Select, Table
+│           │   └── banking/               → BankingDashboard.jsx
+│           ├── services/                   → API services partages
+│           ├── stores/                     → Zustand stores
+│           ├── utils/                      → Helpers, formatters
+│           ├── styles/                     → design-system.css, apple-premium.css
 │           └── portals/
-│               ├── superadmin/              → PORTAIL PRINCIPAL
-│               ├── client/                  → PRODUCTION-READY (14 fichiers)
-│               ├── prestataire/             → Fonctionnel (Phase D)
-│               └── revendeur/              → Mockup (1 fichier)
+│                   ├── superadmin/         → PORTAIL PRINCIPAL
+│                   ├── client/             → PRODUCTION-READY (14 fichiers)
+│                   ├── prestataire/        → Fonctionnel (Phase D)
+│                   └── revendeur/          → Mockup (1 fichier)
 │
-├── directus/extensions/                     → Custom Directus extensions
-├── integrations/                            → External API sync modules
-├── docs/                                    → Documentation technique extensive
-├── tools/migration/                         → Scripts migration Directus
-└── scripts/                                 → Scripts utilitaires
+├── directus/extensions/                    → Custom Directus extensions
+├── integrations/                           → External API sync modules
+├── docs/                                   → Documentation technique extensive
+├── tools/migration/                        → Scripts migration Directus
+└── scripts/                                → Scripts utilitaires
+    └── generate-skills-index.sh           → 🔴 SCRIPT BLOQUANT — regenere SKILLS-INDEX.md
 ```
 
 ---
@@ -281,7 +317,7 @@ directus-unified-platform/
 10 modules avec routing unifie dans App.jsx :
 
 | Module | Composants | Etat donnees | Notes |
-|--------|------------|-------------|-------|
+|--------|-----------|--------------|-------|
 | **Finance** | FinanceDashboard, KPICards, CashFlowChart, RecentTransactions, AlertsPanel | Partiel Directus | BudgetsManager & ExpensesTracker = mockes |
 | **Collection** | CollectionDashboard, DebtorsList, DebtorDetail, AgingChart, InterestCalculator, WorkflowConfig, WorkflowTimeline, LPCases | Connecte Directus | Module recouvrement le plus avance |
 | **CRM** | CRMDashboard, CompaniesList, CompanyForm, ContactsList, ContactForm, QuickStats | Partiel Directus | CustomerSuccess & PipelineView = mockes |
@@ -343,15 +379,15 @@ Voir `docs/directus-collections.md` et `docs/COMPLETE_COLLECTIONS_MAPPING.md` po
 **Base** : `src/backend/server.js`
 
 ```
-/api/auth         → JWT authentication
-/api/finance      → 80+ endpoints finance (partiellement implementes)
-/api/commercial   → Workflow complet Lead→Quote→CGV→Signature→Acompte→Projet
-/api/collection   → Recouvrement de creances
-/api/legal        → Juridique / CGV
+/api/auth        → JWT authentication
+/api/finance     → 80+ endpoints finance (partiellement implementes)
+/api/commercial  → Workflow complet Lead→Quote→CGV→Signature→Acompte→Projet
+/api/collection  → Recouvrement de creances
+/api/legal       → Juridique / CGV
 /api/invoice-ninja → Sync Invoice Ninja
-/api/revolut      → Sync bancaire Revolut (5 comptes)
-/api/erpnext      → Comptabilite ERPNext
-/api/mautic       → Marketing automation
+/api/revolut     → Sync bancaire Revolut (5 comptes)
+/api/erpnext     → Comptabilite ERPNext
+/api/mautic      → Marketing automation
 
 /admin    → Proxy vers Directus admin (port 8055)
 /items    → Proxy vers Directus API
@@ -378,7 +414,7 @@ Implemente dans `src/backend/services/commercial/` (7 services).
 ## Integrations externes
 
 | Service | Usage | Config |
-|---------|-------|-------|
+|---------|-------|--------|
 | **Directus 11.10** | CMS / Data layer | Docker, port 8055, PostgreSQL |
 | **Invoice Ninja** | Facturation | API token dans .env |
 | **Revolut** | Banking (5 comptes) | OAuth2, cles privees par entreprise |
@@ -394,12 +430,15 @@ Implemente dans `src/backend/services/commercial/` (7 services).
 ## Phases restantes (ROADMAP v2.0)
 
 | Phase | Objectif | Stories |
-|-------|----------|--------|
-| **F** | Capture leads multicanal (WordPress, WhatsApp, Email, Ringover) | 0/4 |
-| **G** | Revolut webhooks + reconciliation bancaire | 0/5 |
-| **H** | Signatures DocuSeal + CGV | 0/3 |
-| **I** | Finance avancee (jalons, recurrent, avoirs, fournisseurs) | 0/8 |
-| **J** | KPI Dashboard + Rapport CEO | 0/4 |
-| **K** | Multi-entreprises post-V1 (DAINAMICS, LEXAIA, ENKI REALTY, TAKEOUT) | 0/1 |
+|-------|---------|---------|
+| **1** | Design System Apple Premium Monochromatic | 0/9 — PRIORITE ABSOLUE |
+| **2** | Connexion donnees reelles React ↔ Directus | 0/12 |
+| **3** | Finance complete (tous modules) | 0/14 |
+| **4** | Portail Prestataire complet | 0/9 |
+| **5** | Portail Revendeur complet | 0/8 |
+| **6** | Portail Client complet | 0/9 |
+| **7** | Automation & IA | 0/12 |
+| **8** | Qualite & Production | 0/9 |
+| **9** | Multi-entreprises post-V1 | 0/6 |
 
 **Voir ROADMAP.md pour le detail complet de chaque story.**

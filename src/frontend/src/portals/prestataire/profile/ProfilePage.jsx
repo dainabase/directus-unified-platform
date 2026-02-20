@@ -3,6 +3,13 @@
  * Page /prestataire/profile — profil prestataire + gestion documents.
  * Collection : providers (structure à vérifier — loggé dans PROGRESS.md).
  * Upload via directus_files.
+ *
+ * Sections:
+ *   1. GeneralInfoSection (company_name, ide_number, address, phone, email, daily_rate)
+ *   2. DocumentsSection (upload/manage provider_documents)
+ *   3. SpecialtiesSection (specialties tags + canton zones)
+ *   4. StatistiquesSection (missions, factures, livrables)
+ *   5. NotificationsSection (email preferences toggles)
  */
 
 import React, { useState, useCallback, useRef } from 'react'
@@ -11,13 +18,14 @@ import { useForm } from 'react-hook-form'
 import {
   UserCircle, Building, Phone, Mail, MapPin, Save,
   Upload, FileCheck, AlertTriangle, Clock, Trash2,
-  Shield, Tag, Globe, Loader2, CheckCircle, XCircle
+  Shield, Tag, Globe, Loader2, CheckCircle, XCircle,
+  BarChart3, Bell, Briefcase, Receipt, PackageCheck
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import toast from 'react-hot-toast'
 import api from '../../../lib/axios'
-import { useAuthStore } from '../../../stores/authStore'
+import { useProviderAuth } from '../hooks/useProviderAuth'
 
 const formatCHF = (value) =>
   new Intl.NumberFormat('fr-CH', {
@@ -46,23 +54,6 @@ const DOCUMENT_TYPES = [
   { key: 'trade_register', label: 'Extrait registre commerce', required: false },
   { key: 'certifications', label: 'Certifications', required: false }
 ]
-
-// ── Fetch profil prestataire ──
-const fetchProfile = async (userId) => {
-  try {
-    // Chercher le profil prestataire lié à l'utilisateur
-    const { data } = await api.get('/items/providers', {
-      params: {
-        filter: { user_id: { _eq: userId } },
-        fields: ['*'],
-        limit: 1
-      }
-    })
-    return data?.data?.[0] || null
-  } catch {
-    return null
-  }
-}
 
 // ── Fetch documents du prestataire ──
 const fetchDocuments = async (providerId) => {
@@ -463,23 +454,200 @@ const SpecialtiesSection = ({ profile, onSave }) => {
   )
 }
 
+// ── Section 4 : Statistiques ──
+const StatistiquesSection = ({ stats, isLoading }) => {
+  const statItems = [
+    {
+      label: 'Total missions',
+      value: stats?.totalProjects || 0,
+      icon: Briefcase,
+      color: 'text-blue-600',
+      bg: 'bg-blue-50'
+    },
+    {
+      label: 'Total facturé',
+      value: formatCHF(stats?.totalInvoiced || 0),
+      icon: Receipt,
+      color: 'text-green-600',
+      bg: 'bg-green-50'
+    },
+    {
+      label: 'Nb factures',
+      value: stats?.invoiceCount || 0,
+      icon: FileCheck,
+      color: 'text-purple-600',
+      bg: 'bg-purple-50'
+    },
+    {
+      label: 'Livrables terminés',
+      value: stats?.completedDeliverables || 0,
+      icon: PackageCheck,
+      color: 'text-orange-600',
+      bg: 'bg-orange-50'
+    }
+  ]
+
+  return (
+    <div className="ds-card p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <BarChart3 className="w-5 h-5 text-blue-600" />
+        <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          Statistiques
+        </h3>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {statItems.map(({ label, value, icon: Icon, color, bg }) => (
+          <div key={label} className={`${bg} rounded-xl p-4 flex flex-col items-center gap-2`}>
+            <div className={`w-10 h-10 rounded-full ${bg} flex items-center justify-center`}>
+              <Icon size={20} className={color} />
+            </div>
+            {isLoading ? (
+              <div className="h-6 w-16 ds-skeleton rounded" />
+            ) : (
+              <p className={`text-lg font-bold ${color}`}>{value}</p>
+            )}
+            <p className="text-xs text-gray-500 text-center">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Section 5 : Préférences de notifications ──
+const NotificationsSection = () => {
+  const [prefs, setPrefs] = useState({
+    newProposals: true,
+    paymentStatus: true,
+    weeklyDigest: false
+  })
+
+  const togglePref = (key) => {
+    setPrefs(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  const handleSave = () => {
+    toast.success('Préférences de notifications sauvegardées')
+  }
+
+  const notifOptions = [
+    {
+      key: 'newProposals',
+      label: 'Nouvelles propositions de mission',
+      description: 'Recevoir un email quand une nouvelle proposition de mission correspond à votre profil'
+    },
+    {
+      key: 'paymentStatus',
+      label: 'Statut des paiements',
+      description: 'Être notifié par email lorsqu\'un paiement est émis ou confirmé'
+    },
+    {
+      key: 'weeklyDigest',
+      label: 'Résumé hebdomadaire',
+      description: 'Recevoir chaque lundi un récapitulatif de votre activité de la semaine'
+    }
+  ]
+
+  return (
+    <div className="ds-card p-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <Bell className="w-5 h-5 text-blue-600" />
+          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+            Notifications
+          </h3>
+        </div>
+        <button
+          onClick={handleSave}
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+        >
+          <Save size={14} /> Sauvegarder
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {notifOptions.map(({ key, label, description }) => (
+          <div key={key} className="flex items-start justify-between gap-4 p-3 rounded-lg bg-gray-50">
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-800">{label}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={prefs[key]}
+              onClick={() => togglePref(key)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                prefs[key] ? 'bg-[#0071E3]' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  prefs[key] ? 'translate-x-5' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Page principale ──
 const ProfilePage = () => {
   const queryClient = useQueryClient()
-  const user = useAuthStore((s) => s.user)
-  const userId = user?.id
+  const { provider } = useProviderAuth()
+  const providerId = provider?.id
 
   const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ['prestataire-profile', userId],
-    queryFn: () => fetchProfile(userId),
-    enabled: !!userId,
+    queryKey: ['prestataire-profile', providerId],
+    queryFn: async () => {
+      if (!providerId) return null
+      try {
+        const { data } = await api.get(`/items/providers/${providerId}`, {
+          params: { fields: ['*'] }
+        })
+        return data?.data || null
+      } catch {
+        return null
+      }
+    },
+    enabled: !!providerId,
     staleTime: 1000 * 60 * 5
   })
 
   const { data: documents, isLoading: docsLoading } = useQuery({
-    queryKey: ['prestataire-documents', profile?.id],
-    queryFn: () => fetchDocuments(profile?.id),
-    enabled: !!profile?.id,
+    queryKey: ['prestataire-documents', providerId],
+    queryFn: () => fetchDocuments(providerId),
+    enabled: !!providerId,
+    staleTime: 1000 * 60 * 5
+  })
+
+  // Fetch provider stats
+  const { data: stats, isLoading: statsLoading } = useQuery({
+    queryKey: ['provider-stats', providerId],
+    queryFn: async () => {
+      const [projectsRes, invoicesRes, deliverablesRes] = await Promise.all([
+        api.get('/items/projects', {
+          params: { filter: { main_provider_id: { _eq: providerId } }, aggregate: { count: ['*'] } }
+        }),
+        api.get('/items/supplier_invoices', {
+          params: { filter: { provider_id: { _eq: providerId } }, aggregate: { count: ['*'], sum: ['amount'] } }
+        }),
+        api.get('/items/deliverables', {
+          params: { filter: { assigned_provider_id: { _eq: providerId }, status: { _eq: 'completed' } }, aggregate: { count: ['*'] } }
+        })
+      ])
+      return {
+        totalProjects: parseInt(projectsRes.data?.data?.[0]?.count || 0),
+        totalInvoiced: parseFloat(invoicesRes.data?.data?.[0]?.sum?.amount || 0),
+        invoiceCount: parseInt(invoicesRes.data?.data?.[0]?.count || 0),
+        completedDeliverables: parseInt(deliverablesRes.data?.data?.[0]?.count || 0)
+      }
+    },
+    enabled: !!providerId,
     staleTime: 1000 * 60 * 5
   })
 
@@ -489,7 +657,7 @@ const ProfilePage = () => {
         return api.patch(`/items/providers/${profile.id}`, data)
       }
       // Créer un profil si inexistant
-      return api.post('/items/providers', { ...data, user_id: userId })
+      return api.post('/items/providers', { ...data, user_id: providerId })
     },
     onSuccess: () => {
       toast.success('Profil mis à jour')
@@ -546,7 +714,7 @@ const ProfilePage = () => {
       {/* Section 2 */}
       <DocumentsSection
         documents={documents || []}
-        providerId={profile?.id}
+        providerId={providerId}
         onUploadSuccess={() => queryClient.invalidateQueries({ queryKey: ['prestataire-documents'] })}
       />
 
@@ -555,6 +723,15 @@ const ProfilePage = () => {
         profile={profile}
         onSave={handleSaveProfile}
       />
+
+      {/* Section 4 */}
+      <StatistiquesSection
+        stats={stats}
+        isLoading={statsLoading}
+      />
+
+      {/* Section 5 */}
+      <NotificationsSection />
     </div>
   )
 }

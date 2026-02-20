@@ -33,6 +33,15 @@ const PrestataireDashboard = lazy(() => import('./portals/prestataire/Dashboard'
 const QuoteRequests = lazy(() => import('./portals/prestataire/quotes/QuoteRequests'))
 const PurchaseOrders = lazy(() => import('./portals/prestataire/orders/PurchaseOrders'))
 const ProviderInvoices = lazy(() => import('./portals/prestataire/invoices/ProviderInvoices'))
+const ProviderCalendar = lazy(() => import('./portals/prestataire/calendar/CalendarPage'))
+const ProviderMissions = lazy(() => import('./portals/prestataire/missions/MissionsListPage'))
+const ProviderMissionDetail = lazy(() => import('./portals/prestataire/missions/MissionDetailPage'))
+const ProviderTasks = lazy(() => import('./portals/prestataire/tasks/TasksPage'))
+const ProviderMessages = lazy(() => import('./portals/prestataire/messages/MessagesPage'))
+const ProviderKnowledgeBase = lazy(() => import('./portals/prestataire/knowledge/KnowledgeBasePage'))
+const ProviderKnowledgeArticle = lazy(() => import('./portals/prestataire/knowledge/KnowledgeArticlePage'))
+const ProviderProfile = lazy(() => import('./portals/prestataire/profile/ProfilePage'))
+const ProviderUploadInvoice = lazy(() => import('./portals/prestataire/invoices/UploadInvoicePage'))
 
 // Revendeur Portal
 const RevendeurLayout = lazy(() => import('./portals/revendeur/layout/RevendeurLayout'))
@@ -304,6 +313,15 @@ function App() {
               <Route path="quotes" element={<QuoteRequests />} />
               <Route path="orders" element={<PurchaseOrders />} />
               <Route path="invoices" element={<ProviderInvoices />} />
+              <Route path="invoices/upload" element={<ProviderUploadInvoice />} />
+              <Route path="calendar" element={<ProviderCalendar />} />
+              <Route path="missions" element={<ProviderMissions />} />
+              <Route path="missions/:id" element={<ProviderMissionDetail />} />
+              <Route path="tasks" element={<ProviderTasks />} />
+              <Route path="messages" element={<ProviderMessages />} />
+              <Route path="knowledge" element={<ProviderKnowledgeBase />} />
+              <Route path="knowledge/:id" element={<ProviderKnowledgeArticle />} />
+              <Route path="profile" element={<ProviderProfile />} />
             </Route>
           </Route>
 

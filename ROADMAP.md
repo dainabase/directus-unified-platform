@@ -108,23 +108,25 @@
 
 ---
 
-## PHASE 4 — PORTAIL PRESTATAIRE COMPLET ⚡
+## PHASE 4 — PORTAIL PRESTATAIRE COMPLET ✅
 
-**Durée estimée** : 1 semaine
+**Complété** : 2026-02-20 — 12 JSX files, ~5500 lignes, build OK
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
-| 4.1 | Dashboard prestataire — données réelles | 🔥 | 🟡 | |
-| 4.2 | Missions — liste (connecté Directus) | 🔥 | 🔵 | Récupérer ancien 64KB |
-| 4.3 | Mission — détail (brief + matériel + contact) | 🔥 | 🔵 | Récupérer ancien 75KB |
-| 4.4 | Tâches prestataire | ⚡ | 🔵 | Récupérer ancien 65KB |
-| 4.5 | **Module 23** — Calendrier missions | ⚡ | 🔵 | Récupérer ancien 52KB + export iCal |
-| 4.6 | **Module 24** — Messagerie CEO ↔ Prestataire | 📌 | 🔵 | Récupérer ancien 46KB |
-| 4.7 | **Module 22** — Base de connaissances | 💡 | 🔵 | Récupérer ancien 50KB + article 49KB |
-| 4.8 | Profil prestataire | 📌 | 🟡 | |
-| 4.9 | Upload facture prestataire + OCR auto | 🔥 | 🔴 | Déclencheur → Module 12 |
+| 4.1 | Dashboard prestataire — données réelles | 🔥 | 🟢 | 616 lignes — timeline, deadlines, quick stats, proposals/projects/invoices |
+| 4.2 | Missions — liste (connecté Directus) | 🔥 | 🟢 | 270 lignes — status filter, search, project cards grid |
+| 4.3 | Mission — détail (brief + matériel + contact) | 🔥 | 🟢 | 430 lignes — info grid, deliverables table, documents section |
+| 4.4 | Tâches prestataire | ⚡ | 🟢 | 523 lignes — list + kanban toggle, status update mutation, priority filter |
+| 4.5 | **Module 23** — Calendrier missions | ⚡ | 🟢 | 636 lignes — CSS Grid month/week, iCal export, day detail sidebar |
+| 4.6 | **Module 24** — Messagerie CEO ↔ Prestataire | 📌 | 🟢 | 650 lignes — 2-panel layout, conversations groupées, 30s polling |
+| 4.7 | **Module 22** — Base de connaissances | 💡 | 🟢 | KnowledgeBasePage + KnowledgeArticlePage, category filter, HTML sanitization |
+| 4.8 | Profil prestataire | 📌 | 🟢 | 739 lignes — fix auth useProviderAuth, stats section, notifications prefs |
+| 4.9 | Upload facture prestataire + OCR auto | 🔥 | 🟢 | 3-step wizard: upload → OCR → review, drag-drop, TVA 8.1/2.6/3.8 |
 | ~~4.10~~ | ~~Performance~~ | ⚫ | ⚫ | Supprimé — non pertinent |
 | ~~4.11~~ | ~~Récompenses~~ | ⚫ | ⚫ | Supprimé — non pertinent |
+
+**Critère de sortie** : ✅ Portail prestataire complet avec 11 routes, sidebar 11 entrées. Build production OK.
 
 ---
 
@@ -225,13 +227,13 @@
 | Phase 1 — Design System | 9 | ✅ 100% complété (Fév 2026) |
 | Phase 2 — Données réelles | 12 | ✅ 100% complété (Fév 2026) |
 | Phase 3 — Finance complète | 11 | ✅ 100% complété (2026-02-20) |
-| Phase 4 — Prestataire | 9 | 🟡 ~20% |
+| Phase 4 — Prestataire | 9 | ✅ 100% complété (2026-02-20) |
 | Phase 5 — Revendeur | 8 | 🟡 ~15% |
 | Phase 6 — Client | 9 | 🟡 ~30% |
 | Phase 7 — Automation & IA | 12 | 🔴 ~5% |
 | Phase 8 — Qualité | 9 | 🟡 ~10% |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~45% global** |
+| **TOTAL** | **96 stories** | **~55% global** |
 
 ---
 

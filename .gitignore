@@ -3,6 +3,11 @@ node_modules/
 npm-debug.log*
 yarn-error.log*
 
+# Keys / Certificates
+keys/
+*.pem
+*.key
+
 # Environment
 .env
 .env.local

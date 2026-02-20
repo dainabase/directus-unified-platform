@@ -8,15 +8,23 @@ import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FileText, Package, Receipt,
-  LogOut, Wrench
+  Calendar, LogOut, Wrench, Briefcase, CheckSquare,
+  MessageSquare, BookOpen, User, Upload
 } from 'lucide-react'
 import { useProviderAuth } from '../hooks/useProviderAuth'
 
 const NAV_ITEMS = [
   { path: '/prestataire', label: 'Tableau de bord', icon: LayoutDashboard, end: true },
+  { path: '/prestataire/missions', label: 'Missions', icon: Briefcase },
+  { path: '/prestataire/tasks', label: 'Tâches', icon: CheckSquare },
+  { path: '/prestataire/calendar', label: 'Calendrier', icon: Calendar },
+  { path: '/prestataire/messages', label: 'Messages', icon: MessageSquare },
   { path: '/prestataire/quotes', label: 'Demandes de devis', icon: FileText },
   { path: '/prestataire/orders', label: 'Bons de commande', icon: Package },
-  { path: '/prestataire/invoices', label: 'Mes factures', icon: Receipt }
+  { path: '/prestataire/invoices', label: 'Mes factures', icon: Receipt },
+  { path: '/prestataire/invoices/upload', label: 'Upload facture', icon: Upload },
+  { path: '/prestataire/knowledge', label: 'Base de connaissances', icon: BookOpen },
+  { path: '/prestataire/profile', label: 'Mon profil', icon: User }
 ]
 
 const PrestataireLayout = () => {

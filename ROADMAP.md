@@ -294,6 +294,14 @@
 - 18 champs ajoutés sur 4 collections : bank_transactions (+6), client_invoices (+3), projects (+2), reconciliations (+7)
 - Arrondi suisse ±0.05 CHF implémenté dans le scoring montant
 
+**Audit Phase G (2026-02-20) — 6 bugs corrigés** :
+- BUG-G01: express.json() global cassait express.raw() du webhook → bypass conditionnel ajouté dans server.js
+- BUG-G02: determineOwnerCompany() retournait toujours null → mapping account_id implémenté (5 entreprises)
+- BUG-G03: http://localhost:3000 hardcodé dans activateProjectIfDeposit → utilise UNIFIED_PORT env
+- BUG-G04: parseFloat() sans arrondi causait erreurs IEEE 754 → Math.round(x*100)/100
+- BUG-G05: matchQRReference() sans validation format 27 chiffres → regex /^\d{27}$/ ajoutée
+- BUG-G06: matchQRReference() acceptait cleanQR.includes(cleanTx) → supprimé (seul cleanTx.includes(cleanQR) est correct)
+
 ---
 
 ## PHASE H — SIGNATURES DOCUSEAL + CGV *(TERMINÉE)*

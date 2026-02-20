@@ -101,9 +101,30 @@ export async function syncRecentTransactions(revolut, hoursBack = 24) {
 /**
  * Determiner l'owner_company a partir du compte Revolut
  * Les 5 entreprises ont chacune un compte Revolut distinct
+ * Mapping base sur integrations/revolut/config/companies.json
  */
 function determineOwnerCompany(accountId) {
-  // Mapping a completer avec les vrais IDs de comptes Revolut
-  // Pour l'instant, default HYPERVISUAL
-  return null;
+  if (!accountId) return 'HYPERVISUAL'; // Default si pas d'account_id
+
+  const accountMapping = {
+    // HYPERVISUAL
+    'acc_hypervisual_chf': 'HYPERVISUAL',
+    'acc_hypervisual_eur': 'HYPERVISUAL',
+    // DAINAMICS
+    'acc_dainamics_chf': 'DAINAMICS',
+    'acc_dainamics_eur': 'DAINAMICS',
+    'acc_dainamics_usd': 'DAINAMICS',
+    // LEXAIA
+    'acc_lexaia_chf': 'LEXAIA',
+    'acc_lexaia_eur': 'LEXAIA',
+    // ENKI_REALTY
+    'acc_enki_chf': 'ENKI_REALTY',
+    'acc_enki_eur': 'ENKI_REALTY',
+    'acc_enki_gbp': 'ENKI_REALTY',
+    // TAKEOUT
+    'acc_takeout_chf': 'TAKEOUT',
+    'acc_takeout_eur': 'TAKEOUT'
+  };
+
+  return accountMapping[accountId] || 'HYPERVISUAL';
 }

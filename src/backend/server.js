@@ -38,8 +38,13 @@ console.log('Demarrage du serveur Directus Unifie (ES Modules)...');
 // MIDDLEWARES GLOBAUX
 // ============================================
 
-// JSON body parser
-app.use(express.json({ limit: '20mb' }));
+// JSON body parser — SAUF pour les webhooks Revolut qui ont besoin du body brut (HMAC)
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/revolut/webhook-receiver')) {
+    return next(); // Laisser express.raw() du webhook-receiver gerer le body
+  }
+  express.json({ limit: '20mb' })(req, res, next);
+});
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Middleware de logging

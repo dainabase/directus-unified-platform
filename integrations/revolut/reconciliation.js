@@ -81,7 +81,10 @@ function matchQRReference(txRef, invoiceQR) {
   if (!txRef || !invoiceQR) return false;
   const cleanTx = txRef.replace(/\s/g, '');
   const cleanQR = invoiceQR.replace(/\s/g, '');
-  return cleanTx === cleanQR || cleanTx.includes(cleanQR) || cleanQR.includes(cleanTx);
+  // Valider le format QR-Reference suisse : exactement 27 chiffres
+  const qrRegex = /^\d{27}$/;
+  if (!qrRegex.test(cleanQR)) return false;
+  return cleanTx === cleanQR || cleanTx.includes(cleanQR);
 }
 
 // ── Algorithme principal de scoring ──
@@ -91,9 +94,10 @@ export function calculateMatchScore(transaction, invoice) {
   const reasons = [];
 
   // 1. Montant exact (40 points) — arrondi suisse 0.05 CHF
-  const txAmount = Math.abs(parseFloat(transaction.amount) || 0);
-  const invAmount = parseFloat(invoice.amount || 0);
-  const amountDiff = Math.abs(txAmount - invAmount);
+  // Arrondir a 2 decimales pour eviter les erreurs IEEE 754 floating point
+  const txAmount = Math.round(Math.abs(parseFloat(transaction.amount) || 0) * 100) / 100;
+  const invAmount = Math.round(parseFloat(invoice.amount || 0) * 100) / 100;
+  const amountDiff = Math.round(Math.abs(txAmount - invAmount) * 100) / 100;
 
   if (invAmount > 0) {
     if (amountDiff <= 0.05) {
@@ -283,7 +287,10 @@ export async function activateProjectIfDeposit(invoice, transaction) {
 
     // Declencher email confirmation (Phase E - E-03)
     try {
-      await axios.post('http://localhost:3000/api/email/payment-confirmed', {
+      const baseURL = process.env.UNIFIED_PORT
+        ? `http://localhost:${process.env.UNIFIED_PORT}`
+        : 'http://localhost:3000';
+      await axios.post(`${baseURL}/api/email/payment-confirmed`, {
         payment_id: transaction.id
       }, { headers: { 'Content-Type': 'application/json' } });
     } catch (e) {

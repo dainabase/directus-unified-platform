@@ -149,6 +149,11 @@ const KPISidebar = lazy(() => import('./portals/superadmin/kpis/KPIWidget'))
 const ThresholdConfig = lazy(() => import('./portals/superadmin/kpis/ThresholdConfig'))
 const TreasuryForecast = lazy(() => import('./portals/superadmin/kpis/TreasuryForecast'))
 
+// Phase 7 — Automation & IA
+const EmailTemplates = lazy(() => import('./portals/superadmin/automation/EmailTemplates'))
+const Workflows = lazy(() => import('./portals/superadmin/automation/Workflows'))
+const NotificationHub = lazy(() => import('./portals/superadmin/automation/NotificationHub'))
+
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
   return (
@@ -291,6 +296,11 @@ function App() {
                   <Route path="kpis" element={<KPISidebar selectedCompany={selectedCompany} />} />
                   <Route path="kpis/thresholds" element={<ThresholdConfig selectedCompany={selectedCompany} />} />
                   <Route path="kpis/treasury" element={<TreasuryForecast selectedCompany={selectedCompany} />} />
+
+                  {/* Phase 7 — Automation & IA */}
+                  <Route path="automation/emails" element={<EmailTemplates selectedCompany={selectedCompany} />} />
+                  <Route path="automation/workflows" element={<Workflows selectedCompany={selectedCompany} />} />
+                  <Route path="automation/notifications" element={<NotificationHub selectedCompany={selectedCompany} />} />
 
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />

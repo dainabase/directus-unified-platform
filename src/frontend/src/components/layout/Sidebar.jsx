@@ -27,6 +27,8 @@ import {
   Milestone,
   ChevronDown,
   ChevronRight,
+  Mail,
+  Bell,
 } from 'lucide-react'
 
 const companies = [
@@ -83,6 +85,14 @@ const navSections = [
     items: [
       { label: 'Contrats', icon: Shield, path: '/superadmin/legal/contracts' },
       { label: 'Abonnements', icon: RefreshCw, path: '/superadmin/subscriptions' },
+    ],
+  },
+  {
+    label: 'AUTOMATION',
+    items: [
+      { label: 'Email Templates', icon: Mail, path: '/superadmin/automation/emails' },
+      { label: 'Workflows', icon: Zap, path: '/superadmin/automation/workflows' },
+      { label: 'Notifications', icon: Bell, path: '/superadmin/automation/notifications' },
     ],
   },
   {

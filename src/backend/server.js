@@ -236,6 +236,38 @@ try {
 }
 
 // ============================================
+// API WORKFLOWS - Phase 7 (Lead qualification, Quote→Deposit, Payment→Project, Monthly Report)
+// ============================================
+
+try {
+  const workflowsRouter = await import('./api/workflows/index.js');
+  app.use('/api/workflows', workflowsRouter.default);
+
+  // Start monthly CEO report CRON
+  const { startMonthlyCron } = await import('./api/workflows/monthly-report.js');
+  if (startMonthlyCron) {
+    startMonthlyCron();
+    console.log('[api] Monthly CEO report CRON started (Phase 7)');
+  }
+
+  console.log('[api] Workflows connected: /api/workflows (Phase 7 automation)');
+} catch (err) {
+  console.warn('[api] Workflows not available:', err.message);
+}
+
+// ============================================
+// API NOTIFICATIONS - Phase 7 (SSE + REST)
+// ============================================
+
+try {
+  const notificationsRouter = await import('./api/notifications/index.js');
+  app.use('/api/notifications', notificationsRouter.default);
+  console.log('[api] Notifications connected: /api/notifications (Phase 7)');
+} catch (err) {
+  console.warn('[api] Notifications not available:', err.message);
+}
+
+// ============================================
 // API INTEGRATIONS - DocuSeal, Invoice Ninja, Mautic
 // ============================================
 

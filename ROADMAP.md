@@ -170,24 +170,26 @@
 
 ---
 
-## PHASE 7 — AUTOMATION & IA ⚡
+## PHASE 7 — AUTOMATION & IA ✅
 
-**Durée estimée** : 1-2 semaines
+**Complété** : 2026-02-20 — 12/12 stories, 5 backend workflows, 3 frontend modules, 2 API modules, build OK
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
-| 7.1 | **Module 20** — Email Templates (éditeur + Mautic sync) | ⚡ | 🔵 | Récupérer ancien 18KB |
-| 7.2 | **Module 21** — Workflows visuels (liste + historique) | ⚡ | 🔵 | Récupérer ancien 19KB |
-| 7.3 | Workflow : Lead entrant → qualification LLM | 🔥 | 🔴 | Claude API |
-| 7.4 | Workflow : Signature → facture acompte auto | 🔥 | 🔴 | |
-| 7.5 | Workflow : Paiement → activation projet auto | 🔥 | 🔴 | Revolut webhook |
-| 7.6 | Workflow : Relances automatiques (J+7, J+14, J+30) | ⚡ | 🔴 | Via Mautic |
-| 7.7 | Workflow : Rapport mensuel CEO (1er du mois) | 📌 | 🔴 | |
-| 7.8 | Notification — Automation (hub + historique) | ⚡ | 🔵 | Récupérer ancien 28KB |
-| 7.9 | Module 13 — Time tracking → facturation régie | 📌 | 🔴 | |
-| 7.10 | Module 14 — Tickets support → facturation hors contrat | 📌 | 🔴 | |
-| 7.11 | Intégration WhatsApp Business → Lead auto | 💡 | 🔴 | Déféré |
-| 7.12 | Intégration Ringover + résumé LLM appels | 💡 | 🔴 | |
+| 7.1 | **Module 20** — Email Templates (éditeur + Mautic sync) | ⚡ | 🟢 | 2026-02-20 — 557 lignes, CRUD Directus, sync Mautic, multi-langue FR/DE/EN, preview inline |
+| 7.2 | **Module 21** — Workflows visuels (liste + historique) | ⚡ | 🟢 | 2026-02-20 — 591 lignes, 6 workflows prédéfinis, toggle ON/OFF, historique exécutions |
+| 7.3 | Workflow : Lead entrant → qualification LLM | 🔥 | 🟢 | 2026-02-20 — Claude claude-sonnet-4-6, 3x retry exponential backoff, score ≥7 → email confirmation |
+| 7.4 | Workflow : Signature → facture acompte auto | 🔥 | 🟢 | 2026-02-20 — DocuSeal webhook, 30% acompte Invoice Ninja, idempotent |
+| 7.5 | Workflow : Paiement → activation projet auto | 🔥 | 🟢 | 2026-02-20 — Revolut HMAC webhook, 3 stratégies matching, deposit→project / final→completed |
+| 7.6 | Workflow : Relances automatiques (J+7, J+14, J+30) | ⚡ | 🟢 | 2026-02-20 — invoice-reminders.js, cron J+7/J+14/J+30, Mautic transactional |
+| 7.7 | Workflow : Rapport mensuel CEO (1er du mois) | 📌 | 🟢 | 2026-02-20 — CRON 1er du mois 08:00, Claude AI summary, anti-doublon, preview + send |
+| 7.8 | Notification — Automation (hub + historique) | ⚡ | 🟢 | 2026-02-20 — 522 lignes, SSE + polling fallback, filtres type/read/date, mark read |
+| 7.9 | Module 13 — Time tracking → facturation régie | 📌 | 🟢 | 2026-02-20 — 8 endpoints, CSV export BOM, Invoice Ninja multi-rate TVA 8.1/2.6/3.8 |
+| 7.10 | Module 14 — Tickets support → facturation hors contrat | 📌 | 🟢 | 2026-02-20 — support/index.js, billing endpoint, invoice generation |
+| 7.11 | Intégration WhatsApp Business → Lead auto | 💡 | 🟢 | 2026-02-20 — whatsapp-webhook.js 240 lignes, verify + messages, lead auto-create |
+| 7.12 | Intégration Ringover + résumé LLM appels | 💡 | 🟢 | 2026-02-20 — ringover-polling.js, call events, LLM summary |
+
+**Critère de sortie** : ✅ Automation complète. 5 workflows backend, 3 modules frontend (Email Templates, Workflows, Notifications), Time Tracking API, SSE notifications. Build production OK.
 
 ---
 
@@ -229,16 +231,16 @@
 | Phase | Stories | Statut global |
 |-------|---------|--------------|
 | Phase 0 — Fondation + V1 backend | 10 | ✅ 100% complété |
-| Phase 1 — Design System | 9 | ⚠️ 67% (6/9 OK, 3 résidus portails + ~50 fichiers SuperAdmin bg-blue-600/GlassCard) |
-| Phase 2 — Données réelles | 12 | ⚠️ 83% (10/12 OK, budgets mockés + Revolut token refresh manquant) |
+| Phase 1 — Design System | 9 | ✅ 100% complété (2026-02-20) — 261 corrections DS dans ~65 fichiers |
+| Phase 2 — Données réelles | 12 | ✅ 100% complété (2026-02-20) — Budgets + Revolut token refresh OK |
 | Phase 3 — Finance complète | 11 | ✅ 100% complété (2026-02-20) |
 | Phase 4 — Prestataire | 9 | ✅ 100% complété (2026-02-20) |
 | Phase 5 — Revendeur | 8 | ✅ 100% complété (2026-02-20) |
 | Phase 6 — Client | 9 | ✅ 100% complété (2026-02-20) |
-| Phase 7 — Automation & IA | 12 | 🔴 ~5% |
+| Phase 7 — Automation & IA | 12 | ✅ 100% complété (2026-02-20) |
 | Phase 8 — Qualité | 9 | 🟡 ~10% |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~66% global** |
+| **TOTAL** | **96 stories** | **~84% global (81/96)** |
 
 ---
 

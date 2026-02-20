@@ -7,21 +7,34 @@
 
 ---
 
-## 📚 SKILLS OBLIGATOIRES — LIRE EN PREMIER
+## 📚 ÉTAPE 0 — SKILLS OBLIGATOIRES AVANT TOUT CODE
 
-**Étape 1 — Consulter le routeur de skills du projet :**
+Lire dans l'ordre avant d'écrire la première ligne de code :
+
 ```bash
-cat SKILLS-MAPPING.md
+# 1. SKILL ROUTER — Toujours en premier
+cat /Users/jean-mariedelaunay/directus-unified-platform/.claude/skills/skill-router/SKILL.md
+
+# 2. SKILLS MAPPING — Référence complète des combinaisons par story
+cat /Users/jean-mariedelaunay/directus-unified-platform/SKILLS-MAPPING.md
 ```
 
-**Étape 2 — Lire les skills de base Phase I :**
-```bash
-cat ~/.claude/skills-repos/backend-api/SKILL.md
-cat ~/.claude/skills-repos/directus-integration/SKILL.md
-cat ~/.claude/skills-repos/swiss-accounting/SKILL.md
-```
+Si tu ne peux pas lire un fichier → **STOP et signale l'erreur. Ne jamais deviner.**
 
-**Étape 3 — Lire les skills spécialisés selon SKILLS-MAPPING.md pour chaque story avant de la coder.**
+### Combinaisons par story (issues de SKILLS-MAPPING.md)
+
+| Story | Skills à lire dans l'ordre |
+|-------|---------------------------|
+| **I-01** Facturation jalons | `.claude/skills/swiss-compliance-engine/SKILL.md` + `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md` |
+| **I-02** Contrats récurrents | `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/react-expert/SKILL.md` |
+| **I-03** CRON facturation | `.claude/skills/swiss-compliance-engine/SKILL.md` + `.claude/skills/integration-sync-engine/SKILL.md` + `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/express-route-generator/SKILL.md` |
+| **I-04** Avoirs / notes de crédit | `.claude/skills/swiss-compliance-engine/SKILL.md` + `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md` |
+| **I-05** Workflow validation fournisseurs | `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/react-expert/SKILL.md` |
+| **I-06** Détection écarts devis/facture | `.claude/skills/swiss-compliance-engine/SKILL.md` + `.claude/skills/postgresql-directus-optimizer/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/sql-pro/SKILL.md` |
+| **I-07** Suivi temps → régie | `.claude/skills/swiss-compliance-engine/SKILL.md` + `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/anthropics-skills/skills/frontend-design/SKILL.md` |
+| **I-08** Tickets support → facturation | `.claude/skills/directus-api-patterns/SKILL.md` + `~/.claude/skills-repos/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md` + `~/.claude/skills-repos/claude-code-plugins-plus-skills/skills/06-backend-dev/express-route-generator/SKILL.md` |
+
+> Lire les skills de la story **avant** de commencer à coder cette story. Pas tous en amont.
 
 ---
 

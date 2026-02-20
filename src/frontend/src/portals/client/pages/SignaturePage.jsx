@@ -16,7 +16,7 @@ const formatCHF = (value) =>
     style: 'currency',
     currency: 'CHF',
     minimumFractionDigits: 2
-  }).format((value || 0) / 100)
+  }).format(value || 0)
 
 const SignaturePage = () => {
   const { quoteId } = useParams()

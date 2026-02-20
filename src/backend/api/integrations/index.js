@@ -184,16 +184,15 @@ router.post('/docuseal/signature/:submissionId/remind', async (req, res) => {
  * DocuSeal webhook handler
  */
 router.post('/docuseal/webhook', async (req, res) => {
+  // ACK immediat (200) — DocuSeal reessaiera si non-200
+  const signature = req.headers['x-docuseal-signature'];
+  res.json({ received: true });
+
+  // Traitement asynchrone apres ACK
   try {
-    const signature = req.headers['x-docuseal-signature'];
-    const result = await DocuSealService.handleWebhook(req.body, signature);
-    res.json(result);
+    await DocuSealService.handleWebhook(req.body, signature);
   } catch (error) {
     console.error('DocuSeal webhook error:', error.message);
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
   }
 });
 

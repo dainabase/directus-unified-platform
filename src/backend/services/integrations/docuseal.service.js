@@ -173,10 +173,10 @@ export async function createCGVSignatureRequest(cgvAcceptanceId, options = {}) {
       role: 'Client'
     };
 
-    const submission = await docusealApi.post('/submissions', {
+    const submission = await docusealApi.post('/api/submissions', {
       template_id: options.templateId || getTemplateIdForType('cgv'),
       send_email: true,
-      signers: [{
+      submitters: [{
         ...signer,
         fields: [
           {
@@ -228,7 +228,7 @@ export async function createCGVSignatureRequest(cgvAcceptanceId, options = {}) {
  */
 export async function getSignatureStatus(submissionId) {
   try {
-    const response = await docusealApi.get(`/submissions/${submissionId}`);
+    const response = await docusealApi.get(`/api/submissions/${submissionId}`);
     const submission = response.data;
 
     return {
@@ -589,7 +589,7 @@ function mapDocuSealStatus(status) {
  */
 export async function cancelSignatureRequest(submissionId) {
   try {
-    await docusealApi.delete(`/submissions/${submissionId}`);
+    await docusealApi.delete(`/api/submissions/${submissionId}`);
     await updateSignatureLog(submissionId, { status: 'cancelled' });
     return { success: true };
   } catch (error) {
@@ -603,7 +603,7 @@ export async function cancelSignatureRequest(submissionId) {
  */
 export async function resendSignatureRequest(submissionId, email) {
   try {
-    await docusealApi.post(`/submissions/${submissionId}/remind`, {
+    await docusealApi.post(`/api/submissions/${submissionId}/remind`, {
       email: email
     });
     return { success: true };
@@ -618,7 +618,7 @@ export async function resendSignatureRequest(submissionId, email) {
  */
 export async function getEmbedSigningUrl(submissionId, signerEmail) {
   try {
-    const response = await docusealApi.get(`/submissions/${submissionId}`);
+    const response = await docusealApi.get(`/api/submissions/${submissionId}`);
     const signer = response.data.signers?.find(s => s.email === signerEmail);
 
     if (!signer?.embed_url) {

@@ -332,6 +332,13 @@
 - Routes intégrations déjà montées dans server.js — pas besoin de créer de nouveau router
 - setupDocuSealWebhook() ajouté au démarrage server.js pour enregistrer le webhook sur l'instance locale
 
+**Audit Phase H (2026-02-20) — 5 bugs corrigés** :
+- BUG-H01: createCGVSignatureRequest() utilisait `signers` au lieu de `submitters` → corrigé (docuseal.service.js:179)
+- BUG-H02: 5 endpoints DocuSeal manquaient le préfixe `/api/` (CGV, getStatus, cancel, remind, embed) → corrigé
+- BUG-H03: deposit.service.js hardcodait token Directus → utilise DIRECTUS_ADMIN_TOKEN env var
+- BUG-H04: SignaturePage.jsx divisait montant par 100 (centimes) alors que quotes stocke en CHF decimal → corrigé
+- BUG-H05: Webhook DocuSeal retournait 500 en cas d'erreur au lieu de ACK 200 immédiat → pattern async ajouté
+
 ---
 
 ## PHASE I — MODULES FINANCE AVANCÉS (CDC V1.2) *(TERMINÉE)*

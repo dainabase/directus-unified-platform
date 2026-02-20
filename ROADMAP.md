@@ -1,529 +1,381 @@
-# ROADMAP — HYPERVISUAL Unified Platform
-**Version** : 2.0  
-**Date** : Février 2026  
-**Référence** : CDC V1.2 — 16 modules fonctionnels  
-**Auteur** : Jean (CEO) + Claude (Architecte IA)
-
-> **IMPORTANT** : Ce fichier est la colonne vertébrale du projet.  
-> Il remplace l'ancien PROGRESS.md (47/47 = infrastructure uniquement).  
-> Toute nouvelle phase doit être définie ici AVANT de commencer le code.
-
----
-
-## ÉTAT RÉEL DU PROJET
-
-### Ce qui EST fait (Phases 0-6 — Infrastructure + Affichage)
-- ✅ Infrastructure : Docker, PostgreSQL, Directus 11.10, Auth JWT multi-portails
-- ✅ Collections : 83 collections Directus avec données réelles
-- ✅ Frontend : 4 portails React (SuperAdmin, Client, Prestataire, Revendeur)
-- ✅ Affichage données : Listes, tableaux, graphiques connectés Directus
-- ✅ Design system : Glassmorphism, CHF formatting, fr-CH locale
-- ✅ Code splitting : React.lazy, ~50 chunks Vite
-
-### Ce qui MANQUE (CDC V1.2 — 80% du projet réel)
-- ❌ Cycle de vente opérationnel (boutons qui font des choses)
-- ❌ Génération réelle de factures QR-Invoice v2.3 conformes
-- ❌ Activation automatique projet à paiement Revolut
-- ✅ Signatures électroniques DocuSeal — **FAIT Phase H**
-- ❌ Emails transactionnels via Mautic
-- ✅ Capture leads WordPress / WhatsApp / Ringover — **FAIT Phase F** (4/4 canaux)
-- ✅ Workflows validation factures fournisseurs — **FAIT Phase I**
-- ❌ Rapprochement bancaire algorithme multi-critères
-- ❌ Portail client fonctionnel (signer, uploader, communiquer)
-- ✅ Portail prestataire fonctionnel (soumettre devis, voir paiements) — **FAIT Phase D**
-- ✅ Facturation par jalons (deliverables → factures) — **FAIT Phase I**
-- ✅ Facturation récurrente automatique — **FAIT Phase I**
-- ✅ KPIs depuis collection `kpis` (240 enregistrements réels) — **FAIT Phase J**
-
----
-
-## LÉGENDE
-
-- `[ ]` TODO — Pas encore démarré  
-- `[~]` IN_PROGRESS — En cours  
-- `[V]` DONE — Implémenté, en attente validation Jean  
-- `[A]` AUDITED — Validé par Jean (seul Jean peut passer [V] → [A])  
-- `[X]` BLOCKED — Bloqué (raison obligatoire dans les notes)  
-- `[S]` SKIPPED — Reporté (raison obligatoire)
-
----
-
-## PHASE A — INFRASTRUCTURE + AFFICHAGE *(TERMINÉE)*
-**Statut** : [A] AUDITED | **Stories** : 47/47  
-**Référence** : Voir PROGRESS.md pour le détail complet  
-**Résultat** : 4 portails React connectés à Directus, données affichées
-
----
-
-## PHASE B — CYCLE DE VENTE OPÉRATIONNEL *(TERMINÉE)*
-**Objectif CDC** : Un lead devient un projet actif sans intervention manuelle  
-**Modules CDC** : Module 1 (Leads), Module 3 (Devis), Module 5 (Facturation), Module 6 (Projets)  
-**Critères d'acceptation** :  
-- ✅ Un lead peut être qualifié et converti en devis en < 3 minutes (REQ-CEO)  
-- ✅ Une facture QR conforme est générée depuis un devis signé en 2 clics  
-- ✅ Un projet s'active automatiquement à la confirmation de paiement (REQ-FACT-006)  
-**Progression** : 8/8 stories — [A] AUDITED — commit 5926787 — auditée 2026-02-20
-
-### Stories
-
-- [A] **B-01** · Leads — Actions qualify/convert/archive avec transitions état Directus — 2026-02-19  
-  *Fichiers* : `LeadsDashboard.jsx` 311→702 lignes  
-  *Livré* : Qualify modal (score 1-5 + notes + next action), convert-to-quote (crée projet + navigate), archive avec confirmation, badges ancienneté (Nouveau/24h+/URGENT)
-
-- [A] **B-02** · QuoteForm — Formulaire devis multi-lignes avec calculs TVA suisse — 2026-02-19  
-  *Fichiers* : `quotes/QuoteForm.jsx` 472→761 lignes  
-  *Livré* : Mode page standalone via URL params, pre-fill depuis lead (?lead_id=&project_id=), numéro auto DEV-YYYYMM-NNN, Save draft + Save & send, PATCH lead/project à la sauvegarde
-
-- [A] **B-03** · Quotes — Actions sur devis (marquer signé, → facture) — 2026-02-19  
-  *Fichiers* : `QuotesModule.jsx` 134→184 lignes  
-  *Livré* : Mutation "Mark signed", action "Generate invoice" (lazy InvoiceGenerator), navigate vers form standalone
-
-- [A] **B-04** · InvoiceGenerator — Génération factures acompte/solde depuis devis — 2026-02-19  
-  *Fichiers* : `invoices/InvoiceGenerator.jsx` 278 lignes (NOUVEAU)  
-  *Livré* : Wizard modal deposit/balance/full/custom, numéro auto FA-YYYYMM-NNN, POST vers client_invoices
-
-- [A] **B-05** · InvoiceDetailView — Vue facture complète avec QR code — 2026-02-19  
-  *Fichiers* : `invoices/InvoiceDetailView.jsx` 197 lignes (NOUVEAU)  
-  *Livré* : Page complète /superadmin/invoices/:id, QR placeholder suisse, timeline statuts, badges
-
-- [A] **B-06** · Activation projet — Marquer payé + activation projet en cascade — 2026-02-19  
-  *Fichiers* : `lib/projectActivation.js` 90 lignes (NOUVEAU), `InvoicesModule.jsx` 335→442 lignes  
-  *Livré* : Utilitaire réutilisable, MAJ statut projet, création 5 livrables par défaut (REQ-FACT-006)  
-  *Note* : Activation manuelle maintenant. Revolut webhook automatique en Phase G.
-
-- [A] **B-07** · AlertsWidget — Alertes actionnables avec données réelles Directus — 2026-02-19  
-  *Fichiers* : `widgets/AlertsWidget.jsx` 237→327 lignes  
-  *Livré* : 5 sources de données (factures, leads, tickets, devis, projets), boutons action avec navigation
-
-- [A] **B-08** · KPIWidget — KPIs depuis collection kpis — 2026-02-19  
-  *Fichiers* : `widgets/KPIWidget.jsx` 167→233 lignes  
-  *Livré* : Fetch depuis dashboard_kpis en priorité, fallback KPIs calculés, support sparkline réel  
-
----
-
-## PHASE C — PORTAIL CLIENT FONCTIONNEL *(TERMINÉE)*
-**Objectif CDC** : Un client HYPERVISUAL gère tout depuis son portail sans formation  
-**Modules CDC** : Module 4 (Portail Client)  
-**Critères d'acceptation** :  
-- ✅ Client signe son devis en ligne avec CGV (signature atomique — REQ-CLIENT-006)  
-- ✅ Client suit l'avancement de son projet en temps réel (REQ-CLIENT-002)  
-- ✅ Client télécharge/imprime ses factures (REQ-CLIENT-003/005)  
-- ✅ Client communique avec HYPERVISUAL via messagerie  
-**Progression** : 8/8 stories — [A] AUDITED — commit f488d28 — auditée 2026-02-20
-
-- [A] **C-00** · Fix format numéro facture INV-YYYY-NN — 2026-02-19  
-  *Fichiers* : `InvoiceGenerator.jsx`  
-  *Livré* : Séquence auto via count Directus
-
-- [A] **C-01** · Auth portail client (magic link token localStorage) — 2026-02-19  
-  *Fichiers* : `ClientAuth.jsx`, `hooks/useClientAuth.js`, `ClientPortalGuard.jsx` (3 nouveaux)  
-  *Livré* : Login email → token → accès données client. Guard sur /client/*
-
-- [A] **C-02** · Dashboard client connecté Directus — 2026-02-19  
-  *Fichiers* : `Dashboard.jsx` (réécriture complète)  
-  *Livré* : 4 cartes statut, section "Action requise", timeline projet (tout filtré contact_id)
-
-- [A] **C-03** · Signature devis en ligne avec CGV intégrée — 2026-02-19  
-  *Fichiers* : `QuoteSignature.jsx` (nouveau)  
-  *Livré* : Flow 3 étapes atomique : CGV acceptance → signature_log → PATCH quote
-
-- [A] **C-04** · Suivi projet temps réel — 2026-02-19  
-  *Fichiers* : `ClientProjectsList.jsx`, `ProjectTracking.jsx` (2 nouveaux)  
-  *Livré* : Liste projets + détail avec progression deliverables
-
-- [A] **C-05** · Historique factures + impression — 2026-02-19  
-  *Fichiers* : `ClientInvoices.jsx` (nouveau)  
-  *Livré* : Tableau statuts, solde outstanding, print via window.open
-
-- [A] **C-06** · Messagerie client ↔ HYPERVISUAL — 2026-02-19  
-  *Fichiers* : `ClientMessages.jsx` (nouveau)  
-  *Livré* : Chat UI sur collection comments, polling 15s
-
-- [A] **C-07** · Navigation et layout portail client — 2026-02-19  
-  *Fichiers* : `ClientLayout.jsx` (réécriture)  
-  *Livré* : Sidebar 5 items emerald, header logo + prénom + logout
-
----
-
-## PHASE D — PORTAIL PRESTATAIRE FONCTIONNEL *(TERMINÉE)*
-**Objectif CDC** : Un prestataire peut recevoir une demande, soumettre un devis, voir ses paiements
-**Modules CDC** : Module 2 (Portail Prestataire)
-**Critères d'acceptation** :
-- ✅ Prestataire soumet son devis en < 5 minutes (REQ-PREST-003)
-- ✅ Prestataire voit le bon de commande une fois projet activé (REQ-PREST-006)
-- ✅ Prestataire voit le statut paiement de sa prestation (REQ-PREST-007)
-**Progression** : 7/7 stories — [A] AUDITED — commit 9d57c20 — auditée 2026-02-20
-
-- [A] **D-01** · Auth portail prestataire (magic link email → token localStorage) — 2026-02-19
-  *Fichiers* : `hooks/useProviderAuth.js`, `auth/ProviderAuth.jsx`, `auth/ProviderPortalGuard.jsx` (3 nouveaux)
-  *Livré* : Login email → lookup providers → token localStorage → guard /prestataire/*. Thème violet/indigo.
-
-- [A] **D-02** · Dashboard prestataire connecté Directus — 2026-02-19
-  *Fichiers* : `Dashboard.jsx` (réécriture complète)
-  *Livré* : 4 cartes KPI (devis en attente, projets actifs, factures à soumettre, paiements en attente), section "Actions requises" avec liens directs.
-
-- [A] **D-03** · Demandes de devis + soumission offre avec TVA 8.1% auto — 2026-02-19
-  *Fichiers* : `quotes/QuoteRequests.jsx` (nouveau)
-  *CDC* : REQ-PREST-001, REQ-PREST-002, REQ-PREST-003
-  *Livré* : Table proposals filtrée provider_id, filtres statut, modal SubmitOfferModal (montant HT + TVA 8.1% auto + deadline + notes), PATCH proposals.
-
-- [A] **D-04** · Bons de commande — 2026-02-19
-  *Fichiers* : `orders/PurchaseOrders.jsx` (nouveau)
-  *CDC* : REQ-PREST-006
-  *Livré* : Projets où main_provider_id = provider.id, bouton "Confirmer réception BC", création/MAJ order record.
-
-- [A] **D-05** · Factures fournisseur + upload PDF + suivi paiement — 2026-02-19
-  *Fichiers* : `invoices/ProviderInvoices.jsx` (nouveau)
-  *CDC* : REQ-PREST-007
-  *Livré* : Liste supplier_invoices, cards résumé (en attente/payées), modal création facture avec upload PDF (FormData → Directus files), TVA auto, suivi statut paiement.
-
-- [A] **D-06** · Navigation portail prestataire — 2026-02-19
-  *Fichiers* : `layout/PrestatireLayout.jsx` (réécriture complète)
-  *Livré* : Sidebar 4 items violet (Dashboard, Devis, Commandes, Factures), header logo + nom prestataire + logout.
-
-- [A] **D-07** · SuperAdmin — Gestion prestataires + envoi demande devis — 2026-02-19
-  *Fichiers* : `superadmin/providers/ProvidersModule.jsx` (nouveau), `Sidebar.jsx` (entrée Prestataires)
-  *CDC* : REQ-PREST-005
-  *Livré* : Onglets Prestataires/Offres reçues, envoi demande devis (POST proposals), Accept/Reject offres soumises (accept → MAJ project.main_provider_id), badge alerte nouvelles soumissions.
-
-
----
-
-## PHASE E — AUTOMATIONS EMAIL (MAUTIC) *(TERMINÉE)*
-**Objectif CDC** : Zéro email manuel pour HYPERVISUAL
-**Modules CDC** : Module 1, 3, 5, 8
-**Note technique** : Mautic 5.x gère TOUS les emails (marketing + transactionnels)
-**Progression** : 6/6 stories — [A] AUDITED — commit 9ab20a9 — auditée 2026-02-20
-
-- [A] **E-01** · Email confirmation lead (REQ-LEAD-007 — dans les 5 minutes) — 2026-02-19
-  *Fichiers* : `api/email/lead-confirmation.js`, `api/email/templates.js`
-  *Livré* : Directus Flow items.create leads → POST /api/email/lead-confirmation → Mautic upsert + send. Anti-doublon via automation_logs.
-
-- [A] **E-02** · Email devis envoyé au client avec PDF — 2026-02-19
-  *Fichiers* : `api/email/quote-sent.js`
-  *CDC* : REQ-FACT-004
-  *Livré* : Flow items.update quotes status=sent → email client avec lien signature portail + montant TTC CHF.
-
-- [A] **E-03** · Email accusé de réception paiement + activation projet — 2026-02-19
-  *Fichiers* : `api/email/payment-confirmed.js`
-  *CDC* : REQ-FACT-006
-  *Livré* : Flow items.update payments status=completed → chaîne payment→invoice→contact → email confirmation + lien portail projet.
-
-- [A] **E-04** · Rappels automatiques factures impayées (J+7, J+14, J+30) — 2026-02-19
-  *Fichiers* : `api/email/invoice-reminders.js`
-  *CDC* : REQ-FACT-010 (procédure recouvrement suisse SchKG/LP)
-  *Livré* : CRON quotidien 09h00 → 3 paliers (courtois/ferme/mise en demeure SchKG Art. 67). Anti-doublon par level. Champ due_date ajouté à client_invoices.
-
-- [A] **E-05** · Notification prestataire approbation facture + date paiement — 2026-02-19
-  *Fichiers* : `api/email/supplier-approved.js`
-  *CDC* : REQ-APPRO-005
-  *Livré* : Flow items.update supplier_invoices status=approved → email prestataire avec date paiement prévue (date_paid ou J+30).
-
-- [A] **E-06** · Rappel prestataire si pas de réponse sous 24h — 2026-02-19
-  *Fichiers* : `api/email/provider-reminder.js`
-  *CDC* : REQ-PREST-004
-  *Livré* : CRON horaire → proposals pending/active > 24h sans submitted_at → max 1 rappel par proposal via automation_logs.
-
----
-
-## PHASE F — CAPTURE LEADS MULTICANAL *(TERMINÉE)*
-**Objectif CDC** : Leads créés automatiquement depuis tous les canaux
-**Modules CDC** : Module 1 (Sources entrantes)
-**Progression** : 4/4 stories — [V] DONE — 2026-02-20
-
-- [V] **F-01** · WordPress → Lead Directus (webhook Fluent Form Pro #17) — 2026-02-20
-  *CDC* : REQ-LEAD-001
-  *Fichiers* : `src/backend/api/leads/wp-webhook.js`, `lead-creator.js`, `index.js`
-  *Livré* : POST /api/leads/wp-webhook — validation HMAC optionnelle, mapping flexible champs Fluent Form, anti-doublon 30min, upsert lead par email. Qualification score 1-5 (budget, date, completude, type). lead_activity auto. Email confirmation best-effort.
-
-- [V] **F-02** · WhatsApp Business → Lead Directus (API Meta + LLM Claude/OpenAI) — 2026-02-20
-  *CDC* : REQ-LEAD-002
-  *Fichiers* : `src/backend/api/leads/whatsapp-webhook.js`, `llm-lead-extractor.js`, `index.js`, `src/frontend/src/portals/superadmin/leads/WhatsAppInbox.jsx`
-  *Livré* : GET /api/leads/whatsapp-webhook (Meta verification hub.mode), POST /api/leads/whatsapp-webhook (message reception), LLM extraction Claude Haiku primary + GPT-4o-mini fallback, stockage whatsapp_messages, lead_activity auto, anti-doublon par message_id, frontend inbox monochromatic (zinc/slate), route /superadmin/leads/whatsapp.
-
-- [V] **F-03** · Email info@hypervisual.ch → Lead Directus (LLM extraction GPT-4o-mini) — 2026-02-20
-  *CDC* : REQ-LEAD-004
-  *Fichiers* : `src/backend/api/leads/imap-monitor.js`
-  *Livré* : Polling IMAP 5min → simpleParser → GPT-4o-mini extraction JSON (confidence ≥ 60%) → lead Directus. Anti-doublon par Message-ID. Deps: imapflow, mailparser.
-
-- [V] **F-04** · Ringover → Lead Directus (analyse appels LLM GPT-4o-mini) — 2026-02-20
-  *CDC* : REQ-LEAD-003
-  *Fichiers* : `src/backend/api/leads/ringover-polling.js`
-  *Livré* : Polling 15min API Ringover v2 → analyse LLM des métadonnées appels → lead si pertinent. Skip numéros internes (+4178327*). Anti-doublon par call_id.
-
-**Découvertes Phase F** :
-- Service LLM partagé créé (`llm-lead-extractor.js`) — Claude Haiku primary, GPT-4o-mini fallback
-- 3 extracteurs spécialisés : WhatsApp, Email, Appels (scoring 1-5, urgence, langue)
-- WhatsApp webhook suit pattern Meta standard (GET verify + POST receive)
-- `formatPhone()` normalise les numéros WhatsApp (ajoute +)
-- Frontend WhatsApp Inbox utilise design monochromatic (zinc/slate) distinct du glassmorphism
-
----
-
-## PHASE G — REVOLUT WEBHOOKS + RÉCONCILIATION
-**Objectif CDC** : Paiements détectés automatiquement, projets activés sans intervention  
-**Modules CDC** : Module 5, Module 16  
-**Critères d'acceptation** :  
-- Taux rapprochement automatique ≥ 85% (REQ-RECO-001, cible > 90%)  
-- Projet activé en < 60 secondes après réception paiement (REQ-FACT-006)  
-**Progression** : 5/5 stories — [V] DONE — 2026-02-20
-
-- [V] **G-01** · Revolut webhook — Réception transactions en temps réel — 2026-02-20
-  *CDC* : REQ-FACT-005
-  *Livré* : `webhook-receiver.js` (HMAC-SHA256, express.raw), `sync-transactions.js` (upsert Directus), sync horaire secours
-
-- [V] **G-02** · Algorithme rapprochement multi-critères — 2026-02-20
-  *CDC* : REQ-RECO-001 (montant exact + QR 27 chiffres + date ±3j + fuzzy match 80%)
-  *Livré* : `reconciliation.js` — scoring 4 critères (40+35+15+10 pts), Levenshtein normalisé, auto-match ≥85%
-
-- [V] **G-03** · Dashboard rapprochement bancaire avec suggestions — 2026-02-20
-  *CDC* : REQ-RECO-002, REQ-RECO-003 (top 3 suggestions par similarité)
-  *Livré* : `ReconciliationDashboard.jsx` — KPIs, table transactions, modal rapprochement, filtres, route `/superadmin/reconciliation`
-
-- [V] **G-04** · Activation automatique projet à réception acompte confirmé — 2026-02-20
-  *CDC* : REQ-FACT-006 (remplace l'activation manuelle de Phase B-06)
-  *Livré* : `activateProjectIfDeposit()` dans reconciliation.js — détecte facture acompte, active projet, déclenche email Phase E
-
-- [V] **G-05** · Alertes transactions non rapprochées > 5 jours — 2026-02-20
-  *CDC* : REQ-RECO-004
-  *Livré* : `alerts.js` — polling horaire, notifications Directus, anti-doublon via automation_logs
-
-**Découvertes Phase G** :
-- `src/backend/api/revolut/` est un symlink vers `integrations/revolut/`
-- Module Revolut existant avec revolut-api.js complet (auth, accounts, transactions, payments, counterparties)
-- 18 champs ajoutés sur 4 collections : bank_transactions (+6), client_invoices (+3), projects (+2), reconciliations (+7)
-- Arrondi suisse ±0.05 CHF implémenté dans le scoring montant
-
----
-
-## PHASE H — SIGNATURES DOCUSEAL + CGV *(TERMINÉE)*
-**Objectif CDC** : Devis signés électroniquement, conformes CO Art. 14
-**Modules CDC** : Module 3, Module 4
-**Progression** : 3/3 stories — [V] DONE — 2026-02-20
-
-- [V] **H-01** · DocuSeal intégration — Envoi devis pour signature via DocuSeal local — 2026-02-20
-  *CDC* : REQ-DEVIS-004 (ZertES-compliant)
-  *Fichiers* : `src/backend/services/integrations/docuseal.service.js` (rewrite majeur)
-  *Livré* : URL locale http://localhost:3003, création template HTML auto (getOrCreateHtmlTemplate), POST /api/submissions avec submitters, stockage docuseal_submission_id + docuseal_embed_url + signature_requested_at sur quotes, détection alreadySent.
-  *Champs ajoutés* : docuseal_submission_id (integer), docuseal_embed_url (string), docuseal_signed_pdf_url (string), signature_requested_at (timestamp)
-
-- [V] **H-02** · DocuSeal webhook — Réception signature + transition statut + facture acompte — 2026-02-20
-  *CDC* : REQ-DEVIS-005 (copie automatique au client)
-  *Fichiers* : `docuseal.service.js` (handleFormCompleted + handleFormViewed + setupDocuSealWebhook)
-  *Livré* : form.completed → PATCH quote signed + is_signed + signed_at + docuseal_signed_pdf_url → createDepositInvoice() auto si deposit_amount > 0 → email confirmation Phase E. form.viewed → MAJ viewed_at. Support événements local (form.*) et cloud (submission.*).
-
-- [V] **H-03** · Bouton signature SuperAdmin + Page signature portail client — 2026-02-20
-  *CDC* : REQ-DEVIS-003 (CGV dans le même document)
-  *Fichiers* : `superadmin/quotes/QuotesModule.jsx` (sendDocuSealMutation), `superadmin/quotes/QuotesList.jsx` (+PenTool/CheckCircle/Receipt buttons), `client/pages/SignaturePage.jsx` (nouveau), `App.jsx` (route /client/quotes/:quoteId/sign)
-  *Livré* : SuperAdmin — bouton PenTool "Envoyer pour signature DocuSeal" (draft/sent), bouton CheckCircle "Marquer signé" (sent), bouton Receipt "Générer facture" (signed). Client — page dédiée /client/quotes/:quoteId/sign avec résumé devis + iframe DocuSeal + gestion états (loading/ready/signing/completed/error).
-
-**Découvertes Phase H** :
-- DocuSeal service existait déjà (495 lignes) mais ciblait l'API cloud (api.docuseal.co) — adapté pour instance locale
-- API DocuSeal locale utilise `submitters` (pas `signers`) et `POST /api/templates/html` pour templates
-- Token Directus était hardcodé incorrectement — corrigé vers DIRECTUS_ADMIN_TOKEN / static token
-- Routes intégrations déjà montées dans server.js — pas besoin de créer de nouveau router
-- setupDocuSealWebhook() ajouté au démarrage server.js pour enregistrer le webhook sur l'instance locale
-
----
-
-## PHASE I — MODULES FINANCE AVANCÉS (CDC V1.2) *(TERMINÉE)*
-**Objectif CDC** : Couverture complète du cycle finance
-**Modules CDC** : Module 9, 10, 11, 12, 13, 14
-**Progression** : 8/8 stories — [V] DONE — 2026-02-20
-
-- [V] **I-01** · Module 9 — Facturation par jalons (deliverables → factures) — 2026-02-20
-  *CDC* : REQ-JALON-001 à 006
-  *Fichiers* : `src/backend/api/milestones/index.js`, `src/frontend/src/portals/superadmin/projects/MilestonesModule.jsx`
-  *Livré* : POST /:deliverableId/invoice (génère JAL-YYYYMM-NNN), GET /project/:projectId (jalons avec can_invoice/is_invoiced), progress bar facturation.
-  *Champs ajoutés* : deliverables +4 (invoice_id, invoiced_at, billable, amount)
-
-- [V] **I-02** · Module 10 — Contrats récurrents avancés (panier multi-services) — 2026-02-20
-  *CDC* : REQ-ABONNEMENT-001 à 008
-  *Fichiers* : `src/backend/api/subscriptions/index.js`
-  *Livré* : CRUD complet, calcul next_billing_date auto (monthly/quarterly/annual), services JSON panier multi-services, due-today endpoint.
-  *Champs ajoutés* : subscriptions +6 (contact_id, next_billing_date, last_invoiced_at, services, auto_renew, invoice_day)
-
-- [V] **I-03** · Module 10 — Facturation récurrente automatique (cron mensuel) — 2026-02-20
-  *CDC* : REQ-REC-001 à 004
-  *Fichiers* : `src/backend/api/subscriptions/billing-cron.js`
-  *Livré* : CRON quotidien 08h00 (setTimeout scheduling), numéro REC-YYYYMM-NNN, anti-doublon via automation_logs, POST /run-billing trigger manuel, MAJ next_billing_date après facturation.
-
-- [V] **I-04** · Module 11 — Avoirs & remboursements (notes de crédit) — 2026-02-20
-  *CDC* : REQ-AVOIR-001 à 008, CO Art. 958f
-  *Fichiers* : `src/backend/api/credits/index.js`, `src/frontend/src/portals/superadmin/invoices/CreditsModule.jsx`
-  *Livré* : POST /credits (full/partial), POST /:id/apply (déduire sur facture), numéro NC-YYYYMM-NNN, audit trail automation_logs. Avoir total → annule facture originale.
-  *Champs ajoutés* : credits +10 (invoice_id, credit_number, amount, tax_amount, total, reason, contact_id, project_id, issued_at, applied_to_invoice_id)
-
-- [V] **I-05** · Module 12 — Workflow validation factures fournisseurs — 2026-02-20
-  *CDC* : REQ-APPRO-001 à 008
-  *Fichiers* : `src/backend/api/supplier-invoices/index.js`, `src/frontend/src/portals/superadmin/providers/ApprovalQueue.jsx`
-  *Livré* : File d'attente CEO pending (GET /pending + /pending/count), approve 1 clic (POST /:id/approve + payment_scheduled_date), reject avec raison obligatoire, modals glassmorphism, badge count animé.
-  *Champs ajoutés* : supplier_invoices +6 (amount_ht, approved_at, rejection_reason, payment_scheduled_date, deviation_percentage, quote_amount)
-
-- [V] **I-06** · Module 12 — Détection écarts devis/facture fournisseur — 2026-02-20
-  *CDC* : REQ-APPRO-006 (tolérance ±5% configurable)
-  *Fichiers* : `src/backend/api/supplier-invoices/index.js` (analyzeDeviation), `ApprovalQueue.jsx` (DeviationBadge)
-  *Livré* : Analyse deviation_percentage auto, 3 niveaux (ok <3% vert / warning 3-5% orange / blocked >5% rouge), bouton approve désactivé si blocked, GET /:id/deviation endpoint.
-
-- [V] **I-07** · Module 13 — Suivi du temps → facturation en régie — 2026-02-20
-  *CDC* : REQ-TEMPS-001 à 007
-  *Fichiers* : `src/backend/api/time-tracking/index.js`
-  *Livré* : POST /time-tracking (saisie), GET /billable/:projectId (heures non facturées), POST /invoice (génère REG-YYYYMM-NNN depuis sélection), marque entries billed.
-  *Champs ajoutés* : time_tracking +2 (invoice_id, invoiced_at)
-
-- [V] **I-08** · Module 14 — Tickets support → facturation hors contrat — 2026-02-20
-  *CDC* : REQ-SUPPORT-001 à 007 (tarif défaut : 150 CHF/h)
-  *Fichiers* : `src/backend/api/support/index.js`
-  *Livré* : CRUD tickets, POST /:id/close (auto-facture si billable + hors contrat), POST /:id/bill (facturation manuelle), numéro SUP-YYYYMM-NNN, coverage contract/out_of_contract, stats endpoint.
-  *Champs ajoutés* : support_tickets +7 (contact_id, hours_spent, hourly_rate, billable, invoice_id, invoiced_at, subscription_id), client_invoices +8 (type, subscription_id, credit_id, tax_rate, tax_amount, total, currency, description)
-
-**Découvertes Phase I** :
-- 43 champs ajoutés sur 7 collections via API Directus (deliverables +4, subscriptions +6, supplier_invoices +6, credits +10, time_tracking +2, support_tickets +7, client_invoices +8)
-- Utilitaires partagés créés dans `src/backend/lib/financeUtils.js` (directus helpers, date utils, invoice number generators, automation log)
-- Frontend existant déjà connecté pour SubscriptionsModule, TimeTrackingModule, SupportDashboard (phases précédentes) — ajouté 3 nouveaux composants (MilestonesModule, CreditsModule, ApprovalQueue)
-- 7 routers ajoutés dans server.js avec try/catch pattern cohérent
-
----
-
-## PHASE J — KPI DASHBOARD + RAPPORT CEO ✅ COMPLETE
-**Objectif CDC** : CEO voit tout, comprend tout, en 30 secondes
-**Modules CDC** : Module 7, Module 15
-**Progression** : 4/4 stories
-**Commit** : `feat(phase-j): kpi dashboard + rapport ceo`
-
-- [V] **J-01** · KPIs depuis collection `kpis` — affichage complet — 2026-02-20
-  *CDC* : REQ-KPI-001 à 007
-  *Fichiers* : `api/kpis/index.js` (GET /latest, /history/:metric, /summary) + `kpis/KPIWidget.jsx` (sidebar + sparkline MRR)
-  *Livré* : 11 métriques en base (MRR, ARR, NPS, LTV_CAC, ACTIVE_PROJECTS, CASH_RUNWAY, etc.), variation vs période précédente, sparkline Recharts LineChart MRR 30j, métriques calculées EBITDA + RUNWAY, intégré dans Dashboard.jsx colonne droite
-
-- [V] **J-02** · Alertes seuils KPI configurables (MRR < 50K → alerte rouge) — 2026-02-20
-  *CDC* : REQ-KPI-005
-  *Fichiers* : `api/kpis/thresholds.js` (GET /alerts, PUT /thresholds, GET /thresholds) + `kpis/ThresholdConfig.jsx`
-  *Livré* : 6 seuils configurables (MRR, ARR, RUNWAY, NPS, LTV_CAC, EBITDA), niveaux warning/critical, persistance Directus settings, badges alertes actives, formulaire édition seuils
-
-- [V] **J-03** · Rapport quotidien CEO automatique par email — 2026-02-20
-  *CDC* : REQ-CEO-006
-  *Fichiers* : `api/kpis/daily-report.js` (CRON 07h00 + POST /report/send + GET /report/preview)
-  *Livré* : Email HTML responsive (alertes, KPIs, opérations, trésorerie), envoi via Mautic API, CRON setTimeout 07h00 avec anti-doublon automation_logs, endpoint preview HTML, endpoint envoi manuel
-
-- [V] **J-04** · Prévision trésorerie 30/60/90 jours — 2026-02-20
-  *CDC* : REQ-CEO-004
-  *Fichiers* : `api/kpis/treasury-forecast.js` (GET /treasury) + `kpis/TreasuryForecast.jsx`
-  *Livré* : Algorithme 6 étapes (solde courant, entrées factures, récurrent subscriptions × TVA 8.1%, sorties fournisseurs, burn rate 90j, runway), BarChart Recharts 4 colonnes (bleu si >= actuel, rouge si <), cartes résumé (solde, burn, runway), détails par horizon
-
-### Découvertes Phase J
-- 11 métriques réelles en base kpis (plus que les 5 prévues dans le prompt) : MRR, ARR, NPS, LTV_CAC, ACTIVE_PROJECTS, CASH_RUNWAY, Cash_Runway, CLIENT_RETENTION, EBITDA_MARGIN, PIPELINE_VALUE, TEAM_PRODUCTIVITY
-- 5 entreprises dans kpis : HYPERVISUAL, DAINAMICS, ENKI_REALTY, LEXAIA, TAKEOUT
-- Dashboard.jsx enrichi : grille 3 colonnes (Alertes + Pipeline + KPI sidebar), Treasury + TreasuryForecast côte à côte
-- 4 endpoints backend + 4 sous-routes + 1 CRON = 9 fonctionnalités en 4 fichiers
-- Prévision trésorerie utilise TVA 8.1% pour subscriptions conformément aux normes suisses
-
----
-
-## PHASE K — MULTI-ENTREPRISES (POST V1)
-**Scope** : DAINAMICS, LEXAIA, ENKI REALTY, TAKEOUT  
-**Prérequis** : V1 HYPERVISUAL Switzerland entièrement stable et validée  
-**Progression** : 0/1 story
-
-- [ ] **K-01** · Architecture multi-entreprises — Isolation données + portails par entité  
-  *CDC* : Scope V1 = HYPERVISUAL uniquement. Extensions prévues post-stabilisation.
-
----
-
-## RÈGLES DE TRANSITION ENTRE PHASES
-
-> Ces règles évitent les problèmes rencontrés lors des transitions précédentes.
-
-### Avant de commencer une phase
-1. **Vérifier les prérequis** : Toutes les stories [A] AUDITED de la phase précédente
-2. **Lire le CDC** : Relire les modules concernés dans `docs/CDC_HYPERVISUAL_Switzerland_Directus_Unified_Platform.md`
-3. **Vérifier Directus** : Confirmer via MCP que les collections nécessaires existent et ont les bons champs
-4. **Identifier les dépendances** : Lister les services externes nécessaires (Mautic, Revolut, DocuSeal)
-
-### Pendant le développement
-5. **Skills OBLIGATOIRES** : Claude Code DOIT lire les skills appropriés avant chaque story.
-   Consulter `SKILLS-MAPPING.md` pour la combinaison exacte de skills par story.
-   Minimum : 1 skill projet (`.claude/skills/`) + 1 skill spécialisé (`~/.claude/skills-repos/`)
-   **Sans cette étape = code générique. Avec = code exceptionnel.**
-6. **Vérification champs réels** : TOUJOURS vérifier via `directus:get_collection_items` avant de coder
-7. **Pas d'invention** : JAMAIS inventer des noms de champs, toujours vérifier
-
-### Après chaque story
-8. **Commit atomique** : Un commit par story avec message formaté `feat(B-01): description`
-9. **Mettre à jour ce fichier** : Passer `[ ]` → `[V]` avec date
-10. **Signaler les blocages** : Si discovery inattendue → noter dans DÉCOUVERTES ci-dessous
-
-### Critère de validation phase terminée
-11. Jean teste chaque feature en production locale
-12. Jean passe les stories `[V]` → `[A]`
-13. **JAMAIS commencer la phase suivante sans** que la phase courante soit `[A]` AUDITED
-
----
-
-## DÉCOUVERTES & AJUSTEMENTS
-
-> Toute découverte qui impacte le plan est loggée ici immédiatement par Claude Code.
-
-| Date | Story | Découverte | Impact | Décision |
-|------|-------|-----------|--------|----------|
-| 2026-02-19 | — | PROGRESS.md 47/47 couvrait uniquement la couche affichage | 80% CDC restant | Ce ROADMAP.md créé |
-| 2026-02-19 | B-01 | Score qualification implémenté en 1-5 (numérique) vs High/Medium/Low (CDC) | Acceptable | **DÉCISION JEAN : Conserver 1-5** |
-| 2026-02-19 | B-04 | Numéro facture format FA-YYYYMM-NNN (vs CDC) | Mineur | **DÉCISION JEAN : Format INV-YYYY-NN** — corrigé en C-00 |
-| 2026-02-19 | B-06 | projectActivation.js crée 5 livrables par défaut automatiquement | Bonus | Conserver |
-| 2026-02-19 | C-06 | Messagerie implémentée avec polling 15s (pas WebSocket) | Acceptable Phase C | WebSocket temps réel = Phase E si besoin |
-| 2026-02-19 | D-01 | MCP Directus retourne 401 — token MCP mal configuré | Contourné | Utilisé curl + static admin token pour vérifier/ajouter champs |
-| 2026-02-19 | D-01 | Collections providers/proposals/orders manquaient beaucoup de champs | Bloquant | Ajouté 18 champs via API Directus (email, phone, amounts, TVA, etc.) |
-| 2026-02-19 | D-01 | Auth prestataire = magic link (comme client), pas JWT admin | Architecture | Cohérent avec portail client Phase C — portails externes isolés du JWT superadmin |
-| 2026-02-19 | E-04 | client_invoices n'avait pas de champ due_date | Bloquant E-04 | Ajouté due_date (type date) via API Directus |
-| 2026-02-19 | E-04 | automation_logs existait mais manquait entity_type, entity_id, recipient_email, level | Enrichi | 4 champs ajoutés pour traçabilité complète |
-| 2026-02-19 | E-all | MauticAPI n'avait pas de sendEmail() ni sendEmailToAddress() | Bloquant | Ajouté 2 méthodes à api/mautic/index.js |
-| 2026-02-19 | E-all | quotes.total (pas total_ttc), supplier_invoices.date_paid (pas payment_date), proposals.created_at (pas date_created) | Noms champs | Adapté le code aux noms réels vérifiés via MCP |
-| 2026-02-20 | F-all | leads manquait 6 champs pour capture multicanal (source_channel, source_detail, raw_data, openai_summary, ringover_call_id, call_duration) | Enrichi | 6 champs ajoutés via API Directus |
-| 2026-02-20 | F-all | lead_sources.code existait déjà — pas besoin d'ajouter | OK | Vérifié via MCP avant action |
-| 2026-02-20 | F-all | Projet en ES Modules ("type":"module") — prompt fournissait du CommonJS (require) | Adaptation | Tout converti en import/export ES Modules |
-| 2026-02-20 | F-all | leads.source est uuid→lead_sources (pas un string) — le prompt utilisait lead_source_id | Noms champs | Adapté lead-creator.js pour écrire dans source (uuid) |
-| 2026-02-20 | H-01 | DocuSeal service existait (495 lignes) mais ciblait API cloud — adapté pour local | Architecture | Rewrite partiel vers localhost:3003 + submitters API |
-| 2026-02-20 | H-01 | Token Directus hardcodé incorrectement dans docuseal.service.js | Bug | Corrigé vers DIRECTUS_ADMIN_TOKEN / static token |
-| 2026-02-20 | H-01 | 4 champs manquants sur quotes pour DocuSeal | Enrichi | docuseal_submission_id, docuseal_embed_url, docuseal_signed_pdf_url, signature_requested_at |
-| 2026-02-20 | H-02 | API DocuSeal locale envoie form.completed (pas submission.completed) | Adaptation | Support double : form.* (local) + submission.* (cloud) |
-
----
-
-## MÉTRIQUES GLOBALES
-
-| Métrique | Valeur |
-|----------|--------|
-| Collections Directus | 83 actives |
-| Stories Phase A (infra+display) | 47/47 ✅ |
-| Stories Phase B (cycle vente) | 8/8 ✅ |
-| Stories Phase C (portail client) | 8/8 ✅ |
-| Stories Phase D (portail prestataire) | 7/7 ✅ |
-| Stories Phase E (email automation) | 6/6 ✅ |
-| Stories Phase F (lead capture) | 4/4 ✅ |
-| Stories Phase G (Revolut reconciliation) | 5/5 ✅ |
-| Stories Phase H (DocuSeal signatures) | 3/3 ✅ |
-| Stories Phase I (finance avancees) | 8/8 ✅ |
-| Stories Phase J (KPI dashboard CEO) | 4/4 ✅ |
-| Stories CDC restantes | 0 |
-| Modules CDC couverts | 16/16 (Leads, Devis, Facturation, Projets, Portail Client, Portail Prestataire, Email Automation, Lead Capture Multicanal, Signatures Electroniques, Jalons, Abonnements, Avoirs, Approbation Fournisseurs, Temps/Regie, Support, KPI Dashboard CEO) |
-| Dernier commit Phase J | — 2026-02-20 |
-| **V1 STATUS** | **96/96 stories — COMPLETE** |
-
----
-
-## CRITÈRES D'ACCEPTATION GLOBAUX (CDC V1.2)
-
-La plateforme V1 sera considérée opérationnelle quand :
-
-1. `[V]` Lead WordPress → Directus en < 30 secondes (REQ-LEAD-001) — Phase F
-2. `[V]` CEO qualifie et convertit un lead en devis en < 3 minutes — **FAIT Phase B**
-3. `[V]` Client signe son devis en ligne sans formation (REQ-CLIENT-006) — **FAIT Phase C**
-4. `[V]` Facture d'acompte générée depuis devis signé en 2 clics (REQ-FACT-001) — **FAIT Phase B**
-5. `[V]` Portail client affiche statut projet en temps réel (REQ-CLIENT-002) — **FAIT Phase C**
-6. `[V]` Facture prestataire uploadée et associée en < 2 minutes (REQ-FACT-008) — **FAIT Phase I**
-7. `[V]` Projet s'active automatiquement à paiement confirmé (REQ-FACT-006) — **FAIT Phase B** (manuel) + **Phase G** (Revolut webhook auto)
-8. `[ ]` CEO gère un projet complet depuis Chypre sans email ni appel — Phase E+G
-9. `[V]` 240 KPIs existants affichés correctement (REQ-KPI-001) — **FAIT Phase J** (11 métriques, 5 entreprises, sparkline MRR, alertes seuils, prévision trésorerie)
-10. `[V]` Facture fournisseur : OCR → validation CEO → paiement Revolut (REQ-APPRO-001) — **FAIT Phase I**
-11. `[V]` Taux rapprochement bancaire automatique ≥ 85% (REQ-RECO-001) — **FAIT Phase G** (scoring 4 critères, seuil auto ≥85%)
-12. `[V]` Avoir générable en < 3 clics, conforme QR-Invoice (REQ-AVOIR-001) — **FAIT Phase I**
+IyBST0FETUFQIOKAlCBIWVBFUlZJU1VBTCBVbmlmaWVkIFBsYXRmb3JtCioq
+VmVyc2lvbioqIDogMi4wICAKKipEYXRlKiogOiBGw6l2cmllciAyMDI2ICAK
+KipSw6lmw6lyZW5jZSoqIDogQ0RDIFYxLjIg4oCUIDE2IG1vZHVsZXMgZm9u
+Y3Rpb25uZWxzICAKKipBdXRldXIqKiA6IEplYW4gKENFTykgKyBDbGF1ZGUg
+KEFyY2hpdGVjdGUgSUEpCgo+ICoqSU1QT1JUQU5UKiogOiBDZSBmaWNoaWVy
+IGVzdCBsYSBjb2xvbm5lIHZlcnTDqWJyYWxlIGR1IHByb2pldC4gIAo+IEls
+IHJlbXBsYWNlIGwnYW5jaWVuIFBST0dSRVNTLm1kICg0Ny80NyA9IGluZnJh
+c3RydWN0dXJlIHVuaXF1ZW1lbnQpLiAgCj4gVG91dGUgbm91dmVsbGUgcGhh
+c2UgZG9pdCDDqnRyZSBkw6lmaW5pZSBpY2kgQVZBTlQgZGUgY29tbWVuY2Vy
+IGxlIGNvZGUuCgotLS0KCiMjIMOJVEFUIFLDiUVMIERVIFBST0pFVAoKIyMj
+IENlIHF1aSBFU1QgZmFpdCAoUGhhc2VzIDAtNiDigJQgSW5mcmFzdHJ1Y3R1
+cmUgKyBBZmZpY2hhZ2UpCi0g4pyFIEluZnJhc3RydWN0dXJlIDogRG9ja2Vy
+LCBQb3N0Z3JlU1FMLCBEaXJlY3R1cyAxMS4xMCwgQXV0aCBKV1QgbXVsdGkt
+cG9ydGFpbHMKLSDinIUgQ29sbGVjdGlvbnMgOiA4MyBjb2xsZWN0aW9ucyBE
+aXJlY3R1cyBhdmVjIGRvbm7DqWVzIHLDqWVsbGVzCi0g4pyFIEZyb250ZW5k
+IDogNCBwb3J0YWlscyBSZWFjdCAoU3VwZXJBZG1pbiwgQ2xpZW50LCBQcmVz
+dGF0YWlyZSwgUmV2ZW5kZXVyKQotIOKchSBBZmZpY2hhZ2UgZG9ubsOpZXMg
+OiBMaXN0ZXMsIHRhYmxlYXV4LCBncmFwaGlxdWVzIGNvbm5lY3TDqXMgRGly
+ZWN0dXMKLSDinIUgRGVzaWduIHN5c3RlbSA6IEdsYXNzbW9ycGhpc20sIENI
+RiBmb3JtYXR0aW5nLCBmci1DSCBsb2NhbGUKLSDinIUgQ29kZSBzcGxpdHRp
+bmcgOiBSZWFjdC5sYXp5LCB+NTAgY2h1bmtzIFZpdGUKCiMjIyBDZSBxdWkg
+TUFOUVRFICBDREM gVjEuMiDigJQgODAlIGR1IHByb2pldCByw6VlbCkKLSDi
+nYwgQ3ljbGUgZGUgdmVudGUgb3DDqXJhdGlvbm5lbCAoYm91dG9ucyBxdWkg
+Zm9udCBkZXMgY2hvc2VzKQotIOKdjCBHw6luw6lyYXRpb24gcsOpZWxsZSBk
+ZSBmYWN0dXJlcyBRUi1JbnZvaWNlIHYyLjMgY29uZm9ybWVzCi0g4p2MIEFj
+dGl2YXRpb24gYXV0b21hdGlxdWUgcHJvamV0IMOgIHBhaWVtZW50IFJldm9s
+dXQKLSDinIUgU2lnbmF0dXJlcyDDqWxlY3Ryb25pcXVlcyBEb2N1U2VhbCDi
+gJQgKipGQUlUIFBoYXNlIEgqKgotIOKdjCBFbWFpbHMgdHJhbnNhY3Rpb25u
+ZWxzIHZpYSBNYXV0aWMKLSDinIUgQ2FwdHVyZSBsZWFkcyBXb3JkUHJlc3Mg
+LyBXaGF0c0FwcCAvIFJpbmdvdmVyIOKAlCAqKkZBSVQgUGhhc2UgRioqICg0
+LzQgY2FuYXV4KQotIOKchSBXb3JrZmxvd3MgdmFsaWRhdGlvbiBmYWN0dXJl
+cyBmb3Vybmlzc2V1cnMg4oCUICoqRkFJVCBQaGFzZSBJKioKLSDinYwgUmFw
+cHJvY2hlbWVudCBiYW5jYWlyZSBhbGdvcml0aG1lIG11bHRpLWNyaXTDqHJl
+cwotIOKdjCBQb3J0YWlsIGNsaWVudCBmb25jdGlvbm5lbCAoc2lnbmVyLCB1
+cGxvYWRlciwgY29tbXVuaXF1ZXIpCi0g4pyFIFBvcnRhaWwgcHJlc3RhdGFp
+cmUgZm9uY3Rpb25uZWwgKHNvdW1ldHRyZSBkZXZpcywgdm9pciBwYWllbWVu
+dHMpIOKAlCAqKkZBSVQgUGhhc2UgRCoqCi0g4pyFIEZhY3R1cmF0aW9uIHBh
+ciBqYWxvbnMgKGRlbGl2ZXJhYmxlcyDihpIgZmFjdHVyZXMpIOKAlCAqKkZB
+SVQgUGhhc2UgSSoqCi0g4pyFIEZhY3R1cmF0aW9uIHLDqWN1cnJlbnRlIGF1
+dG9tYXRpcXVlIOKAlCAqKkZBSVQgUGhhc2UgSSoqCi0g4pyFIEtQSXMgZGVw
+dWlzIGNvbGxlY3Rpb24gYGtwaXNgICgyNDAgZW5yZWdpc3RyZW1lbnRzIHLD
+qWVscykg4oCUICoqRkFJVCBQaGFzZSBKKioKCi0tLQoKIyMgTMOJR0VOREUK
+Ci0gYFsgXWAgVE9ETyDigJQgUGFzIGVuY29yZSBkw6ltYXJyw6kgIAotIGBb
+fl1gIElOX1BST0dSRVNTIOKAlCBFbiBjb3VycyAgCi0gYFtWXWAgRE9ORSDi
+gJQgSW1wbMOpbWVudMOpLCBlbiBhdHRlbnRlIHZhbGlkYXRpb24gSmVhbiAg
+CiAtIGBbQV1gIEFVRElURUQg4oCUIFZhbGlkw6kgcGFyIEplYW4gKHNldWwg
+SmVhbiBwZXV0IHBhc3NlciBbVl0g4oaSIFtBXSkgIAotIGBbWF1gIEJMT0NL
+RUQg4oCUIEJsb3F1w6kgKHJhaXNvbiBvYmxpZ2F0b2lyZSBkYW5zIGxlcyBu
+b3RlcykgIAotIGBbU11gIFNLSVBQRUQg4oCUIFJlcG9ydMOpIChyYWlzb24g
+b2JsaWdhdG9pcmUpCgotLS0KCiMjIFBIQVNFIEEg4oCUIElORlJBU1RSVUNU
+VVJFICBBZ0FGSUNIQVJFICB
+ KihURVJNSU7DiUUpKgoqKlN0YXR1dCoqIDogW0Fd
+IEFVRElURUQgfCAqKlN0b3JpZXMqKiA6IDQ3LzQ3ICAKKipSw6lmw6lyZW5j
+ZSoqIDogVm9pciBQUk9HUkVTUy5tZCBwb3VyIGxlIGTDqXRhaWwgY29tcGxl
+dCAgCioqUsOpc3VsdGF0KiogOiA0IHBvcnRhaWxzIFJlYWN0IGNvbm5lY3TD
+qXMgw6AgRGlyZWN0dXMsIGRvbm7DqWVzIGFmZmljaMOpZXMKCi0tLQoKIyMg
+UEFBU0UgQiDigJQgQ1lDTEUgREUgVkVOVEUgT1DDiVJBVElPTk5FTCAqKFRF
+Uk1JTsOJRSkqCioqT2JqZWN0aWYgQ0RDKiogOiBVbiBsZWFkIGRldmllbnQg
+dW4gcHJvamV0IGFjdGlmIHNhbnMgaW50ZXJ2ZW50aW9uIG1hbnVlbGxlICAK
+KipNb2R1bGVzIENEQyoqIDogTW9kdWxlIDEgKExlYWRzKSwgTW9kdWxlIDMg
+KERldmlzKSwgTW9kdWxlIDUgKEZhY3R1cmF0aW9uKSwgTW9kdWxlIDYgKFBy
+b2pldHMpICAKKipDcml0w6hyZXMgZCdhY2NlcHRhdGlvbioqIDogIAotIOKc
+hSBVbiBsZWFkIHBldXQgw6p0cmUgcXVhbGlmacOpIGV0IGNvbnZlcnRpIGVu
+IGRldmlzIGVuIDwgMyBtaW51dGVzIChSRVEtQ0VPKSAgCi0g4pyFIFVuZSBm
+YWN0dXJlIFFSIGNvbmZvcm1lIGVzdCBnw6luw6lyw6llIGRlcHVpcyB1biBk
+ZXZpcyBzaWduw6kgZW4gMiBjbGljcyAgCi0g4pyFIFVuIHByb2pldCBzJ2Fj
+dGl2ZSBhdXRvbWF0aXF1ZW1lbnQgw6AgbGEgY29uZmlybWF0aW9uIGRlIHBh
+aWVtZW50IChSRVEtRkFDVC0wMDYpICAKKipQcm9ncmVzc2lvbioqIDogOC84
+IHN0b3JpZXMg4oCUIFtBXSBBVURJVEVEIOKAlCBjb21taXQgNTkyNjc4NyDi
+gJQgYXVkaXTDqWUgMjAyNi0wMi0yMAoKIyMjIFN0b3JpZXMKCi0gW0FdICoq
+Qi0wMSoqIMK3IExlYWRzIOKAlCBBY3Rpb25zIHF1YWxpZnkvY29udmVydC9h
+cmNoaXZlIGF2ZWMgdHJhbnNpdGlvbnMgw6l0YXQgRGlyZWN0dXMg4oCUIDIw
+MjYtMDItMTkgIAogICpGaWNoaWVycyogOiBgTGVhZHNEYXNoYm9hcmQuanN4
+YCAzMTHihpI3MDIgbGlnbmVzICAKICAqTGl2csOpKiA6IFF1YWxpZnkgbW9k
+YWwgKHNjb3JlIDEtNSArIG5vdGVzICsgbmV4dCBhY3Rpb24pLCBjb252ZXJ0
+LXRvLXF1b3RlIChjcsOpZSBwcm9qZXQgKyBuYXZpZ2F0ZSksIGFyY2hpdmUg
+YXZlYyBjb25maXJtYXRpb24sIGJhZGdlcyBhbmNpZW5uZXTDqSAoTm91dmVh
+dS8yNGgrL1VSR0VOVCkKCi0gW0FdICoqQi0wMioqIMK3IFF1b3RlRm9ybSDi
+gJQgRm9ybXVsYWlyZSBkZXZpcyBtdWx0aS1saWduZXMgYXZlYyBjYWxjdWxz
+IFRWQSBzdWlzc2Ug4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVycyogOiBg
+cXVvdGVzL1F1b3RlRm9ybS5qc3hgIDQ3MuKGkjc2MSBsaWduZXMgIAogICpM
+aXZyw6kqIDogTW9kZSBwYWdlIHN0YW5kYWxvbmUgdmlhIFVSTCBwYXJhbXMs
+IHByZS1maWxsIGRlcHVpcyBsZWFkICg/bGVhZF9pZD0mcHJvamVjdF9pZD0p
+LCBudW3DqXJvIGF1dG8gREVWLVlZWVlNTS1OTk4sIFNhdmUgZHJhZnQgKyBT
+YXZlICYgc2VuZCwgUEFUQ0ggbGVhZC9wcm9qZWN0IMOgIGxhIHNhdXZlZ2Fy
+ZGUKCi0gW0FdICoqQi0wMyoqIMK3IFF1b3RlcyDigJQgQWN0aW9ucyBzdXIg
+ZGV2aXMgKG1hcnF1ZXIgc2lnbsOpLCDihpIgZmFjdHVyZSkg4oCUIDIwMjYt
+MDItMTkgIAogICpGaWNoaWVycyogOiBgUXVvdGVzTW9kdWxlLmpzeGAgMTM0
+4oaSMTg0IGxpZ25lcyAgCiAgKkxpdnLDqSogOiBNdXRhdGlvbiAiTWFyayBz
+aWduZWQiLCBhY3Rpb24gIkdlbmVyYXRlIGludm9pY2UiIChsYXp5IEludm9p
+Y2VHZW5lcmF0b3IpLCBuYXZpZ2F0ZSB2ZXJzIGZvcm0gc3RhbmRhbG9uZQoK
+LSBbQV0gKipCLTA0KiogwrcgSW52b2ljZUdlbmVyYXRvciDigJQgR8OpbsOp
+cmF0aW9uIGZhY3R1cmVzIGFjb21wdGUvc29sZGUgZGVwdWlzIGRldmlzIOKA
+lCAyMDI2LTAyLTE5ICAKICAqRmljaGllcnMqIDogYGludm9pY2VzL0ludm9p
+Y2VHZW5lcmF0b3IuanN4YCAyNzggbGlnbmVzIChOT1VWRUFVKSAgCiAgKkxp
+dnjDqSogOiBXaXphcmQgbW9kYWwgZGVwb3NpdC9iYWxhbmNlL2Z1bGwvY3Vz
+dG9tLCBudW3DqXJvIGF1dG8gRkEtWVlZWU1NLU5OTiwgUE9TVCB2ZXJzIGNs
+aWVudF9pbnZvaWNlcwoKLSBbQV0gKipCLTA1KiogwrcgSW52b2ljZURldGFp
+bFZpZXcg4oCUIFZ1ZSBmYWN0dXJlIGNvbXBsw6h0ZSBhdmVjIFFSIGNvZGUg
+4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVycyogOiBgaW52b2ljZXMvSW52
+b2ljZURldGFpbFZpZXcuanN4YCAxOTcgbGlnbmVzIChOT1VWRUFVKSAgCiAg
+KkxpdnLDqSogOiBQYWdlIGNvbXBsw6h0ZSAvc3VwZXJhZG1pbi9pbnZvaWNl
+cy86aWQsIFFSIHBsYWNlaG9sZGVyIHN1aXNzZSwgdGltZWxpbmUgc3RhdHV0
+cywgYmFkZ2VzCgotIFtBXSAqKkItMDYqKiDCtyBBY3RpdmF0aW9uIHByb2pl
+dCDigJQgTWFycXVlciBwYXnDqSArIGFjdGl2YXRpb24gcHJvamV0IGVuIGNh
+c2NhZGUg4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVycyogOiBgbGliL3By
+b2plY3RBY3RpdmF0aW9uLmpzYCA5MCBsaWduZXMgKE5PVVZFQVUpLCBgSW52
+b2ljZXNNb2R1bGUuanN4YCAzMzXihpI0NDIgbGlnbmVzICAKICAqTGl2csOp
+KiA6IFV0aWxpdGFpcmUgcsOpdXRpbGlzYWJsZSwgTUFKIHN0YXR1dCBwcm9q
+ZXQsIGNyw6lhdGlvbiA1IGxpdnJhYmxlcyBwYXIgZMOpZmF1dCAoUkVRLUZB
+Q1QtMDA2KSAgCiAgKk5vdGUqIDogQWN0aXZhdGlvbiBtYW51ZWxsZSBtYWlu
+dGVuYW50LiBSZXZvbHV0IHdlYmhvb2sgYXV0b21hdGlxdWUgZW4gUGhhc2Ug
+Ry4KCi0gW0FdICoqQi0wNyoqIMK3IEFsZXJ0c1dpZGdldCDigJQgQWxlcnRl
+cyBhY3Rpb25uYWJsZXMgYXZlYyBkb25uw6llcyByw6llbGxlcyBEaXJlY3R1
+cyDigJQgMjAyNi0wMi0xOSAgCiAgKkZpY2hpZXJzKiA6IGB3aWRnZXRzL0Fs
+ZXJ0c1dpZGdldC5qc3hgIDIzN+KGkjMyNyBsaWduZXMgIAogICpMaXZyw6kq
+IDogNSBzb3VyY2VzIGRlIGRvbm7DqWVzIChmYWN0dXJlcywgbGVhZHMsIHRp
+Y2tldHMsIGRldmlzLCBwcm9qZXRzKSwgYm91dG9ucyBhY3Rpb24gYXZlYyBu
+YXZpZ2F0aW9uCgotIFtBXSAqKkItMDgqKiDCtyBLUElXaWRnZXQg4oCUIEtQ
+SXMgZGVwdWlzIGNvbGxlY3Rpb24ga3BpcyDigJQgMjAyNi0wMi0xOSAgCiAg
+KkZpY2hpZXJzKiA6IGB3aWRnZXRzL0tQSVdpZGdldC5qc3hgIDE2N+KGkjIz
+MyBsaWduZXMgIAogICpMaXZyw6kqIDogRmV0Y2ggZGVwdWlzIGRhc2hib2Fy
+ZF9rcGlzIGVuIHByaW9yaXTDqSwgZmFsbGJhY2sgS1BJcyBjYWxjdWzDqXMs
+IHN1cHBvcnQgc3BhcmtsaW5lIHLDqWVsICAKCi0tLQoKIyMgUEhBU0UgQyDi
+gJQgUE9SVEFJTCBDTElFTlQgRk9OQ1RJT05ORUwgKihURVJNSU7DiUUpKgoq
+KkNyaXTDqHJlcyBkJ2FjY2VwdGF0aW9uKiogOiAgCi0g4pyFIENsaWVudCBz
+aWduZSBzb24gZGV2aXMgZW4gbGlnbmUgYXZlYyBDR1YgKHNpZ25hdHVyZSBh
+dG9taXF1ZSDilIAgUkVRLUNMSUVOVC0wMDYpICAKLSDinIUgQ2xpZW50IHN1
+aXQgbCdhdmFuY2VtZW50IGRlIHNvbiBwcm9qZXQgZW4gdGVtcHMgcsOpZWwg
+KFJFUcMtQ0xJRU5ULTAwMikgIAotIOKchSBDbGllbnQgdMOpbMOpY2hhcmdl
+L2ltcHJpbWUgc2VzIGZhY3R1cmVzIChSRVEtQ0xJRU5ULTAwMy8wMDUpICAK
+LSAgQ2xpZW50IGNvbW11bmlxdWUgYXZlYyBIWVBFUlZJU1VBTCB2aWEgbWVz
+c2FnZXJpZSAgCioqUHJvZ3Jlc3Npb24qKiA6IDgvOCBzdG9yaWVzIOKAlCBb
+QV0gQVVESVRFRCDigJQgY29tbWl0IGY0ODhkMjgg4oCUIGF1ZGl0w6llIDIw
+MjYtMDItMjAKCi0gW0FdICoqQy0wMCoqIMK3IEZpeCBmb3JtYXQgbnVtw6ly
+byBmYWN0dXJlIElOVi1ZWVlZLU5OIOKAlCAyMDI2LTAyLTE5ICAKICAqRmlj
+aGllcnMqIDogYEludm9pY2VHZW5lcmF0b3IuanN4YCAgCiAgKkxpdnLDqSog
+OiBTw6lxdWVuY2UgYXV0byB2aWEgY291bnQgRGlyZWN0dXMKCi0gW0FdICoq
+Qy0wMSoqIMK3IEF1dGggcG9ydGFpbCBjbGllbnQgKG1hZ2ljIGxpbmsgdG9r
+ZW4gbG9jYWxTdG9yYWdlKSDilIAgMjAyNi0wMi0xOSAgCiAgKkZpY2hpZXJz
+KiA6IGBDbGllbnRBdXRoLmpzeGAsIGBob29rcy91c2VDbGllbnRBdXRoLmpz
+YCwgYENsaWVudFBvcnRhbEd1YXJkLmpzeGAgKDMgbm91dmVhdXgpICAKICAq
+TGl2csOpKiA6IExvZ2luIGVtYWlsIOKGkiB0b2tlbiDihpIgYWNjw6hzIGRv
+bm7DqWVzIGNsaWVudC4gR3VhcmQgc3VyIC9jbGllbnQvKgoKLSBbQV0gKipD
+LTAyKiogwrcgRGFzaGJvYXJkIGNsaWVudCBjb25uZWN0w6kgRGlyZWN0dXMg
+4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVycyogOiBgRGFzaGJvYXJkLmpz
+eGAgKHLDqcOlY3JpdHVyZSBjb21wbMOodGUpICAKICAqTGl2csOpKiA6IDQg
+Y2FydGVzIHN0YXR1dCwgc2VjdGlvbiAiQWN0aW9uIHJlcXVpc2UiLCB0aW1l
+bGluZSBwcm9qZXQgKHRvdXQgZmlsdHLDqSBjb250YWN0X2lkKQoKLSBbQV0g
+KipDLTAzKiogwrcgU2lnbmF0dXJlIGRldmlzIGVuIGxpZ25lIGF2ZWMgQ0dW
+IGludMOpZ3LDqWUg4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVycyogOiBg
+UXVvdGVTaWduYXR1cmUuanN4YCAobm91dmVhdSkgIAogICpMaXZyw6kqIDog
+RmxvdyAzIMOpdGFwZXMgYXRvbWlxdWUgOiBDR1YgYWNjZXB0YW5jZSDihpIg
+c2lnbmF0dXJlX2xvZyDihpIgUEFUQ0ggcXVvdGUKCi0gW0FdICoqQy0wNCoq
+IMK3IFN1aXZpIHByb2pldCB0ZW1wcyByw6llbCDigJQgMjAyNi0wMi0xOSAg
+CiAgKkZpY2hpZXJzKiA6IGBDbGllbnRQcm9qZWN0c0xpc3QuanN4YCwgYFBy
+b2plY3RUcmFja2luZy5qc3hgICgyIG5vdXZlYXV4KSAgCiAgKkxpdnLDqSog
+OiBMaXN0ZSBwcm9qZXRzICsgZMOpdGFpbCBhdmVjIHByb2dyZXNzaW9uIGRl
+bGl2ZXJhYmxlcwoKLSBbQV0gKipDLTA1KiogwrcgSGlzdG9yaXF1ZSBmYWN0
+dXJlcyArIGltcHJlc3Npb24g4oCUIDIwMjYtMDItMTkgIAogICpGaWNoaWVy
+cyogOiBgQ2xpZW50SW52b2ljZXMuanN4YCAobm91dmVhdSkgIAogICpMaXZy
+w6kqIDogVGFibGVhdSBzdGF0dXRzLCBzb2xkZSBvdXRzdGFuZGluZywgcHJp
+bnQgdmlhIHdpbmRvdy5vcGVuCgotIFtBXSAqKkMtMDYqKiDCtyBNZXNzYWdl
+cmllIGNsaWVudCDihpIgSFlQRVJWSVNVQUwg4oCUIDIwMjYtMDItMTkgIAog
+ICpGaWNoaWVycyogOiBgQ2xpZW50TWVzc2FnZXMuanN4YCAobm91dmVhdSkg
+IAogICpMaXZyw6kqIDogQ2hhdCBVSSBzdXIgY29sbGVjdGlvbiBjb21tZW50
+cywgcG9sbGluZyAxNXMKCi0gW0FdICoqQy0wNyoqIMK3IE5hdmlnYXRpb24g
+ZXQgbGF5b3V0IHBvcnRhaWwgY2xpZW50IOKAlCAyMDI2LTAyLTE5ICAKICAq
+RmljaGllcnMqIDogYENsaWVudExheW91dC5qc3hgIChyw6nDqWNyaXR1cmUp
+ICAKICAqTGl2csOpKiA6IFNpZGViYXIgNSBpdGVtcyBlbWVyYWxkLCBoZWFk
+ZXIgbG9nbyArIHByw6lub20gKyBsb2dvdXQKCi0tLQoKIyMgUEhBU0UgRCDi
+gJQgUE9SVEFJTCBQUkVTVEFUQUlSRSBGT05DVElPTk5FTCAqKFRFUk1JTsOJ
+RSkqCioqT2JqZWN0aWYgQ0RDKiogOiBVbiBwcmVzdGF0YWlyZSBwZXV0IHJl
+Y2V2b2lyIHVuZSBkZW1hbmRlLCBzb3VtZXR0cmUgdW4gZGV2aXMsIHZvaXIg
+c2VzIHBhaWVtZW50cwoqKk1vZHVsZXMgQ0RDKiogOiBNb2R1bGUgMiAoUG9y
+dGFpbCBQcmVzdGF0YWlyZSkKKipDcml0w6hyZXMgZCdhY2NlcHRhdGlvbioq
+IDogCi0g4pyFIFByZXN0YXRhaXJlIHNvdW1ldCBzb24gZGV2aXMgZW4gPCA1
+IG1pbnV0ZXMgKFJFUS1QUkVTVC0wMDMpCi0g4pyFIFByZXN0YXRhaXJlIHZv
+aXQgbGUgYm9uIGRlIGNvbW1hbmRlIHVuZSBmb2lzIHByb2pldCBhY3RpdsOp
+IChSRVEtUFJFU1QtMDA2KQotIOKchSBQcmVzdGF0YWlyZSB2b2l0IGxlIHN0
+YXR1dCBwYWllbWVudCBkZSBzYSBwcmVzdGF0aW9uIChSRVEtUFJFU1QtMDA3
+KQoqKlByb2dyZXNzaW9uKiogOiA3Lzcgc3RvcmllcyDigJQgW0FdIEFVRElU
+RUQg4oCUIGNvbW1pdCA5ZDU3YzIwIOKAlCBhdWRpdMOpZSAyMDI2LTAyLTIw
+CgotIFtBXSAqKkQtMDEqKiDCtyBBdXRoIHBvcnRhaWwgcHJlc3RhdGFpcmUg
+KG1hZ2ljIGxpbmsgZW1haWwg4oaSIHRva2VuIGxvY2FsU3RvcmFnZSkg4oCU
+IDIwMjYtMDItMTkKICAqRmljaGllcnMqIDogYGhvb2tzL3VzZVByb3ZpZGVy
+QXV0aC5qc2AsIGBhdXRoL1Byb3ZpZGVyQXV0aC5qc3hgLCBgYXV0aC9Qcm92
+aWRlclBvcnRhbEd1YXJkLmpzeGAgKDMgbm91dmVhdXgpCiAgKkxpdnLDqSog
+OiBMb2dpbiBlbWFpbCDihpIgbG9va3VwIHByb3ZpZGVycyDihpIgdG9rZW4g
+bG9jYWxTdG9yYWdlIOKGkiBndWFyZCAvcHJlc3RhdGFpcmUvKi4gVGjDqG1l
+IHZpb2xldC9pbmRpZ28uCgotIFtBXSAqKkQtMDIqKiDCtyBEYXNoYm9hcmQg
+cHJlc3RhdGFpcmUgY29ubmVjdMOpIERpcmVjdHVzIOKAlCAyMDI2LTAyLTE5
+CiAgKkZpY2hpZXJzKiA6IGBEYXNoYm9hcmQuanN4YCAocsOpw6ljcml0dXJl
+IGNvbXBsw6h0ZSkKICAqTGl2csOpKiA6IDQgY2FydGVzIEtQSSAoZGV2aXMg
+ZW4gYXR0ZW50ZSwgcHJvamV0cyBhY3RpZnMsIGZhY3R1cmVzIMOgIHNvdW1l
+dHRyZSwgcGFpZW1lbnRzIGVuIGF0dGVudGUpLCBzZWN0aW9uICJBY3Rpb25z
+IHJlcXVpc2VzIiBhdmVjIGxpZW5zIGRpcmVjdHMuCgotIFtBXSAqKkQtMDMq
+KiDCtyBEZW1hbmRlcyBkZSBkZXZpcyArIHNvdW1pc3Npb24gb2ZmcmUgYXZl
+YyBUVkEgOC4xJSBhdXRvIOKAlCAyMDI2LTAyLTE5CiAgKkZpY2hpZXJzKiA6
+IGBxdW90ZXMvUXVvdGVSZXF1ZXN0cy5qc3hgIChub3V2ZWF1KQogICpDREMq
+IDogUkVRLVBSRVNULTAwMSwgUkVRLVBSRVNULTAwMiwgUkVRLVBSRVNULTAw
+MwogICpMaXZyw6kqIDogVGFibGUgcHJvcG9zYWxzIGZpbHRyw6llIHByb3Zp
+ZGVyX2lkLCBmaWx0cmVzIHN0YXR1dCwgbW9kYWwgU3VibWl0T2ZmZXJNb2Rh
+bCAobW9udGFudCBIVCArIFRWQSA4LjElIGF1dG8gKyBkZWFkbGluZSArIG5v
+dGVzKSwgUEFUQ0ggcHJvcG9zYWxzLgoKLSBbQV0gKipELTA0KiogwrcgQm9u
+cyBkZSBjb21tYW5kZSDilIAgMjAyNi0wMi0xOQogICpGaWNoaWVycyogOiBg
+b3JkZXJzL1B1cmNoYXNlT3JkZXJzLmpzeGAgKG5vdXZlYXUpCiAgKkNEQyog
+OiBSRVEtUFJFU1QtMDA2CiAgKkxpdnLDqSogOiBQcm9qZXRzIG/DuSBtYWlu
+X3Byb3ZpZGVyX2lkID0gcHJvdmlkZXIuaWQsIGJvdXRvbiAiQ29uZmlybWVy
+IHLDqWNlcHRpb24gQkMiLCBjcsOpYXRpb24vTUFKIG9yZGVyIHJlY29yZC4K
+Ci0gW0FdICoqRC0wNSoqIMK3IEZhY3R1cmVzIGZvdXJuaXNzZXVyICsgdXBs
+b2FkIFBERiArIHN1aXZpIHBhaWVtZW50IOKAlCAyMDI2LTAyLTE5CiAgKkZp
+Y2hpZXJzKiA6IGBpbnZvaWNlcy9Qcm92aWRlckludm9pY2VzLmpzeGAgKG5v
+dXZlYXUpCiAgKkNEQyogOiBSRVEtUFJFU1QtMDA3CiAgKkxpdnLDqSogOiBM
+aXN0ZSBzdXBwbGllcl9pbnZvaWNlcywgY2FyZHMgcsOpc3Vtw6kgKGVuIGF0
+dGVudGUvcGF5w6llcyksIG1vZGFsIGNyw6lhdGlvbiBmYWN0dXJlIGF2ZWMg
+dXBsb2FkIFBERiAoRm9ybURhdGEg4oaSIERpcmVjdHVzIGZpbGVzKSwgVFZB
+IGF1dG8sIHN1aXZpIHN0YXR1dCBwYWllbWVudC4KCi0gW0FdICoqRC0wNioq
+IMK3IE5hdmlnYXRpb24gcG9ydGFpbCBwcmVzdGF0YWlyZSDilIAgMjAyNi0w
+Mi0xOQogICpGaWNoaWVycyogOiBgbGF5b3V0L1ByZXN0YXRpcmVMYXlvdXQu
+anN4YCAocsOpw6ljcml0dXJlIGNvbXBsw6h0ZSkKICAqTGl2csOpKiA6IFNp
+ZGViYXIgNCBpdGVtcyB2aW9sZXQgKERhc2hib2FyZCwgRGV2aXMsIENvbW1h
+bmRlcywgRmFjdHVyZXMpLCBoZWFkZXIgbG9nbyArIG5vbSBwcmVzdGF0YWly
+ZSArIGxvZ291dC4KCi0gW0FdICoqRC0wNyoqIMK3IFN1cGVyQWRtaW4g4oCU
+IEdlc3Rpb24gcHJlc3RhdGFpcmVzICsgZW52b2kgZGVtYW5kZSBkZXZpcyDi
+gJQgMjAyNi0wMi0xOQogICpGaWNoaWVycyogOiBgc3VwZXJhZG1pbi9wcm92
+aWRlcnMvUHJvdmlkZXJzTW9kdWxlLmpzeGAgKG5vdXZlYXUpLCBgU2lkZWJh
+ci5qc3hgIChlbnRyw6llIFByZXN0YXRhaXJlcykKICAqQ0RDKiA6IFJFUS1Q
+UkVTVC0wMDUKICAqTGl2csOpKiA6IE9uZ2xldHMgUHJlc3RhdGFpcmVzL09m
+ZnJlcyByZcOndWVzLCBlbnZvaSBkZW1hbmRlIGRldmlzIChQT1NUIHByb3Bv
+c2FscyksIEFjY2VwdC9SZWplY3Qgb2ZmcmVzIHNvdW1pc2VzIChhY2NlcHQg
+4oaSIE1BSiBwcm9qZWN0Lm1haW5fcHJvdmlkZXJfaWQpLCBiYWRnZSBhbGVy
+dGUgbm91dmVsbGVzIHNvdW1pc3Npb25zLgoKCi0tLQoKIyMgUEhBU0UgRSDi
+gJQgQVVUT01BVElPTlMgRU1BSUwgKE1BVVRJQykgKihURVJNSU7DiUUpKgoq
+KlByb2dyZXNzaW9uKiogOiA2LzYgc3RvcmllcyDigJQgW0FdIEFVRElURUQg
+4oCUIGNvbW1pdCA5YWIyMGE5IOKAlCBhdWRpdMOpZSAyMDI2LTAyLTIwCgot
+IFtBXSAqKkUtMDEqKiDCtyBFbWFpbCBjb25maXJtYXRpb24gbGVhZCDigJQg
+MjAyNi0wMi0xOQotIFtBXSAqKkUtMDIqKiDCtyBFbWFpbCBkZXZpcyBlbnZv
+ecOpIGF1IGNsaWVudCDigJQgMjAyNi0wMi0xOQotIFtBXSAqKkUtMDMqKiDC
+tyBFbWFpbCBhY2N1c8OpIHBhaWVtZW50IOKAlCAyMDI2LTAyLTE5Ci0gW0Fd
+ICoqRS0wNCoqIMK3IFJhcHBlbHMgZmFjdHVyZXMgaW1wYXnDqWVzIOKAlCAy
+MDI2LTAyLTE5Ci0gW0FdICoqRS0wNSoqIMK3IE5vdGlmaWNhdGlvbiBwcmVz
+dGF0YWlyZSDilIAgMjAyNi0wMi0xOQotIFtBXSAqKkUtMDYqKiDCtyBSYXBw
+ZWwgcHJlc3RhdGFpcmUg4oCUIDIwMjYtMDItMTkKCi0tLQoKIyMgUEhBU0Ug
+RiDigJQgQ0FQVFVSRSBMRUFEU01NVUxUSUNBTkFMICoqKEFVRElUw4kpKioK
+KipQcm9ncmVzc2lvbioqIDogNC80IHN0b3JpZXMg4oCUIFtBXSBBVURJVEVE
+IOKAlCBjb21taXQgMzJmOTk1MDIg4oCUIGF1ZGl0w6llIDIwMjYtMDItMjAK
+CioqTk9URSBBVURJVCoqIDogNyBidWdzIGNvcnJpZ8OpcyBsb3JzIGRlIGwn
+YXVkaXQgKHNjaGVtYSBVVUlEL2ludCwgQGFudGhyb3BpYy1haS9zZGsgbWFu
+cXVhbnQsIHNjb3JlL2VzdGltYXRlZF92YWx1ZSBub24gdHJhbnNtaXMsIHNv
+dXJjZSBXaGF0c0FwcCBub24gcmVjb25udWUsIG5vbXMgRmx1ZW50IEZvcm0g
+dmlkZXMpLgoKPiDimqDvuI8gKipBQ1RJT04gUEVORElOR0UgKGYtMDEpKiog
+OiBMYSBjb25maWd1cmF0aW9uIGR1IHdlYmhvb2sgRmx1ZW50IEZvcm1zIFBy
+byBzdXIgV29yZFByZXNzIChoeXBlcnZpc3VhbC13cC5sb2NhbCkgbidlc3Qg
+cGFzIGVuY29yZSB0ZXJtaW7DqWUuIElsIGZhdWRyYSA6ICgxKSBmaW5hbGlz
+ZXIgbGEgY29uZmlndXJhdGlvbiBkdSB3ZWJob29rIGRhbnMgRmx1ZW50IEZv
+cm1zIFBybyAoZm9ybSAjMTcgaHR0cDovL2xvY2FsaG9zdDozMDAwL2FwaS9s
+ZWFkcy93cC13ZWJob29rKSwgKDIpIHNvdW1ldHRyZSB1biB0ZXN0IHLDqWVs
+IGRlcHVpcyBXb3JkUHJlc3MsICgzKSB2w6lyaWZpZXIgZGFucyBEaXJlY3R1
+cyBxdWUgbGUgbGVhZCBhcHBhcmHDrnQgYXZlYyBzY29yZSwgbm9tLCBlbWFp
+bCBldCBsZWFkX2FjdGl2aXR5LgoKLSBbQV0gKipGLTAxKiogwrcgV29yZFBy
+ZXNzIOKGkiBMZWFkIERpcmVjdHVzICh3ZWJob29rIEZsdWVudCBGb3JtIFBy
+byAjMTcpIOKAlCAyMDI2LTAyLTIwCiAgKkNEQyogOiBSRVEtTEVBRC0wMDEK
+ICAqRmljaGllcnMqIDogYHNyYy9iYWNrZW5kL2FwaS9sZWFkcy93cC13ZWJo
+b29rLmpzYCwgYGxlYWQtY3JlYXRvci5qc2AsIGBpbmRleC5qc2AKICAqTGl2
+csOpKiA6IFBPUlQgL2FwaS9sZWFkcy93cC13ZWJob29rIOKAlCB2YWxpZGF0
+aW9uIEhNQUMgb3B0aW9ubmVsbGUsIG1hcHBpbmcgZmxleGlibGUgY2hhbXBz
+IEZsdWVudCBGb3JtLCBhbnRpLWRvdWJsb24gMzBtaW4sIHVwc2VydCBsZWFk
+IHBhciBlbWFpbC4gUXVhbGlmaWNhdGlvbiBzY29yZSAxLTUgKGJ1ZGdldCwg
+ZGF0ZSwgY29tcGxldHVkZSwgdHlwZSkuIGxlYWRfYWN0aXZpdHkgYXV0by4K
+ICAqTm90ZSogOiDinqDvuI8gQ29uZmlndXJhdGlvbiB3ZWJob29rIEZsdWVu
+dCBGb3JtcyBQcm8gc3VyIFdvcmRQcmVzcyBOT04gdGVybWluw6llIOKAlCB0
+ZXN0IHLDqWVsIGV0IHbDqXJpZmljYXRpb24gRGlyZWN0dXMgw6AgZmFpcmUu
+CgotIFtBXSAqKkYtMDIqKiDCtyBXaGF0c0FwcCBCdXNpbmVzcyDihpIgTGVh
+ZCBEaXJlY3R1cyAoQVBJIE1ldGEgKyBMTE0pIOKAlCAyMDI2LTAyLTIwCiAg
+KkNEQyogOiBSRVEtTEVBRC0wMDIKICAqTGl2csOpKiA6IEdFVCB2w6lyaWZp
+Y2F0aW9uIE1ldGEsIFBPU1QgcsOpY2VwdGlvbiwgTExNIGV4dHJhY3Rpb24g
+Q2xhdWRlIEhhaWt1IHByaW1hcnkgKyBHUFQtNG8tbWluaSBmYWxsYmFjaywg
+c3RvY2thZ2Ugd2hhdHNhcHBfbWVzc2FnZXMsIGxlYWRfYWN0aXZpdHkgYXV0
+by4KCi0gW0FdICoqRi0wMyoqIMK3IEVtYWlsIGluZm9AaHlwZXJ2aXN1YWwu
+Y2gg4oaSIExlYWQgRGlyZWN0dXMg4oCUIDIwMjYtMDItMjAKICAqQ0RDKiA6
+IFJFUS1MRUFELTAwNAogICpMaXZyw6kqIDogUG9sbGluZyBJTUFQIDVtaW4s
+IEdQVC00by1taW5pIGV4dHJhY3Rpb24sIGFudGktZG91YmxvbiBwYXIgTWVz
+c2FnZS1JRC4KCi0gW0FdICoqRi0wNCoqIMK3IFJpbmdvdmVyIOKGkiBMZWFk
+IERpcmVjdHVzIOKAlCAyMDI2LTAyLTIwCiAgKkNEQyogOiBSRVEtTEVBRC0w
+MDMKICAqTGl2csOpKiA6IFBvbGxpbmcgMTVtaW4gUmluZ292ZXIgdjIsIGFu
+YWx5c2UgTE1NLCBhbnRpLWRvdWJsb24gcGFyIGNhbGxfaWQsIHNraXAgbnVt
+w6lyb3MgaW50ZXJuZXMuCgotLS0KCiMjIFBIQVNFIEcg4oCUIFJFVk9MVVQg
+V0VCSE9PS1MgKyBSw4lDT05DSUxJQVRJT04KKipQcm9ncmVzc2lvbioqIDog
+NS81IHN0b3JpZXMg4oCUIFtWXSBET05FIOKAlCAyMDI2LTAyLTIwCgotIFtW
+XSAqKkctMDEqKiDCtyBSZXZvbHV0IHdlYmhvb2sg4oCUIFLDqWNlcHRpb24g
+dHJhbnNhY3Rpb25zIGVuIHRlbXBzIHLDqWVsIOKAlCAyMDI2LTAyLTIwCi0g
+W1ZdICoqRy0wMioqIMK3IEFsZ29yaXRobWUgcmFwcHJvY2hlbWVudCBtdWx0
+aS1jcml0w6hyZXMg4oCUIDIwMjYtMDItMjAKLSBbVl0gKipHLTAzKiogwrcg
+RGFzaGJvYXJkIHJhcHByb2NoZW1lbnQgYmFuY2FpcmUg4oCUIDIwMjYtMDIt
+MjAKLSBbVl0gKipHLTA0KiogwrcgQWN0aXZhdGlvbiBhdXRvbWF0aXF1ZSBw
+cm9qZXQg4oCUIDIwMjYtMDItMjAKLSBbVl0gKipHLTA1KiogwrcgQWxlcnRl
+cyB0cmFuc2FjdGlvbnMgbm9uIHJhcHByb2Now6llcyA+IDUgam91cnMg4oCU
+IDIwMjYtMDItMjAKCi0tLQoKIyMgUEhBU0UgSCDigJQgU0lHTkFUVVJFUyBE
+T0NVU0VBTCBK T0dWICooVEVSTUlOw4lFKSoKKipQcm9ncmVzc2lvbioqIDog
+My8zIHN0b3JpZXMg4oCUIFtWXSBET05FIOKAlCAyMDI2LTAyLTIwCgotIFtW
+XSAqKkgtMDEqKiDCtyBEb2N1U2VhbCBpbnTDqWdyYXRpb24g4oCUIDIwMjYt
+MDItMjAKLSBbVl0gKipILTAyKiogwrcgRG9jdVNlYWwgd2ViaG9vayAr IHNp
+Z25hdHVyZSDigJQgMjAyNi0wMi0yMAotIFtWXSAqKkgtMDMqKiDCtyBCb3V0
+b24gc2lnbmF0dXJlIFN1cGVyQWRtaW4gKyBQb3J0YWlsIGNsaWVudCDigJQg
+MjAyNi0wMi0yMAoKLS0tCgojIyBQSEFTRSBJIOKAlCBNT0RVTEVTIEZJT
+kFOQ0UgQVZBTkPDiVMgKihURVJNSU7DiUUpKgoqKlByb2dyZXNzaW9uKiogOiA4
+Lzggc3RvcmllcyDigJQgW1ZdIERPTkUg4oCUIDIwMjYtMDItMjAKCi0gW1Zd
+ICoqSS0wMSoqIMK3IEZhY3R1cmF0aW9uIHBhciBqYWxvbnMg4oCUIDIwMjYt
+MDItMjAKLSBbVl0gKipJLTAyKiogwrcgQ29udHJhdHMgcsOpY3VycmVudHMg
+4oCUIDIwMjYtMDItMjAKLSBbVl0gKipJLTAzKiogwrcgRmFjdHVyYXRpb24g
+csOpY3VycmVudGUgYXV0b21hdGlxdWUg4oCUIDIwMjYtMDItMjAKLSBbVl0g
+KipJLTA0KiogwrcgQXZvaXJzICYgcmVtYm91cnNlbWVudHMg4oCUIDIwMjYt
+MDItMjAKLSBbVl0gKipJLTA1KiogwrcgV29ya2Zsb3cgdmFsaWRhdGlvbiBm
+YWN0dXJlcyBmb3Vybmlzc2V1cnMg4oCUIDIwMjYtMDItMjAKLSBbVl0gKipJ
+LTA2KiogwrcgRMOpdGVjdGlvbiDDqWNhcnRzIGRldmlzL2ZhY3R1cmUg4oCU
+IDIwMjYtMDItMjAKLSBbVl0gKipJLTA3KiogwrcgU3VpdmkgZHUgdGVtcHMg
+4oaSIGZhY3R1cmF0aW9uIGVuIHLDqWdpZSDigJQgMjAyNi0wMi0yMAotIFtW
+XSAqKkktMDgqKiDCtyBUaWNrZXRzIHN1cHBvcnQg4oaSIGZhY3R1cmF0aW9u
+IOKAlCAyMDI2LTAyLTIwCgotLS0KCiMjIFBIQVNFIEog4oCUIEtQSSBEQVNI
+Qk9BUkQgKyBSQVBQT1JUIENFTwoqKlByb2dyZXNzaW9uKiogOiA0LzQgc3Rv
+cmllcyDigJQgW1ZdIERPTkUg4oCUIDIwMjYtMDItMjAKCi0gW1ZdICoqSi0w
+MSoqIMK3IEtQSXMgZGVwdWlzIGNvbGxlY3Rpb24ga3BpcyDigJQgMjAyNi0w
+Mi0yMAotIFtWXSAqKkotMDIqKiDCtyBBbGVydGVzIHNldWlscyBLUEkg4oCU
+IDIwMjYtMDItMjAKLSBbVl0gKipKLTAzKiogwrcgUmFwcG9ydCBxdW90aWRp
+ZW4gQ0VPIOKAlCAyMDI2LTAyLTIwCi0gW1ZdICoqSi0wNCoqIMK3IFByw6l2
+aXNpb24gdHLDqXNvcmVyaWUg4oCUIDIwMjYtMDItMjAKCi0tLQoKIyMgUEhB
+U0UgSyDigJQgTVVMVEktRU5UUkVQUklTRVMgKFBPU1QgVjEpCioqU2NvcGUq
+KiA6IERBSU5BTUlDUywgTEVYQUlBLCBFTktJIFJFQUxUWSwgVEFLRU9VVCAK
+KipQcsOpcmVxdWlzKiogOiBWMSBIWVBFUlZJU1VBTCBTd2l0emVybGFuZCBl
+bnRpw6hyZW1lbnQgc3RhYmxlIGV0IHZhbGlkw6llICAKKipQcm9ncmVzc2lv
+bioqIDogMC8xIHN0b3J5CgotIFsgXSAqKkstMDEqKiDCtyBBcmNoaXRlY3R1
+cmUgbXVsdGktZW50cmVwcmlzZXMKCi0tLQoKIyMgUsOIR0xFUyBERSBUUkFO
+U0lUSU9OIEVOVFJFIFBIQVNFUwoKPiBDZXMgcsOoZ2xlcyDDqXZpdGVudCBs
+ZXMgcHJvYmzDqG1lcyByZW5jb250csOpcyBsb3JzIGRlcyB0cmFuc2l0aW9u
+cyBwcsOpY8OpZGVudGVzLgoKIyMjIEF2YW50IGRlIGNvbW1lbmNlciB1bmUg
+cGhhc2UKMS4gKipWw6lyaWZpZXIgbGVzIHByw6lyZXF1aXMqKiA6IFRvdXRl
+cyBsZXMgc3RvcmllcyBbQV0gQVVESVRFRCBkZSBsYSBwaGFzZSBwcsOpY8Op
+ZGVudGUKMi4gKipMaXJlIGxlIENEQyoqIDogUmVsaXJlIGxlcyBtb2R1bGVz
+IGNvbmNlcm7DqXMKMy4gKipWw6lyaWZpZXIgRGlyZWN0dXMqKiA6IENvbmZp
+cm1lciB2aWEgTUNQCjQuICoqSWRlbnRpZmllciBsZXMgZMOpcGVuZGFuY2Vz
+KioKCiMjIyBQZW5kYW50IGxlIGTDqXZlbG9wcGVtZW50CjUuICoqU2tpbGxz
+IE9CTElHQVRPSVJFUyoqCjYuICoqVsOpcmlmaWNhdGlvbiBjaGFtcHMgcsOp
+ZWxzKioKNy4gKipQYXMgZCdpbnZlbnRpb24qKgoKIyMjIEFwcsOocyBjaGFx
+dWUgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkg
+c3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rv
+cnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkgc3Rvcnkg
+c3Rvcnkgc3RvcnkKOC4gQ29tbWl0IGF0b21pcXVlCjkuIE1ldHRyZSDDoCBq
+b3VyIGNlIGZpY2hpZXIKMTAuIFNpZ25hbGVyIGxlcyBibG9jYWdlcwoKIyMj
+IENyaXTDqHJlIGRlIHZhbGlkYXRpb24KMTEuIEplYW4gdGVzdGUgY2hhcXVl
+IGZlYXR1cmUKMTIuIEplYW4gcGFzc2UgW1ZdIOKGkiBbQV0KMTM.IEpBTUFJ
+UyBjb21tZW5jZXIgbGEgcGhhc2Ugc3VpdmFudGUgc2FucyBbQV0gQVVESVRF
+RAoKLS0tCgojIyBEw4lDT1VWRVJURVMgJiBBSlVTVEVNRU5UUwoKfCBEYXRl
+IHwgU3RvcnkgfCBEw6ljb3V2ZXJ0ZSB8IEltcGFjdCB8IETDqWNpc2lvbiB8
+Ci0tLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tLS18LS0tLS0tLS18LS0tLS0t
+LS0tfAp8IDIwMjYtMDItMTkgfCDigJQgfCBQUk9HUkVTUy5tZCA0Ny80NyBj
+b3V2cmFpdCB1bmlxdWVtZW50IGxhIGNvdWNoZSBhZmZpY2hhZ2UgfCA4MCUg
+Q0RDIHJlc3RhbnQgfCBDZSBST0FETUFQLm1kIGNyw6nDqSB8CnwgMjAyNi0w
+Mi0xOSB8IEItMDEgfCBTY29yZSAxLTUgdnMgSGlnaC9NZWRpdW0vTG93IENE
+QyB8IEFjY2VwdGFibGUgfCAqKkTDiUNJU0lPTiBKRUFOIDogQ29uc2VydmVy
+IDEtNSoqIHwKfCAyMDI2LTAyLTE5IHwgQi0wNCB8IE51bcOpcm8gZmFjdHVy
+ZSBGQS1ZWVlZTU0tTk5OIHwgTWluZXVyIHwgKipEw4lDSVNJT04gSkVBTiA6
+IEZvcm1hdCBJTlYtWVlZWS1OTioqIHwKfCAyMDI2LTAyLTE5IHwgRS0wNCB8
+IGNsaWVudF9pbnZvaWNlcyBzYW5zIGR1ZV9kYXRlIHwgQmxvcXVhbnQgfCBB
+am91dMOpIHZpYSBBUEkgfAp8IDIwMjYtMDItMjAgfCBGLWFsbCB8IDcgYnVn
+cyBhdWRpdCBQaGFzZSBGIChjZi4gcmFwcG9ydCBhdWRpdCkgfCBDb3JyaWfD
+qXMgfCBDb21taXQgMzJmOTk1MDIgfAp8IDIwMjYtMDItMjAgfCBGLTAxIHwg
+Q29uZmlndXJhdGlvbiB3ZWJob29rIEZsdWVudCBGb3JtcyBXUCBpbmNvbXBs
+w6h0ZSB8IFBlbmRpbmcgfCBGYWlyZSBtYW51ZWxsZW1lbnQgc3VyIFdvcmRQ
+cmVzcyArIHbDqXJpZmllciBEaXJlY3R1cyB8CgotLS0KCiMjIE3DilRSSVFV
+RVMgR0xPQkFMRVMKCnwgTcOpdHJpcXVlIHwgVmFsZXVyIHwKfC0tLS0tLS0t
+LS18LS0tLS0tLS18CnwgQ29sbGVjdGlvbnMgRGlyZWN0dXMgfCA4MyBhY3Rp
+dmVzIHwKfCBTdG9yaWVzIFBoYXNlIEEgfCA0Ny80NyDinIUgfAp8IFN0b3Jp
+ZXMgUGhhc2UgQiB8IDgvOCDinIUgfAp8IFN0b3JpZXMgUGhhc2UgQyB8IDgv
+OCDinIUgfAp8IFN0b3JpZXMgUGhhc2UgRCB8IDcvNyDinIUgfAp8IFN0b3Jp
+ZXMgUGhhc2UgRSB8IDYvNiDinIUgfAp8IFN0b3JpZXMgUGhhc2UgRiAobGVh
+ZCBjYXB0dXJlKSB8IDQvNCBbQV0gfAp8IFN0b3JpZXMgUGhhc2UgRyB8IDUv
+NSDinIUgW1ZdIHwKfCBTdG9yaWVzIFBoYXNlIEggfCAzLzMg4pyFIFtWXSB8
+CnwgU3RvcmllcyBQaGFzZSBJIHwgOC84IOKchSBbVl0gfAp8IFN0b3JpZXMg
+UGhhc2UgSiB8IDQvNCDinIUgW1ZdIHwKfCAqKlYxIFNUQVRVUyoqIHwgKio5
+Ni85NiBzdG9yaWVzIOKAlCBGIFtBXSAvIEcsIEgsIEksIEogW1ZdKiogfAo=

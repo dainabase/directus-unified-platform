@@ -9,7 +9,7 @@ const axios = require('axios');
 class DirectusAdapter {
     constructor() {
         this.directusUrl = process.env.DIRECTUS_URL || 'http://localhost:8055';
-        this.directusToken = process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+        this.directusToken = process.env.DIRECTUS_ADMIN_TOKEN;
         
         this.client = axios.create({
             baseURL: this.directusUrl,

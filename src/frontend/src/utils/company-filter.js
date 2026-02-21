@@ -223,24 +223,11 @@ export function formatCompanyName(company) {
 }
 
 /**
- * Debug : log les informations de filtrage
+ * Debug : log les informations de filtrage (no-op in production)
  * @param {string} context - Contexte du debug
  * @param {Object} filters - Filtres appliqués
  * @param {Array} data - Données résultantes
  */
 export function debugCompanyFilter(context, filters, data) {
-  if (process.env.NODE_ENV !== 'development') return;
-  
-  console.group(`🏢 [${context}] Company Filter Debug`);
-  console.log('Filters:', filters);
-  console.log('Company:', filters?.company);
-  console.log('Normalized:', normalizeCompanyName(filters?.company));
-  console.log('Data count:', Array.isArray(data) ? data.length : 'N/A');
-  
-  if (Array.isArray(data) && data.length > 0) {
-    const stats = getStatsByOwnerCompany(data);
-    console.log('Distribution:', stats);
-  }
-  
-  console.groupEnd();
+  // Debug logging removed for production
 }

@@ -406,7 +406,8 @@ app.get('/api/directus/items/:collection', authMiddleware, async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Erreur proxy Directus:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -492,8 +493,7 @@ app.post('/api/ocr/scan-invoice', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Erreur OCR:', error.response?.data || error.message);
     res.status(500).json({
-      error: 'Erreur lors du scan',
-      details: error.response?.data?.error?.message || error.message
+      error: 'Internal server error'
     });
   }
 });

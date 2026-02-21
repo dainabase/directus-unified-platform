@@ -7,7 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuration
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'; // Token JMD qui fonctionne
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 // Liste complète des 62 collections
 const ALL_COLLECTIONS = [

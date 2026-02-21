@@ -9,7 +9,8 @@
 import axios from 'axios';
 
 const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 const DRY_RUN = process.argv.includes('--dry-run') || !process.argv.includes('--execute');
 
 const api = axios.create({

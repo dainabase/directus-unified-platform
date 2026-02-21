@@ -7,7 +7,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuration
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 const client = axios.create({
   baseURL: API_URL,

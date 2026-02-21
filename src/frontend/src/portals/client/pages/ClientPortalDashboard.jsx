@@ -366,8 +366,7 @@ const ClientPortalDashboard = () => {
           <InvoicesList
             onSelectInvoice={setSelectedInvoice}
             onPayInvoice={(invoice) => {
-              // Open payment flow
-              console.log('Pay invoice:', invoice);
+              // TODO: Open payment flow
             }}
           />
         )}

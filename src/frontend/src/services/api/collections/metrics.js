@@ -9,8 +9,6 @@ export const metricsAPI = {
    */
   async getKPIs(filters = {}) {
     try {
-      // Debug du filtrage
-      console.log('🎯 getKPIs called with filters:', filters);
       
       // Récupérer toutes les données nécessaires avec filtrage automatique owner_company
       const [
@@ -171,13 +169,6 @@ export const metricsAPI = {
 
       // Taille équipe estimée
       const teamSize = Math.max(5, Math.round(totalHours / 160)); // 160h = 1 ETP/mois
-
-      console.log(`📊 KPIs calculated for ${filters.company || 'ALL'}:`, {
-        projects: projects.length,
-        activeClients: allActiveClientIds.length,
-        revenue: totalRevenue,
-        mrr: estimatedMRR
-      });
 
       return {
         // Métriques principales
@@ -432,7 +423,7 @@ export const metricsAPI = {
           });
         }
       } catch (runwayError) {
-        console.warn('Could not fetch runway for alerts:', runwayError.message);
+        // Runway data unavailable for alerts - non-critical
       }
 
       return alerts.slice(0, 10); // Limiter à 10 alertes max

@@ -357,12 +357,10 @@ export const kpiAPI = {
    */
   async getOverview(company = null) {
     if (USE_MOCK) {
-      console.log('📊 Using mock KPI data')
       return mockAPI.getOverview(company)
     }
 
     try {
-      console.log('📊 Fetching real KPI data from Directus...')
 
       // Fetch all metrics in parallel
       const [financial, projects, people] = await Promise.all([
@@ -401,10 +399,9 @@ export const kpiAPI = {
         }
       }
 
-      console.log('✅ KPI data loaded successfully')
       return overview
     } catch (error) {
-      console.warn('❌ Error fetching KPIs, falling back to mock data:', error)
+      console.error('Error fetching KPIs, falling back to mock data:', error)
       return mockAPI.getOverview(company)
     }
   },
@@ -420,7 +417,7 @@ export const kpiAPI = {
     try {
       return await generateTrendsData(period, company)
     } catch (error) {
-      console.warn('Error fetching trends, using mock data:', error)
+      console.error('Error fetching trends, using mock data:', error)
       return mockAPI.getTrends(period, company)
     }
   },
@@ -441,7 +438,7 @@ export const kpiAPI = {
 
       return { overview, trends }
     } catch (error) {
-      console.warn('Error fetching company KPIs:', error)
+      console.error('Error fetching company KPIs:', error)
       return mockAPI.getCompanyKPIs(company)
     }
   },

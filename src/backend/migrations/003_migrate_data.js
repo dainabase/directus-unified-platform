@@ -7,7 +7,7 @@ const client = createDirectus('http://localhost:8055')
   .with(rest());
 
 // Token API Directus
-const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 client.setToken(DIRECTUS_TOKEN);
 

@@ -103,7 +103,7 @@ const SignatureEmbed = ({
         break;
 
       default:
-        console.log('DocuSeal event:', eventData.event);
+        break;
     }
   };
 

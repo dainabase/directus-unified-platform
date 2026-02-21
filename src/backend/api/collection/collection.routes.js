@@ -26,7 +26,7 @@ router.post('/initialize/:invoiceId', companyAccessMiddleware, async (req, res) 
     res.status(201).json(tracking);
   } catch (error) {
     console.error('Erreur initialisation recouvrement:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -41,7 +41,7 @@ router.post('/process', async (req, res) => {
     res.json(results);
   } catch (error) {
     console.error('Erreur traitement recouvrement:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -56,7 +56,7 @@ router.get('/dashboard/:company', companyAccessMiddleware, async (req, res) => {
     res.json(dashboard);
   } catch (error) {
     console.error('Erreur dashboard recouvrement:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -71,7 +71,7 @@ router.post('/:trackingId/payment', companyAccessMiddleware, async (req, res) =>
     res.json(result);
   } catch (error) {
     console.error('Erreur enregistrement paiement:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -87,7 +87,7 @@ router.post('/:trackingId/suspend', companyAccessMiddleware, async (req, res) =>
     res.json(result);
   } catch (error) {
     console.error('Erreur suspension:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -102,7 +102,7 @@ router.post('/:trackingId/resume', companyAccessMiddleware, async (req, res) => 
     res.json(result);
   } catch (error) {
     console.error('Erreur reprise:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -118,7 +118,7 @@ router.post('/:trackingId/write-off', companyAccessMiddleware, async (req, res) 
     res.json(result);
   } catch (error) {
     console.error('Erreur passage en perte:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -133,7 +133,7 @@ router.get('/:trackingId/history', companyAccessMiddleware, async (req, res) => 
     res.json(history);
   } catch (error) {
     console.error('Erreur historique:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -163,7 +163,7 @@ router.post('/calculate-interest', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Erreur calcul intérêts:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -177,7 +177,7 @@ router.get('/rate-check/:rate', async (req, res) => {
     const result = interestCalculator.isRateAcceptable(rate);
     res.json(result);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -196,7 +196,7 @@ router.post('/lp/initiate/:trackingId', companyAccessMiddleware, async (req, res
     res.status(201).json(lpCase);
   } catch (error) {
     console.error('Erreur initiation LP:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -210,7 +210,7 @@ router.post('/lp/webhook', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Erreur webhook LP:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -225,7 +225,7 @@ router.get('/lp/:caseId', companyAccessMiddleware, async (req, res) => {
     res.json(status);
   } catch (error) {
     console.error('Erreur statut LP:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -240,7 +240,7 @@ router.post('/lp/:caseId/continue', companyAccessMiddleware, async (req, res) =>
     res.json(result);
   } catch (error) {
     console.error('Erreur continuation LP:', error);
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 
@@ -255,7 +255,7 @@ router.get('/lp/stats/:company', companyAccessMiddleware, async (req, res) => {
     res.json(stats);
   } catch (error) {
     console.error('Erreur stats LP:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -269,7 +269,7 @@ router.get('/lp/fees/:amount', async (req, res) => {
     const fees = lpIntegrationService.calculateLPFees(amount);
     res.json({ claim_amount: amount, lp_fees: fees, total: amount + fees });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: 'Internal server error' });
   }
 });
 

@@ -3,7 +3,8 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 // Collections système à ignorer
 const SYSTEM_COLLECTIONS = [

@@ -4,7 +4,8 @@ import axios from 'axios';
 import { OWNER_COMPANIES } from '../../frontend/src/utils/company-filter.js';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 const COMPANIES = Object.keys(OWNER_COMPANIES);
 

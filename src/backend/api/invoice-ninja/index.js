@@ -19,7 +19,7 @@ const invoiceNinja = new InvoiceNinjaAPI({
 // Initialiser Directus SDK v17
 const getDirectus = () => {
   return createDirectus(process.env.DIRECTUS_URL || 'http://localhost:8055')
-    .with(staticToken(process.env.DIRECTUS_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'))
+    .with(staticToken(process.env.DIRECTUS_ADMIN_TOKEN))
     .with(rest());
 };
 
@@ -31,7 +31,7 @@ router.get('/clients', async (req, res) => {
     const clients = await invoiceNinja.getClients(req.query);
     res.json({ success: true, data: clients });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -41,7 +41,7 @@ router.get('/clients/:id', async (req, res) => {
     const client = await invoiceNinja.getClient(req.params.id);
     res.json({ success: true, data: client });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -51,7 +51,7 @@ router.post('/clients', async (req, res) => {
     const client = await invoiceNinja.createClient(req.body);
     res.json({ success: true, data: client });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -61,7 +61,7 @@ router.put('/clients/:id', async (req, res) => {
     const client = await invoiceNinja.updateClient(req.params.id, req.body);
     res.json({ success: true, data: client });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -71,7 +71,7 @@ router.delete('/clients/:id', async (req, res) => {
     await invoiceNinja.deleteClient(req.params.id);
     res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -83,7 +83,7 @@ router.get('/invoices', async (req, res) => {
     const invoices = await invoiceNinja.getInvoices(req.query);
     res.json({ success: true, data: invoices });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -93,7 +93,7 @@ router.get('/invoices/:id', async (req, res) => {
     const invoice = await invoiceNinja.getInvoice(req.params.id);
     res.json({ success: true, data: invoice });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -103,7 +103,7 @@ router.post('/invoices', async (req, res) => {
     const invoice = await invoiceNinja.createInvoice(req.body);
     res.json({ success: true, data: invoice });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -113,7 +113,7 @@ router.put('/invoices/:id', async (req, res) => {
     const invoice = await invoiceNinja.updateInvoice(req.params.id, req.body);
     res.json({ success: true, data: invoice });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -123,7 +123,7 @@ router.post('/invoices/:id/send', async (req, res) => {
     const result = await invoiceNinja.sendInvoice(req.params.id);
     res.json({ success: true, data: result });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -134,7 +134,7 @@ router.post('/invoices/:id/mark-paid', async (req, res) => {
     const invoice = await invoiceNinja.markInvoicePaid(req.params.id, amount);
     res.json({ success: true, data: invoice });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -146,7 +146,7 @@ router.get('/invoices/:id/pdf', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="invoice-${req.params.id}.pdf"`);
     res.send(pdf);
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -158,7 +158,7 @@ router.get('/payments', async (req, res) => {
     const payments = await invoiceNinja.getPayments(req.query);
     res.json({ success: true, data: payments });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -168,7 +168,7 @@ router.post('/payments', async (req, res) => {
     const payment = await invoiceNinja.createPayment(req.body);
     res.json({ success: true, data: payment });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -180,7 +180,7 @@ router.get('/products', async (req, res) => {
     const products = await invoiceNinja.getProducts(req.query);
     res.json({ success: true, data: products });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -190,7 +190,7 @@ router.post('/products', async (req, res) => {
     const product = await invoiceNinja.createProduct(req.body);
     res.json({ success: true, data: product });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -202,7 +202,7 @@ router.get('/quotes', async (req, res) => {
     const quotes = await invoiceNinja.getQuotes(req.query);
     res.json({ success: true, data: quotes });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -212,7 +212,7 @@ router.post('/quotes', async (req, res) => {
     const quote = await invoiceNinja.createQuote(req.body);
     res.json({ success: true, data: quote });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -222,7 +222,7 @@ router.post('/quotes/:id/convert', async (req, res) => {
     const invoice = await invoiceNinja.convertQuoteToInvoice(req.params.id);
     res.json({ success: true, data: invoice });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -267,7 +267,7 @@ router.post('/sync/contact', async (req, res) => {
 
     res.json({ success: true, data: { directus_id: contact.id, invoice_ninja_id: client.id } });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -329,7 +329,7 @@ router.post('/sync/invoice', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -360,7 +360,7 @@ router.post('/sync/bulk', async (req, res) => {
           );
           synced++;
         } catch (error) {
-          errors.push({ id: contact.id, error: error.message });
+          errors.push({ id: contact.id, error: 'Internal server error' });
         }
       }
 
@@ -369,7 +369,7 @@ router.post('/sync/bulk', async (req, res) => {
       res.status(400).json({ success: false, error: 'Type non supporté' });
     }
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -435,7 +435,7 @@ router.get('/dashboard', async (req, res) => {
     const data = await invoiceNinja.getDashboardData();
     res.json({ success: true, data });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 
@@ -456,7 +456,7 @@ router.get('/test', async (req, res) => {
     const result = await invoiceNinja.testConnection();
     res.json(result);
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 

@@ -39,8 +39,7 @@ const KanbanView = ({ projects }) => {
   const handleDrop = (e, newStatus) => {
     e.preventDefault()
     if (draggingProject) {
-      // Here you would update the project status in the backend
-      console.log(`Moving project ${draggingProject.id} to ${newStatus}`)
+      // TODO: update the project status in the backend
       setDraggingProject(null)
     }
   }

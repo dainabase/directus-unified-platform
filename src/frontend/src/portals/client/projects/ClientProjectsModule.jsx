@@ -52,7 +52,6 @@ async function fetchClientProjects(userId) {
 
   // If no projects found with client_id filter, fallback: show all from HYPERVISUAL
   if (projects.length === 0 && userId) {
-    console.log('[ClientProjectsModule] No projects found for client_id, showing HYPERVISUAL projects as fallback')
     const fallback = await api.get('/items/projects', {
       params: {
         fields: ['id', 'name', 'status', 'start_date', 'end_date', 'description', 'owner_company', 'date_created'],

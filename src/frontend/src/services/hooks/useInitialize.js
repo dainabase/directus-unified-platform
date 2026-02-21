@@ -11,7 +11,6 @@ export const useInitialize = () => {
 
     const initialize = async () => {
       try {
-        console.log('🚀 Initialisation du dashboard')
         await fetchCompanies()
         await fetchDashboardData()
       } catch (error) {

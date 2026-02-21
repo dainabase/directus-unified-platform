@@ -5,22 +5,15 @@ export const projectsAPI = {
   // Simplifier - pas de relations ni sort
   async getAll(filters = {}) {
     try {
-      console.log('🔄 Fetching all projects...', filters)
-      
       let params = {
         fields: ['id', 'name', 'status', 'owner_company', 'budget', 'start_date', 'end_date', 'client_id', 'company_id']
       }
-      
+
       // Utiliser le helper pour gérer tous les formats de filtre
       params = addOwnerCompanyToParams(params, filters)
-      
+
       const projects = await directus.get('projects', params)
-      console.log(`✅ Projects loaded: ${projects.length}`)
-      
-      if (params.filter?.owner_company?._eq) {
-        console.log(`   Filtré pour: ${params.filter.owner_company._eq}`)
-      }
-      
+
       return projects || []
     } catch (error) {
       console.error('❌ Error fetching projects:', error)

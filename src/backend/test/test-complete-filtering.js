@@ -4,7 +4,8 @@ import axios from 'axios';
 import fs from 'fs/promises';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 const COMPANIES = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'TAKEOUT'];
 
 // Collections confirmées avec owner_company

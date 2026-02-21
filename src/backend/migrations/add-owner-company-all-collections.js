@@ -3,7 +3,8 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8055';
-const TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'; // Token JMD avec permissions
+import 'dotenv/config';
+const TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 // Configuration du champ owner_company
 const OWNER_COMPANY_FIELD = {

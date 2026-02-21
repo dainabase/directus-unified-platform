@@ -12,7 +12,7 @@ module.exports = {
     
     // Configuration Notion pour l'upload et la base de données
     notion: {
-        apiKey: process.env.NOTION_API_KEY || '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',
+        apiKey: process.env.NOTION_API_KEY || '',
         version: process.env.NOTION_VERSION || '2022-06-28',
         databases: {
             documents: process.env.NOTION_DB_DOCUMENTS || '230adb95-3c6f-80eb-9903-ff117c2a518f',
@@ -56,8 +56,8 @@ module.exports = {
             warnings.push('OpenAI non configuré - Fonctionnalités OCR limitées');
         }
         
-        if (this.notion.apiKey === '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') {
-            warnings.push('Utilisation de la clé Notion par défaut - Configurez votre propre clé');
+        if (!this.notion.apiKey) {
+            warnings.push('NOTION_API_KEY non configurée - Configurez votre propre clé');
         }
         
         return warnings;

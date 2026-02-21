@@ -11,7 +11,8 @@ import axios from 'axios';
 
 // Configuration Directus
 const DIRECTUS_URL = 'http://localhost:8055';
-const DIRECTUS_TOKEN = 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW';
+import 'dotenv/config';
+const DIRECTUS_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 
 // Mode dry-run par défaut
 const DRY_RUN = process.argv.includes('--dry-run') || !process.argv.includes('--execute');

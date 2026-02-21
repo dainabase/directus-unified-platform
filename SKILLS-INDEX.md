@@ -1,6 +1,6 @@
 # SKILLS-INDEX.md — Tous les skills disponibles
 
-> **Auto-généré** : 2026-02-20 22:48  
+> **Auto-généré** : 2026-02-21 06:11  
 > **Total skills spécialisés** : 3837 skills dans `~/.claude/skills-repos/`  
 > **Skills projet HYPERVISUAL** : 9 skills dans `.claude/skills/`  
 > **Regénérer** : `bash scripts/generate-skills-index.sh`  

@@ -301,3 +301,133 @@ body {
 .ds-pulse {
   animation: ds-pulse 2s ease-in-out infinite;
 }
+
+/* =========================================
+   RESPONSIVE UTILITIES — Tablet & Mobile
+   ========================================= */
+
+/* Dashboard grid responsive */
+@media (max-width: 1280px) {
+  .ds-grid-kpi {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .ds-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .ds-grid-kpi {
+    grid-template-columns: 1fr !important;
+  }
+  .ds-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+  .ds-grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Sidebar responsive */
+@media (max-width: 1024px) {
+  .ds-sidebar-responsive {
+    transform: translateX(-100%);
+    transition: transform 200ms ease-out;
+    position: fixed;
+    z-index: 400;
+  }
+  .ds-sidebar-responsive.ds-sidebar-open {
+    transform: translateX(0);
+  }
+  .ds-main-responsive {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+/* Table responsive */
+@media (max-width: 768px) {
+  .ds-table-responsive {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ds-table-responsive table {
+    min-width: 600px;
+  }
+}
+
+/* Card stack on mobile */
+@media (max-width: 640px) {
+  .ds-card-responsive {
+    padding: 12px !important;
+  }
+  .ds-hide-mobile {
+    display: none !important;
+  }
+  .ds-show-mobile {
+    display: block !important;
+  }
+}
+
+/* KPI card responsive */
+@media (max-width: 640px) {
+  .ds-kpi-value {
+    font-size: 20px !important;
+  }
+  .ds-kpi-label {
+    font-size: 11px !important;
+  }
+}
+
+/* Charts responsive */
+@media (max-width: 768px) {
+  .ds-chart-container {
+    height: 200px !important;
+  }
+}
+
+/* TopBar responsive */
+@media (max-width: 768px) {
+  .ds-topbar-responsive .ds-topbar-search {
+    display: none;
+  }
+  .ds-topbar-responsive .ds-topbar-actions {
+    gap: 8px;
+  }
+}
+
+/* Flex responsive helpers */
+.ds-flex-responsive {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .ds-flex-responsive {
+    flex-direction: column;
+  }
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+  .ds-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .ds-no-print {
+    display: none !important;
+  }
+  .ds-sidebar-responsive,
+  nav,
+  .ds-topbar-responsive {
+    display: none !important;
+  }
+  .ds-main-responsive {
+    margin-left: 0 !important;
+  }
+}

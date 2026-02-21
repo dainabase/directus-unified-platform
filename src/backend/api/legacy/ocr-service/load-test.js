@@ -42,7 +42,7 @@ async function createTestInvoice(index) {
   ctx.fillText(`Date: ${new Date().toLocaleDateString('fr-CH')}`, 50, 250);
   
   const amount = Math.floor(Math.random() * 9000 + 1000);
-  const vat = Math.round(amount * 0.077);
+  const vat = Math.round(amount * 0.081);
   const total = amount + vat;
   
   ctx.fillText(`Montant HT: CHF ${amount.toFixed(2)}`, 50, 310);

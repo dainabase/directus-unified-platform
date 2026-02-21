@@ -193,21 +193,23 @@
 
 ---
 
-## PHASE 8 — QUALITÉ & PRODUCTION 📌
+## PHASE 8 — QUALITÉ & PRODUCTION ✅
 
-**Durée estimée** : 1 semaine
+**Complété** : 2026-02-21 — 9/9 stories, sécurité + performance + responsive + monitoring + tests + docs
 
 | # | Story | Prio | Statut | Notes |
 |---|-------|------|--------|-------|
-| 8.1 | Tests end-to-end cycle complet (Lead → Paiement) | 🔥 | 🔴 | |
-| 8.2 | Correction taux TVA OCR (7.7→8.1, 2.5→2.6, 3.7→3.8) | 🔥 | 🔴 | TODO urgent — fichiers : finance-ocr-ai.js, ocr-hybrid-processor.js, expenses-notion.js |
-| 8.3 | Permissions granulaires RBAC (4 rôles) | ⚡ | 🟡 | |
-| 8.4 | Audit sécurité (JWT expiry, HTTPS, rate limiting) | ⚡ | 🔴 | |
-| 8.5 | Performance (lazy loading, pagination, cache Redis) | ⚡ | 🔴 | |
-| 8.6 | Responsive mobile (dashboard CEO en tablet) | 📌 | 🔴 | |
-| 8.7 | Documentation API des 156 endpoints custom | 📌 | 🔴 | |
-| 8.8 | Grafana monitoring (dashboards existants) | 📌 | 🟡 | |
-| 8.9 | Mise à jour ROADMAP.md après chaque story | 🔥 | 🟢 | Règle Claude Code — en cours |
+| 8.1 | Tests end-to-end cycle complet (Lead → Paiement) | 🔥 | 🟢 | 2026-02-21 — e2e-cycle.test.js, 12 scenarios node:test, skip sans RUN_E2E |
+| 8.2 | Correction taux TVA OCR (7.7→8.1, 2.5→2.6, 3.7→3.8) | 🔥 | 🟢 | 2026-02-21 — 6 occurrences corrigées (4 HTML legacy + 1 load-test.js), tva-engine.js OK déjà |
+| 8.3 | Permissions granulaires RBAC (4 rôles) | ⚡ | 🟢 | 2026-02-21 — rbac.config.js (superadmin/client/prestataire/revendeur), 79 permissions, hasPermission/requireOwnership middleware |
+| 8.4 | Audit sécurité (JWT expiry, HTTPS, rate limiting) | ⚡ | 🟢 | 2026-02-21 — helmet headers, 3 rate limiters (global 100/min, auth 10/15min, webhook 30/min), security-logger.js, JWT startup check |
+| 8.5 | Performance (lazy loading, pagination, cache Redis) | ⚡ | 🟢 | 2026-02-21 — cache.js (Redis w/ graceful fallback), pagination.js, cacheMiddleware avec X-Cache header |
+| 8.6 | Responsive mobile (dashboard CEO en tablet) | 📌 | 🟢 | 2026-02-21 — responsive CSS utilities (grid/sidebar/table/kpi/chart breakpoints), useResponsive hook, MobileMenuButton, print styles |
+| 8.7 | Documentation API des 200+ endpoints custom | 📌 | 🟢 | 2026-02-21 — docs/API-REFERENCE.md, 25 sections, 200+ endpoints catalogués depuis code source |
+| 8.8 | Grafana monitoring + Prometheus metrics | 📌 | 🟢 | 2026-02-21 — monitoring/prometheus.yml, metrics.middleware.js (prom-client), 2 dashboards Grafana (platform 8 panels, finance 6 panels) |
+| 8.9 | Mise à jour ROADMAP.md après chaque story | 🔥 | 🟢 | Règle Claude Code — complété |
+
+**Critère de sortie** : ✅ Sécurité renforcée (helmet + rate limiting + RBAC 4 rôles). Performance (Redis cache + pagination). Responsive mobile. 200+ endpoints documentés. Monitoring Prometheus/Grafana. Tests E2E. Build 0 erreurs.
 
 ---
 
@@ -238,9 +240,9 @@
 | Phase 5 — Revendeur | 8 | ✅ 100% complété (2026-02-20) |
 | Phase 6 — Client | 9 | ✅ 100% complété (2026-02-20) |
 | Phase 7 — Automation & IA | 12 | ✅ 100% complété (2026-02-20) |
-| Phase 8 — Qualité | 9 | 🟡 ~10% |
+| Phase 8 — Qualité & Production | 9 | ✅ 100% complété (2026-02-21) |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~84% global (81/96)** |
+| **TOTAL** | **96 stories** | **~94% global (90/96)** |
 
 ---
 

@@ -13,7 +13,25 @@ import { fileURLToPath } from 'url';
 import axios from 'axios';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { validateEnv } from './config/env.validator.js';
+import { initCache } from './lib/cache.js';
+import { securityMonitor } from './middleware/security-logger.js';
+
+// ============================================
+// PROMETHEUS METRICS (Story 8.8) — optional
+// ============================================
+let metricsMiddleware = null;
+let metricsEndpoint = null;
+try {
+  const metricsModule = await import('./middleware/metrics.middleware.js');
+  metricsMiddleware = metricsModule.metricsMiddleware;
+  metricsEndpoint = metricsModule.metricsEndpoint;
+  console.log('[metrics] Prometheus metrics middleware loaded');
+} catch (metricsErr) {
+  console.warn('[metrics] Metrics middleware not available:', metricsErr.message);
+}
 
 // ES Modules: __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -25,6 +43,14 @@ dotenv.config();
 // Valider les variables d'environnement
 validateEnv();
 
+// ============================================
+// JWT SECURITY CHECK (Story 8.4)
+// ============================================
+const jwtSecret = process.env.JWT_SECRET;
+if (!jwtSecret || jwtSecret.length < 32 || jwtSecret === 'change-me') {
+  console.warn('[SECURITY] JWT_SECRET is weak or missing. Set a strong secret (32+ chars) in .env');
+}
+
 const app = express();
 const PORT = process.env.UNIFIED_PORT || 3000;
 
@@ -35,17 +61,73 @@ const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN;
 console.log('Demarrage du serveur Directus Unifie (ES Modules)...');
 
 // ============================================
+// SECURITY HEADERS — Helmet (Story 8.4)
+// ============================================
+app.use(helmet({
+  contentSecurityPolicy: false, // Disabled for SPA
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
+
+// ============================================
+// SECURITY MONITOR (Story 8.4)
+// ============================================
+app.use(securityMonitor);
+
+// ============================================
+// PROMETHEUS METRICS MIDDLEWARE (Story 8.8)
+// ============================================
+if (metricsMiddleware) {
+  app.use(metricsMiddleware);
+}
+if (metricsEndpoint) {
+  app.get('/metrics', metricsEndpoint);
+  console.log('[metrics] Prometheus endpoint available at /metrics');
+}
+
+// ============================================
+// RATE LIMITING (Story 8.4)
+// ============================================
+
+// Global rate limiter (100 requests per minute per IP)
+const globalLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Trop de requetes, reessayez dans 1 minute', code: 'RATE_LIMIT' },
+});
+app.use('/api/', globalLimiter);
+
+// Strict rate limiter for auth endpoints (10 requests per 15 minutes)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { success: false, error: 'Trop de tentatives, reessayez dans 15 minutes', code: 'AUTH_RATE_LIMIT' },
+});
+app.use('/api/auth/', authLimiter);
+
+// Webhook rate limiter (30 per minute — more generous for automated calls)
+const webhookLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  message: { success: false, error: 'Webhook rate limit exceeded', code: 'WEBHOOK_RATE_LIMIT' },
+});
+app.use('/api/workflows/webhook/', webhookLimiter);
+
+// ============================================
 // MIDDLEWARES GLOBAUX
 // ============================================
 
 // JSON body parser — SAUF pour les webhooks Revolut qui ont besoin du body brut (HMAC)
+// Request size limited to 10mb (Story 8.4)
 app.use((req, res, next) => {
   if (req.path.startsWith('/api/revolut/webhook-receiver')) {
     return next(); // Laisser express.raw() du webhook-receiver gerer le body
   }
-  express.json({ limit: '20mb' })(req, res, next);
+  express.json({ limit: '10mb' })(req, res, next);
 });
-app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Middleware de logging
 app.use((req, res, next) => {
@@ -713,27 +795,30 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
-✅ Serveur Directus Unifié v2.1 démarré !
+Serveur Directus Unifie v2.1 demarre !
 ==========================================
-🏠 Page d'accueil     : http://localhost:${PORT}
-👨‍💼 SuperAdmin + OCR  : http://localhost:${PORT}/superadmin
-👥 Portal Client      : http://localhost:${PORT}/client
-🔧 Portal Prestataire : http://localhost:${PORT}/prestataire
-🏪 Portal Revendeur   : http://localhost:${PORT}/revendeur
-⚙️ Directus Admin     : http://localhost:8055/admin
+Page d'accueil     : http://localhost:${PORT}
+SuperAdmin + OCR   : http://localhost:${PORT}/superadmin
+Portal Client      : http://localhost:${PORT}/client
+Portal Prestataire : http://localhost:${PORT}/prestataire
+Portal Revendeur   : http://localhost:${PORT}/revendeur
+Directus Admin     : http://localhost:8055/admin
 
-💰 Finance API        : http://localhost:${PORT}/api/finance
-📋 Legal API          : http://localhost:${PORT}/api/legal
-🛒 Commercial API     : http://localhost:${PORT}/api/commercial
-📊 Health Check       : http://localhost:${PORT}/api/health
+Finance API        : http://localhost:${PORT}/api/finance
+Legal API          : http://localhost:${PORT}/api/legal
+Commercial API     : http://localhost:${PORT}/api/commercial
+Health Check       : http://localhost:${PORT}/api/health
 
-📊 Statut:
-- OCR OpenAI : ${process.env.OPENAI_API_KEY ? '✅ Configuré' : '❌ Manquant'}
-- DocuSeal   : ${process.env.DOCUSEAL_API_KEY ? '✅ Configuré' : '❌ Non configuré'}
+Statut:
+- OCR OpenAI : ${process.env.OPENAI_API_KEY ? 'Configure' : 'Manquant'}
+- DocuSeal   : ${process.env.DOCUSEAL_API_KEY ? 'Configure' : 'Non configure'}
 - Port       : ${PORT}
 - PID        : ${process.pid}
 - Mode       : ES Modules
   `);
+
+  // Initialize Redis cache layer
+  initCache();
 });
 
 // ============================================

@@ -265,7 +265,7 @@
             
             tbody.innerHTML = invoices.map(invoice => {
                 const amount = parseFloat(invoice.amount || 0);
-                const vat = amount * 0.077; // TVA 7.7%
+                const vat = amount * 0.081; // TVA 8.1%
                 const total = amount + vat;
                 
                 return `
@@ -348,9 +348,9 @@
             const modal = new bootstrap.Modal(document.getElementById('invoice-modal'));
             
             const amount = parseFloat(invoice.amount || 0);
-            const vat = amount * 0.077;
+            const vat = amount * 0.081;
             const total = amount + vat;
-            
+
             // Afficher les détails
             document.getElementById('invoice-detail').innerHTML = `
                 <div class="invoice">
@@ -404,7 +404,7 @@
                                 <td class="text-end">${window.App.utils.formatCurrency(amount)}</td>
                             </tr>
                             <tr>
-                                <th>TVA 7.7%</th>
+                                <th>TVA 8.1%</th>
                                 <td class="text-end">${window.App.utils.formatCurrency(vat)}</td>
                             </tr>
                             <tr>

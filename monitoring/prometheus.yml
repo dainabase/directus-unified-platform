@@ -1,0 +1,74 @@
+# Prometheus Configuration — HYPERVISUAL Unified Platform
+# Story 8.8 — Monitoring & Observability
+#
+# Scrape targets:
+#   1. Express API (port 3000) — custom /metrics endpoint
+#   2. Directus CMS (port 8055) — health endpoint
+#   3. PostgreSQL Exporter (port 9187) — optional, if deployed
+#   4. Redis Exporter (port 9121) — optional, if deployed
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+  external_labels:
+    cluster: "hypervisual-unified"
+    environment: "production"
+
+# Alerting (optional — Alertmanager)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - "alertmanager:9093"
+
+# Rule files (optional)
+# rule_files:
+#   - "alerts/*.yml"
+
+scrape_configs:
+  # ── 1. Express API (custom metrics) ──────────────────────
+  - job_name: "express-api"
+    metrics_path: /metrics
+    scrape_interval: 10s
+    static_configs:
+      - targets: ["host.docker.internal:3000"]
+        labels:
+          service: "express-api"
+          phase: "8"
+    # Handle non-standard /metrics response gracefully
+    honor_labels: true
+
+  # ── 2. Directus CMS ─────────────────────────────────────
+  - job_name: "directus"
+    metrics_path: /server/health
+    scrape_interval: 30s
+    static_configs:
+      - targets: ["host.docker.internal:8055"]
+        labels:
+          service: "directus"
+    # Directus health endpoint returns JSON, not Prometheus format
+    # Use a relabel to mark it as an info-level scrape
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: "up"
+        target_label: __name__
+        replacement: "directus_up"
+
+  # ── 3. PostgreSQL Exporter (optional) ───────────────────
+  - job_name: "postgresql"
+    scrape_interval: 30s
+    static_configs:
+      - targets: ["host.docker.internal:9187"]
+        labels:
+          service: "postgresql"
+          database: "directus"
+
+  # ── 4. Redis Exporter (optional) ────────────────────────
+  - job_name: "redis"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["host.docker.internal:9121"]
+        labels:
+          service: "redis"

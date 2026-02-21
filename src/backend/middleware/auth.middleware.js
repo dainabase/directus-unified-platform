@@ -11,6 +11,9 @@ import { createDirectus, rest, readItems, readItem } from '@directus/sdk';
 import dotenv from 'dotenv';
 dotenv.config();
 
+// RBAC Configuration (Story 8.3)
+import ROLES, { hasPermission as rbacHasPermission, getRolePermissions, requireOwnership } from '../config/rbac.config.js';
+
 // JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
@@ -270,6 +273,9 @@ export const requireRole = (allowedRoles) => {
 
 /**
  * Permission-based access control middleware
+ * Uses RBAC config (Story 8.3) to check role-based permissions,
+ * with fallback to JWT token permissions for backwards compatibility.
+ *
  * @param {string} permission - Required permission (e.g., 'finance.read', 'invoice.write')
  */
 export const requirePermission = (permission) => {
@@ -287,25 +293,30 @@ export const requirePermission = (permission) => {
       return next();
     }
 
-    // Check for specific permission
+    // 1. Check RBAC config for the user's role (primary check)
+    if (req.user.role && rbacHasPermission(req.user.role, permission)) {
+      return next();
+    }
+
+    // 2. Fallback: check JWT token-level permissions (backwards compatibility)
     const [resource, action] = permission.split('.');
-    const hasPermission = req.user.permissions.some(p => {
+    const tokenHasPermission = (req.user.permissions || []).some(p => {
       const [pResource, pAction] = p.split('.');
-      // Exact match or wildcard
       return (pResource === resource || pResource === '*') &&
              (pAction === action || pAction === '*');
     });
 
-    if (!hasPermission) {
-      return res.status(403).json({
-        success: false,
-        error: 'Permission insuffisante',
-        code: 'PERMISSION_DENIED',
-        required: permission
-      });
+    if (tokenHasPermission) {
+      return next();
     }
 
-    next();
+    return res.status(403).json({
+      success: false,
+      error: 'Permission insuffisante',
+      code: 'PERMISSION_DENIED',
+      required: permission,
+      role: req.user.role
+    });
   };
 };
 
@@ -367,6 +378,10 @@ export const flexibleAuth = (req, res, next) => {
     code: 'AUTH_REQUIRED'
   });
 };
+
+// Re-export RBAC utilities (Story 8.3)
+export { requireOwnership, getRolePermissions };
+export { ROLES, rbacHasPermission };
 
 // Export utilities
 export {

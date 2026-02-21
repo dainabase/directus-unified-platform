@@ -228,6 +228,30 @@
 
 ---
 
+## AUDIT & CORRECTIONS — 2026-02-21
+
+| Catégorie | Trouvé | Corrigé | Statut |
+|-----------|--------|---------|--------|
+| ErrorBoundary React | 0 composant | 1 créé + wrapping App.jsx | ✅ |
+| Glassmorphism (backdrop-blur, bg-white/) | 4 composants | 4 nettoyés + GlassCard supprimé | ✅ |
+| Legacy card/btn → ds-card/ds-btn | ~1370 instances | Top 30 fichiers migrés, reste = déjà fait | ✅ |
+| Couleurs non-DS (blue/indigo/cyan) | ~40 fichiers | 13 fichiers critiques corrigés → zinc/accent | ✅ |
+| Gradients décoratifs | 3 fichiers | 3 supprimés (App, Banking, Commissions) | ✅ |
+| Routes API non protégées | 17 routes | 17 + authMiddleware ajouté | ✅ |
+| Tokens Directus hardcodés | 22 fichiers | 22 → process.env.DIRECTUS_ADMIN_TOKEN | ✅ |
+| Notion API key hardcodée | 2 fichiers | 2 → process.env.NOTION_API_KEY | ✅ |
+| Mautic password hardcodé | 2 fichiers | 2 → process.env.MAUTIC_PASSWORD | ✅ |
+| Error.message leaking en 500 | 43 instances | 43 → 'Internal server error' | ✅ |
+| console.log production frontend | ~50 instances | ~30 supprimés, console.error préservé | ✅ |
+| Syntax error qr-invoice.test.js | 1 | 1 corrigé (typographic quote) | ✅ |
+| Hardcoded localhost (frontend) | 9 instances | 9 déjà avec env fallback — PASS | ✅ |
+
+**Commits audit** :
+- `cc982eae` — fix(audit): sécurité + DS conformité + ErrorBoundary — 37 fichiers
+- `8eb2d83d` — fix(corrections): sécurité secrets + error leaking + console cleanup — 35 fichiers
+
+---
+
 ## RÉCAPITULATIF CHIFFRÉ
 
 | Phase | Stories | Statut global |

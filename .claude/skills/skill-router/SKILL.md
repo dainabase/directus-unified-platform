@@ -58,18 +58,15 @@ Skills effectivement utilisés :
 
 Plugins effectivement utilisés :
 - [nom-plugin] — [comment utilisé]
-(Si aucun plugin utilisé : indiquer "Aucun plugin activé pour cette tâche")
+(Si aucun plugin utilisé : indiquer "Aucun plugin actif pour cette tâche")
 
 MCP effectivement utilisés :
 - [MCP name] — [opérations effectuées]
 
-Skills disponibles NON utilisés (pourquoi) :
-- [nom-skill] — [raison : non pertinent / déjà couvert par X / hors scope]
-
 Fichiers modifiés :
 - [chemin/fichier] — [description changement]
 
-Commits pushés :
+Commits poussés :
 - [hash court] — [message commit]
 
 Écarts vs prompt initial :
@@ -79,74 +76,55 @@ Commits pushés :
 
 **Ce bloc est OBLIGATOIRE. Sans lui, la story n'est pas considérée comme complète.**
 
-**Pourquoi cette règle :** Permet à l'Architecte (Jean) de vérifier en 30 secondes que les bons skills ont été consultés, que les plugins pertinents ont été activés, et qu'aucun outil pertinent n'a été ignoré.
-
 ---
 
 ## Workflow de consultation (30 secondes)
 
 ### Étape 1 — Point d'entrée unique : SKILLS-QUICK-INDEX.md
 Lire **en premier** : `SKILLS-QUICK-INDEX.md` (racine du repo)
-→ Contient les 50+ skills les plus utilisés avec chemins directs
-→ Résout 80% des besoins sans aller plus loin
+→ Contient le mapping phases ROADMAP → packs de skills
 → Contient aussi la liste des **plugins actifs** à consulter
+→ Résout 80% des besoins sans aller plus loin
 
-### Étape 2 — Plugins actifs disponibles
-Lire : `.claude/skills/skill-router/references/active-plugins.md`
-→ 17 skills invocables + 8 custom skills = **25 outils toujours chargés**
-→ Vérifier si un plugin actif couvre déjà le besoin avant de charger un skill externe
+### Étape 2 — Charger le SKILL-PACK correspondant
+Lire : `.claude/skills/skill-packs/SKILL-PACK-[XX]-[NOM].md`
+→ Contient la liste des skills nécessaires AVEC chemins absolus
+→ UN seul pack par tâche (le pack couvre la phase complète)
 
-### Étape 3 — Si besoin de plus : REGISTRY.md
-Lire : `.claude/skills/skill-router/references/REGISTRY.md`
-→ Index complet 939+ skills par catégorie
-→ Puis lire le fichier catégorie pertinent :
-   `.claude/skills/skill-router/references/categories/<categorie>.md`
+### Étape 3 — Lire les SKILL.md réels
+Pour chaque skill listé dans le pack :
+1. Copier le chemin absolu depuis le pack
+2. Lire le fichier SKILL.md à ce chemin exact
+3. Appliquer ses instructions pour la tâche
+4. NE PAS activer de plugin permanent — juste lire et suivre les instructions
 
 ### Étape 4 — Vérifier les MCP disponibles
 Lire : `.claude/skills/skill-router/references/mcp-servers.md`
 → 6 MCP servers disponibles directement (pas besoin de SKILL.md)
 
-### Étape 5 — Charger les skills retenus
-Pour chaque skill sélectionné :
-1. Lire son SKILL.md complet via le chemin exact du registry
-2. Appliquer ses instructions pour la tâche
-3. NE PAS activer de plugin permanent — juste lire et suivre les instructions
+### Étape 5 — Si besoin de skills hors-pack : REGISTRY.md
+Lire : `.claude/skills/skill-router/references/REGISTRY.md`
+→ Index complet 939+ skills par catégorie
+→ Puis lire le fichier catégorie pertinent :
+   `.claude/skills/skill-router/references/categories/<categorie>.md`
 
 ---
 
-## Catégories disponibles (939+ skills au total)
+## Règle de sélection optimale
 
-| Catégorie | Skills | Fichier détail |
-|-----------|--------|----------------|
-| Database | ~57 | `references/categories/database.md` |
-| API Development | ~57 | `references/categories/api.md` |
-| Security | ~73 | `references/categories/security.md` |
-| DevOps | ~62 | `references/categories/devops.md` |
-| Testing | ~68 | `references/categories/testing.md` |
-| AI / ML | ~76 | `references/categories/ai-ml.md` |
-| Performance | ~36 | `references/categories/performance.md` |
-| Frontend | ~39 | `references/categories/frontend.md` |
-| Finance | ~3 | `references/categories/finance.md` |
-| Productivity | ~73 | `references/categories/productivity.md` |
-| Documentation | ~33 | `references/categories/documentation.md` |
-| Business / C-Level | ~10 | `references/categories/business.md` |
-| Regulatory | ~55 | `references/categories/regulatory.md` |
-| **Swiss Compliance** | **custom** | `references/categories/swiss-compliance.md` ← |
-| Orchestration | ~19 | `references/categories/orchestration.md` |
-| Other / General | ~278 | `references/categories/other.md` |
-| **MCP Servers** | **6** | `references/mcp-servers.md` |
-| **Plugins Actifs** | **17+8=25** | `references/active-plugins.md` |
-| **Custom Skills Projet** | **8** | Toujours actifs dans `.claude/skills/` |
-
-> Pour le détail complet : lire `references/REGISTRY.md`
+- **Un pack** couvre une phase complète du ROADMAP
+- **Pas de limite arbitraire** sur le nombre de skills dans un pack
+- **Toujours lire SKILLS-QUICK-INDEX.md en premier** — point d'entrée unique
+- **Si la tâche est hors-roadmap** (ponctuelle) : charger 2-5 skills depuis REGISTRY directement
 
 ---
 
 ## Mapping rapide tâche → skills
 
-| Type de tâche | Skills à consulter en priorité |
-|---------------|-------------------------------|
-| Créer/modifier collection Directus | `directus-api-patterns` + MCP Directus |
+| Type de tâche | Aller vers |
+|----------------|------------|
+| Phase A/B/C/D/E/F du ROADMAP | `SKILLS-QUICK-INDEX.md` → pack approprié |
+| Collection Directus | `directus-api-patterns` + MCP Directus |
 | Page React / composant UI | `SKILLS-QUICK-INDEX.md` § UI/Design + React |
 | TVA / Finance suisse | `swiss-compliance-engine` (OBLIGATOIRE) |
 | QR-Invoice | `swiss-compliance-engine` (OBLIGATOIRE) |
@@ -161,15 +139,6 @@ Pour chaque skill sélectionné :
 
 ---
 
-## Règle de sélection optimale
-
-- **Tâche simple** (1 fichier, 1 composant) → 2-3 skills max
-- **Tâche moyenne** (1 module complet) → 3-5 skills
-- **Tâche complexe** (phase entière, multi-fichiers) → 5-8 skills
-- **Ne jamais charger plus de 8 skills** — risque de confusion contextuelle
-
----
-
 ## Skills interdits sur ce projet
 
 | Skill | Raison |
@@ -179,4 +148,4 @@ Pour chaque skill sélectionné :
 | `angular-*` / `vue-*` | React uniquement |
 | Tout skill AWS/GCP/Azure | Storage Directus local |
 | `apexcharts-*` | Recharts uniquement |
-| glassmorphism décoratif | Design Apple Premium Monochromatic |
+| glassmorphisme décoratif | Design Apple Premium Monochromatic |

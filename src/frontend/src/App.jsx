@@ -7,6 +7,7 @@ import { Loader2 } from 'lucide-react'
 import queryClient from './lib/queryClient'
 import { useAuthStore } from './stores/authStore'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import ErrorBoundary from './components/ErrorBoundary'
 import LoginPage from './pages/LoginPage'
 
 // Layout components (kept eager — always needed)
@@ -16,7 +17,7 @@ import TopBar from './components/layout/TopBar'
 // ── Loading spinner for Suspense fallback ──
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
-    <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+    <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
   </div>
 )
 
@@ -157,7 +158,7 @@ const NotificationHub = lazy(() => import('./portals/superadmin/automation/Notif
 // SuperAdmin layout wrapper (sidebar + topbar)
 const SuperAdminLayout = ({ children, selectedCompany, setSelectedCompany }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-zinc-50">
       <Sidebar />
       <TopBar
         selectedCompany={selectedCompany}
@@ -194,6 +195,7 @@ function App() {
           }}
         />
 
+        <ErrorBoundary>
         <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           {/* ── Public routes ── */}
@@ -375,6 +377,7 @@ function App() {
           <Route path="*" element={<Navigate to="/superadmin" replace />} />
         </Routes>
         </Suspense>
+        </ErrorBoundary>
 
         {import.meta.env.DEV && (
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />

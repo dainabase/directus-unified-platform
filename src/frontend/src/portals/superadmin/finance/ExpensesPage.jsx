@@ -46,7 +46,7 @@ const STATUS_CONFIG = {
   pending:  { label: 'En attente', color: 'bg-amber-50 text-amber-700',   icon: Clock },
   approved: { label: 'Approuvee',  color: 'bg-green-50 text-green-700',   icon: CheckCircle },
   rejected: { label: 'Refusee',    color: 'bg-red-50 text-red-700',       icon: XCircle },
-  paid:     { label: 'Payee',      color: 'bg-blue-50 text-blue-700',     icon: DollarSign }
+  paid:     { label: 'Payee',      color: 'bg-zinc-50 text-zinc-700',     icon: DollarSign }
 }
 
 const TVA_RATES = [
@@ -709,8 +709,8 @@ const ExpensesPage = ({ selectedCompany }) => {
         {/* Month total */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-blue-50">
-              <Calendar size={16} className="text-[#0071E3]" />
+            <div className="p-2 rounded-lg bg-zinc-50">
+              <Calendar size={16} className="text-zinc-600" />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Depenses ce mois</span>
           </div>
@@ -745,8 +745,8 @@ const ExpensesPage = ({ selectedCompany }) => {
         {/* Budget remaining */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-indigo-50">
-              <Wallet size={16} className="text-indigo-600" />
+            <div className="p-2 rounded-lg bg-zinc-50">
+              <Wallet size={16} className="text-zinc-600" />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Budget restant</span>
           </div>

@@ -14,7 +14,7 @@ const invoiceNinjaAPI = axios.create({
 const directusAPI = axios.create({
   baseURL: 'http://localhost:8055',
   headers: {
-    'Authorization': `Bearer ${process.env.DIRECTUS_API_TOKEN || 'e6Vt5LRHnYhq7-78yzoSxwdgjn2D6-JW'}`,
+    'Authorization': `Bearer ${process.env.DIRECTUS_API_TOKEN || process.env.DIRECTUS_ADMIN_TOKEN}`,
     'Content-Type': 'application/json'
   }
 });

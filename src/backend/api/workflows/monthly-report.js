@@ -361,6 +361,12 @@ function buildReportHTML(data, summary) {
 
 async function sendReportEmail(to, subject, htmlContent) {
   try {
+    const mauticUser = process.env.MAUTIC_USER || process.env.MAUTIC_USERNAME || 'admin';
+    const mauticPassword = process.env.MAUTIC_PASSWORD || '';
+    if (!mauticPassword) {
+      console.warn(`[${WORKFLOW_NAME}] WARNING: MAUTIC_PASSWORD is not set. Email sending will likely fail.`);
+    }
+
     const res = await axios.post(`${MAUTIC_URL}/api/emails/new`, {
       name: subject,
       subject,
@@ -369,8 +375,8 @@ async function sendReportEmail(to, subject, htmlContent) {
     }, {
       headers: { 'Content-Type': 'application/json' },
       auth: {
-        username: process.env.MAUTIC_USER || process.env.MAUTIC_USERNAME || 'admin',
-        password: process.env.MAUTIC_PASSWORD || 'admin'
+        username: mauticUser,
+        password: mauticPassword
       },
       timeout: 15000
     });
@@ -382,8 +388,8 @@ async function sendReportEmail(to, subject, htmlContent) {
       }, {
         headers: { 'Content-Type': 'application/json' },
         auth: {
-          username: process.env.MAUTIC_USER || process.env.MAUTIC_USERNAME || 'admin',
-          password: process.env.MAUTIC_PASSWORD || 'admin'
+          username: mauticUser,
+          password: mauticPassword
         },
         timeout: 15000
       });

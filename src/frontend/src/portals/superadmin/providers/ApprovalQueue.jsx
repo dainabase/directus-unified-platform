@@ -146,7 +146,7 @@ export default function ApprovalQueue({ selectedCompany }) {
       </div>
 
       {/* Table */}
-      <div className="bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center p-8">
             <Loader2 className="w-6 h-6 text-orange-400 animate-spin" />
@@ -160,7 +160,7 @@ export default function ApprovalQueue({ selectedCompany }) {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-400 text-xs border-b border-white/10">
+              <tr className="text-gray-400 text-xs border-b border-zinc-200">
                 <th className="text-left p-3">N°</th>
                 <th className="text-left p-3">Prestataire</th>
                 <th className="text-right p-3">Montant</th>
@@ -173,7 +173,7 @@ export default function ApprovalQueue({ selectedCompany }) {
               {invoices.map(inv => {
                 const isBlocked = inv.deviation?.status === 'blocked'
                 return (
-                  <tr key={inv.id} className="border-b border-white/5 hover:bg-white/5">
+                  <tr key={inv.id} className="border-b border-zinc-100 hover:bg-zinc-50">
                     <td className="p-3 font-mono text-white text-xs">{inv.invoice_number || '—'}</td>
                     <td className="p-3 text-gray-300">{inv.supplier_name || '—'}</td>
                     <td className="p-3 text-right text-white font-medium">
@@ -216,8 +216,8 @@ export default function ApprovalQueue({ selectedCompany }) {
 
       {/* Approve Modal */}
       {approveModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-gray-900 border border-white/20 rounded-2xl p-6 w-full max-w-md space-y-4">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white border border-zinc-200 rounded-2xl p-6 w-full max-w-md space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-white font-semibold">Approuver la facture</h3>
               <button onClick={() => setApproveModal(null)} className="text-gray-400 hover:text-white">
@@ -239,7 +239,7 @@ export default function ApprovalQueue({ selectedCompany }) {
                 type="date"
                 value={paymentDate}
                 onChange={e => setPaymentDate(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm mt-1"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm mt-1"
               />
             </div>
             <div className="flex gap-2 justify-end">
@@ -271,8 +271,8 @@ export default function ApprovalQueue({ selectedCompany }) {
 
       {/* Reject Modal */}
       {rejectModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-gray-900 border border-white/20 rounded-2xl p-6 w-full max-w-md space-y-4">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-white border border-zinc-200 rounded-2xl p-6 w-full max-w-md space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-white font-semibold">Rejeter la facture</h3>
               <button onClick={() => setRejectModal(null)} className="text-gray-400 hover:text-white">
@@ -287,7 +287,7 @@ export default function ApprovalQueue({ selectedCompany }) {
               <textarea
                 value={rejectReason}
                 onChange={e => setRejectReason(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm mt-1"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm mt-1"
                 rows={3}
                 placeholder="Raison du rejet..."
               />

@@ -86,13 +86,13 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
             ))}
           </select>
           <button 
-            className="btn btn-outline-primary btn-sm"
+            className="ds-btn ds-btn-outline-primary ds-btn-sm"
             onClick={onRefresh}
           >
             <RefreshCw size={16} />
           </button>
           <button 
-            className="btn btn-primary btn-sm"
+            className="ds-btn ds-btn-primary btn-sm"
             onClick={() => setShowCreateModal(true)}
           >
             <Plus size={16} className="me-1" />
@@ -104,8 +104,8 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
       {/* Statistiques rapides */}
       <div className="row row-cards mb-4">
         <div className="col-sm-6 col-lg-3">
-          <div className="card card-sm">
-            <div className="card-body">
+          <div className="ds-card ds-card-sm">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Clock size={20} className="text-warning" />
@@ -121,8 +121,8 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
           </div>
         </div>
         <div className="col-sm-6 col-lg-3">
-          <div className="card card-sm">
-            <div className="card-body">
+          <div className="ds-card ds-card-sm">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <CheckCircle size={20} className="text-success" />
@@ -138,8 +138,8 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
           </div>
         </div>
         <div className="col-sm-6 col-lg-3">
-          <div className="card card-sm">
-            <div className="card-body">
+          <div className="ds-card ds-card-sm">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Shield size={20} className="text-green" />
@@ -155,8 +155,8 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
           </div>
         </div>
         <div className="col-sm-6 col-lg-3">
-          <div className="card card-sm">
-            <div className="card-body">
+          <div className="ds-card ds-card-sm">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <AlertTriangle size={20} className="text-danger" />
@@ -235,7 +235,7 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
                 <td>
                   <div className="btn-list flex-nowrap">
                     <button 
-                      className="btn btn-sm btn-ghost-primary"
+                      className="ds-btn ds-btn-sm ds-btn-ghost-primary"
                       onClick={() => setSelectedRequest(request)}
                       title="Voir détails"
                     >
@@ -243,7 +243,7 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
                     </button>
                     {request.status === 'pending' && (
                       <button 
-                        className="btn btn-sm btn-ghost-primary"
+                        className="ds-btn ds-btn-sm ds-btn-ghost-primary"
                         title="Renvoyer"
                       >
                         <Send size={16} />
@@ -251,7 +251,7 @@ const SignatureRequests = ({ company, requests = [], onRefresh }) => {
                     )}
                     {request.status === 'pending' && (
                       <button 
-                        className="btn btn-sm btn-ghost-danger"
+                        className="ds-btn ds-btn-sm ds-btn-ghost-danger"
                         title="Annuler"
                       >
                         <XCircle size={16} />
@@ -419,8 +419,8 @@ const CreateSignatureModal = ({ company, onClose, onSubmit, isLoading }) => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn" onClick={onClose}>Annuler</button>
-              <button type="submit" className="btn btn-primary" disabled={isLoading}>
+              <button type="button" className="ds-btn" onClick={onClose}>Annuler</button>
+              <button type="submit" className="ds-btn ds-btn-primary" disabled={isLoading}>
                 {isLoading ? 'Envoi...' : 'Envoyer demande'}
               </button>
             </div>
@@ -478,7 +478,7 @@ const SignatureDetailsModal = ({ request, onClose }) => {
             )}
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="ds-btn ds-btn-secondary" onClick={onClose}>
               Fermer
             </button>
           </div>

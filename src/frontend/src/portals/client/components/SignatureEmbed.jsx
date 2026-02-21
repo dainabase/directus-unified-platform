@@ -142,8 +142,8 @@ const SignatureEmbed = ({
   if (status === 'loading') {
     return (
       <div className="signature-embed">
-        <div className="card">
-          <div className="card-body text-center py-5">
+        <div className="ds-card">
+          <div className="ds-card-body text-center py-5">
             <div className="spinner-border text-primary mb-3" role="status">
               <span className="visually-hidden">Chargement...</span>
             </div>
@@ -161,16 +161,16 @@ const SignatureEmbed = ({
   if (status === 'error') {
     return (
       <div className="signature-embed">
-        <div className="card border-danger">
-          <div className="card-body text-center py-5">
+        <div className="ds-card border-danger">
+          <div className="ds-card-body text-center py-5">
             <span className="display-4 text-danger">⚠️</span>
             <h5 className="mt-3">Erreur de signature</h5>
             <p className="text-muted">{error || 'Une erreur est survenue'}</p>
             <div className="d-flex justify-content-center gap-3">
-              <button className="btn btn-primary" onClick={handleRetry}>
+              <button className="ds-btn ds-btn-primary" onClick={handleRetry}>
                 Réessayer
               </button>
-              <button className="btn btn-outline-secondary" onClick={handleCancel}>
+              <button className="ds-btn ds-btn-outline-secondary" onClick={handleCancel}>
                 Annuler
               </button>
             </div>
@@ -184,8 +184,8 @@ const SignatureEmbed = ({
   if (status === 'completed') {
     return (
       <div className="signature-embed">
-        <div className="card border-success">
-          <div className="card-body text-center py-5">
+        <div className="ds-card border-success">
+          <div className="ds-card-body text-center py-5">
             <span className="display-4">✅</span>
             <h5 className="mt-3 text-success">Document signé</h5>
             <p className="text-muted mb-0">
@@ -203,8 +203,8 @@ const SignatureEmbed = ({
   return (
     <div className="signature-embed">
       {/* Header */}
-      <div className="card mb-3">
-        <div className="card-body py-2">
+      <div className="ds-card mb-3">
+        <div className="ds-card-body py-2">
           <div className="d-flex justify-content-between align-items-center">
             <div>
               <h6 className="mb-0">
@@ -216,13 +216,13 @@ const SignatureEmbed = ({
             </div>
             <div>
               <button
-                className="btn btn-sm btn-outline-secondary me-2"
+                className="ds-btn ds-btn-sm ds-btn-outline-secondary me-2"
                 onClick={checkSignatureStatus}
               >
                 Vérifier le statut
               </button>
               <button
-                className="btn btn-sm btn-outline-danger"
+                className="ds-btn ds-btn-sm ds-btn-outline-danger"
                 onClick={handleCancel}
               >
                 Annuler
@@ -233,7 +233,7 @@ const SignatureEmbed = ({
       </div>
 
       {/* Signature Iframe */}
-      <div className="card">
+      <div className="ds-card">
         <div className="ratio ratio-16x9" style={{ minHeight: '600px' }}>
           {signatureUrl && (
             <iframe
@@ -253,8 +253,8 @@ const SignatureEmbed = ({
       </div>
 
       {/* Help Text */}
-      <div className="card mt-3 bg-light">
-        <div className="card-body py-2">
+      <div className="ds-card mt-3 bg-light">
+        <div className="ds-card-body py-2">
           <small className="text-muted">
             <strong>Signature électronique sécurisée</strong>
             <br />

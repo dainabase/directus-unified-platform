@@ -172,8 +172,8 @@ const TicketsManager = ({ selectedCompany }) => {
       {/* Stats */}
       <div className="row g-3 mb-4">
         <div className="col-md-3">
-          <div className="card bg-primary-lt">
-            <div className="card-body py-3">
+          <div className="ds-card bg-primary-lt">
+            <div className="ds-card-body py-3">
               <div className="d-flex justify-content-between">
                 <span>Total tickets</span>
                 <span className="fw-bold">{stats.total}</span>
@@ -182,8 +182,8 @@ const TicketsManager = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card bg-success-lt">
-            <div className="card-body py-3">
+          <div className="ds-card bg-success-lt">
+            <div className="ds-card-body py-3">
               <div className="d-flex justify-content-between">
                 <span>Ouverts</span>
                 <span className="fw-bold">{stats.open}</span>
@@ -192,8 +192,8 @@ const TicketsManager = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card bg-warning-lt">
-            <div className="card-body py-3">
+          <div className="ds-card bg-warning-lt">
+            <div className="ds-card-body py-3">
               <div className="d-flex justify-content-between">
                 <span>En attente</span>
                 <span className="fw-bold">{stats.pending}</span>
@@ -202,8 +202,8 @@ const TicketsManager = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card bg-info-lt">
-            <div className="card-body py-3">
+          <div className="ds-card bg-info-lt">
+            <div className="ds-card-body py-3">
               <div className="d-flex justify-content-between">
                 <span>Resolus</span>
                 <span className="fw-bold">{stats.resolved}</span>
@@ -265,7 +265,7 @@ const TicketsManager = ({ selectedCompany }) => {
           </select>
         </div>
         <div className="col-md-3 text-end">
-          <button className="btn btn-primary">
+          <button className="ds-btn ds-btn-primary">
             <Plus size={16} className="me-1" />
             Nouveau ticket
           </button>
@@ -275,7 +275,7 @@ const TicketsManager = ({ selectedCompany }) => {
       <div className="row g-4">
         {/* Tickets List */}
         <div className={selectedTicket ? 'col-lg-5' : 'col-12'}>
-          <div className="card">
+          <div className="ds-card">
             <div className="table-responsive">
               <table className="table table-hover card-table table-vcenter">
                 <thead>
@@ -335,11 +335,11 @@ const TicketsManager = ({ selectedCompany }) => {
         {/* Ticket Detail */}
         {selectedTicket && (
           <div className="col-lg-7">
-            <div className="card">
-              <div className="card-header">
+            <div className="ds-card">
+              <div className="ds-card-header">
                 <div className="d-flex justify-content-between align-items-start">
                   <div>
-                    <h5 className="card-title mb-1">{selectedTicket.subject}</h5>
+                    <h5 className="ds-card-title mb-1">{selectedTicket.subject}</h5>
                     <div className="d-flex align-items-center gap-2">
                       <span className="text-primary">{selectedTicket.id}</span>
                       {getStatusBadge(selectedTicket.status)}
@@ -349,7 +349,7 @@ const TicketsManager = ({ selectedCompany }) => {
                   <button className="btn-close" onClick={() => setSelectedTicket(null)}></button>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="ds-card-body">
                 {/* Customer Info */}
                 <div className="d-flex align-items-center mb-4 p-3 bg-light rounded">
                   <div className="avatar bg-primary-lt text-primary me-3">
@@ -420,10 +420,10 @@ const TicketsManager = ({ selectedCompany }) => {
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     />
-                    <button className="btn btn-ghost-secondary">
+                    <button className="ds-btn ds-btn-ghost-secondary">
                       <Paperclip size={16} />
                     </button>
-                    <button className="btn btn-primary" onClick={handleSendMessage}>
+                    <button className="ds-btn ds-btn-primary" onClick={handleSendMessage}>
                       <Send size={16} />
                     </button>
                   </div>

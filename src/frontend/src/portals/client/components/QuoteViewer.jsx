@@ -158,7 +158,7 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
     return (
       <div className="alert alert-danger" role="alert">
         <strong>Erreur:</strong> {error}
-        <button className="btn btn-sm btn-outline-danger ms-3" onClick={loadQuote}>
+        <button className="ds-btn ds-btn-sm ds-btn-outline-danger ms-3" onClick={loadQuote}>
           Réessayer
         </button>
       </div>
@@ -176,8 +176,8 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
   return (
     <div className="quote-viewer">
       {/* Header */}
-      <div className="card mb-4">
-        <div className="card-body">
+      <div className="ds-card mb-4">
+        <div className="ds-card-body">
           <div className="row align-items-center">
             <div className="col-md-8">
               <h4 className="mb-1">
@@ -201,11 +201,11 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
       {/* Quote Info */}
       <div className="row g-4 mb-4">
         <div className="col-md-6">
-          <div className="card h-100">
-            <div className="card-header">
+          <div className="ds-card h-100">
+            <div className="ds-card-header">
               <h6 className="mb-0">Informations</h6>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <table className="table table-borderless mb-0">
                 <tbody>
                   <tr>
@@ -227,11 +227,11 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
         </div>
 
         <div className="col-md-6">
-          <div className="card h-100">
-            <div className="card-header">
+          <div className="ds-card h-100">
+            <div className="ds-card-header">
               <h6 className="mb-0">Montants</h6>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <table className="table table-borderless mb-0">
                 <tbody>
                   <tr>
@@ -261,11 +261,11 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
 
       {/* Line Items */}
       {quote.quote_items?.length > 0 && (
-        <div className="card mb-4">
-          <div className="card-header">
+        <div className="ds-card mb-4">
+          <div className="ds-card-header">
             <h6 className="mb-0">Détail des prestations</h6>
           </div>
-          <div className="card-body p-0">
+          <div className="ds-card-body p-0">
             <div className="table-responsive">
               <table className="table table-hover mb-0">
                 <thead className="table-light">
@@ -299,11 +299,11 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
 
       {/* Description */}
       {quote.description && (
-        <div className="card mb-4">
-          <div className="card-header">
+        <div className="ds-card mb-4">
+          <div className="ds-card-header">
             <h6 className="mb-0">Description du projet</h6>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             <div dangerouslySetInnerHTML={{ __html: quote.description }} />
           </div>
         </div>
@@ -311,11 +311,11 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
 
       {/* CGV Acceptance */}
       {cgvVersion && !quote.cgv_accepted && quote.status !== 'signed' && quote.status !== 'completed' && (
-        <div className="card mb-4 border-warning">
-          <div className="card-header bg-warning-subtle">
+        <div className="ds-card mb-4 border-warning">
+          <div className="ds-card-header bg-warning-subtle">
             <h6 className="mb-0">Conditions Générales de Vente</h6>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             <p className="mb-3">
               Avant de signer ce devis, veuillez prendre connaissance de nos conditions générales de vente
               (version {cgvVersion.version}).
@@ -325,7 +325,7 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
                 href={cgvVersion.pdf_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline-secondary me-3"
+                className="ds-btn ds-btn-outline-secondary me-3"
               >
                 📄 Télécharger les CGV (PDF)
               </a>
@@ -348,15 +348,15 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
 
       {/* Action Buttons */}
       {quote.status === 'sent' || quote.status === 'viewed' ? (
-        <div className="card">
-          <div className="card-body text-center">
+        <div className="ds-card">
+          <div className="ds-card-body text-center">
             <h5 className="mb-3">Prêt à signer ce devis ?</h5>
             <p className="text-muted mb-4">
               En signant ce devis, vous acceptez les conditions et vous engagez à verser l'acompte de{' '}
               <strong>{formatCurrency(quote.deposit_amount, quote.currency)}</strong> ({quote.deposit_percentage}%).
             </p>
             <button
-              className="btn btn-primary btn-lg px-5"
+              className="ds-btn ds-btn-primary btn-lg px-5"
               onClick={handleRequestSignature}
               disabled={signingInProgress || (!cgvAccepted && cgvVersion)}
             >
@@ -377,8 +377,8 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
           </div>
         </div>
       ) : quote.status === 'signed' || quote.status === 'completed' ? (
-        <div className="card border-success">
-          <div className="card-body text-center">
+        <div className="ds-card border-success">
+          <div className="ds-card-body text-center">
             <span className="display-4">✅</span>
             <h5 className="mt-3 mb-2">Devis signé</h5>
             <p className="text-muted mb-0">
@@ -389,7 +389,7 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
                 href={quote.signed_document_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline-success mt-3"
+                className="ds-btn ds-btn-outline-success mt-3"
               >
                 📄 Télécharger le devis signé
               </a>
@@ -397,8 +397,8 @@ const QuoteViewer = ({ quoteId, onSign, onAcceptCGV }) => {
           </div>
         </div>
       ) : quote.status === 'expired' ? (
-        <div className="card border-danger">
-          <div className="card-body text-center">
+        <div className="ds-card border-danger">
+          <div className="ds-card-body text-center">
             <span className="display-4">⏰</span>
             <h5 className="mt-3 mb-2">Devis expiré</h5>
             <p className="text-muted mb-0">

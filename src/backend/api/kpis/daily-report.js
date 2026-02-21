@@ -256,6 +256,12 @@ function generateEmailHTML(data) {
  */
 async function sendEmailViaMautic(to, subject, htmlContent) {
   try {
+    const mauticUser = process.env.MAUTIC_USER || 'admin';
+    const mauticPassword = process.env.MAUTIC_PASSWORD || '';
+    if (!mauticPassword) {
+      console.warn('[daily-report] WARNING: MAUTIC_PASSWORD is not set. Email sending will likely fail.');
+    }
+
     const res = await axios.post(`${MAUTIC_URL}/api/emails/new`, {
       name: subject,
       subject: subject,
@@ -264,8 +270,8 @@ async function sendEmailViaMautic(to, subject, htmlContent) {
     }, {
       headers: { 'Content-Type': 'application/json' },
       auth: {
-        username: process.env.MAUTIC_USER || 'admin',
-        password: process.env.MAUTIC_PASSWORD || 'admin'
+        username: mauticUser,
+        password: mauticPassword
       },
       timeout: 10000
     });
@@ -278,8 +284,8 @@ async function sendEmailViaMautic(to, subject, htmlContent) {
       }, {
         headers: { 'Content-Type': 'application/json' },
         auth: {
-          username: process.env.MAUTIC_USER || 'admin',
-          password: process.env.MAUTIC_PASSWORD || 'admin'
+          username: mauticUser,
+          password: mauticPassword
         },
         timeout: 10000
       });

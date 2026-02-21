@@ -125,7 +125,7 @@ function AccountCard({ account, isSelected, onClick }) {
       onClick={onClick}
       className={`ds-card p-5 text-left w-full transition-all ${
         isSelected
-          ? 'ring-2 ring-[#0071E3] bg-blue-50/60'
+          ? 'ring-2 ring-[#0071E3] bg-zinc-50/60'
           : 'hover:shadow-md'
       }`}
     >
@@ -255,7 +255,7 @@ function ReconciliationModal({ transaction, onClose, onConfirm }) {
               onClick={() => setSelectedInvoice(inv)}
               className={`w-full text-left px-4 py-3 rounded-lg mb-1 transition-all border ${
                 selectedInvoice?.id === inv.id
-                  ? 'border-[#0071E3] bg-blue-50'
+                  ? 'border-[#0071E3] bg-zinc-50'
                   : 'border-transparent hover:bg-gray-50'
               }`}
             >
@@ -277,7 +277,7 @@ function ReconciliationModal({ transaction, onClose, onConfirm }) {
                 {inv.status && (
                   <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                     inv.status === 'paid' ? 'bg-green-100 text-green-700' :
-                    inv.status === 'sent' ? 'bg-blue-100 text-blue-700' :
+                    inv.status === 'sent' ? 'bg-zinc-100 text-zinc-700' :
                     inv.status === 'overdue' ? 'bg-red-100 text-red-700' :
                     'bg-gray-100 text-gray-600'
                   }`}>
@@ -620,14 +620,14 @@ export function BankingPage({ selectedCompany }) {
       </div>
 
       {/* ── Consolidated Balance ── */}
-      <div className="bg-gradient-to-br from-[#0071E3] to-blue-700 rounded-2xl p-6 text-white shadow-lg">
+      <div className="rounded-2xl p-6 text-white shadow-lg" style={{ background: 'var(--accent, #0071E3)' }}>
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-blue-100 text-xs font-medium uppercase tracking-wider">
+            <p className="text-white/70 text-xs font-medium uppercase tracking-wider">
               Solde consolide
             </p>
             <h2 className="text-3xl font-bold mt-1">{formatCHF(totalBalanceCHF)}</h2>
-            <p className="text-blue-200 text-sm mt-1">
+            <p className="text-white/60 text-sm mt-1">
               {accounts.length} compte{accounts.length !== 1 ? 's' : ''} actif{accounts.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -955,7 +955,7 @@ export function BankingPage({ selectedCompany }) {
                         {!tx.reconciled ? (
                           <button
                             onClick={() => setReconcileTarget(tx)}
-                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs text-[#0071E3] hover:bg-blue-50"
+                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs text-[#0071E3] hover:bg-zinc-50"
                           >
                             <Link2 size={12} className="mr-1" />
                             Associer a facture

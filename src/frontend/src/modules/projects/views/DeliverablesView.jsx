@@ -179,11 +179,11 @@ const DeliverablesView = ({ selectedCompany }) => {
             </div>
           </div>
           <div className="col-auto ms-auto d-flex gap-2">
-            <button className="btn btn-outline-secondary">
+            <button className="ds-btn ds-btn-outline-secondary">
               <Download size={16} className="me-1" />
               Exporter
             </button>
-            <button className="btn btn-primary" onClick={() => setShowNewModal(true)}>
+            <button className="ds-btn ds-btn-primary" onClick={() => setShowNewModal(true)}>
               <Plus size={16} className="me-1" />
               Nouveau livrable
             </button>
@@ -194,8 +194,8 @@ const DeliverablesView = ({ selectedCompany }) => {
       {/* KPIs */}
       <div className="row g-3 mb-4">
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <Package size={20} className="text-primary me-2" />
                 <span className="text-muted small">Total livrables</span>
@@ -205,8 +205,8 @@ const DeliverablesView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <CheckCircle size={20} className="text-success me-2" />
                 <span className="text-muted small">Termines</span>
@@ -219,8 +219,8 @@ const DeliverablesView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <Target size={20} className="text-info me-2" />
                 <span className="text-muted small">En cours</span>
@@ -230,8 +230,8 @@ const DeliverablesView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <AlertTriangle size={20} className="text-danger me-2" />
                 <span className="text-muted small">En retard</span>
@@ -275,15 +275,15 @@ const DeliverablesView = ({ selectedCompany }) => {
       <div className="row g-4">
         {filteredDeliverables.map(deliverable => (
           <div key={deliverable.id} className="col-md-6 col-lg-4">
-            <div className={`card h-100 ${isOverdue(deliverable.dueDate, deliverable.status) ? 'border-danger' : ''}`}>
-              <div className="card-header">
+            <div className={`ds-card h-100 ${isOverdue(deliverable.dueDate, deliverable.status) ? 'border-danger' : ''}`}>
+              <div className="ds-card-header">
                 <div className="d-flex justify-content-between align-items-start">
                   <div>
-                    <h5 className="card-title mb-1">{deliverable.name}</h5>
+                    <h5 className="ds-card-title mb-1">{deliverable.name}</h5>
                     <small className="text-muted">{deliverable.project}</small>
                   </div>
                   <div className="dropdown">
-                    <button className="btn btn-sm btn-ghost-secondary" data-bs-toggle="dropdown">
+                    <button className="ds-btn ds-btn-sm ds-btn-ghost-secondary" data-bs-toggle="dropdown">
                       <MoreVertical size={16} />
                     </button>
                     <div className="dropdown-menu dropdown-menu-end">
@@ -301,7 +301,7 @@ const DeliverablesView = ({ selectedCompany }) => {
                   </div>
                 </div>
               </div>
-              <div className="card-body">
+              <div className="ds-card-body">
                 <p className="text-muted small mb-3">{deliverable.description}</p>
 
                 <div className="mb-3">
@@ -333,7 +333,7 @@ const DeliverablesView = ({ selectedCompany }) => {
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
+              <div className="ds-card-footer">
                 <div className="d-flex justify-content-between align-items-center">
                   <div className={`d-flex align-items-center small ${isOverdue(deliverable.dueDate, deliverable.status) ? 'text-danger' : 'text-muted'}`}>
                     <Calendar size={12} className="me-1" />
@@ -356,8 +356,8 @@ const DeliverablesView = ({ selectedCompany }) => {
       </div>
 
       {filteredDeliverables.length === 0 && (
-        <div className="card">
-          <div className="card-body text-center py-5 text-muted">
+        <div className="ds-card">
+          <div className="ds-card-body text-center py-5 text-muted">
             <Package size={48} className="mb-3 opacity-50" />
             <p>Aucun livrable trouve</p>
           </div>
@@ -428,10 +428,10 @@ const DeliverablesView = ({ selectedCompany }) => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setSelectedDeliverable(null)}>
+                <button className="ds-btn ds-btn-secondary" onClick={() => setSelectedDeliverable(null)}>
                   Fermer
                 </button>
-                <button className="btn btn-primary">
+                <button className="ds-btn ds-btn-primary">
                   <Edit2 size={14} className="me-1" />
                   Modifier
                 </button>
@@ -488,10 +488,10 @@ const DeliverablesView = ({ selectedCompany }) => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowNewModal(false)}>
+                <button className="ds-btn ds-btn-secondary" onClick={() => setShowNewModal(false)}>
                   Annuler
                 </button>
-                <button className="btn btn-primary" onClick={() => {
+                <button className="ds-btn ds-btn-primary" onClick={() => {
                   toast.success('Livrable cree');
                   setShowNewModal(false);
                 }}>

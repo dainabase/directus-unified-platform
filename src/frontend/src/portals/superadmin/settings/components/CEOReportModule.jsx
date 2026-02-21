@@ -24,7 +24,7 @@ async function fetchCEOReport(companyId) {
   return data?.data || null
 }
 
-const KPICard = ({ icon: Icon, label, value, subtitle, color = 'text-gray-900', iconColor = 'text-blue-500' }) => (
+const KPICard = ({ icon: Icon, label, value, subtitle, color = 'text-gray-900', iconColor = 'text-zinc-500' }) => (
   <div className="ds-card p-4">
     <div className="flex items-center gap-2 mb-2">
       <Icon size={16} className={iconColor} />
@@ -56,7 +56,7 @@ const CEOReportModule = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <FileText size={20} className="text-blue-500" />
+            <FileText size={20} style={{ color: 'var(--accent, #0071E3)' }} />
             Rapport CEO quotidien
           </h2>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -89,7 +89,7 @@ const CEOReportModule = () => {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
         </div>
       ) : !report ? (
         <div className="ds-card p-12 text-center">
@@ -112,8 +112,8 @@ const CEOReportModule = () => {
               icon={TrendingUp}
               label="CA du mois"
               value={formatCHF(report.kpis.revenue_month)}
-              iconColor="text-blue-500"
-              color="text-blue-600"
+              iconColor="text-zinc-500"
+              color="text-gray-900"
             />
             <KPICard
               icon={TrendingDown}
@@ -128,8 +128,8 @@ const CEOReportModule = () => {
               label="Pipeline"
               value={formatCHF(report.kpis.pipeline_value)}
               subtitle={`${report.kpis.open_leads} lead(s) actif(s)`}
-              iconColor="text-blue-500"
-              color="text-blue-600"
+              iconColor="text-zinc-500"
+              color="text-gray-900"
             />
           </div>
 
@@ -146,8 +146,8 @@ const CEOReportModule = () => {
               icon={FolderOpen}
               label="Projets actifs"
               value={report.kpis.active_projects}
-              iconColor="text-cyan-500"
-              color="text-cyan-600"
+              iconColor="text-zinc-500"
+              color="text-gray-900"
             />
           </div>
 

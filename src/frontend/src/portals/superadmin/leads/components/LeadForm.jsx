@@ -132,7 +132,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     value={formData.first_name}
                     onChange={(e) => handleChange('first_name', e.target.value)}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -143,7 +143,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="text"
                     value={formData.last_name}
                     onChange={(e) => handleChange('last_name', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -154,7 +154,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleChange('email', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -165,7 +165,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -176,7 +176,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="tel"
                     value={formData.whatsapp}
                     onChange={(e) => handleChange('whatsapp', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
               </div>
@@ -197,7 +197,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="text"
                     value={formData.company_name}
                     onChange={(e) => handleChange('company_name', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -208,7 +208,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="text"
                     value={formData.job_title}
                     onChange={(e) => handleChange('job_title', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -220,7 +220,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     value={formData.website}
                     onChange={(e) => handleChange('website', e.target.value)}
                     placeholder="https://"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
               </div>
@@ -240,7 +240,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                   <select
                     value={formData.source}
                     onChange={(e) => handleChange('source', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   >
                     {sources.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -254,7 +254,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                   <select
                     value={formData.status}
                     onChange={(e) => handleChange('status', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   >
                     {statuses.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -268,7 +268,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                   <select
                     value={formData.priority}
                     onChange={(e) => handleChange('priority', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   >
                     {priorities.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -282,7 +282,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                   <select
                     value={formData.company}
                     onChange={(e) => handleChange('company', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   >
                     {companies.map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -297,7 +297,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     type="number"
                     value={formData.estimated_value}
                     onChange={(e) => handleChange('estimated_value', parseFloat(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
                 <div>
@@ -310,7 +310,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                     max="100"
                     value={formData.score}
                     onChange={(e) => handleChange('score', parseInt(e.target.value) || 0)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                   />
                 </div>
               </div>
@@ -326,13 +326,13 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                 {formData.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: 'var(--accent-light, #e8f0fe)', color: 'var(--accent, #0071E3)' }}
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => handleRemoveTag(tag)}
-                      className="hover:text-blue-900"
+                      className="hover:text-zinc-900"
                     >
                       <X size={14} />
                     </button>
@@ -346,7 +346,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                   onChange={(e) => setNewTag(e.target.value)}
                   placeholder="Ajouter un tag..."
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                 />
                 <button
                   type="button"
@@ -367,7 +367,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                 value={formData.notes}
                 onChange={(e) => handleChange('notes', e.target.value)}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
               />
             </div>
           </div>

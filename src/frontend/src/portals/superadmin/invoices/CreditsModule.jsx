@@ -49,7 +49,7 @@ async function applyCredit(creditId, targetInvoiceId) {
 
 const STATUS_COLORS = {
   draft: 'bg-gray-100 text-gray-600',
-  issued: 'bg-blue-100 text-blue-700',
+  issued: 'bg-zinc-100 text-zinc-700',
   applied: 'bg-green-100 text-green-700',
   expired: 'bg-red-100 text-red-700'
 }
@@ -91,13 +91,13 @@ export default function CreditsModule({ selectedCompany }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CreditCard className="w-5 h-5 text-blue-400" />
+          <CreditCard className="w-5 h-5" style={{ color: 'var(--accent, #0071E3)' }} />
           <h2 className="text-white font-semibold">Avoirs & Notes de Credit</h2>
           <span className="text-gray-400 text-sm">({credits.length})</span>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
+          className="text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors" style={{ background: 'var(--accent-light, rgba(0,113,227,0.15))', color: 'var(--accent, #0071E3)' }}
         >
           <Plus className="w-4 h-4" /> Emettre un avoir
         </button>
@@ -105,7 +105,7 @@ export default function CreditsModule({ selectedCompany }) {
 
       {/* Form */}
       {showForm && (
-        <div className="bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-4 space-y-3">
+        <div className="ds-card p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-white text-sm font-medium">Nouvel avoir</h3>
             <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-white">
@@ -119,7 +119,7 @@ export default function CreditsModule({ selectedCompany }) {
                 type="text"
                 value={form.invoice_id}
                 onChange={e => setForm({ ...form, invoice_id: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm"
                 placeholder="ID facture..."
               />
             </div>
@@ -128,7 +128,7 @@ export default function CreditsModule({ selectedCompany }) {
               <select
                 value={form.type}
                 onChange={e => setForm({ ...form, type: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm"
               >
                 <option value="full">Total</option>
                 <option value="partial">Partiel</option>
@@ -141,7 +141,7 @@ export default function CreditsModule({ selectedCompany }) {
                   type="number"
                   value={form.amount}
                   onChange={e => setForm({ ...form, amount: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm"
                   placeholder="0.00"
                 />
               </div>
@@ -151,7 +151,7 @@ export default function CreditsModule({ selectedCompany }) {
               <textarea
                 value={form.reason}
                 onChange={e => setForm({ ...form, reason: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm"
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 text-white text-sm"
                 rows={2}
                 placeholder="Motif de l'avoir..."
               />
@@ -160,7 +160,7 @@ export default function CreditsModule({ selectedCompany }) {
           <button
             onClick={() => createMut.mutate(form)}
             disabled={!form.invoice_id || !form.reason || createMut.isPending}
-            className="bg-[#0071E3] hover:bg-blue-700 disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            className="disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors" style={{ backgroundColor: 'var(--accent, #0071E3)' }}
           >
             {createMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
             Emettre l'avoir
@@ -169,17 +169,17 @@ export default function CreditsModule({ selectedCompany }) {
       )}
 
       {/* Table */}
-      <div className="bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 overflow-hidden">
+      <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center p-8">
-            <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
           </div>
         ) : credits.length === 0 ? (
           <p className="text-gray-400 text-sm p-6 text-center">Aucun avoir emis.</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-gray-400 text-xs border-b border-white/10">
+              <tr className="text-gray-400 text-xs border-b border-zinc-200">
                 <th className="text-left p-3">N° Avoir</th>
                 <th className="text-left p-3">Facture</th>
                 <th className="text-right p-3">Montant</th>
@@ -190,7 +190,7 @@ export default function CreditsModule({ selectedCompany }) {
             </thead>
             <tbody>
               {credits.map(c => (
-                <tr key={c.id} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={c.id} className="border-b border-zinc-100 hover:bg-zinc-50">
                   <td className="p-3">
                     <span className="text-white font-mono text-xs">{c.credit_number || '—'}</span>
                   </td>

@@ -119,14 +119,14 @@ const InterestCalculator = ({ company }) => {
     <div className="row">
       {/* Formulaire de calcul */}
       <div className="col-lg-6">
-        <div className="card">
-          <div className="card-header">
-            <h4 className="card-title">
+        <div className="ds-card">
+          <div className="ds-card-header">
+            <h4 className="ds-card-title">
               <Calculator size={20} className="me-2" />
               Calculateur d'Intérêts Moratoires
             </h4>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             {/* Montant principal */}
             <div className="mb-3">
               <label className="form-label required">
@@ -232,11 +232,11 @@ const InterestCalculator = ({ company }) => {
         </div>
         
         {/* Configuration avancée */}
-        <div className="card mt-4">
-          <div className="card-header">
-            <h4 className="card-title">Configuration Avancée</h4>
+        <div className="ds-card mt-4">
+          <div className="ds-card-header">
+            <h4 className="ds-card-title">Configuration Avancée</h4>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             <div className="row">
               <div className="col-12">
                 <h6 className="text-muted mb-3">TAUX SELON TYPE DE CRÉANCE</h6>
@@ -273,19 +273,19 @@ const InterestCalculator = ({ company }) => {
       {/* Résultats */}
       <div className="col-lg-6">
         {result ? (
-          <div className="card">
-            <div className="card-header">
-              <h4 className="card-title text-zinc-900">
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h4 className="ds-card-title text-zinc-900">
                 <CheckCircle size={20} className="me-2" />
                 Résultat du Calcul
               </h4>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               {/* Résumé principal */}
               <div className="row row-cards mb-4">
                 <div className="col-6">
-                  <div className="card card-sm">
-                    <div className="card-body text-center">
+                  <div className="ds-card ds-card-sm">
+                    <div className="ds-card-body text-center">
                       <div className="h1 mb-0 text-zinc-900">
                         {result.interestAmount.toLocaleString('fr-CH', {
                           style: 'currency',
@@ -297,8 +297,8 @@ const InterestCalculator = ({ company }) => {
                   </div>
                 </div>
                 <div className="col-6">
-                  <div className="card card-sm">
-                    <div className="card-body text-center">
+                  <div className="ds-card ds-card-sm">
+                    <div className="ds-card-body text-center">
                       <div className="h1 mb-0 text-zinc-900">
                         {result.totalAmount.toLocaleString('fr-CH', {
                           style: 'currency',
@@ -390,8 +390,8 @@ const InterestCalculator = ({ company }) => {
             </div>
           </div>
         ) : (
-          <div className="card">
-            <div className="card-body text-center py-5">
+          <div className="ds-card">
+            <div className="ds-card-body text-center py-5">
               <Calculator size={48} className="text-muted mb-3" />
               <h5 className="text-muted">Calcul d'Intérêts</h5>
               <p className="text-muted">
@@ -402,14 +402,14 @@ const InterestCalculator = ({ company }) => {
         )}
         
         {/* Informations légales */}
-        <div className="card mt-4">
-          <div className="card-header">
-            <h4 className="card-title">
+        <div className="ds-card mt-4">
+          <div className="ds-card-header">
+            <h4 className="ds-card-title">
               <FileText size={20} className="me-2" />
               Bases Légales
             </h4>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             <ul className="list-unstyled">
               <li className="mb-2">
                 <CheckCircle size={16} className="text-zinc-900 me-2" />

@@ -90,15 +90,15 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
     <div className="row">
       {/* Content principal */}
       <div className="col-lg-9">
-        <div className="card">
+        <div className="ds-card">
           {/* Header */}
-          <div className="card-header">
+          <div className="ds-card-header">
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center">
                   <FileText size={20} className="me-2 text-primary" />
                   <div>
-                    <h3 className="card-title mb-1">{cgv?.title}</h3>
+                    <h3 className="ds-card-title mb-1">{cgv?.title}</h3>
                     <div className="text-muted small">
                       {getStatusIcon()} Version {cgv?.version} - {getTypeLabel()}
                     </div>
@@ -108,21 +108,21 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
               <div className="col-auto">
                 <div className="btn-list">
                   <button 
-                    className="btn btn-outline-secondary btn-sm"
+                    className="ds-btn ds-btn-outline-secondary ds-btn-sm"
                     onClick={() => setShowVariables(!showVariables)}
                   >
                     <Eye size={16} className="me-1" />
                     Variables
                   </button>
                   <button 
-                    className="btn btn-outline-primary btn-sm"
+                    className="ds-btn ds-btn-outline-primary ds-btn-sm"
                     onClick={handleDownloadPDF}
                   >
                     <Download size={16} className="me-1" />
                     PDF
                   </button>
                   <button 
-                    className="btn btn-outline-secondary btn-sm"
+                    className="ds-btn ds-btn-outline-secondary ds-btn-sm"
                     onClick={onClose}
                   >
                     <X size={16} />
@@ -133,7 +133,7 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
           </div>
           
           {/* Métadonnées */}
-          <div className="card-body border-bottom">
+          <div className="ds-card-body border-bottom">
             <div className="row text-muted small">
               <div className="col-md-3">
                 <strong>Entreprise:</strong><br />
@@ -155,7 +155,7 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
           </div>
           
           {/* Contenu principal */}
-          <div className="card-body">
+          <div className="ds-card-body">
             {isLoading ? (
               <div className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -180,7 +180,7 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
           
           {/* Footer avec notes */}
           {cgv?.notes && (
-            <div className="card-footer bg-light">
+            <div className="ds-card-footer bg-light">
               <div className="text-muted small">
                 <strong>Notes internes:</strong> {cgv.notes}
               </div>
@@ -193,11 +193,11 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
       <div className="col-lg-3">
         {/* Variables disponibles */}
         {showVariables && (
-          <div className="card mb-3">
-            <div className="card-header">
-              <h4 className="card-title">Variables utilisées</h4>
+          <div className="ds-card mb-3">
+            <div className="ds-card-header">
+              <h4 className="ds-card-title">Variables utilisées</h4>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="table-responsive">
                 <table className="table table-sm">
                   <thead>
@@ -223,11 +223,11 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
         )}
         
         {/* Clauses vérifiées */}
-        <div className="card">
-          <div className="card-header">
-            <h4 className="card-title text-success">Clauses vérifiées</h4>
+        <div className="ds-card">
+          <div className="ds-card-header">
+            <h4 className="ds-card-title text-success">Clauses vérifiées</h4>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             {cgv?.clauses_checked?.length > 0 ? (
               <div>
                 {cgv.clauses_checked.map(clause => (
@@ -244,24 +244,24 @@ const CGVPreview = ({ cgv, onClose, variables = {} }) => {
         </div>
         
         {/* Actions rapides */}
-        <div className="card mt-3">
-          <div className="card-header">
-            <h4 className="card-title">Actions</h4>
+        <div className="ds-card mt-3">
+          <div className="ds-card-header">
+            <h4 className="ds-card-title">Actions</h4>
           </div>
-          <div className="card-body">
+          <div className="ds-card-body">
             <div className="d-grid gap-2">
-              <button className="btn btn-sm btn-outline-primary">
+              <button className="ds-btn ds-btn-sm ds-btn-outline-primary">
                 <Share2 size={14} className="me-1" />
                 Partager lien
               </button>
               <button 
-                className="btn btn-sm btn-outline-secondary"
+                className="ds-btn ds-btn-sm ds-btn-outline-secondary"
                 onClick={handleDownloadPDF}
               >
                 <Download size={14} className="me-1" />
                 Télécharger PDF
               </button>
-              <button className="btn btn-sm btn-outline-success">
+              <button className="ds-btn ds-btn-sm ds-btn-outline-success">
                 <CheckCircle size={14} className="me-1" />
                 Générer acceptation
               </button>

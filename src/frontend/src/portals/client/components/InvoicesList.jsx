@@ -130,17 +130,17 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
       {/* Summary Cards */}
       <div className="row g-3 mb-4">
         <div className="col-md-4">
-          <div className="card bg-primary text-white">
-            <div className="card-body">
-              <h6 className="card-title opacity-75">Total à payer</h6>
+          <div className="ds-card bg-primary text-white">
+            <div className="ds-card-body">
+              <h6 className="ds-card-title opacity-75">Total à payer</h6>
               <h3 className="mb-0">{formatCurrency(getTotalDue())}</h3>
             </div>
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h6 className="card-title text-muted">Factures en attente</h6>
+          <div className="ds-card">
+            <div className="ds-card-body">
+              <h6 className="ds-card-title text-muted">Factures en attente</h6>
               <h3 className="mb-0 text-warning">
                 {invoices.filter(i => i.status === 'sent' || i.status === 'viewed').length}
               </h3>
@@ -148,9 +148,9 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h6 className="card-title text-muted">Factures en retard</h6>
+          <div className="ds-card">
+            <div className="ds-card-body">
+              <h6 className="ds-card-title text-muted">Factures en retard</h6>
               <h3 className="mb-0 text-danger">
                 {invoices.filter(i => i.status === 'overdue').length}
               </h3>
@@ -160,38 +160,38 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
       </div>
 
       {/* Filters */}
-      <div className="card mb-4">
-        <div className="card-body py-2">
+      <div className="ds-card mb-4">
+        <div className="ds-card-body py-2">
           <div className="d-flex align-items-center">
             <span className="text-muted me-3">Filtrer:</span>
             <div className="btn-group btn-group-sm">
               <button
-                className={`btn ${filter === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
+                className={`ds-btn ${filter === 'all' ? 'ds-btn-primary' : 'ds-btn-outline-primary'}`}
                 onClick={() => setFilter('all')}
               >
                 Toutes
               </button>
               <button
-                className={`btn ${filter === 'pending' ? 'btn-primary' : 'btn-outline-primary'}`}
+                className={`ds-btn ${filter === 'pending' ? 'ds-btn-primary' : 'ds-btn-outline-primary'}`}
                 onClick={() => setFilter('pending')}
               >
                 En attente
               </button>
               <button
-                className={`btn ${filter === 'paid' ? 'btn-primary' : 'btn-outline-primary'}`}
+                className={`ds-btn ${filter === 'paid' ? 'ds-btn-primary' : 'ds-btn-outline-primary'}`}
                 onClick={() => setFilter('paid')}
               >
                 Payées
               </button>
               <button
-                className={`btn ${filter === 'overdue' ? 'btn-primary' : 'btn-outline-primary'}`}
+                className={`ds-btn ${filter === 'overdue' ? 'ds-btn-primary' : 'ds-btn-outline-primary'}`}
                 onClick={() => setFilter('overdue')}
               >
                 En retard
               </button>
             </div>
             <button
-              className="btn btn-sm btn-outline-secondary ms-auto"
+              className="ds-btn ds-btn-sm ds-btn-outline-secondary ms-auto"
               onClick={loadInvoices}
             >
               Actualiser
@@ -204,7 +204,7 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
       {error && (
         <div className="alert alert-danger" role="alert">
           {error}
-          <button className="btn btn-sm btn-outline-danger ms-3" onClick={loadInvoices}>
+          <button className="ds-btn ds-btn-sm ds-btn-outline-danger ms-3" onClick={loadInvoices}>
             Réessayer
           </button>
         </div>
@@ -212,14 +212,14 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
 
       {/* Invoice List */}
       {invoices.length === 0 ? (
-        <div className="card">
-          <div className="card-body text-center py-5">
+        <div className="ds-card">
+          <div className="ds-card-body text-center py-5">
             <span className="display-4 text-muted">📄</span>
             <p className="mt-3 mb-0 text-muted">Aucune facture trouvée</p>
           </div>
         </div>
       ) : (
-        <div className="card">
+        <div className="ds-card">
           <div className="table-responsive">
             <table className="table table-hover mb-0">
               <thead className="table-light">
@@ -269,7 +269,7 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
                     <td className="text-end" onClick={(e) => e.stopPropagation()}>
                       <div className="btn-group btn-group-sm">
                         <button
-                          className="btn btn-outline-secondary"
+                          className="ds-btn ds-btn-outline-secondary"
                           onClick={() => handleDownloadPDF(invoice.id)}
                           title="Télécharger PDF"
                         >
@@ -277,7 +277,7 @@ const InvoicesList = ({ onSelectInvoice, onPayInvoice }) => {
                         </button>
                         {(invoice.status === 'sent' || invoice.status === 'viewed' || invoice.status === 'overdue') && (
                           <button
-                            className="btn btn-primary"
+                            className="ds-btn ds-btn-primary"
                             onClick={() => onPayInvoice?.(invoice)}
                             title="Payer cette facture"
                           >

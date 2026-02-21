@@ -128,7 +128,7 @@ const ClientPortalDashboard = () => {
             <span className="text-muted me-3">
               Bonjour, <strong>{user?.first_name || user?.email}</strong>
             </span>
-            <button className="btn btn-outline-secondary btn-sm" onClick={logout}>
+            <button className="ds-btn ds-btn-outline-secondary ds-btn-sm" onClick={logout}>
               Déconnexion
             </button>
           </div>
@@ -148,7 +148,7 @@ const ClientPortalDashboard = () => {
                     <span>
                       Devis <strong>{action.reference}</strong> en attente de signature
                       <button
-                        className="btn btn-sm btn-warning ms-2"
+                        className="ds-btn ds-btn-sm ds-btn-warning ms-2"
                         onClick={() => handleSignQuote(action.id)}
                       >
                         Signer
@@ -222,32 +222,32 @@ const ClientPortalDashboard = () => {
             {/* Stats Cards */}
             <div className="row g-4 mb-4">
               <div className="col-md-3">
-                <div className="card h-100">
-                  <div className="card-body">
+                <div className="ds-card h-100">
+                  <div className="ds-card-body">
                     <h6 className="text-muted mb-2">Devis en attente</h6>
                     <h3 className="mb-0">{stats?.pendingQuotes || 0}</h3>
                   </div>
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card h-100 border-warning">
-                  <div className="card-body">
+                <div className="ds-card h-100 border-warning">
+                  <div className="ds-card-body">
                     <h6 className="text-muted mb-2">Factures impayées</h6>
                     <h3 className="mb-0 text-warning">{stats?.unpaidInvoices || 0}</h3>
                   </div>
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card h-100">
-                  <div className="card-body">
+                <div className="ds-card h-100">
+                  <div className="ds-card-body">
                     <h6 className="text-muted mb-2">Montant dû</h6>
                     <h3 className="mb-0">{formatCurrency(stats?.totalDue || 0)}</h3>
                   </div>
                 </div>
               </div>
               <div className="col-md-3">
-                <div className="card h-100 border-success">
-                  <div className="card-body">
+                <div className="ds-card h-100 border-success">
+                  <div className="ds-card-body">
                     <h6 className="text-muted mb-2">Projets actifs</h6>
                     <h3 className="mb-0 text-success">{stats?.activeProjects || 0}</h3>
                   </div>
@@ -256,11 +256,11 @@ const ClientPortalDashboard = () => {
             </div>
 
             {/* Recent Quotes */}
-            <div className="card mb-4">
-              <div className="card-header d-flex justify-content-between align-items-center">
+            <div className="ds-card mb-4">
+              <div className="ds-card-header d-flex justify-content-between align-items-center">
                 <h6 className="mb-0">Devis récents</h6>
                 <button
-                  className="btn btn-sm btn-outline-primary"
+                  className="ds-btn ds-btn-sm ds-btn-outline-primary"
                   onClick={() => setActiveTab('quotes')}
                 >
                   Voir tous
@@ -289,7 +289,7 @@ const ClientPortalDashboard = () => {
                           <td>{formatDate(quote.date_created)}</td>
                           <td className="text-end">
                             <button
-                              className="btn btn-sm btn-outline-primary"
+                              className="ds-btn ds-btn-sm ds-btn-outline-primary"
                               onClick={() => setSelectedQuote(quote.id)}
                             >
                               Voir
@@ -301,7 +301,7 @@ const ClientPortalDashboard = () => {
                   </table>
                 </div>
               ) : (
-                <div className="card-body text-center text-muted">
+                <div className="ds-card-body text-center text-muted">
                   Aucun devis récent
                 </div>
               )}
@@ -311,8 +311,8 @@ const ClientPortalDashboard = () => {
 
         {activeTab === 'quotes' && (
           <div className="quotes-tab">
-            <div className="card">
-              <div className="card-header">
+            <div className="ds-card">
+              <div className="ds-card-header">
                 <h6 className="mb-0">Mes devis</h6>
               </div>
               <div className="table-responsive">
@@ -338,14 +338,14 @@ const ClientPortalDashboard = () => {
                         <td className="text-end">
                           <div className="btn-group btn-group-sm">
                             <button
-                              className="btn btn-outline-primary"
+                              className="ds-btn ds-btn-outline-primary"
                               onClick={() => setSelectedQuote(quote.id)}
                             >
                               Voir
                             </button>
                             {(quote.status === 'sent' || quote.status === 'viewed') && (
                               <button
-                                className="btn btn-primary"
+                                className="ds-btn ds-btn-primary"
                                 onClick={() => handleSignQuote(quote.id)}
                               >
                                 Signer
@@ -379,8 +379,8 @@ const ClientPortalDashboard = () => {
             {stats?.activeProjects > 0 ? (
               <ProjectTimeline projectId={selectedProject || stats?.latestProjectId} />
             ) : (
-              <div className="card">
-                <div className="card-body text-center py-5">
+              <div className="ds-card">
+                <div className="ds-card-body text-center py-5">
                   <span className="display-4 text-muted">📁</span>
                   <p className="mt-3 mb-0 text-muted">Aucun projet actif</p>
                 </div>

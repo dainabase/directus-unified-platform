@@ -34,7 +34,7 @@ const formatDate = (dateStr) => {
 
 const STATUS_CONFIG = {
   pending:   { label: 'En attente',  cls: 'bg-amber-100 text-amber-700' },
-  validated: { label: 'Validee',     cls: 'bg-blue-100 text-blue-700' },
+  validated: { label: 'Validee',     cls: 'bg-zinc-100 text-zinc-700' },
   paid:      { label: 'Payee',       cls: 'bg-green-100 text-green-700' }
 }
 
@@ -129,12 +129,12 @@ const CommissionsRevendeur = () => {
         {/* Taux moyen */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-              <Percent size={20} className="text-blue-600" />
+            <div className="w-10 h-10 rounded-xl bg-zinc-50 flex items-center justify-center">
+              <Percent size={20} className="text-zinc-600" />
             </div>
             <span className="text-sm text-gray-500">Taux moyen</span>
           </div>
-          <p className="text-2xl font-bold text-blue-600">{kpis.avgRate.toFixed(1)}%</p>
+          <p className="text-2xl font-bold text-gray-900">{kpis.avgRate.toFixed(1)}%</p>
           <p className="text-xs text-gray-400 mt-1">Sur {commissions.length} deals</p>
         </div>
       </div>
@@ -213,7 +213,7 @@ const CommissionsRevendeur = () => {
       )}
 
       {/* Total banner */}
-      <div className="ds-card p-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200">
+      <div className="ds-card p-5 bg-zinc-50 border border-amber-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">

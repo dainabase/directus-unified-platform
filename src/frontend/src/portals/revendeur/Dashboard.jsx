@@ -76,11 +76,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
         {/* Colonne principale */}
         <div className="col-lg-8">
           {/* Ventes hebdomadaires */}
-          <div className="card mb-4">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Ventes vs Objectifs (Cette semaine)</h5>
+          <div className="ds-card mb-4">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Ventes vs Objectifs (Cette semaine)</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={salesData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -98,11 +98,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
           {/* Ligne de cartes */}
           <div className="row g-3 mb-4">
             <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Répartition CA par Produit</h5>
+              <div className="ds-card">
+                <div className="ds-card-header">
+                  <h5 className="ds-card-title mb-0">Répartition CA par Produit</h5>
                 </div>
-                <div className="card-body">
+                <div className="ds-card-body">
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
                       <Pie
@@ -138,11 +138,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <h5 className="card-title mb-0">Évolution Clients</h5>
+              <div className="ds-card">
+                <div className="ds-card-header">
+                  <h5 className="ds-card-title mb-0">Évolution Clients</h5>
                 </div>
-                <div className="card-body">
+                <div className="ds-card-body">
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={clientsData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -160,11 +160,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
           </div>
 
           {/* Top clients */}
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Top Clients</h5>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Top Clients</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="table-responsive">
                 <table className="table">
                   <thead>
@@ -188,7 +188,7 @@ const RevendeurDashboard = ({ selectedCompany }) => {
                           </span>
                         </td>
                         <td>
-                          <button className="btn btn-sm btn-outline-primary">Détails</button>
+                          <button className="ds-btn ds-btn-sm ds-btn-outline-primary">Détails</button>
                         </td>
                       </tr>
                     ))}
@@ -202,11 +202,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
         {/* Colonne latérale */}
         <div className="col-lg-4">
           {/* Alertes stock */}
-          <div className="card mb-4">
-            <div className="card-header bg-danger text-white">
-              <h5 className="card-title mb-0">⚠️ Alertes Stock</h5>
+          <div className="ds-card mb-4">
+            <div className="ds-card-header bg-danger text-white">
+              <h5 className="ds-card-title mb-0">⚠️ Alertes Stock</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="list-group list-group-flush">
                 <div className="list-group-item px-0">
                   <div className="d-flex justify-content-between align-items-center">
@@ -214,7 +214,7 @@ const RevendeurDashboard = ({ selectedCompany }) => {
                       <h6 className="mb-0">Pack Starter</h6>
                       <small className="text-danger">Stock: 3 unités</small>
                     </div>
-                    <button className="btn btn-sm btn-danger">Commander</button>
+                    <button className="ds-btn ds-btn-sm ds-btn-danger">Commander</button>
                   </div>
                 </div>
                 <div className="list-group-item px-0">
@@ -223,7 +223,7 @@ const RevendeurDashboard = ({ selectedCompany }) => {
                       <h6 className="mb-0">Support Premium</h6>
                       <small className="text-warning">Stock: 8 unités</small>
                     </div>
-                    <button className="btn btn-sm btn-warning">Commander</button>
+                    <button className="ds-btn ds-btn-sm ds-btn-warning">Commander</button>
                   </div>
                 </div>
                 <div className="list-group-item px-0">
@@ -232,7 +232,7 @@ const RevendeurDashboard = ({ selectedCompany }) => {
                       <h6 className="mb-0">Formation Basic</h6>
                       <small className="text-danger">Stock: 2 unités</small>
                     </div>
-                    <button className="btn btn-sm btn-danger">Commander</button>
+                    <button className="ds-btn ds-btn-sm ds-btn-danger">Commander</button>
                   </div>
                 </div>
               </div>
@@ -240,11 +240,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
           </div>
 
           {/* Commandes récentes */}
-          <div className="card mb-4">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Dernières Commandes</h5>
+          <div className="ds-card mb-4">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Dernières Commandes</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="list-group list-group-flush">
                 <div className="list-group-item px-0">
                   <div className="d-flex justify-content-between align-items-start">
@@ -278,11 +278,11 @@ const RevendeurDashboard = ({ selectedCompany }) => {
           </div>
 
           {/* Objectifs du mois */}
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Objectifs Décembre</h5>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Objectifs Décembre</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="mb-3">
                 <div className="d-flex justify-content-between mb-1">
                   <span>CA Mensuel</span>

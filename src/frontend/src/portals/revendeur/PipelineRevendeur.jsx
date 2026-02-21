@@ -25,7 +25,7 @@ const formatCHF = (v) =>
 // ── Kanban columns (4 logical groups) ──
 const KANBAN_COLUMNS = {
   prospect: { label: 'Prospect', color: '#6B7280', statuses: ['new', 'contacted'] },
-  qualifie: { label: 'Qualifie', color: '#3B82F6', statuses: ['qualified'] },
+  qualifie: { label: 'Qualifie', color: '#71717A', statuses: ['qualified'] },
   negociation: { label: 'Negociation', color: '#F59E0B', statuses: ['proposal', 'negotiation'] },
   signe: { label: 'Signe', color: '#22C55E', statuses: ['won'] }
 }
@@ -45,8 +45,8 @@ const PRIORITY_COLORS = { high: '#EF4444', medium: '#F59E0B', low: '#22C55E' }
 // ── Status badge config (for list view) ──
 const STATUS_BADGE = {
   new: { label: 'Nouveau', bg: 'bg-gray-100', text: 'text-gray-600' },
-  contacted: { label: 'Contacte', bg: 'bg-blue-100', text: 'text-blue-700' },
-  qualified: { label: 'Qualifie', bg: 'bg-indigo-100', text: 'text-indigo-700' },
+  contacted: { label: 'Contacte', bg: 'bg-zinc-100', text: 'text-zinc-700' },
+  qualified: { label: 'Qualifie', bg: 'bg-zinc-200', text: 'text-zinc-800' },
   proposal: { label: 'Proposition', bg: 'bg-amber-100', text: 'text-amber-700' },
   negotiation: { label: 'Negociation', bg: 'bg-orange-100', text: 'text-orange-700' },
   won: { label: 'Signe', bg: 'bg-green-100', text: 'text-green-700' },
@@ -148,7 +148,7 @@ const KanbanCard = ({ lead, onMoveNext, isPending }) => {
       </div>
 
       <div className="flex items-center justify-between mt-3">
-        <span className="text-sm font-semibold text-blue-700">
+        <span className="text-sm font-semibold text-gray-900">
           {formatCHF(lead.estimated_value)}
         </span>
 
@@ -156,7 +156,7 @@ const KanbanCard = ({ lead, onMoveNext, isPending }) => {
           <button
             onClick={() => onMoveNext({ leadId: lead.id, newStatus: nextStatus })}
             disabled={isPending}
-            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors disabled:opacity-50"
+            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200 transition-colors disabled:opacity-50"
             title="Passer au statut suivant"
           >
             {isPending ? <Loader2 size={11} className="animate-spin" /> : <ArrowRight size={11} />}
@@ -223,7 +223,7 @@ const LeadListItem = ({ lead, onStatusChange, isPending }) => {
   const lastActivity = formatDate(lead.date_updated || lead.last_contacted_at)
 
   return (
-    <div className="ds-card p-4 hover:border-blue-200 transition-colors">
+    <div className="ds-card p-4 hover:border-zinc-300 transition-colors">
       <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
         {/* Priority dot */}
         <PriorityDot priority={lead.priority} />
@@ -239,7 +239,7 @@ const LeadListItem = ({ lead, onStatusChange, isPending }) => {
         </div>
 
         {/* Value CHF */}
-        <span className="text-sm font-bold text-blue-700 shrink-0">
+        <span className="text-sm font-bold text-gray-900 shrink-0">
           {formatCHF(lead.estimated_value)}
         </span>
 
@@ -258,7 +258,7 @@ const LeadListItem = ({ lead, onStatusChange, isPending }) => {
           <button
             onClick={() => onStatusChange({ leadId: lead.id, newStatus: nextStatus })}
             disabled={isPending}
-            className="flex items-center gap-0.5 px-2 py-1.5 rounded-lg text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors disabled:opacity-50 shrink-0"
+            className="flex items-center gap-0.5 px-2 py-1.5 rounded-lg text-xs font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200 transition-colors disabled:opacity-50 shrink-0"
             title="Avancer au statut suivant"
           >
             {isPending ? <Loader2 size={12} className="animate-spin" /> : <ChevronRight size={14} />}

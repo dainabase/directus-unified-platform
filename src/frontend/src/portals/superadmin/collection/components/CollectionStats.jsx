@@ -51,8 +51,8 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
       {/* Indicateurs clés */}
       <div className="row row-cards mb-4">
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <DollarSign size={24} className="text-primary" />
@@ -75,8 +75,8 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Target size={24} className="text-success" />
@@ -99,8 +99,8 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Clock size={24} className="text-warning" />
@@ -123,8 +123,8 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <FileText size={24} className="text-danger" />
@@ -151,11 +151,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
       <div className="row">
         {/* Évolution recouvrement */}
         <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Évolution du Recouvrement</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Évolution du Recouvrement</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={monthlyTrend}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -188,11 +188,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         
         {/* Répartition par statut */}
         <div className="col-lg-4">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Répartition par Statut</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Répartition par Statut</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
@@ -220,11 +220,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
       <div className="row mt-4">
         {/* Analyse âge créances */}
         <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Analyse de l'Âge des Créances</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Analyse de l'Âge des Créances</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={agingData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -243,11 +243,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         
         {/* Performance étapes LP */}
         <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Efficacité Procédures LP</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Efficacité Procédures LP</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={lpStepsData} layout="horizontal">
                   <CartesianGrid strokeDasharray="3 3" />
@@ -266,11 +266,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
       {/* Tableau de bord détaillé */}
       <div className="row mt-4">
         <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Indicateurs Détaillés</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Indicateurs Détaillés</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="table-responsive">
                 <table className="table table-vcenter">
                   <thead>
@@ -337,11 +337,11 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
         
         {/* Actions recommandées */}
         <div className="col-lg-4">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Actions Recommandées</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Actions Recommandées</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="space-y-3">
                 <div className="d-flex align-items-start">
                   <AlertTriangle size={20} className="text-danger me-3 mt-1" />
@@ -391,14 +391,14 @@ const CollectionStats = ({ company, stats, agingAnalysis, recoveryPerformance })
       {/* Conformité légale */}
       <div className="row mt-4">
         <div className="col-lg-12">
-          <div className="card border-primary">
-            <div className="card-header bg-primary-lt">
-              <h3 className="card-title">
+          <div className="ds-card border-primary">
+            <div className="ds-card-header bg-primary-lt">
+              <h3 className="ds-card-title">
                 <FileText size={20} className="me-2" />
                 Conformité Procédures LP Suisses
               </h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="row">
                 <div className="col-md-6">
                   <h6 className="text-muted mb-3">ÉTAPES RESPECTÉES</h6>

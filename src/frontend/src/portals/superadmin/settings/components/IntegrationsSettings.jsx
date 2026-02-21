@@ -221,7 +221,7 @@ const IntegrationsSettings = () => {
           </p>
         </div>
         <button
-          className="btn btn-outline-primary"
+          className="ds-btn ds-btn-outline-primary"
           onClick={() => refetch()}
           disabled={isLoading}
         >
@@ -236,7 +236,7 @@ const IntegrationsSettings = () => {
           {CATEGORIES.map(cat => (
             <button
               key={cat.id}
-              className={`btn ${activeCategory === cat.id ? 'btn-primary' : 'btn-outline-secondary'}`}
+              className={`ds-btn ${activeCategory === cat.id ? 'ds-btn-primary' : 'ds-btn-outline-secondary'}`}
               onClick={() => setActiveCategory(cat.id)}
             >
               {cat.name}
@@ -253,8 +253,8 @@ const IntegrationsSettings = () => {
 
           return (
             <div className="col-md-6" key={integration.id}>
-              <div className={`card ${isExpanded ? 'border-primary' : ''}`}>
-                <div className="card-header">
+              <div className={`ds-card ${isExpanded ? 'border-primary' : ''}`}>
+                <div className="ds-card-header">
                   <div className="d-flex align-items-center">
                     <div
                       className="avatar bg-light me-3"
@@ -274,18 +274,18 @@ const IntegrationsSettings = () => {
                     {getStatusBadge(integration)}
                   </div>
                 </div>
-                <div className="card-body">
+                <div className="ds-card-body">
                   {/* Quick Actions */}
                   <div className="d-flex gap-2 mb-3">
                     <button
-                      className="btn btn-sm btn-outline-primary"
+                      className="ds-btn ds-btn-sm ds-btn-outline-primary"
                       onClick={() => setExpandedIntegration(isExpanded ? null : integration.id)}
                     >
                       <Settings size={14} className="me-1" />
                       {isExpanded ? 'Fermer' : 'Configurer'}
                     </button>
                     <button
-                      className="btn btn-sm btn-outline-success"
+                      className="ds-btn ds-btn-sm ds-btn-outline-success"
                       onClick={() => handleTest(integration.id)}
                       disabled={testingId === integration.id}
                     >
@@ -301,7 +301,7 @@ const IntegrationsSettings = () => {
                         href={status.docs_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn btn-sm btn-outline-secondary"
+                        className="ds-btn ds-btn-sm ds-btn-outline-secondary"
                       >
                         <ExternalLink size={14} className="me-1" />
                         Docs
@@ -338,7 +338,7 @@ const IntegrationsSettings = () => {
                                   {field.type === 'password' && (
                                     <button
                                       type="button"
-                                      className="btn btn-outline-secondary"
+                                      className="ds-btn ds-btn-outline-secondary"
                                       onClick={() => toggleSecret(integration.id, field.key)}
                                     >
                                       {showSecrets[`${integration.id}-${field.key}`] ? (
@@ -354,13 +354,13 @@ const IntegrationsSettings = () => {
                           </div>
                         ))}
                         <div className="d-flex gap-2">
-                          <button type="submit" className="btn btn-primary">
+                          <button type="submit" className="ds-btn ds-btn-primary">
                             <Save size={14} className="me-1" />
                             Enregistrer
                           </button>
                           <button
                             type="button"
-                            className="btn btn-outline-secondary"
+                            className="ds-btn ds-btn-outline-secondary"
                             onClick={() => setExpandedIntegration(null)}
                           >
                             Annuler

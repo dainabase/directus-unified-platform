@@ -48,8 +48,8 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       {/* KPIs principaux */}
       <div className="row row-cards mb-4">
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <FileText size={24} className="text-zinc-700" />
@@ -72,8 +72,8 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Shield size={24} className="text-zinc-700" />
@@ -96,8 +96,8 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Users size={24} className="text-zinc-700" />
@@ -120,8 +120,8 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
         </div>
         
         <div className="col-sm-6 col-lg-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="row align-items-center">
                 <div className="col-auto">
                   <Award size={24} className="text-zinc-700" />
@@ -148,11 +148,11 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       <div className="row">
         {/* Évolution temporelle */}
         <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Évolution des Acceptations et Signatures</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Évolution des Acceptations et Signatures</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={monthlyAcceptances}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -185,11 +185,11 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
         
         {/* Répartition par type */}
         <div className="col-lg-4">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Documents par Type</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Documents par Type</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
@@ -217,11 +217,11 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       <div className="row mt-4">
         {/* Score conformité détaillé */}
         <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Score de Conformité Détaillé</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Score de Conformité Détaillé</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={complianceData} layout="horizontal" margin={{ left: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -237,11 +237,11 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
         
         {/* Types de signatures */}
         <div className="col-lg-6">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Signatures par Niveau de Sécurité</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Signatures par Niveau de Sécurité</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -287,11 +287,11 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       {/* Alertes et recommandations */}
       <div className="row mt-4">
         <div className="col-lg-12">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Alertes et Recommandations</h3>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h3 className="ds-card-title">Alertes et Recommandations</h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="row">
                 <div className="col-md-4">
                   <div className="d-flex align-items-start">
@@ -335,14 +335,14 @@ const LegalStats = ({ company, stats, cgvList, signatureRequests }) => {
       {/* Résumé légal */}
       <div className="row mt-4">
         <div className="col-lg-12">
-          <div className="card border-zinc-200">
-            <div className="card-header bg-zinc-50">
-              <h3 className="card-title">
+          <div className="ds-card border-zinc-200">
+            <div className="ds-card-header bg-zinc-50">
+              <h3 className="ds-card-title">
                 <Shield size={20} className="me-2" />
                 Résumé Conformité Légale Suisse
               </h3>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <div className="row">
                 <div className="col-md-6">
                   <h6 className="text-muted mb-3">BASES LÉGALES RESPECTÉES</h6>

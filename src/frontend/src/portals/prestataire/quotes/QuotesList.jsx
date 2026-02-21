@@ -22,7 +22,7 @@ const formatCHF = (value) =>
 const STATUS_CONFIG = {
   new: { label: 'Nouveau', color: 'bg-red-100 text-red-700', icon: AlertTriangle },
   pending: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700', icon: Clock },
-  submitted: { label: 'Soumis', color: 'bg-blue-100 text-blue-700', icon: FileText },
+  submitted: { label: 'Soumis', color: 'bg-zinc-100 text-zinc-700', icon: FileText },
   accepted: { label: 'Accepté', color: 'bg-green-100 text-green-700', icon: CheckCircle },
   rejected: { label: 'Refusé', color: 'bg-gray-100 text-gray-600', icon: XCircle }
 }
@@ -105,7 +105,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
       {/* Header + Filtres */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-blue-600" />
+          <FileText className="w-5 h-5" style={{ color: 'var(--accent, #0071E3)' }} />
           <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Demandes de devis
           </h3>
@@ -159,7 +159,7 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
                 return (
                   <tr
                     key={p.id}
-                    className={`border-b border-gray-50 hover:bg-gray-50/50 cursor-pointer ${isNew ? 'bg-blue-50/30' : ''}`}
+                    className={`border-b border-gray-50 hover:bg-gray-50/50 cursor-pointer ${isNew ? 'bg-zinc-50/50' : ''}`}
                     onClick={() => handleRowClick(p)}
                   >
                     <td className="py-3 text-gray-500 font-mono text-xs">
@@ -198,13 +198,13 @@ const QuotesList = ({ onSelectQuote, onRespondQuote }) => {
                       {(p.status === 'new' || p.status === 'pending') && (
                         <button
                           onClick={(e) => { e.stopPropagation(); onRespondQuote?.(p) }}
-                          className="px-3 py-1 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors"
+                          className="px-3 py-1 rounded-lg text-xs font-medium text-white transition-colors" style={{ backgroundColor: 'var(--accent, #0071E3)' }}
                         >
                           Répondre
                         </button>
                       )}
                       {p.status === 'submitted' && (
-                        <span className="text-xs text-blue-600 font-medium">En révision</span>
+                        <span className="text-xs font-medium" style={{ color: 'var(--accent, #0071E3)' }}>En révision</span>
                       )}
                     </td>
                   </tr>

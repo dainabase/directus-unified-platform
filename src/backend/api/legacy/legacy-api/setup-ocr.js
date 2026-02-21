@@ -122,9 +122,9 @@ async function setupEnvironment() {
         console.log(`     2. Ajoutez-la dans le fichier .env: NOTION_API_KEY=votre_clé_ici`);
         console.log(`     3. Ou utilisez la clé de test par défaut (limitée)`);
         
-        // Utiliser une clé de test si aucune n'est fournie
-        envConfig.NOTION_API_KEY = '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';
-        console.log(`\n${colors.yellow}  ℹ️  Utilisation de la clé de test par défaut${colors.reset}`);
+        // Leave NOTION_API_KEY empty — user must provide their own key via .env
+        envConfig.NOTION_API_KEY = process.env.NOTION_API_KEY || '';
+        console.log(`\n${colors.yellow}  ⚠️  NOTION_API_KEY non configurée. Ajoutez-la dans .env pour activer Notion.${colors.reset}`);
     }
     
     // Créer le contenu du fichier .env

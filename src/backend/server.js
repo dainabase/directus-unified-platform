@@ -212,10 +212,10 @@ try {
   const kpisDailyReportRouter = await import('./api/kpis/daily-report.js');
   const kpisTreasuryRouter = await import('./api/kpis/treasury-forecast.js');
 
-  app.use('/api/kpis', kpisRouter.default);
-  app.use('/api/kpis', kpisThresholdsRouter.default);
-  app.use('/api/kpis', kpisDailyReportRouter.default);
-  app.use('/api/kpis/treasury', kpisTreasuryRouter.default);
+  app.use('/api/kpis', authMiddleware, kpisRouter.default);
+  app.use('/api/kpis', authMiddleware, kpisThresholdsRouter.default);
+  app.use('/api/kpis', authMiddleware, kpisDailyReportRouter.default);
+  app.use('/api/kpis/treasury', authMiddleware, kpisTreasuryRouter.default);
 
   // Start daily CEO report CRON (07h00)
   const { startDailyCEOReport } = kpisDailyReportRouter;
@@ -235,7 +235,7 @@ try {
 
 try {
   const milestonesRouter = await import('./api/milestones/index.js');
-  app.use('/api/milestones', milestonesRouter.default);
+  app.use('/api/milestones', authMiddleware, companyFilter, milestonesRouter.default);
   console.log('[api] Milestones connected: /api/milestones (I-01)');
 } catch (err) {
   console.warn('[api] Milestones not available:', err.message);
@@ -243,7 +243,7 @@ try {
 
 try {
   const subscriptionsApiRouter = await import('./api/subscriptions/index.js');
-  app.use('/api/subscriptions', subscriptionsApiRouter.default);
+  app.use('/api/subscriptions', authMiddleware, companyFilter, subscriptionsApiRouter.default);
   console.log('[api] Subscriptions API connected: /api/subscriptions (I-02)');
 } catch (err) {
   console.warn('[api] Subscriptions API not available:', err.message);
@@ -251,7 +251,7 @@ try {
 
 try {
   const billingCronRouter = await import('./api/subscriptions/billing-cron.js');
-  app.use('/api/subscriptions', billingCronRouter.default);
+  app.use('/api/subscriptions', authMiddleware, billingCronRouter.default);
   const { startRecurringBillingCron } = billingCronRouter;
   if (startRecurringBillingCron) {
     startRecurringBillingCron();
@@ -263,7 +263,7 @@ try {
 
 try {
   const creditsRouter = await import('./api/credits/index.js');
-  app.use('/api/credits', creditsRouter.default);
+  app.use('/api/credits', authMiddleware, companyFilter, creditsRouter.default);
   console.log('[api] Credits connected: /api/credits (I-04)');
 } catch (err) {
   console.warn('[api] Credits not available:', err.message);
@@ -271,7 +271,7 @@ try {
 
 try {
   const supplierInvoicesRouter = await import('./api/supplier-invoices/index.js');
-  app.use('/api/supplier-invoices', supplierInvoicesRouter.default);
+  app.use('/api/supplier-invoices', authMiddleware, companyFilter, supplierInvoicesRouter.default);
   console.log('[api] Supplier invoices connected: /api/supplier-invoices (I-05/I-06)');
 } catch (err) {
   console.warn('[api] Supplier invoices not available:', err.message);
@@ -279,7 +279,7 @@ try {
 
 try {
   const timeTrackingApiRouter = await import('./api/time-tracking/index.js');
-  app.use('/api/time-tracking', timeTrackingApiRouter.default);
+  app.use('/api/time-tracking', authMiddleware, companyFilter, timeTrackingApiRouter.default);
   console.log('[api] Time tracking API connected: /api/time-tracking (I-07)');
 } catch (err) {
   console.warn('[api] Time tracking API not available:', err.message);
@@ -287,7 +287,7 @@ try {
 
 try {
   const supportApiRouter = await import('./api/support/index.js');
-  app.use('/api/support', supportApiRouter.default);
+  app.use('/api/support', authMiddleware, companyFilter, supportApiRouter.default);
   console.log('[api] Support API connected: /api/support (I-08)');
 } catch (err) {
   console.warn('[api] Support API not available:', err.message);
@@ -299,6 +299,8 @@ try {
 
 try {
   const leadsRoutes = await import('./api/leads/index.js');
+  // NOTE: Leads routes include external webhook endpoints (wp-webhook, whatsapp-webhook)
+  // that handle their own authentication. Global authMiddleware not applied here.
   app.use('/api/leads', leadsRoutes.default);
   console.log('[api] Lead capture connected: /api/leads (F-01 WP, F-02 WhatsApp, F-03 IMAP, F-04 Ringover)');
 } catch (err) {
@@ -311,6 +313,8 @@ try {
 
 try {
   const emailRoutes = await import('./api/email/index.js');
+  // NOTE: Email routes are called by Directus Flows internally.
+  // No JWT auth applied; routes should validate X-API-Key or internal origin.
   app.use('/api/email', emailRoutes.default);
   console.log('[api] Email automation connected: /api/email (6 flows Phase E)');
 } catch (err) {
@@ -323,6 +327,8 @@ try {
 
 try {
   const workflowsRouter = await import('./api/workflows/index.js');
+  // NOTE: Workflow routes include external webhook endpoints (docuseal, revolut)
+  // that handle their own HMAC authentication. Global authMiddleware not applied here.
   app.use('/api/workflows', workflowsRouter.default);
 
   // Start monthly CEO report CRON
@@ -343,7 +349,7 @@ try {
 
 try {
   const notificationsRouter = await import('./api/notifications/index.js');
-  app.use('/api/notifications', notificationsRouter.default);
+  app.use('/api/notifications', authMiddleware, notificationsRouter.default);
   console.log('[api] Notifications connected: /api/notifications (Phase 7)');
 } catch (err) {
   console.warn('[api] Notifications not available:', err.message);
@@ -388,8 +394,8 @@ try {
 // PROXY DIRECTUS LEGACY
 // ============================================
 
-// Proxy simple vers Directus
-app.get('/api/directus/items/:collection', async (req, res) => {
+// Proxy simple vers Directus (protected)
+app.get('/api/directus/items/:collection', authMiddleware, async (req, res) => {
   try {
     const response = await axios.get(
       `${DIRECTUS_URL}/items/${req.params.collection}`,
@@ -404,8 +410,8 @@ app.get('/api/directus/items/:collection', async (req, res) => {
   }
 });
 
-// Endpoint OCR pour scanner les factures
-app.post('/api/ocr/scan-invoice', async (req, res) => {
+// Endpoint OCR pour scanner les factures (protected)
+app.post('/api/ocr/scan-invoice', authMiddleware, async (req, res) => {
   try {
     const { image } = req.body;
 
@@ -582,7 +588,7 @@ app.use('/graphql', createProxyMiddleware({
 // API Invoice Ninja - ES Modules
 try {
   const invoiceNinjaRouter = await import('./api/invoice-ninja/index.js');
-  app.use('/api/invoice-ninja', invoiceNinjaRouter.default);
+  app.use('/api/invoice-ninja', authMiddleware, invoiceNinjaRouter.default);
   console.log('✅ API Invoice Ninja connectée: /api/invoice-ninja');
 } catch (err) {
   console.warn('⚠️ API Invoice Ninja non disponible:', err.message);
@@ -600,7 +606,7 @@ try {
 // API ERPNext - À convertir
 try {
   const erpnextRouter = await import('./api/erpnext/index.js');
-  app.use('/api/erpnext', erpnextRouter.default);
+  app.use('/api/erpnext', authMiddleware, erpnextRouter.default);
   console.log('✅ API ERPNext connectée: /api/erpnext');
 } catch (err) {
   console.warn('⚠️ API ERPNext non disponible:', err.message);
@@ -609,7 +615,7 @@ try {
 // API Mautic - À convertir
 try {
   const mauticRouter = await import('./api/mautic/router.js');
-  app.use('/api/mautic', mauticRouter.default);
+  app.use('/api/mautic', authMiddleware, mauticRouter.default);
   console.log('✅ API Mautic connectée: /api/mautic');
 } catch (err) {
   console.warn('⚠️ API Mautic non disponible:', err.message);

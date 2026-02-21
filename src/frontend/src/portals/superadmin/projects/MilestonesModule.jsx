@@ -71,8 +71,8 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
 
   if (!projectId) {
     return (
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-6">
-        <p className="text-gray-400">Selectionnez un projet pour voir les jalons.</p>
+      <div className="ds-card p-6">
+        <p className="text-zinc-500">Selectionnez un projet pour voir les jalons.</p>
       </div>
     )
   }
@@ -81,10 +81,10 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
   const summary = data?.summary || {}
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden">
+    <div className="ds-card overflow-hidden">
       {/* Header */}
       <div
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5"
+        className="flex items-center justify-between p-4 cursor-pointer hover:bg-zinc-50"
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
 
       {/* Table */}
       {expanded && (
-        <div className="border-t border-white/10">
+        <div className="border-t border-zinc-200">
           {isLoading ? (
             <div className="flex justify-center p-8">
               <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
@@ -123,7 +123,7 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-gray-400 text-xs border-b border-white/10">
+                <tr className="text-gray-400 text-xs border-b border-zinc-200">
                   <th className="text-left p-3">Livrable</th>
                   <th className="text-center p-3">Statut</th>
                   <th className="text-right p-3">Montant</th>
@@ -132,7 +132,7 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
               </thead>
               <tbody>
                 {milestones.map(m => (
-                  <tr key={m.id} className="border-b border-white/5 hover:bg-white/5">
+                  <tr key={m.id} className="border-b border-zinc-100 hover:bg-zinc-50">
                     <td className="p-3">
                       <p className="text-white font-medium">{m.title}</p>
                       {m.description && <p className="text-gray-500 text-xs truncate max-w-xs">{m.description}</p>}
@@ -176,7 +176,7 @@ export default function MilestonesModule({ projectId, projectName, selectedCompa
 
           {/* Footer summary */}
           {milestones.length > 0 && (
-            <div className="flex justify-between items-center p-3 bg-white/5 text-xs">
+            <div className="flex justify-between items-center p-3 bg-zinc-50 text-xs">
               <span className="text-gray-400">
                 Total facture : {formatCHF(summary.invoiced_amount)} / {formatCHF(summary.total_amount)}
               </span>

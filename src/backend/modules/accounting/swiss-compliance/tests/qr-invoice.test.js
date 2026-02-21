@@ -454,7 +454,7 @@ describe('QR-Factures ISO 20022 v2.3 - Tests de Conformité', () => {
                 .toMatch(/^\d{2} \d{5} \d{5} \d{5} \d{5} \d{5} \d{1}$/);
             
             expect(QRInvoiceUtils.formatters.amount(1500.75, 'CHF'))
-                .toBe('CHF 1'500.75');
+                .toBe("CHF 1'500.75");
         });
     });
     

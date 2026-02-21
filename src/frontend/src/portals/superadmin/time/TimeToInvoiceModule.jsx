@@ -144,7 +144,7 @@ const TimeToInvoiceModule = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
       </div>
     )
   }
@@ -154,7 +154,7 @@ const TimeToInvoiceModule = () => {
       {/* Header */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <Receipt size={20} className="text-indigo-500" />
+          <Receipt size={20} style={{ color: 'var(--accent, #0071E3)' }} />
           Facturation en regie
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
@@ -203,7 +203,7 @@ const TimeToInvoiceModule = () => {
                 <thead>
                   <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
                     <th className="px-4 py-3 w-10">
-                      <button onClick={toggleSelectAll} className="text-gray-400 hover:text-blue-600">
+                      <button onClick={toggleSelectAll} className="text-gray-400 hover:text-gray-700">
                         {selected.size === filtered.length && filtered.length > 0 ? <CheckSquare size={16} /> : <Square size={16} />}
                       </button>
                     </th>
@@ -220,10 +220,10 @@ const TimeToInvoiceModule = () => {
                     const hasRate = e.hourly_rate != null && e.hourly_rate > 0
                     const amount = hasRate ? (e.hours || 0) * e.hourly_rate : 0
                     return (
-                      <tr key={e.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(e.id) ? 'bg-blue-50/30' : ''}`}>
+                      <tr key={e.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(e.id) ? 'bg-zinc-50/50' : ''}`}>
                         <td className="px-4 py-3">
-                          <button onClick={() => toggleSelect(e.id)} className="text-gray-400 hover:text-blue-600">
-                            {selected.has(e.id) ? <CheckSquare size={16} className="text-blue-600" /> : <Square size={16} />}
+                          <button onClick={() => toggleSelect(e.id)} className="text-gray-400 hover:text-gray-700">
+                            {selected.has(e.id) ? <CheckSquare size={16} style={{ color: 'var(--accent, #0071E3)' }} /> : <Square size={16} />}
                           </button>
                         </td>
                         <td className="px-4 py-3 text-xs text-gray-500">
@@ -233,7 +233,7 @@ const TimeToInvoiceModule = () => {
                           {e.project_name || <span className="text-gray-400 italic">Projet non assigne</span>}
                         </td>
                         <td className="px-4 py-3">
-                          <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-bold">{e.hours}h</span>
+                          <span className="px-2 py-0.5 bg-zinc-100 text-zinc-700 rounded-full text-xs font-bold">{e.hours}h</span>
                         </td>
                         <td className="px-4 py-3">
                           {hasRate ? (
@@ -260,7 +260,7 @@ const TimeToInvoiceModule = () => {
           <div className="space-y-4">
             <div className="ds-card p-5 space-y-4">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <FileText size={16} className="text-indigo-500" />
+                <FileText size={16} style={{ color: 'var(--accent, #0071E3)' }} />
                 Recapitulatif facture
               </h3>
 
@@ -283,7 +283,7 @@ const TimeToInvoiceModule = () => {
                 </div>
                 <div className="border-t border-gray-100 pt-2 flex justify-between">
                   <span className="text-gray-700 font-medium">Total TTC</span>
-                  <span className="font-bold text-lg text-indigo-600">{formatCHF(summary.ttc)}</span>
+                  <span className="font-bold text-lg" style={{ color: 'var(--accent, #0071E3)' }}>{formatCHF(summary.ttc)}</span>
                 </div>
               </div>
 
@@ -303,7 +303,7 @@ const TimeToInvoiceModule = () => {
                     type="text"
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                     placeholder="Nom du client"
                   />
                 </div>
@@ -313,7 +313,7 @@ const TimeToInvoiceModule = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-zinc-400 focus:border-zinc-400"
                     placeholder="Facturation en regie..."
                   />
                 </div>
@@ -322,7 +322,7 @@ const TimeToInvoiceModule = () => {
               <button
                 onClick={() => generateMutation.mutate()}
                 disabled={selected.size === 0 || !clientName.trim() || generateMutation.isPending}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors" style={{ backgroundColor: 'var(--accent, #0071E3)' }}
               >
                 {generateMutation.isPending ? (
                   <Loader2 size={16} className="animate-spin" />

@@ -83,13 +83,13 @@ const UsersSettings = () => {
         </div>
         <div className="d-flex gap-2">
           <button
-            className="btn btn-outline-secondary"
+            className="ds-btn ds-btn-outline-secondary"
             onClick={() => refetch()}
             disabled={isLoading}
           >
             <RefreshCw size={16} className={isLoading ? 'spin' : ''} />
           </button>
-          <button className="btn btn-primary" onClick={handleCreate}>
+          <button className="ds-btn ds-btn-primary" onClick={handleCreate}>
             <UserPlus size={16} className="me-1" />
             Nouvel utilisateur
           </button>
@@ -228,14 +228,14 @@ const UsersSettings = () => {
                     </td>
                     <td className="text-end">
                       <button
-                        className="btn btn-sm btn-ghost-primary me-1"
+                        className="ds-btn ds-btn-sm ds-btn-ghost-primary me-1"
                         onClick={() => handleEdit(user)}
                         title="Modifier"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
-                        className="btn btn-sm btn-ghost-danger"
+                        className="ds-btn ds-btn-sm ds-btn-ghost-danger"
                         title="Supprimer"
                       >
                         <Trash2 size={14} />
@@ -357,10 +357,10 @@ const UserModal = ({ user, onClose, onSave }) => {
                       <button
                         key={company}
                         type="button"
-                        className={`btn btn-sm ${
+                        className={`ds-btn ds-btn-sm ${
                           formData.companies.includes(company)
-                            ? 'btn-primary'
-                            : 'btn-outline-secondary'
+                            ? 'ds-btn-primary'
+                            : 'ds-btn-outline-secondary'
                         }`}
                         onClick={() => handleCompanyToggle(company)}
                       >
@@ -386,10 +386,10 @@ const UserModal = ({ user, onClose, onSave }) => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
+              <button type="button" className="ds-btn ds-btn-secondary" onClick={onClose}>
                 Annuler
               </button>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="ds-btn ds-btn-primary">
                 {user ? 'Mettre a jour' : 'Creer'}
               </button>
             </div>

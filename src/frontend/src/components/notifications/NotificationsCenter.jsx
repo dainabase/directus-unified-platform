@@ -34,14 +34,14 @@ const NotificationsCenter = ({
   isMarkingAllRead = false
 }) => {
   return (
-    <div className="absolute right-0 top-full mt-2 w-96 bg-white/95 backdrop-blur-lg rounded-xl border border-gray-200/50 shadow-2xl z-50 max-h-[80vh] flex flex-col">
+    <div className="absolute right-0 top-full mt-2 w-96 bg-white rounded-xl border border-zinc-200 shadow-2xl z-50 max-h-[80vh] flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bell size={16} className="text-gray-600" />
           <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
           {unreadCount > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--accent-light, #e8f0fe)', color: 'var(--accent, #0071E3)' }}>
               {unreadCount}
             </span>
           )}
@@ -51,7 +51,7 @@ const NotificationsCenter = ({
             <button
               onClick={onMarkAllRead}
               disabled={isMarkingAllRead}
-              className="text-xs text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50"
+              className="text-xs font-medium disabled:opacity-50" style={{ color: 'var(--accent, #0071E3)' }}
             >
               {isMarkingAllRead ? (
                 <Loader2 size={12} className="animate-spin" />
@@ -75,7 +75,7 @@ const NotificationsCenter = ({
       <div className="overflow-y-auto flex-1">
         {isLoading ? (
           <div className="flex items-center justify-center py-10">
-            <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
           </div>
         ) : notifications.length === 0 ? (
           <div className="py-10 text-center">
@@ -95,7 +95,7 @@ const NotificationsCenter = ({
                 <div
                   key={n.id}
                   className={`px-4 py-3 flex items-start gap-3 hover:bg-gray-50/50 transition-colors cursor-pointer ${
-                    !n.is_read ? 'bg-blue-50/30' : ''
+                    !n.is_read ? 'bg-zinc-50/50' : ''
                   }`}
                   onClick={() => !n.is_read && onMarkRead?.(n.id)}
                 >
@@ -112,7 +112,7 @@ const NotificationsCenter = ({
                     <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
                   </div>
                   {!n.is_read && (
-                    <div className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-2" />
+                    <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: 'var(--accent, #0071E3)' }} />
                   )}
                 </div>
               )

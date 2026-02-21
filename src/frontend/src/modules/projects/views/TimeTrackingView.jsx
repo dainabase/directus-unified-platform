@@ -79,10 +79,10 @@ const mockWeeklyData = [
 ];
 
 const mockProjectDistribution = [
-  { name: 'Refonte Site Web', hours: 24, color: '#3b82f6' },
+  { name: 'Refonte Site Web', hours: 24, color: '#0071E3' },
   { name: 'Application Mobile', hours: 18, color: '#10b981' },
   { name: 'ERP Integration', hours: 12, color: '#f59e0b' },
-  { name: 'Migration Cloud', hours: 8, color: '#8b5cf6' }
+  { name: 'Migration Cloud', hours: 8, color: '#71717a' }
 ];
 
 const PROJECTS = [
@@ -206,11 +206,11 @@ const TimeTrackingView = ({ selectedCompany }) => {
             </div>
           </div>
           <div className="col-auto ms-auto d-flex gap-2">
-            <button className="btn btn-outline-secondary">
+            <button className="ds-btn ds-btn-outline-secondary">
               <Download size={16} className="me-1" />
               Exporter
             </button>
-            <button className="btn btn-primary" onClick={() => setShowNewEntryModal(true)}>
+            <button className="ds-btn ds-btn-primary" onClick={() => setShowNewEntryModal(true)}>
               <Plus size={16} className="me-1" />
               Nouvelle entree
             </button>
@@ -219,8 +219,8 @@ const TimeTrackingView = ({ selectedCompany }) => {
       </div>
 
       {/* Timer Widget */}
-      <div className="card mb-4 bg-primary-lt">
-        <div className="card-body">
+      <div className="ds-card mb-4 bg-primary-lt">
+        <div className="ds-card-body">
           <div className="row align-items-center">
             <div className="col-auto">
               <div className="display-6 font-monospace fw-bold text-primary">
@@ -241,16 +241,16 @@ const TimeTrackingView = ({ selectedCompany }) => {
             </div>
             <div className="col-auto d-flex gap-2">
               {!isTracking ? (
-                <button className="btn btn-success btn-lg" onClick={startTimer}>
+                <button className="ds-btn ds-btn-success btn-lg" onClick={startTimer}>
                   <Play size={20} className="me-1" />
                   Demarrer
                 </button>
               ) : (
                 <>
-                  <button className="btn btn-warning btn-lg" onClick={pauseTimer}>
+                  <button className="ds-btn ds-btn-warning btn-lg" onClick={pauseTimer}>
                     <Pause size={20} />
                   </button>
-                  <button className="btn btn-danger btn-lg" onClick={stopTimer}>
+                  <button className="ds-btn ds-btn-danger btn-lg" onClick={stopTimer}>
                     <StopCircle size={20} className="me-1" />
                     Arreter
                   </button>
@@ -264,8 +264,8 @@ const TimeTrackingView = ({ selectedCompany }) => {
       {/* KPIs */}
       <div className="row g-3 mb-4">
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <Clock size={20} className="text-primary me-2" />
                 <span className="text-muted small">Aujourd'hui</span>
@@ -275,8 +275,8 @@ const TimeTrackingView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <Calendar size={20} className="text-info me-2" />
                 <span className="text-muted small">Cette semaine</span>
@@ -286,8 +286,8 @@ const TimeTrackingView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <Target size={20} className="text-success me-2" />
                 <span className="text-muted small">Facturable</span>
@@ -297,8 +297,8 @@ const TimeTrackingView = ({ selectedCompany }) => {
           </div>
         </div>
         <div className="col-md-3">
-          <div className="card">
-            <div className="card-body">
+          <div className="ds-card">
+            <div className="ds-card-body">
               <div className="d-flex align-items-center mb-2">
                 <TrendingUp size={20} className="text-warning me-2" />
                 <span className="text-muted small">Revenus</span>
@@ -312,29 +312,29 @@ const TimeTrackingView = ({ selectedCompany }) => {
       {/* Charts Row */}
       <div className="row g-4 mb-4">
         <div className="col-lg-8">
-          <div className="card">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Heures par jour (cette semaine)</h5>
+          <div className="ds-card">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Heures par jour (cette semaine)</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={mockWeeklyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip formatter={(v) => `${v}h`} />
-                  <Bar dataKey="hours" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="hours" fill="#0071E3" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
         <div className="col-lg-4">
-          <div className="card h-100">
-            <div className="card-header">
-              <h5 className="card-title mb-0">Par projet</h5>
+          <div className="ds-card h-100">
+            <div className="ds-card-header">
+              <h5 className="ds-card-title mb-0">Par projet</h5>
             </div>
-            <div className="card-body">
+            <div className="ds-card-body">
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie
@@ -399,7 +399,7 @@ const TimeTrackingView = ({ selectedCompany }) => {
       </div>
 
       {/* Time Entries Table */}
-      <div className="card">
+      <div className="ds-card">
         <div className="table-responsive">
           <table className="table table-hover card-table">
             <thead>
@@ -455,11 +455,11 @@ const TimeTrackingView = ({ selectedCompany }) => {
                   </td>
                   <td className="text-end">
                     <div className="btn-group">
-                      <button className="btn btn-sm btn-ghost-primary" title="Modifier">
+                      <button className="ds-btn ds-btn-sm ds-btn-ghost-primary" title="Modifier">
                         <Edit2 size={14} />
                       </button>
                       <button
-                        className="btn btn-sm btn-ghost-danger"
+                        className="ds-btn ds-btn-sm ds-btn-ghost-danger"
                         onClick={() => handleDelete(entry.id)}
                         title="Supprimer"
                       >
@@ -537,10 +537,10 @@ const TimeTrackingView = ({ selectedCompany }) => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setShowNewEntryModal(false)}>
+                <button className="ds-btn ds-btn-secondary" onClick={() => setShowNewEntryModal(false)}>
                   Annuler
                 </button>
-                <button className="btn btn-primary" onClick={handleAddEntry}>
+                <button className="ds-btn ds-btn-primary" onClick={handleAddEntry}>
                   Ajouter
                 </button>
               </div>

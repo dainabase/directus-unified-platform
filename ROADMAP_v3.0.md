@@ -44,15 +44,15 @@
 
 | # | Story | Prio | Statut | Critère de done |
 |---|-------|------|--------|------------------|
-| A.1 | Vérifier via MCP : `messages`, `knowledge_base`, `email_templates` existent ? | 🔥 | 🔴 | Rapport MCP avec champs |
-| A.2 | Créer collection `commissions` — schéma CDC v2.0 §7.1 | 🔥 | 🔴 | `describe_table commissions` OK |
-| A.3 | Créer/compléter collection `messages` — schéma CDC v2.0 §7.2 | 🔥 | 🔴 | Tous champs requis présents |
-| A.4 | Créer/compléter collection `knowledge_base` — schéma CDC v2.0 §7.3 | ⚡ | 🔴 | Tous champs requis présents |
-| A.5 | Créer/compléter collection `email_templates` — schéma CDC v2.0 §7.4 | ⚡ | 🔴 | Tous champs requis présents |
-| A.6 | Audit mock data : inventaire complet fichiers JSX avec données hardcodées | 🔥 | 🔴 | Liste exhaustive chemin + ligne |
-| A.7 | Vérifier taux TVA dans TOUS les fichiers (aucun 7.7, 2.5, 3.7 résiduel) | 🔥 | 🔴 | grep retourne 0 résultat TVA |
+| A.1 | Vérifier via MCP : `messages`, `knowledge_base`, `email_templates` existent ? | 🔥 | 🟢 | 2026-02-21 — commissions/messages/knowledge_base manquantes, email_templates OK (12 champs) |
+| A.2 | Créer collection `commissions` — schéma CDC v2.0 §7.1 | 🔥 | 🟢 | 2026-02-21 — 13 champs + 3 M2O (reseller_id→people, deal_id→quotes, invoice_id→client_invoices) |
+| A.3 | Créer/compléter collection `messages` — schéma CDC v2.0 §7.2 | 🔥 | 🟢 | 2026-02-21 — 8 champs + 3 M2O (sender_id→directus_users, recipient_id→directus_users, project_id→projects) |
+| A.4 | Créer/compléter collection `knowledge_base` — schéma CDC v2.0 §7.3 | ⚡ | 🟢 | 2026-02-21 — 11 champs + 1 M2O (author_id→directus_users), slug unique, status draft/published |
+| A.5 | Créer/compléter collection `email_templates` — schéma CDC v2.0 §7.4 | ⚡ | 🟢 | 2026-02-21 — Existait (12 champs), champ `language` (FR/DE/EN) ajouté → 13 champs total |
+| A.6 | Audit mock data : inventaire complet fichiers JSX avec données hardcodées | 🔥 | 🟢 | 2026-02-21 — 35 findings → `docs/audit-mock-data.md` (18 mock, 14 TODO, 2 hardcoded, 2 fake) |
+| A.7 | Vérifier taux TVA dans TOUS les fichiers (aucun 7.7, 2.5, 3.7 résiduel) | 🔥 | 🟢 | 2026-02-21 — 1 fix (populate-directus.js 0.077→0.081), accounting-engine historique=OK, tests=OK |
 
-**Critère de sortie Phase A** : Toutes les collections existent. Inventaire mock data complet. Zéro ancien taux TVA.
+**Critère de sortie Phase A** : ✅ Toutes les collections existent. Inventaire mock data documenté. Taux TVA conformes.
 
 ---
 
@@ -194,7 +194,7 @@
 
 | Phase | Stories | Semaine | Objectif |
 |-------|---------|---------|----------|
-| A — Fondation Données | 7 | S1 | Collections créées, mock data inventorié |
+| A — Fondation Données | 7 | S1 | ✅ 100% (2026-02-21) — 4 collections, audit mock, TVA OK |
 | B — Connecter | 15 | S1-S2 | Zéro mock, workflows testés en réel |
 | C — Simplifier UX | 7 | S2-S3 | Sidebar ≤7, Dashboard workflow-first |
 | D — Rendre Visible | 11 | S3-S4 | 4 Hubs + actions contextuelles |
@@ -237,5 +237,5 @@
 
 *ROADMAP v3.0 — Février 2026*  
 *Remplace ROADMAP v2.0*  
-*52 stories identifiées — 0% complété (baseline a59152d)*  
+*52 stories identifiées — 13% complété (7/52) — Phase A terminée*  
 *Cible production : 6 semaines — fin mars 2026*

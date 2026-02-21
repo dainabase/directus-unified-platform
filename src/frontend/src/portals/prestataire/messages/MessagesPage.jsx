@@ -3,6 +3,7 @@
  * CEO <-> Prestataire messaging system.
  * 2-panel layout: conversations list (left) + messages thread (right).
  * Uses Directus collection `messages` filtered by provider_id.
+ * Fields: id, sender_id, recipient_id, project_id, content, attachments, read_at, date_created
  * Responsive: mobile shows one panel at a time.
  */
 
@@ -84,11 +85,11 @@ const NewConversationForm = ({ providerId, onCancel, onSent }) => {
   const sendMutation = useMutation({
     mutationFn: async () => {
       await api.post('/items/messages', {
-        sender_provider_id: providerId,
+        sender_id: providerId,
         subject: subject.trim() || 'Message',
         content: content.trim(),
         project_id: projectId || null,
-        read: false,
+        read_at: null,
         date_created: new Date().toISOString()
       })
     },
@@ -279,14 +280,14 @@ const MessagesPage = () => {
         params: {
           filter: {
             _or: [
-              { sender_provider_id: { _eq: providerId } },
-              { recipient_provider_id: { _eq: providerId } }
+              { sender_id: { _eq: providerId } },
+              { recipient_id: { _eq: providerId } }
             ]
           },
           fields: [
             'id', 'subject', 'content', 'date_created',
-            'sender_provider_id', 'recipient_provider_id',
-            'read', 'project_id.name', 'project_id.id'
+            'sender_id', 'recipient_id',
+            'read_at', 'project_id.name', 'project_id.id'
           ],
           sort: ['-date_created'],
           limit: 50
@@ -330,8 +331,8 @@ const MessagesPage = () => {
 
       // Track unread incoming messages
       if (
-        msg.read === false &&
-        msg.sender_provider_id !== providerId
+        !msg.read_at &&
+        msg.sender_id !== providerId
       ) {
         grouped[key].hasUnread = true
       }
@@ -385,13 +386,13 @@ const MessagesPage = () => {
     const conv = conversations.find(c => c.key === convKey)
     if (conv?.hasUnread) {
       const unreadIds = conv.messages
-        .filter(m => !m.read && m.sender_provider_id !== providerId)
+        .filter(m => !m.read_at && m.sender_id !== providerId)
         .map(m => m.id)
 
       if (unreadIds.length > 0) {
         // Mark each as read (batch)
         Promise.all(
-          unreadIds.map(id => api.patch(`/items/messages/${id}`, { read: true }))
+          unreadIds.map(id => api.patch(`/items/messages/${id}`, { read_at: new Date().toISOString() }))
         ).then(() => {
           queryClient.invalidateQueries({ queryKey: ['provider-conversations'] })
         }).catch(() => { /* silent */ })
@@ -403,11 +404,11 @@ const MessagesPage = () => {
   const sendMessageMutation = useMutation({
     mutationFn: async ({ subject, content, projectId }) => {
       await api.post('/items/messages', {
-        sender_provider_id: providerId,
+        sender_id: providerId,
         subject: subject || selectedConversation?.subject || 'Message',
         content,
         project_id: projectId || null,
-        read: false,
+        read_at: null,
         date_created: new Date().toISOString()
       })
     },
@@ -446,7 +447,7 @@ const MessagesPage = () => {
     setShowNewConversation(false)
   }
 
-  const isOutgoing = (msg) => msg.sender_provider_id === providerId
+  const isOutgoing = (msg) => msg.sender_id === providerId
 
   // ── Total unread count ──
   const unreadCount = conversations.filter(c => c.hasUnread).length

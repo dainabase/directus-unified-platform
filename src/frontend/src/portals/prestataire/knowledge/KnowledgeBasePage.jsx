@@ -1,7 +1,8 @@
 /**
  * KnowledgeBasePage — Story 4.7
  * /prestataire/knowledge — Base de connaissances prestataire.
- * Collection Directus : knowledge_articles (fallback gracieux si inexistante).
+ * Collection Directus : knowledge_base (fallback gracieux si inexistante).
+ * Fields: id, title, slug, category, content, attachments, visible_to, status, author_id, date_created, date_updated
  */
 
 import React, { useState, useMemo } from 'react'
@@ -123,11 +124,11 @@ const KnowledgeBasePage = () => {
 
   // Debounced search for query key (simple approach: use raw value, staleTime handles caching)
   const { data: articles = [], isLoading, error } = useQuery({
-    queryKey: ['knowledge-articles', searchTerm, selectedCategory],
+    queryKey: ['knowledge-base', searchTerm, selectedCategory],
     queryFn: async () => {
       try {
         const params = {
-          fields: ['id', 'title', 'summary', 'category', 'date_created', 'date_updated', 'author', 'tags'],
+          fields: ['id', 'title', 'content', 'category', 'date_created', 'date_updated', 'author_id'],
           sort: ['-date_updated'],
           limit: 50,
           filter: { status: { _eq: 'published' } }
@@ -138,10 +139,16 @@ const KnowledgeBasePage = () => {
         if (searchTerm) {
           params.search = searchTerm
         }
-        const { data } = await api.get('/items/knowledge_articles', { params })
-        return data?.data || []
+        const { data } = await api.get('/items/knowledge_base', { params })
+        const items = data?.data || []
+        return items.map(item => ({
+          ...item,
+          summary: item.content ? item.content.replace(/<[^>]*>/g, '').slice(0, 200) : '',
+          author: item.author_id,
+          tags: item.category ? [item.category] : []
+        }))
       } catch (err) {
-        // Collection may not exist -- return empty gracefully
+        // Collection knowledge_base may not exist -- return empty gracefully
         if (err?.response?.status === 403 || err?.response?.status === 404) return []
         throw err
       }

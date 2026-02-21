@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import api from '../../../../lib/axios';
 
 const INTEGRATIONS = [
   {
@@ -135,9 +136,8 @@ const IntegrationsSettings = () => {
   const { data: statusData, isLoading, refetch } = useQuery({
     queryKey: ['integration-status'],
     queryFn: async () => {
-      const response = await fetch('/api/integrations/status');
-      if (!response.ok) throw new Error('Failed to fetch status');
-      return response.json();
+      const response = await api.get('/api/integrations/status');
+      return response.data;
     },
     staleTime: 60000
   });
@@ -147,11 +147,8 @@ const IntegrationsSettings = () => {
   // Test connection mutation
   const testConnection = useMutation({
     mutationFn: async (integrationId) => {
-      const response = await fetch(`/api/integrations/${integrationId}/test`, {
-        method: 'POST'
-      });
-      if (!response.ok) throw new Error('Test failed');
-      return response.json();
+      const response = await api.post(`/api/integrations/${integrationId}/test`);
+      return response.data;
     },
     onSuccess: (data, integrationId) => {
       toast.success(`Connexion ${INTEGRATIONS.find(i => i.id === integrationId)?.name} reussie`);
@@ -186,22 +183,22 @@ const IntegrationsSettings = () => {
     const status = integrationStatus[integration.id];
     if (!status) {
       return (
-        <span className="badge bg-secondary-lt text-secondary">
+        <span className="ds-badge ds-badge-default">
           Non configure
         </span>
       );
     }
     if (status.connected) {
       return (
-        <span className="badge bg-success-lt text-success">
-          <CheckCircle size={12} className="me-1" />
+        <span className="ds-badge ds-badge-success">
+          <CheckCircle size={12} className="mr-1" />
           Connecte
         </span>
       );
     }
     return (
-      <span className="badge bg-danger-lt text-danger">
-        <XCircle size={12} className="me-1" />
+      <span className="ds-badge ds-badge-danger">
+        <XCircle size={12} className="mr-1" />
         Erreur
       </span>
     );
@@ -210,13 +207,13 @@ const IntegrationsSettings = () => {
   return (
     <div>
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="flex justify-between items-center mb-4">
         <div>
-          <h4 className="mb-1">
-            <Plug size={20} className="me-2" />
+          <h4 className="mb-1 flex items-center">
+            <Plug size={20} className="mr-2" />
             Integrations
           </h4>
-          <p className="text-muted mb-0">
+          <p className="text-zinc-500 mb-0">
             Connectez vos services externes
           </p>
         </div>
@@ -225,14 +222,14 @@ const IntegrationsSettings = () => {
           onClick={() => refetch()}
           disabled={isLoading}
         >
-          <RefreshCw size={16} className={isLoading ? 'spin' : ''} />
+          <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           Actualiser
         </button>
       </div>
 
       {/* Category Filter */}
       <div className="mb-4">
-        <div className="btn-group">
+        <div className="flex gap-1">
           {CATEGORIES.map(cat => (
             <button
               key={cat.id}
@@ -246,42 +243,39 @@ const IntegrationsSettings = () => {
       </div>
 
       {/* Integrations Grid */}
-      <div className="row g-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredIntegrations.map(integration => {
           const isExpanded = expandedIntegration === integration.id;
           const status = integrationStatus[integration.id];
 
           return (
-            <div className="col-md-6" key={integration.id}>
+            <div key={integration.id}>
               <div className={`ds-card ${isExpanded ? 'border-primary' : ''}`}>
-                <div className="ds-card-header">
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="avatar bg-light me-3"
-                      style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      <Plug size={24} className="text-primary" />
+                <div className="p-4" style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center mr-3">
+                      <Plug size={24} style={{ color: 'var(--accent)' }} />
                     </div>
-                    <div className="flex-grow-1">
+                    <div className="flex-1">
                       <h5 className="mb-0">
                         {integration.name}
                         {integration.required && (
-                          <span className="badge bg-danger-lt text-danger ms-2">Requis</span>
+                          <span className="ds-badge ds-badge-danger ml-2">Requis</span>
                         )}
                       </h5>
-                      <small className="text-muted">{integration.description}</small>
+                      <span className="text-sm text-zinc-500">{integration.description}</span>
                     </div>
                     {getStatusBadge(integration)}
                   </div>
                 </div>
-                <div className="ds-card-body">
+                <div className="p-4">
                   {/* Quick Actions */}
-                  <div className="d-flex gap-2 mb-3">
+                  <div className="flex gap-2 mb-3">
                     <button
                       className="ds-btn ds-btn-sm ds-btn-outline-primary"
                       onClick={() => setExpandedIntegration(isExpanded ? null : integration.id)}
                     >
-                      <Settings size={14} className="me-1" />
+                      <Settings size={14} className="mr-1" />
                       {isExpanded ? 'Fermer' : 'Configurer'}
                     </button>
                     <button
@@ -290,9 +284,9 @@ const IntegrationsSettings = () => {
                       disabled={testingId === integration.id}
                     >
                       {testingId === integration.id ? (
-                        <RefreshCw size={14} className="me-1 spin" />
+                        <RefreshCw size={14} className="mr-1 animate-spin" />
                       ) : (
-                        <TestTube size={14} className="me-1" />
+                        <TestTube size={14} className="mr-1" />
                       )}
                       Tester
                     </button>
@@ -303,7 +297,7 @@ const IntegrationsSettings = () => {
                         rel="noopener noreferrer"
                         className="ds-btn ds-btn-sm ds-btn-outline-secondary"
                       >
-                        <ExternalLink size={14} className="me-1" />
+                        <ExternalLink size={14} className="mr-1" />
                         Docs
                       </a>
                     )}
@@ -311,14 +305,18 @@ const IntegrationsSettings = () => {
 
                   {/* Configuration Form */}
                   {isExpanded && (
-                    <div className="border-top pt-3">
-                      <form onSubmit={(e) => { e.preventDefault(); toast.success('Configuration sauvegardee'); }}>
+                    <div className="pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        // TODO: Wire up api.put/post call to persist integration config
+                        toast.success('Configuration sauvegardee');
+                      }}>
                         {integration.fields.map(field => (
                           <div className="mb-3" key={field.key}>
-                            <label className="form-label">{field.label}</label>
-                            <div className="input-group">
+                            <label className="block text-sm font-medium text-zinc-700 mb-1">{field.label}</label>
+                            <div className="flex">
                               {field.type === 'select' ? (
-                                <select className="form-select">
+                                <select className="ds-input">
                                   {field.options.map(opt => (
                                     <option key={opt} value={opt}>{opt}</option>
                                   ))}
@@ -331,14 +329,14 @@ const IntegrationsSettings = () => {
                                         ? 'password'
                                         : field.type === 'password' ? 'text' : field.type
                                     }
-                                    className="form-control"
+                                    className="ds-input"
                                     placeholder={field.placeholder || ''}
                                     defaultValue={status?.config?.[field.key] || ''}
                                   />
                                   {field.type === 'password' && (
                                     <button
                                       type="button"
-                                      className="ds-btn ds-btn-outline-secondary"
+                                      className="ds-btn ds-btn-outline-secondary ml-1"
                                       onClick={() => toggleSecret(integration.id, field.key)}
                                     >
                                       {showSecrets[`${integration.id}-${field.key}`] ? (
@@ -353,9 +351,9 @@ const IntegrationsSettings = () => {
                             </div>
                           </div>
                         ))}
-                        <div className="d-flex gap-2">
+                        <div className="flex gap-2">
                           <button type="submit" className="ds-btn ds-btn-primary">
-                            <Save size={14} className="me-1" />
+                            <Save size={14} className="mr-1" />
                             Enregistrer
                           </button>
                           <button
@@ -372,7 +370,7 @@ const IntegrationsSettings = () => {
 
                   {/* Status Info */}
                   {status && !isExpanded && (
-                    <div className="small text-muted">
+                    <div className="text-sm text-zinc-500">
                       {status.last_sync && (
                         <span>
                           Derniere sync: {new Date(status.last_sync).toLocaleString('fr-CH')}
@@ -389,10 +387,15 @@ const IntegrationsSettings = () => {
 
       {/* Warning for missing required integrations */}
       {INTEGRATIONS.filter(i => i.required && !integrationStatus[i.id]?.connected).length > 0 && (
-        <div className="alert alert-warning mt-4">
-          <AlertTriangle size={20} className="me-2" />
-          <strong>Attention:</strong> Certaines integrations requises ne sont pas configurees.
-          La plateforme peut ne pas fonctionner correctement.
+        <div
+          className="ds-card p-4 flex items-center gap-2 mt-4"
+          style={{ borderLeft: '3px solid var(--warning)' }}
+        >
+          <AlertTriangle size={20} className="text-amber-500 shrink-0" />
+          <span>
+            <strong>Attention:</strong> Certaines integrations requises ne sont pas configurees.
+            La plateforme peut ne pas fonctionner correctement.
+          </span>
         </div>
       )}
     </div>

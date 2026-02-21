@@ -78,6 +78,28 @@ Commits poussés :
 
 ---
 
+## ⚠️ RÈGLES OBLIGATOIRES — POST-AUDIT (BLOQUANT)
+
+**Ces 4 règles s'appliquent SANS EXCEPTION à chaque tâche.**
+
+### ⚠️ OBLIGATOIRE 1 — Relire chaque SKILL.md à chaque session
+
+Relire le SKILL.md de chaque skill sélectionné même s'il a été utilisé dans une session précédente. Ne jamais utiliser le contexte existant comme substitut à la lecture. Les skills peuvent avoir été mis à jour entre deux sessions. La lecture complète est le seul moyen de garantir que les instructions appliquées sont à jour.
+
+### ⚠️ OBLIGATOIRE 2 — MCP Directus pour toute donnée de configuration
+
+Toujours inclure MCP Directus si la tâche touche des données de configuration, des tokens, des paramètres système ou des collections. Cela inclut : audit de schéma, vérification de champs, création/modification de collections, migration de données, et toute opération nécessitant la connaissance de la structure réelle en base.
+
+### ⚠️ OBLIGATOIRE 3 — MCP GitHub avant tout audit ou modification
+
+Toujours inclure MCP GitHub avant tout audit ou modification de code existant — vérifier les commits récents pour éviter les régressions. Avant de modifier un fichier, consulter son historique de commits récents pour comprendre les changements effectués et ne pas annuler un fix précédent.
+
+### ⚠️ OBLIGATOIRE 4 — PACK-03-SECURITY pour tout webhook + paiement
+
+Si la tâche mentionne webhook + paiement (Revolut, DocuSeal ou autre) → PACK-03-SECURITY obligatoire + skill `senior-security` obligatoire, sans exception. Cela couvre : validation HMAC, vérification de signature, audit des endpoints exposés, et tout traitement de données financières entrantes.
+
+---
+
 ## Workflow de consultation (30 secondes)
 
 ### Étape 1 — Point d'entrée unique : SKILLS-QUICK-INDEX.md

@@ -286,13 +286,24 @@ export async function activateProjectIfDeposit(invoice, transaction) {
     console.log(`[G-04] Projet ${invoice.project_id} active automatiquement — paiement Revolut confirme`);
 
     // Declencher email confirmation (Phase E - E-03)
+    // Lookup payment record by revolut_transaction_id (email handler needs Directus payment_id)
     try {
       const baseURL = process.env.UNIFIED_PORT
         ? `http://localhost:${process.env.UNIFIED_PORT}`
         : 'http://localhost:3000';
-      await axios.post(`${baseURL}/api/email/payment-confirmed`, {
-        payment_id: transaction.id
-      }, { headers: { 'Content-Type': 'application/json' } });
+      const payments = await directusGet('/items/payments', {
+        'filter[revolut_transaction_id][_eq]': transaction.revolut_transaction_id || transaction.id,
+        limit: 1,
+        fields: 'id'
+      });
+      const paymentId = payments?.[0]?.id;
+      if (paymentId) {
+        await axios.post(`${baseURL}/api/email/payment-confirmed`, {
+          payment_id: paymentId
+        }, { headers: { 'Content-Type': 'application/json' } });
+      } else {
+        console.warn('[G-04] Aucun paiement Directus trouve pour email — tx:', transaction.id);
+      }
     } catch (e) {
       console.error('[G-04] Erreur declenchement email:', e.message);
     }

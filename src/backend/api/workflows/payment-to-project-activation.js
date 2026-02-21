@@ -52,8 +52,8 @@ async function logWorkflowExecution({ workflow, entity_type, entity_id, status, 
 function validateRevolutSignature(rawBody, signature) {
   const signingKey = process.env.REVOLUT_WEBHOOK_SECRET;
   if (!signingKey) {
-    console.warn(`[${WORKFLOW_NAME}] REVOLUT_WEBHOOK_SECRET non configure — validation HMAC desactivee`);
-    return true; // Skip validation if secret not set (dev mode)
+    console.error(`[${WORKFLOW_NAME}] REVOLUT_WEBHOOK_SECRET non configure — webhook REJETE`);
+    return false;
   }
 
   if (!signature) {
@@ -190,7 +190,7 @@ router.post('/webhook/revolut/payment', rawBodyParser, async (req, res) => {
   try {
     // 1. Get raw body and signature
     const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from(JSON.stringify(req.body));
-    const signature = req.headers['x-revolut-signature'] || req.headers['x-revolut-signature-sha256'];
+    const signature = req.headers['revolut-signature'] || req.headers['x-revolut-signature'] || req.headers['x-revolut-signature-sha256'];
 
     // 2. Validate HMAC signature
     if (!validateRevolutSignature(rawBody, signature)) {
@@ -220,6 +220,23 @@ router.post('/webhook/revolut/payment', rawBodyParser, async (req, res) => {
     if (amount <= 0) {
       console.log(`[${WORKFLOW_NAME}] Montant <= 0, ignore: ${amount} ${currency}`);
       return res.json({ success: true, skipped: true, reason: 'Montant non positif' });
+    }
+
+    // Deduplication: reject replayed webhooks
+    if (revolutTxId) {
+      try {
+        const existing = await directusGet('/items/payments', {
+          'filter[revolut_transaction_id][_eq]': revolutTxId,
+          limit: 1,
+          fields: 'id'
+        });
+        if (existing && existing.length > 0) {
+          console.log(`[${WORKFLOW_NAME}] Transaction ${revolutTxId} deja traitee — ignore (replay protection)`);
+          return res.json({ success: true, skipped: true, reason: 'Deja traite (deduplication)' });
+        }
+      } catch (dedupErr) {
+        console.warn(`[${WORKFLOW_NAME}] Dedup check failed, continuing: ${dedupErr.message}`);
+      }
     }
 
     // Only process incoming payments (credit)

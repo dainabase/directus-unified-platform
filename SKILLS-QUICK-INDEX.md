@@ -18,9 +18,10 @@ Lire son SKILL.md via le chemin absolu indiqué dans la catégorie
 
 ---
 
-## ⛔ BLOC DE DÉCLARATION OBLIGATOIRE (avant tout code)
+## ⛔ RÈGLE N°1 — DÉCLARATION EN DÉBUT DE TÂCHE (BLOQUANT)
 
-> Format défini dans `.claude/skills/skill-router/SKILL.md` — **Si absent → STOP**
+> Format complet défini dans `.claude/skills/skill-router/SKILL.md`
+> **Si ce bloc est absent au début → STOP IMMÉDIAT, ne pas continuer**
 
 ```
 === DÉCLARATION SKILLS ===
@@ -31,12 +32,54 @@ Skills sélectionnés :
 1. [nom-skill] — [chemin exact] — [raison]
 2. [nom-skill] — [chemin exact] — [raison]
 
+Plugins actifs utilisés :
+- [nom-plugin] — [usage dans cette tâche]
+
 MCP utilisés :
 - [MCP name] — [usage]
 
-Skills lus : ✅ [liste]
+Skills lus : ✅ [liste confirmée]
 === FIN DÉCLARATION SKILLS ===
 ```
+
+---
+
+## ⛔ RÈGLE N°2 — RÉSUMÉ EN FIN DE TÂCHE (BLOQUANT)
+
+> **Obligatoire à la fin de chaque story, phase ou prompt. Sans ce bloc → tâche non considérée comme complète.**
+
+```
+=== RÉSUMÉ EXÉCUTION ===
+Story/Phase : [ex: A.3 — Collection messages]
+Statut : ✅ Complété | ⚠️ Partiel | ❌ Échoué
+
+Skills effectivement utilisés :
+1. [nom-skill] — [chemin] — [comment utilisé concrètement]
+2. [nom-skill] — [chemin] — [comment utilisé concrètement]
+...
+
+Plugins effectivement utilisés :
+- [nom-plugin] — [comment utilisé]
+(Si aucun : indiquer "Aucun plugin activé pour cette tâche")
+
+MCP effectivement utilisés :
+- [MCP name] — [opérations effectuées]
+
+Skills disponibles NON utilisés (pourquoi) :
+- [nom-skill] — [non pertinent / déjà couvert par X / hors scope]
+
+Fichiers modifiés :
+- [chemin/fichier] — [description changement]
+
+Commits pushés :
+- [hash court] — [message commit]
+
+Écarts vs prompt initial :
+- [AUCUN | description de tout écart]
+=== FIN RÉSUMÉ EXÉCUTION ===
+```
+
+**Pourquoi cette règle :** Jean (CEO / Architecte) vérifie en 30 secondes que les bons skills ET plugins ont été consultés, et qu'aucun outil pertinent n'a été ignoré.
 
 ---
 
@@ -59,7 +102,47 @@ Skills lus : ✅ [liste]
 
 ---
 
-## 🎯 CUSTOM SKILLS PROJET (8 skills — toujours disponibles dans `.claude/skills/`)
+## 🔌 PLUGINS ACTIFS (17 skills invocables + 8 custom = 25 outils toujours chargés)
+
+> Détail complet : `.claude/skills/skill-router/references/active-plugins.md`
+> **Vérifier cette liste AVANT de chercher un skill externe — le plugin couvre peut-être déjà le besoin**
+
+| Plugin | Catégorie | Déclencher quand |
+|--------|-----------|-----------------|
+| `database-schema-designer` | Database | Conception de schema, ERD, relations |
+| `sql-query-optimizer` | Database | Optimisation de requêtes, EXPLAIN, index |
+| `rest-api-generator` | API | Création d'endpoints REST |
+| `api-authentication-builder` | API | OAuth, JWT, sessions, auth |
+| `webhook-handler-creator` | API | Webhooks entrants/sortants |
+| `n8n-workflow-designer` | Automation | Workflows n8n |
+| `anomaly-detection-system` | AI/ML | Détection anomalies transactions |
+| `time-series-forecaster` | AI/ML | Prévisions cash flow, métriques |
+| `gdpr-compliance-scanner` | Security | Conformité RGPD |
+| `pci-dss-validator` | Security | Validation PCI DSS paiements |
+| `database-migration-manager` | Database | Migrations SQL, versioning schema |
+| `ci-cd-pipeline-builder` | DevOps | GitHub Actions, pipelines CI/CD |
+| `unit-test-generator` | Testing | Tests unitaires auto |
+| `e2e-test-framework` | Testing | Tests E2E Playwright/Cypress |
+| `apm-dashboard-creator` | Performance | Dashboards monitoring |
+| `overnight-dev` | Productivity | Développement autonome nocturne |
+| `project-health-auditor` | Productivity | Audit santé projet continu |
+
+**Custom Skills Projet (8 — toujours chargés) :**
+
+| Skill | Déclencheur |
+|-------|-------------|
+| `directus-extension-architect` | Création d'extensions Directus (hooks, endpoints, modules) |
+| `swiss-compliance-engine` | TVA suisse, QR-factures, recouvrement SchKG, PME Käfer |
+| `multi-portal-architecture` | Architecture des 4 portails (SuperAdmin, Client, Prestataire, Revendeur) |
+| `directus-api-patterns` | Patterns API Directus (ItemsService, filtres, relations) |
+| `integration-sync-engine` | Synchronisation Invoice Ninja, Revolut, ERPNext, Mautic, DocuSeal |
+| `ceo-dashboard-designer` | Dashboard CEO glassmorphism, KPIs, métriques temps réel |
+| `postgresql-directus-optimizer` | Optimisation PostgreSQL pour Directus (index, requêtes, cache) |
+| `docker-stack-ops` | Opérations Docker Compose pour le stack complet |
+
+---
+
+## 🎯 CUSTOM SKILLS PROJET — CHEMINS COMPLETS
 
 | Skill | Usage |
 |-------|-------|
@@ -137,7 +220,6 @@ Skills lus : ✅ [liste]
 | **server-sent-events-setup** | Notifications push temps réel | `~/claude-code-plugins-plus-skills/skills/16-api-integration/server-sent-events-setup/SKILL.md` |
 | **api-client-generator** | Clients API (Mautic, Invoice Ninja, Revolut) | `~/claude-code-plugins-plus-skills/skills/16-api-integration/api-client-generator/SKILL.md` |
 | **api-response-cacher** | Cache réponses API (performance) | `~/claude-code-plugins-plus-skills/skills/16-api-integration/api-response-cacher/SKILL.md` |
-| **senior-fullstack** | Architecture API complète | `~/jeffallan-claude-skills/skills/fullstack-guardian/SKILL.md` |
 
 ---
 
@@ -238,10 +320,12 @@ Skills lus : ✅ [liste]
 
 **30 secondes pour choisir tes skills :**
 1. Identifier le type de tâche (UI ? Backend ? Finance ? Webhook ?)
-2. Scanner la section correspondante ci-dessus
-3. Choisir 2-4 skills avec leurs chemins exacts
-4. Lire chaque SKILL.md choisi AVANT de coder
-5. Écrire le BLOC DE DÉCLARATION (voir format en haut)
+2. Vérifier d'abord la section **PLUGINS ACTIFS** — le plugin couvre peut-être le besoin
+3. Scanner la section thématique correspondante ci-dessus
+4. Choisir 2-4 skills avec leurs chemins exacts
+5. Lire chaque SKILL.md choisi AVANT de coder
+6. Écrire le **BLOC DÉCLARATION** (Règle N°1) avant tout code
+7. Écrire le **BLOC RÉSUMÉ** (Règle N°2) après chaque story
 
 **Pour les 939 skills non listés ici :**
 → Lire `.claude/skills/skill-router/references/categories/<categorie>.md`

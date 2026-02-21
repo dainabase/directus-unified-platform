@@ -104,6 +104,7 @@ const VATReportsPage = lazy(() => import('./portals/superadmin/finance/VATReport
 const ExpensesPage = lazy(() => import('./portals/superadmin/finance/ExpensesPage'))
 const QRInvoiceGenerator = lazy(() => import('./portals/superadmin/finance/QRInvoiceGenerator'))
 const MilestoneInvoicingPage = lazy(() => import('./portals/superadmin/finance/MilestoneInvoicingPage'))
+const InvoiceNinjaHub = lazy(() => import('./portals/superadmin/finance/InvoiceNinjaHub'))
 
 // CRM Module
 const CRMDashboard = lazy(() => import('./portals/superadmin/crm/CRMDashboard'))
@@ -236,6 +237,7 @@ function App() {
                   <Route path="finance/expenses" element={<ExpensesPage selectedCompany={selectedCompany} />} />
                   <Route path="finance/qr-invoice" element={<QRInvoiceGenerator selectedCompany={selectedCompany} />} />
                   <Route path="finance/milestones" element={<MilestoneInvoicingPage selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoice-ninja" element={<InvoiceNinjaHub selectedCompany={selectedCompany} />} />
 
                   {/* Projets */}
                   <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />

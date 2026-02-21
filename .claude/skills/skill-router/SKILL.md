@@ -12,12 +12,11 @@ description: >
 
 # Skill Router — Tool Discovery System
 
-## ⛔ BLOCAGE OBLIGATOIRE — LIRE AVANT TOUT
+---
 
-**RÈGLE N°1 ABSOLUE ET NON NÉGOCIABLE :**
+## ⛔ RÈGLE N°1 — DÉCLARATION EN DÉBUT DE TÂCHE (BLOQUANT)
 
-Avant d'écrire UNE SEULE LIGNE de code ou de modifier UN SEUL FICHIER,
-tu DOIS produire le bloc suivant dans ton output :
+**Avant d'écrire UNE SEULE LIGNE de code ou de modifier UN SEUL FICHIER, produire obligatoirement :**
 
 ```
 === DÉCLARATION SKILLS ===
@@ -29,14 +28,58 @@ Skills sélectionnés :
 2. [nom-skill] — [chemin exact] — [raison]
 ...
 
+Plugins actifs utilisés :
+- [nom-plugin] — [usage dans cette tâche]
+
 MCP utilisés :
 - [MCP name] — [usage]
 
-Skills lus : ✅ [liste]
+Skills lus : ✅ [liste confirmée]
 === FIN DÉCLARATION SKILLS ===
 ```
 
-**Si cette déclaration est absente → STOP. Ne pas continuer.**
+**Si cette déclaration est absente → STOP IMMÉDIAT. Ne pas continuer.**
+
+---
+
+## ⛔ RÈGLE N°2 — RÉSUMÉ EN FIN DE TÂCHE (BLOQUANT)
+
+**À la fin de chaque story, phase ou prompt, produire obligatoirement le bloc suivant AVANT les commits :**
+
+```
+=== RÉSUMÉ EXÉCUTION ===
+Story/Phase : [ex: A.3 — Collection messages]
+Statut : ✅ Complété | ⚠️ Partiel | ❌ Échoué
+
+Skills effectivement utilisés :
+1. [nom-skill] — [chemin] — [comment utilisé concrètement]
+2. [nom-skill] — [chemin] — [comment utilisé concrètement]
+...
+
+Plugins effectivement utilisés :
+- [nom-plugin] — [comment utilisé]
+(Si aucun plugin utilisé : indiquer "Aucun plugin activé pour cette tâche")
+
+MCP effectivement utilisés :
+- [MCP name] — [opérations effectuées]
+
+Skills disponibles NON utilisés (pourquoi) :
+- [nom-skill] — [raison : non pertinent / déjà couvert par X / hors scope]
+
+Fichiers modifiés :
+- [chemin/fichier] — [description changement]
+
+Commits pushés :
+- [hash court] — [message commit]
+
+Écarts vs prompt initial :
+- [AUCUN | description de tout écart]
+=== FIN RÉSUMÉ EXÉCUTION ===
+```
+
+**Ce bloc est OBLIGATOIRE. Sans lui, la story n'est pas considérée comme complète.**
+
+**Pourquoi cette règle :** Permet à l'Architecte (Jean) de vérifier en 30 secondes que les bons skills ont été consultés, que les plugins pertinents ont été activés, et qu'aucun outil pertinent n'a été ignoré.
 
 ---
 
@@ -46,22 +89,28 @@ Skills lus : ✅ [liste]
 Lire **en premier** : `SKILLS-QUICK-INDEX.md` (racine du repo)
 → Contient les 50+ skills les plus utilisés avec chemins directs
 → Résout 80% des besoins sans aller plus loin
+→ Contient aussi la liste des **plugins actifs** à consulter
 
-### Étape 2 — Si besoin de plus : REGISTRY.md
+### Étape 2 — Plugins actifs disponibles
+Lire : `.claude/skills/skill-router/references/active-plugins.md`
+→ 17 skills invocables + 8 custom skills = **25 outils toujours chargés**
+→ Vérifier si un plugin actif couvre déjà le besoin avant de charger un skill externe
+
+### Étape 3 — Si besoin de plus : REGISTRY.md
 Lire : `.claude/skills/skill-router/references/REGISTRY.md`
 → Index complet 939+ skills par catégorie
 → Puis lire le fichier catégorie pertinent :
    `.claude/skills/skill-router/references/categories/<categorie>.md`
 
-### Étape 3 — Vérifier les MCP disponibles
+### Étape 4 — Vérifier les MCP disponibles
 Lire : `.claude/skills/skill-router/references/mcp-servers.md`
 → 6 MCP servers disponibles directement (pas besoin de SKILL.md)
 
-### Étape 4 — Charger les skills retenus
+### Étape 5 — Charger les skills retenus
 Pour chaque skill sélectionné :
 1. Lire son SKILL.md complet via le chemin exact du registry
 2. Appliquer ses instructions pour la tâche
-3. NE PAS activer de plugin permanent — juste lire et suivre
+3. NE PAS activer de plugin permanent — juste lire et suivre les instructions
 
 ---
 
@@ -86,6 +135,7 @@ Pour chaque skill sélectionné :
 | Orchestration | ~19 | `references/categories/orchestration.md` |
 | Other / General | ~278 | `references/categories/other.md` |
 | **MCP Servers** | **6** | `references/mcp-servers.md` |
+| **Plugins Actifs** | **17+8=25** | `references/active-plugins.md` |
 | **Custom Skills Projet** | **8** | Toujours actifs dans `.claude/skills/` |
 
 > Pour le détail complet : lire `references/REGISTRY.md`

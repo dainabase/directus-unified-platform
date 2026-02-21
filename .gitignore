@@ -11,8 +11,13 @@ keys/
 # Environment
 .env
 .env.local
+.env.production
 .env.*.local
 .npmrc
+
+# Secrets & Credentials
+secrets/
+credentials/
 
 # Build
 dist/

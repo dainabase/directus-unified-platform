@@ -11,6 +11,12 @@ import { createDirectus, rest, readItems, readItem } from '@directus/sdk';
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Redis-backed token blacklist with in-memory fallback
+import {
+  blacklistToken as redisBlacklistToken,
+  isTokenBlacklisted
+} from '../services/tokenBlacklist.js';
+
 // RBAC Configuration (Story 8.3)
 import ROLES, { hasPermission as rbacHasPermission, getRolePermissions, requireOwnership } from '../config/rbac.config.js';
 
@@ -33,10 +39,9 @@ const getDirectusClient = () => {
 const COMPANIES = ['HYPERVISUAL', 'DAINAMICS', 'LEXAIA', 'ENKI_REALTY', 'TAKEOUT'];
 
 /**
- * Rate limiting storage (use Redis in production)
+ * Rate limiting storage
  */
 const loginAttempts = new Map();
-const tokenBlacklist = new Set();
 
 /**
  * Check login attempts for brute force protection
@@ -107,11 +112,13 @@ function generateTokens(user) {
 }
 
 /**
- * Verify JWT token
+ * Verify JWT token (async — checks Redis-backed blacklist)
  */
-function verifyToken(token) {
+async function verifyToken(token) {
   try {
-    if (tokenBlacklist.has(token)) {
+    // Check Redis-backed blacklist (with in-memory fallback)
+    const blacklisted = await isTokenBlacklisted(token);
+    if (blacklisted) {
       return { valid: false, error: 'Token has been revoked' };
     }
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -125,19 +132,31 @@ function verifyToken(token) {
 }
 
 /**
- * Blacklist a token (for logout)
+ * Blacklist a token (for logout / token rotation)
+ * Calculates TTL from JWT exp claim so Redis entry auto-expires.
  */
-function blacklistToken(token) {
-  tokenBlacklist.add(token);
-  // Auto-cleanup after token would have expired anyway
-  setTimeout(() => tokenBlacklist.delete(token), 24 * 60 * 60 * 1000);
+async function blacklistToken(token) {
+  let ttl = 86400; // Default 24h
+  try {
+    // Decode without verification to read exp claim
+    const payload = jwt.decode(token);
+    if (payload && payload.exp) {
+      const remaining = payload.exp - Math.floor(Date.now() / 1000);
+      if (remaining > 0) {
+        ttl = remaining;
+      }
+    }
+  } catch {
+    // Use default TTL if decode fails
+  }
+  await redisBlacklistToken(token, ttl);
 }
 
 /**
  * Main authentication middleware
  * Extracts and validates JWT from Authorization header
  */
-export const authMiddleware = (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
   try {
     // Get token from header
     const authHeader = req.headers.authorization;
@@ -150,7 +169,7 @@ export const authMiddleware = (req, res, next) => {
     }
 
     const token = authHeader.substring(7);
-    const { valid, decoded, error } = verifyToken(token);
+    const { valid, decoded, error } = await verifyToken(token);
 
     if (!valid) {
       return res.status(401).json({
@@ -185,7 +204,7 @@ export const authMiddleware = (req, res, next) => {
  * Optional authentication middleware
  * Allows both authenticated and unauthenticated requests
  */
-export const optionalAuth = (req, res, next) => {
+export const optionalAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     req.user = null;
@@ -193,7 +212,7 @@ export const optionalAuth = (req, res, next) => {
   }
 
   const token = authHeader.substring(7);
-  const { valid, decoded } = verifyToken(token);
+  const { valid, decoded } = await verifyToken(token);
 
   if (valid) {
     req.user = {
@@ -360,7 +379,7 @@ export const apiKeyAuth = (req, res, next) => {
 /**
  * Combined authentication (JWT or API Key)
  */
-export const flexibleAuth = (req, res, next) => {
+export const flexibleAuth = async (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
   const authHeader = req.headers.authorization;
 

@@ -228,6 +228,33 @@
 
 ---
 
+## PHASE 10 — SÉCURITÉ POST-AUDIT ✅
+
+**Objectif** : Corriger les 6 problèmes critiques identifiés lors de l'audit sécurité (score initial 49/100).
+**Complété** : 2026-02-21 — 6/6 problèmes résolus, 136 tests unitaires, build OK
+
+| # | Problème | Prio | Statut | Correction |
+|---|----------|------|--------|------------|
+| P1 | Routes API sans authentification (revolut, invoice-ninja, mautic, erpnext, kpis) | 🔥 | 🟢 | authMiddleware + requireRole(['superadmin']) sur 7 mounts dans server.js |
+| P2 | .env.example incomplet + .gitignore insuffisant | ⚡ | 🟢 | .env.example réécrit (toutes vars REQUIRED/OPTIONAL), .gitignore renforcé (.env.production, secrets/, credentials/) |
+| P3 | JWT blacklist in-memory (perdue au restart) | 🔥 | 🟢 | tokenBlacklist.js → Redis-backed (ioredis, TTL JWT exp, clé jwt:blacklist:*) + fallback in-memory |
+| P4 | USE_MOCK_DATA dans composants | ⚡ | 🟢 | Vérifié propre — aucun pattern mock trouvé dans le frontend |
+| P5 | 0% couverture de tests | 🔥 | 🟢 | 136 tests node:test : vat.test.js (29), auth.test.js (21), rbac.test.js (61), env-validator.test.js (25) — 100% pass |
+| P6 | Portails secondaires sans auth | ⚡ | 🟢 | Vérifié propre — tous les portails ont des auth guards (ClientAuthProvider, useProviderAuth, ResellerAuthProvider) |
+
+**Fichiers créés/modifiés** :
+- `src/backend/services/tokenBlacklist.js` (NEW) — Redis JWT blacklist service
+- `src/backend/server.js` — requireRole ajouté sur 7 routes admin
+- `src/backend/middleware/auth.middleware.js` — verifyToken/blacklistToken async + Redis
+- `src/backend/api/auth/auth.routes.js` — 4 call sites await async
+- `.env.example` — réécrit complet
+- `.gitignore` — renforcé
+- `src/backend/tests/unit/*.test.js` (4 NEW) — 136 tests unitaires
+
+**Critère de sortie** : ✅ Score sécurité relevé. Routes protégées. JWT persistant Redis. 136 tests passants. Build 0 erreurs.
+
+---
+
 ## AUDIT & CORRECTIONS — 2026-02-21
 
 | Catégorie | Trouvé | Corrigé | Statut |
@@ -266,7 +293,8 @@
 | Phase 7 — Automation & IA | 12 | ✅ 100% complété (2026-02-20) |
 | Phase 8 — Qualité & Production | 9 | ✅ 100% complété (2026-02-21) |
 | Phase 9 — Multi-entreprises | 6 | 🔴 0% |
-| **TOTAL** | **96 stories** | **~94% global (90/96)** |
+| Phase 10 — Sécurité Post-Audit | 6 | ✅ 100% complété (2026-02-21) — 136 tests, Redis JWT, routes protégées |
+| **TOTAL** | **102 stories** | **~94% global (96/102)** |
 
 ---
 

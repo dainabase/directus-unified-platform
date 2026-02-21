@@ -258,7 +258,7 @@ router.post('/refresh', asyncHandler(async (req, res) => {
     });
   }
 
-  const { valid, decoded, error } = verifyToken(refreshToken);
+  const { valid, decoded, error } = await verifyToken(refreshToken);
 
   if (!valid || decoded.type !== 'refresh') {
     return res.status(401).json({
@@ -301,7 +301,7 @@ router.post('/refresh', asyncHandler(async (req, res) => {
     }
 
     // Blacklist old refresh token (rotation)
-    blacklistToken(refreshToken);
+    await blacklistToken(refreshToken);
 
     // Generate new tokens
     const tokens = generateTokens({
@@ -339,7 +339,7 @@ router.post('/logout', authMiddleware, asyncHandler(async (req, res) => {
   const token = authHeader?.substring(7);
 
   if (token) {
-    blacklistToken(token);
+    await blacklistToken(token);
   }
 
   res.json({
@@ -547,7 +547,7 @@ router.post('/change-password', authMiddleware, asyncHandler(async (req, res) =>
     const authHeader = req.headers.authorization;
     const token = authHeader?.substring(7);
     if (token) {
-      blacklistToken(token);
+      await blacklistToken(token);
     }
 
     res.json({

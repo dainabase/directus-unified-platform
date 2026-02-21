@@ -159,7 +159,7 @@ app.use((req, res, next) => {
 // ============================================
 
 import authRoutes from './api/auth/auth.routes.js';
-import { authMiddleware, optionalAuth, flexibleAuth } from './middleware/auth.middleware.js';
+import { authMiddleware, optionalAuth, flexibleAuth, requireRole } from './middleware/auth.middleware.js';
 import { companyFilter } from './middleware/company-filter.middleware.js';
 app.use('/api/auth', authRoutes);
 console.log('[api] Auth connected: /api/auth');
@@ -212,10 +212,10 @@ try {
   const kpisDailyReportRouter = await import('./api/kpis/daily-report.js');
   const kpisTreasuryRouter = await import('./api/kpis/treasury-forecast.js');
 
-  app.use('/api/kpis', authMiddleware, kpisRouter.default);
-  app.use('/api/kpis', authMiddleware, kpisThresholdsRouter.default);
-  app.use('/api/kpis', authMiddleware, kpisDailyReportRouter.default);
-  app.use('/api/kpis/treasury', authMiddleware, kpisTreasuryRouter.default);
+  app.use('/api/kpis', authMiddleware, requireRole(['superadmin']), kpisRouter.default);
+  app.use('/api/kpis', authMiddleware, requireRole(['superadmin']), kpisThresholdsRouter.default);
+  app.use('/api/kpis', authMiddleware, requireRole(['superadmin']), kpisDailyReportRouter.default);
+  app.use('/api/kpis/treasury', authMiddleware, requireRole(['superadmin']), kpisTreasuryRouter.default);
 
   // Start daily CEO report CRON (07h00)
   const { startDailyCEOReport } = kpisDailyReportRouter;
@@ -588,8 +588,8 @@ app.use('/graphql', createProxyMiddleware({
 // API Invoice Ninja - ES Modules
 try {
   const invoiceNinjaRouter = await import('./api/invoice-ninja/index.js');
-  app.use('/api/invoice-ninja', authMiddleware, invoiceNinjaRouter.default);
-  console.log('✅ API Invoice Ninja connectée: /api/invoice-ninja');
+  app.use('/api/invoice-ninja', authMiddleware, requireRole(['superadmin']), invoiceNinjaRouter.default);
+  console.log('✅ API Invoice Ninja connectée: /api/invoice-ninja (protected: superadmin)');
 } catch (err) {
   console.warn('⚠️ API Invoice Ninja non disponible:', err.message);
 }
@@ -597,8 +597,8 @@ try {
 // API Revolut - ES Modules
 try {
   const revolutRouter = await import('./api/revolut/index.js');
-  app.use('/api/revolut', revolutRouter.default);
-  console.log('✅ API Revolut connectée: /api/revolut');
+  app.use('/api/revolut', authMiddleware, requireRole(['superadmin']), revolutRouter.default);
+  console.log('✅ API Revolut connectée: /api/revolut (protected: superadmin)');
 } catch (err) {
   console.warn('⚠️ API Revolut non disponible:', err.message);
 }
@@ -606,8 +606,8 @@ try {
 // API ERPNext - À convertir
 try {
   const erpnextRouter = await import('./api/erpnext/index.js');
-  app.use('/api/erpnext', authMiddleware, erpnextRouter.default);
-  console.log('✅ API ERPNext connectée: /api/erpnext');
+  app.use('/api/erpnext', authMiddleware, requireRole(['superadmin']), erpnextRouter.default);
+  console.log('✅ API ERPNext connectée: /api/erpnext (protected: superadmin)');
 } catch (err) {
   console.warn('⚠️ API ERPNext non disponible:', err.message);
 }
@@ -615,8 +615,8 @@ try {
 // API Mautic - À convertir
 try {
   const mauticRouter = await import('./api/mautic/router.js');
-  app.use('/api/mautic', authMiddleware, mauticRouter.default);
-  console.log('✅ API Mautic connectée: /api/mautic');
+  app.use('/api/mautic', authMiddleware, requireRole(['superadmin']), mauticRouter.default);
+  console.log('✅ API Mautic connectée: /api/mautic (protected: superadmin)');
 } catch (err) {
   console.warn('⚠️ API Mautic non disponible:', err.message);
 }

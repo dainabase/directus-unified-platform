@@ -3,13 +3,14 @@
  * Page commissions pour le portail revendeur.
  * Affiche les commissions dues, payees, taux moyen.
  *
- * TODO: La collection `commissions` n'existe pas encore dans Directus (403 on schema query).
- *       Toutes les donnees sont mockees. Remplacer par des requetes Directus
- *       une fois la collection creee.
+ * Connected to Directus `commissions` collection.
+ * Fields: id, reseller_id, deal_id, invoice_id, amount, percentage, currency,
+ *         status, paid_at, owner_company, notes, date_created, date_updated
  */
 
 import React, { useMemo } from 'react'
-import { DollarSign, Percent, CheckCircle, Clock, ArrowUpRight, Receipt } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { DollarSign, Percent, CheckCircle, Clock, ArrowUpRight, Receipt, Loader2, Inbox } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import api from '../../lib/axios'
@@ -33,31 +34,34 @@ const formatDate = (dateStr) => {
 // ── Status config ──
 
 const STATUS_CONFIG = {
-  pending:   { label: 'En attente',  cls: 'bg-amber-100 text-amber-700' },
-  validated: { label: 'Validee',     cls: 'bg-zinc-100 text-zinc-700' },
-  paid:      { label: 'Payee',       cls: 'bg-green-100 text-green-700' }
+  pending:   { label: 'En attente',  cls: 'ds-badge ds-badge-warning' },
+  validated: { label: 'Validee',     cls: 'ds-badge ds-badge-info' },
+  paid:      { label: 'Payee',       cls: 'ds-badge ds-badge-success' }
 }
-
-// ── Mock data ──
-// TODO: Replace with Directus query when `commissions` collection is created
-// Collection fields: id, reseller_id (M2O resellers), quote_id (M2O quotes),
-// rate (decimal), base_amount (decimal), commission_amount (decimal),
-// status (pending/validated/paid), paid_at (datetime), date_created
-const MOCK_COMMISSIONS = [
-  { id: 1, deal: 'DEV-2026-0042', client: 'Migros SA',       base_amount: 45000, rate: 10, commission_amount: 4500,  status: 'validated', date_created: '2026-02-15', paid_at: null },
-  { id: 2, deal: 'DEV-2026-0038', client: 'Coop Suisse',     base_amount: 32000, rate: 8,  commission_amount: 2560,  status: 'paid',      date_created: '2026-01-20', paid_at: '2026-02-01' },
-  { id: 3, deal: 'DEV-2026-0035', client: 'Rolex SA',        base_amount: 78000, rate: 12, commission_amount: 9360,  status: 'pending',   date_created: '2026-02-10', paid_at: null },
-  { id: 4, deal: 'DEV-2025-0120', client: 'Nestle Suisse',   base_amount: 25000, rate: 10, commission_amount: 2500,  status: 'paid',      date_created: '2025-12-15', paid_at: '2026-01-10' },
-  { id: 5, deal: 'DEV-2026-0045', client: 'SwissRE',         base_amount: 55000, rate: 10, commission_amount: 5500,  status: 'pending',   date_created: '2026-02-18', paid_at: null }
-]
 
 // ── Component ──
 
 const CommissionsRevendeur = () => {
   const user = useAuthStore((s) => s.user)
+  const userId = user?.id
 
-  // TODO: Replace with useQuery + api.get('/items/commissions', { ... }) when collection exists
-  const commissions = MOCK_COMMISSIONS
+  // ── Fetch commissions from Directus ──
+  const { data: commissions = [], isLoading } = useQuery({
+    queryKey: ['revendeur-commissions', userId],
+    queryFn: async () => {
+      const { data } = await api.get('/items/commissions', {
+        params: {
+          filter: { reseller_id: { _eq: userId } },
+          fields: ['id', 'deal_id', 'invoice_id', 'amount', 'percentage', 'currency', 'status', 'paid_at', 'owner_company', 'notes', 'date_created'],
+          sort: ['-date_created'],
+          limit: 50
+        }
+      }).catch(() => ({ data: { data: [] } }))
+      return data?.data || []
+    },
+    enabled: !!userId,
+    refetchInterval: 60000
+  })
 
   // ── Computed KPIs ──
   const kpis = useMemo(() => {
@@ -66,10 +70,10 @@ const CommissionsRevendeur = () => {
     )
     const paid = commissions.filter((c) => c.status === 'paid')
 
-    const totalDues = pendingAndValidated.reduce((sum, c) => sum + c.commission_amount, 0)
-    const totalPaid = paid.reduce((sum, c) => sum + c.commission_amount, 0)
+    const totalDues = pendingAndValidated.reduce((sum, c) => sum + (c.amount || 0), 0)
+    const totalPaid = paid.reduce((sum, c) => sum + (c.amount || 0), 0)
 
-    const totalRates = commissions.reduce((sum, c) => sum + c.rate, 0)
+    const totalRates = commissions.reduce((sum, c) => sum + (c.percentage || 0), 0)
     const avgRate = commissions.length > 0 ? totalRates / commissions.length : 0
 
     return { totalDues, totalPaid, avgRate }
@@ -87,8 +91,23 @@ const CommissionsRevendeur = () => {
   const totalPendingBanner = useMemo(() => {
     return commissions
       .filter((c) => c.status === 'pending' || c.status === 'validated')
-      .reduce((sum, c) => sum + c.commission_amount, 0)
+      .reduce((sum, c) => sum + (c.amount || 0), 0)
   }, [commissions])
+
+  // ── Derive base amount from amount/percentage ──
+  const getBaseAmount = (c) => {
+    if (c.percentage && c.percentage > 0) return c.amount / (c.percentage / 100)
+    return c.amount || 0
+  }
+
+  // ── Loading state ──
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <Loader2 size={32} className="animate-spin text-zinc-400" />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -158,28 +177,45 @@ const CommissionsRevendeur = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {commissions.map((c) => {
-                const cfg = STATUS_CONFIG[c.status] || STATUS_CONFIG.pending
-                return (
-                  <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <Receipt size={14} className="text-gray-400" />
-                        <span className="text-sm font-medium text-gray-900">{c.deal}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{c.client}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 text-right">{formatCHF(c.base_amount)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 text-right">{c.rate}%</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-gray-900 text-right">{formatCHF(c.commission_amount)}</td>
-                    <td className="px-4 py-3 text-center">
-                      <span className={`ds-badge inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.cls}`}>
-                        {cfg.label}
-                      </span>
-                    </td>
-                  </tr>
-                )
-              })}
+              {commissions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-12 text-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <Inbox size={32} className="text-zinc-300" />
+                      <p className="text-sm text-zinc-400">Aucune commission pour le moment</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                commissions.map((c) => {
+                  const cfg = STATUS_CONFIG[c.status] || STATUS_CONFIG.pending
+                  const dealLabel = typeof c.deal_id === 'object' && c.deal_id?.id
+                    ? c.deal_id.id
+                    : c.deal_id || '—'
+                  const clientLabel = (typeof c.deal_id === 'object' && c.deal_id?.client_name)
+                    ? c.deal_id.client_name
+                    : c.owner_company || '—'
+                  return (
+                    <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <Receipt size={14} className="text-gray-400" />
+                          <span className="text-sm font-medium text-gray-900">{dealLabel}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700">{clientLabel}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700 text-right">{formatCHF(getBaseAmount(c))}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700 text-right">{c.percentage || 0}%</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-gray-900 text-right">{formatCHF(c.amount)}</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.cls}`}>
+                          {cfg.label}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -192,22 +228,30 @@ const CommissionsRevendeur = () => {
             <h3 className="font-semibold text-gray-900">Paiements recents</h3>
           </div>
           <div className="divide-y divide-gray-50">
-            {recentPaid.map((c) => (
-              <div key={c.id} className="px-4 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
-                    <ArrowUpRight size={16} className="text-green-600" />
+            {recentPaid.map((c) => {
+              const dealLabel = typeof c.deal_id === 'object' && c.deal_id?.id
+                ? c.deal_id.id
+                : c.deal_id || '—'
+              const clientLabel = (typeof c.deal_id === 'object' && c.deal_id?.client_name)
+                ? c.deal_id.client_name
+                : c.owner_company || '—'
+              return (
+                <div key={c.id} className="px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                      <ArrowUpRight size={16} className="text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{dealLabel} — {clientLabel}</p>
+                      <p className="text-xs text-gray-400">
+                        Paye le {formatDate(c.paid_at)}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{c.deal} — {c.client}</p>
-                    <p className="text-xs text-gray-400">
-                      Paye le {formatDate(c.paid_at)}
-                    </p>
-                  </div>
+                  <span className="text-sm font-bold text-green-600">+{formatCHF(c.amount)}</span>
                 </div>
-                <span className="text-sm font-bold text-green-600">+{formatCHF(c.commission_amount)}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}

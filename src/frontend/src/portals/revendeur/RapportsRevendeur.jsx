@@ -1,7 +1,8 @@
 /**
  * RapportsRevendeur — Reports page for reseller portal
  * Monthly KPIs, 12-month evolution chart (Recharts), data table, CSV export.
- * Leads fetched from Directus (filtered by assigned_to), commissions are MOCK.
+ * Leads fetched from Directus (filtered by assigned_to).
+ * Commissions fetched from `commissions` collection (reseller_id = user.id).
  */
 
 import React, { useState, useMemo } from 'react'
@@ -44,16 +45,6 @@ const exportCSV = (data, filename) => {
   URL.revokeObjectURL(url)
 }
 
-// TODO: Replace with real commissions data from a Directus collection when it exists.
-// The commissions collection does not exist yet — these are placeholder values.
-const MOCK_COMMISSIONS_BY_MONTH = {
-  0: 2400, 1: 3100, 2: 2800, 3: 4200, 4: 3600, 5: 5100,
-  6: 4800, 7: 3900, 8: 5500, 9: 6200, 10: 7100, 11: 7800
-}
-
-const generateMockCommission = (monthIndex) => {
-  return MOCK_COMMISSIONS_BY_MONTH[monthIndex % 12] || 3000
-}
 
 // ── KPI Card ──
 
@@ -242,6 +233,26 @@ const RapportsRevendeur = () => {
     staleTime: 1000 * 60 * 2
   })
 
+  // ── Fetch commissions for the 12-month range ──
+  const { data: allCommissions12m = [] } = useQuery({
+    queryKey: ['revendeur-commissions-12m', userId, chartStart, chartEnd],
+    queryFn: async () => {
+      const { data } = await api.get('/items/commissions', {
+        params: {
+          filter: {
+            reseller_id: { _eq: userId },
+            date_created: { _gte: chartStart, _lte: chartEnd + 'T23:59:59' }
+          },
+          fields: ['id', 'amount', 'status', 'date_created'],
+          limit: -1
+        }
+      }).catch(() => ({ data: { data: [] } }))
+      return data?.data || []
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 2
+  })
+
   // ── Computed KPIs ──
 
   const currentRevenue = currentQuotes.reduce(
@@ -254,9 +265,29 @@ const RapportsRevendeur = () => {
     ? ((currentRevenue - prevRevenue) / prevRevenue) * 100
     : null
 
-  // TODO: Replace with real commission calculation when collection exists
-  const currentCommission = generateMockCommission(selectedMonth)
-  const prevCommission = generateMockCommission(prevMonthDate.getMonth())
+  // Commission KPI: sum commissions for selected month vs previous month
+  const currentCommission = useMemo(() => {
+    const mStart = startOfMonth(selectedDate)
+    const mEnd = endOfMonth(selectedDate)
+    return allCommissions12m
+      .filter((c) => {
+        const d = new Date(c.date_created)
+        return d >= mStart && d <= mEnd
+      })
+      .reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0)
+  }, [allCommissions12m, selectedDate])
+
+  const prevCommission = useMemo(() => {
+    const mStart = startOfMonth(prevMonthDate)
+    const mEnd = endOfMonth(prevMonthDate)
+    return allCommissions12m
+      .filter((c) => {
+        const d = new Date(c.date_created)
+        return d >= mStart && d <= mEnd
+      })
+      .reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0)
+  }, [allCommissions12m, prevMonthDate])
+
   const commissionTrend = prevCommission > 0
     ? ((currentCommission - prevCommission) / prevCommission) * 100
     : null
@@ -292,13 +323,13 @@ const RapportsRevendeur = () => {
     return monthsInterval.map((monthDate) => {
       const monthKey = format(monthDate, 'yyyy-MM')
       const monthLabel = format(monthDate, 'MMM yyyy', { locale: fr })
-      const monthStart = startOfMonth(monthDate)
-      const monthEnd = endOfMonth(monthDate)
+      const mStart = startOfMonth(monthDate)
+      const mEnd = endOfMonth(monthDate)
 
       // Leads pipeline for this month
       const monthLeads = allLeads12m.filter(l => {
         const d = new Date(l.date_created)
-        return d >= monthStart && d <= monthEnd
+        return d >= mStart && d <= mEnd
       })
       const pipeline = monthLeads.reduce(
         (sum, l) => sum + (parseFloat(l.estimated_value) || 0), 0
@@ -312,10 +343,16 @@ const RapportsRevendeur = () => {
       // Signed quotes for this month
       const monthQuotes = allQuotes12m.filter(q => {
         const d = new Date(q.signed_at)
-        return d >= monthStart && d <= monthEnd
+        return d >= mStart && d <= mEnd
       })
-      // TODO: Replace mock commissions with real data
-      const commission = generateMockCommission(monthDate.getMonth())
+
+      // Commissions for this month (real data)
+      const commission = allCommissions12m
+        .filter((c) => {
+          const d = new Date(c.date_created)
+          return d >= mStart && d <= mEnd
+        })
+        .reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0)
 
       return {
         mois: monthLabel,
@@ -324,10 +361,10 @@ const RapportsRevendeur = () => {
         leadsConvertis: convertedCount,
         pipeline: Math.round(pipeline),
         devisSignes: monthQuotes.length,
-        commissions: commission
+        commissions: Math.round(commission)
       }
     })
-  }, [monthsInterval, allLeads12m, allQuotes12m])
+  }, [monthsInterval, allLeads12m, allQuotes12m, allCommissions12m])
 
   // ── Table data for export ──
 
@@ -402,7 +439,6 @@ const RapportsRevendeur = () => {
           icon={BarChart3}
           label="Commissions gagnees"
           value={formatCHF(currentCommission)}
-          subtitle="Donnees simulees"
           trend={commissionTrend}
           trendLabel="vs mois precedent"
         />

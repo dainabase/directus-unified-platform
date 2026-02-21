@@ -1,7 +1,7 @@
 /**
  * MarketingRevendeur — Marketing & Assets page for the Revendeur portal
  * Fetches files from Directus /files API (marketing folder/tags).
- * Falls back to empty state with mock campaign templates.
+ * Fetches email templates from Directus email_templates collection.
  */
 
 import React, { useState, useMemo } from 'react'
@@ -10,6 +10,7 @@ import {
   Image, FileText, Video, Download, Mail, Folder,
   Search, Loader2, FileIcon, Film
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import api from '../../lib/axios'
 import { useAuthStore } from '../../stores/authStore'
 
@@ -21,13 +22,6 @@ const FILTER_TYPES = [
   { id: 'image', label: 'Images' },
   { id: 'pdf', label: 'PDF' },
   { id: 'video', label: 'Videos' }
-]
-
-// TODO: Replace with Mautic API templates assigned to reseller
-const MOCK_CAMPAIGNS = [
-  { id: 1, name: 'Lancement produit LED', description: 'Template email pour annonce nouveau produit digital signage', type: 'email' },
-  { id: 2, name: 'Offre speciale trimestre', description: 'Promotion trimestrielle pour revendeurs agreees', type: 'email' },
-  { id: 3, name: 'Invitation evenement', description: 'Template invitation salon professionnel', type: 'email' }
 ]
 
 // ── Helpers ──
@@ -88,6 +82,22 @@ const MarketingRevendeur = () => {
           fields: ['id', 'title', 'filename_download', 'type', 'filesize', 'width', 'height'],
           sort: ['-uploaded_on'],
           limit: 50
+        }
+      }).catch(() => ({ data: { data: [] } }))
+      return data?.data || []
+    },
+    staleTime: 1000 * 60 * 5
+  })
+
+  // Fetch email templates from Directus
+  const { data: campaignTemplates = [], isLoading: loadingTemplates } = useQuery({
+    queryKey: ['revendeur-email-templates'],
+    queryFn: async () => {
+      const { data } = await api.get('/items/email_templates', {
+        params: {
+          fields: ['id', 'name', 'type', 'subject_fr', 'language', 'date_created'],
+          sort: ['-date_created'],
+          limit: 20
         }
       }).catch(() => ({ data: { data: [] } }))
       return data?.data || []
@@ -230,31 +240,59 @@ const MarketingRevendeur = () => {
       {/* Campaign Templates Section */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 mb-4">Templates de campagne</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {MOCK_CAMPAIGNS.map((campaign) => (
-            <div key={campaign.id} className="ds-card p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0,113,227,0.08)' }}>
-                  <Mail size={20} style={{ color: 'var(--accent)' }} />
+        {loadingTemplates ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="ds-card p-5 animate-pulse">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gray-100" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-100 rounded w-3/4" />
+                    <div className="h-3 bg-gray-50 rounded w-1/3" />
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-sm font-semibold text-gray-900 truncate">{campaign.name}</h3>
-                  <span className="text-xs text-gray-400 capitalize">{campaign.type}</span>
-                </div>
+                <div className="h-3 bg-gray-50 rounded w-full mb-2" />
+                <div className="h-3 bg-gray-50 rounded w-2/3 mb-4" />
+                <div className="h-9 bg-gray-100 rounded w-full" />
               </div>
-              <p className="text-sm text-gray-500 mb-4 line-clamp-2">{campaign.description}</p>
-              <button
-                onClick={() => {
-                  // TODO: Integrate with Mautic API to clone/use template
-                  alert(`Template "${campaign.name}" selectionne. Integration Mautic a venir.`)
-                }}
-                className="ds-btn ds-btn-primary w-full text-sm"
-              >
-                Utiliser
-              </button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : campaignTemplates.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {campaignTemplates.map((template) => (
+              <div key={template.id} className="ds-card p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0,113,227,0.08)' }}>
+                    <Mail size={20} style={{ color: 'var(--accent)' }} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-semibold text-gray-900 truncate">{template.name}</h3>
+                    <span className="text-xs text-gray-400 capitalize">{template.type || 'email'}</span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500 mb-4 line-clamp-2">
+                  {template.subject_fr || 'Aucun sujet'}
+                </p>
+                <button
+                  onClick={() => {
+                    toast.info('Template selectionne. Mautic integration en cours.')
+                  }}
+                  className="ds-btn ds-btn-primary w-full text-sm"
+                >
+                  Utiliser
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="ds-card p-12 text-center">
+            <Mail size={48} className="text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-700 mb-1">Aucun template disponible</h3>
+            <p className="text-sm text-gray-400">
+              Les templates de campagne seront bientot disponibles dans cet espace.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )

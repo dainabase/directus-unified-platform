@@ -48,7 +48,7 @@ const fetchBudgets = async (company) => {
   }
 
   // Fallback: fetch from `dashboard_kpis` where metric type relates to budgets
-  // TODO: Once `budgets` collection is populated, remove this fallback
+  // Fallback: dashboard_kpis for budget-like data when budgets collection is empty
   try {
     const res = await api.get('/items/dashboard_kpis', {
       params: {
@@ -99,7 +99,6 @@ const fetchExpensesForBudgets = async (company) => {
   }
 
   // Fallback: fetch debit bank_transactions as expense proxy
-  // TODO: Once `expenses` collection is populated, remove this fallback
   try {
     const sixMonthsAgo = new Date()
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)

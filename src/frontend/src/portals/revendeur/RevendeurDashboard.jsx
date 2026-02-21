@@ -1,13 +1,13 @@
 /**
  * RevendeurDashboard — Portail Revendeur
  * Dashboard revendeur connecte a Directus.
- * KPIs (leads actifs, pipeline, deals signes, commissions mock),
- * Top 5 deals, commissions recentes (mock), pipeline chart (Recharts).
+ * KPIs (leads actifs, pipeline, deals signes, commissions),
+ * Top 5 deals, commissions recentes, pipeline chart (Recharts).
  *
  * Auth: useAuthStore (user.id = directus_users uuid)
  * Leads filtres par assigned_to = user.id
  * Quotes: company-wide (pas de reseller_id)
- * Commissions: MOCK (collection inexistante)
+ * Commissions: fetched from `commissions` collection (reseller_id = user.id)
  */
 
 import React, { useMemo } from 'react'
@@ -113,7 +113,25 @@ const RevendeurDashboard = () => {
     refetchInterval: 60000
   })
 
-  const isLoading = loadingLeads || loadingQuotes
+  // ── Fetch commissions for this reseller ──
+  const { data: commissions = [], isLoading: loadingCommissions } = useQuery({
+    queryKey: ['revendeur-commissions-dashboard', userId],
+    queryFn: async () => {
+      const { data } = await api.get('/items/commissions', {
+        params: {
+          filter: { reseller_id: { _eq: userId } },
+          fields: ['id', 'amount', 'status', 'paid_at', 'date_created', 'deal_id', 'owner_company', 'notes'],
+          sort: ['-date_created'],
+          limit: 10
+        }
+      }).catch(() => ({ data: { data: [] } }))
+      return data?.data || []
+    },
+    enabled: !!userId,
+    refetchInterval: 60000
+  })
+
+  const isLoading = loadingLeads || loadingQuotes || loadingCommissions
 
   // ── KPI computations ──
   const activeLeads = useMemo(
@@ -161,13 +179,16 @@ const RevendeurDashboard = () => {
     return months.map(({ label, count }) => ({ name: label, leads: count }))
   }, [leads])
 
-  // ── TODO: commissions collection does not exist in Directus ──
-  // ── Replace with real data when `commissions` collection is created ──
-  const mockCommissions = useMemo(() => [
-    { id: 1, label: 'Commission HYPERVISUAL Q4', amount: 4800, date: '2026-01-15', status: 'payee' },
-    { id: 2, label: 'Commission LED Wall Migros', amount: 3200, date: '2026-02-01', status: 'en attente' },
-    { id: 3, label: 'Commission Ecran COOP', amount: 4450, date: '2026-02-10', status: 'en attente' }
-  ], [])
+  // ── Commission KPI: sum of pending/validated commissions ──
+  const pendingCommissionsTotal = useMemo(
+    () => commissions
+      .filter((c) => c.status === 'pending' || c.status === 'validated')
+      .reduce((sum, c) => sum + (parseFloat(c.amount) || 0), 0),
+    [commissions]
+  )
+
+  // ── Last 3 commissions for the "recentes" section ──
+  const recentCommissions = useMemo(() => commissions.slice(0, 3), [commissions])
 
   // ── Display name ──
   const displayName = user
@@ -215,12 +236,11 @@ const RevendeurDashboard = () => {
           value={dealsSignedThisMonth.length}
           subtitle={format(new Date(), 'MMMM yyyy', { locale: fr })}
         />
-        {/* TODO: Replace mock commission value with real data when `commissions` collection exists in Directus */}
         <KPICard
           icon={Wallet}
           label="Commissions a recevoir"
-          value={formatCHF(12450)}
-          subtitle="Estimation en cours"
+          value={formatCHF(pendingCommissionsTotal)}
+          subtitle={`${commissions.filter((c) => c.status === 'pending' || c.status === 'validated').length} commission${commissions.filter((c) => c.status === 'pending' || c.status === 'validated').length > 1 ? 's' : ''} en attente`}
         />
       </div>
 
@@ -280,43 +300,57 @@ const RevendeurDashboard = () => {
           )}
         </div>
 
-        {/* Commissions recentes — TODO: replace mock data with real Directus collection */}
+        {/* Commissions recentes */}
         <div className="ds-card">
           <div className="p-4 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Commissions recentes
             </h2>
-            {/* TODO: show total from real data */}
-            <span className="text-xs text-gray-400">3 dernieres</span>
+            <span className="text-xs text-gray-400">{recentCommissions.length} derniere{recentCommissions.length > 1 ? 's' : ''}</span>
           </div>
 
-          <div className="divide-y divide-gray-50">
-            {/* TODO: Replace this mock data with useQuery fetching from `commissions` collection when it exists */}
-            {mockCommissions.map((c) => {
-              const isPaid = c.status === 'payee'
-              return (
-                <div
-                  key={c.id}
-                  className="px-4 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className={isPaid ? 'ds-badge ds-badge-success' : 'ds-badge ds-badge-warning'}>
-                      {c.status}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{c.label}</p>
-                      <p className="text-xs text-gray-400">
-                        {format(new Date(c.date), 'dd MMM yyyy', { locale: fr })}
-                      </p>
+          {recentCommissions.length === 0 ? (
+            <div className="p-8 text-center text-gray-400 text-sm">
+              Aucune commission disponible
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-50">
+              {recentCommissions.map((c) => {
+                const statusBadge = {
+                  paid:      { label: 'Payee',      cls: 'ds-badge ds-badge-success' },
+                  validated: { label: 'Validee',    cls: 'ds-badge ds-badge-success' },
+                  pending:   { label: 'En attente', cls: 'ds-badge ds-badge-warning' },
+                  cancelled: { label: 'Annulee',    cls: 'ds-badge ds-badge-danger' }
+                }
+                const badge = statusBadge[c.status] || { label: c.status || 'Inconnu', cls: 'ds-badge ds-badge-default' }
+                return (
+                  <div
+                    key={c.id}
+                    className="px-4 py-3 flex items-center justify-between hover:bg-gray-50/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={badge.cls}>
+                        {badge.label}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          {c.notes || `Commission #${String(c.id).slice(0, 8)}`}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {c.date_created
+                            ? format(new Date(c.date_created), 'dd MMM yyyy', { locale: fr })
+                            : '—'}
+                        </p>
+                      </div>
                     </div>
+                    <span className="text-sm font-bold text-gray-900">
+                      {formatCHF(parseFloat(c.amount) || 0)}
+                    </span>
                   </div>
-                  <span className="text-sm font-bold text-gray-900">
-                    {formatCHF(c.amount)}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 

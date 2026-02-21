@@ -5,11 +5,14 @@ const variantClasses = {
   primary: 'ds-btn ds-btn-primary',
   secondary: 'ds-btn ds-btn-secondary',
   ghost: 'ds-btn ds-btn-ghost',
+  plain: 'ds-btn ds-btn-plain',
+  destructive: 'ds-btn ds-btn-destructive',
 }
 
 const sizeClasses = {
-  sm: 'text-xs !py-1 !px-2.5',
+  sm: 'ds-btn-sm',
   md: '',
+  lg: 'ds-btn-lg',
 }
 
 const Button = ({
@@ -17,6 +20,7 @@ const Button = ({
   variant = 'primary',
   size = 'md',
   icon,
+  iconOnly = false,
   loading = false,
   disabled = false,
   fullWidth = false,
@@ -26,8 +30,8 @@ const Button = ({
   const classes = [
     variantClasses[variant] || variantClasses.primary,
     sizeClasses[size] || '',
+    iconOnly ? 'ds-btn-icon' : '',
     fullWidth ? 'w-full' : '',
-    (disabled || loading) ? 'opacity-50 cursor-not-allowed' : '',
     className,
   ].filter(Boolean).join(' ')
 
@@ -36,11 +40,12 @@ const Button = ({
       {loading ? (
         <Loader2 size={14} className="animate-spin" />
       ) : icon ? (
-        <span className="flex-shrink-0 flex items-center" style={{ width: 14, height: 14 }}>{icon}</span>
+        <span className="flex-shrink-0 flex items-center">{icon}</span>
       ) : null}
-      {children}
+      {!iconOnly && children}
     </button>
   )
 }
 
+export { Button }
 export default Button

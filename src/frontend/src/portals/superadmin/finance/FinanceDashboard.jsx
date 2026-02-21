@@ -1,7 +1,7 @@
 /**
  * FinanceDashboard — S-03-06 refactor
  * Dashboard finance SuperAdmin connecte a Directus via useFinance hook.
- * Utilise Tailwind + glassmorphism au lieu de Tabler classes.
+ * Utilise Tailwind + design-system.css tokens.
  */
 
 import React from 'react'

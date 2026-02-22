@@ -130,6 +130,7 @@ const IntegrationsSettings = () => {
   const [expandedIntegration, setExpandedIntegration] = useState(null);
   const [showSecrets, setShowSecrets] = useState({});
   const [testingId, setTestingId] = useState(null);
+  const [formValues, setFormValues] = useState({});
   const queryClient = useQueryClient();
 
   // Fetch integration statuses
@@ -159,6 +160,25 @@ const IntegrationsSettings = () => {
     }
   });
 
+  // Save integration config mutation
+  const saveConfig = useMutation({
+    mutationFn: async ({ integrationId, config }) => {
+      const response = await api.post('/api/integrations/config', {
+        integration_id: integrationId,
+        config
+      });
+      return response.data;
+    },
+    onSuccess: (data, { integrationId }) => {
+      toast.success(`Configuration ${INTEGRATIONS.find(i => i.id === integrationId)?.name} sauvegardee`);
+      queryClient.invalidateQueries({ queryKey: ['integration-status'] });
+      setExpandedIntegration(null);
+    },
+    onError: (error, { integrationId }) => {
+      toast.error(`Erreur sauvegarde ${INTEGRATIONS.find(i => i.id === integrationId)?.name}: ${error.response?.data?.error?.message || error.message}`);
+    }
+  });
+
   const handleTest = async (integrationId) => {
     setTestingId(integrationId);
     try {
@@ -166,6 +186,16 @@ const IntegrationsSettings = () => {
     } finally {
       setTestingId(null);
     }
+  };
+
+  const handleFieldChange = (integrationId, fieldKey, value) => {
+    setFormValues(prev => ({
+      ...prev,
+      [integrationId]: {
+        ...(prev[integrationId] || {}),
+        [fieldKey]: value
+      }
+    }));
   };
 
   const toggleSecret = (integrationId, fieldKey) => {
@@ -308,15 +338,24 @@ const IntegrationsSettings = () => {
                     <div className="pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
                       <form onSubmit={(e) => {
                         e.preventDefault();
-                        // TODO: Wire up api.put/post call to persist integration config
-                        toast.success('Configuration sauvegardee');
+                        const config = formValues[integration.id] || {};
+                        // Merge with existing config to avoid losing un-edited fields
+                        const existingConfig = status?.config || {};
+                        saveConfig.mutate({
+                          integrationId: integration.id,
+                          config: { ...existingConfig, ...config }
+                        });
                       }}>
                         {integration.fields.map(field => (
                           <div className="mb-3" key={field.key}>
                             <label className="block text-sm font-medium text-zinc-700 mb-1">{field.label}</label>
                             <div className="flex">
                               {field.type === 'select' ? (
-                                <select className="ds-input">
+                                <select
+                                  className="ds-input"
+                                  value={formValues[integration.id]?.[field.key] ?? status?.config?.[field.key] ?? ''}
+                                  onChange={(e) => handleFieldChange(integration.id, field.key, e.target.value)}
+                                >
                                   {field.options.map(opt => (
                                     <option key={opt} value={opt}>{opt}</option>
                                   ))}
@@ -331,7 +370,8 @@ const IntegrationsSettings = () => {
                                     }
                                     className="ds-input"
                                     placeholder={field.placeholder || ''}
-                                    defaultValue={status?.config?.[field.key] || ''}
+                                    value={formValues[integration.id]?.[field.key] ?? status?.config?.[field.key] ?? ''}
+                                    onChange={(e) => handleFieldChange(integration.id, field.key, e.target.value)}
                                   />
                                   {field.type === 'password' && (
                                     <button
@@ -352,8 +392,12 @@ const IntegrationsSettings = () => {
                           </div>
                         ))}
                         <div className="flex gap-2">
-                          <button type="submit" className="ds-btn ds-btn-primary">
-                            <Save size={14} className="mr-1" />
+                          <button type="submit" className="ds-btn ds-btn-primary" disabled={saveConfig.isPending}>
+                            {saveConfig.isPending ? (
+                              <RefreshCw size={14} className="mr-1 animate-spin" />
+                            ) : (
+                              <Save size={14} className="mr-1" />
+                            )}
                             Enregistrer
                           </button>
                           <button

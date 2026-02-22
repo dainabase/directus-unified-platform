@@ -17,10 +17,11 @@ import {
 import {
   Landmark, CreditCard, Download, Search, X, ChevronLeft, ChevronRight,
   ArrowDownRight, ArrowUpRight, Link2, RefreshCw, Loader2, AlertCircle,
-  Eye, EyeOff, Filter, CheckCircle2
+  Eye, EyeOff, Filter, CheckCircle2, ShieldAlert, ShieldOff, ExternalLink
 } from 'lucide-react'
 import { format, subDays, parseISO, startOfDay, isWithinInterval } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import toast from 'react-hot-toast'
 import api from '../../../lib/axios'
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -108,6 +109,126 @@ const createReconciliation = async ({ transaction_id, invoice_id, amount, curren
     reconciliation_type: 'manual'
   })
   return res.data?.data
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Token status
+// ────────────────────────────────────────────────────────────────────────────
+
+const fetchTokenStatus = async (company) => {
+  try {
+    const res = await api.get('/api/revolut/token-status', {
+      params: { company: company || 'HYPERVISUAL' }
+    })
+    return res.data?.data || { hasToken: false, expired: true }
+  } catch {
+    return { hasToken: false, expired: true, error: true }
+  }
+}
+
+const refreshRevolutToken = async (company) => {
+  const res = await api.post('/api/revolut/refresh', {
+    company: company || 'HYPERVISUAL'
+  })
+  return res.data
+}
+
+/**
+ * Compute token state from status data.
+ * Returns: 'valid' | 'expiring' | 'expired' | 'missing'
+ */
+function getTokenState(tokenStatus) {
+  if (!tokenStatus) return 'missing'
+  if (!tokenStatus.hasToken) return 'missing'
+  if (tokenStatus.expired) return 'expired'
+  // Revolut access tokens last 40min, but refresh tokens last 90 days.
+  // The token-status endpoint reports the access token expiry.
+  // We warn if a refresh has been failing (warning field set)
+  if (tokenStatus.warning) return 'expiring'
+  // If token expires within 7 days worth of refresh cycles but has no warning, it's valid
+  return 'valid'
+}
+
+/** Orange warning banner — token has issues but data still available */
+function TokenWarningBanner({ tokenStatus, onRefresh, isRefreshing }) {
+  return (
+    <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 flex items-start gap-3">
+      <ShieldAlert className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-amber-800">
+          Connexion Revolut instable
+        </p>
+        <p className="text-xs text-amber-700 mt-0.5">
+          {tokenStatus?.warning
+            ? `Le renouvellement automatique du token a echoue. ${tokenStatus.warning}`
+            : 'Le token Revolut necessite un renouvellement.'
+          }
+          {' '}Les donnees affichees peuvent etre en retard.
+        </p>
+      </div>
+      <button
+        onClick={onRefresh}
+        disabled={isRefreshing}
+        className="ds-btn text-xs px-3 py-1.5 bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50 flex-shrink-0"
+      >
+        {isRefreshing ? (
+          <Loader2 size={12} className="animate-spin mr-1" />
+        ) : (
+          <RefreshCw size={12} className="mr-1" />
+        )}
+        Renouveler
+      </button>
+    </div>
+  )
+}
+
+/** Full degraded page — token expired, show clean message */
+function TokenExpiredPage({ tokenStatus, onReconnect, isRefreshing }) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs text-gray-500 uppercase tracking-wide">Pole Finance</p>
+          <h2 className="text-xl font-bold text-gray-900">Banking / Revolut</h2>
+        </div>
+      </div>
+
+      <div className="ds-card p-12 text-center max-w-lg mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-zinc-100 flex items-center justify-center mx-auto mb-5">
+          <ShieldOff className="w-8 h-8 text-zinc-400" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 mb-2">
+          Connexion Revolut expiree
+        </h3>
+        <p className="text-sm text-gray-500 mb-1">
+          {tokenStatus?.hasToken === false
+            ? 'Aucun token Revolut configure. Veuillez connecter votre compte Revolut Business via OAuth2.'
+            : 'Le token d\'acces Revolut a expire et le renouvellement automatique a echoue.'
+          }
+        </p>
+        <p className="text-xs text-gray-400 mb-6">
+          Les donnees bancaires ne peuvent pas etre synchronisees tant que la connexion n'est pas retablie.
+        </p>
+        <button
+          onClick={onReconnect}
+          disabled={isRefreshing}
+          className="ds-btn ds-btn-primary px-6 py-2.5"
+        >
+          {isRefreshing ? (
+            <Loader2 size={14} className="animate-spin mr-2" />
+          ) : (
+            <ExternalLink size={14} className="mr-2" />
+          )}
+          Reconnecter Revolut OAuth2
+        </button>
+        {tokenStatus?.warning && (
+          <p className="text-xs text-red-500 mt-4">
+            Derniere erreur : {tokenStatus.warning}
+          </p>
+        )}
+      </div>
+    </div>
+  )
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -335,6 +456,36 @@ export function BankingPage({ selectedCompany }) {
   })
 
   const PAGE_SIZE = 50
+
+  // ── Token status query ──
+  const {
+    data: tokenStatus,
+    isLoading: tokenLoading,
+    refetch: refetchToken
+  } = useQuery({
+    queryKey: ['revolut-token-status', company],
+    queryFn: () => fetchTokenStatus(company),
+    staleTime: 1000 * 60,
+    refetchInterval: 60_000
+  })
+
+  const tokenState = getTokenState(tokenStatus)
+  const [isRefreshingToken, setIsRefreshingToken] = useState(false)
+
+  const handleReconnect = async () => {
+    setIsRefreshingToken(true)
+    try {
+      await refreshRevolutToken(company)
+      await refetchToken()
+      toast.success('Token Revolut renouvele')
+    } catch (err) {
+      toast.error('Echec du renouvellement. Utilisez OAuth2 pour reconnecter.')
+      // Fall back to OAuth2 authorization
+      window.location.href = `/api/integrations/revolut/oauth/authorize?company=${encodeURIComponent(company || 'HYPERVISUAL')}`
+    } finally {
+      setIsRefreshingToken(false)
+    }
+  }
 
   // ── Queries ──
   const {
@@ -581,6 +732,17 @@ export function BankingPage({ selectedCompany }) {
   // ── Loading ──
   const isLoading = accountsLoading || transactionsLoading
 
+  // ── Token expired: show degraded page (CDC v2.0 §4.5) ──
+  if (!tokenLoading && (tokenState === 'expired' || tokenState === 'missing')) {
+    return (
+      <TokenExpiredPage
+        tokenStatus={tokenStatus}
+        onReconnect={handleReconnect}
+        isRefreshing={isRefreshingToken}
+      />
+    )
+  }
+
   if (isLoading && accounts.length === 0) {
     return (
       <div className="space-y-6">
@@ -593,6 +755,15 @@ export function BankingPage({ selectedCompany }) {
 
   return (
     <div className="space-y-6">
+      {/* ── Token expiring warning banner ── */}
+      {tokenState === 'expiring' && (
+        <TokenWarningBanner
+          tokenStatus={tokenStatus}
+          onRefresh={handleReconnect}
+          isRefreshing={isRefreshingToken}
+        />
+      )}
+
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
         <div>

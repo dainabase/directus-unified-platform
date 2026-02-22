@@ -117,34 +117,34 @@
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.1.1 | Créer `InvoiceNinjaHub.jsx` | 🔥 | 🔴 | Statut + dernières factures + raccourcis |
-| D.1.2 | Bouton "Envoyer via Invoice Ninja" dans Factures clients | 🔥 | 🔴 | Action contextuelle |
-| D.1.3 | Bouton "Envoyer via Invoice Ninja" dans Devis | 🔥 | 🔴 | Action contextuelle + statut |
-| D.1.4 | Widget "Impayés Invoice Ninja" dans Dashboard CEO | ⚡ | 🔴 | Nombre + montant total |
+| D.1.1 | Créer `InvoiceNinjaHub.jsx` | 🔥 | 🟢 2026-02-22 | Statut + dernières factures + raccourcis — DS v2.0 rewrite complet |
+| D.1.2 | Bouton "Envoyer via Invoice Ninja" dans Factures clients | 🔥 | 🟢 2026-02-22 | Action contextuelle dans InvoicesPage |
+| D.1.3 | Bouton "Envoyer via Invoice Ninja" dans Devis | 🔥 | 🟢 2026-02-22 | Action contextuelle + conversion dans QuotesModule |
+| D.1.4 | Widget "Impayés Invoice Ninja" dans Dashboard CEO | ⚡ | 🟢 2026-02-22 | OverdueInvoicesWidget — nombre + montant, polling 60s |
 
 ### D.2 — Hub Mautic
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.2.1 | Créer `MauticHub.jsx` | ⚡ | 🔴 | Statut + campagnes + stats |
-| D.2.2 | Bouton "Envoyer relance (Mautic)" sur factures en retard | 🔥 | 🔴 | Action contextuelle avec confirmation |
-| D.2.3 | Stat "Emails envoyés ce mois" dans Dashboard CEO | 📌 | 🔴 | KPI depuis API Mautic |
+| D.2.1 | Créer `MauticHub.jsx` | ⚡ | 🟢 2026-02-22 | Statut + campagnes + stats — live data via /api/mautic/* |
+| D.2.2 | Bouton "Envoyer relance (Mautic)" sur factures en retard | 🔥 | 🟢 2026-02-22 | Action contextuelle avec confirmation dans InvoicesPage |
+| D.2.3 | Stat "Emails envoyés ce mois" dans Dashboard CEO | 📌 | 🟢 2026-02-22 | MauticEmailsWidget — KPI polling 60s |
 
 ### D.3 — Hub Revolut
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.3.1 | Compléter `RevolutHub.jsx` — balances + transactions + statut token | 🔥 | 🔴 | CHF + EUR + USD + expiration |
-| D.3.2 | Bouton "Payer via Revolut" sur facture fournisseur validée | 🔥 | 🔴 | Flow : validation → montant → confirmation → paiement |
-| D.3.3 | Balances Revolut live dans Dashboard CEO | 🔥 | 🔴 | Refresh 60s |
+| D.3.1 | Compléter `RevolutHub.jsx` — balances + transactions + statut token | 🔥 | 🟢 2026-02-22 | CHF + EUR + USD + token warning + transactions list |
+| D.3.2 | Bouton "Payer via Revolut" sur facture fournisseur validée | 🔥 | 🟢 2026-02-22 | Flow 3 étapes : vérification → confirmation → résultat |
+| D.3.3 | Balances Revolut live dans Dashboard CEO | 🔥 | 🟢 2026-02-22 | RevolutBalancesWidget — solde CHF, polling 60s |
 
 ### D.4 — Hub ERPNext
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.4.1 | Créer `ERPNextHub.jsx` — lecture seule | 📌 | 🔴 | Statut + stock critique + RH |
+| D.4.1 | Créer `ERPNextHub.jsx` — lecture seule | 📌 | 🟢 2026-02-22 | 6 KPIs (revenus, dépenses, GL, stock, employés, commandes) + activités + chart revenus |
 
-**Critère de sortie Phase D** : 4 Hubs accessibles. Actions contextuelles IN et Mautic. Revolut paiement fournisseur fonctionnel.
+**Critère de sortie Phase D** : ✅ 4 Hubs accessibles. Actions contextuelles IN et Mautic. Revolut paiement fournisseur fonctionnel.
 
 ---
 

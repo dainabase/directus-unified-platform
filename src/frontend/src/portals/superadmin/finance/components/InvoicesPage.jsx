@@ -10,7 +10,7 @@ import React, { useState, useMemo, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   FileText, Search, Plus, Download, Receipt,
-  ChevronLeft, ChevronRight, Loader2, ArrowUpDown, Send
+  ChevronLeft, ChevronRight, Loader2, ArrowUpDown, Send, Megaphone
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '../../../../lib/axios'
@@ -152,6 +152,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [sendingId, setSendingId] = useState(null)
+  const [relanceId, setRelanceId] = useState(null)
 
   const handleSendInvoiceNinja = async (e, inv) => {
     e.stopPropagation()
@@ -164,6 +165,21 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
       toast.error(err.response?.data?.error || 'Erreur lors de l\'envoi via Invoice Ninja')
     } finally {
       setSendingId(null)
+    }
+  }
+
+  const handleRelanceMautic = async (e, inv) => {
+    e.stopPropagation()
+    if (!inv.id) return
+    if (!window.confirm(`Envoyer une relance Mautic pour la facture ${inv.invoice_number || inv.id} ?`)) return
+    setRelanceId(inv.id)
+    try {
+      await api.post(`/api/integrations/mautic/trigger/payment-reminder/${inv.id}`)
+      toast.success(`Relance envoyee via Mautic pour ${inv.invoice_number || inv.id}`)
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Erreur lors de la relance Mautic')
+    } finally {
+      setRelanceId(null)
     }
   }
 
@@ -366,21 +382,39 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
                       <StatusBadge status={displayStatus} />
                     </td>
                     <td className="px-4 py-3 text-center">
-                      {inv.status === 'sent' || inv.status === 'draft' ? (
-                        <button
-                          onClick={(e) => handleSendInvoiceNinja(e, inv)}
-                          disabled={sendingId === inv.id}
-                          className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs"
-                          title="Envoyer via Invoice Ninja"
-                        >
-                          {sendingId === inv.id ? (
-                            <Loader2 size={12} className="animate-spin" />
-                          ) : (
-                            <Send size={12} />
-                          )}
-                          Envoyer IN
-                        </button>
-                      ) : null}
+                      <div className="flex items-center justify-center gap-1">
+                        {(inv.status === 'sent' || inv.status === 'draft') && (
+                          <button
+                            onClick={(e) => handleSendInvoiceNinja(e, inv)}
+                            disabled={sendingId === inv.id}
+                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs"
+                            title="Envoyer via Invoice Ninja"
+                          >
+                            {sendingId === inv.id ? (
+                              <Loader2 size={12} className="animate-spin" />
+                            ) : (
+                              <Send size={12} />
+                            )}
+                            IN
+                          </button>
+                        )}
+                        {isOverdue && (
+                          <button
+                            onClick={(e) => handleRelanceMautic(e, inv)}
+                            disabled={relanceId === inv.id}
+                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs"
+                            style={{ color: 'var(--semantic-orange)' }}
+                            title="Relance via Mautic"
+                          >
+                            {relanceId === inv.id ? (
+                              <Loader2 size={12} className="animate-spin" />
+                            ) : (
+                              <Megaphone size={12} />
+                            )}
+                            Relance
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 )

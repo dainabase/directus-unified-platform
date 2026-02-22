@@ -19,6 +19,7 @@ import TreasuryWidget from './widgets/TreasuryWidget'
 import ActiveProjectsWidget from './widgets/ActiveProjectsWidget'
 import IntegrationStatusBar from './widgets/IntegrationStatusBar'
 import OverdueInvoicesWidget from './widgets/OverdueInvoicesWidget'
+import MauticEmailsWidget from './widgets/MauticEmailsWidget'
 
 const Dashboard = ({ selectedCompany }) => {
   const isFetching = useIsFetching()
@@ -63,8 +64,11 @@ const Dashboard = ({ selectedCompany }) => {
       {/* 2. Actions urgentes — full width */}
       <AlertsWidget selectedCompany={selectedCompany} maxItems={5} />
 
-      {/* 2b. Factures impayées Invoice Ninja */}
-      <OverdueInvoicesWidget />
+      {/* 2b. Factures impayées Invoice Ninja + Emails Mautic */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <OverdueInvoicesWidget />
+        <MauticEmailsWidget />
+      </div>
 
       {/* 3. KPIs compacts */}
       <KPIWidget selectedCompany={selectedCompany} />

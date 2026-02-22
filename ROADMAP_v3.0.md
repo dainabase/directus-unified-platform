@@ -104,7 +104,7 @@
 | C.4 | Fusionner CRM Dashboard + Leads + Pipeline | ⚡ | 🔴 | Suppression CRM Dashboard standalone |
 | C.5 | Déplacer Support/Tickets sous Projets | 📌 | 🔴 | Cohérence workflow opérationnel |
 | C.6 | Dashboard CEO — refactoring workflow-first | 🔥 | 🔴 | Layout 5 workflows (CDC v2.0 §3.3) |
-| C.7 | Barre statut intégrations bas du Dashboard CEO | ⚡ | 🔴 | 4 pastilles : IN, Mautic, Revolut, ERPNext |
+| C.7 | Barre statut intégrations bas du Dashboard CEO | ⚡ | 🟢 Fait (2026-02-22) | 5 pastilles : IN, Mautic, Revolut, ERPNext, DocuSeal — hook useIntegrationStatus + polling 60s |
 
 **Critère de sortie Phase C** : Sidebar ≤7 entrées. Dashboard affiche 5 workflows.
 

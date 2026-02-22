@@ -165,12 +165,13 @@ export class IntegrationManager {
     const status = {
       docuseal: { available: false, error: null },
       invoiceNinja: { available: false, error: null },
-      mautic: { available: false, error: null }
+      mautic: { available: false, error: null },
+      revolut: { available: false, error: null, warning: null },
+      erpnext: { available: false, error: null }
     };
 
     // Check DocuSeal
     try {
-      // DocuSeal doesn't have a health endpoint, check if API key is set
       status.docuseal.available = !!process.env.DOCUSEAL_API_KEY;
       if (!status.docuseal.available) {
         status.docuseal.error = 'API key not configured';
@@ -198,6 +199,41 @@ export class IntegrationManager {
       status.mautic.available = dashboard.totalContacts !== undefined;
     } catch (error) {
       status.mautic.error = error.message;
+    }
+
+    // Check Revolut
+    try {
+      const hasClientId = !!process.env.REVOLUT_CLIENT_ID;
+      const hasSecret = !!process.env.REVOLUT_CLIENT_SECRET || !!process.env.REVOLUT_PRIVATE_KEY;
+      status.revolut.available = hasClientId && hasSecret;
+      if (!status.revolut.available) {
+        status.revolut.error = 'Revolut credentials not configured';
+      } else {
+        // Check token expiry if stored
+        const tokenExpiry = process.env.REVOLUT_TOKEN_EXPIRES_AT;
+        if (tokenExpiry) {
+          const expiresAt = new Date(tokenExpiry);
+          const now = new Date();
+          const daysUntilExpiry = (expiresAt - now) / (1000 * 60 * 60 * 24);
+          if (daysUntilExpiry < 7) {
+            status.revolut.warning = `Token expire dans ${Math.max(0, Math.round(daysUntilExpiry))} jours`;
+          }
+        }
+      }
+    } catch (error) {
+      status.revolut.error = error.message;
+    }
+
+    // Check ERPNext
+    try {
+      const hasUrl = !!process.env.ERPNEXT_URL;
+      const hasKey = !!process.env.ERPNEXT_API_KEY;
+      status.erpnext.available = hasUrl && hasKey;
+      if (!status.erpnext.available) {
+        status.erpnext.error = 'ERPNext credentials not configured';
+      }
+    } catch (error) {
+      status.erpnext.error = error.message;
     }
 
     return status;

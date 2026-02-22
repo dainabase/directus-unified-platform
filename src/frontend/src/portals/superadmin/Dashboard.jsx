@@ -18,6 +18,7 @@ import TreasuryWidget from './widgets/TreasuryWidget'
 import ActiveProjectsWidget from './widgets/ActiveProjectsWidget'
 import KPISidebar from './kpis/KPIWidget'
 import TreasuryForecast from './kpis/TreasuryForecast'
+import IntegrationStatusBar from './widgets/IntegrationStatusBar'
 
 const Dashboard = ({ selectedCompany }) => {
   const isFetching = useIsFetching()
@@ -58,6 +59,9 @@ const Dashboard = ({ selectedCompany }) => {
 
       {/* KPIs Row */}
       <KPIWidget selectedCompany={selectedCompany} />
+
+      {/* Integration Status Bar */}
+      <IntegrationStatusBar />
 
       {/* Operations + Pipeline + KPIs Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">

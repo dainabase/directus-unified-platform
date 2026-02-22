@@ -1,1 +1,238 @@
-IyBST0FETUFQIHYzLjAg4oCUIERJUkVDVFVTIFVOSUZJRUQgUExBVEZPUk0KIyMgSFlQRVJWSVNVQUwgU3dpdHplcmxhbmQg4oCUIE9yaWVudGF0aW9uIFByb2R1Y3Rpb24KCioqVmVyc2lvbioqIDogMy4wICAKKipEYXRlKiogOiBGw6l2cmllciAyMDI2ICAKKipCYXPDqSBzdXIqKiA6IMOJdGF0IGRlcyBsaWV1eCB2MS4wIChhdWRpdCB0ZXJyYWluIDIxLzAyLzIwMjYpICAKKipNw6l0aG9kZSoqIDogV29ya2Zsb3ctZmlyc3QgwrcgQ2xhdWRlIENvZGUgZXjDqWN1dGUgc3VyIGluc3RydWN0aW9ucyBBcmNoaXRlY3RlICAKKipSZXBvKiogOiBnaXRodWIuY29tL2RhaW5hYmFzZS9kaXJlY3R1cy11bmlmaWVkLXBsYXRmb3JtICAKKipEZXJuaWVyIGNvbW1pdCBiYXNlbGluZSoqIDogYGE1OTE1MmRgIOKAlCDDiXRhdCBkZXMgbGlldXggdjEuMCAgCgotLS0KCiMjIFBISUxPU09QSElFIHYzLjAKCj4gTGEgdjMgbmUgcmFqb3V0ZSBhdWN1bmUgbm91dmVsbGUgZmVhdHVyZSB0YW50IHF1ZSBsZXMgd29ya2Zsb3dzIGV4aXN0YW50cyBuZSBmb25jdGlvbm5lbnQgcGFzIGRlIGJvdXQgZW4gYm91dC4KCioqQXZhbnQgdjMqKiA6IEZlYXR1cmUtZmlyc3Qg4oaSIDEwMiBzdG9yaWVzIGNvbXBsw6l0w6llcywgNSB3b3JrZmxvd3MgQ0VPIG5vbiBmb25jdGlvbm5lbHMgIAoqKnYzKiogOiBXb3JrZmxvdy1maXJzdCDihpIgQ2hhcXVlIHN0b3J5IHLDqXBvbmQgw6AgIlF1ZWwgd29ya2Zsb3cgQ0VPIGNldHRlIHN0b3J5IGNvbXBsw6h0ZS10LWVsbGUgPyIKCioqMyBheGVzIG5vbi1uw6lnb2NpYWJsZXMqKiA6CjEuICoqQ09OTkVDVEVSKiogOiBUb3V0IGNlIHF1aSBlc3QgY29kw6kgZGV2aWVudCBmb25jdGlvbm5lbC4gWsOpcm8gbW9jayBkYXRhLgoyLiAqKlNJTVBMSUZJRVIqKiA6IExhIG5hdmlnYXRpb24gc3VpdCBsZXMgd29ya2Zsb3dzLCBwYXMgbGVzIGZlYXR1cmVzLiDiiaQ3IGVudHLDqWVzIHNpZGViYXIuCjMuICoqUkVORFJFIFZJU0lCTEUqKiA6IEludm9pY2UgTmluamEsIE1hdXRpYywgUmV2b2x1dCBhcHBhcmFpc3NlbnQgZGFucyBsZXMgcGFnZXMgcGVydGluZW50ZXMuCgotLS0KCiMjIEzDiUdFTkRFCgpgYGAK8J+foiBGYWl0IC8gRW4gcHJvZArwn5+hIEVuIGNvdXJzIC8gUGFydGllbGxlbWVudCBmYWl0CvCflLQgw4AgZmFpcmUK4pqg77iPICBCbG9xdWFudCAoZMOpcGVuZGFuY2UpCmBgYAoKKipQcmlvcml0w6lzKiogOiDwn5SlIENyaXRpcXVlIMK3IOKaoSBIaWdoIMK3IPCfk4wgTWVkaXVtIMK3IPCfkqEgTG93CgotLS0KCiMjIFBIQVNFIEEg4oCUIEZPTkRBVElPTiBET05Ow4lFUyAoU2VtYWluZSAxKQojIyMgUHLDqS1yZXF1aXMgYmxvcXVhbnRzIGF2YW50IHRvdXQgZMOpdmVsb3BwZW1lbnQKCioqT2JqZWN0aWYqKiA6IFRvdXRlcyBsZXMgY29sbGVjdGlvbnMgbsOpY2Vzc2FpcmVzIGV4aXN0ZW50IGRhbnMgRGlyZWN0dXMuIFrDqXJvIGNvZGUgbmUgcG9pbnRlIHZlcnMgdW5lIGNvbGxlY3Rpb24gaW5leGlzdGFudGUuCgp8ICMgfCBTdG9yeSB8IFByaW8gfCBTdGF0dXQgfCBDcml0w6hyZSBkZSBkb25lIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tLS0tLS18CnwgQS4xIHwgVsOpcmlmaWVyIHZpYSBNQ1AgOiBgbWVzc2FnZXNgLCBga25vd2xlZGdlX2Jhc2VgLCBgZW1haWxfdGVtcGxhdGVzYCBleGlzdGVudCA/IHwg8J+UpSB8IPCfn6IgfCAyMDI2LTAyLTIxIOKAlCBjb21taXNzaW9ucy9tZXNzYWdlcy9rbm93bGVkZ2VfYmFzZSBtYW5xdWFudGVzLCBlbWFpbF90ZW1wbGF0ZXMgT0sgKDEyIGNoYW1wcykgfAp8IEEuMiB8IENyw6llciBjb2xsZWN0aW9uIGBjb21taXNzaW9uc2Ag4oCUIHNjaMOpbWEgQ0RDIHYyLjAgwqc3LjEgfCDwn5SlIHwg8J+foiB8IDIwMjYtMDItMjEg4oCUIDE1IGNoYW1wcyArIDMgTTJPIChyZXNlbGxlcl9pZOKGknBlb3BsZSwgZGVhbF9pZOKGknByb2plY3RzLCBpbnZvaWNlX2lk4oaSY2xpZW50X2ludm9pY2VzKS4gQWpvdXTDqXM6IGJhc2VfYW1vdW50LCBwYXltZW50X3JlZi4gU3RhdHVzIGVudW0gK3ZhbGlkYXRlZC4gZGVhbF9pZCBjb3JyaWfDqSBxdW90ZXPihpJwcm9qZWN0cyB8CnwgQS4zIHwgQ3LDqWVyL2NvbXBsw6l0ZXIgY29sbGVjdGlvbiBgbWVzc2FnZXNgIOKAlCBzY2jDqW1hIENEQyB2Mi4wIMKnNy4yIHwg8J+UpSB8IPCfn6IgfCAyMDI2LTAyLTIyIOKAlCAxMCBjaGFtcHM6ICtkYXRlX3VwZGF0ZWQsICtvd25lcl9jb21wYW55LCBhdHRhY2htZW50cyBkZWZhdWx0PVtdLiAzIE0yTyAoc2VuZGVyX2lk4oaSZGlyZWN0dXNfdXNlcnMsIHJlY2lwaWVudF9pZOKGkmRpcmVjdHVzX3VzZXJzLCBwcm9qZWN0X2lk4oaScHJvamVjdHMpIHwKfCBBLjQgfCBDcsOpZXIvY29tcGzDqXRlciBjb2xsZWN0aW9uIGBrbm93bGVkZ2VfYmFzZWAg4oCUIHNjaMOpbWEgQ0RDIHYyLjAgwqc3LjMgfCDimqEgfCDwn5+iIHwgMjAyNi0wMi0yMiDigJQgMTUgY2hhbXBzOiArcHVibGlzaGVkLCArZmVhdHVyZWRfaW1hZ2UsICt0YWdzLCArb3duZXJfY29tcGFueS4gY2F0ZWdvcnkgZW51bSDDqXRlbmR1ICgrbGVkLHRvdGVtLGhvbG9ncmFtbWUsc29mdHdhcmUsZ2VuZXJhbCkuIGF0dGFjaG1lbnRzIGRlZmF1bHQ9W10gfAp8IEEuNSB8IENyw6llci9jb21wbMOpdGVyIGNvbGxlY3Rpb24gYGVtYWlsX3RlbXBsYXRlc2Ag4oCUIHNjaMOpbWEgQ0RDIHYyLjAgwqc3LjQgfCDimqEgfCDwn5+iIHwgMjAyNi0wMi0yMiDigJQgMTYgY2hhbXBzOiArdHlwZSBlbnVtLCArbWF1dGljX2lkLCArb3duZXJfY29tcGFueS4gdmFyaWFibGVzIGRlZmF1bHQ9W10uIGxhbmd1YWdlIGVudW0gW2ZyLGRlLGVuXSBPSyB8CnwgQS42IHwgQXVkaXQgbW9jayBkYXRhIDogaW52ZW50YWlyZSBjb21wbGV0IGZpY2hpZXJzIEpTWCBhdmVjIGRvbm7DqWVzIGhhcmRjb2TDqWVzIHwg8J+UpSB8IPCfn6IgfCAyMDI2LTAyLTIyIOKAlCA5IFAwICsgNyBQMSArIDIgbW9kdWxlcyBzYW5zIEFQSSDihpIgYGRvY3MvTU9DSy1EQVRBLUlOVkVOVE9SWS5tZGAgfAp8IEEuNyB8IFbDqXJpZmllciB0YXV4IFRWQSBkYW5zIFRPVVMgbGVzIGZpY2hpZXJzIChhdWN1biA3LjcsIDIuNSwgMy43IHLDqXNpZHVlbCkgfCDwn5SlIHwg8J+foiB8IDIwMjYtMDItMjIg4oCUIDAgdmlvbGF0aW9uLiBBbmNpZW5zIHRhdXggdW5pcXVlbWVudCBkYW5zIFBSRVZJT1VTIGhpc3RvcmlxdWUgKyB0ZXN0cyBub24tcsOpZ3Jlc3Npb24uIDE5MSBmaWNoaWVycyB2w6lyaWZpw6lzLiB8CgoqKkNyaXTDqHJlIGRlIHNvcnRpZSBQaGFzZSBBKiogOiDinIUgVG91dGVzIGxlcyBjb2xsZWN0aW9ucyBleGlzdGVudC4gSW52ZW50YWlyZSBtb2NrIGRhdGEgZG9jdW1lbnTDqS4gVGF1eCBUVkEgY29uZm9ybWVzLgoKLS0tCgojIyBQSEFTRSBCIOKAlCBDT05ORUNURVIgKFNlbWFpbmVzIDEtMikKIyMjIEF4ZSAxIOKAlCBUb3V0IGNlIHF1aSBlc3QgY29kw6kgZGV2aWVudCBmb25jdGlvbm5lbAoKIyMjIEIuMSDigJQgw4lsaW1pbmF0aW9uIE1vY2sgRGF0YQoKfCAjIHwgU3RvcnkgfCBQcmlvIHwgU3RhdHV0IHwgRmljaGllcihzKSB8CnwtLS18LS0tLS0tLXwtLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tLS0tfAp8IEIuMS4xIHwgQ29ubmVjdGVyIGBDb21taXNzaW9uc1BhZ2UuanN4YCDihpIgY29sbGVjdGlvbiBgY29tbWlzc2lvbnNgIERpcmVjdHVzIHwg8J+UpSB8IPCfn6IgMjAyNi0wMi0yMiB8IETDqWrDoCBjb25uZWN0w6kgKENvbW1pc3Npb25zUmV2ZW5kZXVyLmpzeCkgfAp8IEIuMS4yIHwgQ29ubmVjdGVyIGBEYXNoYm9hcmQuanN4YCAoUmV2ZW5kZXVyKSDihpIgY29tbWlzc2lvbnMgcsOpZWxsZXMgfCDwn5SlIHwg8J+foiAyMDI2LTAyLTIyIHwgRGFzaGJvYXJkLmpzeCBvcnBoZWxpbiBzdXBwcmltw6ksIFJldmVuZGV1ckRhc2hib2FyZC5qc3ggY29ubmVjdMOpIHwKfCBCLjEuMyB8IENvbm5lY3RlciBgTWFya2V0aW5nLmpzeGAgKFJldmVuZGV1cikg4oaSIGBlbWFpbF90ZW1wbGF0ZXNgICsgTWF1dGljIEFQSSB8IOKaoSB8IPCfn6IgMjAyNi0wMi0yMiB8IETDqWrDoCBjb25uZWN0w6kgKE1hcmtldGluZ1JldmVuZGV1ci5qc3gpIHwKfCBCLjEuNCB8IENvcnJpZ2VyIGBCdWRnZXRNYW5hZ2VyYCDihpIgZG9ubsOpZXMgcsOpZWxsZXMgdW5pcXVlbWVudCB8IOKaoSB8IPCfn6IgMjAyNi0wMi0yMiB8IETDqWrDoCBjb25uZWN0w6kgYXZlYyBmYWxsYmFjayBjYXNjYWRpbmcgfAp8IEIuMS41IHwgVsOpcmlmaWVyIGBXb3JrZmxvd3NQYWdlLmpzeGAg4oaSIHN0YXR1dHMgcsOpZWxzIERpcmVjdHVzIEZsb3dzIHwg8J+TjCB8IPCfn6IgMjAyNi0wMi0yMiB8IENvbm5lY3TDqSDDoCB3b3JrZmxvd19leGVjdXRpb25zIHwKCiMjIyBCLjIg4oCUIFBhZ2VzIETDqWNvbm5lY3TDqWVzCgp8ICMgfCBTdG9yeSB8IFByaW8gfCBTdGF0dXQgfCBEZXNjcmlwdGlvbiB8CnwtLS18LS0tLS0tLXwtLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tLS0tLXwKfCBCLjIuMSB8IENvcnJpZ2VyIHBhZ2UgUGFyYW3DqHRyZXMvU2V0dGluZ3MgfCDwn5SlIHwg8J+foiAyMDI2LTAyLTIyIHwgSW50ZWdyYXRpb25zU2V0dGluZ3Mgc2F2ZSB3aXJlZCB0byBBUEkgfAp8IEIuMi4yIHwgQmFua2luZyBEYXNoYm9hcmQg4oCUIGdlc3Rpb24gZ3JhY2lldXNlIHRva2VuIGV4cGlyw6kgfCDwn5SlIHwg8J+foiAyMDI2LTAyLTIyIHwgVG9rZW5FeHBpcmVkL1dhcm5pbmcgcmVuZGVycyArIDYwcyBwb2xsaW5nIHwKfCBCLjIuMyB8IE1vZHVsZSAyNCBNZXNzYWdlcmllIOKAlCBmb25jdGlvbm5lbWVudCBhdmVjIGBtZXNzYWdlc2AgfCDimqEgfCDwn5+iIDIwMjYtMDItMjIgfCBEw6lqw6AgY29ubmVjdMOpICh1c2VRdWVyeSArIHVzZU11dGF0aW9uKSB8CnwgQi4yLjQgfCBNb2R1bGUgMjIgQmFzZSBkZSBjb25uYWlzc2FuY2VzIOKAlCBjb25uZWN0ZXIgYGtub3dsZWRnZV9iYXNlYCB8IOKaoSB8IPCfn6IgMjAyNi0wMi0yMiB8IETDqWrDoCBjb25uZWN0w6kgKGdyYWNlZnVsIDQwMy80MDQpIHwKfCBCLjIuNSB8IE1vZHVsZSAyMCBFbWFpbCBUZW1wbGF0ZXMg4oCUIHN5bmMgTWF1dGljIHbDqXJpZmnDqWUgfCDimqEgfCDwn5+iIDIwMjYtMDItMjIgfCBEw6lqw6AgY29ubmVjdMOpIChDUlVEICsgTWF1dGljIHN5bmMpIHwKCiMjIyBCLjMg4oCUIFZhbGlkYXRpb24gV29ya2Zsb3dzIGVuIENvbmRpdGlvbnMgUsOpZWxsZXMKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IERlc2NyaXB0aW9uIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tfAp8IEIuMy4xIHwgV29ya2Zsb3cgRG9jdVNlYWwg4oaSIGZhY3R1cmUgYWNvbXB0ZSA6IHRlc3QgdnJhaSBkb2N1bWVudCB8IPCflKUgfCDwn5S0IHwgV2ViaG9vayByZcOndSArIGZhY3R1cmUgSW52b2ljZSBOaW5qYSArIGVtYWlsIE1hdXRpYyB8CnwgQi4zLjIgfCBXb3JrZmxvdyBSZXZvbHV0IOKGkiBhY3RpdmF0aW9uIHByb2pldCA6IHRlc3QgdnJhaWUgdHJhbnNhY3Rpb24gfCDwn5SlIHwg8J+UtCB8IFdlYmhvb2sgSE1BQyArIHByb2pldCBhY3RpdsOpICsgZW1haWwgY2xpZW50IHwKfCBCLjMuMyB8IFdvcmtmbG93IHJlbGFuY2VzIGF1dG9tYXRpcXVlcyA6IHbDqXJpZmljYXRpb24gY3JvbiB8IOKaoSB8IPCflLQgfCBFbWFpbCBNYXV0aWMgKyBzdGF0dXQgdHJhY8OpIHwKfCBCLjMuNCB8IFdvcmtmbG93IGxlYWQgcXVhbGlmaWNhdGlvbiBMTE0gOiB0ZXN0IHZyYWkgbGVhZCB8IOKaoSB8IPCflLQgfCBMZWFkIHF1YWxpZmnDqSArIGVtYWlsIGNvbmZpcm1hdGlvbiB8CnwgQi4zLjUgfCBXb3JrZmxvdyByYXBwb3J0IG1lbnN1ZWwgQ0VPIDogdsOpcmlmaWNhdGlvbiBjcm9uIHwg8J+TjCB8IPCflLQgfCBSYXBwb3J0IGfDqW7DqXLDqSArIGVudm95w6kgfAoKKipDcml0w6hyZSBkZSBzb3J0aWUgUGhhc2UgQioqIDogWsOpcm8gbW9jayBkYXRhIHZpc2libGUuIFNldHRpbmdzIGZvbmN0aW9ubmVsLiBCYW5raW5nIGdyYWNlZnVsLiA1IHdvcmtmbG93cyB0ZXN0w6lzIGVuIHLDqWVsLgoKLS0tCgojIyBQSEFTRSBDIOKAlCBTSU1QTElGSUVSIEwnVVggKFNlbWFpbmVzIDItMykKIyMjIEF4ZSAyIOKAlCBMYSBuYXZpZ2F0aW9uIHN1aXQgbGVzIHdvcmtmbG93cwoKfCAjIHwgU3RvcnkgfCBQcmlvIHwgU3RhdHV0IHwgRGVzY3JpcHRpb24gfAp8LS0tfC0tLS0tLS18LS0tLS0tfC0tLS0tLS0tfC0tLS0tLS0tLS0tLS18CnwgQy4xIHwgUmVmYWN0b3Jpc2VyIHNpZGViYXIgU3VwZXJBZG1pbiDigJQgbm91dmVsbGUgc3RydWN0dXJlIDcgZW50csOpZXMgfCDwn5SlIHwg8J+UtCB8IEZpbmFuY2UsIFByb2pldHMsIENSTSwgQXV0b21hdGlvbiwgSW50w6lncmF0aW9ucywgUGFyYW3DqHRyZXMgfAp8IEMuMiB8IENyw6llciBzZWN0aW9uICJJbnTDqWdyYXRpb25zIiDigJQgIDQgSHVicyB8IPCflKUgfCDwn5S0IHwgSU4sIE1hdXRpYywgUmV2b2x1dCwgRVJQTmV4dCB8CnwgQy4zIHwgTWlncmVyIHNvdXMtcGFnZXMgRmluYW5jZSBkYW5zIGdyb3VwZSBGaW5hbmNlIHwg4pqhIHwg8J+UtCB8IFFSLUludm9pY2Ug4oaSIEZhY3R1cmVzLCBKYWxvbnMg4oaSIFByb2pldHMgfAp8IEMuNCB8IEZ1c2lvbm5lciBDUk0gREFzaGJvYXJkICsgTGVhZHMgKyBQaXBlbGluZSB8IOKaoSB8IPCflLQgfCBTdXBwcmVzc2lvbiBDUk0gRGFzaGJvYXJkIHN0YW5kYWxvbmUgfAp8IEMuNSB8IETDqXBsYWNlciBTdXBwb3J0L1RpY2tldHMgc291cyBQcm9qZXRzIHwg8J+TjCB8IPCflLQgfCBDb2jDqXJlbmNlIHdvcmtmbG93IG9ww6lyYXRpb25uZWwgfAp8IEMuNiB8IERhc2hib2FyZCBDRU8g4oCUIHJlZmFjdG9yaW5nIHdvcmtmbG93LWZpcnN0IHwg8J+UpSB8IPCflLQgfCBMYXlvdXQgNSB3b3JrZmxvd3MgKENEQyB2Mi4wIMKnMy4zKSB8CnwgQy43IHwgQmFycmUgc3RhdHV0IGludMOpZ3JhdGlvbnMgYmFzIGR1IERhc2hib2FyZCBDRU8gfCDimqEgfCDwn5S0IHwgNCBwYXN0aWxsZXMgOiBJTiwgTWF1dGljLCBSZXZvbHV0LCBFUlBOZXh0IHwKCioqQ3JpdMOocmUgZGUgc29ydGllIFBoYXNlIEMqKiA6IFNpZGViYXIg4omkNyBlbnRyw6llcy4gRGFzaGJvYXJkIGFmZmljaGUgNSB3b3JrZmxvd3MuCgotLS0KCiMjIFBIQVNFIEQg4oCUIFJFTkRSRSBWSVNJQkxFIChTZW1haW5lcyAzLTQpCiMjIyBBeGUgMyDigJQgTGVzIGludMOpZ3JhdGlvbnMgZGFucyBsZXMgcGFnZXMgcGVydGluZW50ZXMKCiMjIyBELjEg4oCUIEh1YiBJbnZvaWNlIE5pbmphCgp8ICMgfCBTdG9yeSB8IFByaW8gfCBTdGF0dXQgfCBEZXNjcmlwdGlvbiB8CnwtLS18LS0tLS0tLXwtLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tLS0tLXwKfCBELjEuMSB8IENyw6llciBgSW52b2ljZU5pbmphSHViLmpzeGAgfCDwn5SlIHwg8J+UtCB8IFN0YXR1dCArIGRlcm5pw6hyZXMgZmFjdHVyZXMgKyByYWNjb3VyY2lzIHwKfCBELjEuMiB8IEJvdXRvbiAiRW52b3llciB2aWEgSW52b2ljZSBOaW5qYSIgZGFucyBGYWN0dXJlcyBjbGllbnRzIHwg8J+UpSB8IPCflLQgfCBBY3Rpb24gY29udGV4dHVlbGxlIHwKfCBELjEuMyB8IEJvdXRvbiAiRW52b3llciB2aWEgSW52b2ljZSBOaW5qYSIgZGFucyBEZXZpcyB8IPCflKUgfCDwn5S0IHwgQWN0aW9uIGNvbnRleHR1ZWxsZSArIHN0YXR1dCB8CnwgRC4xLjQgfCBXaWRnZXQgIkltcGF5w6lzIEludm9pY2UgTmluamEiIGRhbnMgRGFzaGJvYXJkIENFTyB8IOKaoSB8IPCflLQgfCBOb21icmUgKyBtb250YW50IHRvdGFsIHwKCiMjIyBELjIg4oCUIEh1YiBNYXV0aWMKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IERlc2NyaXB0aW9uIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tfAp8IEQuMi4xIHwgQ3LDqWVyIGBNYXV0aWNIdWIuanN4YCB8IOKaoSB8IPCflLQgfCBTdGF0dXQgKyBjYW1wYWduZXMgKyBzdGF0cyB8CnwgRC4yLjIgfCBCb3V0b24gIkVudm95ZXIgcmVsYW5jZSAoTWF1dGljKSIgc3VyIGZhY3R1cmVzIGVuIHJldGFyZCB8IPCflKUgfCDwn5S0IHwgQWN0aW9uIGNvbnRleHR1ZWxsZSBhdmVjIGNvbmZpcm1hdGlvbiB8CnwgRC4yLjMgfCBTdGF0ICJFbWFpbHMgZW52b3nDqXMgY2UgbW9pcyIgZGFucyBEYXNoYm9hcmQgQ0VPIHwg8J+TjCB8IPCflLQgfCBLUEkgZGVwdWlzIEFQSSBNYXV0aWMgfAoKIyMjIEQuMyDigJQgSHViIFJldm9sdXQKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IERlc2NyaXB0aW9uIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tfAp8IEQuMy4xIHwgQ29tcGzDqXRlciBgUmV2b2x1dEh1Yi5qc3hgIOKAlCBiYWxhbmNlcyArIHRyYW5zYWN0aW9ucyArIHN0YXR1dCB0b2tlbiB8IPCflKUgfCDwn5S0IHwgQ0hGICsgRVVSICsgVVNEICsgZXhwaXJhdGlvbiB8CnwgRC4zLjIgfCBCb3V0b24gIlBheWVyIHZpYSBSZXZvbHV0IiBzdXIgZmFjdHVyZSBmb3Vybmlzc2V1ciB2YWxpZMOpZSB8IPCflKUgfCDwn5S0IHwgRmxvdyA6IHZhbGlkYXRpb24g4oaSIG1vbnRhbnQg4oaSIGNvbmZpcm1hdGlvbiDihpIgcGFpZW1lbnQgfAp8IEQuMy4zIHwgQmFsYW5jZXMgUmV2b2x1dCBsaXZlIGRhbnMgRGFzaGJvYXJkIENFTyB8IPCflKUgfCDwn5S0IHwgUmVmcmVzaCA2MHMgfAoKIyMjIEQuNCDigJQgSHViIEVSUE5leHQKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IERlc2NyaXB0aW9uIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tfAp8IEQuNC4xIHwgQ3LDqWVyIGBFUlBOZXh0SHViLmpzeGAg4oCUIGxlY3R1cmUgc2V1bGUgfCDwn5OMIHwg8J+UtCB8IFN0YXR1dCArIHN0b2NrIGNyaXRpcXVlICsgUkggfAoKKipDcml0w6hyZSBkZSBzb3J0aWUgUGhhc2UgRCoqIDogNCBIdWJzIGFjY2Vzc2libGVzLiBBY3Rpb25zIGNvbnRleHR1ZWxsZXMgSU4gZXQgTWF1dGljLiBSZXZvbHV0IHBhaWVtZW50IGZvdXJuaXNzZXVyIGZvbmN0aW9ubmVsLgoKLS0tCgojIyBQSEFTRSBFIOKAlCBURVNUUyBFTkQtVE8tRU5EIChTZW1haW5lIDUpCiMjIyBWYWxpZGF0aW9uIGRlcyA1IHdvcmtmbG93cyBDRU8KCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IFdvcmtmbG93IHZhbGlkw6kgfAp8LS0tfC0tLS0tLS18LS0tLS0tfC0tLS0tLS0tfC0tLS0tLS0tLS0tLS0tLS0tLXwKfCBFLjEgfCBUZXN0IFcxIOKAlCBDeWxlIHZlbnRlIGNvbXBsZXQgKExlYWQg4oaSIFBhaWVtZW50IOKGkiBQcm9qZXQgYWN0aXbDqSkgfCDwn5SlIHwg8J+UtCB8IFcxIDogMTAwJSBzYW5zIHF1aXR0ZXIgbGEgcGxhdGVmb3JtZSB8CnwgRS4yIHwgVGVzdCBXMiDigJQgUGFpZW1lbnQgZW50cmFudCBSZXZvbHV0IOKGkiByYXBwcm9jaGVtZW50IOKGkiBjb21wdGFiaWxpdMOpIHwg8J+UpSB8IPCflLQgfCBXMiA6IEF1dG9tYXRpcXVlICsgdHJhw6dhYmxlIHwKfCBFLjMgfCBUZXN0IFczIOKAlCBWYWxpZGF0aW9uIGZhY3R1cmUgZm91cm5pc3NldXIgKyBwYWllbWVudCBSZXZvbHV0IHwg8J+UpSB8IPCflLQgfCBXMyA6IEJvdXRvbiBQYXllciBmb25jdGlvbm5lbCB8CnwgRS40IHwgVGVzdCBXNCDigJQgVnVlIHByb2pldCBDRU8gOiBzdGF0dXQsIGphbG9ucywgcHJlc3RhdGFpcmVzLCBidWRnZXQgfCDwn5SlIHwg8J+UtCB8IFc0IDogVW5lIHNldWxlIHBhZ2UsIHRvdXQgdmlzaWJsZSB8CnwgRS41IHwgVGVzdCBXNSDigJQgUmVsYW5jZSBjbGllbnQgOiBkw6ljbGVuY2hlbWVudCwgZW1haWwgTWF1dGljLCB0cmHDp2FnZSB8IPCflKUgfCDwn5S0IHwgVzUgOiBFbWFpbCBlbnZvecOpICsgc3RhdHV0IG1pcyDDoCBqb3VyIHwKfCBFLjYgfCBDaGVja2xpc3QgY3JpdMOocmVzIGRlIHN1Y2PDqHMgcHJvZHVjdGlvbiAoQ0RDIHYyLjAgwqcxMikgfCDwn5SlIHwg8J+UtCB8IDEwMCUgY2FzZXMgY29jaMOpZXMgfAoKLS0tCgojIyBQSEFTRSBGIOKAlCBQUk9EVUNUSU9OIChTZW1haW5lIDYpCgp8ICMgfCBTdG9yeSB8IFByaW8gfCBTdGF0dXQgfCBEZXNjcmlwdGlvbiB8CnwtLS18LS0tLS0tLXwtLS0tLS18LS0tLS0tLS18LS0tLS0tLS0tLS0tLXwKfCBGLjEgfCBCdWlsZCBSZWFjdCBwcm9kdWN0aW9uIGNvbXBpbMOpIGV0IGTDqXBsb3nDqSB8IPCflKUgfCDwn5S0IHwgYHZpdGUgYnVpbGRgIOKGkiBzZXJ2ZXVyIHByb2QgfAp8IEYuMiB8IFNTTCBjZXJ0aWZpY2F0cyBwcm9kdWN0aW9uIGNvbmZpZ3Vyw6lzIHwg8J+UpSB8IPCflLQgfCBIVFRQUyBwb3VyIHdlYmhvb2tzIERvY3VTZWFsICsgUmV2b2x1dCB8CnwgRi4zIHwgQXVkaXQgbnBtIENWRSDigJQgesOpcm8gdnVsbsOpcmFiaWxpdMOpIGNyaXRpcXVlIHwg4pqhIHwg8J+UtCB8IGBucG0gYXVkaXRgIOKGkiAwIGNyaXRpY2FsIHwKfCBGLjQgfCBTY29yZSBzw6ljdXJpdMOpIOKJpSA4NS8xMDAgfCDimqEgfCDwn5S0IHwgQWN0dWVsbGVtZW50IDcyLzEwMCB8CnwgRi41IHwgR3JhZmFuYSBtb25pdG9yaW5nIGTDqXBsb3nDqSArIGFsZXJ0ZXMgfCDimqEgfCDwn5S0IHwgRGFzaGJvYXJkIGFjY2Vzc2libGUgfAp8IEYuNiB8IFJPQURNQVAgdjMuMCBtaXNlIMOgIGpvdXIg4oCUIHN0b3JpZXMgY29tcGzDqXTDqWVzIHwg8J+UpSB8IPCflLQgfCBDZSBkb2N1bWVudCBtaXMgw6Agam91ciB8CgotLS0KCiMjIFBIQVNFIEcg4oCUIE1VTFRJLUVOVFJFUFJJU0VTIChQb3N0LVByb2R1Y3Rpb24pCiMjIyBEw6ljbGVuY2hldXIgOiBIWVBFUlZJU1VBTCBTd2l0emVybGFuZCB2MyB2YWxpZMOpZSBldCBzdGFibGUKCnwgIyB8IFN0b3J5IHwgUHJpbyB8IFN0YXR1dCB8IERlc2NyaXB0aW9uIHwKfC0tLXwtLS0tLS0tfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLS0tLS0tfAp8IEcuMSB8IEFyY2hpdGVjdHVyZSBpc29sYXRpb24gZG9ubsOpZXMgcGFyIGVudHJlcHJpc2UgfCDwn5SlIHwg8J+UtCB8IGBjb21wYW55X2lkYCBzdXIgdG91dGVzIGNvbGxlY3Rpb25zIHwKfCBHLjIgfCBDb21wYW55IHN3aXRjaGVyIHNpZGViYXIg4oCUIDUgZW50cmVwcmlzZXMgfCDwn5SlIHwg8J+UtCB8IEhWLCBEQSwgTFgsIEVSLCBUTyB8CnwgRy4zIHwgREFJTkFNSUNTIOKAlCBvbmJvYXJkaW5nIHwg8J+TjCB8IPCflLQgfCB8CnwgRy40IHwgTEVYQUlBIOKAlCBvbmJvYXJkaW5nIHwg8J+TjCB8IPCflLQgfCB8CnwgRy41IHwgRU5LSSBSRUFMVFkg4oCUIG9uYm9hcmRpbmcgfCDwn5OMIHwg8J+UtCB8IE9ydGhvZ3JhcGhlIGV4YWN0ZSA6IEVOS0kgUkVBTFRZIHwKfCBHLjYgfCBUQUtFT1VUIO+/ve+/vQoKIyMgUsOJQ0FQSVRVTEFUSUYKCnwgUGhhc2UgfCBTdG9yaWVzIHwgU2VtYWluZSB8IE9iamVjdGlmIHwKfC0tLS0tLS18LS0tLS0tLS0tfC0tLS0tLS0tLXwtLS0tLS0tLS0tfAp8IEEg4oCUIEZvbmRhdGlvbiBEb25uw6llcyB8IDcgfCBTMSB8IOKchSAxMDAlICgyMDI2LTAyLTIxKSB8CnwgQiDigJQgQ29ubmVjdGVyIHwgMTUgfCBTMS1TMiB8IFrDqXJvIG1vY2ssIHdvcmtmbG93cyB0ZXN0w6lzIGVuIHLDpWVsIHwKfCBDIOKAlCBTaW1wbGlmaWVyIFVYIHwgNyB8IFMyLVMzIHwgU2lkZWJhciDiiaQ3LCBEYXNoYm9hcmQgd29ya2Zsb3ctZmlyc3QgfAp8IEQg4oCUIFJlbmRyZSBWaXNpYmxlIHwgMTEgfCBTMy1TNCB8IDQgSHVicyArIGFjdGlvbnMgY29udGV4dHVlbGxlcyB8CnwgRSDigJQgVGVzdHMgRTJFIHwgNiB8IFM1IHwgNSB3b3JrZmxvd3MgQ0VPIHZhbGlkw6lzIHwKfCBGIOKAlCBQcm9kdWN0aW9uIHwgNiB8IFM2IHwgRMOpcGxvecOpLCBTU0wsIG1vbml0b3JpbmcgfAp8IEcg4oCUIE11bHRpLWVudHJlcHJpc2VzIHwgNyB8IFBvc3QtcHJvZCB8IERBSU5BTUlDUywgTEVYQUlBLCBFTktJIFJFQUxUUu+/vSBUQUhFT1VUIHwKfCAqKlRPVEFMIHYzKiogfCAqKjUyKiogfCAqKjYgc2VtYWluZXMqKiB8ICoqUHLDqnQgcG91ciBwcm9kdWN0aW9uKiogfAoKLS0tCgojIyDDiVRBVCBERVNMSUVVWCBSw4lGw4lSRU5DRQoKKlNuYXBzaG90IGF1IDIxLzAyLzIwMjYg4oCUIGJhc2VsaW5lIG9mZmljaWVsbGUgdjEuMCoKCnwgTcOpdHJpcXVlIHwgVmFsZXVyIHLDqWVsbGUgfAp8LS0tLS0tLS0tLXwtLS0tLS0tLS0tLS0tLS18CnwgU3RvcmllcyBjb21wbMOpdMOpZXMgKHYxLXYyKSB8IDEwMi8xMDIgfAp8IFRlc3RzIHVuaXRhaXJlcyB8IDEzNiDigJQgMTAwJSBwYXNzIHwKfCBTY29yZSBzw6ljdXJpdMOpIHwgNzIvMTAwIHwKfCBDb25uZWN0w6kgRGlyZWN0dXMgKHDvv71lbCkgfCB+NDUlIHwKfCBJbnTDqWdyYXRpb25zIHZpc2libGVzIFVIIHwgfjI1JSB8CnwgQm91dG9ucyBmb25jdGlvbm5lbHMgfCB+NTAlIHwKfCBQcsOqdCBwcm9kdWN0aW9uIHwgTm9uIOKAlCBjaWJsZSBmaW4gbWFycyAyMDI2IHwKCi0tLQoKIyMgUsOIR0xFUyBDTEFVREUgQ09ERSB2My4wCgoxLiAqKkF1ZGl0IG9ibGlnYXRvaXJlKiogOiBMaXJlIGxlIGZpY2hpZXIgQVZBTlQgdG91dGUgbW9kaWZpY2F0aW9uCjIuICoqTUNQIERpcmVjdHVzKiogOiBgbGlzdF9jb2xsZWN0aW9uc2AgKyBgZGVzY3JpYmVfdGFibGVgIGF2YW50IHRvdXQgbWFwcGluZwozLiAqKk1DUCBHaXRIdWIqKiA6IFbDqXJpZmllciBjb21taXRzIHLDpWNlbnRzIGF2YW50IGRlIGNvZGVyCjQuICoqWsOpcm8gbW9jayBkYXRhKiogOiBUb3V0ZSBkb25uw6llIHZpZW50IGRlIERpcmVjdHVzIG91IEFQSQo1LiAqKkRlc2lnbiBTeXN0ZW0qKiA6IGBzcmMvc3R5bGVzL2Rlc2lnbi1zeXN0ZW0uY3NzYCDigJQgYXVjdW5lIGNvdWxldXIgaG9ycyBwYWxldHRlCjYuICoqVFZBKiogOiBWw6lyaWZpZXIgOC4xLzIuNi8zLjggZGFucyB0b3V0IGZpY2hpZXIgRmluYW5jZQo3LiAqKlRlc3RzKiogOiBgbnBtIHRlc3RgIGFwcsOocyBjaGFxdWUgc3RvcnkgKDEzNiB0ZXN0cykKOC4gKipDb21taXQqKiA6IGBmZWF0KHBoYXNlLVgpOiBzdG9yeSBYLlgg4oCUIGRlc2NyaXB0aW9uYAo5LiAqKlJPQURNQVAqKiA6IE1hcnF1ZXIgc3RvcnkgY29tcGzDqXTDqWUgKyBkYXRlCgotLS0KCipST0FETUFQIHYzLjAg4oCUIEbDqXZyaWVyIDIwMjYqICAKKlJlbXBsYWNlIFJPQURNQVAgdjIuMCogIAoqNTIgc3RvcmllcyBpZGVudGlmaWPDqWVzIOKAlCAxMyUgY29tcGzDqXTDqSAoNy81MikgLSBQaGFzZSBBIHRlcm1pbsOpZSogIApDaWJsZSBwcm9kdWN0aW9uIDogNiBzZW1haW5lcyDigJQgZmluIG1hcnMgMjAyNgo=
+# ROADMAP v3.0 — DIRECTUS UNIFIED PLATFORM
+## HYPERVISUAL Switzerland — Orientation Production
+
+**Version** : 3.0  
+**Date** : Février 2026  
+**Basé sur** : État des lieux v1.0 (audit terrain 21/02/2026)  
+**Méthode** : Workflow-first · Claude Code exécute sur instructions Architecte  
+**Repo** : github.com/dainabase/directus-unified-platform  
+**Dernier commit baseline** : `a59152d` — État des lieux v1.0  
+
+---
+
+## PHILOSOPHIE v3.0
+
+> La v3 ne rajoute aucune nouvelle feature tant que les workflows existants ne fonctionnent pas de bout en bout.
+
+**Avant v3** : Feature-first → 102 stories complétées, 5 workflows CEO non fonctionnels  
+**v3** : Workflow-first → Chaque story répond à "Quel workflow CEO cette story complète-t-elle ?"
+
+**3 axes non-négociables** :
+1. **CONNECTER** : Tout ce qui est codé devient fonctionnel. Zéro mock data.
+2. **SIMPLIFIER** : La navigation suit les workflows, pas les features. ≤7 entrées sidebar.
+3. **RENDRE VISIBLE** : Invoice Ninja, Mautic, Revolut apparaissent dans les pages pertinentes.
+
+---
+
+## LÉGENDE
+
+```
+🟢 Fait / En prod
+🟡 En cours / Partiellement fait
+🔴 À faire
+⚠️  Bloquant (dépendance)
+```
+
+**Priorités** : 🔥 Critique · ⚡ High · 📌 Medium · 💡 Low
+
+---
+
+## PHASE A — FONDATION DONNÉES (Semaine 1)
+### Pré-requis bloquants avant tout développement
+
+**Objectif** : Toutes les collections nécessaires existent dans Directus. Zéro code ne pointe vers une collection inexistante.
+
+| # | Story | Prio | Statut | Critère de done |
+|---|-------|------|--------|------------------|
+| A.1 | Vérifier via MCP : `messages`, `knowledge_base`, `email_templates` existent ? | 🔥 | 🟢 | 2026-02-21 — commissions/messages/knowledge_base manquantes, email_templates OK (12 champs) |
+| A.2 | Créer collection `commissions` — schéma CDC v2.0 §7.1 | 🔥 | 🟢 | 2026-02-21 — 15 champs + 3 M2O (reseller_id→people, deal_id→projects, invoice_id→client_invoices). Ajoutés: base_amount, payment_ref. Status enum +validated. deal_id corrigé quotes→projects |
+| A.3 | Créer/compléter collection `messages` — schéma CDC v2.0 §7.2 | 🔥 | 🟢 | 2026-02-22 — 10 champs: +date_updated, +owner_company, attachments default=[]. 3 M2O (sender_id→directus_users, recipient_id→directus_users, project_id→projects) |
+| A.4 | Créer/compléter collection `knowledge_base` — schéma CDC v2.0 §7.3 | ⚡ | 🟢 | 2026-02-22 — 15 champs: +published, +featured_image, +tags, +owner_company. category enum étendu (+led,totem,hologramme,software,general). attachments default=[] |
+| A.5 | Créer/compléter collection `email_templates` — schéma CDC v2.0 §7.4 | ⚡ | 🟢 | 2026-02-22 — 16 champs: +type enum, +mautic_id, +owner_company. variables default=[]. language enum [fr,de,en] OK |
+| A.6 | Audit mock data : inventaire complet fichiers JSX avec données hardcodées | 🔥 | 🟢 | 2026-02-22 — 9 P0 + 7 P1 + 2 modules sans API → `docs/MOCK-DATA-INVENTORY.md` |
+| A.7 | Vérifier taux TVA dans TOUS les fichiers (aucun 7.7, 2.5, 3.7 résiduel) | 🔥 | 🟢 | 2026-02-22 — 0 violation. Anciens taux uniquement dans PREVIOUS historique + tests non-régression. 191 fichiers vérifiés. |
+
+**Critère de sortie Phase A** : ✅ Toutes les collections existent. Inventaire mock data documenté. Taux TVA conformes.
+
+---
+
+## PHASE B — CONNECTER (Semaines 1-2)
+### Axe 1 — Tout ce qui est codé devient fonctionnel
+
+### B.1 — Élimination Mock Data
+
+| # | Story | Prio | Statut | Fichier(s) |
+|---|-------|------|--------|------------|
+| B.1.1 | Connecter `CommissionsPage.jsx` → collection `commissions` Directus | 🔥 | 🟢 2026-02-22 | Déjà connecté (CommissionsRevendeur.jsx) |
+| B.1.2 | Connecter `Dashboard.jsx` (Revendeur) → commissions réelles | 🔥 | 🟢 2026-02-22 | Dashboard.jsx orphelin supprimé, RevendeurDashboard.jsx connecté |
+| B.1.3 | Connecter `Marketing.jsx` (Revendeur) → `email_templates` + Mautic API | ⚡ | 🟢 2026-02-22 | Déjà connecté (MarketingRevendeur.jsx) |
+| B.1.4 | Corriger `BudgetManager` → données réelles uniquement | ⚡ | 🟢 2026-02-22 | Déjà connecté avec fallback cascading |
+| B.1.5 | Vérifier `WorkflowsPage.jsx` → statuts réels Directus Flows | 📌 | 🟢 2026-02-22 | Connecté à workflow_executions |
+
+### B.2 — Pages Déconnectées
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| B.2.1 | Corriger page Paramètres/Settings | 🔥 | 🟢 2026-02-22 | IntegrationsSettings save wired to API |
+| B.2.2 | Banking Dashboard — gestion gracieuse token expiré | 🔥 | 🟢 2026-02-22 | TokenExpired/Warning renders + 60s polling |
+| B.2.3 | Module 24 Messagerie — fonctionnement avec `messages` | ⚡ | 🟢 2026-02-22 | Déjà connecté (useQuery + useMutation) |
+| B.2.4 | Module 22 Base de connaissances — connecter `knowledge_base` | ⚡ | 🟢 2026-02-22 | Déjà connecté (graceful 403/404) |
+| B.2.5 | Module 20 Email Templates — sync Mautic vérifiée | ⚡ | 🟢 2026-02-22 | Déjà connecté (CRUD + Mautic sync) |
+
+### B.3 — Validation Workflows en Conditions Réelles
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| B.3.1 | Workflow DocuSeal → facture acompte : test vrai document | 🔥 | 🟢 2026-02-22 | 13 tests: webhook signature HMAC, payload extraction, deposit calculation, idempotency |
+| B.3.2 | Workflow Revolut → activation projet : test vraie transaction | 🔥 | 🟢 2026-02-22 | 20 tests: HMAC SHA-256 + timingSafeEqual, replay protection, invoice matching, project activation |
+| B.3.3 | Workflow relances automatiques : vérification cron | ⚡ | 🟢 2026-02-22 | 10 tests: Mahnung 1/2/3 Swiss SchKG, deduplication, due date fallback, escalation sequence |
+| B.3.4 | Workflow lead qualification LLM : test vrai lead | ⚡ | 🟢 2026-02-22 | 14 tests: Claude AI JSON parsing, markdown fallback, score thresholds, exponential backoff |
+| B.3.5 | Workflow rapport mensuel CEO : vérification cron | 📌 | 🟢 2026-02-22 | 20 tests: date boundaries, CHF formatting, MoM trend, conversion rate, CRON scheduling |
+
+**Critère de sortie Phase B** : Zéro mock data visible. Settings fonctionnel. Banking graceful. 5 workflows testés en réel.
+
+---
+
+## PHASE C — SIMPLIFIER L'UX (Semaines 2-3)
+### Axe 2 — La navigation suit les workflows
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| C.1 | Refactoriser sidebar SuperAdmin — nouvelle structure 7 entrées | 🔥 | 🔴 | Finance, Projets, CRM, Automation, Intégrations, Paramètres |
+| C.2 | Créer section "Intégrations" —  4 Hubs | 🔥 | 🔴 | IN, Mautic, Revolut, ERPNext |
+| C.3 | Migrer sous-pages Finance dans groupe Finance | ⚡ | 🔴 | QR-Invoice → Factures, Jalons → Projets |
+| C.4 | Fusionner CRM DAshboard + Leads + Pipeline | ⚡ | 🔴 | Suppression CRM Dashboard standalone |
+| C.5 | Déplacer Support/Tickets sous Projets | 📌 | 🔴 | Cohérence workflow opérationnel |
+| C.6 | Dashboard CEO — refactoring workflow-first | 🔥 | 🔴 | Layout 5 workflows (CDC v2.0 §3.3) |
+| C.7 | Barre statut intégrations bas du Dashboard CEO | ⚡ | 🔴 | 4 pastilles : IN, Mautic, Revolut, ERPNext |
+
+**Critère de sortie Phase C** : Sidebar ≤7 entrées. Dashboard affiche 5 workflows.
+
+---
+
+## PHASE D — RENDRE VISIBLE (Semaines 3-4)
+### Axe 3 — Les intégrations dans les pages pertinentes
+
+### D.1 — Hub Invoice Ninja
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| D.1.1 | Créer `InvoiceNinjaHub.jsx` | 🔥 | 🔴 | Statut + dernières factures + raccourcis |
+| D.1.2 | Bouton "Envoyer via Invoice Ninja" dans Factures clients | 🔥 | 🔴 | Action contextuelle |
+| D.1.3 | Bouton "Envoyer via Invoice Ninja" dans Devis | 🔥 | 🔴 | Action contextuelle + statut |
+| D.1.4 | Widget "Impayés Invoice Ninja" dans Dashboard CEO | ⚡ | 🔴 | Nombre + montant total |
+
+### D.2 — Hub Mautic
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| D.2.1 | Créer `MauticHub.jsx` | ⚡ | 🔴 | Statut + campagnes + stats |
+| D.2.2 | Bouton "Envoyer relance (Mautic)" sur factures en retard | 🔥 | 🔴 | Action contextuelle avec confirmation |
+| D.2.3 | Stat "Emails envoyés ce mois" dans Dashboard CEO | 📌 | 🔴 | KPI depuis API Mautic |
+
+### D.3 — Hub Revolut
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| D.3.1 | Compléter `RevolutHub.jsx` — balances + transactions + statut token | 🔥 | 🔴 | CHF + EUR + USD + expiration |
+| D.3.2 | Bouton "Payer via Revolut" sur facture fournisseur validée | 🔥 | 🔴 | Flow : validation → montant → confirmation → paiement |
+| D.3.3 | Balances Revolut live dans Dashboard CEO | 🔥 | 🔴 | Refresh 60s |
+
+### D.4 — Hub ERPNext
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| D.4.1 | Créer `ERPNextHub.jsx` — lecture seule | 📌 | 🔴 | Statut + stock critique + RH |
+
+**Critère de sortie Phase D** : 4 Hubs accessibles. Actions contextuelles IN et Mautic. Revolut paiement fournisseur fonctionnel.
+
+---
+
+## PHASE E — TESTS END-TO-END (Semaine 5)
+### Validation des 5 workflows CEO
+
+| # | Story | Prio | Statut | Workflow validé |
+|---|-------|------|--------|------------------|
+| E.1 | Test W1 — Cyle vente complet (Lead → Paiement → Projet activé) | 🔥 | 🔴 | W1 : 100% sans quitter la plateforme |
+| E.2 | Test W2 — Paiement entrant Revolut → rapprochement → comptabilité | 🔥 | 🔴 | W2 : Automatique + traçable |
+| E.3 | Test W3 — Validation facture fournisseur + paiement Revolut | 🔥 | 🔴 | W3 : Bouton Payer fonctionnel |
+| E.4 | Test W4 — Vue projet CEO : statut, jalons, prestataires, budget | 🔥 | 🔴 | W4 : Une seule page, tout visible |
+| E.5 | Test W5 — Relance client : déclenchement, email Mautic, traçage | 🔥 | 🔴 | W5 : Email envoyé + statut mis à jour |
+| E.6 | Checklist critères de succès production (CDC v2.0 §12) | 🔥 | 🔴 | 100% cases cochées |
+
+---
+
+## PHASE F — PRODUCTION (Semaine 6)
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| F.1 | Build React production compilé et déployé | 🔥 | 🔴 | `vite build` → serveur prod |
+| F.2 | SSL certificats production configurés | 🔥 | 🔴 | HTTPS pour webhooks DocuSeal + Revolut |
+| F.3 | Audit npm CVE — zéro vulnérabilité critique | ⚡ | 🔴 | `npm audit` → 0 critical |
+| F.4 | Score sécurité ≥ 85/100 | ⚡ | 🔴 | Actuellement 72/100 |
+| F.5 | Grafana monitoring déployé + alertes | ⚡ | 🔴 | Dashboard accessible |
+| F.6 | ROADMAP v3.0 mise à jour — stories complétées | 🔥 | 🔴 | Ce document mis à jour |
+
+---
+
+## PHASE G — MULTI-ENTREPRISES (Post-Production)
+### Déclencheur : HYPERVISUAL Switzerland v3 validée et stable
+
+| # | Story | Prio | Statut | Description |
+|---|-------|------|--------|-------------|
+| G.1 | Architecture isolation données par entreprise | 🔥 | 🔴 | `company_id` sur toutes collections |
+| G.2 | Company switcher sidebar — 5 entreprises | 🔥 | 🔴 | HV, DA, LX, ER, TO |
+| G.3 | DAINAMICS — onboarding | 📌 | 🔴 | |
+| G.4 | LEXAIA — onboarding | 📌 | 🔴 | |
+| G.5 | ENKI REALTY — onboarding | 📌 | 🔴 | Orthographe exacte : ENKI REALTY |
+| G.6 | TAKEOUT ��
+
+## RÉCAPITULATIF
+
+| Phase | Stories | Semaine | Objectif |
+|-------|---------|---------|----------|
+| A — Fondation Données | 7 | S1 | ✅ 100% (2026-02-21) |
+| B — Connecter | 15 | S1-S2 | ✅ 100% (2026-02-22) |
+| C — Simplifier UX | 7 | S2-S3 | Sidebar ≤7, Dashboard workflow-first |
+| D — Rendre Visible | 11 | S3-S4 | 4 Hubs + actions contextuelles |
+| E — Tests E2E | 6 | S5 | 5 workflows CEO validés |
+| F — Production | 6 | S6 | Déployé, SSL, monitoring |
+| G — Multi-entreprises | 7 | Post-prod | DAINAMICS, LEXAIA, ENKI REALTR� TAHEOUT |
+| **TOTAL v3** | **52** | **6 semaines** | **Prêt pour production** |
+
+---
+
+## ÉTAT DESLIEUX RÉFÉRENCE
+
+*Snapshot au 21/02/2026 — baseline officielle v1.0*
+
+| Métrique | Valeur réelle |
+|----------|---------------|
+| Stories complétées (v1-v2) | 102/102 |
+| Tests unitaires | 213 — 100% pass |
+| Score sécurité | 72/100 |
+| Connecté Directus (p�el) | ~45% |
+| Intégrations visibles UH | ~25% |
+| Boutons fonctionnels | ~50% |
+| Prêt production | Non — cible fin mars 2026 |
+
+---
+
+## RÈGLES CLAUDE CODE v3.0
+
+1. **Audit obligatoire** : Lire le fichier AVANT toute modification
+2. **MCP Directus** : `list_collections` + `describe_table` avant tout mapping
+3. **MCP GitHub** : Vérifier commits råcents avant de coder
+4. **Zéro mock data** : Toute donnée vient de Directus ou API
+5. **Design System** : `src/styles/design-system.css` — aucune couleur hors palette
+6. **TVA** : Vérifier 8.1/2.6/3.8 dans tout fichier Finance
+7. **Tests** : `npm test` après chaque story (213 tests)
+8. **Commit** : `feat(phase-X): story X.X — description`
+9. **ROADMAP** : Marquer story complétée + date
+
+---
+
+*ROADMAP v3.0 — Février 2026*  
+*Remplace ROADMAP v2.0*  
+*52 stories identificées — 42% complété (22/52) - Phase A terminée, Phase B terminée*  
+Cible production : 6 semaines — fin mars 2026

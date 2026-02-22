@@ -98,12 +98,12 @@
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| C.1 | Refactoriser sidebar SuperAdmin — nouvelle structure 7 entrées | 🔥 | 🔴 | Finance, Projets, CRM, Automation, Intégrations, Paramètres |
-| C.2 | Créer section "Intégrations" —  4 Hubs | 🔥 | 🔴 | IN, Mautic, Revolut, ERPNext |
-| C.3 | Migrer sous-pages Finance dans groupe Finance | ⚡ | 🔴 | QR-Invoice → Factures, Jalons → Projets |
-| C.4 | Fusionner CRM DAshboard + Leads + Pipeline | ⚡ | 🔴 | Suppression CRM Dashboard standalone |
-| C.5 | Déplacer Support/Tickets sous Projets | 📌 | 🔴 | Cohérence workflow opérationnel |
-| C.6 | Dashboard CEO — refactoring workflow-first | 🔥 | 🔴 | Layout 5 workflows (CDC v2.0 §3.3) |
+| C.1 | Refactoriser sidebar SuperAdmin — nouvelle structure 7 entrées | 🔥 | 🟢 Fait (2026-02-22) | Finance, Projets, CRM, Automation, Intégrations, Paramètres — 7 sections collapsibles |
+| C.2 | Créer section "Intégrations" —  4 Hubs | 🔥 | 🟢 Fait (2026-02-22) | IN, Mautic, Revolut, ERPNext — pages hub + routes App.jsx |
+| C.3 | Migrer sous-pages Finance dans groupe Finance | ⚡ | 🟢 Fait (2026-02-22) | QR-Invoice → Factures, Jalons → Projets — regroupement sidebar |
+| C.4 | Fusionner CRM Dashboard + Leads + Pipeline | ⚡ | 🟢 Fait (2026-02-22) | Section CRM unifiée dans sidebar |
+| C.5 | Déplacer Support/Tickets sous Projets | 📌 | 🟢 Fait (2026-02-22) | Cohérence workflow opérationnel |
+| C.6 | Dashboard CEO — refactoring workflow-first | 🔥 | 🟢 Fait (2026-02-22) | Layout: Header → Alerts → KPIs → Pipeline+Treasury → ActiveProjects → IntegrationStatusBar |
 | C.7 | Barre statut intégrations bas du Dashboard CEO | ⚡ | 🟢 Fait (2026-02-22) | 5 pastilles : IN, Mautic, Revolut, ERPNext, DocuSeal — hook useIntegrationStatus + polling 60s |
 
 **Critère de sortie Phase C** : Sidebar ≤7 entrées. Dashboard affiche 5 workflows.

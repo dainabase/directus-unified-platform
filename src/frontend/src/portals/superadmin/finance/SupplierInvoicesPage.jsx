@@ -18,7 +18,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Receipt, Search, Eye, Trash2, Plus, Upload, FileText,
   CheckCircle, Clock, XCircle, CreditCard, Loader2,
-  ChevronDown, MoreHorizontal, X, AlertCircle, Ban
+  ChevronDown, MoreHorizontal, X, AlertCircle, Ban, Wallet
 } from 'lucide-react'
 import api from '../../../lib/axios'
 
@@ -689,9 +689,167 @@ const DetailModal = ({ invoice, onClose }) => {
   )
 }
 
+// ── Revolut Payment Modal (3-step) ──
+
+const RevolutPaymentModal = ({ invoice, onClose, onSuccess }) => {
+  const [step, setStep] = useState(1) // 1: review, 2: confirm, 3: processing/done
+  const [error, setError] = useState(null)
+
+  const amt = parseFloat(invoice.amount) || 0
+  const rate = parseFloat(invoice.vat_rate) || VAT_RATE
+  const vat = amt * rate / 100
+  const ttc = invoice.total_ttc ? parseFloat(invoice.total_ttc) : amt + vat
+  const currency = invoice.currency || 'CHF'
+
+  const payMutation = useMutation({
+    mutationFn: async () => {
+      const res = await api.post('/api/integrations/revolut/pay', {
+        supplier_invoice_id: invoice.id,
+        amount: ttc,
+        currency,
+        supplier_name: invoice.supplier_name,
+        reference: invoice.invoice_number || `SI-${invoice.id}`
+      })
+      return res.data
+    },
+    onSuccess: (data) => {
+      setStep(3)
+      if (onSuccess) onSuccess(invoice.id, data)
+    },
+    onError: (err) => {
+      setError(err.response?.data?.message || err.message || 'Erreur de paiement Revolut')
+    }
+  })
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6" style={{ borderBottom: '1px solid var(--sep)' }}>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg" style={{ background: 'var(--tint-blue)' }}>
+              <Wallet size={18} style={{ color: 'var(--accent)' }} />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--label-1)' }}>
+                Paiement Revolut
+              </h2>
+              <p className="ds-meta">
+                {step === 1 ? 'Etape 1/3 — Verification' : step === 2 ? 'Etape 2/3 — Confirmation' : 'Etape 3/3 — Resultat'}
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg transition-colors" style={{ color: 'var(--label-3)' }}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-4">
+          {/* Step 1: Review */}
+          {step === 1 && (
+            <>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span style={{ color: 'var(--label-2)' }}>Fournisseur</span>
+                  <span className="font-medium" style={{ color: 'var(--label-1)' }}>{invoice.supplier_name}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span style={{ color: 'var(--label-2)' }}>Reference</span>
+                  <span className="font-medium" style={{ color: 'var(--label-1)' }}>{invoice.invoice_number || '--'}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span style={{ color: 'var(--label-2)' }}>Montant HT</span>
+                  <span style={{ color: 'var(--label-1)' }}>{formatCHF(amt)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span style={{ color: 'var(--label-2)' }}>TVA {rate}%</span>
+                  <span style={{ color: 'var(--label-1)' }}>{formatCHF(vat)}</span>
+                </div>
+                <div className="flex justify-between text-sm pt-3" style={{ borderTop: '1px solid var(--sep)' }}>
+                  <span className="font-semibold" style={{ color: 'var(--label-1)' }}>Total TTC</span>
+                  <span className="font-bold text-lg" style={{ color: 'var(--accent)' }}>{formatCHF(ttc)}</span>
+                </div>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button onClick={onClose} className="ds-btn ds-btn-ghost flex-1">Annuler</button>
+                <button onClick={() => setStep(2)} className="ds-btn ds-btn-primary flex-1">
+                  Continuer
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Step 2: Confirm */}
+          {step === 2 && (
+            <>
+              <div className="ds-alert ds-alert-warning">
+                <AlertCircle size={18} />
+                <div>
+                  <p style={{ fontWeight: 600, color: 'var(--semantic-orange)' }}>Confirmer le paiement</p>
+                  <p className="ds-meta" style={{ marginTop: 2 }}>
+                    Un virement de <strong>{formatCHF(ttc)}</strong> sera initie vers <strong>{invoice.supplier_name}</strong> via votre compte Revolut Business.
+                  </p>
+                </div>
+              </div>
+
+              {error && (
+                <div className="ds-alert ds-alert-danger">
+                  <XCircle size={16} />
+                  <p className="text-sm" style={{ color: 'var(--semantic-red)' }}>{error}</p>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => { setStep(1); setError(null) }} className="ds-btn ds-btn-ghost flex-1">
+                  Retour
+                </button>
+                <button
+                  onClick={() => payMutation.mutate()}
+                  disabled={payMutation.isPending}
+                  className="ds-btn ds-btn-primary flex-1"
+                >
+                  {payMutation.isPending ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Wallet size={14} />
+                  )}
+                  Confirmer le paiement
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Step 3: Success */}
+          {step === 3 && (
+            <>
+              <div className="text-center py-4">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3"
+                  style={{ background: 'var(--tint-green)' }}
+                >
+                  <CheckCircle size={28} style={{ color: 'var(--semantic-green)' }} />
+                </div>
+                <p className="text-lg font-semibold" style={{ color: 'var(--label-1)' }}>
+                  Paiement initie
+                </p>
+                <p className="ds-meta mt-1">
+                  Le virement de {formatCHF(ttc)} vers {invoice.supplier_name} a ete soumis a Revolut.
+                </p>
+              </div>
+              <button onClick={onClose} className="ds-btn ds-btn-primary w-full">
+                Fermer
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Actions Dropdown ──
 
-const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView }) => {
+const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onPayRevolut, onDelete, onView }) => {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -732,6 +890,12 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       icon: CreditCard,
       action: () => onPay(invoice.id),
       color: 'text-[var(--semantic-green)]'
+    })
+    items.push({
+      label: 'Payer via Revolut',
+      icon: Wallet,
+      action: () => onPayRevolut(invoice),
+      color: 'text-[var(--accent)]'
     })
   }
 
@@ -784,6 +948,7 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
   const [page, setPage] = useState(1)
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [viewInvoice, setViewInvoice] = useState(null)
+  const [revolutPayInvoice, setRevolutPayInvoice] = useState(null)
 
   const company = selectedCompany === 'all' ? '' : selectedCompany
 
@@ -869,6 +1034,12 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
     if (window.confirm('Supprimer definitivement cette facture ?')) {
       deleteMutation.mutate(id)
     }
+  }
+
+  const handleRevolutPaySuccess = (id) => {
+    // Mark invoice as paid after successful Revolut payment
+    payMutation.mutate(id)
+    setRevolutPayInvoice(null)
   }
 
   // Determine if a due date is overdue
@@ -1078,6 +1249,7 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
                             onApprove={handleApprove}
                             onReject={handleReject}
                             onPay={handlePay}
+                            onPayRevolut={setRevolutPayInvoice}
                             onDelete={handleDelete}
                           />
                         </div>
@@ -1129,6 +1301,15 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         <DetailModal
           invoice={viewInvoice}
           onClose={() => setViewInvoice(null)}
+        />
+      )}
+
+      {/* Revolut Payment Modal */}
+      {revolutPayInvoice && (
+        <RevolutPaymentModal
+          invoice={revolutPayInvoice}
+          onClose={() => setRevolutPayInvoice(null)}
+          onSuccess={handleRevolutPaySuccess}
         />
       )}
     </div>

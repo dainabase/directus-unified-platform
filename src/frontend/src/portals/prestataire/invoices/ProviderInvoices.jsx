@@ -28,10 +28,10 @@ const formatCHF = (value) =>
 const VAT_RATE = 8.1
 
 const STATUS_CONFIG = {
-  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500', icon: Clock },
-  approved: { label: 'Approuvee', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3', icon: CheckCircle },
-  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: '#34C759', icon: CreditCard },
-  rejected: { label: 'Refusee', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30', icon: AlertCircle },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock },
+  approved: { label: 'Approuvee', bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)', icon: CheckCircle },
+  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)', icon: CreditCard },
+  rejected: { label: 'Refusee', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)', icon: AlertCircle },
   cancelled: { label: 'Annulee', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280', icon: X }
 }
 
@@ -245,7 +245,7 @@ const NewInvoiceModal = ({ onClose, providerId, providerName }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -316,7 +316,7 @@ const ProviderInvoices = () => {
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
         >
           <Plus size={18} />
           Soumettre une facture
@@ -327,14 +327,14 @@ const ProviderInvoices = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={16} style={{ color: 'var(--warning)' }} />
+            <Clock size={16} style={{ color: 'var(--semantic-orange)' }} />
             <span className="text-xs text-gray-500 font-medium">En attente de paiement</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(totalPending)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={16} style={{ color: 'var(--success)' }} />
+            <CheckCircle size={16} style={{ color: 'var(--semantic-green)' }} />
             <span className="text-xs text-gray-500 font-medium">Total paye</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{formatCHF(totalPaid)}</p>
@@ -401,18 +401,18 @@ const ProviderInvoices = () => {
                           <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>En cours Revolut</span>
                         )}
                         {inv.status === 'paid' && inv.date_paid && (
-                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>
+                          <span className="text-xs font-medium" style={{ color: 'var(--semantic-green)' }}>
                             Paye le {format(new Date(inv.date_paid), 'dd.MM.yyyy', { locale: fr })}
                           </span>
                         )}
                         {inv.status === 'paid' && !inv.date_paid && (
-                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>Paye</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--semantic-green)' }}>Paye</span>
                         )}
                         {inv.status === 'pending' && (
                           <span className="text-xs text-gray-400">En attente de validation</span>
                         )}
                         {inv.status === 'rejected' && (
-                          <span className="text-xs font-medium" style={{ color: 'var(--danger)' }}>Refusee</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--semantic-red)' }}>Refusee</span>
                         )}
                       </td>
                     </tr>

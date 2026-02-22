@@ -118,7 +118,7 @@ const ProgressRing = ({ value, size = 56, strokeWidth = 5 }) => {
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke="#0071E3"
+        stroke="var(--accent-hover)"
         strokeWidth={strokeWidth}
         strokeDasharray={circumference}
         strokeDashoffset={offset}
@@ -387,7 +387,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
   if (isLoading && projects.length === 0) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="w-8 h-8 animate-spin text-[#0071E3]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-hover)]" />
         <span className="ml-3 text-gray-500">Chargement des projets...</span>
       </div>
     )
@@ -419,7 +419,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Milestone size={24} className="text-[#0071E3]" />
+            <Milestone size={24} className="text-[var(--accent-hover)]" />
             Facturation par jalons
           </h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -443,7 +443,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
             <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               Budget total
             </span>
-            <Wallet size={18} className="text-[#0071E3]" />
+            <Wallet size={18} className="text-[var(--accent-hover)]" />
           </div>
           <p className="text-xl font-bold text-gray-900">{formatCHF(aggregation.totalBudget)}</p>
           <p className="text-xs text-gray-400 mt-1">Projets actifs</p>
@@ -476,7 +476,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
             <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
               Taux de facturation
             </span>
-            <BarChart3 size={18} className="text-[#0071E3]" />
+            <BarChart3 size={18} className="text-[var(--accent-hover)]" />
           </div>
           <div className="flex items-center gap-3">
             <ProgressRing value={aggregation.billingRate} size={48} strokeWidth={4} />
@@ -514,7 +514,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                   onClick={() => handleProjectClick(project.id)}
                   className={`ds-card p-5 text-left w-full transition-colors ${
                     isExpanded
-                      ? 'ring-2 ring-[#0071E3] ring-offset-1'
+                      ? 'ring-2 ring-[var(--accent-hover)] ring-offset-1'
                       : 'hover:border-gray-300'
                   }`}
                 >
@@ -526,7 +526,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                       </p>
                     </div>
                     {isExpanded
-                      ? <ChevronUp size={16} className="text-[#0071E3] flex-shrink-0 ml-2" />
+                      ? <ChevronUp size={16} className="text-[var(--accent-hover)] flex-shrink-0 ml-2" />
                       : <ChevronDown size={16} className="text-gray-400 flex-shrink-0 ml-2" />}
                   </div>
 
@@ -545,7 +545,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                       className="h-2 rounded-full transition-all duration-300"
                       style={{
                         width: `${Math.round(pct * 100)}%`,
-                        backgroundColor: '#0071E3'
+                        backgroundColor: 'var(--accent-hover)'
                       }}
                     />
                   </div>
@@ -583,7 +583,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
 
           {loadingProjectDeliverables ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-6 h-6 animate-spin text-[#0071E3]" />
+              <Loader2 className="w-6 h-6 animate-spin text-[var(--accent-hover)]" />
               <span className="ml-2 text-sm text-gray-500">Chargement des jalons...</span>
             </div>
           ) : projectDeliverables.length === 0 ? (
@@ -605,7 +605,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                         }
                         onChange={toggleAll}
                         disabled={selectableMilestones.length === 0}
-                        className="rounded border-gray-300 text-[#0071E3] focus:ring-[#0071E3]"
+                        className="rounded border-gray-300 text-[var(--accent-hover)] focus:ring-[var(--accent-hover)]"
                       />
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -656,7 +656,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                             checked={isSelected}
                             onChange={() => toggleMilestone(d)}
                             disabled={!isSelectable}
-                            className="rounded border-gray-300 text-[#0071E3] focus:ring-[#0071E3] disabled:opacity-30"
+                            className="rounded border-gray-300 text-[var(--accent-hover)] focus:ring-[var(--accent-hover)] disabled:opacity-30"
                           />
                         </td>
                         <td className="px-4 py-3 text-gray-500 font-mono text-xs">
@@ -707,7 +707,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
           {selectedMilestones.length > 0 && (
             <div className="p-4 bg-blue-50/50 border-t border-blue-100 flex items-center justify-between">
               <p className="text-sm text-gray-700">
-                <span className="font-semibold text-[#0071E3]">{selectedMilestones.length}</span>
+                <span className="font-semibold text-[var(--accent-hover)]">{selectedMilestones.length}</span>
                 {' '}jalon{selectedMilestones.length > 1 ? 's' : ''} selectionne{selectedMilestones.length > 1 ? 's' : ''}
                 {' — '}
                 <span className="font-semibold">{formatCHF(invoiceSummary.subtotal)}</span> HT
@@ -735,7 +735,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
             {/* Modal header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-100">
               <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                <Receipt size={20} className="text-[#0071E3]" />
+                <Receipt size={20} className="text-[var(--accent-hover)]" />
                 Generer la facture
               </h3>
               <button
@@ -795,7 +795,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                       onClick={() => setSelectedVatRate(vr)}
                       className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
                         selectedVatRate.key === vr.key
-                          ? 'border-[#0071E3] bg-blue-50 text-[#0071E3]'
+                          ? 'border-[var(--accent-hover)] bg-blue-50 text-[var(--accent-hover)]'
                           : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -840,7 +840,7 @@ const MilestoneInvoicingPage = ({ selectedCompany }) => {
                 </div>
                 <div className="flex items-center justify-between text-base pt-2 border-t border-gray-100">
                   <span className="font-semibold text-gray-900">Total TTC</span>
-                  <span className="font-bold text-[#0071E3] text-lg">
+                  <span className="font-bold text-[var(--accent-hover)] text-lg">
                     {formatCHF(invoiceSummary.total)}
                   </span>
                 </div>

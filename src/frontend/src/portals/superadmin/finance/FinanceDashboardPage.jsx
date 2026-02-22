@@ -35,7 +35,7 @@ import api from '../../../lib/axios'
 // Constants
 // ────────────────────────────────────────────────────────────────────────────
 
-const ACCENT = '#0071E3'
+const ACCENT = 'var(--accent-hover)'
 
 const MONTHS_FR = [
   'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -48,7 +48,7 @@ const MONTHS_SHORT = [
 ]
 
 const COMPANY_COLORS = [
-  ACCENT, '#34C759', '#FF9500', '#AF52DE', '#FF3B30',
+  ACCENT, 'var(--semantic-green)', 'var(--semantic-orange)', '#AF52DE', 'var(--semantic-red)',
   '#5856D6', '#00C7BE', '#FF2D55'
 ]
 
@@ -254,9 +254,9 @@ function KPICard({ label, value, trend, icon: Icon, iconColor }) {
 
 function AlertItem({ severity, message, detail }) {
   const config = {
-    red: { bgStyle: { background: 'var(--danger-light)', borderColor: 'var(--danger)' }, textStyle: { color: 'var(--text-primary)' }, icon: Ban, iconStyle: { color: 'var(--danger)' } },
-    amber: { bgStyle: { background: 'var(--warning-light)', borderColor: 'var(--warning)' }, textStyle: { color: 'var(--text-primary)' }, icon: AlertTriangle, iconStyle: { color: 'var(--warning)' } },
-    blue: { bgStyle: { background: 'var(--accent-light)', borderColor: 'var(--accent)' }, textStyle: { color: 'var(--text-primary)' }, icon: AlertCircle, iconStyle: { color: 'var(--accent)' } }
+    red: { bgStyle: { background: 'var(--tint-red)', borderColor: 'var(--semantic-red)' }, textStyle: { color: 'var(--label-1)' }, icon: Ban, iconStyle: { color: 'var(--semantic-red)' } },
+    amber: { bgStyle: { background: 'var(--tint-orange)', borderColor: 'var(--semantic-orange)' }, textStyle: { color: 'var(--label-1)' }, icon: AlertTriangle, iconStyle: { color: 'var(--semantic-orange)' } },
+    blue: { bgStyle: { background: 'var(--accent-light)', borderColor: 'var(--accent)' }, textStyle: { color: 'var(--label-1)' }, icon: AlertCircle, iconStyle: { color: 'var(--accent)' } }
   }
   const s = config[severity] || config.blue
   const IconComp = s.icon
@@ -650,14 +650,14 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
             value={kpis.receivables}
             trend={null}
             icon={ArrowDownLeft}
-            iconColor="#FF9500"
+            iconColor="var(--semantic-orange)"
           />
           <KPICard
             label="A payer"
             value={kpis.payables}
             trend={null}
             icon={ArrowUpRight}
-            iconColor="#FF3B30"
+            iconColor="var(--semantic-red)"
           />
 
           {/* Row 2 */}
@@ -666,7 +666,7 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
             value={kpis.monthlyRevenue}
             trend={kpis.revenueTrend}
             icon={TrendingUp}
-            iconColor="#34C759"
+            iconColor="var(--semantic-green)"
           />
           <KPICard
             label="Depenses du mois"
@@ -680,7 +680,7 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
             value={kpis.netMargin}
             trend={kpis.marginTrend}
             icon={Target}
-            iconColor={kpis.netMargin >= 0 ? '#34C759' : '#FF3B30'}
+            iconColor={kpis.netMargin >= 0 ? 'var(--semantic-green)' : 'var(--semantic-red)'}
           />
         </div>
       )}
@@ -727,19 +727,19 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
                   type="monotone"
                   dataKey="revenus"
                   name="Revenus"
-                  stroke="#34C759"
+                  stroke="var(--semantic-green)"
                   strokeWidth={2}
-                  dot={{ r: 3, fill: '#34C759' }}
-                  activeDot={{ r: 5, fill: '#34C759', stroke: '#fff', strokeWidth: 2 }}
+                  dot={{ r: 3, fill: 'var(--semantic-green)' }}
+                  activeDot={{ r: 5, fill: 'var(--semantic-green)', stroke: '#fff', strokeWidth: 2 }}
                 />
                 <Line
                   type="monotone"
                   dataKey="depenses"
                   name="Depenses"
-                  stroke="#FF3B30"
+                  stroke="var(--semantic-red)"
                   strokeWidth={2}
-                  dot={{ r: 3, fill: '#FF3B30' }}
-                  activeDot={{ r: 5, fill: '#FF3B30', stroke: '#fff', strokeWidth: 2 }}
+                  dot={{ r: 3, fill: 'var(--semantic-red)' }}
+                  activeDot={{ r: 5, fill: 'var(--semantic-red)', stroke: '#fff', strokeWidth: 2 }}
                 />
                 <Line
                   type="monotone"
@@ -819,14 +819,14 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
                 <Bar
                   dataKey="revenus"
                   name="Revenus"
-                  fill="#34C759"
+                  fill="var(--semantic-green)"
                   radius={[3, 3, 0, 0]}
                   maxBarSize={24}
                 />
                 <Bar
                   dataKey="depenses"
                   name="Depenses"
-                  fill="#FF3B30"
+                  fill="var(--semantic-red)"
                   radius={[3, 3, 0, 0]}
                   maxBarSize={24}
                 />
@@ -887,7 +887,7 @@ const FinanceDashboardPage = ({ selectedCompany }) => {
                         <td className="px-5 py-3 font-medium text-gray-900 truncate max-w-[200px]">
                           {tx.description || 'Transaction'}
                         </td>
-                        <td className="px-5 py-3 text-right whitespace-nowrap font-semibold" style={{ color: isCredit ? 'var(--success)' : 'var(--danger)' }}>
+                        <td className="px-5 py-3 text-right whitespace-nowrap font-semibold" style={{ color: isCredit ? 'var(--semantic-green)' : 'var(--semantic-red)' }}>
                           {isCredit ? '+' : '-'}{formatCHF(Math.abs(amount))}
                         </td>
                         <td className="px-5 py-3 text-center whitespace-nowrap">

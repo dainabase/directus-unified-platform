@@ -60,7 +60,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                   {stats?.totalContacts || 0}
                 </div>
                 <div className="text-gray-500 text-sm">
-                  <span className="inline-flex items-center" style={{color:'var(--success)'}}>
+                  <span className="inline-flex items-center" style={{color:'var(--semantic-green)'}}>
                     +{stats?.newContactsThisWeek || 0}
                   </span>
                   {' '}cette semaine
@@ -74,7 +74,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--success)', color:'#fff'}}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--semantic-green)', color:'#fff'}}>
                   <Building2 size={24} />
                 </div>
               </div>
@@ -86,7 +86,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                   {stats?.totalCompanies || 0}
                 </div>
                 <div className="text-gray-500 text-sm">
-                  <span className="inline-flex items-center" style={{color:'var(--success)'}}>
+                  <span className="inline-flex items-center" style={{color:'var(--semantic-green)'}}>
                     +{stats?.newCompaniesThisWeek || 0}
                   </span>
                   {' '}cette semaine
@@ -100,7 +100,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="flex items-center">
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--warning)', color:'#fff'}}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background:'var(--semantic-orange)', color:'#fff'}}>
                   <Activity size={24} />
                 </div>
               </div>
@@ -232,7 +232,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <Phone size={16} className="mr-2" style={{color:'var(--success)'}} />
+                          <Phone size={16} className="mr-2" style={{color:'var(--semantic-green)'}} />
                           Appels effectués
                         </div>
                       </td>
@@ -258,7 +258,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
                     <tr className="hover:bg-gray-50/50">
                       <td className="px-4 py-3">
                         <div className="flex items-center">
-                          <Activity size={16} className="mr-2" style={{color:'var(--warning)'}} />
+                          <Activity size={16} className="mr-2" style={{color:'var(--semantic-orange)'}} />
                           Opportunités créées
                         </div>
                       </td>
@@ -299,7 +299,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
 
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--success)', color:'#fff'}}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--semantic-green)', color:'#fff'}}>
                       IT
                     </div>
                   </div>
@@ -329,7 +329,7 @@ const QuickStats = ({ company, stats, isLoading }) => {
 
                 <div className="px-4 py-3 flex items-center gap-3">
                   <div className="mr-3">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--warning)', color:'#fff'}}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium" style={{background:'var(--semantic-orange)', color:'#fff'}}>
                       BC
                     </div>
                   </div>
@@ -356,14 +356,14 @@ const QuickStats = ({ company, stats, isLoading }) => {
           <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(52,199,89,0.2)'}}>
-                <UserCheck size={32} className="mb-2 mx-auto" style={{color:'var(--success)'}} />
-                <h4 className="font-bold mb-1" style={{color:'var(--success)'}}>23</h4>
+                <UserCheck size={32} className="mb-2 mx-auto" style={{color:'var(--semantic-green)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--semantic-green)'}}>23</h4>
                 <p className="text-gray-500 text-sm mb-0">Contacts à relancer</p>
               </div>
 
               <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(255,149,0,0.2)'}}>
-                <Phone size={32} className="mb-2 mx-auto" style={{color:'var(--warning)'}} />
-                <h4 className="font-bold mb-1" style={{color:'var(--warning)'}}>12</h4>
+                <Phone size={32} className="mb-2 mx-auto" style={{color:'var(--semantic-orange)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--semantic-orange)'}}>12</h4>
                 <p className="text-gray-500 text-sm mb-0">Appels en attente</p>
               </div>
 
@@ -374,8 +374,8 @@ const QuickStats = ({ company, stats, isLoading }) => {
               </div>
 
               <div className="rounded-xl p-3 text-center" style={{border:'1px solid rgba(255,59,48,0.2)'}}>
-                <Activity size={32} className="mb-2 mx-auto" style={{color:'var(--danger)'}} />
-                <h4 className="font-bold mb-1" style={{color:'var(--danger)'}}>5</h4>
+                <Activity size={32} className="mb-2 mx-auto" style={{color:'var(--semantic-red)'}} />
+                <h4 className="font-bold mb-1" style={{color:'var(--semantic-red)'}}>5</h4>
                 <p className="text-gray-500 text-sm mb-0">Tâches urgentes</p>
               </div>
             </div>

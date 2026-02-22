@@ -112,7 +112,7 @@ const GeneralInfoSection = ({ profile, onSave }) => {
         ) : (
           <button
             onClick={handleSubmit(onSubmit)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
           >
             <Save size={14} /> Sauvegarder
           </button>
@@ -243,9 +243,9 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'validated': return <CheckCircle size={14} style={{ color: 'var(--success)' }} />
-      case 'rejected': return <XCircle size={14} style={{ color: 'var(--danger)' }} />
-      default: return <Clock size={14} style={{ color: 'var(--warning)' }} />
+      case 'validated': return <CheckCircle size={14} style={{ color: 'var(--semantic-green)' }} />
+      case 'rejected': return <XCircle size={14} style={{ color: 'var(--semantic-red)' }} />
+      default: return <Clock size={14} style={{ color: 'var(--semantic-orange)' }} />
     }
   }
 
@@ -303,7 +303,7 @@ const DocumentsSection = ({ documents, providerId, onUploadSuccess }) => {
                 </div>
 
                 {hasDoc ? (
-                  <span className="text-xs font-medium" style={{ color: existing[0].status === 'validated' ? 'var(--success)' : existing[0].status === 'rejected' ? 'var(--danger)' : 'var(--warning)' }}>
+                  <span className="text-xs font-medium" style={{ color: existing[0].status === 'validated' ? 'var(--semantic-green)' : existing[0].status === 'rejected' ? 'var(--semantic-red)' : 'var(--semantic-orange)' }}>
                     {getStatusLabel(existing[0].status)}
                   </span>
                 ) : (
@@ -403,7 +403,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
         >
           <Save size={14} /> Sauvegarder
         </button>
@@ -419,7 +419,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
               onClick={() => toggleSpecialty(s)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 selectedSpecialties.includes(s)
-                  ? 'bg-[#0071E3] text-white'
+                  ? 'bg-[var(--accent-hover)] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -439,7 +439,7 @@ const SpecialtiesSection = ({ profile, onSave }) => {
               onClick={() => toggleCanton(c)}
               className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                 selectedCantons.includes(c)
-                  ? 'bg-[#0071E3] text-white'
+                  ? 'bg-[var(--accent-hover)] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -466,7 +466,7 @@ const StatistiquesSection = ({ stats, isLoading }) => {
       label: 'Total facturé',
       value: formatCHF(stats?.totalInvoiced || 0),
       icon: Receipt,
-      fg: 'var(--success)',
+      fg: 'var(--semantic-green)',
       bg: 'rgba(52,199,89,0.06)'
     },
     {
@@ -480,7 +480,7 @@ const StatistiquesSection = ({ stats, isLoading }) => {
       label: 'Livrables terminés',
       value: stats?.completedDeliverables || 0,
       icon: PackageCheck,
-      fg: 'var(--warning)',
+      fg: 'var(--semantic-orange)',
       bg: 'rgba(255,149,0,0.06)'
     }
   ]
@@ -558,7 +558,7 @@ const NotificationsSection = () => {
         </div>
         <button
           onClick={handleSave}
-          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
         >
           <Save size={14} /> Sauvegarder
         </button>
@@ -577,7 +577,7 @@ const NotificationsSection = () => {
               aria-checked={prefs[key]}
               onClick={() => togglePref(key)}
               className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 ${
-                prefs[key] ? 'bg-[#0071E3]' : 'bg-gray-300'
+                prefs[key] ? 'bg-[var(--accent-hover)]' : 'bg-gray-300'
               }`}
             >
               <span

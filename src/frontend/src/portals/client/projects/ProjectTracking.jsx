@@ -15,21 +15,21 @@ import api from '../../../lib/axios'
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
 const PROJECT_STATUSES = {
-  pending: { label: 'En attente', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)' },
-  active: { label: 'Actif', bg: 'var(--success-light)', fg: 'var(--success)' },
+  pending: { label: 'En attente', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)' },
+  active: { label: 'Actif', bg: 'var(--tint-green)', fg: 'var(--semantic-green)' },
   in_progress: { label: 'En cours', bg: 'var(--accent-light)', fg: 'var(--accent)' },
   in_preparation: { label: 'En préparation', bg: 'rgba(90,200,250,0.12)', fg: '#5AC8FA' },
   deposit_received: { label: 'Acompte reçu', bg: 'rgba(48,176,199,0.12)', fg: '#30B0C7' },
-  on_hold: { label: 'En pause', bg: 'var(--warning-light)', fg: 'var(--warning)' },
-  completed: { label: 'Terminé', bg: 'var(--success-light)', fg: 'var(--success)' },
-  cancelled: { label: 'Annulé', bg: 'var(--danger-light)', fg: 'var(--danger)' }
+  on_hold: { label: 'En pause', bg: 'var(--tint-orange)', fg: 'var(--semantic-orange)' },
+  completed: { label: 'Terminé', bg: 'var(--tint-green)', fg: 'var(--semantic-green)' },
+  cancelled: { label: 'Annulé', bg: 'var(--tint-red)', fg: 'var(--semantic-red)' }
 }
 
 const DELIVERABLE_STATUS = {
-  pending: { label: 'À faire', icon: Circle, fg: 'var(--text-tertiary)', bg: 'rgba(0,0,0,0.02)', border: 'var(--border-light)' },
+  pending: { label: 'À faire', icon: Circle, fg: 'var(--label-3)', bg: 'rgba(0,0,0,0.02)', border: 'var(--sep)' },
   in_progress: { label: 'En cours', icon: Clock, fg: 'var(--accent)', bg: 'var(--accent-light)', border: 'var(--accent)' },
-  completed: { label: 'Terminé', icon: CheckCircle, fg: 'var(--success)', bg: 'var(--success-light)', border: 'var(--success)' },
-  cancelled: { label: 'Annulé', icon: AlertCircle, fg: 'var(--text-tertiary)', bg: 'rgba(0,0,0,0.02)', border: 'var(--border-light)' }
+  completed: { label: 'Terminé', icon: CheckCircle, fg: 'var(--semantic-green)', bg: 'var(--tint-green)', border: 'var(--semantic-green)' },
+  cancelled: { label: 'Annulé', icon: AlertCircle, fg: 'var(--label-3)', bg: 'rgba(0,0,0,0.02)', border: 'var(--sep)' }
 }
 
 const ProjectTracking = () => {
@@ -78,8 +78,8 @@ const ProjectTracking = () => {
   if (!project) {
     return (
       <div className="text-center py-12">
-        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{color:'var(--danger)'}} />
-        <p style={{color:'var(--text-secondary)'}}>Projet introuvable</p>
+        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{color:'var(--semantic-red)'}} />
+        <p style={{color:'var(--label-2)'}}>Projet introuvable</p>
         <button onClick={() => navigate('/client/projects')} className="mt-4 hover:underline" style={{color:'var(--accent)'}}>
           ← Retour aux projets
         </button>
@@ -91,7 +91,7 @@ const ProjectTracking = () => {
     <div className="space-y-6 max-w-4xl">
       {/* Back */}
       <button onClick={() => navigate('/client/projects')}
-        className="flex items-center gap-2 text-sm" style={{color:'var(--text-tertiary)'}}>
+        className="flex items-center gap-2 text-sm" style={{color:'var(--label-3)'}}>
         <ArrowLeft size={16} /> Retour aux projets
       </button>
 
@@ -101,40 +101,40 @@ const ProjectTracking = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <FolderKanban className="w-6 h-6" style={{color:'var(--accent)'}} />
-              <h1 className="text-xl font-bold" style={{color:'var(--text-primary)'}}>{project.name}</h1>
+              <h1 className="text-xl font-bold" style={{color:'var(--label-1)'}}>{project.name}</h1>
             </div>
             <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium"
               style={{background: statusCfg.bg, color: statusCfg.fg}}>
               {statusCfg.label}
             </span>
           </div>
-          <div className="text-right text-sm" style={{color:'var(--text-tertiary)'}}>
+          <div className="text-right text-sm" style={{color:'var(--label-3)'}}>
             {project.start_date && <p>Début : {formatDate(project.start_date)}</p>}
             {project.end_date && <p>Fin prévue : {formatDate(project.end_date)}</p>}
           </div>
         </div>
         {project.description && (
-          <p className="text-sm mt-4" style={{color:'var(--text-secondary)'}}>{project.description}</p>
+          <p className="text-sm mt-4" style={{color:'var(--label-2)'}}>{project.description}</p>
         )}
       </div>
 
       {/* Progress */}
       <div className="ds-card p-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>Progression globale</h3>
+          <h3 className="font-semibold" style={{color:'var(--label-1)'}}>Progression globale</h3>
           <span className="text-lg font-bold" style={{color:'var(--accent)'}}>{progressPct}%</span>
         </div>
         <div className="w-full rounded-full h-3" style={{background:'rgba(0,0,0,0.08)'}}>
           <div className="h-3 rounded-full transition-all duration-500" style={{ width: `${progressPct}%`, background:'var(--accent)' }} />
         </div>
-        <p className="text-sm mt-2" style={{color:'var(--text-tertiary)'}}>{completed} sur {total} livrables terminés</p>
+        <p className="text-sm mt-2" style={{color:'var(--label-3)'}}>{completed} sur {total} livrables terminés</p>
       </div>
 
       {/* Deliverables */}
       <div className="ds-card p-6">
-        <h3 className="font-semibold mb-4" style={{color:'var(--text-primary)'}}>Livrables</h3>
+        <h3 className="font-semibold mb-4" style={{color:'var(--label-1)'}}>Livrables</h3>
         {deliverables.length === 0 ? (
-          <p className="text-sm text-center py-6" style={{color:'var(--text-tertiary)'}}>Aucun livrable défini</p>
+          <p className="text-sm text-center py-6" style={{color:'var(--label-3)'}}>Aucun livrable défini</p>
         ) : (
           <div className="space-y-3">
             {deliverables.map((d, idx) => {
@@ -146,23 +146,23 @@ const ProjectTracking = () => {
                   <div className="flex flex-col items-center">
                     <DIcon className="w-5 h-5" style={{color: dcfg.fg}} />
                     {idx < deliverables.length - 1 && (
-                      <div className="w-px h-8 mt-1" style={{background:'var(--border-light)'}} />
+                      <div className="w-px h-8 mt-1" style={{background:'var(--sep)'}} />
                     )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <h4 className={`text-sm font-medium ${d.status === 'completed' ? 'line-through' : ''}`}
-                        style={{color: d.status === 'completed' ? 'var(--text-tertiary)' : 'var(--text-primary)'}}>
+                        style={{color: d.status === 'completed' ? 'var(--label-3)' : 'var(--label-1)'}}>
                         {d.title}
                       </h4>
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full"
-                        style={{color: dcfg.fg, background:'var(--bg-surface)'}}>
+                        style={{color: dcfg.fg, background:'var(--bg-2)'}}>
                         {dcfg.label}
                       </span>
                     </div>
-                    {d.description && <p className="text-xs mt-1" style={{color:'var(--text-tertiary)'}}>{d.description}</p>}
+                    {d.description && <p className="text-xs mt-1" style={{color:'var(--label-3)'}}>{d.description}</p>}
                     {d.due_date && (
-                      <div className="flex items-center gap-1 mt-1.5 text-xs" style={{color:'var(--text-tertiary)'}}>
+                      <div className="flex items-center gap-1 mt-1.5 text-xs" style={{color:'var(--label-3)'}}>
                         <Calendar size={12} /> {formatDate(d.due_date)}
                       </div>
                     )}

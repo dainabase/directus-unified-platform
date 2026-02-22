@@ -1,9 +1,9 @@
 import React from 'react'
 
 const colorMap = {
-  success: 'var(--success)',
-  warning: 'var(--warning)',
-  danger: 'var(--danger)',
+  success: 'var(--semantic-green)',
+  warning: 'var(--semantic-orange)',
+  danger: 'var(--semantic-red)',
   info: 'var(--accent)',
 }
 

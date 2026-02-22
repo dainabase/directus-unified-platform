@@ -223,8 +223,8 @@ export function InvoiceNinjaHub({ selectedCompany }) {
             disabled={!health.online}
             className="ds-btn ds-btn-ghost justify-start gap-3 px-4 py-3 h-auto text-left disabled:opacity-40"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#0071E3]/10 flex items-center justify-center flex-shrink-0">
-              <Plus size={16} className="text-[#0071E3]" />
+            <div className="w-9 h-9 rounded-lg bg-[var(--accent-hover)]/10 flex items-center justify-center flex-shrink-0">
+              <Plus size={16} className="text-[var(--accent-hover)]" />
             </div>
             <div>
               <p className="text-sm font-medium text-zinc-900">Creer un devis</p>
@@ -237,8 +237,8 @@ export function InvoiceNinjaHub({ selectedCompany }) {
             disabled={!health.online}
             className="ds-btn ds-btn-ghost justify-start gap-3 px-4 py-3 h-auto text-left disabled:opacity-40"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#0071E3]/10 flex items-center justify-center flex-shrink-0">
-              <Send size={16} className="text-[#0071E3]" />
+            <div className="w-9 h-9 rounded-lg bg-[var(--accent-hover)]/10 flex items-center justify-center flex-shrink-0">
+              <Send size={16} className="text-[var(--accent-hover)]" />
             </div>
             <div>
               <p className="text-sm font-medium text-zinc-900">Envoyer une facture</p>
@@ -252,9 +252,9 @@ export function InvoiceNinjaHub({ selectedCompany }) {
             className="ds-btn ds-btn-ghost justify-start gap-3 px-4 py-3 h-auto text-left disabled:opacity-40"
           >
             <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-              overdueCount > 0 ? 'bg-red-50' : 'bg-[#0071E3]/10'
+              overdueCount > 0 ? 'bg-red-50' : 'bg-[var(--accent-hover)]/10'
             }`}>
-              <AlertCircle size={16} className={overdueCount > 0 ? 'text-red-500' : 'text-[#0071E3]'} />
+              <AlertCircle size={16} className={overdueCount > 0 ? 'text-red-500' : 'text-[var(--accent-hover)]'} />
             </div>
             <div>
               <p className="text-sm font-medium text-zinc-900">Voir les impayes</p>
@@ -290,7 +290,7 @@ export function InvoiceNinjaHub({ selectedCompany }) {
           </div>
         ) : invoicesLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-[#0071E3] animate-spin" />
+            <Loader2 className="w-6 h-6 text-[var(--accent-hover)] animate-spin" />
           </div>
         ) : invoices.length === 0 ? (
           <div className="px-5 py-12 text-center">

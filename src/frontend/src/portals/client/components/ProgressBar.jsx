@@ -1,10 +1,10 @@
 /**
  * ProgressBar — Reusable progress bar component
- * Props: value (0-100), color (default #0071E3), height (default 6px)
+ * Props: value (0-100), color (default var(--accent-hover)), height (default 6px)
  */
 import React from 'react'
 
-const ProgressBar = ({ value = 0, color = '#0071E3', height = 6 }) => {
+const ProgressBar = ({ value = 0, color = 'var(--accent-hover)', height = 6 }) => {
   const pct = Math.max(0, Math.min(100, value))
   return (
     <div

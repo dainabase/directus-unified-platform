@@ -281,7 +281,7 @@ const IntegrationsSettings = () => {
           return (
             <div key={integration.id}>
               <div className={`ds-card ${isExpanded ? 'border-primary' : ''}`}>
-                <div className="p-4" style={{ borderBottom: '1px solid var(--border-light)' }}>
+                <div className="p-4" style={{ borderBottom: '1px solid var(--sep)' }}>
                   <div className="flex items-center">
                     <div className="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center mr-3">
                       <Plug size={24} style={{ color: 'var(--accent)' }} />
@@ -335,7 +335,7 @@ const IntegrationsSettings = () => {
 
                   {/* Configuration Form */}
                   {isExpanded && (
-                    <div className="pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
+                    <div className="pt-3" style={{ borderTop: '1px solid var(--sep)' }}>
                       <form onSubmit={(e) => {
                         e.preventDefault();
                         const config = formValues[integration.id] || {};
@@ -433,7 +433,7 @@ const IntegrationsSettings = () => {
       {INTEGRATIONS.filter(i => i.required && !integrationStatus[i.id]?.connected).length > 0 && (
         <div
           className="ds-card p-4 flex items-center gap-2 mt-4"
-          style={{ borderLeft: '3px solid var(--warning)' }}
+          style={{ borderLeft: '3px solid var(--semantic-orange)' }}
         >
           <AlertTriangle size={20} className="text-amber-500 shrink-0" />
           <span>

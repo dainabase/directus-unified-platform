@@ -213,7 +213,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
           </button>
           <button
             onClick={onNewInvoice}
-            className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#0071E3] rounded-lg hover:bg-blue-700"
+            className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[var(--accent-hover)] rounded-lg hover:bg-blue-700"
           >
             <Plus size={15} />
             Nouvelle facture
@@ -244,7 +244,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
               onClick={() => handleStatusChange(tab.key)}
               className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                 isActive
-                  ? 'bg-[#0071E3] text-white shadow-sm'
+                  ? 'bg-[var(--accent-hover)] text-white shadow-sm'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >

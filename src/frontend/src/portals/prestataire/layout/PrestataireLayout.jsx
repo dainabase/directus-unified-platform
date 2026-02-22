@@ -1,6 +1,6 @@
 /**
  * PrestataireLayout — Phase D-06
- * Layout portail prestataire avec sidebar 4 items, accent blue (#0071E3).
+ * Layout portail prestataire avec sidebar 4 items, accent blue (var(--accent-hover)).
  * Auth via useProviderAuth (magic-link comme client portal).
  */
 
@@ -40,21 +40,21 @@ const PrestataireLayout = () => {
   const initials = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Sidebar */}
       <aside
         className="fixed left-0 top-0 bottom-0 w-64 ds-glass flex flex-col z-30"
-        style={{ borderRight: '1px solid var(--border-light)' }}
+        style={{ borderRight: '1px solid var(--sep)' }}
       >
         {/* Logo */}
-        <div className="p-6" style={{ borderBottom: '1px solid var(--border-light)' }}>
+        <div className="p-6" style={{ borderBottom: '1px solid var(--sep)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#0071E3] flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-hover)] flex items-center justify-center shadow-sm">
               <Wrench className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>HYPERVISUAL</p>
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Espace Prestataire</p>
+              <p className="font-bold text-sm" style={{ color: 'var(--label-1)' }}>HYPERVISUAL</p>
+              <p className="text-xs" style={{ color: 'var(--label-3)' }}>Espace Prestataire</p>
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ const PrestataireLayout = () => {
               end={item.end}
               style={({ isActive }) => ({
                 background: isActive ? 'var(--accent-light)' : 'transparent',
-                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                color: isActive ? 'var(--accent)' : 'var(--label-2)',
                 transition: 'all 0.15s ease'
               })}
               className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50"
@@ -80,14 +80,14 @@ const PrestataireLayout = () => {
         </nav>
 
         {/* User section */}
-        <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <div className="p-4" style={{ borderTop: '1px solid var(--sep)' }}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-[#0071E3] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-[var(--accent-hover)] flex items-center justify-center">
               <span className="text-sm font-bold text-white">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>{displayName}</p>
-              <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{provider?.email}</p>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--label-1)' }}>{displayName}</p>
+              <p className="text-xs truncate" style={{ color: 'var(--label-3)' }}>{provider?.email}</p>
             </div>
           </div>
           <button

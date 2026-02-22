@@ -84,7 +84,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
           {/* Provider */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Prestataire <span style={{ color: 'var(--danger)' }}>*</span>
+              Prestataire <span style={{ color: 'var(--semantic-red)' }}>*</span>
             </label>
             <select
               {...register('provider_id', { required: 'Selectionnez un prestataire' })}
@@ -95,7 +95,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
                 <option key={p.id} value={p.id}>{p.name} {p.specialty ? `(${p.specialty})` : ''}</option>
               ))}
             </select>
-            {errors.provider_id && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.provider_id.message}</p>}
+            {errors.provider_id && <p className="text-xs mt-1" style={{ color: 'var(--semantic-red)' }}>{errors.provider_id.message}</p>}
           </div>
 
           {/* Project */}
@@ -115,20 +115,20 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Titre de la demande <span style={{ color: 'var(--danger)' }}>*</span>
+              Titre de la demande <span style={{ color: 'var(--semantic-red)' }}>*</span>
             </label>
             <input
               {...register('name', { required: 'Le titre est obligatoire' })}
               className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white"
               placeholder="Installation LED facade..."
             />
-            {errors.name && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.name.message}</p>}
+            {errors.name && <p className="text-xs mt-1" style={{ color: 'var(--semantic-red)' }}>{errors.name.message}</p>}
           </div>
 
           {/* Mission description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description de la mission <span style={{ color: 'var(--danger)' }}>*</span>
+              Description de la mission <span style={{ color: 'var(--semantic-red)' }}>*</span>
             </label>
             <textarea
               {...register('mission_description', { required: 'La description est obligatoire' })}
@@ -136,7 +136,7 @@ const CreateQuoteRequestModal = ({ onClose, providers, selectedCompany }) => {
               className="w-full pl-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-zinc-200 focus:border-zinc-300 bg-white resize-none"
               placeholder="Decrire en detail ce qui est attendu du prestataire..."
             />
-            {errors.mission_description && <p className="text-xs mt-1" style={{ color: 'var(--danger)' }}>{errors.mission_description.message}</p>}
+            {errors.mission_description && <p className="text-xs mt-1" style={{ color: 'var(--semantic-red)' }}>{errors.mission_description.message}</p>}
           </div>
 
           {/* Actions */}
@@ -256,16 +256,16 @@ const ProvidersModule = ({ selectedCompany }) => {
       {/* Alert: new offers submitted */}
       {submittedCount > 0 && (
         <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'rgba(255,149,0,0.08)', border: '1px solid rgba(255,149,0,0.2)' }}>
-          <AlertTriangle className="w-5 h-5 shrink-0" style={{ color: 'var(--warning)' }} />
+          <AlertTriangle className="w-5 h-5 shrink-0" style={{ color: 'var(--semantic-orange)' }} />
           <div className="flex-1">
-            <p className="text-sm font-medium" style={{ color: 'var(--warning)' }}>
+            <p className="text-sm font-medium" style={{ color: 'var(--semantic-orange)' }}>
               {submittedCount} nouvelle{submittedCount > 1 ? 's' : ''} offre{submittedCount > 1 ? 's' : ''} soumise{submittedCount > 1 ? 's' : ''}
             </p>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--warning)' }}>Cliquez sur "Offres" pour les examiner</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--semantic-orange)' }}>Cliquez sur "Offres" pour les examiner</p>
           </div>
           <button
             onClick={() => setActiveTab('proposals')}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium text-white" style={{ background: 'var(--warning)' }}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium text-white" style={{ background: 'var(--semantic-orange)' }}
           >
             Voir les offres
           </button>
@@ -292,7 +292,7 @@ const ProvidersModule = ({ selectedCompany }) => {
           <FileText size={16} className="inline mr-1.5" />
           Offres ({proposals.length})
           {submittedCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: 'var(--danger)' }}>
+            <span className="absolute -top-1 -right-1 w-5 h-5 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: 'var(--semantic-red)' }}>
               {submittedCount}
             </span>
           )}
@@ -332,8 +332,8 @@ const ProvidersModule = ({ selectedCompany }) => {
                       <td className="py-3">
                         <span className="inline-flex items-center rounded-full text-xs font-medium"
                           style={
-                            p.status === 'active' ? { background: 'rgba(52,199,89,0.12)', color: '#34C759', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
-                            p.status === 'suspended' ? { background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                            p.status === 'active' ? { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                            p.status === 'suspended' ? { background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
                             { background: 'rgba(113,113,122,0.12)', color: '#71717a', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }
                           }>
                           {p.status === 'active' ? 'Actif' : p.status === 'suspended' ? 'Suspendu' : p.status || 'N/A'}
@@ -377,10 +377,10 @@ const ProvidersModule = ({ selectedCompany }) => {
                           <h3 className="text-base font-semibold text-gray-900">{p.name}</h3>
                           <span className="inline-flex items-center rounded-full text-xs font-medium"
                             style={
-                              p.status === 'pending' ? { background: 'rgba(255,149,0,0.12)', color: '#FF9500', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
-                              p.status === 'submitted' ? { background: 'rgba(0,113,227,0.12)', color: '#0071E3', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
-                              p.status === 'accepted' ? { background: 'rgba(52,199,89,0.12)', color: '#34C759', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
-                              p.status === 'rejected' ? { background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'pending' ? { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'submitted' ? { background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'accepted' ? { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
+                              p.status === 'rejected' ? { background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' } :
                               { background: 'rgba(113,113,122,0.12)', color: '#71717a', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }
                             }>
                             {p.status === 'pending' ? 'En attente' :
@@ -428,7 +428,7 @@ const ProvidersModule = ({ selectedCompany }) => {
                               if (window.confirm('Refuser cette offre ?')) rejectMutation.mutate(p.id)
                             }}
                             disabled={rejectMutation.isPending}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50" style={{ color: 'var(--danger)' }}
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50" style={{ color: 'var(--semantic-red)' }}
                           >
                             <XCircle size={16} />
                             Refuser

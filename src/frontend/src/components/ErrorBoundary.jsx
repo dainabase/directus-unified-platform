@@ -25,12 +25,12 @@ class ErrorBoundary extends React.Component {
         <div className="flex items-center justify-center min-h-[60vh] p-8">
           <div className="ds-card text-center" style={{ maxWidth: 480, padding: 32 }}>
             <div className="flex justify-center mb-4">
-              <AlertTriangle size={48} style={{ color: 'var(--danger)' }} />
+              <AlertTriangle size={48} style={{ color: 'var(--semantic-red)' }} />
             </div>
-            <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>
+            <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--label-1)', marginBottom: 8 }}>
               Une erreur est survenue
             </h2>
-            <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 24, lineHeight: 1.5 }}>
+            <p style={{ fontSize: 14, color: 'var(--label-2)', marginBottom: 24, lineHeight: 1.5 }}>
               L'application a rencontre un probleme inattendu. Essayez de recharger la page.
             </p>
             <div className="flex gap-3 justify-center">

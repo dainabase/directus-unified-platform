@@ -22,16 +22,16 @@ const TYPE_CONFIG = {
   workflow_failure: {
     icon: AlertCircle,
     label: 'Workflow',
-    borderColor: 'var(--danger)',
-    iconBg: 'var(--danger-light)',
-    iconColor: 'var(--danger)'
+    borderColor: 'var(--semantic-red)',
+    iconBg: 'var(--tint-red)',
+    iconColor: 'var(--semantic-red)'
   },
   payment_received: {
     icon: DollarSign,
     label: 'Paiement',
-    borderColor: 'var(--success)',
-    iconBg: 'var(--success-light)',
-    iconColor: 'var(--success)'
+    borderColor: 'var(--semantic-green)',
+    iconBg: 'var(--tint-green)',
+    iconColor: 'var(--semantic-green)'
   },
   lead_qualified: {
     icon: Users,
@@ -43,16 +43,16 @@ const TYPE_CONFIG = {
   invoice_overdue: {
     icon: Clock,
     label: 'Facture',
-    borderColor: 'var(--warning)',
-    iconBg: 'var(--warning-light)',
-    iconColor: 'var(--warning)'
+    borderColor: 'var(--semantic-orange)',
+    iconBg: 'var(--tint-orange)',
+    iconColor: 'var(--semantic-orange)'
   },
   project_activated: {
     icon: FolderOpen,
     label: 'Projet',
-    borderColor: 'var(--success)',
-    iconBg: 'var(--success-light)',
-    iconColor: 'var(--success)'
+    borderColor: 'var(--semantic-green)',
+    iconBg: 'var(--tint-green)',
+    iconColor: 'var(--semantic-green)'
   },
   reminder_sent: {
     icon: Mail,
@@ -355,12 +355,12 @@ export const NotificationHub = () => {
           <span className="flex items-center gap-1.5 text-xs">
             {sseConnected ? (
               <>
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--success)' }} />
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--semantic-green)' }} />
                 <span className="text-zinc-500">Connecte</span>
               </>
             ) : (
               <>
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--danger)' }} />
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--semantic-red)' }} />
                 <span className="text-zinc-500">Deconnecte</span>
               </>
             )}
@@ -395,13 +395,13 @@ export const NotificationHub = () => {
           icon={AlertCircle}
           label="Alertes critiques"
           value={summary.criticalErrors}
-          iconStyle={summary.criticalErrors > 0 ? { color: 'var(--danger)' } : undefined}
+          iconStyle={summary.criticalErrors > 0 ? { color: 'var(--semantic-red)' } : undefined}
         />
         <SummaryCard
           icon={DollarSign}
           label="Paiements recus (aujourd'hui)"
           value={summary.paymentsToday}
-          iconStyle={summary.paymentsToday > 0 ? { color: 'var(--success)' } : undefined}
+          iconStyle={summary.paymentsToday > 0 ? { color: 'var(--semantic-green)' } : undefined}
         />
       </div>
 
@@ -468,7 +468,7 @@ export const NotificationHub = () => {
         </div>
       ) : isError ? (
         <div className="ds-card p-12 text-center">
-          <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
+          <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
           <p className="text-zinc-700 font-medium">Erreur de chargement</p>
           <p className="text-sm text-zinc-400 mt-1">Impossible de charger les notifications</p>
         </div>

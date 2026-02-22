@@ -30,26 +30,26 @@ const formatCHF = (v) =>
 // ── Status config ────────────────────────────────────────
 const STATUS_CONFIG = {
   new:          { label: 'Nouveau',      bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
-  contacted:    { label: 'Contacte',     bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  qualified:    { label: 'Qualifie',     bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
-  proposal:     { label: 'Proposition',  bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
-  negotiation:  { label: 'Negociation',  bg: 'rgba(255,149,0,0.15)', fg: '#FF9500' },
-  won:          { label: 'Gagne',        bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  lost:         { label: 'Perdu',        bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  contacted:    { label: 'Contacte',     bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  qualified:    { label: 'Qualifie',     bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' },
+  proposal:     { label: 'Proposition',  bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
+  negotiation:  { label: 'Negociation',  bg: 'rgba(255,149,0,0.15)', fg: 'var(--semantic-orange)' },
+  won:          { label: 'Gagne',        bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  lost:         { label: 'Perdu',        bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' },
   inactive:     { label: 'Inactif',      bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 const PRIORITY_CONFIG = {
-  high:   { label: 'Haute',   dotColor: '#FF3B30' },
-  medium: { label: 'Moyenne', dotColor: '#FF9500' },
+  high:   { label: 'Haute',   dotColor: 'var(--semantic-red)' },
+  medium: { label: 'Moyenne', dotColor: 'var(--semantic-orange)' },
   low:    { label: 'Basse',   dotColor: '#9CA3AF' }
 }
 
 const SOURCE_CONFIG = {
-  wordpress: { label: 'WordPress', bg: 'rgba(0,113,227,0.08)', fg: '#0071E3' },
+  wordpress: { label: 'WordPress', bg: 'rgba(0,113,227,0.08)', fg: 'var(--accent-hover)' },
   email:     { label: 'Email',     bg: 'rgba(107,114,128,0.08)', fg: '#6B7280' },
-  ringover:  { label: 'Ringover',  bg: 'rgba(52,199,89,0.08)', fg: '#34C759' },
-  whatsapp:  { label: 'WhatsApp',  bg: 'rgba(52,199,89,0.08)', fg: '#34C759' },
+  ringover:  { label: 'Ringover',  bg: 'rgba(52,199,89,0.08)', fg: 'var(--semantic-green)' },
+  whatsapp:  { label: 'WhatsApp',  bg: 'rgba(52,199,89,0.08)', fg: 'var(--semantic-green)' },
   manual:    { label: 'Manuel',    bg: 'rgba(107,114,128,0.08)', fg: '#6B7280' }
 }
 

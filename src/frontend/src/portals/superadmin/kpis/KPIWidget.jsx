@@ -54,7 +54,7 @@ async function fetchMRRHistory(company) {
 const TrendBadge = ({ variation, trend }) => {
   if (!variation || variation === 0) {
     return (
-      <span className="flex items-center gap-0.5" style={{ color: 'var(--text-tertiary)', fontSize: 11 }}>
+      <span className="flex items-center gap-0.5" style={{ color: 'var(--label-3)', fontSize: 11 }}>
         <Minus size={11} /> 0%
       </span>
     )
@@ -63,7 +63,7 @@ const TrendBadge = ({ variation, trend }) => {
   return (
     <span
       className="flex items-center gap-0.5"
-      style={{ fontSize: 11, fontWeight: 500, color: isUp ? 'var(--success)' : 'var(--danger)' }}
+      style={{ fontSize: 11, fontWeight: 500, color: isUp ? 'var(--semantic-green)' : 'var(--semantic-red)' }}
     >
       {isUp ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
       {variation > 0 ? '+' : ''}{variation}%
@@ -125,7 +125,7 @@ export default function KPISidebar({ selectedCompany }) {
         <button
           onClick={() => refetch()}
           className="p-1 rounded-md transition-colors duration-150"
-          style={{ color: 'var(--text-tertiary)' }}
+          style={{ color: 'var(--label-3)' }}
           title="Actualiser"
         >
           <RefreshCw size={13} />
@@ -150,7 +150,7 @@ export default function KPISidebar({ selectedCompany }) {
                 <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)' }}>MRR</span>
                 <TrendBadge variation={kpis.MRR.variation} trend={kpis.MRR.trend} />
               </div>
-              <p style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-primary)', marginTop: 2 }}>
+              <p style={{ fontSize: 20, fontWeight: 700, color: 'var(--label-1)', marginTop: 2 }}>
                 {formatCHF(kpis.MRR.value)}
               </p>
               <MRRSparkline data={mrrHistory?.data} />
@@ -172,11 +172,11 @@ export default function KPISidebar({ selectedCompany }) {
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.02)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  <span className="ds-body" style={{ color: 'var(--text-secondary)' }}>
+                  <span className="ds-body" style={{ color: 'var(--label-2)' }}>
                     {METRIC_LABELS[metric] || metric}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--label-1)' }}>
                       {formatMetricValue(metric, kpi.value)}
                     </span>
                     <TrendBadge variation={kpi.variation} trend={kpi.trend} />

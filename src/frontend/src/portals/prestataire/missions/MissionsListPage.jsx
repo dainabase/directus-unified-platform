@@ -24,9 +24,9 @@ const formatCHF = (value) =>
   }).format(value || 0)
 
 const STATUS_MAP = {
-  active: { label: 'En cours', color: 'var(--success)' },
-  in_progress: { label: 'En cours', color: 'var(--success)' },
-  'in-progress': { label: 'En cours', color: 'var(--success)' },
+  active: { label: 'En cours', color: 'var(--semantic-green)' },
+  in_progress: { label: 'En cours', color: 'var(--semantic-green)' },
+  'in-progress': { label: 'En cours', color: 'var(--semantic-green)' },
   completed: { label: 'Termine', color: 'var(--accent)' },
   planned: { label: 'Planifie', color: '#6B7280' },
   draft: { label: 'Brouillon', color: '#9CA3AF' }
@@ -110,7 +110,7 @@ const MissionCard = ({ mission, onClick }) => {
 
       {/* Action */}
       <div className="flex items-center justify-end pt-3 border-t border-gray-100">
-        <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors">
+        <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:bg-blue-700 transition-colors">
           Voir detail <ArrowRight size={14} />
         </button>
       </div>
@@ -214,7 +214,7 @@ const MissionsListPage = () => {
                 onClick={() => setStatusFilter(f.value)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   statusFilter === f.value
-                    ? 'bg-[#0071E3] text-white'
+                    ? 'bg-[var(--accent-hover)] text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >

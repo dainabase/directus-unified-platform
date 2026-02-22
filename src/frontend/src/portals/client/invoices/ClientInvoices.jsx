@@ -16,11 +16,11 @@ const formatCHF = (v) => new Intl.NumberFormat('fr-CH', { style: 'currency', cur
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
 const STATUS_CONFIG = {
-  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
-  paid: { label: 'Payée', bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle },
-  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)', icon: AlertTriangle },
-  cancelled: { label: 'Annulée', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: AlertCircle },
-  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Receipt },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock },
+  paid: { label: 'Payée', bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)', icon: CheckCircle },
+  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)', icon: AlertTriangle },
+  cancelled: { label: 'Annulée', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)', icon: AlertCircle },
+  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)', icon: Receipt },
   sent: { label: 'Envoyée', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)', icon: Receipt }
 }
 
@@ -93,10 +93,10 @@ const ClientInvoices = () => {
       {totalOutstanding > 0 && (
         <div className="rounded-xl p-5 flex items-center justify-between" style={{background:"rgba(255,149,0,0.08)", border:"1px solid rgba(255,149,0,0.25)"}}>
           <div>
-            <p className="text-sm font-medium" style={{color:"var(--warning)"}}>Montant total à régler</p>
-            <p className="text-xs" style={{color:"var(--warning)"}}>{unpaid.length} facture(s) en attente</p>
+            <p className="text-sm font-medium" style={{color:"var(--semantic-orange)"}}>Montant total à régler</p>
+            <p className="text-xs" style={{color:"var(--semantic-orange)"}}>{unpaid.length} facture(s) en attente</p>
           </div>
-          <p className="text-2xl font-bold" style={{color:"var(--warning)"}}>{formatCHF(totalOutstanding)}</p>
+          <p className="text-2xl font-bold" style={{color:"var(--semantic-orange)"}}>{formatCHF(totalOutstanding)}</p>
         </div>
       )}
 
@@ -190,7 +190,7 @@ const ClientInvoices = () => {
             </div>
             <div className="flex items-center gap-3 p-6 border-t border-gray-100">
               <button onClick={handlePrint}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-[#0071E3] hover:opacity-90">
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-white bg-[var(--accent-hover)] hover:opacity-90">
                 <Printer size={16} /> Imprimer
               </button>
               <button onClick={() => setSelectedInvoice(null)}

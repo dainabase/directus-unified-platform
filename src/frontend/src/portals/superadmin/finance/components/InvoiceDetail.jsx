@@ -214,7 +214,7 @@ const InvoiceDetail = ({ invoiceId, onBack, selectedCompany }) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="w-8 h-8 text-[#0071E3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[var(--accent-hover)] animate-spin" />
       </div>
     )
   }
@@ -284,7 +284,7 @@ const InvoiceDetail = ({ invoiceId, onBack, selectedCompany }) => {
             <button
               onClick={() => handleStatusChange('sent')}
               disabled={actionLoading === 'sent'}
-              className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#0071E3] rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[var(--accent-hover)] rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               {actionLoading === 'sent' ? (
                 <Loader2 size={14} className="animate-spin" />

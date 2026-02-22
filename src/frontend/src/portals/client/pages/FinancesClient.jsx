@@ -68,11 +68,11 @@ const ChartTooltip = ({ active, payload, label }) => {
   return (
     <div
       className="ds-card px-4 py-3 shadow-lg"
-      style={{ border: '1px solid var(--border-light, #E5E5EA)' }}
+      style={{ border: '1px solid var(--sep)' }}
     >
       <p
         className="text-xs font-medium mb-2"
-        style={{ color: 'var(--text-secondary, #6E6E73)' }}
+        style={{ color: 'var(--label-2)' }}
       >
         {label}
       </p>
@@ -82,10 +82,10 @@ const ChartTooltip = ({ active, payload, label }) => {
             className="w-2.5 h-2.5 rounded-full"
             style={{ background: entry.color }}
           />
-          <span style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+          <span style={{ color: 'var(--label-2)' }}>
             {entry.name}:
           </span>
-          <span className="font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+          <span className="font-semibold" style={{ color: 'var(--label-1)' }}>
             {formatCHF(entry.value)}
           </span>
         </div>
@@ -228,7 +228,7 @@ const FinancesClient = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#0071E3' }} />
+        <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent-hover)' }} />
       </div>
     )
   }
@@ -239,10 +239,10 @@ const FinancesClient = () => {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--label-1)' }}>
             Mes finances
           </h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--label-2)' }}>
             Vue d'ensemble de votre situation financiere.
           </p>
         </div>
@@ -261,13 +261,13 @@ const FinancesClient = () => {
       <div>
         <h1
           className="text-xl font-bold"
-          style={{ color: 'var(--text-primary, #1D1D1F)' }}
+          style={{ color: 'var(--label-1)' }}
         >
           Mes finances
         </h1>
         <p
           className="text-sm mt-1"
-          style={{ color: 'var(--text-secondary, #6E6E73)' }}
+          style={{ color: 'var(--label-2)' }}
         >
           Vue d'ensemble de votre situation financiere.
         </p>
@@ -293,7 +293,7 @@ const FinancesClient = () => {
               className="w-[34px] h-[34px] rounded-lg flex items-center justify-center"
               style={{ background: soldeDu > 0 ? 'rgba(255,59,48,0.10)' : 'rgba(52,199,89,0.10)' }}
             >
-              <AlertTriangle size={18} style={{ color: soldeDu > 0 ? '#FF3B30' : '#34C759' }} />
+              <AlertTriangle size={18} style={{ color: soldeDu > 0 ? 'var(--semantic-red)' : 'var(--semantic-green)' }} />
             </div>
           </div>
           <p
@@ -301,21 +301,21 @@ const FinancesClient = () => {
             style={{
               fontSize: 26,
               lineHeight: '32px',
-              color: soldeDu > 0 ? '#FF3B30' : '#34C759'
+              color: soldeDu > 0 ? 'var(--semantic-red)' : 'var(--semantic-green)'
             }}
           >
             {formatCHF(soldeDu)}
           </p>
-          <p className="text-sm" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+          <p className="text-sm" style={{ color: 'var(--label-2)' }}>
             Solde du
           </p>
           {soldeDu > 0 && (
-            <p className="text-xs mt-1" style={{ color: '#FF3B30' }}>
+            <p className="text-xs mt-1" style={{ color: 'var(--semantic-red)' }}>
               {invoices.filter((i) => i.status !== 'paid' && i.status !== 'cancelled').length} facture{invoices.filter((i) => i.status !== 'paid' && i.status !== 'cancelled').length > 1 ? 's' : ''} en attente
             </p>
           )}
           {soldeDu <= 0 && (
-            <p className="text-xs mt-1" style={{ color: '#34C759' }}>
+            <p className="text-xs mt-1" style={{ color: 'var(--semantic-green)' }}>
               Aucun solde en cours
             </p>
           )}
@@ -328,21 +328,21 @@ const FinancesClient = () => {
           <div>
             <h2
               className="text-base font-semibold"
-              style={{ color: 'var(--text-primary, #1D1D1F)' }}
+              style={{ color: 'var(--label-1)' }}
             >
               Apercu mensuel
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--label-3)' }}>
               6 derniers mois — Facture vs Paye
             </p>
           </div>
-          <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+          <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--label-2)' }}>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#0071E3' }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--accent-hover)' }} />
               Facture
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#D1D1D6' }} />
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--gray-4)' }} />
               Paye
             </div>
           </div>
@@ -354,12 +354,12 @@ const FinancesClient = () => {
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#AEAEB2' }}
+              tick={{ fontSize: 11, fill: 'var(--label-3)' }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#AEAEB2' }}
+              tick={{ fontSize: 11, fill: 'var(--label-3)' }}
               tickFormatter={(v) =>
                 v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v.toString()
               }
@@ -369,14 +369,14 @@ const FinancesClient = () => {
             <Bar
               dataKey="facture"
               name="Facture"
-              fill="#0071E3"
+              fill="var(--accent-hover)"
               radius={[4, 4, 0, 0]}
               maxBarSize={32}
             />
             <Bar
               dataKey="paye"
               name="Paye"
-              fill="#D1D1D6"
+              fill="var(--gray-4)"
               radius={[4, 4, 0, 0]}
               maxBarSize={32}
             />
@@ -388,16 +388,16 @@ const FinancesClient = () => {
       <div className="ds-card overflow-hidden">
         <div
           className="flex items-center justify-between px-5 py-4"
-          style={{ borderBottom: '1px solid var(--border-light, #E5E5EA)' }}
+          style={{ borderBottom: '1px solid var(--sep)' }}
         >
           <div>
             <h2
               className="text-base font-semibold"
-              style={{ color: 'var(--text-primary, #1D1D1F)' }}
+              style={{ color: 'var(--label-1)' }}
             >
               Historique complet
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--label-3)' }}>
               {invoices.length} enregistrement{invoices.length > 1 ? 's' : ''}
             </p>
           </div>
@@ -405,8 +405,8 @@ const FinancesClient = () => {
             onClick={handleExportCSV}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors"
             style={{
-              background: 'var(--bg-secondary, #F5F5F7)',
-              color: 'var(--text-secondary, #6E6E73)'
+              background: 'var(--bg)',
+              color: 'var(--label-2)'
             }}
           >
             <Download size={14} />
@@ -420,8 +420,8 @@ const FinancesClient = () => {
               <tr
                 className="text-xs uppercase tracking-wide"
                 style={{
-                  color: 'var(--text-tertiary, #AEAEB2)',
-                  borderBottom: '1px solid var(--border-light, #E5E5EA)'
+                  color: 'var(--label-3)',
+                  borderBottom: '1px solid var(--sep)'
                 }}
               >
                 <th className="text-left px-5 py-3 font-medium">Type</th>
@@ -432,24 +432,24 @@ const FinancesClient = () => {
                 <th className="text-right px-5 py-3 font-medium">Solde courant</th>
               </tr>
             </thead>
-            <tbody className="divide-y" style={{ borderColor: 'var(--border-light, #F5F5F7)' }}>
+            <tbody className="divide-y" style={{ borderColor: 'var(--sep)' }}>
               {historyRows.map((inv) => (
                 <tr key={inv.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-2">
-                      <TrendingUp size={14} style={{ color: '#0071E3' }} />
-                      <span style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+                      <TrendingUp size={14} style={{ color: 'var(--accent-hover)' }} />
+                      <span style={{ color: 'var(--label-2)' }}>
                         Facture
                       </span>
                     </div>
                   </td>
-                  <td className="px-5 py-3 font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                  <td className="px-5 py-3 font-medium" style={{ color: 'var(--label-1)' }}>
                     {inv.invoice_number || '\u2014'}
                   </td>
-                  <td className="px-5 py-3" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+                  <td className="px-5 py-3" style={{ color: 'var(--label-2)' }}>
                     {formatDate(inv.date_created)}
                   </td>
-                  <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                  <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--label-1)' }}>
                     {formatCHF(inv.total)}
                   </td>
                   <td className="px-5 py-3">
@@ -458,7 +458,7 @@ const FinancesClient = () => {
                   <td
                     className="px-5 py-3 text-right font-semibold"
                     style={{
-                      color: inv.runningBalance > 0 ? '#FF3B30' : '#34C759'
+                      color: inv.runningBalance > 0 ? 'var(--semantic-red)' : 'var(--semantic-green)'
                     }}
                   >
                     {formatCHF(inv.runningBalance)}

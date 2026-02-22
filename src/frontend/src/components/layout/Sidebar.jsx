@@ -133,7 +133,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
             width: 32,
             height: 32,
             borderRadius: 'var(--radius-logo)',
-            background: 'var(--text-primary)',
+            background: 'var(--label-1)',
             color: '#FFFFFF',
             fontSize: 12,
             fontWeight: 700,
@@ -142,7 +142,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
         >
           HV
         </div>
-        <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
+        <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--label-1)' }}>
           HYPERVISUAL
         </span>
       </div>
@@ -164,7 +164,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
               fontWeight: 600,
               borderRadius: 'var(--radius-badge)',
               background: activeCompany === c.id ? 'var(--accent)' : 'transparent',
-              color: activeCompany === c.id ? '#FFFFFF' : 'var(--text-secondary)',
+              color: activeCompany === c.id ? '#FFFFFF' : 'var(--label-2)',
             }}
             onMouseEnter={(e) => {
               if (activeCompany !== c.id) e.currentTarget.style.background = 'rgba(0,0,0,0.04)'
@@ -197,7 +197,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
                   className="flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150"
                   style={{
                     background: isActive ? 'var(--accent-light)' : 'transparent',
-                    color: isActive ? 'var(--accent)' : 'var(--text-primary)',
+                    color: isActive ? 'var(--accent)' : 'var(--label-1)',
                     fontSize: '13.5px',
                     fontWeight: isActive ? 500 : 450,
                   }}
@@ -210,7 +210,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
                 >
                   <Icon
                     size={16}
-                    style={{ color: isActive ? 'var(--accent)' : 'var(--text-secondary)' }}
+                    style={{ color: isActive ? 'var(--accent)' : 'var(--label-2)' }}
                   />
                   <span>{item.label}</span>
                 </NavLink>
@@ -231,7 +231,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
             width: 28,
             height: 28,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--text-primary), var(--text-secondary))',
+            background: 'linear-gradient(135deg, var(--label-1), var(--label-2))',
             color: '#FFFFFF',
             fontSize: 11,
             fontWeight: 600,
@@ -240,16 +240,16 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
           JM
         </div>
         <div className="flex-1 min-w-0">
-          <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-primary)' }} className="truncate">
+          <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--label-1)' }} className="truncate">
             Jean-Marie D.
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>CEO</div>
+          <div style={{ fontSize: 11, color: 'var(--label-2)' }}>CEO</div>
         </div>
         <button
           className="transition-colors duration-150"
-          style={{ color: 'var(--text-tertiary)' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-tertiary)')}
+          style={{ color: 'var(--label-3)' }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--label-2)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--label-3)')}
         >
           <Settings size={16} />
         </button>

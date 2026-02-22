@@ -419,7 +419,7 @@ const QuoteForm = ({ quote, onClose }) => {
           {/* Entreprise emettrice */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Entreprise \u00e9mettrice <span style={{ color: 'var(--danger)' }}>*</span>
+              Entreprise \u00e9mettrice <span style={{ color: 'var(--semantic-red)' }}>*</span>
             </label>
             <select {...register('owner_company_id', { required: true })} className="ds-input w-full">
               {OWNER_COMPANIES.map(c => (

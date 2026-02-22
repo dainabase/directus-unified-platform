@@ -81,7 +81,7 @@ const ProjectsModule = ({ selectedCompany }) => {
         </Card>
         <Card className="p-4">
           <p className="text-sm text-gray-600">Terminés</p>
-          <p className="text-2xl font-bold mt-1" style={{color:'var(--success)'}}>{stats.completed}</p>
+          <p className="text-2xl font-bold mt-1" style={{color:'var(--semantic-green)'}}>{stats.completed}</p>
         </Card>
         <Card className="p-4">
           <p className="text-sm text-gray-600">Budget Total</p>

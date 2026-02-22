@@ -217,7 +217,7 @@ const QuoteResponseForm = ({ proposal, onClose }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium bg-[var(--accent-hover)] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {isSubmitting ? (
                 <Loader2 size={16} className="animate-spin" />

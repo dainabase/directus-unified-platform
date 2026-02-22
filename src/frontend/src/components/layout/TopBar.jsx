@@ -58,7 +58,7 @@ const TopBar = ({ onNewAction }) => {
           <Search
             size={14}
             className="absolute left-2.5 top-1/2 -translate-y-1/2"
-            style={{ color: 'var(--text-tertiary)' }}
+            style={{ color: 'var(--label-3)' }}
           />
           <input
             ref={searchRef}
@@ -78,7 +78,7 @@ const TopBar = ({ onNewAction }) => {
         {/* Notifications */}
         <button
           className="relative p-2 rounded-md transition-colors duration-150"
-          style={{ color: 'var(--text-secondary)' }}
+          style={{ color: 'var(--label-2)' }}
           onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
           onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
         >
@@ -92,7 +92,7 @@ const TopBar = ({ onNewAction }) => {
                 width: 6,
                 height: 6,
                 borderRadius: '50%',
-                background: 'var(--danger)',
+                background: 'var(--semantic-red)',
               }}
             />
           )}

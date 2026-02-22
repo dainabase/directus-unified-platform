@@ -15,11 +15,11 @@ import { fr } from 'date-fns/locale'
 import api from '../../../lib/axios'
 
 const PRIORITY_CONFIG = {
-  critical: { icon: AlertCircle, bg: 'var(--danger-light)', border: 'var(--danger)', text: 'var(--danger)', dot: 'var(--danger)' },
-  high:     { icon: AlertTriangle, bg: 'var(--warning-light)', border: 'var(--warning)', text: 'var(--warning)', dot: 'var(--warning)' },
-  medium:   { icon: Clock, bg: 'rgba(0,0,0,0.04)', border: 'var(--border-light)', text: 'var(--text-secondary)', dot: 'var(--text-tertiary)' },
+  critical: { icon: AlertCircle, bg: 'var(--tint-red)', border: 'var(--semantic-red)', text: 'var(--semantic-red)', dot: 'var(--semantic-red)' },
+  high:     { icon: AlertTriangle, bg: 'var(--tint-orange)', border: 'var(--semantic-orange)', text: 'var(--semantic-orange)', dot: 'var(--semantic-orange)' },
+  medium:   { icon: Clock, bg: 'rgba(0,0,0,0.04)', border: 'var(--sep)', text: 'var(--label-2)', dot: 'var(--label-3)' },
   low:      { icon: Bell, bg: 'var(--accent-light)', border: 'var(--accent)', text: 'var(--accent)', dot: 'var(--accent)' },
-  info:     { icon: Bell, bg: 'rgba(0,0,0,0.03)', border: 'var(--border-light)', text: 'var(--text-secondary)', dot: 'var(--text-tertiary)' }
+  info:     { icon: Bell, bg: 'rgba(0,0,0,0.03)', border: 'var(--sep)', text: 'var(--label-2)', dot: 'var(--label-3)' }
 }
 
 const CHF = (value) =>
@@ -261,7 +261,7 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
     return (
       <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-4">
-          <AlertCircle size={16} style={{ color: 'var(--danger)' }} />
+          <AlertCircle size={16} style={{ color: 'var(--semantic-red)' }} />
           <span className="ds-card-title">Alertes</span>
         </div>
         <div className="space-y-3">
@@ -277,7 +277,7 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
     <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <AlertCircle size={16} style={{ color: 'var(--danger)' }} />
+          <AlertCircle size={16} style={{ color: 'var(--semantic-red)' }} />
           <span className="ds-card-title">Alertes & Actions</span>
         </div>
         {alerts.length > 0 && (
@@ -287,7 +287,7 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
 
       {displayAlerts.length === 0 ? (
         <div className="text-center py-8">
-          <Check size={24} style={{ color: 'var(--success)', margin: '0 auto 8px' }} />
+          <Check size={24} style={{ color: 'var(--semantic-green)', margin: '0 auto 8px' }} />
           <p className="ds-meta">Aucune alerte active</p>
         </div>
       ) : (
@@ -305,7 +305,7 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
                   border: `1px solid ${config.border}`,
                   borderColor: priority === 'critical' || priority === 'high'
                     ? `color-mix(in srgb, ${config.border} 30%, transparent)`
-                    : 'var(--border-light)'
+                    : 'var(--sep)'
                 }}
               >
                 <span
@@ -340,7 +340,7 @@ const AlertsWidget = ({ selectedCompany, maxItems = 5 }) => {
                     onClick={() => dismissMutation.mutate(alert.id)}
                     disabled={dismissMutation.isPending}
                     className="opacity-0 group-hover:opacity-100 p-1 rounded-md transition-all duration-150"
-                    style={{ color: 'var(--text-tertiary)' }}
+                    style={{ color: 'var(--label-3)' }}
                     title="Marquer comme lu"
                   >
                     {dismissMutation.isPending ? (

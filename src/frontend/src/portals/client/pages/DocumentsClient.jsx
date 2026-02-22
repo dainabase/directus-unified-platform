@@ -129,7 +129,7 @@ const TabButton = ({ tab, isActive, onClick }) => (
     className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
     style={{
       background: isActive ? 'rgba(0,113,227,0.10)' : 'transparent',
-      color: isActive ? '#0071E3' : 'var(--text-secondary, #6E6E73)'
+      color: isActive ? 'var(--accent-hover)' : 'var(--label-2)'
     }}
   >
     <tab.icon size={16} />
@@ -139,7 +139,7 @@ const TabButton = ({ tab, isActive, onClick }) => (
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center py-16">
-    <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#0071E3' }} />
+    <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent-hover)' }} />
   </div>
 )
 
@@ -181,7 +181,7 @@ const TabDevis = ({ contactId }) => {
         <thead>
           <tr
             className="text-xs uppercase tracking-wide"
-            style={{ color: 'var(--text-tertiary, #AEAEB2)', borderBottom: '1px solid var(--border-light, #E5E5EA)' }}
+            style={{ color: 'var(--label-3)', borderBottom: '1px solid var(--sep)' }}
           >
             <th className="text-left px-5 py-3 font-medium">Numero</th>
             <th className="text-left px-5 py-3 font-medium">Date</th>
@@ -191,26 +191,26 @@ const TabDevis = ({ contactId }) => {
             <th className="text-right px-5 py-3 font-medium">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y" style={{ borderColor: 'var(--border-light, #F5F5F7)' }}>
+        <tbody className="divide-y" style={{ borderColor: 'var(--sep)' }}>
           {quotes.map((q) => (
             <tr key={q.id} className="hover:bg-gray-50/50 transition-colors">
               <td className="px-5 py-3">
-                <p className="font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                <p className="font-medium" style={{ color: 'var(--label-1)' }}>
                   {q.quote_number || '\u2014'}
                 </p>
                 {q.name && (
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--label-3)' }}>
                     {q.name}
                   </p>
                 )}
               </td>
-              <td className="px-5 py-3" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+              <td className="px-5 py-3" style={{ color: 'var(--label-2)' }}>
                 {formatDate(q.date_created)}
               </td>
-              <td className="px-5 py-3 text-right" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+              <td className="px-5 py-3 text-right" style={{ color: 'var(--label-2)' }}>
                 {formatCHF(q.subtotal, q.currency || 'CHF')}
               </td>
-              <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+              <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--label-1)' }}>
                 {formatCHF(q.total, q.currency || 'CHF')}
               </td>
               <td className="px-5 py-3">
@@ -222,7 +222,7 @@ const TabDevis = ({ contactId }) => {
                     <button
                       onClick={() => navigate(`/client/quotes?sign=${q.id}`)}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-colors"
-                      style={{ background: '#0071E3' }}
+                      style={{ background: 'var(--accent-hover)' }}
                     >
                       <PenTool size={12} />
                       Signer
@@ -234,8 +234,8 @@ const TabDevis = ({ contactId }) => {
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
                     style={{
-                      background: 'var(--bg-secondary, #F5F5F7)',
-                      color: 'var(--text-secondary, #6E6E73)'
+                      background: 'var(--bg)',
+                      color: 'var(--label-2)'
                     }}
                   >
                     <Download size={12} />
@@ -280,7 +280,7 @@ const TabContrats = ({ companyId }) => {
         <thead>
           <tr
             className="text-xs uppercase tracking-wide"
-            style={{ color: 'var(--text-tertiary, #AEAEB2)', borderBottom: '1px solid var(--border-light, #E5E5EA)' }}
+            style={{ color: 'var(--label-3)', borderBottom: '1px solid var(--sep)' }}
           >
             <th className="text-left px-5 py-3 font-medium">Numero</th>
             <th className="text-left px-5 py-3 font-medium">Titre</th>
@@ -289,22 +289,22 @@ const TabContrats = ({ companyId }) => {
             <th className="text-left px-5 py-3 font-medium">Date</th>
           </tr>
         </thead>
-        <tbody className="divide-y" style={{ borderColor: 'var(--border-light, #F5F5F7)' }}>
+        <tbody className="divide-y" style={{ borderColor: 'var(--sep)' }}>
           {contracts.map((c) => (
             <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
-              <td className="px-5 py-3 font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+              <td className="px-5 py-3 font-medium" style={{ color: 'var(--label-1)' }}>
                 {c.contract_number || '\u2014'}
               </td>
-              <td className="px-5 py-3" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+              <td className="px-5 py-3" style={{ color: 'var(--label-2)' }}>
                 {c.title || '\u2014'}
               </td>
               <td className="px-5 py-3">
                 <StatusBadge status={c.status} />
               </td>
-              <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+              <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--label-1)' }}>
                 {c.value != null ? formatCHF(c.value) : '\u2014'}
               </td>
-              <td className="px-5 py-3" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+              <td className="px-5 py-3" style={{ color: 'var(--label-2)' }}>
                 {formatDate(c.created_at)}
               </td>
             </tr>
@@ -345,7 +345,7 @@ const TabFactures = ({ contactId }) => {
         <thead>
           <tr
             className="text-xs uppercase tracking-wide"
-            style={{ color: 'var(--text-tertiary, #AEAEB2)', borderBottom: '1px solid var(--border-light, #E5E5EA)' }}
+            style={{ color: 'var(--label-3)', borderBottom: '1px solid var(--sep)' }}
           >
             <th className="text-left px-5 py-3 font-medium">Numero</th>
             <th className="text-left px-5 py-3 font-medium">Date</th>
@@ -355,7 +355,7 @@ const TabFactures = ({ contactId }) => {
             <th className="text-right px-5 py-3 font-medium">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y" style={{ borderColor: 'var(--border-light, #F5F5F7)' }}>
+        <tbody className="divide-y" style={{ borderColor: 'var(--sep)' }}>
           {invoices.map((inv) => {
             const isOverdue = inv.status === 'overdue' ||
               (inv.due_date && inv.status === 'sent' && new Date(inv.due_date) < new Date())
@@ -366,16 +366,16 @@ const TabFactures = ({ contactId }) => {
                 className="hover:bg-gray-50/50 transition-colors"
                 style={isOverdue ? { background: 'rgba(255,59,48,0.04)' } : undefined}
               >
-                <td className="px-5 py-3 font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                <td className="px-5 py-3 font-medium" style={{ color: 'var(--label-1)' }}>
                   {inv.invoice_number || '\u2014'}
                 </td>
-                <td className="px-5 py-3" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+                <td className="px-5 py-3" style={{ color: 'var(--label-2)' }}>
                   {formatDate(inv.date_created)}
                 </td>
-                <td className="px-5 py-3" style={{ color: isOverdue ? '#FF3B30' : 'var(--text-secondary, #6E6E73)' }}>
+                <td className="px-5 py-3" style={{ color: isOverdue ? 'var(--semantic-red)' : 'var(--label-2)' }}>
                   {formatDate(inv.due_date)}
                 </td>
-                <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--label-1)' }}>
                   {formatCHF(inv.total, inv.currency || 'CHF')}
                 </td>
                 <td className="px-5 py-3">
@@ -387,7 +387,7 @@ const TabFactures = ({ contactId }) => {
                       <button
                         onClick={() => navigate(`/client/payment/${inv.id}`)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-colors"
-                        style={{ background: '#0071E3' }}
+                        style={{ background: 'var(--accent-hover)' }}
                       >
                         <CreditCard size={12} />
                         Payer
@@ -399,8 +399,8 @@ const TabFactures = ({ contactId }) => {
                       }}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors"
                       style={{
-                        background: 'var(--bg-secondary, #F5F5F7)',
-                        color: 'var(--text-secondary, #6E6E73)'
+                        background: 'var(--bg)',
+                        color: 'var(--label-2)'
                       }}
                     >
                       <Download size={12} />
@@ -449,20 +449,20 @@ const TabAutres = () => {
               className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
               style={{ background: 'rgba(0,113,227,0.08)' }}
             >
-              <IconComponent size={20} style={{ color: '#0071E3' }} />
+              <IconComponent size={20} style={{ color: 'var(--accent-hover)' }} />
             </div>
             <div className="flex-1 min-w-0">
               <p
                 className="text-sm font-medium truncate"
-                style={{ color: 'var(--text-primary, #1D1D1F)' }}
+                style={{ color: 'var(--label-1)' }}
               >
                 {file.title || file.filename_download || 'Document'}
               </p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-xs" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                <span className="text-xs" style={{ color: 'var(--label-3)' }}>
                   {formatDate(file.uploaded_on)}
                 </span>
-                <span className="text-xs" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                <span className="text-xs" style={{ color: 'var(--label-3)' }}>
                   {formatFileSize(file.filesize)}
                 </span>
               </div>
@@ -472,7 +472,7 @@ const TabAutres = () => {
                 window.open(`/assets/${file.id}?download`, '_blank')
               }}
               className="p-2 rounded-lg transition-colors hover:bg-gray-100 flex-shrink-0"
-              style={{ color: 'var(--text-secondary, #6E6E73)' }}
+              style={{ color: 'var(--label-2)' }}
               title="Telecharger"
             >
               <Download size={16} />
@@ -514,13 +514,13 @@ const DocumentsClient = () => {
       <div>
         <h1
           className="text-xl font-bold"
-          style={{ color: 'var(--text-primary, #1D1D1F)' }}
+          style={{ color: 'var(--label-1)' }}
         >
           Mes documents
         </h1>
         <p
           className="text-sm mt-1"
-          style={{ color: 'var(--text-secondary, #6E6E73)' }}
+          style={{ color: 'var(--label-2)' }}
         >
           Retrouvez tous vos devis, contrats, factures et documents partages.
         </p>
@@ -529,7 +529,7 @@ const DocumentsClient = () => {
       {/* Horizontal pill tabs */}
       <div
         className="flex items-center gap-1 p-1 rounded-xl"
-        style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+        style={{ background: 'var(--bg)' }}
       >
         {TABS.map((tab) => (
           <TabButton

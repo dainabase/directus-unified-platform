@@ -10,7 +10,7 @@ import {
 } from 'recharts'
 import api from '../../../../lib/axios'
 
-const COLORS = ['#0071E3', '#34C759', '#FF9500', '#FF3B30', '#8E8E93', '#AF52DE']
+const COLORS = ['var(--accent-hover)', 'var(--semantic-green)', 'var(--semantic-orange)', 'var(--semantic-red)', 'var(--gray-1)', '#AF52DE']
 
 const STATUS_CFG = {
   draft:     { label: 'Brouillon',  bg: 'bg-gray-100',   text: 'text-gray-600' },
@@ -243,7 +243,7 @@ const MarketingAnalytics = ({ selectedCompany }) => {
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#0071E3" radius={[4, 4, 0, 0]} name="Campagnes" />
+                <Bar dataKey="count" fill="var(--accent-hover)" radius={[4, 4, 0, 0]} name="Campagnes" />
               </BarChart>
             </ResponsiveContainer>
           )}

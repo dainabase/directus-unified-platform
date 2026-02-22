@@ -2,9 +2,9 @@ import React from 'react'
 
 const colorMap = {
   blue: 'var(--accent)',
-  green: 'var(--success)',
-  orange: 'var(--warning)',
-  red: 'var(--danger)',
+  green: 'var(--semantic-green)',
+  orange: 'var(--semantic-orange)',
+  red: 'var(--semantic-red)',
 }
 
 const ProgressBar = ({ value = 0, color = 'blue', size = 'sm', label, className = '' }) => {

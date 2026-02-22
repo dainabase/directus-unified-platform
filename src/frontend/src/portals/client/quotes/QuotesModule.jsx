@@ -24,12 +24,12 @@ const formatDate = (d) => {
 
 // Status config
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock },
+  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)', icon: Clock },
   sent: { label: 'Envoye', bg: 'var(--accent-light)', fg: 'var(--accent)', icon: FileText },
   viewed: { label: 'Consulte', bg: 'rgba(175,82,222,0.12)', fg: '#AF52DE', icon: Eye },
-  signed: { label: 'Signe', bg: 'var(--success-light)', fg: 'var(--success)', icon: CheckCircle2 },
-  expired: { label: 'Expire', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: XCircle },
-  rejected: { label: 'Refuse', bg: 'var(--danger-light)', fg: 'var(--danger)', icon: XCircle }
+  signed: { label: 'Signe', bg: 'var(--tint-green)', fg: 'var(--semantic-green)', icon: CheckCircle2 },
+  expired: { label: 'Expire', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)', icon: XCircle },
+  rejected: { label: 'Refuse', bg: 'var(--tint-red)', fg: 'var(--semantic-red)', icon: XCircle }
 }
 
 const StatusBadge = ({ status }) => {
@@ -185,46 +185,46 @@ const QuoteDetail = ({ quoteId, onBack }) => {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="ds-btn ds-btn-ghost p-2">
-          <ArrowLeft size={20} style={{color:'var(--text-secondary)'}} />
+          <ArrowLeft size={20} style={{color:'var(--label-2)'}} />
         </button>
         <div className="flex-1">
-          <h2 className="text-lg font-bold" style={{color:'var(--text-primary)'}}>{quote.title || `Devis ${quote.reference}`}</h2>
-          <p className="text-sm" style={{color:'var(--text-tertiary)'}}>Ref: {quote.reference} — {formatDate(quote.date_created)}</p>
+          <h2 className="text-lg font-bold" style={{color:'var(--label-1)'}}>{quote.title || `Devis ${quote.reference}`}</h2>
+          <p className="text-sm" style={{color:'var(--label-3)'}}>Ref: {quote.reference} — {formatDate(quote.date_created)}</p>
         </div>
         <StatusBadge status={quote.status} />
       </div>
 
       {/* Expiry warning */}
       {isExpired && quote.status !== 'signed' && (
-        <div className="rounded-lg px-4 py-3 flex items-center gap-3" style={{background:'var(--danger-light)', border:'1px solid var(--danger)'}}>
-          <XCircle className="w-5 h-5 flex-shrink-0" style={{color:'var(--danger)'}} />
-          <p className="text-sm" style={{color:'var(--danger)'}}>Ce devis a expire le {formatDate(quote.valid_until)}.</p>
+        <div className="rounded-lg px-4 py-3 flex items-center gap-3" style={{background:'var(--tint-red)', border:'1px solid var(--semantic-red)'}}>
+          <XCircle className="w-5 h-5 flex-shrink-0" style={{color:'var(--semantic-red)'}} />
+          <p className="text-sm" style={{color:'var(--semantic-red)'}}>Ce devis a expire le {formatDate(quote.valid_until)}.</p>
         </div>
       )}
 
       {/* Amounts card */}
       <div className="ds-card">
-        <div className="p-5" style={{borderBottom:'1px solid var(--border-light)'}}>
+        <div className="p-5" style={{borderBottom:'1px solid var(--sep)'}}>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div>
-              <p className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)'}}>Montant HT</p>
-              <p className="text-lg font-semibold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total_ht)}</p>
+              <p className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)'}}>Montant HT</p>
+              <p className="text-lg font-semibold" style={{color:'var(--label-1)'}}>{formatCHF(quote.total_ht)}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)'}}>TVA</p>
-              <p className="text-lg font-semibold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total_tva)}</p>
+              <p className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)'}}>TVA</p>
+              <p className="text-lg font-semibold" style={{color:'var(--label-1)'}}>{formatCHF(quote.total_tva)}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)'}}>Total TTC</p>
+              <p className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)'}}>Total TTC</p>
               <p className="text-lg font-bold" style={{ color: GREEN }}>{formatCHF(quote.total_ttc)}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)'}}>Acompte ({quote.deposit_percentage || 0}%)</p>
-              <p className="text-lg font-semibold" style={{color:'var(--warning)'}}>{formatCHF(quote.deposit_amount)}</p>
+              <p className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)'}}>Acompte ({quote.deposit_percentage || 0}%)</p>
+              <p className="text-lg font-semibold" style={{color:'var(--semantic-orange)'}}>{formatCHF(quote.deposit_amount)}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)'}}>Validite</p>
-              <p className="text-lg font-semibold" style={{color: isExpired ? 'var(--danger)' : 'var(--text-primary)'}}>
+              <p className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)'}}>Validite</p>
+              <p className="text-lg font-semibold" style={{color: isExpired ? 'var(--semantic-red)' : 'var(--label-1)'}}>
                 {formatDate(quote.valid_until)}
               </p>
             </div>
@@ -233,11 +233,11 @@ const QuoteDetail = ({ quoteId, onBack }) => {
 
         {/* Line items */}
         {quote.items && quote.items.length > 0 && (
-          <div className="p-5" style={{borderBottom:'1px solid var(--border-light)'}}>
-            <h4 className="text-sm font-semibold mb-3" style={{color:'var(--text-secondary)'}}>Detail des prestations</h4>
+          <div className="p-5" style={{borderBottom:'1px solid var(--sep)'}}>
+            <h4 className="text-sm font-semibold mb-3" style={{color:'var(--label-2)'}}>Detail des prestations</h4>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-xs uppercase tracking-wide" style={{color:'var(--text-tertiary)', borderBottom:'1px solid var(--border-light)'}}>
+                <tr className="text-xs uppercase tracking-wide" style={{color:'var(--label-3)', borderBottom:'1px solid var(--sep)'}}>
                   <th className="text-left py-2">Description</th>
                   <th className="text-right py-2">Qte</th>
                   <th className="text-right py-2">Prix unit.</th>
@@ -247,10 +247,10 @@ const QuoteDetail = ({ quoteId, onBack }) => {
               <tbody className="divide-y" style={{borderColor:'rgba(0,0,0,0.04)'}}>
                 {quote.items.map((item, i) => (
                   <tr key={i}>
-                    <td className="py-2" style={{color:'var(--text-primary)'}}>{item.description || item.label}</td>
-                    <td className="py-2 text-right" style={{color:'var(--text-secondary)'}}>{item.quantity || 1}</td>
-                    <td className="py-2 text-right" style={{color:'var(--text-secondary)'}}>{formatCHF(item.unit_price || item.price)}</td>
-                    <td className="py-2 text-right font-medium" style={{color:'var(--text-primary)'}}>
+                    <td className="py-2" style={{color:'var(--label-1)'}}>{item.description || item.label}</td>
+                    <td className="py-2 text-right" style={{color:'var(--label-2)'}}>{item.quantity || 1}</td>
+                    <td className="py-2 text-right" style={{color:'var(--label-2)'}}>{formatCHF(item.unit_price || item.price)}</td>
+                    <td className="py-2 text-right font-medium" style={{color:'var(--label-1)'}}>
                       {formatCHF((item.quantity || 1) * (item.unit_price || item.price || 0))}
                     </td>
                   </tr>
@@ -263,8 +263,8 @@ const QuoteDetail = ({ quoteId, onBack }) => {
         {/* Notes */}
         {quote.notes && (
           <div className="p-5">
-            <h4 className="text-sm font-semibold mb-2" style={{color:'var(--text-secondary)'}}>Conditions et notes</h4>
-            <p className="text-sm whitespace-pre-line" style={{color:'var(--text-secondary)'}}>{quote.notes}</p>
+            <h4 className="text-sm font-semibold mb-2" style={{color:'var(--label-2)'}}>Conditions et notes</h4>
+            <p className="text-sm whitespace-pre-line" style={{color:'var(--label-2)'}}>{quote.notes}</p>
           </div>
         )}
       </div>
@@ -274,17 +274,17 @@ const QuoteDetail = ({ quoteId, onBack }) => {
         <div className="ds-card">
           <div className="p-5">
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-5 h-5" style={{color:'var(--text-secondary)'}} />
-              <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>Conditions Generales de Vente</h3>
-              <span className="text-xs" style={{color:'var(--text-tertiary)'}}>v{cgv.version}</span>
+              <Shield className="w-5 h-5" style={{color:'var(--label-2)'}} />
+              <h3 className="font-semibold" style={{color:'var(--label-1)'}}>Conditions Generales de Vente</h3>
+              <span className="text-xs" style={{color:'var(--label-3)'}}>v{cgv.version}</span>
             </div>
 
             {/* Expandable CGV content */}
-            <div className="rounded-lg mb-4" style={{border:'1px solid var(--border-light)'}}>
+            <div className="rounded-lg mb-4" style={{border:'1px solid var(--sep)'}}>
               <button
                 onClick={() => setCgvExpanded(!cgvExpanded)}
                 className="w-full px-4 py-3 flex items-center justify-between text-sm font-medium ds-btn-ghost"
-                style={{color:'var(--text-secondary)'}}
+                style={{color:'var(--label-2)'}}
               >
                 <span>{cgv.title || 'Conditions Generales de Vente'}</span>
                 <ChevronDown
@@ -293,8 +293,8 @@ const QuoteDetail = ({ quoteId, onBack }) => {
                 />
               </button>
               {cgvExpanded && (
-                <div className="px-4 pb-4 max-h-[400px] overflow-y-auto" style={{borderTop:'1px solid var(--border-light)'}}>
-                  <div className="prose prose-sm mt-3 whitespace-pre-line" style={{color:'var(--text-secondary)'}}>
+                <div className="px-4 pb-4 max-h-[400px] overflow-y-auto" style={{borderTop:'1px solid var(--sep)'}}>
+                  <div className="prose prose-sm mt-3 whitespace-pre-line" style={{color:'var(--label-2)'}}>
                     {cgv.content}
                   </div>
                 </div>
@@ -308,9 +308,9 @@ const QuoteDetail = ({ quoteId, onBack }) => {
                 id="cgv-accept"
                 checked={cgvChecked}
                 onChange={(e) => setCgvChecked(e.target.checked)}
-                className="mt-1 rounded" style={{borderColor:'var(--border-light)', accentColor:'var(--accent)'}}
+                className="mt-1 rounded" style={{borderColor:'var(--sep)', accentColor:'var(--accent)'}}
               />
-              <label htmlFor="cgv-accept" className="text-sm" style={{color:'var(--text-secondary)'}}>
+              <label htmlFor="cgv-accept" className="text-sm" style={{color:'var(--label-2)'}}>
                 J'ai lu et j'accepte les Conditions Generales de Vente (v{cgv.version}).
               </label>
             </div>
@@ -348,8 +348,8 @@ const QuoteDetail = ({ quoteId, onBack }) => {
         <div className="ds-card p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>Signer ce devis</h3>
-              <p className="text-sm mt-1" style={{color:'var(--text-tertiary)'}}>
+              <h3 className="font-semibold" style={{color:'var(--label-1)'}}>Signer ce devis</h3>
+              <p className="text-sm mt-1" style={{color:'var(--label-3)'}}>
                 En signant, vous acceptez les conditions du devis et l'acompte de {formatCHF(quote.deposit_amount)} sera demande.
               </p>
             </div>
@@ -415,15 +415,15 @@ const QuotesModule = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold" style={{color:'var(--text-primary)'}}>Mes devis</h2>
-        <p className="text-sm mt-1" style={{color:'var(--text-tertiary)'}}>Consultez, acceptez les CGV et signez vos devis</p>
+        <h2 className="text-xl font-bold" style={{color:'var(--label-1)'}}>Mes devis</h2>
+        <p className="text-sm mt-1" style={{color:'var(--label-3)'}}>Consultez, acceptez les CGV et signez vos devis</p>
       </div>
 
       {/* Action needed alert */}
       {quotes.some(q => ['sent', 'viewed'].includes(q.status)) && (
-        <div className="rounded-lg px-4 py-3 flex items-center gap-3" style={{background:'var(--warning-light)', border:'1px solid var(--warning)'}}>
-          <AlertCircle className="w-5 h-5 flex-shrink-0" style={{color:'var(--warning)'}} />
-          <p className="text-sm" style={{color:'var(--warning)'}}>
+        <div className="rounded-lg px-4 py-3 flex items-center gap-3" style={{background:'var(--tint-orange)', border:'1px solid var(--semantic-orange)'}}>
+          <AlertCircle className="w-5 h-5 flex-shrink-0" style={{color:'var(--semantic-orange)'}} />
+          <p className="text-sm" style={{color:'var(--semantic-orange)'}}>
             <strong>{quotes.filter(q => ['sent', 'viewed'].includes(q.status)).length} devis</strong> en attente de votre signature.
           </p>
         </div>
@@ -478,7 +478,7 @@ const QuotesModule = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3">
-                        <p className="text-sm font-medium truncate" style={{color:'var(--text-primary)'}}>
+                        <p className="text-sm font-medium truncate" style={{color:'var(--label-1)'}}>
                           {q.title || `Devis ${q.reference}`}
                         </p>
                         <StatusBadge status={isExpired && q.status !== 'signed' ? 'expired' : q.status} />
@@ -488,20 +488,20 @@ const QuotesModule = () => {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-4 mt-1 text-xs" style={{color:'var(--text-tertiary)'}}>
+                      <div className="flex items-center gap-4 mt-1 text-xs" style={{color:'var(--label-3)'}}>
                         <span>Ref: {q.reference}</span>
                         <span>{formatDate(q.date_created)}</span>
                         {q.valid_until && (
-                          <span style={isExpired ? {color:'var(--danger)'} : undefined}>
+                          <span style={isExpired ? {color:'var(--semantic-red)'} : undefined}>
                             Valide jusqu'au {formatDate(q.valid_until)}
                           </span>
                         )}
                       </div>
                     </div>
                     <div className="text-right ml-4">
-                      <p className="text-lg font-bold" style={{color:'var(--text-primary)'}}>{formatCHF(q.total_ttc)}</p>
+                      <p className="text-lg font-bold" style={{color:'var(--label-1)'}}>{formatCHF(q.total_ttc)}</p>
                       {q.deposit_amount > 0 && (
-                        <p className="text-xs" style={{color:'var(--warning)'}}>Acompte: {formatCHF(q.deposit_amount)}</p>
+                        <p className="text-xs" style={{color:'var(--semantic-orange)'}}>Acompte: {formatCHF(q.deposit_amount)}</p>
                       )}
                     </div>
                   </div>

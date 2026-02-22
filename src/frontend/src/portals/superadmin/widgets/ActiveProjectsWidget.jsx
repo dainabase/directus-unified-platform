@@ -101,7 +101,7 @@ const ActiveProjectsWidget = ({ selectedCompany, maxItems = 8 }) => {
                       className="h-full rounded-full transition-all"
                       style={{
                         width: `${progress}%`,
-                        backgroundColor: isOverdue ? 'var(--danger)' : 'var(--accent)'
+                        backgroundColor: isOverdue ? 'var(--semantic-red)' : 'var(--accent)'
                       }}
                     />
                   </div>

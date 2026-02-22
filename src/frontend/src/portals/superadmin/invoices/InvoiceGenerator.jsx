@@ -179,7 +179,7 @@ const InvoiceGenerator = ({ quote, onClose }) => {
               {depositPercentage > 0 && (
                 <div>
                   <span className="text-gray-500">Acompte ({depositPercentage}%)</span>
-                  <p className="font-medium" style={{ color: 'var(--warning)' }}>{formatCHF(depositAmount)}</p>
+                  <p className="font-medium" style={{ color: 'var(--semantic-orange)' }}>{formatCHF(depositAmount)}</p>
                 </div>
               )}
             </div>

@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
   const [selectedCompany, setSelectedCompany] = useState('all')
 
   return (
-    <div style={{ background: 'var(--bg-primary)', minHeight: '100vh' }}>
+    <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
       <Sidebar
         selectedCompany={selectedCompany}
         onCompanyChange={setSelectedCompany}

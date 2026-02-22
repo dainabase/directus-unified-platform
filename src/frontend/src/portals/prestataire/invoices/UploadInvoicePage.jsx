@@ -74,7 +74,7 @@ const StepIndicator = ({ currentStep }) => {
                 style={{
                   background: isDone || isActive
                     ? 'var(--accent)'
-                    : 'var(--border-medium)'
+                    : 'var(--fill-3)'
                 }}
               />
             )}
@@ -89,7 +89,7 @@ const StepIndicator = ({ currentStep }) => {
                     : isActive
                       ? 'var(--accent)'
                       : 'rgba(0, 0, 0, 0.06)',
-                  color: isDone || isActive ? '#FFFFFF' : 'var(--text-tertiary)',
+                  color: isDone || isActive ? '#FFFFFF' : 'var(--label-3)',
                   boxShadow: isActive ? '0 0 0 4px rgba(0, 113, 227, 0.15)' : 'none'
                 }}
               >
@@ -98,7 +98,7 @@ const StepIndicator = ({ currentStep }) => {
               <span
                 className="text-xs font-medium transition-colors duration-300"
                 style={{
-                  color: isDone || isActive ? 'var(--accent)' : 'var(--text-tertiary)'
+                  color: isDone || isActive ? 'var(--accent)' : 'var(--label-3)'
                 }}
               >
                 {step.label}
@@ -206,7 +206,7 @@ const StepUpload = ({ onFileSelected, file, onRemoveFile, onAnalyze, isAnalyzing
           onClick={() => fileInputRef.current?.click()}
           className="cursor-pointer rounded-xl p-10 text-center transition-all duration-200"
           style={{
-            border: `2px dashed ${isDragOver ? 'var(--accent)' : 'var(--border-medium)'}`,
+            border: `2px dashed ${isDragOver ? 'var(--accent)' : 'var(--fill-3)'}`,
             background: isDragOver ? 'var(--accent-light)' : 'rgba(0, 0, 0, 0.02)'
           }}
         >
@@ -218,7 +218,7 @@ const StepUpload = ({ onFileSelected, file, onRemoveFile, onAnalyze, isAnalyzing
           >
             <Upload
               size={24}
-              style={{ color: isDragOver ? '#FFFFFF' : 'var(--text-tertiary)' }}
+              style={{ color: isDragOver ? '#FFFFFF' : 'var(--label-3)' }}
             />
           </div>
 
@@ -406,8 +406,8 @@ const StepReview = ({
         <div
           className="flex items-center gap-2 p-3 rounded-lg text-xs font-medium"
           style={{
-            background: 'var(--success-light)',
-            color: 'var(--success)'
+            background: 'var(--tint-green)',
+            color: 'var(--semantic-green)'
           }}
         >
           <CheckCircle size={14} />
@@ -419,7 +419,7 @@ const StepReview = ({
         <div
           className="flex items-center gap-2 p-3 rounded-lg text-xs font-medium"
           style={{
-            background: 'var(--warning-light)',
+            background: 'var(--tint-orange)',
             color: '#B45309'
           }}
         >
@@ -534,7 +534,7 @@ const StepReview = ({
           </div>
           <div
             className="flex justify-between text-sm pt-2"
-            style={{ borderTop: '1px solid var(--border-light)' }}
+            style={{ borderTop: '1px solid var(--sep)' }}
           >
             <span className="font-semibold text-gray-900">Total TTC</span>
             <span className="font-bold" style={{ color: 'var(--accent)' }}>
@@ -577,7 +577,7 @@ const StepReview = ({
             className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm"
             style={{
               background: 'rgba(0, 0, 0, 0.03)',
-              border: '1px solid var(--border-light)'
+              border: '1px solid var(--sep)'
             }}
           >
             <FileText size={14} style={{ color: 'var(--accent)' }} />
@@ -588,7 +588,7 @@ const StepReview = ({
         {/* Actions */}
         <div
           className="flex items-center justify-between pt-4"
-          style={{ borderTop: '1px solid var(--border-light)' }}
+          style={{ borderTop: '1px solid var(--sep)' }}
         >
           <button
             type="button"

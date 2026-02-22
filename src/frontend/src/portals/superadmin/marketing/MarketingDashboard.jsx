@@ -26,7 +26,7 @@ import ContentCalendar from './components/ContentCalendar'
 import MarketingAnalytics from './components/MarketingAnalytics'
 import MarketingEvents from './components/MarketingEvents'
 
-const COLORS = ['#0071E3', '#34C759', '#FF9500', '#FF3B30', '#8E8E93', '#AF52DE']
+const COLORS = ['var(--accent-hover)', 'var(--semantic-green)', 'var(--semantic-orange)', 'var(--semantic-red)', 'var(--gray-1)', '#AF52DE']
 
 const STATUS_CFG = {
   draft: { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
@@ -172,10 +172,10 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
           { label: 'Campagnes', value: kpis.total, icon: Megaphone, color: 'var(--accent)' },
-          { label: 'Actives', value: kpis.active, icon: Target, color: '#34C759' },
+          { label: 'Actives', value: kpis.active, icon: Target, color: 'var(--semantic-green)' },
           { label: 'Emails envoyes', value: kpis.totalSent.toLocaleString(), icon: Mail, color: 'var(--accent)' },
           { label: 'Taux ouverture', value: `${kpis.openRate}%`, icon: Eye, color: 'var(--accent)' },
-          { label: 'Taux clic', value: `${kpis.clickRate}%`, icon: MousePointer, color: '#FF9500' },
+          { label: 'Taux clic', value: `${kpis.clickRate}%`, icon: MousePointer, color: 'var(--semantic-orange)' },
           { label: 'Budget total', value: formatCHF(kpis.totalBudget), icon: TrendingUp, color: 'var(--accent)' }
         ].map((kpi, i) => {
           const Icon = kpi.icon
@@ -225,7 +225,7 @@ const MarketingDashboard = ({ selectedCompany, view }) => {
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="value" fill="#0071E3" radius={[4, 4, 0, 0]} name="Campagnes" />
+                <Bar dataKey="value" fill="var(--accent-hover)" radius={[4, 4, 0, 0]} name="Campagnes" />
               </BarChart>
             </ResponsiveContainer>
           )}

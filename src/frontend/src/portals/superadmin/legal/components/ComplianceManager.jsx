@@ -42,10 +42,10 @@ const SCORE_MAP = {
 }
 
 const PIE_COLORS = {
-  compliant: '#34C759',
-  partial: '#FF9500',
-  'non-compliant': '#FF3B30',
-  'in-progress': '#0071E3'
+  compliant: 'var(--semantic-green)',
+  partial: 'var(--semantic-orange)',
+  'non-compliant': 'var(--semantic-red)',
+  'in-progress': 'var(--accent-hover)'
 }
 
 const PIE_LABELS = {
@@ -74,21 +74,21 @@ const fetchCompliance = async (company) => {
 // ── Helpers ────────────────────────────────────────────────
 
 const getScoreColorStyle = (score) => {
-  if (score >= 90) return { color: 'var(--success)' }
-  if (score >= 70) return { color: 'var(--warning)' }
-  return { color: 'var(--danger)' }
+  if (score >= 90) return { color: 'var(--semantic-green)' }
+  if (score >= 70) return { color: 'var(--semantic-orange)' }
+  return { color: 'var(--semantic-red)' }
 }
 
 const getScoreBarStyle = (score) => {
-  if (score >= 90) return { backgroundColor: 'var(--success)' }
-  if (score >= 70) return { backgroundColor: 'var(--warning)' }
-  return { backgroundColor: 'var(--danger)' }
+  if (score >= 90) return { backgroundColor: 'var(--semantic-green)' }
+  if (score >= 70) return { backgroundColor: 'var(--semantic-orange)' }
+  return { backgroundColor: 'var(--semantic-red)' }
 }
 
 const getRadialFill = (score) => {
-  if (score >= 80) return '#34C759'
-  if (score >= 60) return '#FF9500'
-  return '#FF3B30'
+  if (score >= 80) return 'var(--semantic-green)'
+  if (score >= 60) return 'var(--semantic-orange)'
+  return 'var(--semantic-red)'
 }
 
 // ── Component ──────────────────────────────────────────────
@@ -273,7 +273,7 @@ const ComplianceManager = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={18} className="text-[var(--success)]" />
+            <CheckCircle size={18} className="text-[var(--semantic-green)]" />
             <span className="text-sm text-gray-500">Conformes</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.compliant}</p>
@@ -294,7 +294,7 @@ const ComplianceManager = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={18} className="text-[var(--warning)]" />
+            <Calendar size={18} className="text-[var(--semantic-orange)]" />
             <span className="text-sm text-gray-500">Audits proches</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.pendingAudits}</p>
@@ -302,12 +302,12 @@ const ComplianceManager = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <AlertOctagon size={18} className="text-[var(--danger)]" />
+            <AlertOctagon size={18} className="text-[var(--semantic-red)]" />
             <span className="text-sm text-gray-500">Non conformes</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.nonCompliant}</p>
           {stats.nonCompliant > 0 && (
-            <p className="text-xs text-[var(--danger)] mt-1">Action requise</p>
+            <p className="text-xs text-[var(--semantic-red)] mt-1">Action requise</p>
           )}
         </div>
       </div>
@@ -429,7 +429,7 @@ const ComplianceManager = ({ selectedCompany }) => {
           <div
             key={item.id}
             className="ds-card p-5 cursor-pointer"
-            style={item.status === 'non-compliant' ? { borderColor: 'var(--danger)' } : undefined}
+            style={item.status === 'non-compliant' ? { borderColor: 'var(--semantic-red)' } : undefined}
             onClick={() => setSelectedItem(item)}
           >
             {/* Card Header */}
@@ -459,10 +459,10 @@ const ComplianceManager = ({ selectedCompany }) => {
                 <Target size={14} className="text-gray-400" />
                 <span className="text-xs text-gray-500">Risque:</span>
                 <span className={`text-xs font-medium ${
-                  item.risk_level === 'critical' ? 'text-[var(--danger)]' :
-                  item.risk_level === 'high' ? 'text-[var(--warning)]' :
-                  item.risk_level === 'medium' ? 'text-[var(--warning)]' :
-                  'text-[var(--success)]'
+                  item.risk_level === 'critical' ? 'text-[var(--semantic-red)]' :
+                  item.risk_level === 'high' ? 'text-[var(--semantic-orange)]' :
+                  item.risk_level === 'medium' ? 'text-[var(--semantic-orange)]' :
+                  'text-[var(--semantic-green)]'
                 }`}>
                   {item.risk_level === 'critical' ? 'Critique' :
                    item.risk_level === 'high' ? 'Eleve' :

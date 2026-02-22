@@ -17,7 +17,7 @@ const Select = React.forwardRef(({
       <div className="relative">
         <select
           ref={ref}
-          className={`ds-input appearance-none pr-9 ${error ? '!border-[var(--danger)]' : ''} ${className}`}
+          className={`ds-input appearance-none pr-9 ${error ? '!border-[var(--semantic-red)]' : ''} ${className}`}
           {...props}
         >
           {placeholder && (
@@ -36,11 +36,11 @@ const Select = React.forwardRef(({
         <ChevronDown
           size={16}
           className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-          style={{ color: 'var(--text-tertiary)' }}
+          style={{ color: 'var(--label-3)' }}
         />
       </div>
       {error && (
-        <p className="mt-1" style={{ fontSize: 11, color: 'var(--danger)' }}>{error}</p>
+        <p className="mt-1" style={{ fontSize: 11, color: 'var(--semantic-red)' }}>{error}</p>
       )}
     </div>
   )

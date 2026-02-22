@@ -220,7 +220,7 @@ const ClientDashboard = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#0071E3' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent-hover)' }} />
       </div>
     )
   }
@@ -232,10 +232,10 @@ const ClientDashboard = () => {
     <div className="space-y-6 max-w-6xl">
       {/* ── Greeting ───────────────────────────────────────────────────────── */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>
           Bonjour{client?.first_name ? ` ${client.first_name}` : ''}
         </h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+        <p className="mt-1 text-sm" style={{ color: 'var(--label-2)' }}>
           Bienvenue sur votre espace client
         </p>
       </div>
@@ -279,7 +279,7 @@ const ClientDashboard = () => {
           style={{ background: 'rgba(255,149,0,0.06)', border: '1px solid rgba(255,149,0,0.18)' }}
         >
           <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle size={18} style={{ color: '#FF9500' }} />
+            <AlertTriangle size={18} style={{ color: 'var(--semantic-orange)' }} />
             <h2 className="font-semibold" style={{ color: '#CC7700' }}>
               Actions requises
             </h2>
@@ -293,17 +293,17 @@ const ClientDashboard = () => {
                 style={{ background: 'rgba(255,255,255,0.85)' }}
               >
                 <div>
-                  <p className="text-sm font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                  <p className="text-sm font-medium" style={{ color: 'var(--label-1)' }}>
                     Devis {q.quote_number} — {formatCHF(q.total)}
                   </p>
-                  <p className="text-xs" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                  <p className="text-xs" style={{ color: 'var(--label-3)' }}>
                     Valide jusqu'au {formatDate(q.valid_until)}
                   </p>
                 </div>
                 <button
                   onClick={() => navigate(`/client/quotes?sign=${q.id}`)}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-colors"
-                  style={{ background: '#0071E3' }}
+                  style={{ background: 'var(--accent-hover)' }}
                 >
                   <PenTool size={14} /> Signer
                 </button>
@@ -318,17 +318,17 @@ const ClientDashboard = () => {
                 style={{ background: 'rgba(255,255,255,0.85)' }}
               >
                 <div>
-                  <p className="text-sm font-medium" style={{ color: '#FF3B30' }}>
+                  <p className="text-sm font-medium" style={{ color: 'var(--semantic-red)' }}>
                     Facture {inv.invoice_number} en retard — {formatCHF(inv.total || inv.amount)}
                   </p>
-                  <p className="text-xs" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                  <p className="text-xs" style={{ color: 'var(--label-3)' }}>
                     Echue le {formatDate(inv.due_date)}
                   </p>
                 </div>
                 <button
                   onClick={() => navigate('/client/invoices')}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-white transition-colors"
-                  style={{ background: '#FF3B30' }}
+                  style={{ background: 'var(--semantic-red)' }}
                 >
                   <CreditCard size={14} /> Payer
                 </button>
@@ -341,14 +341,14 @@ const ClientDashboard = () => {
       {/* ── Mes projets recents ────────────────────────────────────────────── */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--label-1)' }}>
             Mes projets recents
           </h2>
           {activeProjects.length > 3 && (
             <button
               onClick={() => navigate('/client/projects')}
               className="text-sm font-medium flex items-center gap-1 transition-colors"
-              style={{ color: '#0071E3' }}
+              style={{ color: 'var(--accent-hover)' }}
             >
               Voir tous <ChevronRight size={14} />
             </button>
@@ -379,7 +379,7 @@ const ClientDashboard = () => {
                     <div className="flex-1 min-w-0">
                       <h3
                         className="font-semibold text-sm truncate"
-                        style={{ color: 'var(--text-primary, #1D1D1F)' }}
+                        style={{ color: 'var(--label-1)' }}
                       >
                         {project.name}
                       </h3>
@@ -390,17 +390,17 @@ const ClientDashboard = () => {
                     <ChevronRight
                       size={16}
                       className="flex-shrink-0 ml-2 mt-0.5"
-                      style={{ color: 'var(--text-tertiary, #AEAEB2)' }}
+                      style={{ color: 'var(--label-3)' }}
                     />
                   </div>
 
                   {/* Progress */}
                   <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1">
-                      <span style={{ color: 'var(--text-secondary, #6E6E73)' }}>
+                      <span style={{ color: 'var(--label-2)' }}>
                         Progression
                       </span>
-                      <span className="font-medium" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+                      <span className="font-medium" style={{ color: 'var(--label-1)' }}>
                         {progress.pct}%
                       </span>
                     </div>
@@ -408,13 +408,13 @@ const ClientDashboard = () => {
                   </div>
 
                   {/* Deliverables count */}
-                  <p className="text-xs" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                  <p className="text-xs" style={{ color: 'var(--label-3)' }}>
                     {progress.completed}/{progress.total} livrable{progress.total !== 1 ? 's' : ''} termine{progress.total !== 1 ? 's' : ''}
                   </p>
 
                   {/* Dates */}
                   {(project.start_date || project.end_date) && (
-                    <p className="text-xs mt-1" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+                    <p className="text-xs mt-1" style={{ color: 'var(--label-3)' }}>
                       {formatDate(project.start_date)} — {formatDate(project.end_date)}
                     </p>
                   )}

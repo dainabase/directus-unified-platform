@@ -17,10 +17,10 @@ import { useProviderAuth } from '../hooks/useProviderAuth'
 
 // -- Category colors (shared with KnowledgeBasePage) --
 const CATEGORY_COLORS = {
-  guides: { bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  procedures: { bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
-  technique: { bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
-  administration: { bg: 'rgba(52,199,89,0.12)', fg: '#34C759' }
+  guides: { bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  procedures: { bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' },
+  technique: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
+  administration: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' }
 }
 
 const getCategoryStyle = (category) =>
@@ -189,7 +189,7 @@ const KnowledgeArticlePage = () => {
                   className="prose prose-sm prose-gray max-w-none
                     prose-headings:text-gray-900 prose-headings:font-semibold
                     prose-p:text-gray-700 prose-p:leading-relaxed
-                    prose-a:text-[#0071E3] prose-a:no-underline hover:prose-a:underline
+                    prose-a:text-[var(--accent-hover)] prose-a:no-underline hover:prose-a:underline
                     prose-li:text-gray-700
                     prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs
                     prose-pre:bg-gray-900 prose-pre:text-gray-100

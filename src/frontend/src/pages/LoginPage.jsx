@@ -1,6 +1,6 @@
 /**
  * LoginPage — Unified login for all portals.
- * Apple Premium Design System — #0071E3 accent only.
+ * Apple Premium Design System — var(--accent-hover) accent only.
  */
 
 import React, { useState } from 'react'
@@ -49,21 +49,21 @@ const LoginPage = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: 'var(--bg-primary, #F5F5F7)' }}
+      style={{ background: 'var(--bg)' }}
     >
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <div
             className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-            style={{ background: '#0071E3', boxShadow: 'var(--shadow-md)' }}
+            style={{ background: 'var(--accent-hover)', boxShadow: 'var(--shadow-md)' }}
           >
             <span className="text-2xl font-black text-white">H</span>
           </div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary, #1D1D1F)' }}>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>
             HYPERVISUAL
           </h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--label-3)' }}>
             Unified Platform
           </p>
         </div>
@@ -72,7 +72,7 @@ const LoginPage = () => {
         <div className="ds-card p-8">
           <h2
             className="text-lg font-semibold mb-6"
-            style={{ color: 'var(--text-primary, #1D1D1F)' }}
+            style={{ color: 'var(--label-1)' }}
           >
             Connexion
           </h2>
@@ -87,8 +87,8 @@ const LoginPage = () => {
                 className="py-2 px-2 rounded-lg text-xs font-medium transition-all"
                 style={
                   portal === p.value
-                    ? { background: '#0071E3', color: '#FFFFFF', boxShadow: 'var(--shadow-sm)' }
-                    : { background: 'rgba(0,0,0,0.04)', color: 'var(--text-secondary, #6E6E73)' }
+                    ? { background: 'var(--accent-hover)', color: '#FFFFFF', boxShadow: 'var(--shadow-sm)' }
+                    : { background: 'rgba(0,0,0,0.04)', color: 'var(--label-2)' }
                 }
               >
                 {p.label}
@@ -100,7 +100,7 @@ const LoginPage = () => {
           {error && (
             <div
               className="flex items-center gap-2 p-3 mb-4 rounded-lg text-sm"
-              style={{ background: 'rgba(255,59,48,0.08)', border: '1px solid rgba(255,59,48,0.2)', color: '#FF3B30' }}
+              style={{ background: 'rgba(255,59,48,0.08)', border: '1px solid rgba(255,59,48,0.2)', color: 'var(--semantic-red)' }}
             >
               <AlertCircle size={16} />
               <span>{error}</span>
@@ -151,7 +151,7 @@ const LoginPage = () => {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: 'var(--text-tertiary, #AEAEB2)' }}
+                  style={{ color: 'var(--label-3)' }}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -177,9 +177,9 @@ const LoginPage = () => {
           {import.meta.env.DEV && (
             <div
               className="mt-4 p-3 rounded-lg"
-              style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--border-light)' }}
+              style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid var(--sep)' }}
             >
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+              <p className="text-xs" style={{ color: 'var(--label-3)' }}>
                 <strong>Dev:</strong> Utilisez les identifiants Directus admin
               </p>
             </div>
@@ -187,7 +187,7 @@ const LoginPage = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs mt-6" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+        <p className="text-center text-xs mt-6" style={{ color: 'var(--label-3)' }}>
           HYPERVISUAL Switzerland — Fribourg, Suisse
         </p>
       </div>

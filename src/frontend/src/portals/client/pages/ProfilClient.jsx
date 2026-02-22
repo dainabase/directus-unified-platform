@@ -20,7 +20,7 @@ const SectionHeader = ({ icon: Icon, title }) => (
       className="w-9 h-9 rounded-xl flex items-center justify-center"
       style={{ background: 'rgba(0,113,227,0.10)' }}
     >
-      <Icon size={18} style={{ color: '#0071E3' }} />
+      <Icon size={18} style={{ color: 'var(--accent-hover)' }} />
     </div>
     <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
   </div>
@@ -288,7 +288,7 @@ const ProfilClient = () => {
   }
 
   const inputClass = 'w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400'
-  const inputBg = { background: 'var(--bg-secondary, #F5F5F7)' }
+  const inputBg = { background: 'var(--bg)' }
   const readOnlyClass = 'w-full px-4 py-2.5 rounded-xl border border-gray-100 text-sm text-gray-500 cursor-not-allowed'
   const readOnlyBg = { background: '#F2F2F7' }
 
@@ -308,7 +308,7 @@ const ProfilClient = () => {
             <button
               onClick={() => setIsEditing(true)}
               className="px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-              style={{ color: '#0071E3', background: 'rgba(0,113,227,0.10)' }}
+              style={{ color: 'var(--accent-hover)', background: 'rgba(0,113,227,0.10)' }}
             >
               Modifier
             </button>
@@ -324,7 +324,7 @@ const ProfilClient = () => {
                 onClick={handleSaveProfile}
                 disabled={updateProfile.isPending}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
-                style={{ background: '#0071E3' }}
+                style={{ background: 'var(--accent-hover)' }}
               >
                 {updateProfile.isPending ? (
                   <Loader2 size={14} className="animate-spin" />
@@ -473,7 +473,7 @@ const ProfilClient = () => {
           <button
             type="submit"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
-            style={{ background: '#0071E3' }}
+            style={{ background: 'var(--accent-hover)' }}
           >
             <Shield size={14} />
             Changer le mot de passe
@@ -484,7 +484,7 @@ const ProfilClient = () => {
           <button
             onClick={handleLogout}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
-            style={{ color: '#FF3B30', background: 'rgba(255,59,48,0.08)' }}
+            style={{ color: 'var(--semantic-red)', background: 'rgba(255,59,48,0.08)' }}
           >
             <LogOut size={16} />
             Se déconnecter
@@ -540,7 +540,7 @@ const ProfilClient = () => {
             onClick={() => savePreferences.mutate()}
             disabled={savePreferences.isPending}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
-            style={{ background: '#0071E3' }}
+            style={{ background: 'var(--accent-hover)' }}
           >
             {savePreferences.isPending ? (
               <Loader2 size={14} className="animate-spin" />
@@ -599,7 +599,7 @@ const ToggleRow = ({ label, description, checked, onChange }) => (
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-      style={{ background: checked ? '#0071E3' : '#D1D1D6' }}
+      style={{ background: checked ? 'var(--accent-hover)' : 'var(--gray-4)' }}
     >
       <span
         className="inline-block h-4 w-4 rounded-full bg-white shadow transition-transform"

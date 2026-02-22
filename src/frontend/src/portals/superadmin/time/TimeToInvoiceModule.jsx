@@ -144,7 +144,7 @@ const TimeToInvoiceModule = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
       </div>
     )
   }
@@ -154,7 +154,7 @@ const TimeToInvoiceModule = () => {
       {/* Header */}
       <div>
         <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-          <Receipt size={20} style={{ color: 'var(--accent, #0071E3)' }} />
+          <Receipt size={20} style={{ color: 'var(--accent)' }} />
           Facturation en regie
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
@@ -223,7 +223,7 @@ const TimeToInvoiceModule = () => {
                       <tr key={e.id} className={`hover:bg-gray-50/50 transition-colors ${selected.has(e.id) ? 'bg-zinc-50/50' : ''}`}>
                         <td className="px-4 py-3">
                           <button onClick={() => toggleSelect(e.id)} className="text-gray-400 hover:text-gray-700">
-                            {selected.has(e.id) ? <CheckSquare size={16} style={{ color: 'var(--accent, #0071E3)' }} /> : <Square size={16} />}
+                            {selected.has(e.id) ? <CheckSquare size={16} style={{ color: 'var(--accent)' }} /> : <Square size={16} />}
                           </button>
                         </td>
                         <td className="px-4 py-3 text-xs text-gray-500">
@@ -260,7 +260,7 @@ const TimeToInvoiceModule = () => {
           <div className="space-y-4">
             <div className="ds-card p-5 space-y-4">
               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <FileText size={16} style={{ color: 'var(--accent, #0071E3)' }} />
+                <FileText size={16} style={{ color: 'var(--accent)' }} />
                 Recapitulatif facture
               </h3>
 
@@ -283,7 +283,7 @@ const TimeToInvoiceModule = () => {
                 </div>
                 <div className="border-t border-gray-100 pt-2 flex justify-between">
                   <span className="text-gray-700 font-medium">Total TTC</span>
-                  <span className="font-bold text-lg" style={{ color: 'var(--accent, #0071E3)' }}>{formatCHF(summary.ttc)}</span>
+                  <span className="font-bold text-lg" style={{ color: 'var(--accent)' }}>{formatCHF(summary.ttc)}</span>
                 </div>
               </div>
 
@@ -322,7 +322,7 @@ const TimeToInvoiceModule = () => {
               <button
                 onClick={() => generateMutation.mutate()}
                 disabled={selected.size === 0 || !clientName.trim() || generateMutation.isPending}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors" style={{ backgroundColor: 'var(--accent, #0071E3)' }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm transition-colors" style={{ backgroundColor: 'var(--accent)' }}
               >
                 {generateMutation.isPending ? (
                   <Loader2 size={16} className="animate-spin" />

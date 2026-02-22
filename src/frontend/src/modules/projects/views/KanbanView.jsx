@@ -53,11 +53,11 @@ const KanbanView = ({ projects }) => {
 
   const getPriorityStyle = (priority) => {
     switch (priority) {
-      case 'critical': return { color: 'var(--danger)', background: 'var(--danger-light)' }
-      case 'high': return { color: 'var(--warning)', background: 'var(--warning-light)' }
+      case 'critical': return { color: 'var(--semantic-red)', background: 'var(--tint-red)' }
+      case 'high': return { color: 'var(--semantic-orange)', background: 'var(--tint-orange)' }
       case 'medium': return { color: 'var(--accent)', background: 'var(--accent-light)' }
-      case 'low': return { color: '#6E6E73', background: 'rgba(0,0,0,0.04)' }
-      default: return { color: '#6E6E73', background: 'rgba(0,0,0,0.04)' }
+      case 'low': return { color: 'var(--label-2)', background: 'rgba(0,0,0,0.04)' }
+      default: return { color: 'var(--label-2)', background: 'rgba(0,0,0,0.04)' }
     }
   }
 
@@ -130,9 +130,9 @@ const KanbanView = ({ projects }) => {
                         style={{
                           width: `${progress}%`,
                           background: column.color === 'blue' ? 'var(--accent)' :
-                            column.color === 'green' ? 'var(--success)' :
-                            column.color === 'yellow' ? 'var(--warning)' :
-                            '#6E6E73'
+                            column.color === 'green' ? 'var(--semantic-green)' :
+                            column.color === 'yellow' ? 'var(--semantic-orange)' :
+                            'var(--label-2)'
                         }}
                       />
                     </div>
@@ -145,7 +145,7 @@ const KanbanView = ({ projects }) => {
                         <Calendar size={14} />
                         <span>Échéance</span>
                       </div>
-                      <span className="font-medium" style={isOverdue ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
+                      <span className="font-medium" style={isOverdue ? {color:'var(--semantic-red)'} : {color:'var(--label-1)'}}>
                         {formatDate(project.end_date)}
                       </span>
                     </div>
@@ -178,7 +178,7 @@ const KanbanView = ({ projects }) => {
                   {/* Warning */}
                   {isOverdue && (
                     <div className="mt-3 pt-3 border-t border-gray-200">
-                      <div className="flex items-center gap-1 text-xs" style={{color:'var(--danger)'}}>
+                      <div className="flex items-center gap-1 text-xs" style={{color:'var(--semantic-red)'}}>
                         <AlertCircle size={12} />
                         <span>En retard</span>
                       </div>

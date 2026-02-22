@@ -29,7 +29,7 @@ const KPICard = ({ label, value, trend, trendDirection, subValue, icon: Icon, cl
           fontSize: 26,
           fontWeight: 700,
           letterSpacing: '-0.5px',
-          color: 'var(--text-primary)',
+          color: 'var(--label-1)',
           lineHeight: 1.2,
         }}
       >
@@ -41,8 +41,8 @@ const KPICard = ({ label, value, trend, trendDirection, subValue, icon: Icon, cl
           <span
             className="ds-badge"
             style={{
-              background: isUp ? 'var(--success-light)' : isDown ? 'var(--danger-light)' : 'rgba(0,0,0,0.06)',
-              color: isUp ? 'var(--success)' : isDown ? 'var(--danger)' : 'var(--text-secondary)',
+              background: isUp ? 'var(--tint-green)' : isDown ? 'var(--tint-red)' : 'rgba(0,0,0,0.06)',
+              color: isUp ? 'var(--semantic-green)' : isDown ? 'var(--semantic-red)' : 'var(--label-2)',
             }}
           >
             {isUp && <TrendingUp size={10} className="mr-0.5" />}

@@ -101,7 +101,7 @@ const HRModule = ({ selectedCompany }) => {
 
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Users className="w-8 h-8" style={{color:'var(--success)'}} />
+            <Users className="w-8 h-8" style={{color:'var(--semantic-green)'}} />
             <Badge variant="success" size="sm">Actifs</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.activeEmployees}</p>
@@ -123,13 +123,13 @@ const HRModule = ({ selectedCompany }) => {
         <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Ancienneté moy.</p>
           <p className="text-2xl font-bold text-gray-900">{stats.averageTenure}</p>
-          <p className="text-xs mt-1" style={{color:'var(--success)'}}>↑ 15% vs année dernière</p>
+          <p className="text-xs mt-1" style={{color:'var(--semantic-green)'}}>↑ 15% vs année dernière</p>
         </Card>
 
         <Card className="p-4">
           <p className="text-sm text-gray-600 mb-1">Turnover</p>
           <p className="text-2xl font-bold text-gray-900">{stats.turnoverRate}</p>
-          <p className="text-xs mt-1" style={{color:'var(--danger)'}}>↑ 3% vs Q1</p>
+          <p className="text-xs mt-1" style={{color:'var(--semantic-red)'}}>↑ 3% vs Q1</p>
         </Card>
       </div>
 

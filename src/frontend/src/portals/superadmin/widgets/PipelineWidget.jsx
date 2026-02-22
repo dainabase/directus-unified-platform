@@ -178,14 +178,14 @@ const KPISummaryCard = ({ icon: Icon, label, value, accent }) => (
     style={{ background: accent ? 'var(--accent-light)' : 'rgba(0,0,0,0.03)' }}
   >
     <div className="flex items-center gap-1.5 mb-1">
-      <Icon size={12} style={{ color: accent ? 'var(--accent)' : 'var(--text-tertiary)' }} />
+      <Icon size={12} style={{ color: accent ? 'var(--accent)' : 'var(--label-3)' }} />
       <span className="ds-meta">{label}</span>
     </div>
     <p style={{
       fontSize: 18,
       fontWeight: 700,
       letterSpacing: '-0.3px',
-      color: accent ? 'var(--accent)' : 'var(--text-primary)',
+      color: accent ? 'var(--accent)' : 'var(--label-1)',
       lineHeight: 1.2
     }}>
       {value}
@@ -242,7 +242,7 @@ const PipelineWidget = ({ selectedCompany }) => {
           <Target size={16} style={{ color: 'var(--accent)' }} />
           <span className="ds-card-title">Pipeline Commercial</span>
         </div>
-        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--label-1)' }}>
           {formatCHF(totalValue)}
         </span>
       </div>
@@ -300,7 +300,7 @@ const PipelineWidget = ({ selectedCompany }) => {
                 />
                 <span
                   className="absolute inset-0 flex items-center justify-end pr-2"
-                  style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)' }}
+                  style={{ fontSize: 11, fontWeight: 500, color: 'var(--label-2)' }}
                 >
                   {stageData.count > 0 && `${stageData.count} · ${formatCHF(stageData.value)}`}
                 </span>
@@ -313,7 +313,7 @@ const PipelineWidget = ({ selectedCompany }) => {
       {/* Summary */}
       <div
         className="mt-4 pt-3 flex items-center justify-between"
-        style={{ borderTop: '1px solid var(--border-light)' }}
+        style={{ borderTop: '1px solid var(--sep)' }}
       >
         <div className="flex items-center gap-1.5 ds-meta">
           <Users size={12} />
@@ -327,7 +327,7 @@ const PipelineWidget = ({ selectedCompany }) => {
       {/* Recent leads & quotes — 2-column section */}
       <div
         className="mt-4 pt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
-        style={{ borderTop: '1px solid var(--border-light)' }}
+        style={{ borderTop: '1px solid var(--sep)' }}
       >
         {/* Left: 5 derniers leads */}
         <div>
@@ -350,7 +350,7 @@ const PipelineWidget = ({ selectedCompany }) => {
                   style={{ background: 'rgba(0,0,0,0.02)' }}
                 >
                   <div className="flex-1 min-w-0">
-                    <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--text-primary)' }} className="truncate">
+                    <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--label-1)' }} className="truncate">
                       {lead.first_name} {lead.last_name}
                     </p>
                     {lead.company_name && (
@@ -388,14 +388,14 @@ const PipelineWidget = ({ selectedCompany }) => {
                   style={{ background: 'rgba(0,0,0,0.02)' }}
                 >
                   <div className="flex-1 min-w-0">
-                    <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--text-primary)' }} className="truncate">
+                    <p style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--label-1)' }} className="truncate">
                       {quote.quote_number || '—'}
                     </p>
                     {quote.client_name && (
                       <p className="ds-meta truncate">{quote.client_name}</p>
                     )}
                   </div>
-                  <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--label-1)', whiteSpace: 'nowrap' }}>
                     {formatCHFFull(quote.total_amount)}
                   </span>
                   <StatusBadge status={quote.status} map={QUOTE_STATUS_BADGE} />

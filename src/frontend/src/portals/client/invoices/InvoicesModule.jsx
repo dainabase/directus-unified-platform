@@ -29,13 +29,13 @@ const daysUntil = (d) => {
 
 // --- Status config ---
 const STATUS_CONFIG = {
-  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock },
-  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
+  draft: { label: 'Brouillon', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)', icon: Clock },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock },
   sent: { label: 'Envoyee', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)', icon: Receipt },
-  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle2 },
-  partial: { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: AlertCircle },
-  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)', icon: XCircle },
-  cancelled: { label: 'Annulee', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: XCircle }
+  paid: { label: 'Payee', bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)', icon: CheckCircle2 },
+  partial: { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: AlertCircle },
+  overdue: { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)', icon: XCircle },
+  cancelled: { label: 'Annulee', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)', icon: XCircle }
 }
 
 const StatusBadge = ({ status }) => {
@@ -105,11 +105,11 @@ const SummaryCards = ({ invoices }) => {
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En attente</p>
-        <p className="text-xl font-bold mt-1" style={{color:"var(--warning)"}}>{pendingCount}</p>
+        <p className="text-xl font-bold mt-1" style={{color:"var(--semantic-orange)"}}>{pendingCount}</p>
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">En retard</p>
-        <p className="text-xl font-bold mt-1" style={{color:"var(--danger)"}}>{overdueCount}</p>
+        <p className="text-xl font-bold mt-1" style={{color:"var(--semantic-red)"}}>{overdueCount}</p>
       </div>
       <div className="ds-card p-4">
         <p className="text-xs text-gray-500 uppercase tracking-wide">Payees</p>

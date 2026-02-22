@@ -159,7 +159,7 @@ const SupplierInvoicesModule = ({ selectedCompany }) => {
             className="p-3 rounded-lg border text-center transition-colors"
             style={statusFilter === key
               ? { borderColor: 'var(--accent)', background: 'var(--accent-light)' }
-              : { borderColor: 'var(--border-light)', background: 'var(--bg-surface)' }
+              : { borderColor: 'var(--sep)', background: 'var(--bg-2)' }
             }
           >
             <p className="text-lg font-bold text-gray-900">{statusCounts[key] || 0}</p>

@@ -158,7 +158,7 @@ const MarketingEvents = ({ selectedCompany }) => {
               <XAxis dataKey="label" tick={{ fontSize: 11 }} />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="count" fill="#0071E3" radius={[4, 4, 0, 0]} name="Evenements" />
+              <Bar dataKey="count" fill="var(--accent-hover)" radius={[4, 4, 0, 0]} name="Evenements" />
             </BarChart>
           </ResponsiveContainer>
         )}

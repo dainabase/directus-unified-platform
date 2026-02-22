@@ -22,9 +22,9 @@ import { useProviderAuth } from '../hooks/useProviderAuth'
 // ── Status columns for Kanban ──
 const STATUS_COLUMNS = {
   draft: { label: 'A faire', color: '#6B7280', statuses: ['draft', 'planned'] },
-  in_progress: { label: 'En cours', color: 'var(--warning)', statuses: ['in_progress', 'in-progress'] },
+  in_progress: { label: 'En cours', color: 'var(--semantic-orange)', statuses: ['in_progress', 'in-progress'] },
   review: { label: 'En revue', color: 'var(--accent)', statuses: ['review'] },
-  completed: { label: 'Termine', color: 'var(--success)', statuses: ['completed'] }
+  completed: { label: 'Termine', color: 'var(--semantic-green)', statuses: ['completed'] }
 }
 
 // ── Priority colors ──
@@ -34,10 +34,10 @@ const PRIORITY_COLORS = { high: '#EF4444', medium: '#F59E0B', low: '#22C55E' }
 const STATUS_BADGE = {
   draft: { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
   planned: { label: 'Planifie', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
-  in_progress: { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  review: { label: 'En revue', bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
-  completed: { label: 'Termine', bg: 'rgba(52,199,89,0.12)', fg: '#34C759' }
+  in_progress: { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  review: { label: 'En revue', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' },
+  completed: { label: 'Termine', bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' }
 }
 
 // ── Next status transition map ──
@@ -187,7 +187,7 @@ const TaskListItem = ({ task, onStatusChange, isPending, navigate }) => {
   const overdue = task.status !== 'completed' && isOverdue(task.due_date)
 
   return (
-    <div className="ds-card p-4 hover:border-[var(--border-light)] transition-colors">
+    <div className="ds-card p-4 hover:border-[var(--sep)] transition-colors">
       <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap">
         {/* Priority dot */}
         <PriorityDot priority={task.priority} />

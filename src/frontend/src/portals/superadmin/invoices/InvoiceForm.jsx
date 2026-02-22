@@ -256,7 +256,7 @@ const InvoiceForm = ({ invoice, selectedCompany, onSave, onCancel }) => {
                     />
                     %
                   </span>
-                  <span className="font-medium" style={{ color: 'var(--warning)' }}>{formatCHF(totals.deposit_amount)}</span>
+                  <span className="font-medium" style={{ color: 'var(--semantic-orange)' }}>{formatCHF(totals.deposit_amount)}</span>
                 </div>
               </div>
             </div>

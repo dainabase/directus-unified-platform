@@ -29,11 +29,11 @@ const OWNER_COMPANIES = [
 
 const STATUS_STYLES = {
   draft: { background: 'rgba(113,113,122,0.12)', color: '#52525b' },
-  sent: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' },
-  viewed: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' },
-  signed: { background: 'rgba(52,199,89,0.12)', color: '#34C759' },
-  rejected: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' },
-  expired: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' }
+  sent: { background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)' },
+  viewed: { background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)' },
+  signed: { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)' },
+  rejected: { background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)' },
+  expired: { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)' }
 }
 
 const STATUS_CONFIG = {
@@ -225,7 +225,7 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                     </td>
                     <td className="py-3">
                       {q.is_signed ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium" style={{ color: '#34C759' }}>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium" style={{ color: 'var(--semantic-green)' }}>
                           Signé ✓
                         </span>
                       ) : q.cgv_accepted ? (

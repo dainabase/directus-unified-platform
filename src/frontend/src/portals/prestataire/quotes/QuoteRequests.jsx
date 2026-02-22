@@ -28,10 +28,10 @@ const formatCHF = (value) =>
 const VAT_RATE = 8.1
 
 const STATUS_CONFIG = {
-  draft: { label: 'Nouveau', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30', icon: AlertTriangle },
-  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500', icon: Clock },
-  submitted: { label: 'Soumis', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3', icon: FileText },
-  accepted: { label: 'Accepte', bg: 'rgba(52,199,89,0.12)', fg: '#34C759', icon: CheckCircle },
+  draft: { label: 'Nouveau', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)', icon: AlertTriangle },
+  pending: { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock },
+  submitted: { label: 'Soumis', bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)', icon: FileText },
+  accepted: { label: 'Accepte', bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)', icon: CheckCircle },
   rejected: { label: 'Refuse', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280', icon: XCircle }
 }
 
@@ -173,7 +173,7 @@ const SubmitOfferModal = ({ proposal, onClose, onSuccess }) => {
             <button
               type="submit"
               disabled={submitMutation.isPending}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors disabled:opacity-50"
             >
               {submitMutation.isPending ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -258,7 +258,7 @@ const QuoteRequests = () => {
             onClick={() => setStatusFilter(f.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               statusFilter === f.value
-                ? 'bg-[#0071E3] text-white'
+                ? 'bg-[var(--accent-hover)] text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
             }`}
           >
@@ -328,14 +328,14 @@ const QuoteRequests = () => {
                         {isPending ? (
                           <button
                             onClick={() => setSelectedProposal(p)}
-                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
                           >
                             Soumettre
                           </button>
                         ) : p.status === 'submitted' ? (
                           <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>En revision</span>
                         ) : p.status === 'accepted' ? (
-                          <span className="text-xs font-medium" style={{ color: 'var(--success)' }}>Accepte</span>
+                          <span className="text-xs font-medium" style={{ color: 'var(--semantic-green)' }}>Accepte</span>
                         ) : null}
                       </td>
                     </tr>

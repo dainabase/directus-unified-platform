@@ -34,11 +34,11 @@ const formatDate = (d) => {
 
 const STATUS_CONFIG = {
   draft: { label: 'Brouillon', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#52525b' } },
-  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
-  sent: { label: 'Envoyee', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' } },
-  paid: { label: 'Payee', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: '#34C759' } },
-  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
-  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' } },
+  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)' } },
+  sent: { label: 'Envoyee', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)' } },
+  paid: { label: 'Payee', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)' } },
+  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)' } },
+  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)' } },
   cancelled: { label: 'Annulee', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#71717a' } }
 }
 

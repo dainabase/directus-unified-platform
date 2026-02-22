@@ -18,9 +18,9 @@ const MONTH_LABELS = [
 ]
 
 const CHART_COLORS = [
-  '#0071E3', '#34C759', '#FF9500', '#5856D6',
-  '#FF3B30', '#00C7BE', '#FF2D55', '#FF9500',
-  '#34C759', '#5856D6', '#30D158', '#AF52DE'
+  'var(--accent-hover)', 'var(--semantic-green)', 'var(--semantic-orange)', '#5856D6',
+  'var(--semantic-red)', '#00C7BE', '#FF2D55', 'var(--semantic-orange)',
+  'var(--semantic-green)', '#5856D6', '#30D158', '#AF52DE'
 ]
 
 const TrainingsView = ({ selectedCompany }) => {
@@ -158,7 +158,7 @@ const TrainingsView = ({ selectedCompany }) => {
     return (
       <Card className="p-8 text-center">
         <GraduationCap size={48} className="mx-auto mb-4 text-gray-300" />
-        <p className="font-medium mb-2" style={{color:'var(--danger)'}}>Erreur de chargement</p>
+        <p className="font-medium mb-2" style={{color:'var(--semantic-red)'}}>Erreur de chargement</p>
         <p className="text-sm text-gray-500">{error?.message || 'Impossible de charger les formations.'}</p>
       </Card>
     )
@@ -189,7 +189,7 @@ const TrainingsView = ({ selectedCompany }) => {
 
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="w-8 h-8" style={{color:'var(--success)'}} />
+            <TrendingUp className="w-8 h-8" style={{color:'var(--semantic-green)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{dynamicFields.length}</p>
           <p className="text-sm text-gray-600">Champs disponibles</p>

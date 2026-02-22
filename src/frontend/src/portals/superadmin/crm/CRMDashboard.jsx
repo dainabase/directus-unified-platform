@@ -176,7 +176,7 @@ const CRMDashboard = ({ selectedCompany: propCompany, view }) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? 'border-[#0071E3] text-[#0071E3]'
+                      ? 'border-[var(--accent-hover)] text-[var(--accent-hover)]'
                       : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >

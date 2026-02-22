@@ -73,10 +73,10 @@ const TRIGGER_CONFIG = {
 }
 
 const STATUS_DOT = {
-  success: { color: '#34C759', label: 'Succes' },
-  error: { color: '#FF3B30', label: 'Erreur' },
-  running: { color: '#FF9500', label: 'En cours', pulse: true },
-  pending: { color: '#AEAEB2', label: 'En attente' }
+  success: { color: 'var(--semantic-green)', label: 'Succes' },
+  error: { color: 'var(--semantic-red)', label: 'Erreur' },
+  running: { color: 'var(--semantic-orange)', label: 'En cours', pulse: true },
+  pending: { color: 'var(--label-3)', label: 'En attente' }
 }
 
 // ── KPI Card ─────────────────────────────────────────────────
@@ -113,7 +113,7 @@ const ToggleSwitch = ({ enabled, onChange, disabled }) => (
     className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
       enabled ? '' : 'bg-zinc-200'
     } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-    style={enabled ? { backgroundColor: 'var(--success)' } : undefined}
+    style={enabled ? { backgroundColor: 'var(--semantic-green)' } : undefined}
   >
     <span
       className={`inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform ${
@@ -184,8 +184,8 @@ const ExecutionDetailModal = ({ execution, onClose }) => {
 
           {/* Error message */}
           {execution.error_message && (
-            <div className="border rounded-lg p-3" style={{ borderColor: 'var(--danger)', backgroundColor: 'var(--danger-light)' }}>
-              <p className="text-xs font-semibold mb-1" style={{ color: 'var(--danger)' }}>Erreur</p>
+            <div className="border rounded-lg p-3" style={{ borderColor: 'var(--semantic-red)', backgroundColor: 'var(--tint-red)' }}>
+              <p className="text-xs font-semibold mb-1" style={{ color: 'var(--semantic-red)' }}>Erreur</p>
               <pre className="text-xs text-zinc-700 whitespace-pre-wrap font-mono">
                 {execution.error_message}
               </pre>
@@ -319,7 +319,7 @@ export const Workflows = () => {
         <div className="flex items-center gap-2">
           <span className="ds-badge bg-green-50 text-green-700">{kpis.active} actifs</span>
           {kpis.errorRate > 0 && (
-            <span className="ds-badge" style={{ background: 'var(--danger-light)', color: 'var(--danger)' }}>
+            <span className="ds-badge" style={{ background: 'var(--tint-red)', color: 'var(--semantic-red)' }}>
               {kpis.errorRate}% erreurs
             </span>
           )}
@@ -333,7 +333,7 @@ export const Workflows = () => {
           icon={Zap}
           label="Actifs"
           value={kpis.active}
-          iconStyle={{ color: 'var(--success)' }}
+          iconStyle={{ color: 'var(--semantic-green)' }}
         />
         <KpiCard
           icon={Activity}
@@ -345,7 +345,7 @@ export const Workflows = () => {
           icon={AlertCircle}
           label="Taux d'erreur"
           value={`${kpis.errorRate}%`}
-          iconStyle={kpis.errorRate > 10 ? { color: 'var(--danger)' } : undefined}
+          iconStyle={kpis.errorRate > 10 ? { color: 'var(--semantic-red)' } : undefined}
           color={kpis.errorRate > 10 ? undefined : 'text-zinc-400'}
         />
       </div>
@@ -381,7 +381,7 @@ export const Workflows = () => {
                     {wfStatus.errorAge != null && wfStatus.errorAge > 24 && (
                       <span
                         className="ds-badge"
-                        style={{ background: 'var(--danger-light)', color: 'var(--danger)' }}
+                        style={{ background: 'var(--tint-red)', color: 'var(--semantic-red)' }}
                       >
                         Erreur &gt;24h
                       </span>

@@ -380,12 +380,12 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 flex flex-col items-center justify-center py-10 px-6
                 border-2 border-dashed rounded-xl cursor-pointer transition-all
                 ${isDragging
-                  ? 'border-[#0071E3]'
+                  ? 'border-[var(--accent-hover)]'
                   : 'border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-50'
                 }
               `}
             >
-              <Upload size={32} className={`mb-3 ${isDragging ? 'text-[#0071E3]' : 'text-gray-400'}`} />
+              <Upload size={32} className={`mb-3 ${isDragging ? 'text-[var(--accent-hover)]' : 'text-gray-400'}`} />
               <p className="text-sm font-medium text-gray-700">
                 Glissez-deposez un fichier PDF ici
               </p>
@@ -405,7 +405,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
           {/* Processing indicator */}
           {(ocrStep === 'uploading' || ocrStep === 'processing') && (
             <div className="flex flex-col items-center py-8 px-6 bg-blue-50/50 border border-blue-100 rounded-xl">
-              <Loader2 size={28} className="text-[#0071E3] animate-spin mb-3" />
+              <Loader2 size={28} className="text-[var(--accent-hover)] animate-spin mb-3" />
               <p className="text-sm font-medium text-gray-700">
                 {ocrStep === 'uploading' ? 'Upload du fichier...' : 'Analyse OCR en cours...'}
               </p>
@@ -416,10 +416,10 @@ const UploadModal = ({ onClose, selectedCompany }) => {
           {/* OCR error */}
           {ocrStep === 'error' && (
             <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-xl">
-              <AlertCircle size={18} className="text-[var(--danger)] mt-0.5 shrink-0" />
+              <AlertCircle size={18} className="text-[var(--semantic-red)] mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-medium text-red-800">Erreur de traitement</p>
-                <p className="text-xs text-[var(--danger)] mt-0.5">{ocrError}</p>
+                <p className="text-xs text-[var(--semantic-red)] mt-0.5">{ocrError}</p>
                 <button
                   onClick={() => { setOcrStep('idle'); setSelectedFile(null); setOcrError(null) }}
                   className="text-xs text-red-700 underline mt-2"
@@ -434,7 +434,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
           {selectedFile && ocrStep === 'done' && (
             <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: 'var(--accent-light)', border: '1px solid var(--accent)' }}>
               <div className="flex items-center gap-2">
-                <FileText size={16} className="text-[#0071E3]" />
+                <FileText size={16} className="text-[var(--accent-hover)]" />
                 <span className="text-sm text-gray-700">{selectedFile.name}</span>
                 <span className="text-xs text-gray-400">({(selectedFile.size / 1024).toFixed(0)} KB)</span>
                 {ocrResult && (
@@ -450,7 +450,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                   setOcrStep('idle')
                   setOcrResult(null)
                 }}
-                className="text-gray-400 hover:text-[var(--danger)]"
+                className="text-gray-400 hover:text-[var(--semantic-red)]"
               >
                 <X size={16} />
               </button>
@@ -464,7 +464,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 {/* Supplier name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Fournisseur <span className="text-[var(--danger)]">*</span>
+                    Fournisseur <span className="text-[var(--semantic-red)]">*</span>
                   </label>
                   <input
                     type="text"
@@ -492,7 +492,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 {/* Amount HT */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Montant HT (CHF) <span className="text-[var(--danger)]">*</span>
+                    Montant HT (CHF) <span className="text-[var(--semantic-red)]">*</span>
                   </label>
                   <input
                     type="number"
@@ -561,7 +561,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
                 </div>
                 <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
                   <span className="font-semibold text-gray-900">Total TTC</span>
-                  <span className="font-bold text-[#0071E3]">{formatCHF(totalTTC)}</span>
+                  <span className="font-bold text-[var(--accent-hover)]">{formatCHF(totalTTC)}</span>
                 </div>
               </div>
             </>
@@ -595,7 +595,7 @@ const UploadModal = ({ onClose, selectedCompany }) => {
         {/* Save error */}
         {saveMutation.isError && (
           <div className="px-6 pb-4">
-            <p className="text-xs text-[var(--danger)]">
+            <p className="text-xs text-[var(--semantic-red)]">
               Erreur : {saveMutation.error?.message || 'Impossible de sauvegarder la facture'}
             </p>
           </div>
@@ -652,7 +652,7 @@ const DetailModal = ({ invoice, onClose }) => {
             </div>
             <div className="col-span-2">
               <p className="text-gray-500">Total TTC</p>
-              <p className="text-lg font-bold text-[#0071E3]">
+              <p className="text-lg font-bold text-[var(--accent-hover)]">
                 {invoice.total_ttc ? formatCHF(invoice.total_ttc) : formatCHF(
                   (parseFloat(invoice.amount) || 0) * (1 + (parseFloat(invoice.vat_rate) || VAT_RATE) / 100)
                 )}
@@ -661,13 +661,13 @@ const DetailModal = ({ invoice, onClose }) => {
             {invoice.date_paid && (
               <div className="col-span-2">
                 <p className="text-gray-500">Date de paiement</p>
-                <p className="font-medium" style={{ color: 'var(--success)' }}>{formatDate(invoice.date_paid)}</p>
+                <p className="font-medium" style={{ color: 'var(--semantic-green)' }}>{formatDate(invoice.date_paid)}</p>
               </div>
             )}
             {invoice.rejection_reason && (
               <div className="col-span-2">
                 <p className="text-gray-500">Motif de rejet</p>
-                <p className="font-medium" style={{ color: 'var(--danger)' }}>{invoice.rejection_reason}</p>
+                <p className="font-medium" style={{ color: 'var(--semantic-red)' }}>{invoice.rejection_reason}</p>
               </div>
             )}
           </div>
@@ -713,7 +713,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Approuver',
       icon: CheckCircle,
       action: () => onApprove(invoice.id),
-      color: 'text-[var(--success)]'
+      color: 'text-[var(--semantic-green)]'
     })
   }
 
@@ -722,7 +722,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Rejeter',
       icon: Ban,
       action: () => onReject(invoice.id),
-      color: 'text-[var(--danger)]'
+      color: 'text-[var(--semantic-red)]'
     })
   }
 
@@ -731,7 +731,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Marquer payee',
       icon: CreditCard,
       action: () => onPay(invoice.id),
-      color: 'text-[var(--success)]'
+      color: 'text-[var(--semantic-green)]'
     })
   }
 
@@ -740,7 +740,7 @@ const ActionsDropdown = ({ invoice, onApprove, onReject, onPay, onDelete, onView
       label: 'Supprimer',
       icon: Trash2,
       action: () => onDelete(invoice.id),
-      color: 'text-[var(--danger)]'
+      color: 'text-[var(--semantic-red)]'
     })
   }
 
@@ -902,8 +902,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Pending */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg" style={{ background: 'var(--warning-light)' }}>
-              <Clock size={16} style={{ color: 'var(--warning)' }} />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--tint-orange)' }}>
+              <Clock size={16} style={{ color: 'var(--semantic-orange)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">En attente</span>
           </div>
@@ -914,8 +914,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Approved this month */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg" style={{ background: 'var(--success-light)' }}>
-              <CheckCircle size={16} style={{ color: 'var(--success)' }} />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--tint-green)' }}>
+              <CheckCircle size={16} style={{ color: 'var(--semantic-green)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Approuvees ce mois</span>
           </div>
@@ -926,8 +926,8 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
         {/* Rejected this month */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <div className="p-2 rounded-lg" style={{ background: 'var(--danger-light)' }}>
-              <XCircle size={16} style={{ color: 'var(--danger)' }} />
+            <div className="p-2 rounded-lg" style={{ background: 'var(--tint-red)' }}>
+              <XCircle size={16} style={{ color: 'var(--semantic-red)' }} />
             </div>
             <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">Rejetees ce mois</span>
           </div>
@@ -1042,7 +1042,7 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1.5">
-                          {inv.file_id && <FileText size={13} className="text-[#0071E3] shrink-0" />}
+                          {inv.file_id && <FileText size={13} className="text-[var(--accent-hover)] shrink-0" />}
                           <span className="font-medium text-gray-900">{inv.invoice_number || '--'}</span>
                         </div>
                       </td>
@@ -1053,9 +1053,9 @@ const SupplierInvoicesPage = ({ selectedCompany }) => {
                         {formatDate(inv.date_created)}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className={overdue ? 'text-[var(--danger)] font-medium' : 'text-gray-500'}>
+                        <span className={overdue ? 'text-[var(--semantic-red)] font-medium' : 'text-gray-500'}>
                           {formatDate(inv.due_date)}
-                          {overdue && <span className="text-[10px] ml-1 text-[var(--danger)]">EN RETARD</span>}
+                          {overdue && <span className="text-[10px] ml-1 text-[var(--semantic-red)]">EN RETARD</span>}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right font-medium text-gray-900 whitespace-nowrap">

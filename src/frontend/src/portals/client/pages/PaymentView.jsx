@@ -143,7 +143,7 @@ const PaymentView = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#0071E3' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent-hover)' }} />
       </div>
     )
   }
@@ -158,7 +158,7 @@ const PaymentView = () => {
         <button
           onClick={() => navigate('/client/invoices')}
           className="text-sm font-medium px-4 py-2 rounded-lg"
-          style={{ color: '#0071E3' }}
+          style={{ color: 'var(--accent-hover)' }}
         >
           Retour aux factures
         </button>
@@ -178,7 +178,7 @@ const PaymentView = () => {
         <button
           onClick={() => navigate('/client/invoices')}
           className="text-sm font-medium px-4 py-2 rounded-lg"
-          style={{ color: '#0071E3' }}
+          style={{ color: 'var(--accent-hover)' }}
         >
           Retour aux factures
         </button>
@@ -194,7 +194,7 @@ const PaymentView = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <div className="relative mb-6">
-          <CheckCircle size={64} style={{ color: '#34C759' }} />
+          <CheckCircle size={64} style={{ color: 'var(--semantic-green)' }} />
           <div
             className="absolute inset-0 rounded-full animate-ping"
             style={{ background: 'rgba(52,199,89,0.15)' }}
@@ -210,7 +210,7 @@ const PaymentView = () => {
         <button
           onClick={() => navigate('/client/invoices')}
           className="px-6 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-          style={{ backgroundColor: '#0071E3' }}
+          style={{ backgroundColor: 'var(--accent-hover)' }}
         >
           Retour aux factures
         </button>
@@ -271,11 +271,11 @@ const PaymentView = () => {
       {/* ── Option 1: QR-Invoice (Primary) ── */}
       <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-4">
-          <QrCode size={20} style={{ color: '#0071E3' }} />
+          <QrCode size={20} style={{ color: 'var(--accent-hover)' }} />
           <h2 className="text-base font-semibold text-gray-900">QR-Invoice</h2>
           <span
             className="ml-auto text-xs font-medium px-2 py-0.5 rounded-full"
-            style={{ backgroundColor: 'rgba(0,113,227,0.10)', color: '#0071E3' }}
+            style={{ backgroundColor: 'rgba(0,113,227,0.10)', color: 'var(--accent-hover)' }}
           >
             Recommande
           </span>
@@ -284,7 +284,7 @@ const PaymentView = () => {
         {/* QR Code placeholder */}
         <div
           className="w-full max-w-[200px] h-[200px] mx-auto mb-5 rounded-lg flex items-center justify-center"
-          style={{ backgroundColor: '#F5F5F7' }}
+          style={{ backgroundColor: 'var(--bg)' }}
         >
           <div className="text-center">
             <QrCode size={48} className="mx-auto mb-2 text-gray-400" />
@@ -340,14 +340,14 @@ const PaymentView = () => {
       {/* ── Option 2: Revolut Link ── */}
       <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-4">
-          <CreditCard size={20} style={{ color: '#0071E3' }} />
+          <CreditCard size={20} style={{ color: 'var(--accent-hover)' }} />
           <h2 className="text-base font-semibold text-gray-900">Payer par carte</h2>
         </div>
 
         <button
           onClick={() => window.open(`${REVOLUT_PAY_URL}?amount=${totalAmount}&ref=${reference}`, '_blank')}
           className="w-full py-3 rounded-lg text-sm font-medium text-white transition-colors flex items-center justify-center gap-2"
-          style={{ backgroundColor: '#0071E3' }}
+          style={{ backgroundColor: 'var(--accent-hover)' }}
         >
           Payer via Revolut <ExternalLink size={14} />
         </button>
@@ -360,7 +360,7 @@ const PaymentView = () => {
       {/* ── Option 3: Virement bancaire ── */}
       <div className="ds-card p-5">
         <div className="flex items-center gap-2 mb-4">
-          <Building2 size={20} style={{ color: '#0071E3' }} />
+          <Building2 size={20} style={{ color: 'var(--accent-hover)' }} />
           <h2 className="text-base font-semibold text-gray-900">Virement bancaire</h2>
         </div>
 
@@ -388,7 +388,7 @@ const PaymentView = () => {
         </div>
 
         <div className="mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(0,113,227,0.06)' }}>
-          <p className="text-xs" style={{ color: '#0071E3' }}>
+          <p className="text-xs" style={{ color: 'var(--accent-hover)' }}>
             Veuillez indiquer la reference <strong>{invoice.invoice_number}</strong> lors de votre virement
             afin que votre paiement soit automatiquement rapproche.
           </p>
@@ -396,7 +396,7 @@ const PaymentView = () => {
       </div>
 
       {/* ── Legal footer ── */}
-      <div className="rounded-lg p-3" style={{ backgroundColor: '#F5F5F7' }}>
+      <div className="rounded-lg p-3" style={{ backgroundColor: 'var(--bg)' }}>
         <p className="text-xs text-gray-400">
           <strong>Paiement securise</strong> — Les donnees bancaires sont transmises de maniere
           chiffree. Conformite suisse (FinSA/FinIA). Devise : CHF.

@@ -99,7 +99,7 @@ const QualifyModal = ({ lead, onSave, onClose, isSaving }) => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <ThermometerSun size={20} style={{color:'var(--warning)'}} />
+              <ThermometerSun size={20} style={{color:'var(--semantic-orange)'}} />
               Qualifier le lead
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -512,7 +512,7 @@ const LeadsDashboard = ({ selectedCompany }) => {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{color:'var(--danger)'}} />
+        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{color:'var(--semantic-red)'}} />
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur de chargement</h2>
         <p className="text-gray-600 mb-4">{error.message}</p>
         <button

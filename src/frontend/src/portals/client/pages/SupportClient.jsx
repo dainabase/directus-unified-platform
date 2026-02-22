@@ -16,10 +16,10 @@ const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'
 
 const PRIORITY_CONFIG = {
-  critical: { label: 'Critique', bg: 'rgba(255,59,48,0.12)', color: '#FF3B30' },
+  critical: { label: 'Critique', bg: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)' },
   high:     { label: 'Haute',    bg: 'rgba(255,59,48,0.08)', color: '#FF6961' },
   medium:   { label: 'Moyenne',  bg: 'rgba(255,204,0,0.12)', color: '#B8860B' },
-  low:      { label: 'Basse',    bg: 'rgba(142,142,147,0.12)', color: '#8E8E93' }
+  low:      { label: 'Basse',    bg: 'rgba(142,142,147,0.12)', color: 'var(--gray-1)' }
 }
 
 const FILTER_TABS = [
@@ -221,7 +221,7 @@ const SupportClient = () => {
         <button
           onClick={() => setShowNewModal(true)}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors"
-          style={{ background: '#0071E3' }}
+          style={{ background: 'var(--accent-hover)' }}
         >
           <Plus size={16} />
           Nouveau ticket
@@ -237,8 +237,8 @@ const SupportClient = () => {
             className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
             style={{
               background: activeFilter === tab.key ? 'rgba(0,113,227,0.10)' : 'transparent',
-              color: activeFilter === tab.key ? '#0071E3' : 'var(--text-secondary, #6E6E73)',
-              border: activeFilter === tab.key ? 'none' : '1px solid var(--border-light, #E5E5EA)'
+              color: activeFilter === tab.key ? 'var(--accent-hover)' : 'var(--label-2)',
+              border: activeFilter === tab.key ? 'none' : '1px solid var(--sep)'
             }}
           >
             {tab.label}
@@ -341,14 +341,14 @@ const SupportClient = () => {
                             placeholder="Votre message..."
                             rows={3}
                             className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
-                            style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+                            style={{ background: 'var(--bg)' }}
                           />
                           <div className="flex items-center gap-3">
                             <button
                               onClick={() => handleSendReply(ticket.id)}
                               disabled={!replyText.trim() || sendReply.isPending}
                               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
-                              style={{ background: '#0071E3' }}
+                              style={{ background: 'var(--accent-hover)' }}
                             >
                               {sendReply.isPending ? (
                                 <Loader2 size={14} className="animate-spin" />
@@ -405,7 +405,7 @@ const SupportClient = () => {
                   placeholder="Décrivez brièvement votre demande"
                   required
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
-                  style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+                  style={{ background: 'var(--bg)' }}
                 />
               </div>
 
@@ -422,7 +422,7 @@ const SupportClient = () => {
                   required
                   minLength={20}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]"
-                  style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+                  style={{ background: 'var(--bg)' }}
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   {newDescription.length}/20 caractères minimum
@@ -436,7 +436,7 @@ const SupportClient = () => {
                   value={newPriority}
                   onChange={(e) => setNewPriority(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] appearance-none"
-                  style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+                  style={{ background: 'var(--bg)' }}
                 >
                   <option value="low">Basse</option>
                   <option value="medium">Moyenne</option>
@@ -453,7 +453,7 @@ const SupportClient = () => {
                   value={newProjectId}
                   onChange={(e) => setNewProjectId(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)] appearance-none"
-                  style={{ background: 'var(--bg-secondary, #F5F5F7)' }}
+                  style={{ background: 'var(--bg)' }}
                 >
                   <option value="">Aucun projet</option>
                   {projects.map(p => (
@@ -468,7 +468,7 @@ const SupportClient = () => {
                   type="submit"
                   disabled={createTicket.isPending}
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-white transition-colors disabled:opacity-50"
-                  style={{ background: '#0071E3' }}
+                  style={{ background: 'var(--accent-hover)' }}
                 >
                   {createTicket.isPending ? (
                     <Loader2 size={16} className="animate-spin" />

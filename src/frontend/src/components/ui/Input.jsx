@@ -15,19 +15,19 @@ const Input = React.forwardRef(({
       )}
       <div className="relative">
         {icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }}>
+          <div className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--label-3)' }}>
             {icon}
           </div>
         )}
         <input
           ref={ref}
           type={type}
-          className={`ds-input ${icon ? 'pl-9' : ''} ${error ? '!border-[var(--danger)]' : ''} ${className}`}
+          className={`ds-input ${icon ? 'pl-9' : ''} ${error ? '!border-[var(--semantic-red)]' : ''} ${className}`}
           {...props}
         />
       </div>
       {error && (
-        <p className="mt-1" style={{ fontSize: 11, color: 'var(--danger)' }}>{error}</p>
+        <p className="mt-1" style={{ fontSize: 11, color: 'var(--semantic-red)' }}>{error}</p>
       )}
     </div>
   )

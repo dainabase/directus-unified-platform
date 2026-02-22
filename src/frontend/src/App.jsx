@@ -17,7 +17,7 @@ import TopBar from './components/layout/TopBar'
 // ── Loading spinner for Suspense fallback ──
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
-    <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
+    <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
   </div>
 )
 

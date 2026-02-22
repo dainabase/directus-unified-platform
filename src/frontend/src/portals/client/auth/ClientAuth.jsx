@@ -34,7 +34,7 @@ const ClientAuth = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#0071E3] text-white mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--accent-hover)] text-white mb-4">
             <Building2 size={32} />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Espace Client</h1>
@@ -85,7 +85,7 @@ const ClientAuth = () => {
                 <button
                   type="submit"
                   disabled={step === 'loading' || !email.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-[#0071E3] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-white bg-[var(--accent-hover)] hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {step === 'loading' ? (
                     <><Loader2 size={18} className="animate-spin" /> Connexion en cours...</>

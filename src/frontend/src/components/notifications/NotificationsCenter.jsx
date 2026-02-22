@@ -41,7 +41,7 @@ const NotificationsCenter = ({
           <Bell size={16} className="text-gray-600" />
           <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
           {unreadCount > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--accent-light, #e8f0fe)', color: 'var(--accent, #0071E3)' }}>
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'var(--tint-blue)', color: 'var(--accent)' }}>
               {unreadCount}
             </span>
           )}
@@ -51,7 +51,7 @@ const NotificationsCenter = ({
             <button
               onClick={onMarkAllRead}
               disabled={isMarkingAllRead}
-              className="text-xs font-medium disabled:opacity-50" style={{ color: 'var(--accent, #0071E3)' }}
+              className="text-xs font-medium disabled:opacity-50" style={{ color: 'var(--accent)' }}
             >
               {isMarkingAllRead ? (
                 <Loader2 size={12} className="animate-spin" />
@@ -75,7 +75,7 @@ const NotificationsCenter = ({
       <div className="overflow-y-auto flex-1">
         {isLoading ? (
           <div className="flex items-center justify-center py-10">
-            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
           </div>
         ) : notifications.length === 0 ? (
           <div className="py-10 text-center">
@@ -112,7 +112,7 @@ const NotificationsCenter = ({
                     <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
                   </div>
                   {!n.is_read && (
-                    <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: 'var(--accent, #0071E3)' }} />
+                    <div className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: 'var(--accent)' }} />
                   )}
                 </div>
               )

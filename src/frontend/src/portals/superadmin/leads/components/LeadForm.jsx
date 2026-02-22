@@ -326,7 +326,7 @@ const LeadForm = ({ lead, onSave, onClose }) => {
                 {formData.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: 'var(--accent-light, #e8f0fe)', color: 'var(--accent, #0071E3)' }}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm" style={{ background: 'var(--tint-blue)', color: 'var(--accent)' }}
                   >
                     {tag}
                     <button

@@ -25,7 +25,7 @@ const DataTable = ({
                 <th
                   key={col.key}
                   className="text-left px-4 py-3"
-                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-tertiary)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--label-3)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
                 >
                   {col.label}
                 </th>
@@ -58,7 +58,7 @@ const DataTable = ({
   }
 
   const SortIcon = ({ colKey }) => {
-    if (sortKey !== colKey) return <ArrowUpDown size={12} style={{ color: 'var(--text-tertiary)', opacity: 0.5 }} />
+    if (sortKey !== colKey) return <ArrowUpDown size={12} style={{ color: 'var(--label-3)', opacity: 0.5 }} />
     return sortDir === 'asc'
       ? <ArrowUp size={12} style={{ color: 'var(--accent)' }} />
       : <ArrowDown size={12} style={{ color: 'var(--accent)' }} />
@@ -76,7 +76,7 @@ const DataTable = ({
                 <th
                   key={col.key}
                   className={`text-left px-4 py-3 ${onSort ? 'cursor-pointer select-none' : ''}`}
-                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-tertiary)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
+                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--label-3)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}
                   onClick={() => onSort?.(col.key)}
                 >
                   <div className="flex items-center gap-1.5">

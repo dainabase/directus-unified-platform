@@ -11,7 +11,7 @@ const Table = ({ columns, data, loading, emptyState, className = '' }) => {
                 <th
                   key={col.key || col}
                   className="text-left px-4 py-3"
-                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-tertiary)' }}
+                  style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--label-3)' }}
                 >
                   <div className="ds-skeleton h-3 w-16" />
                 </th>
@@ -36,7 +36,7 @@ const Table = ({ columns, data, loading, emptyState, className = '' }) => {
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12" style={{ color: 'var(--text-secondary)' }}>
+      <div className="flex flex-col items-center justify-center py-12" style={{ color: 'var(--label-2)' }}>
         {emptyState || <p className="ds-body">Aucune donnee</p>}
       </div>
     )
@@ -56,7 +56,7 @@ const Table = ({ columns, data, loading, emptyState, className = '' }) => {
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.6px',
-                  color: 'var(--text-tertiary)',
+                  color: 'var(--label-3)',
                   borderBottom: '1px solid rgba(0,0,0,0.08)',
                 }}
               >

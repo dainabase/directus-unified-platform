@@ -20,9 +20,9 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-
 const STATUS_CONFIG = {
   sent: { label: 'En attente', bg: 'var(--accent-light)', fg: 'var(--accent)', icon: Clock },
   viewed: { label: 'Consulté', bg: 'rgba(175,82,222,0.12)', fg: '#AF52DE', icon: Eye },
-  signed: { label: 'Signé', bg: 'var(--success-light)', fg: 'var(--success)', icon: CheckCircle },
-  rejected: { label: 'Refusé', bg: 'var(--danger-light)', fg: 'var(--danger)', icon: XCircle },
-  expired: { label: 'Expiré', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)', icon: Clock }
+  signed: { label: 'Signé', bg: 'var(--tint-green)', fg: 'var(--semantic-green)', icon: CheckCircle },
+  rejected: { label: 'Refusé', bg: 'var(--tint-red)', fg: 'var(--semantic-red)', icon: XCircle },
+  expired: { label: 'Expiré', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)', icon: Clock }
 }
 
 const QuoteSignature = () => {
@@ -182,15 +182,15 @@ const QuoteSignature = () => {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold" style={{color:'var(--text-primary)'}}>Mes devis</h1>
-        <p className="text-sm mt-1" style={{color:'var(--text-tertiary)'}}>Consultez et signez vos devis</p>
+        <h1 className="text-2xl font-bold" style={{color:'var(--label-1)'}}>Mes devis</h1>
+        <p className="text-sm mt-1" style={{color:'var(--label-3)'}}>Consultez et signez vos devis</p>
       </div>
 
       {/* Quotes list */}
       {quotes.length === 0 ? (
         <div className="ds-card p-12 text-center">
-          <FileText className="w-12 h-12 mx-auto mb-3" style={{color:'var(--text-tertiary)'}} />
-          <p style={{color:'var(--text-tertiary)'}}>Aucun devis pour le moment</p>
+          <FileText className="w-12 h-12 mx-auto mb-3" style={{color:'var(--label-3)'}} />
+          <p style={{color:'var(--label-3)'}}>Aucun devis pour le moment</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -204,23 +204,23 @@ const QuoteSignature = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="font-semibold" style={{color:'var(--text-primary)'}}>{quote.quote_number}</h3>
+                      <h3 className="font-semibold" style={{color:'var(--label-1)'}}>{quote.quote_number}</h3>
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium"
                         style={{background: cfg.bg, color: cfg.fg}}>
                         <Icon size={12} /> {cfg.label}
                       </span>
                     </div>
                     {quote.description && (
-                      <p className="text-sm mb-2 line-clamp-2" style={{color:'var(--text-tertiary)'}}>{quote.description}</p>
+                      <p className="text-sm mb-2 line-clamp-2" style={{color:'var(--label-3)'}}>{quote.description}</p>
                     )}
-                    <div className="flex items-center gap-4 text-sm" style={{color:'var(--text-tertiary)'}}>
+                    <div className="flex items-center gap-4 text-sm" style={{color:'var(--label-3)'}}>
                       <span>Créé le {formatDate(quote.created_at)}</span>
                       {quote.valid_until && <span>Valide jusqu'au {formatDate(quote.valid_until)}</span>}
                     </div>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="text-lg font-bold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total)}</p>
-                    <p className="text-xs" style={{color:'var(--text-tertiary)'}}>TVA {quote.tax_rate || 8.1}% incluse</p>
+                    <p className="text-lg font-bold" style={{color:'var(--label-1)'}}>{formatCHF(quote.total)}</p>
+                    <p className="text-xs" style={{color:'var(--label-3)'}}>TVA {quote.tax_rate || 8.1}% incluse</p>
                     {canSign ? (
                       <button onClick={() => handleOpenQuote(quote)}
                         className="ds-btn ds-btn-primary mt-2 flex items-center gap-1 px-4 py-2 text-sm font-medium">
@@ -242,13 +242,13 @@ const QuoteSignature = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             {/* Modal header */}
-            <div className="flex items-center justify-between p-6 sticky top-0 rounded-t-2xl z-10" style={{borderBottom:'1px solid var(--border-light)', background:'var(--bg-surface)'}}>
+            <div className="flex items-center justify-between p-6 sticky top-0 rounded-t-2xl z-10" style={{borderBottom:'1px solid var(--sep)', background:'var(--bg-2)'}}>
               <div>
-                <h2 className="text-lg font-semibold" style={{color:'var(--text-primary)'}}>Signer le devis {selectedQuote.quote_number}</h2>
-                <p className="text-sm" style={{color:'var(--text-tertiary)'}}>Relisez les détails et signez</p>
+                <h2 className="text-lg font-semibold" style={{color:'var(--label-1)'}}>Signer le devis {selectedQuote.quote_number}</h2>
+                <p className="text-sm" style={{color:'var(--label-3)'}}>Relisez les détails et signez</p>
               </div>
               <button onClick={() => { setShowSignModal(false); setCgvAccepted(false) }}
-                className="ds-btn ds-btn-ghost p-2" style={{color:'var(--text-tertiary)'}}>
+                className="ds-btn ds-btn-ghost p-2" style={{color:'var(--label-3)'}}>
                 <X size={20} />
               </button>
             </div>
@@ -256,22 +256,22 @@ const QuoteSignature = () => {
             <div className="p-6 space-y-6">
               {/* Quote summary */}
               <div className="rounded-xl p-5" style={{background:'rgba(0,0,0,0.02)'}}>
-                <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{color:'var(--text-secondary)'}}>Résumé du devis</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{color:'var(--label-2)'}}>Résumé du devis</h3>
                 {selectedQuote.description && (
-                  <p className="text-sm mb-4" style={{color:'var(--text-secondary)'}}>{selectedQuote.description}</p>
+                  <p className="text-sm mb-4" style={{color:'var(--label-2)'}}>{selectedQuote.description}</p>
                 )}
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span style={{color:'var(--text-tertiary)'}}>Sous-total HT</span>
+                    <span style={{color:'var(--label-3)'}}>Sous-total HT</span>
                     <span className="font-medium">{formatCHF(selectedQuote.subtotal)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{color:'var(--text-tertiary)'}}>TVA ({selectedQuote.tax_rate || 8.1}%)</span>
+                    <span style={{color:'var(--label-3)'}}>TVA ({selectedQuote.tax_rate || 8.1}%)</span>
                     <span className="font-medium">{formatCHF(selectedQuote.tax_amount)}</span>
                   </div>
-                  <div className="flex justify-between text-base font-bold pt-2 mt-2" style={{borderTop:'1px solid var(--border-light)'}}>
+                  <div className="flex justify-between text-base font-bold pt-2 mt-2" style={{borderTop:'1px solid var(--sep)'}}>
                     <span>Total TTC</span>
-                    <span style={{color:'var(--text-primary)'}}>{formatCHF(selectedQuote.total)}</span>
+                    <span style={{color:'var(--label-1)'}}>{formatCHF(selectedQuote.total)}</span>
                   </div>
                   {selectedQuote.deposit_percentage > 0 && (
                     <div className="flex justify-between text-sm pt-1" style={{color:'var(--accent)'}}>
@@ -283,27 +283,27 @@ const QuoteSignature = () => {
               </div>
 
               {/* CGV Section */}
-              <div className="rounded-xl overflow-hidden" style={{border:'1px solid var(--border-light)'}}>
+              <div className="rounded-xl overflow-hidden" style={{border:'1px solid var(--sep)'}}>
                 <button onClick={() => setCgvExpanded(!cgvExpanded)}
                   className="w-full flex items-center justify-between p-4 ds-btn-ghost transition-colors" style={{background:'rgba(0,0,0,0.02)'}}>
                   <div className="flex items-center gap-2">
                     <Shield className="w-5 h-5" style={{color:'var(--accent)'}} />
-                    <span className="font-medium" style={{color:'var(--text-primary)'}}>
+                    <span className="font-medium" style={{color:'var(--label-1)'}}>
                       Conditions Générales de Vente
-                      {activeCgv && <span className="text-xs ml-2" style={{color:'var(--text-tertiary)'}}>({activeCgv.version})</span>}
+                      {activeCgv && <span className="text-xs ml-2" style={{color:'var(--label-3)'}}>({activeCgv.version})</span>}
                     </span>
                   </div>
                   {cgvExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                 </button>
                 {cgvExpanded && (
-                  <div className="p-4 max-h-80 overflow-y-auto" style={{borderTop:'1px solid var(--border-light)'}}>
+                  <div className="p-4 max-h-80 overflow-y-auto" style={{borderTop:'1px solid var(--sep)'}}>
                     {activeCgv?.content_html ? (
-                      <div className="prose prose-sm max-w-none" style={{color:'var(--text-secondary)'}}
+                      <div className="prose prose-sm max-w-none" style={{color:'var(--label-2)'}}
                         dangerouslySetInnerHTML={{ __html: activeCgv.content_html }} />
                     ) : activeCgv?.summary ? (
-                      <p className="text-sm whitespace-pre-wrap" style={{color:'var(--text-secondary)'}}>{activeCgv.summary}</p>
+                      <p className="text-sm whitespace-pre-wrap" style={{color:'var(--label-2)'}}>{activeCgv.summary}</p>
                     ) : (
-                      <div className="text-center py-6" style={{color:'var(--warning)'}}>
+                      <div className="text-center py-6" style={{color:'var(--semantic-orange)'}}>
                         <AlertTriangle className="w-8 h-8 mx-auto mb-2" />
                         <p className="text-sm">CGV en cours de mise à jour — contactez HYPERVISUAL</p>
                       </div>
@@ -314,15 +314,15 @@ const QuoteSignature = () => {
 
               {/* CGV checkbox */}
               {!activeCgv ? (
-                <div className="rounded-lg p-4 text-sm flex items-center gap-2" style={{background:'var(--warning-light)', border:'1px solid var(--warning)', color:'var(--warning)'}}>
+                <div className="rounded-lg p-4 text-sm flex items-center gap-2" style={{background:'var(--tint-orange)', border:'1px solid var(--semantic-orange)', color:'var(--semantic-orange)'}}>
                   <AlertTriangle size={16} />
                   CGV en cours de mise à jour — signature temporairement désactivée
                 </div>
               ) : (
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded" style={{borderColor:'var(--border-light)', accentColor:'var(--accent)'}} />
-                  <span className="text-sm" style={{color:'var(--text-secondary)'}}>
+                    className="mt-1 w-4 h-4 rounded" style={{borderColor:'var(--sep)', accentColor:'var(--accent)'}} />
+                  <span className="text-sm" style={{color:'var(--label-2)'}}>
                     J'ai lu et j'accepte les <strong>Conditions Générales de Vente</strong> ({activeCgv.version}) d'HYPERVISUAL Switzerland
                   </span>
                 </label>
@@ -330,10 +330,10 @@ const QuoteSignature = () => {
 
               {/* Signature field */}
               <div>
-                <label className="block text-sm font-medium mb-1" style={{color:'var(--text-secondary)'}}>
+                <label className="block text-sm font-medium mb-1" style={{color:'var(--label-2)'}}>
                   Signature électronique
                 </label>
-                <p className="text-xs mb-2" style={{color:'var(--text-tertiary)'}}>
+                <p className="text-xs mb-2" style={{color:'var(--label-3)'}}>
                   Tapez votre nom complet pour signer (signature simple conforme CO Art. 14)
                 </p>
                 <input
@@ -342,7 +342,7 @@ const QuoteSignature = () => {
                   onChange={(e) => setSignerName(e.target.value)}
                   placeholder="Prénom Nom"
                   className="ds-input w-full px-4 py-3 rounded-xl font-serif text-lg italic"
-                  style={{color:'var(--text-primary)'}}
+                  style={{color:'var(--label-1)'}}
                 />
               </div>
 
@@ -359,7 +359,7 @@ const QuoteSignature = () => {
                 )}
               </button>
 
-              <p className="text-xs text-center" style={{color:'var(--text-tertiary)'}}>
+              <p className="text-xs text-center" style={{color:'var(--label-3)'}}>
                 En signant, vous acceptez les conditions du devis et les CGV. Un email de confirmation vous sera envoyé.
               </p>
             </div>

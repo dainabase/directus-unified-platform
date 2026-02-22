@@ -68,11 +68,11 @@ const LeadStats = ({ stats, isLoading }) => {
   const colorStyles = {
     blue: { background: 'rgba(0,113,227,0.08)', color: 'var(--accent)' },
     cyan: { background: 'rgba(0,113,227,0.08)', color: 'var(--accent)' },
-    green: { background: 'rgba(52,199,89,0.08)', color: 'var(--success)' },
-    emerald: { background: 'rgba(52,199,89,0.08)', color: 'var(--success)' },
-    yellow: { background: 'rgba(255,149,0,0.08)', color: 'var(--warning)' },
-    amber: { background: 'rgba(255,149,0,0.08)', color: 'var(--warning)' },
-    red: { background: 'rgba(255,59,48,0.08)', color: 'var(--danger)' }
+    green: { background: 'rgba(52,199,89,0.08)', color: 'var(--semantic-green)' },
+    emerald: { background: 'rgba(52,199,89,0.08)', color: 'var(--semantic-green)' },
+    yellow: { background: 'rgba(255,149,0,0.08)', color: 'var(--semantic-orange)' },
+    amber: { background: 'rgba(255,149,0,0.08)', color: 'var(--semantic-orange)' },
+    red: { background: 'rgba(255,59,48,0.08)', color: 'var(--semantic-red)' }
   }
 
   if (isLoading) {

@@ -266,7 +266,7 @@ const TimeTrackingModule = ({ selectedCompany }) => {
                 <XAxis dataKey="name" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip formatter={(v) => `${v}h`} />
-                <Bar dataKey="hours" fill="#0071E3" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="hours" fill="var(--accent-hover)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (

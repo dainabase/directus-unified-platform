@@ -113,10 +113,10 @@ const SignaturePage = () => {
   // --- Loading ---
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{background:'var(--bg-primary)'}}>
+      <div className="min-h-screen flex items-center justify-center" style={{background:'var(--bg)'}}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{borderColor:'var(--accent)'}} />
-          <p style={{color:'var(--text-secondary)'}}>Preparation de la signature...</p>
+          <p style={{color:'var(--label-2)'}}>Preparation de la signature...</p>
         </div>
       </div>
     )
@@ -125,11 +125,11 @@ const SignaturePage = () => {
   // --- Error ---
   if (status === 'error') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg-primary)'}}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg)'}}>
         <div className="ds-card rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-4xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold mb-2" style={{color:'var(--text-primary)'}}>Erreur</h2>
-          <p className="mb-6" style={{color:'var(--text-secondary)'}}>
+          <h2 className="text-xl font-bold mb-2" style={{color:'var(--label-1)'}}>Erreur</h2>
+          <p className="mb-6" style={{color:'var(--label-2)'}}>
             {error}
           </p>
           <div className="flex gap-3 justify-center">
@@ -154,24 +154,24 @@ const SignaturePage = () => {
   // --- Completed ---
   if (status === 'completed') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg-primary)'}}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{background:'var(--bg)'}}>
         <div className="ds-card rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-5xl mb-4">✅</div>
-          <h2 className="text-xl font-bold mb-2" style={{color:'var(--success)'}}>Devis signe</h2>
-          <p className="mb-2" style={{color:'var(--text-secondary)'}}>
+          <h2 className="text-xl font-bold mb-2" style={{color:'var(--semantic-green)'}}>Devis signe</h2>
+          <p className="mb-2" style={{color:'var(--label-2)'}}>
             Votre signature a ete enregistree avec succes.
           </p>
-          <p className="text-sm mb-6" style={{color:'var(--text-tertiary)'}}>
+          <p className="text-sm mb-6" style={{color:'var(--label-3)'}}>
             Vous recevrez une confirmation par email avec le document signe.
           </p>
           {quote && (
-            <div className="rounded-lg p-4 mb-6 text-left text-sm" style={{background:'var(--success-light)'}}>
-              <p className="font-medium" style={{color:'var(--success)'}}>Devis {quote.quote_number}</p>
-              <p style={{color:'var(--success)'}}>
+            <div className="rounded-lg p-4 mb-6 text-left text-sm" style={{background:'var(--tint-green)'}}>
+              <p className="font-medium" style={{color:'var(--semantic-green)'}}>Devis {quote.quote_number}</p>
+              <p style={{color:'var(--semantic-green)'}}>
                 Montant : {formatCHF(quote.total)} {quote.currency || 'CHF'}
               </p>
               {quote.deposit_amount > 0 && (
-                <p className="mt-1" style={{color:'var(--success)'}}>
+                <p className="mt-1" style={{color:'var(--semantic-green)'}}>
                   Acompte de {formatCHF(quote.deposit_amount)} a regler
                 </p>
               )}
@@ -190,13 +190,13 @@ const SignaturePage = () => {
 
   // --- Ready / Signing — afficher resume + iframe ---
   return (
-    <div className="min-h-screen" style={{background:'var(--bg-primary)'}}>
+    <div className="min-h-screen" style={{background:'var(--bg)'}}>
       {/* Header */}
-      <div className="ds-glass px-4 py-3" style={{borderBottom:'1px solid var(--border-light)'}}>
+      <div className="ds-glass px-4 py-3" style={{borderBottom:'1px solid var(--sep)'}}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold" style={{color:'var(--text-primary)'}}>Signature electronique</h1>
-            <p className="text-sm" style={{color:'var(--text-tertiary)'}}>
+            <h1 className="text-lg font-bold" style={{color:'var(--label-1)'}}>Signature electronique</h1>
+            <p className="text-sm" style={{color:'var(--label-3)'}}>
               {quote?.quote_number ? `Devis ${quote.quote_number}` : 'Devis'}
               {quote?.company_id?.name ? ` — ${quote.company_id.name}` : ''}
             </p>
@@ -215,31 +215,31 @@ const SignaturePage = () => {
         {quote && (
           <div className="ds-card p-4 flex flex-wrap gap-6 text-sm">
             <div>
-              <span style={{color:'var(--text-tertiary)'}}>Client</span>
-              <p className="font-medium" style={{color:'var(--text-primary)'}}>
+              <span style={{color:'var(--label-3)'}}>Client</span>
+              <p className="font-medium" style={{color:'var(--label-1)'}}>
                 {quote.contact_id
                   ? `${quote.contact_id.first_name || ''} ${quote.contact_id.last_name || ''}`.trim()
                   : '—'}
               </p>
             </div>
             <div>
-              <span style={{color:'var(--text-tertiary)'}}>Entreprise</span>
-              <p className="font-medium" style={{color:'var(--text-primary)'}}>{quote.company_id?.name || '—'}</p>
+              <span style={{color:'var(--label-3)'}}>Entreprise</span>
+              <p className="font-medium" style={{color:'var(--label-1)'}}>{quote.company_id?.name || '—'}</p>
             </div>
             <div>
-              <span style={{color:'var(--text-tertiary)'}}>Montant TTC</span>
-              <p className="font-semibold" style={{color:'var(--text-primary)'}}>{formatCHF(quote.total)} {quote.currency || 'CHF'}</p>
+              <span style={{color:'var(--label-3)'}}>Montant TTC</span>
+              <p className="font-semibold" style={{color:'var(--label-1)'}}>{formatCHF(quote.total)} {quote.currency || 'CHF'}</p>
             </div>
             {quote.deposit_amount > 0 && (
               <div>
-                <span style={{color:'var(--text-tertiary)'}}>Acompte</span>
-                <p className="font-medium" style={{color:'var(--warning)'}}>
+                <span style={{color:'var(--label-3)'}}>Acompte</span>
+                <p className="font-medium" style={{color:'var(--semantic-orange)'}}>
                   {formatCHF(quote.deposit_amount)} ({quote.deposit_percentage || 30}%)
                 </p>
               </div>
             )}
             <div>
-              <span style={{color:'var(--text-tertiary)'}}>Statut</span>
+              <span style={{color:'var(--label-3)'}}>Statut</span>
               <p className="font-medium" style={{color:'var(--accent)'}}>
                 {status === 'signing' ? 'Signature en cours...' : 'Pret a signer'}
               </p>
@@ -263,7 +263,7 @@ const SignaturePage = () => {
         )}
 
         {/* Legal notice */}
-        <div className="rounded-lg p-3 text-xs" style={{background:'rgba(0,0,0,0.04)', color:'var(--text-tertiary)'}}>
+        <div className="rounded-lg p-3 text-xs" style={{background:'rgba(0,0,0,0.04)', color:'var(--label-3)'}}>
           <strong>Signature electronique securisee</strong> — Ce document est signe
           electroniquement conformement aux normes suisses (ZertES/SCSE).
           Votre signature a la meme valeur juridique qu'une signature manuscrite.

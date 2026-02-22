@@ -304,7 +304,7 @@ const DepositConfigManager = ({ selectedCompany }) => {
                         <td className="px-4 py-3 text-gray-500 text-xs">{cfg.description || '—'}</td>
                         <td className="px-4 py-3 text-center">
                           {cfg.is_active !== false ? (
-                            <CheckCircle2 size={16} className="inline" style={{ color: "var(--success)" }} />
+                            <CheckCircle2 size={16} className="inline" style={{ color: "var(--semantic-green)" }} />
                           ) : (
                             <X size={16} className="text-gray-300 inline" />
                           )}

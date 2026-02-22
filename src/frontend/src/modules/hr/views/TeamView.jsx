@@ -24,8 +24,8 @@ const TeamView = ({ people }) => {
   }
 
   const avatarColors = [
-    '#0071E3', '#34C759', '#5856D6', '#FF2D55',
-    '#5856D6', '#FF3B30', '#FF9500', '#00C7BE'
+    'var(--accent-hover)', 'var(--semantic-green)', '#5856D6', '#FF2D55',
+    '#5856D6', 'var(--semantic-red)', 'var(--semantic-orange)', '#00C7BE'
   ]
   const getAvatarColor = (name) => {
     const index = (name?.charCodeAt(0) || 0) % avatarColors.length

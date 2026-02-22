@@ -372,7 +372,7 @@ const InvoiceForm = ({ invoice, onSave, onCancel, selectedCompany }) => {
           <button
             type="submit"
             disabled={isSaving}
-            className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-[#0071E3] rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-[var(--accent-hover)] rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             {isSaving ? (
               <Loader2 size={15} className="animate-spin" />
@@ -457,7 +457,7 @@ const InvoiceForm = ({ invoice, onSave, onCancel, selectedCompany }) => {
               <button
                 type="button"
                 onClick={addLine}
-                className="ds-btn ds-btn-ghost inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#0071E3] border border-blue-200 rounded-lg hover:bg-blue-50"
+                className="ds-btn ds-btn-ghost inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--accent-hover)] border border-blue-200 rounded-lg hover:bg-blue-50"
               >
                 <Plus size={13} />
                 Ajouter une ligne
@@ -573,7 +573,7 @@ const InvoiceForm = ({ invoice, onSave, onCancel, selectedCompany }) => {
             <button
               type="button"
               onClick={addLine}
-              className="mt-3 w-full py-2 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:text-[#0071E3] hover:border-blue-300 transition-colors"
+              className="mt-3 w-full py-2 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 hover:text-[var(--accent-hover)] hover:border-blue-300 transition-colors"
             >
               + Ajouter une ligne
             </button>
@@ -691,7 +691,7 @@ const InvoiceForm = ({ invoice, onSave, onCancel, selectedCompany }) => {
           {/* Info box */}
           <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
             <div className="flex items-start gap-2">
-              <FileText size={16} className="text-[#0071E3] mt-0.5 flex-shrink-0" />
+              <FileText size={16} className="text-[var(--accent-hover)] mt-0.5 flex-shrink-0" />
               <div className="text-xs text-blue-800">
                 <p className="font-medium mb-1">Numero de facture</p>
                 <p className="text-blue-600">

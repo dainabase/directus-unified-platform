@@ -56,7 +56,7 @@ const CEOReportModule = () => {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <FileText size={20} style={{ color: 'var(--accent, #0071E3)' }} />
+            <FileText size={20} style={{ color: 'var(--accent)' }} />
             Rapport CEO quotidien
           </h2>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -89,7 +89,7 @@ const CEOReportModule = () => {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent)' }} />
         </div>
       ) : !report ? (
         <div className="ds-card p-12 text-center">

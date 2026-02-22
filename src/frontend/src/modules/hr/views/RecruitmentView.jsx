@@ -117,7 +117,7 @@ const RecruitmentView = ({ selectedCompany }) => {
   if (isError) {
     return (
       <Card className="p-8 text-center">
-        <p className="font-medium mb-2" style={{color:'var(--danger)'}}>Erreur de chargement</p>
+        <p className="font-medium mb-2" style={{color:'var(--semantic-red)'}}>Erreur de chargement</p>
         <p className="text-sm text-gray-500">{error?.message || 'Impossible de charger les candidats.'}</p>
       </Card>
     )
@@ -137,7 +137,7 @@ const RecruitmentView = ({ selectedCompany }) => {
 
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Briefcase className="w-8 h-8" style={{color:'var(--success)'}} />
+            <Briefcase className="w-8 h-8" style={{color:'var(--semantic-green)'}} />
           </div>
           <p className="text-2xl font-bold text-gray-900">{stats.uniquePositions}</p>
           <p className="text-sm text-gray-600">Postes distincts</p>

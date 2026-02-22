@@ -39,20 +39,20 @@ const formatDate = (dateStr) => {
 // ── Quote status config ──
 const QUOTE_STATUS = {
   draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
-  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  signed:   { label: 'Signe',     bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  signed:   { label: 'Signe',     bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' },
   expired:  { label: 'Expire',    bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
 // ── Invoice status config ──
 const INVOICE_STATUS = {
   draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
-  sent:     { label: 'Envoyee',   bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  paid:     { label: 'Payee',     bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  overdue:  { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
-  partial:  { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
+  sent:     { label: 'Envoyee',   bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  paid:     { label: 'Payee',     bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  overdue:  { label: 'En retard', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' },
+  partial:  { label: 'Partielle', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
   cancelled:{ label: 'Annulee',   bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
@@ -235,7 +235,7 @@ const ClientDetailRevendeur = () => {
           {company.status && (
             <span className="px-3 py-1 rounded-full text-xs font-medium"
               style={company.status === 'active'
-                ? { background: 'rgba(52,199,89,0.12)', color: '#34C759' }
+                ? { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)' }
                 : { background: 'rgba(107,114,128,0.12)', color: '#6B7280' }}>
               {company.status === 'active' ? 'Actif' : company.status}
             </span>
@@ -255,7 +255,7 @@ const ClientDetailRevendeur = () => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Receipt size={16} style={{ color: 'var(--success)' }} />
+            <Receipt size={16} style={{ color: 'var(--semantic-green)' }} />
             <span className="text-xs text-gray-500 font-medium">Total factures</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatCHF(stats.totalFactures)}</p>
@@ -263,10 +263,10 @@ const ClientDetailRevendeur = () => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={16} style={{ color: 'var(--success)' }} />
+            <TrendingUp size={16} style={{ color: 'var(--semantic-green)' }} />
             <span className="text-xs text-gray-500 font-medium">Montant encaisse</span>
           </div>
-          <p className="text-xl font-bold" style={{ color: 'var(--success)' }}>{formatCHF(stats.totalPaid)}</p>
+          <p className="text-xl font-bold" style={{ color: 'var(--semantic-green)' }}>{formatCHF(stats.totalPaid)}</p>
           <p className="text-xs text-gray-400 mt-1">
             {stats.totalFactures > 0
               ? `${Math.round((stats.totalPaid / stats.totalFactures) * 100)}% encaisse`
@@ -288,7 +288,7 @@ const ClientDetailRevendeur = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-5 py-3.5 text-sm font-medium border-b-2 transition-colors ${
                   isActive
-                    ? 'border-[#0071E3] text-[#0071E3]'
+                    ? 'border-[var(--accent-hover)] text-[var(--accent-hover)]'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >

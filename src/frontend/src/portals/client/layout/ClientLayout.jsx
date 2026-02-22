@@ -1,6 +1,6 @@
 /**
  * ClientLayout — Portal client layout — Apple Premium DS
- * Blue accent (#0071E3), ds-glass sidebar
+ * Blue accent (var(--accent-hover)), ds-glass sidebar
  */
 import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
@@ -31,17 +31,17 @@ const ClientLayout = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-64 ds-glass flex flex-col z-30" style={{ borderRight: '1px solid var(--border-light)' }}>
+      <aside className="fixed left-0 top-0 bottom-0 w-64 ds-glass flex flex-col z-30" style={{ borderRight: '1px solid var(--sep)' }}>
         {/* Logo */}
-        <div className="p-6" style={{ borderBottom: '1px solid var(--border-light)' }}>
+        <div className="p-6" style={{ borderBottom: '1px solid var(--sep)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#0071E3] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-hover)] flex items-center justify-center">
               <Building2 className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>HYPERVISUAL</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--label-1)' }}>HYPERVISUAL</p>
               <p className="ds-meta">Espace Client</p>
             </div>
           </div>
@@ -57,7 +57,7 @@ const ClientLayout = () => {
               className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150"
               style={({ isActive }) => ({
                 background: isActive ? 'var(--accent-light)' : 'transparent',
-                color: isActive ? 'var(--accent)' : 'var(--text-secondary)'
+                color: isActive ? 'var(--accent)' : 'var(--label-2)'
               })}
             >
               <item.icon size={18} />
@@ -67,7 +67,7 @@ const ClientLayout = () => {
         </nav>
 
         {/* User section */}
-        <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <div className="p-4" style={{ borderTop: '1px solid var(--sep)' }}>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
               <span className="text-sm font-bold text-blue-700">
@@ -75,7 +75,7 @@ const ClientLayout = () => {
               </span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+              <p className="text-sm font-medium truncate" style={{ color: 'var(--label-1)' }}>
                 {client?.first_name} {client?.last_name}
               </p>
               <p className="ds-meta truncate">{client?.email}</p>
@@ -84,7 +84,7 @@ const ClientLayout = () => {
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors duration-150"
-            style={{ color: 'var(--text-secondary)' }}
+            style={{ color: 'var(--label-2)' }}
           >
             <LogOut size={16} />
             Deconnexion

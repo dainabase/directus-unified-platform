@@ -18,14 +18,14 @@ import toast from 'react-hot-toast'
 import api from '../../../../lib/axios'
 
 const CATEGORIES = {
-  software: { label: 'Logiciels', color: '#0071E3' },
-  travel: { label: 'Deplacements', color: '#34C759' },
-  training: { label: 'Formation', color: '#FF9500' },
+  software: { label: 'Logiciels', color: 'var(--accent-hover)' },
+  travel: { label: 'Deplacements', color: 'var(--semantic-green)' },
+  training: { label: 'Formation', color: 'var(--semantic-orange)' },
   office: { label: 'Bureau', color: '#5856D6' },
   meals: { label: 'Repas', color: '#AF52DE' },
-  infrastructure: { label: 'Infrastructure', color: '#FF3B30' },
+  infrastructure: { label: 'Infrastructure', color: 'var(--semantic-red)' },
   marketing: { label: 'Marketing', color: '#00C7BE' },
-  other: { label: 'Autre', color: '#6E6E73' }
+  other: { label: 'Autre', color: 'var(--label-2)' }
 }
 
 const formatCHF = (amount) =>
@@ -208,9 +208,9 @@ const ExpensesTracker = ({ selectedCompany }) => {
   if (error) {
     return (
       <div className="ds-card p-8 text-center">
-        <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
-        <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
-        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+        <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
+        <h3 className="font-semibold mb-2" style={{ color: 'var(--label-1)' }}>Erreur de chargement</h3>
+        <p className="text-sm mb-4" style={{ color: 'var(--label-2)' }}>
           {error.message || 'Impossible de charger les depenses'}
         </p>
         <button
@@ -248,9 +248,9 @@ const ExpensesTracker = ({ selectedCompany }) => {
     <div className="space-y-6">
       {/* Data source indicator */}
       {dataSource === 'bank_transactions' && (
-        <div className="ds-card p-3 flex items-center gap-2" style={{ borderLeft: '3px solid var(--warning)' }}>
-          <Clock size={14} style={{ color: 'var(--warning)' }} />
-          <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+        <div className="ds-card p-3 flex items-center gap-2" style={{ borderLeft: '3px solid var(--semantic-orange)' }}>
+          <Clock size={14} style={{ color: 'var(--semantic-orange)' }} />
+          <span className="text-xs" style={{ color: 'var(--label-2)' }}>
             Donnees depuis <strong>bank_transactions</strong> (collection expenses vide ou indisponible)
           </span>
         </div>
@@ -282,29 +282,29 @@ const ExpensesTracker = ({ selectedCompany }) => {
             <Receipt size={18} style={{ color: 'var(--accent)' }} />
             <span className="ds-label">Total depenses</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.total)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.total)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={18} style={{ color: 'var(--success)' }} />
+            <CheckCircle size={18} style={{ color: 'var(--semantic-green)' }} />
             <span className="ds-label">Approuvees</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.approved)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.approved)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={18} style={{ color: 'var(--warning)' }} />
+            <Clock size={18} style={{ color: 'var(--semantic-orange)' }} />
             <span className="ds-label">En attente</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.pending)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.pending)}</p>
         </div>
-        <div className="ds-card p-5" style={{ borderLeft: '3px solid var(--warning)' }}>
+        <div className="ds-card p-5" style={{ borderLeft: '3px solid var(--semantic-orange)' }}>
           <div className="flex items-center gap-2 mb-2">
-            <Clock size={18} style={{ color: 'var(--warning)' }} />
+            <Clock size={18} style={{ color: 'var(--semantic-orange)' }} />
             <span className="ds-label">A approuver</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{stats.pendingCount}</p>
-          {stats.pendingCount > 0 && <p className="ds-meta mt-1" style={{ color: 'var(--warning)' }}>Necessite validation</p>}
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{stats.pendingCount}</p>
+          {stats.pendingCount > 0 && <p className="ds-meta mt-1" style={{ color: 'var(--semantic-orange)' }}>Necessite validation</p>}
         </div>
       </div>
 
@@ -356,7 +356,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-tertiary)' }} />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--label-3)' }} />
           <input
             type="text"
             className="ds-input pl-9"
@@ -384,7 +384,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+              <tr style={{ borderBottom: '1px solid var(--sep)' }}>
                 <th className="text-left p-4 ds-nav-section">Description</th>
                 <th className="text-left p-4 ds-nav-section">Categorie</th>
                 <th className="text-left p-4 ds-nav-section">Date</th>
@@ -397,7 +397,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
               {filteredExpenses.map(expense => (
                 <tr key={expense.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="p-4">
-                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{expense.description || expense.name || '-'}</span>
+                    <span className="font-medium" style={{ color: 'var(--label-1)' }}>{expense.description || expense.name || '-'}</span>
                     {expense.vendor && <span className="block ds-meta">{expense.vendor}</span>}
                   </td>
                   <td className="p-4">
@@ -405,10 +405,10 @@ const ExpensesTracker = ({ selectedCompany }) => {
                       {CATEGORIES[expense.category]?.label || expense.category || '-'}
                     </span>
                   </td>
-                  <td className="p-4" style={{ color: 'var(--text-secondary)' }}>
+                  <td className="p-4" style={{ color: 'var(--label-2)' }}>
                     <span className="flex items-center gap-1"><Calendar size={12} />{formatDate(expense.date || expense.date_created)}</span>
                   </td>
-                  <td className="p-4 font-medium" style={{ color: 'var(--text-primary)' }}>{formatCHF(expense.amount || 0)}</td>
+                  <td className="p-4 font-medium" style={{ color: 'var(--label-1)' }}>{formatCHF(expense.amount || 0)}</td>
                   <td className="p-4">{getStatusBadge(expense.status)}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -416,7 +416,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
                         <>
                           <button
                             className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                            style={{ color: 'var(--success)' }}
+                            style={{ color: 'var(--semantic-green)' }}
                             onClick={() => handleApprove(expense.id)}
                             title="Approuver"
                           >
@@ -426,7 +426,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
                           {dataSource !== 'bank_transactions' && (
                             <button
                               className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                              style={{ color: 'var(--danger)' }}
+                              style={{ color: 'var(--semantic-red)' }}
                               onClick={() => handleReject(expense.id)}
                               title="Refuser"
                             >
@@ -437,7 +437,7 @@ const ExpensesTracker = ({ selectedCompany }) => {
                       )}
                       <button
                         className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                        style={{ color: 'var(--danger)' }}
+                        style={{ color: 'var(--semantic-red)' }}
                         onClick={() => { if (window.confirm('Supprimer?')) deleteMutation.mutate(expense.id) }}
                         title="Supprimer"
                       >

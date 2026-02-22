@@ -12,7 +12,7 @@ const ClientPortalGuard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-primary)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-4" />
           <p className="text-gray-500">Chargement...</p>

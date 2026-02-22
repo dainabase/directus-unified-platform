@@ -1,6 +1,6 @@
 /**
  * RevendeurLayout — S-05-04
- * Layout portail revendeur avec sidebar blue (#0071E3).
+ * Layout portail revendeur avec sidebar blue (var(--accent-hover)).
  */
 
 import React from 'react'
@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { id: 'rapports', label: 'Rapports', icon: BarChart3, path: '/revendeur/rapports' }
 ]
 
-const ACCENT = '#0071E3'
+const ACCENT = 'var(--accent-hover)'
 
 const RevendeurLayout = () => {
   const location = useLocation()
@@ -46,18 +46,18 @@ const RevendeurLayout = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       {/* Topbar */}
       <header
         className="fixed top-0 left-64 right-0 h-16 ds-glass z-40"
-        style={{ borderBottom: '1px solid var(--border-light)' }}
+        style={{ borderBottom: '1px solid var(--sep)' }}
       >
         <div className="h-full px-6 flex items-center justify-between">
-          <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>{getBreadcrumb()}</span>
+          <span className="text-sm" style={{ color: 'var(--label-3)' }}>{getBreadcrumb()}</span>
           <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{displayName}</p>
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Revendeur</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--label-1)' }}>{displayName}</p>
+              <p className="text-xs" style={{ color: 'var(--label-3)' }}>Revendeur</p>
             </div>
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center"
@@ -79,7 +79,7 @@ const RevendeurLayout = () => {
       {/* Sidebar */}
       <aside
         className="fixed left-0 top-0 h-screen w-64 ds-glass overflow-y-auto z-50"
-        style={{ borderRight: '1px solid var(--border-light)' }}
+        style={{ borderRight: '1px solid var(--sep)' }}
       >
         <div className="p-4">
           <div className="mb-6 px-3 pt-2">
@@ -91,14 +91,14 @@ const RevendeurLayout = () => {
                 <span className="text-lg font-black text-white">R</span>
               </div>
               <div>
-                <h1 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>HYPERVISUAL</h1>
-                <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Espace Revendeur</p>
+                <h1 className="text-sm font-bold" style={{ color: 'var(--label-1)' }}>HYPERVISUAL</h1>
+                <p className="text-xs" style={{ color: 'var(--label-3)' }}>Espace Revendeur</p>
               </div>
             </div>
           </div>
 
           <nav className="space-y-1">
-            <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--label-3)' }}>
               Navigation
             </p>
             {NAV_ITEMS.map((item) => {
@@ -130,8 +130,8 @@ const RevendeurLayout = () => {
             })}
           </nav>
 
-          <div className="mt-8 pt-4" style={{ borderTop: '1px solid var(--border-light)' }}>
-            <div className="px-3 text-xs" style={{ color: 'var(--text-tertiary)' }}>
+          <div className="mt-8 pt-4" style={{ borderTop: '1px solid var(--sep)' }}>
+            <div className="px-3 text-xs" style={{ color: 'var(--label-3)' }}>
               <p>Espace Revendeur v1.0</p>
               <p className="mt-1">HYPERVISUAL Switzerland</p>
             </div>

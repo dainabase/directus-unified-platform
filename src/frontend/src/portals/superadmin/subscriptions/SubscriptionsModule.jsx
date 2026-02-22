@@ -268,7 +268,7 @@ const SubscriptionsModule = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-4">
           <p className="text-xs text-gray-500 mb-1">Actifs</p>
-          <p className="text-2xl font-bold" style={{ color: 'var(--success)' }}>{activeSubs.length}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--semantic-green)' }}>{activeSubs.length}</p>
         </div>
         <div className="ds-card p-4">
           <p className="text-xs text-gray-500 mb-1">Annules</p>
@@ -344,7 +344,7 @@ const SubscriptionsModule = ({ selectedCompany }) => {
                     </td>
                     <td className="px-4 py-3">
                       {s.status === 'active' ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'rgba(52,199,89,0.12)', color: '#34C759' }}>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)' }}>
                           <CheckCircle2 size={12} /> Actif
                         </span>
                       ) : (

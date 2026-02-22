@@ -123,8 +123,8 @@ const ListView = ({ projects }) => {
                     <span
                       className="text-sm"
                       style={new Date(project.end_date) < new Date() && project.status !== 'completed'
-                        ? {color:'var(--danger)', fontWeight:500}
-                        : {color:'#1D1D1F'}}
+                        ? {color:'var(--semantic-red)', fontWeight:500}
+                        : {color:'var(--label-1)'}}
                     >
                       {formatDate(project.end_date)}
                     </span>
@@ -139,9 +139,9 @@ const ListView = ({ projects }) => {
                   <div className="text-right">
                     <p
                       className="text-sm font-medium"
-                      style={budgetUtilization > 90 ? {color:'var(--danger)'} :
-                        budgetUtilization > 75 ? {color:'var(--warning)'} :
-                        {color:'#1D1D1F'}}
+                      style={budgetUtilization > 90 ? {color:'var(--semantic-red)'} :
+                        budgetUtilization > 75 ? {color:'var(--semantic-orange)'} :
+                        {color:'var(--label-1)'}}
                     >
                       {formatCurrency(project.spent_amount || 0)}
                     </p>

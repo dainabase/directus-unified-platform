@@ -471,8 +471,8 @@ function BalanceTab({ entries }) {
             {balance.classes.map((cls) => (
               <React.Fragment key={cls.classNum}>
                 {/* Class header */}
-                <tr className="bg-[#0071E3]/5">
-                  <td colSpan={5} className="px-4 py-2.5 font-semibold text-[#0071E3] text-xs uppercase tracking-wide">
+                <tr className="bg-[var(--accent-hover)]/5">
+                  <td colSpan={5} className="px-4 py-2.5 font-semibold text-[var(--accent-hover)] text-xs uppercase tracking-wide">
                     Classe {cls.classNum} — {cls.className}
                   </td>
                 </tr>
@@ -490,7 +490,7 @@ function BalanceTab({ entries }) {
                       <td className="px-4 py-2.5 text-right font-mono text-gray-700">
                         {acc.credit > 0 ? formatCHF(acc.credit) : ''}
                       </td>
-                      <td className={`px-4 py-2.5 text-right font-mono font-medium ${solde >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
+                      <td className={`px-4 py-2.5 text-right font-mono font-medium ${solde >= 0 ? 'text-gray-900' : 'text-[var(--semantic-red)]'}`}>
                         {formatCHF(Math.abs(solde))} {solde < 0 ? '(C)' : solde > 0 ? '(D)' : ''}
                       </td>
                     </tr>
@@ -670,14 +670,14 @@ function JournalTab({ entries }) {
                     </td>
                     <td className="px-4 py-2.5 font-mono text-xs">
                       {entry.type === 'debit' ? (
-                        <span className="text-[var(--danger)]">{entry.account_code}</span>
+                        <span className="text-[var(--semantic-red)]">{entry.account_code}</span>
                       ) : (
                         <span className="text-gray-400">{entry.counterpart_code || '--'}</span>
                       )}
                     </td>
                     <td className="px-4 py-2.5 font-mono text-xs">
                       {entry.type === 'credit' ? (
-                        <span className="text-[var(--success)]">{entry.account_code}</span>
+                        <span className="text-[var(--semantic-green)]">{entry.account_code}</span>
                       ) : (
                         <span className="text-gray-400">{entry.counterpart_code || '--'}</span>
                       )}
@@ -724,7 +724,7 @@ function JournalTab({ entries }) {
                     onClick={() => setPage(pageNum)}
                     className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
                       pageNum === currentPage
-                        ? 'bg-[#0071E3] text-white'
+                        ? 'bg-[var(--accent-hover)] text-white'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
@@ -790,7 +790,7 @@ function ComptesTab({ entries }) {
               <span className="text-gray-500">
                 {ledger.length} mouvement{ledger.length !== 1 ? 's' : ''}
               </span>
-              <span className={`font-semibold font-mono ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
+              <span className={`font-semibold font-mono ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--semantic-red)]'}`}>
                 Solde: {formatCHF(Math.abs(closingBalance))} {closingBalance < 0 ? '(C)' : closingBalance > 0 ? '(D)' : ''}
               </span>
             </div>
@@ -814,7 +814,7 @@ function ComptesTab({ entries }) {
             <h3 className="text-sm font-semibold text-gray-700">
               Compte {selectedLabel}
             </h3>
-            <span className={`text-sm font-mono font-semibold ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
+            <span className={`text-sm font-mono font-semibold ${closingBalance >= 0 ? 'text-gray-900' : 'text-[var(--semantic-red)]'}`}>
               Solde final: {formatCHF(Math.abs(closingBalance))}
             </span>
           </div>
@@ -857,13 +857,13 @@ function ComptesTab({ entries }) {
                     <td className="px-4 py-2.5 font-mono text-gray-500 text-xs">
                       {entry.counterpart_code || '--'}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-mono text-[var(--danger)] text-xs">
+                    <td className="px-4 py-2.5 text-right font-mono text-[var(--semantic-red)] text-xs">
                       {entry.type === 'debit' ? formatCHF(parseFloat(entry.amount || 0)) : ''}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-mono text-[var(--success)] text-xs">
+                    <td className="px-4 py-2.5 text-right font-mono text-[var(--semantic-green)] text-xs">
                       {entry.type === 'credit' ? formatCHF(parseFloat(entry.amount || 0)) : ''}
                     </td>
-                    <td className={`px-4 py-2.5 text-right font-mono font-medium text-xs ${entry.runningBalance >= 0 ? 'text-gray-900' : 'text-[var(--danger)]'}`}>
+                    <td className={`px-4 py-2.5 text-right font-mono font-medium text-xs ${entry.runningBalance >= 0 ? 'text-gray-900' : 'text-[var(--semantic-red)]'}`}>
                       {formatCHF(Math.abs(entry.runningBalance))}
                     </td>
                   </tr>
@@ -996,10 +996,10 @@ function AccountingPage({ selectedCompany }) {
           isLoading={isLoading}
           hasEntries={false}
         />
-        <div className="ds-card p-6 text-center" style={{ background: 'var(--danger-light)', border: '1px solid var(--danger)' }}>
-          <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
-          <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+        <div className="ds-card p-6 text-center" style={{ background: 'var(--tint-red)', border: '1px solid var(--semantic-red)' }}>
+          <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
+          <h3 className="font-semibold mb-2" style={{ color: 'var(--label-1)' }}>Erreur de chargement</h3>
+          <p className="text-sm mb-4" style={{ color: 'var(--label-2)' }}>
             {error.message || 'Impossible de charger les donnees comptables'}
           </p>
           <button
@@ -1046,11 +1046,11 @@ function AccountingPage({ selectedCompany }) {
 
       {/* Fallback notice */}
       {isFallback && (
-        <div className="ds-card rounded-lg px-4 py-3 flex items-start gap-3" style={{ background: 'var(--warning-light)', border: '1px solid var(--warning)' }}>
-          <AlertCircle size={16} className="mt-0.5 flex-shrink-0" style={{ color: 'var(--warning)' }} />
+        <div className="ds-card rounded-lg px-4 py-3 flex items-start gap-3" style={{ background: 'var(--tint-orange)', border: '1px solid var(--semantic-orange)' }}>
+          <AlertCircle size={16} className="mt-0.5 flex-shrink-0" style={{ color: 'var(--semantic-orange)' }} />
           <div className="text-sm">
-            <p className="font-medium" style={{ color: 'var(--text-primary)' }}>Donnees reconstituees</p>
-            <p className="mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+            <p className="font-medium" style={{ color: 'var(--label-1)' }}>Donnees reconstituees</p>
+            <p className="mt-0.5" style={{ color: 'var(--label-2)' }}>
               Aucune ecriture comptable native trouvee. Les donnees sont reconstituees a partir
               des factures clients, factures fournisseurs et transactions bancaires.
             </p>
@@ -1069,7 +1069,7 @@ function AccountingPage({ selectedCompany }) {
               onClick={() => setActiveTab(tab.id)}
               className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
                 isActive
-                  ? 'border-[#0071E3] text-[#0071E3]'
+                  ? 'border-[var(--accent-hover)] text-[var(--accent-hover)]'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -1096,7 +1096,7 @@ function PageHeader({ selectedYear, yearOptions, onYearChange, onRefresh, onExpo
       <div>
         <p className="text-xs text-gray-500 uppercase tracking-wide">Pole Finance</p>
         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <BookOpen size={22} className="text-[#0071E3]" />
+          <BookOpen size={22} className="text-[var(--accent-hover)]" />
           Plan comptable PME (Kafer)
         </h2>
       </div>

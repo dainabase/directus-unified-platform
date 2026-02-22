@@ -114,7 +114,7 @@ const CGVManager = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle className="w-5 h-5 text-[var(--success)]" />
+            <CheckCircle className="w-5 h-5 text-[var(--semantic-green)]" />
             <span className="text-sm text-gray-500">Actives</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.active}</div>
@@ -128,7 +128,7 @@ const CGVManager = ({ selectedCompany }) => {
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Archive className="w-5 h-5 text-[var(--warning)]" />
+            <Archive className="w-5 h-5 text-[var(--semantic-orange)]" />
             <span className="text-sm text-gray-500">Archivees</span>
           </div>
           <div className="text-2xl font-bold text-gray-900">{kpis.archived}</div>
@@ -192,7 +192,7 @@ const CGVManager = ({ selectedCompany }) => {
       {/* Error state */}
       {isError && (
         <div className="ds-card p-6 text-center">
-          <p className="text-sm" style={{ color: 'var(--danger)' }}>
+          <p className="text-sm" style={{ color: 'var(--semantic-red)' }}>
             Erreur lors du chargement des CGV. Verifiez que la collection cgv_versions existe dans Directus.
           </p>
         </div>

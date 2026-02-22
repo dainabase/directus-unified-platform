@@ -26,10 +26,10 @@ const CATEGORIES = [
 ]
 
 const CATEGORY_COLORS = {
-  guides: { bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  procedures: { bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
-  technique: { bg: 'rgba(255,149,0,0.12)', fg: '#FF9500' },
-  administration: { bg: 'rgba(52,199,89,0.12)', fg: '#34C759' }
+  guides: { bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  procedures: { bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' },
+  technique: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
+  administration: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' }
 }
 
 const getCategoryStyle = (category) =>
@@ -69,7 +69,7 @@ const ArticleCard = ({ article, onClick }) => {
       )}
 
       {/* Title */}
-      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-[#0071E3] transition-colors mb-1.5 line-clamp-2">
+      <h3 className="text-sm font-semibold text-gray-900 group-hover:text-[var(--accent-hover)] transition-colors mb-1.5 line-clamp-2">
         {article.title}
       </h3>
 
@@ -107,7 +107,7 @@ const ArticleCard = ({ article, onClick }) => {
               ? formatDistanceToNow(new Date(article.date_created), { addSuffix: true, locale: fr })
               : ''}
         </span>
-        <span className="flex items-center gap-0.5 text-xs font-medium text-[#0071E3] opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--accent-hover)] opacity-0 group-hover:opacity-100 transition-opacity">
           Lire <ChevronRight size={14} />
         </span>
       </div>
@@ -191,7 +191,7 @@ const KnowledgeBasePage = () => {
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   selectedCategory === cat.key
-                    ? 'bg-[#0071E3] text-white'
+                    ? 'bg-[var(--accent-hover)] text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >

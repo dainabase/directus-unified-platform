@@ -91,13 +91,13 @@ export default function CreditsModule({ selectedCompany }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CreditCard className="w-5 h-5" style={{ color: 'var(--accent, #0071E3)' }} />
+          <CreditCard className="w-5 h-5" style={{ color: 'var(--accent)' }} />
           <h2 className="text-white font-semibold">Avoirs & Notes de Credit</h2>
           <span className="text-gray-400 text-sm">({credits.length})</span>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors" style={{ background: 'var(--accent-light, rgba(0,113,227,0.15))', color: 'var(--accent, #0071E3)' }}
+          className="text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors" style={{ background: 'var(--tint-blue)', color: 'var(--accent)' }}
         >
           <Plus className="w-4 h-4" /> Emettre un avoir
         </button>
@@ -160,7 +160,7 @@ export default function CreditsModule({ selectedCompany }) {
           <button
             onClick={() => createMut.mutate(form)}
             disabled={!form.invoice_id || !form.reason || createMut.isPending}
-            className="disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors" style={{ backgroundColor: 'var(--accent, #0071E3)' }}
+            className="disabled:opacity-50 text-white text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors" style={{ backgroundColor: 'var(--accent)' }}
           >
             {createMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
             Emettre l'avoir
@@ -172,7 +172,7 @@ export default function CreditsModule({ selectedCompany }) {
       <div className="ds-card overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center p-8">
-            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent, #0071E3)' }} />
+            <Loader2 className="w-6 h-6 animate-spin" style={{ color: 'var(--accent)' }} />
           </div>
         ) : credits.length === 0 ? (
           <p className="text-gray-400 text-sm p-6 text-center">Aucun avoir emis.</p>

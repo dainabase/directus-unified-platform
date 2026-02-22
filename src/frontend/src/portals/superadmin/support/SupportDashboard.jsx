@@ -253,7 +253,7 @@ const SupportDashboard = ({ selectedCompany, view }) => {
             <CheckCircle size={14} className="text-green-400" />
             <span className="text-xs text-gray-500">Resolus</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--success)' }}>{kpis.resolved}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--semantic-green)' }}>{kpis.resolved}</p>
         </div>
         <div className="ds-card p-4">
           <div className="flex items-center gap-2 mb-1">

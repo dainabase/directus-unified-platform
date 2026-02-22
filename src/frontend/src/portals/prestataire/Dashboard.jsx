@@ -32,7 +32,7 @@ const StatCard = ({ icon: Icon, label, value, subtitle, color = 'blue' }) => {
     <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-gray-500 font-medium">{label}</span>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center`} style={{ background: color === 'blue' ? 'var(--accent)' : color === 'emerald' ? 'var(--success)' : 'var(--warning)' }}>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center`} style={{ background: color === 'blue' ? 'var(--accent)' : color === 'emerald' ? 'var(--semantic-green)' : 'var(--semantic-orange)' }}>
           <Icon size={16} className="text-white" />
         </div>
       </div>
@@ -47,7 +47,7 @@ const MiniStatCard = ({ icon: Icon, label, value }) => {
   return (
     <div className="ds-card p-4 flex items-center gap-3">
       <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0, 113, 227, 0.08)' }}>
-        <Icon size={16} style={{ color: '#0071E3' }} />
+        <Icon size={16} style={{ color: 'var(--accent-hover)' }} />
       </div>
       <div>
         <p className="text-lg font-bold text-gray-900">{value}</p>
@@ -69,10 +69,10 @@ const DeadlineBadge = ({ dueDate }) => {
     textColor = 'var(--error)'
   } else if (daysLeft < 14) {
     bgColor = 'rgba(245,158,11,0.1)'
-    textColor = 'var(--warning)'
+    textColor = 'var(--semantic-orange)'
   } else {
     bgColor = 'rgba(34,197,94,0.1)'
-    textColor = 'var(--success)'
+    textColor = 'var(--semantic-green)'
   }
 
   return (
@@ -91,9 +91,9 @@ const DeadlineBadge = ({ dueDate }) => {
 
 // -- Timeline item icon mapping --
 const timelineIconMap = {
-  proposal: { Icon: FileText, bg: 'rgba(0, 113, 227, 0.1)', color: '#0071E3' },
-  project: { Icon: FolderKanban, bg: 'rgba(34, 197, 94, 0.1)', color: 'var(--success)' },
-  invoice: { Icon: Receipt, bg: 'rgba(245, 158, 11, 0.1)', color: 'var(--warning)' }
+  proposal: { Icon: FileText, bg: 'rgba(0, 113, 227, 0.1)', color: 'var(--accent-hover)' },
+  project: { Icon: FolderKanban, bg: 'rgba(34, 197, 94, 0.1)', color: 'var(--semantic-green)' },
+  invoice: { Icon: Receipt, bg: 'rgba(245, 158, 11, 0.1)', color: 'var(--semantic-orange)' }
 }
 
 const ProviderDashboard = () => {
@@ -453,7 +453,7 @@ const ProviderDashboard = () => {
                     </p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors">
+                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors">
                   Soumettre mon offre <ArrowRight size={14} />
                 </button>
               </div>
@@ -468,14 +468,14 @@ const ProviderDashboard = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"rgba(255,149,0,0.12)"}}>
-                    <Receipt size={16} style={{color:"var(--warning)"}} />
+                    <Receipt size={16} style={{color:"var(--semantic-orange)"}} />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">{p.name}</p>
                     <p className="text-xs text-gray-500">Projet actif sans facture soumise</p>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" style={{background:"var(--warning)", color:"white"}}>
+                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" style={{background:"var(--semantic-orange)", color:"white"}}>
                   Soumettre ma facture <ArrowRight size={14} />
                 </button>
               </div>
@@ -489,7 +489,7 @@ const ProviderDashboard = () => {
         {/* Timeline — Recent activity */}
         <div className="ds-card p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-5 h-5" style={{ color: '#0071E3' }} />
+            <Activity className="w-5 h-5" style={{ color: 'var(--accent-hover)' }} />
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Activite recente
             </h2>
@@ -530,7 +530,7 @@ const ProviderDashboard = () => {
                     <button
                       onClick={() => navigate(item.link)}
                       className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{ color: '#0071E3' }}
+                      style={{ color: 'var(--accent-hover)' }}
                     >
                       <Eye size={12} />
                       Voir
@@ -545,7 +545,7 @@ const ProviderDashboard = () => {
         {/* Upcoming deadlines */}
         <div className="ds-card p-6">
           <div className="flex items-center gap-2 mb-4">
-            <CalendarClock className="w-5 h-5" style={{ color: '#0071E3' }} />
+            <CalendarClock className="w-5 h-5" style={{ color: 'var(--accent-hover)' }} />
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Echeances a venir
             </h2>
@@ -573,7 +573,7 @@ const ProviderDashboard = () => {
                         className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center"
                         style={{ background: 'rgba(0, 113, 227, 0.08)' }}
                       >
-                        <CalendarClock size={14} style={{ color: '#0071E3' }} />
+                        <CalendarClock size={14} style={{ color: 'var(--accent-hover)' }} />
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-gray-800 truncate">

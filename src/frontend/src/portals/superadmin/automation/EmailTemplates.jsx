@@ -457,7 +457,7 @@ export const EmailTemplates = () => {
         </div>
       ) : isError ? (
         <div className="ds-card p-12 text-center">
-          <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
+          <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
           <p className="text-zinc-700 font-medium">Erreur de chargement</p>
           <p className="text-sm text-zinc-400 mt-1">Impossible de charger les templates email</p>
         </div>

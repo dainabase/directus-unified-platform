@@ -246,13 +246,13 @@ function AccountCard({ account, isSelected, onClick }) {
       onClick={onClick}
       className={`ds-card p-5 text-left w-full transition-all ${
         isSelected
-          ? 'ring-2 ring-[#0071E3] bg-zinc-50/60'
+          ? 'ring-2 ring-[var(--accent-hover)] bg-zinc-50/60'
           : 'hover:shadow-md'
       }`}
     >
       <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-lg bg-[#0071E3]/10 flex items-center justify-center">
-          <CreditCard className="w-5 h-5 text-[#0071E3]" />
+        <div className="w-10 h-10 rounded-lg bg-[var(--accent-hover)]/10 flex items-center justify-center">
+          <CreditCard className="w-5 h-5 text-[var(--accent-hover)]" />
         </div>
         <span className="text-xs font-medium text-gray-400 uppercase">{currency}</span>
       </div>
@@ -376,7 +376,7 @@ function ReconciliationModal({ transaction, onClose, onConfirm }) {
               onClick={() => setSelectedInvoice(inv)}
               className={`w-full text-left px-4 py-3 rounded-lg mb-1 transition-all border ${
                 selectedInvoice?.id === inv.id
-                  ? 'border-[#0071E3] bg-zinc-50'
+                  ? 'border-[var(--accent-hover)] bg-zinc-50'
                   : 'border-transparent hover:bg-gray-50'
               }`}
             >
@@ -747,7 +747,7 @@ export function BankingPage({ selectedCompany }) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-center min-h-[40vh]">
-          <Loader2 className="w-8 h-8 text-[#0071E3] animate-spin" />
+          <Loader2 className="w-8 h-8 text-[var(--accent-hover)] animate-spin" />
         </div>
       </div>
     )
@@ -791,7 +791,7 @@ export function BankingPage({ selectedCompany }) {
       </div>
 
       {/* ── Consolidated Balance ── */}
-      <div className="rounded-2xl p-6 text-white shadow-lg" style={{ background: 'var(--accent, #0071E3)' }}>
+      <div className="rounded-2xl p-6 text-white shadow-lg" style={{ background: 'var(--accent)' }}>
         <div className="flex items-start justify-between">
           <div>
             <p className="text-white/70 text-xs font-medium uppercase tracking-wider">
@@ -842,8 +842,8 @@ export function BankingPage({ selectedCompany }) {
             <LineChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
               <defs>
                 <linearGradient id="balanceGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#0071E3" stopOpacity={0.15} />
-                  <stop offset="100%" stopColor="#0071E3" stopOpacity={0} />
+                  <stop offset="0%" stopColor="var(--accent-hover)" stopOpacity={0.15} />
+                  <stop offset="100%" stopColor="var(--accent-hover)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -869,10 +869,10 @@ export function BankingPage({ selectedCompany }) {
                 type="monotone"
                 dataKey="balance"
                 name="Solde"
-                stroke="#0071E3"
+                stroke="var(--accent-hover)"
                 strokeWidth={2.5}
                 dot={false}
-                activeDot={{ r: 5, fill: '#0071E3', stroke: '#fff', strokeWidth: 2 }}
+                activeDot={{ r: 5, fill: 'var(--accent-hover)', stroke: '#fff', strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -921,13 +921,13 @@ export function BankingPage({ selectedCompany }) {
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
                 className={`ds-btn ds-btn-ghost !py-1.5 text-sm relative ${
-                  activeFilterCount > 0 ? 'text-[#0071E3]' : ''
+                  activeFilterCount > 0 ? 'text-[var(--accent-hover)]' : ''
                 }`}
               >
                 <Filter size={14} className="mr-1" />
                 Filtres
                 {activeFilterCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#0071E3] text-white text-[10px] flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--accent-hover)] text-white text-[10px] flex items-center justify-center font-bold">
                     {activeFilterCount}
                   </span>
                 )}
@@ -1126,7 +1126,7 @@ export function BankingPage({ selectedCompany }) {
                         {!tx.reconciled ? (
                           <button
                             onClick={() => setReconcileTarget(tx)}
-                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs text-[#0071E3] hover:bg-zinc-50"
+                            className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs text-[var(--accent-hover)] hover:bg-zinc-50"
                           >
                             <Link2 size={12} className="mr-1" />
                             Associer a facture
@@ -1175,7 +1175,7 @@ export function BankingPage({ selectedCompany }) {
                     onClick={() => setCurrentPage(page)}
                     className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors ${
                       currentPage === page
-                        ? 'bg-[#0071E3] text-white'
+                        ? 'bg-[var(--accent-hover)] text-white'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >

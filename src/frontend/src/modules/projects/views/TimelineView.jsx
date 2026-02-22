@@ -68,10 +68,10 @@ const TimelineView = ({ projects }) => {
   const getStatusBg = (status) => {
     switch (status) {
       case 'active': return 'var(--accent)'
-      case 'completed': return 'var(--success)'
-      case 'on_hold': return 'var(--warning)'
-      case 'pending': return '#AEAEB2'
-      default: return '#AEAEB2'
+      case 'completed': return 'var(--semantic-green)'
+      case 'on_hold': return 'var(--semantic-orange)'
+      case 'pending': return 'var(--label-3)'
+      default: return 'var(--label-3)'
     }
   }
 
@@ -123,7 +123,7 @@ const TimelineView = ({ projects }) => {
           {/* Today marker */}
           <div
             className="absolute top-0 bottom-0 w-0.5 z-10"
-            style={{background:'var(--danger)'}}
+            style={{background:'var(--semantic-red)'}}
             style={{ left: `${(today.getDate() / daysInMonth) * 100}%` }}
           />
         </div>

@@ -15,12 +15,12 @@ import toast from 'react-hot-toast';
 
 // ── Constants ──────────────────────────────────────────────────────
 const CONTRACT_TYPES = {
-  service: { label: 'Service', color: '#0071E3' },
-  license: { label: 'Licence', color: '#34C759' },
-  maintenance: { label: 'Maintenance', color: '#FF9500' },
+  service: { label: 'Service', color: 'var(--accent-hover)' },
+  license: { label: 'Licence', color: 'var(--semantic-green)' },
+  maintenance: { label: 'Maintenance', color: 'var(--semantic-orange)' },
   nda: { label: 'NDA', color: '#AF52DE' },
-  partnership: { label: 'Partenariat', color: '#FF3B30' },
-  supplier: { label: 'Fournisseur', color: '#6E6E73' }
+  partnership: { label: 'Partenariat', color: 'var(--semantic-red)' },
+  supplier: { label: 'Fournisseur', color: 'var(--label-2)' }
 };
 
 const STATUS_CONFIG = {
@@ -349,9 +349,9 @@ const ContractsManager = ({ selectedCompany }) => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { icon: FileText, color: 'text-[var(--accent)]', label: 'Total contrats', value: stats.total },
-          { icon: CheckCircle, color: 'text-[var(--success)]', label: 'Actifs', value: stats.active },
-          { icon: Clock, color: 'text-[var(--warning)]', label: 'En attente', value: stats.pendingSignature },
-          { icon: AlertTriangle, color: 'text-[var(--danger)]', label: 'Expirent bientot', value: stats.expiringSoon },
+          { icon: CheckCircle, color: 'text-[var(--semantic-green)]', label: 'Actifs', value: stats.active },
+          { icon: Clock, color: 'text-[var(--semantic-orange)]', label: 'En attente', value: stats.pendingSignature },
+          { icon: AlertTriangle, color: 'text-[var(--semantic-red)]', label: 'Expirent bientot', value: stats.expiringSoon },
           { icon: DollarSign, color: 'text-[var(--accent)]', label: 'Valeur active', value: formatCurrency(stats.totalValue), wide: true }
         ].map((kpi, i) => (
           <div key={i} className={`ds-card p-5 ${kpi.wide ? 'col-span-2 md:col-span-1' : ''}`}>
@@ -530,11 +530,11 @@ const ContractsManager = ({ selectedCompany }) => {
                           <span
                             className={`text-xs font-medium ${
                               daysLeft <= 0
-                                ? 'text-[var(--danger)]'
+                                ? 'text-[var(--semantic-red)]'
                                 : daysLeft <= 30
-                                ? 'text-[var(--danger)]'
+                                ? 'text-[var(--semantic-red)]'
                                 : daysLeft <= 90
-                                ? 'text-[var(--warning)]'
+                                ? 'text-[var(--semantic-orange)]'
                                 : 'text-gray-500'
                             }`}
                           >
@@ -564,7 +564,7 @@ const ContractsManager = ({ selectedCompany }) => {
                             </button>
                           )}
                           <button
-                            className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-[var(--danger)] transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-[var(--semantic-red)] transition-colors"
                             onClick={() => handleDelete(contract.id)}
                             disabled={deleteMutation.isPending}
                             title="Supprimer"
@@ -645,7 +645,7 @@ const ContractDetailModal = ({ contract, clientName, onClose, getTypeBadge, getS
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Valeur</p>
-              <span className="text-xl font-bold text-[var(--success)]">
+              <span className="text-xl font-bold text-[var(--semantic-green)]">
                 {contract.value ? formatCurrency(contract.value) : 'N/A'}
               </span>
             </div>
@@ -752,7 +752,7 @@ const CreateContractModal = ({ selectedCompany, companies, onClose, onSubmit, is
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Titre du contrat <span className="text-[var(--danger)]">*</span>
+                Titre du contrat <span className="text-[var(--semantic-red)]">*</span>
               </label>
               <input
                 type="text"

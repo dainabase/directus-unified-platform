@@ -88,8 +88,8 @@ const LeadDetail = ({ lead, onBack, onEdit, onStatusChange }) => {
   const statusCfg = STATUS_CONFIG[lead.status] || STATUS_CONFIG.new
 
   const getScoreStyle = (score) => {
-    if (score >= 80) return { color: 'var(--success)' }
-    if (score >= 50) return { color: 'var(--warning)' }
+    if (score >= 80) return { color: 'var(--semantic-green)' }
+    if (score >= 50) return { color: 'var(--semantic-orange)' }
     return {}
   }
 
@@ -242,7 +242,7 @@ const LeadDetail = ({ lead, onBack, onEdit, onStatusChange }) => {
               {lead.next_followup_at && (
                 <div className="flex justify-between">
                   <span className="text-gray-500">Prochain suivi</span>
-                  <span className="font-medium" style={{color:'var(--warning)'}}>{format(new Date(lead.next_followup_at), 'dd MMM yyyy', { locale: fr })}</span>
+                  <span className="font-medium" style={{color:'var(--semantic-orange)'}}>{format(new Date(lead.next_followup_at), 'dd MMM yyyy', { locale: fr })}</span>
                 </div>
               )}
               {lead.date_updated && (
@@ -377,7 +377,7 @@ const LeadDetail = ({ lead, onBack, onEdit, onStatusChange }) => {
                                   deleteMutation.mutate(activity.id)
                                 }
                               }}
-                              className="p-1 text-gray-300 transition-colors" style={{['--hover-color']:'var(--danger)'}}
+                              className="p-1 text-gray-300 transition-colors" style={{['--hover-color']:'var(--semantic-red)'}}
                             >
                               <Trash2 size={12} />
                             </button>

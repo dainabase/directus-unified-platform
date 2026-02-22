@@ -24,11 +24,11 @@ const formatDate = (d) => {
 
 const STATUS_CONFIG = {
   draft: { label: 'Brouillon', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#52525b' } },
-  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
-  sent: { label: 'Envoyée', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: '#0071E3' } },
-  paid: { label: 'Payée', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: '#34C759' } },
-  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: '#FF9500' } },
-  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: '#FF3B30' } },
+  pending: { label: 'En attente', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)' } },
+  sent: { label: 'Envoyée', badgeStyle: { background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)' } },
+  paid: { label: 'Payée', badgeStyle: { background: 'rgba(52,199,89,0.12)', color: 'var(--semantic-green)' } },
+  partial: { label: 'Partielle', badgeStyle: { background: 'rgba(255,149,0,0.12)', color: 'var(--semantic-orange)' } },
+  overdue: { label: 'En retard', badgeStyle: { background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)' } },
   cancelled: { label: 'Annulée', badgeStyle: { background: 'rgba(113,113,122,0.12)', color: '#71717a' } }
 }
 
@@ -58,7 +58,7 @@ const InvoiceDetailView = () => {
   if (error || !invoice) {
     return (
       <div className="text-center py-12">
-        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--danger)' }} />
+        <AlertCircle className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--semantic-red)' }} />
         <h2 className="text-lg font-semibold text-gray-900 mb-2">Facture introuvable</h2>
         <button onClick={() => navigate('/superadmin/invoices/clients')} style={{ color: 'var(--accent)' }} className="hover:underline">
           ← Retour aux factures
@@ -131,7 +131,7 @@ const InvoiceDetailView = () => {
             </div>
             {invoice.invoice_type && (
               <div className="text-center">
-                <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(0,113,227,0.12)', color: '#0071E3' }}>
+                <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(0,113,227,0.12)', color: 'var(--accent-hover)' }}>
                   {invoice.invoice_type === 'deposit' ? 'Acompte' :
                    invoice.invoice_type === 'balance' ? 'Solde' :
                    invoice.invoice_type === 'full' ? 'Facture complète' : invoice.invoice_type}
@@ -156,7 +156,7 @@ const InvoiceDetailView = () => {
               )}
               {invoice.date_paid && (
                 <div className="flex items-center gap-3 text-sm">
-                  <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--success)' }} />
+                  <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--semantic-green)' }} />
                   <span className="text-gray-600">Payée le {formatDate(invoice.date_paid)}</span>
                 </div>
               )}

@@ -10,17 +10,17 @@ const EmptyState = ({ icon: Icon, title, subtitle, actionLabel, onAction }) => (
       <Icon
         size={48}
         className="mb-4"
-        style={{ color: 'var(--text-tertiary, #AEAEB2)' }}
+        style={{ color: 'var(--label-3)' }}
       />
     )}
     <p
       className="text-base font-medium mb-1"
-      style={{ color: 'var(--text-secondary, #6E6E73)' }}
+      style={{ color: 'var(--label-2)' }}
     >
       {title}
     </p>
     {subtitle && (
-      <p className="text-sm max-w-sm" style={{ color: 'var(--text-tertiary, #AEAEB2)' }}>
+      <p className="text-sm max-w-sm" style={{ color: 'var(--label-3)' }}>
         {subtitle}
       </p>
     )}
@@ -28,7 +28,7 @@ const EmptyState = ({ icon: Icon, title, subtitle, actionLabel, onAction }) => (
       <button
         onClick={onAction}
         className="mt-4 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-        style={{ background: '#0071E3' }}
+        style={{ background: 'var(--accent-hover)' }}
       >
         {actionLabel}
       </button>

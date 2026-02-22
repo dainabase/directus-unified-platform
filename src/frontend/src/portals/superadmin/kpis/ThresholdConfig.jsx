@@ -101,11 +101,11 @@ export default function ThresholdConfig({ selectedCompany }) {
       {alerts.length > 0 && (
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-3">
-            <AlertCircle className="w-5 h-5" style={{ color: 'var(--danger)' }} />
+            <AlertCircle className="w-5 h-5" style={{ color: 'var(--semantic-red)' }} />
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Alertes KPI actives
             </h3>
-            <span style={{ background: 'rgba(255,59,48,0.12)', color: '#FF3B30', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }}>
+            <span style={{ background: 'rgba(255,59,48,0.12)', color: 'var(--semantic-red)', fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '6px' }}>
               {alerts.length}
             </span>
           </div>
@@ -120,9 +120,9 @@ export default function ThresholdConfig({ selectedCompany }) {
                 }
               >
                 <div className="w-2 h-2 rounded-full flex-shrink-0"
-                  style={{ background: alert.level === 'critical' ? 'var(--danger)' : 'var(--warning)' }} />
+                  style={{ background: alert.level === 'critical' ? 'var(--semantic-red)' : 'var(--semantic-orange)' }} />
                 <span className="text-sm font-medium"
-                  style={{ color: alert.level === 'critical' ? 'var(--danger)' : 'var(--warning)' }}>
+                  style={{ color: alert.level === 'critical' ? 'var(--semantic-red)' : 'var(--semantic-orange)' }}>
                   {alert.message}
                 </span>
               </div>
@@ -133,8 +133,8 @@ export default function ThresholdConfig({ selectedCompany }) {
 
       {alerts.length === 0 && (
         <div className="ds-card p-5 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5" style={{ color: 'var(--success)' }} />
-          <span className="text-sm font-medium" style={{ color: 'var(--success)' }}>
+          <CheckCircle className="w-5 h-5" style={{ color: 'var(--semantic-green)' }} />
+          <span className="text-sm font-medium" style={{ color: 'var(--semantic-green)' }}>
             Tous les KPIs sont dans les normes
           </span>
         </div>
@@ -183,13 +183,13 @@ export default function ThresholdConfig({ selectedCompany }) {
                   <th className="text-left py-3 px-2">Unité</th>
                   <th className="text-center py-3 px-2">
                     <span className="flex items-center justify-center gap-1">
-                      <AlertTriangle size={12} style={{ color: 'var(--warning)' }} />
+                      <AlertTriangle size={12} style={{ color: 'var(--semantic-orange)' }} />
                       Warning
                     </span>
                   </th>
                   <th className="text-center py-3 px-2">
                     <span className="flex items-center justify-center gap-1">
-                      <AlertCircle size={12} style={{ color: 'var(--danger)' }} />
+                      <AlertCircle size={12} style={{ color: 'var(--semantic-red)' }} />
                       Critique
                     </span>
                   </th>

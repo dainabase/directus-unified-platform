@@ -34,11 +34,11 @@ import api from '../../../lib/axios'
 
 // ── Constants ──
 
-const ACCENT = '#0071E3'
+const ACCENT = 'var(--accent-hover)'
 const GRAY_500 = '#6B7280'
 const GRAY_300 = '#D1D5DB'
-const SUCCESS = '#34C759'
-const DANGER = '#FF3B30'
+const SUCCESS = 'var(--semantic-green)'
+const DANGER = 'var(--semantic-red)'
 
 const MONTHS_FR = [
   'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -357,7 +357,7 @@ function KPICard({ label, value, subtitle, variation, invertVariation = false })
   return (
     <div className="ds-card p-5">
       <p className="ds-label mb-1">{label}</p>
-      <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+      <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>
         {formatCHF(value)}
       </p>
       <div className="flex items-center gap-2 mt-2">
@@ -383,13 +383,13 @@ function YTDSection({ ytdRevenue, ytdExpenses }) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div>
           <p className="ds-label">Revenus YTD</p>
-          <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+          <p className="text-lg font-bold" style={{ color: 'var(--label-1)' }}>
             {formatCHF(ytdRevenue)}
           </p>
         </div>
         <div>
           <p className="ds-label">Depenses YTD</p>
-          <p className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+          <p className="text-lg font-bold" style={{ color: 'var(--label-1)' }}>
             {formatCHF(ytdExpenses)}
           </p>
         </div>
@@ -416,7 +416,7 @@ function CategoryBreakdownChart({ data }) {
       <div className="ds-card p-6">
         <h3 className="ds-card-title mb-4">Revenus par categorie</h3>
         <div className="flex flex-col items-center justify-center h-[280px] text-center">
-          <Inbox size={32} style={{ color: 'var(--text-tertiary)' }} className="mb-2" />
+          <Inbox size={32} style={{ color: 'var(--label-3)' }} className="mb-2" />
           <p className="ds-label">Aucune donnee de categorie disponible</p>
           <p className="ds-meta mt-1">Les categories s'afficheront une fois les factures emises.</p>
         </div>
@@ -433,25 +433,25 @@ function CategoryBreakdownChart({ data }) {
           layout="vertical"
           margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-light)" horizontal={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--sep)" horizontal={false} />
           <XAxis
             type="number"
             tickFormatter={formatShortCHF}
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-            stroke="var(--border-light)"
+            tick={{ fontSize: 11, fill: 'var(--label-2)' }}
+            stroke="var(--sep)"
           />
           <YAxis
             type="category"
             dataKey="name"
             width={120}
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-            stroke="var(--border-light)"
+            tick={{ fontSize: 11, fill: 'var(--label-2)' }}
+            stroke="var(--sep)"
           />
           <Tooltip
             formatter={(value) => [formatCHFPrecise(value), 'Montant']}
             contentStyle={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-light)',
+              background: 'var(--bg-2)',
+              border: '1px solid var(--sep)',
               borderRadius: 'var(--radius-input)',
               boxShadow: 'var(--shadow-md)',
               fontSize: 12
@@ -489,23 +489,23 @@ function EvolutionChart({ data }) {
       <h3 className="ds-card-title mb-4">Evolution sur 12 mois</h3>
       <ResponsiveContainer width="100%" height={320}>
         <ComposedChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-light)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--sep)" />
           <XAxis
             dataKey="month"
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-            stroke="var(--border-light)"
+            tick={{ fontSize: 11, fill: 'var(--label-2)' }}
+            stroke="var(--sep)"
           />
           <YAxis
             tickFormatter={formatShortCHF}
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-            stroke="var(--border-light)"
+            tick={{ fontSize: 11, fill: 'var(--label-2)' }}
+            stroke="var(--sep)"
             width={55}
           />
           <Tooltip
             formatter={(value, name) => [formatCHFPrecise(value), name]}
             contentStyle={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-light)',
+              background: 'var(--bg-2)',
+              border: '1px solid var(--sep)',
               borderRadius: 'var(--radius-input)',
               boxShadow: 'var(--shadow-md)',
               fontSize: 12
@@ -869,7 +869,7 @@ function ComparisonSection({ current, previous, currentMonth, currentYear }) {
 
   return (
     <div className="ds-card overflow-hidden">
-      <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+      <div className="px-5 py-4 border-b" style={{ borderColor: 'var(--sep)' }}>
         <h3 className="ds-card-title">
           Comparaison : {MONTHS_FR[currentMonth]} {currentYear} vs {MONTHS_FR[prev.month]} {prev.year}
         </h3>
@@ -896,15 +896,15 @@ function ComparisonSection({ current, previous, currentMonth, currentYear }) {
                 <tr
                   key={row.label}
                   className="border-t"
-                  style={{ borderColor: 'var(--border-light)' }}
+                  style={{ borderColor: 'var(--sep)' }}
                 >
-                  <td className="px-5 py-3 font-medium" style={{ color: 'var(--text-primary)' }}>
+                  <td className="px-5 py-3 font-medium" style={{ color: 'var(--label-1)' }}>
                     {row.label}
                   </td>
-                  <td className="px-5 py-3 text-right" style={{ color: 'var(--text-secondary)' }}>
+                  <td className="px-5 py-3 text-right" style={{ color: 'var(--label-2)' }}>
                     {formatCHF(row.previous)}
                   </td>
-                  <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  <td className="px-5 py-3 text-right font-semibold" style={{ color: 'var(--label-1)' }}>
                     {formatCHF(row.current)}
                   </td>
                   <td className="px-5 py-3 text-right">

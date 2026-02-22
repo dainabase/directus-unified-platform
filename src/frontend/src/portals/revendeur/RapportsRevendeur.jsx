@@ -61,7 +61,7 @@ const KPICard = ({ icon: Icon, label, value, subtitle, trend, trendLabel }) => {
           className="w-8 h-8 rounded-lg flex items-center justify-center"
           style={{ background: 'rgba(0, 113, 227, 0.08)' }}
         >
-          <Icon size={16} style={{ color: '#0071E3' }} />
+          <Icon size={16} style={{ color: 'var(--accent-hover)' }} />
         </div>
       </div>
       <p className="text-2xl font-bold text-gray-900">{value}</p>
@@ -70,10 +70,10 @@ const KPICard = ({ icon: Icon, label, value, subtitle, trend, trendLabel }) => {
           <>
             <TrendIcon
               size={14}
-              style={{ color: isPositive ? 'var(--success)' : 'var(--danger)' }}
+              style={{ color: isPositive ? 'var(--semantic-green)' : 'var(--semantic-red)' }}
             />
             <span
-              className="text-xs font-medium" style={{ color: isPositive ? 'var(--success)' : 'var(--danger)' }}
+              className="text-xs font-medium" style={{ color: isPositive ? 'var(--semantic-green)' : 'var(--semantic-red)' }}
             >
               {isPositive ? '+' : ''}{typeof trend === 'number' ? trend.toFixed(1) : trend}%
             </span>
@@ -509,7 +509,7 @@ const RapportsRevendeur = () => {
               dataKey="pipeline"
               name="Pipeline (leads)"
               fill="rgba(0, 113, 227, 0.2)"
-              stroke="#0071E3"
+              stroke="var(--accent-hover)"
               strokeWidth={1}
               radius={[4, 4, 0, 0]}
             />
@@ -574,7 +574,7 @@ const RapportsRevendeur = () => {
                     <td className="py-3 text-right text-gray-700">{row.leadsConvertis}</td>
                     <td className="py-3 text-right text-gray-700">{formatCHF(row.pipeline)}</td>
                     <td className="py-3 text-right text-gray-700">{row.devisSignes}</td>
-                    <td className="py-3 text-right font-medium" style={{ color: 'var(--success)' }}>
+                    <td className="py-3 text-right font-medium" style={{ color: 'var(--semantic-green)' }}>
                       {formatCHF(row.commissions)}
                     </td>
                   </tr>
@@ -596,7 +596,7 @@ const RapportsRevendeur = () => {
                 <td className="py-3 text-right font-semibold text-gray-900">
                   {chartData.reduce((s, r) => s + r.devisSignes, 0)}
                 </td>
-                <td className="py-3 text-right font-semibold" style={{ color: 'var(--success)' }}>
+                <td className="py-3 text-right font-semibold" style={{ color: 'var(--semantic-green)' }}>
                   {formatCHF(chartData.reduce((s, r) => s + r.commissions, 0))}
                 </td>
               </tr>

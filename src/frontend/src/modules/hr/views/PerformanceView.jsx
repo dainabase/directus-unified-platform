@@ -52,8 +52,8 @@ const PerformanceView = ({ people }) => {
   }
 
   const getTrendIcon = (trend) => {
-    if (trend === 'up') return <TrendingUp size={14} style={{color:'var(--success)'}} />
-    if (trend === 'down') return <TrendingUp size={14} className="rotate-180" style={{color:'var(--danger)'}} />
+    if (trend === 'up') return <TrendingUp size={14} style={{color:'var(--semantic-green)'}} />
+    if (trend === 'down') return <TrendingUp size={14} className="rotate-180" style={{color:'var(--semantic-red)'}} />
     return <div className="w-3.5 h-0.5 bg-gray-400" />
   }
 
@@ -63,7 +63,7 @@ const PerformanceView = ({ people }) => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <Award className="w-8 h-8" style={{color:'var(--success)'}} />
+            <Award className="w-8 h-8" style={{color:'var(--semantic-green)'}} />
             <Badge variant="success" size="sm">Excellent</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
@@ -85,7 +85,7 @@ const PerformanceView = ({ people }) => {
 
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <BarChart3 className="w-8 h-8" style={{color:'var(--warning)'}} />
+            <BarChart3 className="w-8 h-8" style={{color:'var(--semantic-orange)'}} />
             <Badge variant="warning" size="sm">Satisfaisant</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
@@ -96,7 +96,7 @@ const PerformanceView = ({ people }) => {
 
         <Card className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <AlertCircle className="w-8 h-8" style={{color:'var(--danger)'}} />
+            <AlertCircle className="w-8 h-8" style={{color:'var(--semantic-red)'}} />
             <Badge variant="error" size="sm">À améliorer</Badge>
           </div>
           <p className="text-2xl font-bold text-gray-900">
@@ -249,14 +249,14 @@ const PerformanceView = ({ people }) => {
               <TrendingUp className="w-5 h-5 text-gray-400" />
             </div>
             <div className="space-y-3">
-              <div className="p-3 rounded-lg" style={{background:'var(--success-light)'}}>
+              <div className="p-3 rounded-lg" style={{background:'var(--tint-green)'}}>
                 <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="w-4 h-4" style={{color:'var(--success)'}} />
-                  <span className="text-sm font-medium" style={{color:'var(--success)'}}>
+                  <TrendingUp className="w-4 h-4" style={{color:'var(--semantic-green)'}} />
+                  <span className="text-sm font-medium" style={{color:'var(--semantic-green)'}}>
                     Progression globale
                   </span>
                 </div>
-                <p className="text-xs" style={{color:'var(--success)'}}>
+                <p className="text-xs" style={{color:'var(--semantic-green)'}}>
                   +12% vs trimestre précédent
                 </p>
               </div>
@@ -273,14 +273,14 @@ const PerformanceView = ({ people }) => {
                 </p>
               </div>
 
-              <div className="p-3 rounded-lg" style={{background:'var(--warning-light)'}}>
+              <div className="p-3 rounded-lg" style={{background:'var(--tint-orange)'}}>
                 <div className="flex items-center gap-2 mb-1">
-                  <AlertCircle className="w-4 h-4" style={{color:'var(--warning)'}} />
-                  <span className="text-sm font-medium" style={{color:'var(--warning)'}}>
+                  <AlertCircle className="w-4 h-4" style={{color:'var(--semantic-orange)'}} />
+                  <span className="text-sm font-medium" style={{color:'var(--semantic-orange)'}}>
                     Attention requise
                   </span>
                 </div>
-                <p className="text-xs" style={{color:'var(--warning)'}}>
+                <p className="text-xs" style={{color:'var(--semantic-orange)'}}>
                   {performanceDistribution.needsImprovement} employés nécessitent un suivi
                 </p>
               </div>

@@ -319,7 +319,7 @@ const CreateExpenseModal = ({ onClose, selectedCompany }) => {
             </div>
             <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
               <span className="font-semibold text-gray-900">Total TTC</span>
-              <span className="font-bold text-[#0071E3]">{formatCHF(totalTTC)}</span>
+              <span className="font-bold text-[var(--accent-hover)]">{formatCHF(totalTTC)}</span>
             </div>
           </div>
         </div>
@@ -485,7 +485,7 @@ const DetailModal = ({ expense, onClose }) => {
             </div>
             <div className="col-span-2">
               <p className="text-gray-500">Total TTC</p>
-              <p className="text-lg font-bold text-[#0071E3]">{formatCHF(ttc)}</p>
+              <p className="text-lg font-bold text-[var(--accent-hover)]">{formatCHF(ttc)}</p>
             </div>
             {expense.vendor && (
               <div className="col-span-2">
@@ -769,7 +769,7 @@ const ExpensesPage = ({ selectedCompany }) => {
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                 <YAxis tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} tick={{ fontSize: 12 }} />
                 <Tooltip formatter={(v) => formatCHF(v)} />
-                <Bar dataKey="amount" fill="#0071E3" name="Depenses" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="amount" fill="var(--accent-hover)" name="Depenses" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (

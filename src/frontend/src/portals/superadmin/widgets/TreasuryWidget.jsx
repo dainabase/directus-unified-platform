@@ -278,7 +278,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
     <div className="ds-card p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Wallet size={16} style={{ color: 'var(--success)' }} />
+          <Wallet size={16} style={{ color: 'var(--semantic-green)' }} />
           <span className="ds-card-title">Tresorerie</span>
         </div>
         <div className="flex items-center gap-2">
@@ -287,8 +287,8 @@ const TreasuryWidget = ({ selectedCompany }) => {
             <span
               className="ds-badge"
               style={{
-                background: 'var(--warning-light)',
-                color: 'var(--warning)',
+                background: 'var(--tint-orange)',
+                color: 'var(--semantic-orange)',
                 fontWeight: 600
               }}
             >
@@ -309,7 +309,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
           <button
             onClick={() => refetch()}
             className="p-1 rounded-md transition-colors duration-150"
-            style={{ color: 'var(--text-tertiary)' }}
+            style={{ color: 'var(--label-3)' }}
             title="Actualiser"
           >
             <RefreshCw size={13} />
@@ -322,12 +322,12 @@ const TreasuryWidget = ({ selectedCompany }) => {
         <div
           className="mb-4 flex items-center justify-between gap-3 p-3 rounded-lg"
           style={{
-            background: 'var(--warning-light)',
-            border: '1px solid var(--warning)',
+            background: 'var(--tint-orange)',
+            border: '1px solid var(--semantic-orange)',
             borderRadius: 'var(--radius-input)'
           }}
         >
-          <div className="flex items-center gap-2" style={{ fontSize: 12, color: 'var(--warning)' }}>
+          <div className="flex items-center gap-2" style={{ fontSize: 12, color: 'var(--semantic-orange)' }}>
             <AlertCircle size={14} style={{ flexShrink: 0 }} />
             <span>Token Revolut expire -- donnees Directus affichees</span>
           </div>
@@ -362,15 +362,15 @@ const TreasuryWidget = ({ selectedCompany }) => {
 
       {/* Balance */}
       <div className="mb-4">
-        <p style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--text-primary)', lineHeight: 1.2 }}>
+        <p style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--label-1)', lineHeight: 1.2 }}>
           {formatCHF(balance)}
         </p>
         <div className="flex items-center gap-4 mt-1.5">
-          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--success)' }}>
+          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--semantic-green)' }}>
             <TrendingUp size={13} />
             +{formatCHF(inflows)} (7j)
           </span>
-          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--danger)' }}>
+          <span className="flex items-center gap-1" style={{ fontSize: 12.5, color: 'var(--semantic-red)' }}>
             <TrendingDown size={13} />
             -{formatCHF(outflows)} (7j)
           </span>
@@ -380,8 +380,8 @@ const TreasuryWidget = ({ selectedCompany }) => {
           <p className="ds-meta mt-2" style={{ fontSize: 12 }}>
             {currencyBreakdown.map((c, i) => (
               <span key={c.currency}>
-                {i > 0 && <span style={{ color: 'var(--text-tertiary)', margin: '0 4px' }}>&middot;</span>}
-                <span style={{ fontWeight: 500, color: 'var(--text-secondary)' }}>
+                {i > 0 && <span style={{ color: 'var(--label-3)', margin: '0 4px' }}>&middot;</span>}
+                <span style={{ fontWeight: 500, color: 'var(--label-2)' }}>
                   {formatCurrency(c.balance, c.currency)}
                 </span>
               </span>
@@ -395,19 +395,19 @@ const TreasuryWidget = ({ selectedCompany }) => {
         <div className="h-24 mb-3">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dailyData} barGap={2}>
-              <XAxis dataKey="day" tick={{ fontSize: 10, fill: 'var(--text-tertiary)' }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="day" tick={{ fontSize: 10, fill: 'var(--label-3)' }} axisLine={false} tickLine={false} />
               <Tooltip
                 formatter={(value) => `${value.toFixed(1)}K CHF`}
                 contentStyle={{
                   fontSize: '12px',
-                  background: 'var(--bg-surface)',
-                  border: '1px solid var(--border-light)',
+                  background: 'var(--bg-2)',
+                  border: '1px solid var(--sep)',
                   borderRadius: 'var(--radius-input)',
                   boxShadow: 'var(--shadow-md)'
                 }}
               />
-              <Bar dataKey="inflows" fill="var(--success)" radius={[3, 3, 0, 0]} />
-              <Bar dataKey="outflows" fill="var(--danger)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="inflows" fill="var(--semantic-green)" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="outflows" fill="var(--semantic-red)" radius={[3, 3, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -416,12 +416,12 @@ const TreasuryWidget = ({ selectedCompany }) => {
       {/* Runway */}
       <div
         className="pt-3 flex items-center justify-between"
-        style={{ borderTop: '1px solid var(--border-light)', fontSize: 12 }}
+        style={{ borderTop: '1px solid var(--sep)', fontSize: 12 }}
       >
-        <span style={{ color: 'var(--text-secondary)' }}>Runway estime</span>
+        <span style={{ color: 'var(--label-2)' }}>Runway estime</span>
         <span style={{
           fontWeight: 600,
-          color: runway > 6 ? 'var(--success)' : runway > 3 ? 'var(--warning)' : 'var(--danger)'
+          color: runway > 6 ? 'var(--semantic-green)' : runway > 3 ? 'var(--semantic-orange)' : 'var(--semantic-red)'
         }}>
           {runway > 0 ? `${runway} mois` : 'N/A'}
         </span>
@@ -429,7 +429,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
 
       {/* 5 dernieres transactions */}
       {recentTransactions.length > 0 && (
-        <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--sep)' }}>
           <p className="ds-meta mb-2" style={{ fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             5 dernieres transactions
           </p>
@@ -449,14 +449,14 @@ const TreasuryWidget = ({ selectedCompany }) => {
                   style={{ fontSize: 12 }}
                 >
                   {isPositive ? (
-                    <ArrowDownLeft size={12} style={{ color: 'var(--success)', flexShrink: 0 }} />
+                    <ArrowDownLeft size={12} style={{ color: 'var(--semantic-green)', flexShrink: 0 }} />
                   ) : (
-                    <ArrowUpRight size={12} style={{ color: 'var(--danger)', flexShrink: 0 }} />
+                    <ArrowUpRight size={12} style={{ color: 'var(--semantic-red)', flexShrink: 0 }} />
                   )}
                   <span className="ds-meta" style={{ width: 38, flexShrink: 0 }}>{txDate}</span>
                   <span
                     className="flex-1 truncate"
-                    style={{ color: 'var(--text-secondary)' }}
+                    style={{ color: 'var(--label-2)' }}
                     title={tx.description}
                   >
                     {desc}
@@ -466,7 +466,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
                       fontWeight: 600,
                       flexShrink: 0,
                       fontVariantNumeric: 'tabular-nums',
-                      color: isPositive ? 'var(--success)' : 'var(--danger)'
+                      color: isPositive ? 'var(--semantic-green)' : 'var(--semantic-red)'
                     }}
                   >
                     {isPositive ? '+' : ''}{formatCurrency(amount, tx.currency || 'CHF')}
@@ -481,9 +481,9 @@ const TreasuryWidget = ({ selectedCompany }) => {
       {/* Derniere sync & Sync maintenant */}
       <div
         className="mt-3 pt-3 flex items-center justify-between"
-        style={{ borderTop: '1px solid var(--border-light)', fontSize: 12 }}
+        style={{ borderTop: '1px solid var(--sep)', fontSize: 12 }}
       >
-        <span className="flex items-center gap-1.5" style={{ color: 'var(--text-tertiary)' }}>
+        <span className="flex items-center gap-1.5" style={{ color: 'var(--label-3)' }}>
           <Clock size={12} />
           {lastSyncData?.synced_at ? (
             <span>
@@ -516,7 +516,7 @@ const TreasuryWidget = ({ selectedCompany }) => {
       {source === 'offline' && (
         <div
           className="mt-3 flex items-center gap-2 p-2.5 rounded-lg"
-          style={{ background: 'var(--warning-light)', fontSize: 12, color: 'var(--warning)' }}
+          style={{ background: 'var(--tint-orange)', fontSize: 12, color: 'var(--semantic-orange)' }}
         >
           <AlertCircle size={14} />
           <span>Donnees indisponibles -- verifier la connexion</span>

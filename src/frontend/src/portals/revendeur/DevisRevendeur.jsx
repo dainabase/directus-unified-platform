@@ -29,12 +29,12 @@ const formatCHF = (value) =>
 
 const STATUS_MAP = {
   draft:    { label: 'Brouillon', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' },
-  active:   { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' },
-  viewed:   { label: 'Consulte',  bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' },
-  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  signed:   { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: '#34C759' },
-  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' },
+  active:   { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  sent:     { label: 'Envoye',    bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' },
+  viewed:   { label: 'Consulte',  bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' },
+  accepted: { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  signed:   { label: 'Accepte',   bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  rejected: { label: 'Refuse',    bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' },
   expired:  { label: 'Expire',    bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
 }
 
@@ -223,7 +223,7 @@ const DevisRevendeur = () => {
                 onClick={() => setStatusFilter(pill.value)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   statusFilter === pill.value
-                    ? 'bg-[#0071E3] text-white'
+                    ? 'bg-[var(--accent-hover)] text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >

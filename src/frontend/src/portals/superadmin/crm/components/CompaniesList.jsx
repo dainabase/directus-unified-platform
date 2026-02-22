@@ -180,7 +180,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
         <div className="ml-auto flex gap-2">
           {selectedCompanies.length > 0 && (
             <button
-              className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style={{color:'var(--danger)'}}
+              className="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style={{color:'var(--semantic-red)'}}
               onClick={handleDeleteSelected}
               disabled={deleteCompany.isPending}
             >
@@ -423,7 +423,7 @@ const CompaniesList = ({ company, searchQuery, onEdit }) => {
                                 )}
                                 <div className="border-t border-gray-100 my-1" />
                                 <button
-                                  className="w-full px-3 py-2 text-left text-sm flex items-center hover:bg-gray-50" style={{color:'var(--danger)'}}
+                                  className="w-full px-3 py-2 text-left text-sm flex items-center hover:bg-gray-50" style={{color:'var(--semantic-red)'}}
                                   onClick={() => {
                                     if (window.confirm('Supprimer cette entreprise ?')) {
                                       deleteCompany.mutate(company.id);

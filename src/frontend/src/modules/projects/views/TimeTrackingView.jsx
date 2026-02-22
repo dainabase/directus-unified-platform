@@ -79,7 +79,7 @@ const mockWeeklyData = [
 ];
 
 const mockProjectDistribution = [
-  { name: 'Refonte Site Web', hours: 24, color: '#0071E3' },
+  { name: 'Refonte Site Web', hours: 24, color: 'var(--accent-hover)' },
   { name: 'Application Mobile', hours: 18, color: '#10b981' },
   { name: 'ERP Integration', hours: 12, color: '#f59e0b' },
   { name: 'Migration Cloud', hours: 8, color: '#71717a' }
@@ -323,7 +323,7 @@ const TimeTrackingView = ({ selectedCompany }) => {
                   <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip formatter={(v) => `${v}h`} />
-                  <Bar dataKey="hours" fill="#0071E3" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="hours" fill="var(--accent-hover)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

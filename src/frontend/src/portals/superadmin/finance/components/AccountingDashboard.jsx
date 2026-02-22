@@ -60,7 +60,7 @@ const TYPE_CONFIG = {
 }
 
 const PIE_COLORS = [
-  '#0071E3', '#34C759', '#FF9500', '#FF3B30', '#AF52DE',
+  'var(--accent-hover)', 'var(--semantic-green)', 'var(--semantic-orange)', 'var(--semantic-red)', '#AF52DE',
   '#5856D6', '#00C7BE', '#FF2D55', '#5AC8FA', '#FFCC00'
 ]
 
@@ -171,8 +171,8 @@ function EmptyState() {
 
 const KPI_ICON_MAP = {
   'accent': { bg: 'var(--accent)', text: '#fff' },
-  'danger': { bg: 'var(--danger)', text: '#fff' },
-  'success': { bg: 'var(--success)', text: '#fff' }
+  'danger': { bg: 'var(--semantic-red)', text: '#fff' },
+  'success': { bg: 'var(--semantic-green)', text: '#fff' }
 }
 
 function KPICard({ icon: Icon, label, value, formatted, color }) {
@@ -255,10 +255,10 @@ function AccountingDashboard({ selectedCompany }) {
   // ── Error state ──
   if (error) {
     return (
-      <div className="ds-card p-6 text-center" style={{ background: 'var(--danger-light)', border: '1px solid var(--danger)' }}>
-        <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
-        <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
-        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+      <div className="ds-card p-6 text-center" style={{ background: 'var(--tint-red)', border: '1px solid var(--semantic-red)' }}>
+        <AlertCircle className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
+        <h3 className="font-semibold mb-2" style={{ color: 'var(--label-1)' }}>Erreur de chargement</h3>
+        <p className="text-sm mb-4" style={{ color: 'var(--label-2)' }}>
           {error.message || 'Impossible de charger les ecritures comptables'}
         </p>
         <button
@@ -336,8 +336,8 @@ function AccountingDashboard({ selectedCompany }) {
               />
               <Tooltip content={<ChartTooltip />} />
               <Legend />
-              <Bar dataKey="debit" name="Debits" fill="#FF3B30" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="credit" name="Credits" fill="#34C759" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="debit" name="Debits" fill="var(--semantic-red)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="credit" name="Credits" fill="var(--semantic-green)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

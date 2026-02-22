@@ -99,7 +99,7 @@ const GridView = ({ projects }) => {
                   <Calendar size={14} />
                   <span>Échéance</span>
                 </div>
-                <span className="font-medium" style={isOverdue ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
+                <span className="font-medium" style={isOverdue ? {color:'var(--semantic-red)'} : {color:'var(--label-1)'}}>
                   {formatDate(project.end_date)}
                 </span>
               </div>
@@ -109,7 +109,7 @@ const GridView = ({ projects }) => {
                   <DollarSign size={14} />
                   <span>Budget</span>
                 </div>
-                <span className="font-medium" style={isOverBudget ? {color:'var(--danger)'} : {color:'#1D1D1F'}}>
+                <span className="font-medium" style={isOverBudget ? {color:'var(--semantic-red)'} : {color:'var(--label-1)'}}>
                   {(project.budget / 1000).toFixed(0)}K CHF
                 </span>
               </div>
@@ -131,8 +131,8 @@ const GridView = ({ projects }) => {
             {(isOverBudget || isOverdue) && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex items-center gap-2 text-sm">
-                  <AlertCircle size={14} style={{color:'var(--danger)'}} />
-                  <span style={{color:'var(--danger)'}}>
+                  <AlertCircle size={14} style={{color:'var(--semantic-red)'}} />
+                  <span style={{color:'var(--semantic-red)'}}>
                     {isOverBudget && isOverdue 
                       ? 'Budget dépassé & En retard'
                       : isOverBudget 

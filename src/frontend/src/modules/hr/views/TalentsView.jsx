@@ -78,7 +78,7 @@ const TalentsView = ({ people }) => {
 
                 {/* Ready for Promotion */}
                 {talent.readinessForPromotion && (
-                  <div className="flex items-center gap-2 text-sm" style={{color:'var(--success)'}}>
+                  <div className="flex items-center gap-2 text-sm" style={{color:'var(--semantic-green)'}}>
                     <TrendingUp size={14} />
                     <span>Prêt pour promotion</span>
                   </div>
@@ -258,11 +258,11 @@ const TalentsView = ({ people }) => {
             <Zap className="w-5 h-5 text-gray-400" />
           </div>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--success-light)'}}>
-              <span className="text-sm font-medium" style={{color:'var(--success)'}}>
+            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--tint-green)'}}>
+              <span className="text-sm font-medium" style={{color:'var(--semantic-green)'}}>
                 Haute Performance
               </span>
-              <span className="text-lg font-bold" style={{color:'var(--success)'}}>
+              <span className="text-lg font-bold" style={{color:'var(--semantic-green)'}}>
                 {talentsData.filter(t => t.potential >= 4).length}
               </span>
             </div>
@@ -274,11 +274,11 @@ const TalentsView = ({ people }) => {
                 {talentsData.filter(t => t.readinessForPromotion).length}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--warning-light)'}}>
-              <span className="text-sm font-medium" style={{color:'var(--warning)'}}>
+            <div className="flex items-center justify-between p-3 rounded-lg" style={{background:'var(--tint-orange)'}}>
+              <span className="text-sm font-medium" style={{color:'var(--semantic-orange)'}}>
                 Talents clés
               </span>
-              <span className="text-lg font-bold" style={{color:'var(--warning)'}}>
+              <span className="text-lg font-bold" style={{color:'var(--semantic-orange)'}}>
                 {keyTalents.length}
               </span>
             </div>

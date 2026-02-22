@@ -23,15 +23,15 @@ import { useProviderAuth } from '../hooks/useProviderAuth'
 
 // ── Status config for badges ──
 const STATUS_COLORS = {
-  active: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)' },
+  active: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
   'in_progress': { bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
   'in-progress': { bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
-  completed: { bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)' },
-  pending: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)' },
-  draft: { bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)' },
-  todo: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)' },
-  done: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)' },
-  cancelled: { bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)' }
+  completed: { bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)' },
+  pending: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
+  draft: { bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)' },
+  todo: { bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
+  done: { bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  cancelled: { bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' }
 }
 
 const DAY_HEADERS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
@@ -41,7 +41,7 @@ const EventDetailModal = ({ event, onClose, onNavigate }) => {
   if (!event) return null
 
   const isMission = event.type === 'mission'
-  const statusCfg = STATUS_COLORS[event.status] || { bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)' }
+  const statusCfg = STATUS_COLORS[event.status] || { bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)' }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -49,7 +49,7 @@ const EventDetailModal = ({ event, onClose, onNavigate }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-3 h-3 rounded-full" style={{background: isMission ? 'var(--accent)' : 'var(--warning)'}} />
+            <div className="w-3 h-3 rounded-full" style={{background: isMission ? 'var(--accent)' : 'var(--semantic-orange)'}} />
             <h3 className="text-base font-semibold text-gray-900">
               {isMission ? 'Mission' : 'Echeance'}
             </h3>
@@ -114,7 +114,7 @@ const EventDetailModal = ({ event, onClose, onNavigate }) => {
                 onClose()
                 onNavigate(`/prestataire/missions/${event.id}`)
               }}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[var(--accent-hover)] text-white hover:opacity-90 transition-colors"
             >
               <Eye size={16} />
               Voir la mission
@@ -167,7 +167,7 @@ const DayDetailSidebar = ({ date, events, onClose, onEventClick }) => {
                 className="w-full text-left p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-2 h-2 rounded-full" style={{background: isMission ? 'var(--accent)' : 'var(--warning)'}} />
+                  <div className="w-2 h-2 rounded-full" style={{background: isMission ? 'var(--accent)' : 'var(--semantic-orange)'}} />
                   <span className="text-xs font-medium text-gray-500">
                     {isMission ? 'Mission' : 'Echeance'}
                   </span>
@@ -495,7 +495,7 @@ const CalendarPage = () => {
                 <span>Missions</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full" style={{background:"var(--warning)"}} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{background:"var(--semantic-orange)"}} />
                 <span>Echeances</span>
               </div>
             </div>
@@ -543,7 +543,7 @@ const CalendarPage = () => {
                     <span
                       className={`
                         text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full
-                        ${today ? 'bg-[#0071E3] text-white' : 'text-gray-700'}
+                        ${today ? 'bg-[var(--accent-hover)] text-white' : 'text-gray-700'}
                         ${!inCurrentMonth ? 'text-gray-300' : ''}
                       `}
                     >
@@ -568,7 +568,7 @@ const CalendarPage = () => {
                           `}
                           style={{
                             background: isMission ? 'rgba(0,113,227,0.10)' : 'rgba(255,149,0,0.12)',
-                            color: isMission ? 'var(--accent)' : 'var(--warning)'
+                            color: isMission ? 'var(--accent)' : 'var(--semantic-orange)'
                           }}
                           title={event.name}
                         >

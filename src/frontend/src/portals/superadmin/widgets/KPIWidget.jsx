@@ -128,9 +128,9 @@ const fetchKPIs = async (company) => {
 }
 
 const TrendIcon = ({ value }) => {
-  if (value > 0) return <TrendingUp size={12} style={{ color: 'var(--success)' }} />
-  if (value < 0) return <TrendingDown size={12} style={{ color: 'var(--danger)' }} />
-  return <Minus size={12} style={{ color: 'var(--text-tertiary)' }} />
+  if (value > 0) return <TrendingUp size={12} style={{ color: 'var(--semantic-green)' }} />
+  if (value < 0) return <TrendingDown size={12} style={{ color: 'var(--semantic-red)' }} />
+  return <Minus size={12} style={{ color: 'var(--label-3)' }} />
 }
 
 const MiniSparkline = ({ data: externalData }) => {
@@ -185,7 +185,7 @@ const KPIWidget = ({ selectedCompany }) => {
             <span className="ds-label">{kpi.label}</span>
             <TrendIcon value={kpi.trend} />
           </div>
-          <p style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--text-primary)', lineHeight: 1.2 }}>
+          <p style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--label-1)', lineHeight: 1.2 }}>
             {kpi.isPercent
               ? `${kpi.value.toFixed(1)}%`
               : kpi.isCurrency === false
@@ -196,7 +196,7 @@ const KPIWidget = ({ selectedCompany }) => {
             <MiniSparkline data={kpi.sparklineData} />
           </div>
           {kpi.trend !== 0 && (
-            <p className="ds-meta mt-1" style={{ color: kpi.trend > 0 ? 'var(--success)' : 'var(--danger)' }}>
+            <p className="ds-meta mt-1" style={{ color: kpi.trend > 0 ? 'var(--semantic-green)' : 'var(--semantic-red)' }}>
               {kpi.trend > 0 ? '+' : ''}{kpi.trend.toFixed(1)}% vs mois dernier
             </p>
           )}

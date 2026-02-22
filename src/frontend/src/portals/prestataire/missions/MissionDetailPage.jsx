@@ -39,18 +39,18 @@ const formatDate = (dateStr) => {
 
 // ── Status badge configuration ──
 const STATUS_CONFIG = {
-  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)',   icon: Clock },
-  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock },
-  active:      { label: 'Actif',      bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)',  icon: CheckCircle },
+  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)',   icon: Clock },
+  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock },
+  active:      { label: 'Actif',      bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)',  icon: CheckCircle },
   in_progress: { label: 'En cours',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)',   icon: Loader2 },
   'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)',   icon: Loader2 },
-  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)', icon: CheckCircle },
-  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)',     icon: AlertCircle },
-  on_hold:     { label: 'En pause',   bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)', icon: Clock }
+  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)', icon: CheckCircle },
+  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)',     icon: AlertCircle },
+  on_hold:     { label: 'En pause',   bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)', icon: Clock }
 }
 
 const StatusBadge = ({ status }) => {
-  const config = STATUS_CONFIG[status] || { label: status || 'Inconnu', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)', icon: Clock }
+  const config = STATUS_CONFIG[status] || { label: status || 'Inconnu', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)', icon: Clock }
   const Icon = config.icon
   return (
     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium" style={{background: config.bg, color: config.fg}}>
@@ -62,13 +62,13 @@ const StatusBadge = ({ status }) => {
 
 // ── Deliverable status badge (can differ from project) ──
 const DELIVERABLE_STATUS = {
-  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-secondary)' },
-  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--warning)' },
+  draft:       { label: 'Brouillon',  bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-2)' },
+  pending:     { label: 'En attente', bg: 'rgba(255,149,0,0.12)', fg: 'var(--semantic-orange)' },
   in_progress: { label: 'En cours',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
   'in-progress': { label: 'En cours', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
   review:      { label: 'En revue',   bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent)' },
-  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--success)' },
-  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--danger)' }
+  completed:   { label: 'Termine',    bg: 'rgba(52,199,89,0.12)', fg: 'var(--semantic-green)' },
+  cancelled:   { label: 'Annule',     bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' }
 }
 
 // ── Skeleton loader ──
@@ -237,7 +237,7 @@ const MissionDetailPage = () => {
         {/* Start date */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={16} style={{color:"var(--success)"}} />
+            <Calendar size={16} style={{color:"var(--semantic-green)"}} />
             <span className="text-xs text-gray-500 font-medium">Date de debut</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatDate(mission.start_date)}</p>
@@ -246,7 +246,7 @@ const MissionDetailPage = () => {
         {/* End date */}
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Calendar size={16} style={{color:"var(--danger)"}} />
+            <Calendar size={16} style={{color:"var(--semantic-red)"}} />
             <span className="text-xs text-gray-500 font-medium">Date de fin</span>
           </div>
           <p className="text-xl font-bold text-gray-900">{formatDate(mission.end_date)}</p>
@@ -327,7 +327,7 @@ const MissionDetailPage = () => {
               </thead>
               <tbody>
                 {deliverables.map(d => {
-                  const dConfig = DELIVERABLE_STATUS[d.status] || { label: d.status || '—', bg: 'rgba(0,0,0,0.04)', fg: 'var(--text-tertiary)' }
+                  const dConfig = DELIVERABLE_STATUS[d.status] || { label: d.status || '—', bg: 'rgba(0,0,0,0.04)', fg: 'var(--label-3)' }
                   const isAssignedToMe = d.assigned_provider_id === providerId
 
                   return (
@@ -389,7 +389,7 @@ const MissionDetailPage = () => {
               return (
                 <div
                   key={doc.id}
-                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-[var(--border-light)] transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-[var(--sep)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{background:"rgba(0,113,227,0.08)"}}>

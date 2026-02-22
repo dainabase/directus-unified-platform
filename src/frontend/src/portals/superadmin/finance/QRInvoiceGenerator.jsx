@@ -187,7 +187,7 @@ const SectionCard = ({ title, icon: Icon, children, className = '' }) => (
   <div className={`ds-card p-5 ${className}`}>
     {title && (
       <div className="flex items-center gap-2 mb-4">
-        {Icon && <Icon size={16} className="text-[#0071E3]" />}
+        {Icon && <Icon size={16} className="text-[var(--accent-hover)]" />}
         <h3 className="ds-card-title text-sm font-semibold text-gray-700 uppercase tracking-wide">
           {title}
         </h3>
@@ -633,7 +633,7 @@ const QRInvoiceGenerator = ({ selectedCompany, invoiceId: propInvoiceId, onBack 
   if (invoiceLoading && activeInvoiceId) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="w-8 h-8 text-[#0071E3] animate-spin" />
+        <Loader2 className="w-8 h-8 text-[var(--accent-hover)] animate-spin" />
       </div>
     )
   }
@@ -659,7 +659,7 @@ const QRInvoiceGenerator = ({ selectedCompany, invoiceId: propInvoiceId, onBack 
           </p>
         </div>
         {invoice && (
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-[#0071E3] text-sm font-medium">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-[var(--accent-hover)] text-sm font-medium">
             <FileText size={14} />
             {invoice.invoice_number || `Facture #${invoice.id}`}
           </span>
@@ -973,7 +973,7 @@ const QRInvoiceGenerator = ({ selectedCompany, invoiceId: propInvoiceId, onBack 
                 <button
                   onClick={() => generateMutation.mutate()}
                   disabled={generateMutation.isPending}
-                  className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-[#0071E3] rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="ds-btn ds-btn-primary inline-flex items-center gap-2 px-5 py-2 text-sm font-medium text-white bg-[var(--accent-hover)] rounded-lg hover:bg-blue-700 disabled:opacity-50"
                 >
                   {generateMutation.isPending ? (
                     <Loader2 size={14} className="animate-spin" />

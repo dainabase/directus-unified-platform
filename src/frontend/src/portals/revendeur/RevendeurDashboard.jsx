@@ -68,7 +68,7 @@ const ChartTooltip = ({ active, payload, label }) => {
   return (
     <div className="ds-card p-3" style={{ boxShadow: 'var(--shadow-md)' }}>
       <p className="text-xs font-medium text-gray-900 mb-1">{label}</p>
-      <p className="text-sm font-bold" style={{ color: '#0071E3' }}>
+      <p className="text-sm font-bold" style={{ color: 'var(--accent-hover)' }}>
         {payload[0].value} lead{payload[0].value > 1 ? 's' : ''}
       </p>
     </div>
@@ -357,7 +357,7 @@ const RevendeurDashboard = () => {
       {/* Pipeline chart — leads created per month (last 6 months) */}
       <div className="ds-card p-6">
         <div className="flex items-center gap-2 mb-4">
-          <BarChart3 size={18} style={{ color: '#0071E3' }} />
+          <BarChart3 size={18} style={{ color: 'var(--accent-hover)' }} />
           <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
             Activite pipeline — 6 derniers mois
           </h2>
@@ -370,19 +370,19 @@ const RevendeurDashboard = () => {
                 dataKey="name"
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 12, fill: '#6E6E73' }}
+                tick={{ fontSize: 12, fill: 'var(--label-2)' }}
               />
               <YAxis
                 allowDecimals={false}
                 tickLine={false}
                 axisLine={false}
-                tick={{ fontSize: 12, fill: '#6E6E73' }}
+                tick={{ fontSize: 12, fill: 'var(--label-2)' }}
                 width={30}
               />
               <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(0, 113, 227, 0.04)' }} />
               <Bar
                 dataKey="leads"
-                fill="#0071E3"
+                fill="var(--accent-hover)"
                 radius={[6, 6, 0, 0]}
                 maxBarSize={48}
               />

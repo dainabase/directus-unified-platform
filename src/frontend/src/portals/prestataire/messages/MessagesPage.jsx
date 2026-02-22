@@ -112,7 +112,7 @@ const NewConversationForm = ({ providerId, onCancel, onSent }) => {
       {/* Form header */}
       <div
         className="flex items-center justify-between p-4"
-        style={{ borderBottom: '1px solid var(--border-light)' }}
+        style={{ borderBottom: '1px solid var(--sep)' }}
       >
         <h2 className="text-sm font-semibold text-gray-900">Nouveau message</h2>
         <button
@@ -166,7 +166,7 @@ const NewConversationForm = ({ providerId, onCancel, onSent }) => {
       </div>
 
       {/* Submit */}
-      <div className="p-4" style={{ borderTop: '1px solid var(--border-light)' }}>
+      <div className="p-4" style={{ borderTop: '1px solid var(--sep)' }}>
         <button
           type="submit"
           disabled={!content.trim() || sendMutation.isPending}
@@ -201,7 +201,7 @@ const ConversationItem = ({ conversation, isActive, isUnread, onClick }) => {
     >
       {/* Avatar */}
       <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-        isActive ? 'bg-[#0071E3]' : 'bg-gray-200'
+        isActive ? 'bg-[var(--accent-hover)]' : 'bg-gray-200'
       }`}>
         <User size={18} className={isActive ? 'text-white' : 'text-gray-500'} />
       </div>
@@ -230,7 +230,7 @@ const ConversationItem = ({ conversation, isActive, isUnread, onClick }) => {
 
       {/* Unread dot */}
       {isUnread && (
-        <div className="w-2.5 h-2.5 rounded-full bg-[#0071E3] shrink-0" />
+        <div className="w-2.5 h-2.5 rounded-full bg-[var(--accent-hover)] shrink-0" />
       )}
     </button>
   )
@@ -242,7 +242,7 @@ const MessageBubble = ({ message, isOutgoing }) => (
   <div className={`flex ${isOutgoing ? 'justify-end' : 'justify-start'}`}>
     <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
       isOutgoing
-        ? 'bg-[#0071E3] text-white rounded-br-md'
+        ? 'bg-[var(--accent-hover)] text-white rounded-br-md'
         : 'bg-gray-100 text-gray-900 rounded-bl-md'
     }`}>
       {!isOutgoing && (
@@ -460,7 +460,7 @@ const MessagesPage = () => {
         <p className="text-sm text-gray-500 mt-1">
           Communiquez avec HYPERVISUAL
           {unreadCount > 0 && (
-            <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#0071E3] text-white">
+            <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--accent-hover)] text-white">
               {unreadCount} non lu{unreadCount > 1 ? 's' : ''}
             </span>
           )}
@@ -476,10 +476,10 @@ const MessagesPage = () => {
             className={`w-full md:w-80 shrink-0 ds-glass flex flex-col h-full ${
               mobileShowThread ? 'hidden md:flex' : 'flex'
             }`}
-            style={{ borderRight: '1px solid var(--border-light)' }}
+            style={{ borderRight: '1px solid var(--sep)' }}
           >
             {/* New message + Search */}
-            <div className="p-3 space-y-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
+            <div className="p-3 space-y-2" style={{ borderBottom: '1px solid var(--sep)' }}>
               <button
                 onClick={() => {
                   setShowNewConversation(true)
@@ -556,7 +556,7 @@ const MessagesPage = () => {
                 {/* Thread header */}
                 <div
                   className="flex items-center gap-3 p-4"
-                  style={{ borderBottom: '1px solid var(--border-light)' }}
+                  style={{ borderBottom: '1px solid var(--sep)' }}
                 >
                   {/* Mobile back button */}
                   <button
@@ -566,7 +566,7 @@ const MessagesPage = () => {
                     <ArrowLeft size={18} />
                   </button>
 
-                  <div className="w-9 h-9 rounded-full bg-[#0071E3] flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[var(--accent-hover)] flex items-center justify-center shrink-0">
                     <User size={16} className="text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -600,7 +600,7 @@ const MessagesPage = () => {
                 <form
                   onSubmit={handleSendMessage}
                   className="p-4"
-                  style={{ borderTop: '1px solid var(--border-light)' }}
+                  style={{ borderTop: '1px solid var(--sep)' }}
                 >
                   <div className="flex items-end gap-2">
                     <textarea
@@ -615,7 +615,7 @@ const MessagesPage = () => {
                     <button
                       type="submit"
                       disabled={!newMessage.trim() || sendMessageMutation.isPending}
-                      className="p-2.5 rounded-xl bg-[#0071E3] text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
+                      className="p-2.5 rounded-xl bg-[var(--accent-hover)] text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
                     >
                       {sendMessageMutation.isPending ? (
                         <Loader2 size={18} className="animate-spin" />

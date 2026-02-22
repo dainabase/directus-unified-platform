@@ -339,7 +339,7 @@ function PeriodSelector({ quarter, year, onQuarterChange, onYearChange }) {
             onClick={() => onQuarterChange(q)}
             className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
               quarter === q
-                ? 'bg-white text-[#0071E3] shadow-sm'
+                ? 'bg-white text-[var(--accent-hover)] shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -350,7 +350,7 @@ function PeriodSelector({ quarter, year, onQuarterChange, onYearChange }) {
           onClick={() => onQuarterChange('annual')}
           className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
             quarter === 'annual'
-              ? 'bg-white text-[#0071E3] shadow-sm'
+              ? 'bg-white text-[var(--accent-hover)] shadow-sm'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -392,8 +392,8 @@ function Formulaire200Card({ breakdown }) {
   return (
     <div className="ds-card p-6">
       <div className="flex items-center gap-3 mb-5">
-        <div className="p-2 rounded-lg bg-[#0071E3]/10">
-          <FileText size={18} className="text-[#0071E3]" />
+        <div className="p-2 rounded-lg bg-[var(--accent-hover)]/10">
+          <FileText size={18} className="text-[var(--accent-hover)]" />
         </div>
         <div>
           <h3 className="ds-card-title">Formulaire 200 AFC</h3>

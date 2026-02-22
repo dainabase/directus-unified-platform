@@ -52,7 +52,7 @@ const ProjectActivatedPage = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin" style={{ color: '#0071E3' }} />
+        <Loader2 className="w-8 h-8 animate-spin" style={{ color: 'var(--accent-hover)' }} />
       </div>
     )
   }
@@ -69,7 +69,7 @@ const ProjectActivatedPage = () => {
         <button
           onClick={() => navigate('/client')}
           className="text-sm font-medium px-4 py-2 rounded-lg"
-          style={{ color: '#0071E3' }}
+          style={{ color: 'var(--accent-hover)' }}
         >
           Retour au tableau de bord
         </button>
@@ -82,7 +82,7 @@ const ProjectActivatedPage = () => {
       <div className="max-w-md w-full text-center">
         {/* ── Success icon with pulse ── */}
         <div className="relative inline-block mb-6">
-          <CheckCircle size={64} style={{ color: '#34C759' }} />
+          <CheckCircle size={64} style={{ color: 'var(--semantic-green)' }} />
           <div
             className="absolute inset-0 rounded-full animate-ping"
             style={{ background: 'rgba(52,199,89,0.12)' }}
@@ -128,7 +128,7 @@ const ProjectActivatedPage = () => {
           className="rounded-lg p-4 mb-6 text-left"
           style={{ backgroundColor: 'rgba(0,113,227,0.06)' }}
         >
-          <p className="text-sm" style={{ color: '#0071E3' }}>
+          <p className="text-sm" style={{ color: 'var(--accent-hover)' }}>
             Votre referent HYPERVISUAL vous contactera sous 24h pour organiser le lancement
             et definir les prochaines etapes.
           </p>
@@ -138,7 +138,7 @@ const ProjectActivatedPage = () => {
         <button
           onClick={() => navigate(`/client/projects/${project.id}`)}
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-          style={{ backgroundColor: '#0071E3' }}
+          style={{ backgroundColor: 'var(--accent-hover)' }}
         >
           Voir mon projet <ArrowRight size={16} />
         </button>

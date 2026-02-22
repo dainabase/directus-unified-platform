@@ -47,9 +47,9 @@ function getFileTypeIcon(mimeType) {
 function getFileTypeBadge(mimeType) {
   const cat = getFileTypeCategory(mimeType)
   switch (cat) {
-    case 'image': return { label: 'Image', bg: 'rgba(0,113,227,0.12)', fg: '#0071E3' }
-    case 'pdf': return { label: 'PDF', bg: 'rgba(255,59,48,0.12)', fg: '#FF3B30' }
-    case 'video': return { label: 'Video', bg: 'rgba(0,113,227,0.10)', fg: '#0071E3' }
+    case 'image': return { label: 'Image', bg: 'rgba(0,113,227,0.12)', fg: 'var(--accent-hover)' }
+    case 'pdf': return { label: 'PDF', bg: 'rgba(255,59,48,0.12)', fg: 'var(--semantic-red)' }
+    case 'video': return { label: 'Video', bg: 'rgba(0,113,227,0.10)', fg: 'var(--accent-hover)' }
     default: return { label: 'Fichier', bg: 'rgba(107,114,128,0.12)', fg: '#6B7280' }
   }
 }

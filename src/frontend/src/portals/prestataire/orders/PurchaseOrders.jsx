@@ -210,7 +210,7 @@ const PurchaseOrders = () => {
                         <button
                           onClick={() => confirmMutation.mutate(project.id)}
                           disabled={confirmMutation.isPending}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[#0071E3] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
+                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[var(--accent-hover)] text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
                         >
                           {confirmMutation.isPending ? (
                             <Loader2 size={16} className="animate-spin" />

@@ -18,12 +18,12 @@ import toast from 'react-hot-toast'
 import api from '../../../../lib/axios'
 
 const CATEGORIES = {
-  marketing: { label: 'Marketing', color: '#0071E3' },
-  it: { label: 'IT', color: '#34C759' },
-  hr: { label: 'RH', color: '#FF9500' },
-  operations: { label: 'Operations', color: '#FF3B30' },
+  marketing: { label: 'Marketing', color: 'var(--accent-hover)' },
+  it: { label: 'IT', color: 'var(--semantic-green)' },
+  hr: { label: 'RH', color: 'var(--semantic-orange)' },
+  operations: { label: 'Operations', color: 'var(--semantic-red)' },
   rd: { label: 'R&D', color: '#AF52DE' },
-  other: { label: 'Autre', color: '#6E6E73' }
+  other: { label: 'Autre', color: 'var(--label-2)' }
 }
 
 const formatCHF = (amount) =>
@@ -230,18 +230,18 @@ const BudgetsManager = ({ selectedCompany }) => {
   }
 
   const getProgressStyle = (pct) => {
-    if (pct > 100) return { backgroundColor: 'var(--danger)' }
-    if (pct > 85) return { backgroundColor: 'var(--warning)' }
-    return { backgroundColor: 'var(--success)' }
+    if (pct > 100) return { backgroundColor: 'var(--semantic-red)' }
+    if (pct > 85) return { backgroundColor: 'var(--semantic-orange)' }
+    return { backgroundColor: 'var(--semantic-green)' }
   }
 
   // Error state
   if (budgetsError) {
     return (
       <div className="ds-card p-8 text-center">
-        <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--danger)' }} />
-        <h3 className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>Erreur de chargement</h3>
-        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+        <AlertCircle className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--semantic-red)' }} />
+        <h3 className="font-semibold mb-2" style={{ color: 'var(--label-1)' }}>Erreur de chargement</h3>
+        <p className="text-sm mb-4" style={{ color: 'var(--label-2)' }}>
           {budgetsError.message || 'Impossible de charger les budgets'}
         </p>
         <button
@@ -279,9 +279,9 @@ const BudgetsManager = ({ selectedCompany }) => {
     <div className="space-y-6">
       {/* Data source indicator (dev only) */}
       {budgetsResult?.source && budgetsResult.source !== 'budgets' && (
-        <div className="ds-card p-3 flex items-center gap-2" style={{ borderLeft: '3px solid var(--warning)' }}>
-          <AlertTriangle size={14} style={{ color: 'var(--warning)' }} />
-          <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+        <div className="ds-card p-3 flex items-center gap-2" style={{ borderLeft: '3px solid var(--semantic-orange)' }}>
+          <AlertTriangle size={14} style={{ color: 'var(--semantic-orange)' }} />
+          <span className="text-xs" style={{ color: 'var(--label-2)' }}>
             Donnees depuis <strong>{budgetsResult.source}</strong> (collection budgets vide ou indisponible)
           </span>
         </div>
@@ -313,32 +313,32 @@ const BudgetsManager = ({ selectedCompany }) => {
             <Wallet size={18} style={{ color: 'var(--accent)' }} />
             <span className="ds-label">Budget total</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.totalAllocated)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.totalAllocated)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingDown size={18} style={{ color: 'var(--warning)' }} />
+            <TrendingDown size={18} style={{ color: 'var(--semantic-orange)' }} />
             <span className="ds-label">Depense</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.totalSpent)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.totalSpent)}</p>
           {stats.totalAllocated > 0 && (
             <p className="ds-meta mt-1">{((stats.totalSpent / stats.totalAllocated) * 100).toFixed(1)}% utilise</p>
           )}
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle size={18} style={{ color: 'var(--success)' }} />
+            <CheckCircle size={18} style={{ color: 'var(--semantic-green)' }} />
             <span className="ds-label">Disponible</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCHF(stats.totalRemaining)}</p>
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{formatCHF(stats.totalRemaining)}</p>
         </div>
         <div className="ds-card p-5">
           <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle size={18} style={{ color: 'var(--danger)' }} />
+            <AlertTriangle size={18} style={{ color: 'var(--semantic-red)' }} />
             <span className="ds-label">Budgets depasses</span>
           </div>
-          <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{stats.overBudgetCount}</p>
-          {stats.overBudgetCount > 0 && <p className="ds-meta mt-1" style={{ color: 'var(--danger)' }}>Necessite attention</p>}
+          <p className="text-2xl font-bold" style={{ color: 'var(--label-1)' }}>{stats.overBudgetCount}</p>
+          {stats.overBudgetCount > 0 && <p className="ds-meta mt-1" style={{ color: 'var(--semantic-red)' }}>Necessite attention</p>}
         </div>
       </div>
 
@@ -354,7 +354,7 @@ const BudgetsManager = ({ selectedCompany }) => {
               <Tooltip formatter={(v) => formatCHF(v)} />
               <Legend />
               <Bar dataKey="budget" fill="var(--accent)" name="Budget" />
-              <Bar dataKey="actual" fill="var(--success)" name="Reel" />
+              <Bar dataKey="actual" fill="var(--semantic-green)" name="Reel" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -410,7 +410,7 @@ const BudgetsManager = ({ selectedCompany }) => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+              <tr style={{ borderBottom: '1px solid var(--sep)' }}>
                 <th className="text-left p-4 ds-nav-section">Budget</th>
                 <th className="text-left p-4 ds-nav-section">Categorie</th>
                 <th className="text-left p-4 ds-nav-section">Alloue</th>
@@ -423,14 +423,14 @@ const BudgetsManager = ({ selectedCompany }) => {
             <tbody>
               {filteredBudgets.map(budget => (
                 <tr key={budget.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                  <td className="p-4 font-medium" style={{ color: 'var(--text-primary)' }}>{budget.name || budget.category}</td>
+                  <td className="p-4 font-medium" style={{ color: 'var(--label-1)' }}>{budget.name || budget.category}</td>
                   <td className="p-4">
                     <span className="ds-badge ds-badge-info">
                       {CATEGORIES[budget.category]?.label || budget.category}
                     </span>
                   </td>
-                  <td className="p-4" style={{ color: 'var(--text-secondary)' }}>{formatCHF(budget.allocated)}</td>
-                  <td className="p-4" style={{ color: 'var(--text-secondary)' }}>{formatCHF(budget.spent)}</td>
+                  <td className="p-4" style={{ color: 'var(--label-2)' }}>{formatCHF(budget.allocated)}</td>
+                  <td className="p-4" style={{ color: 'var(--label-2)' }}>{formatCHF(budget.spent)}</td>
                   <td className="p-4" style={{ width: 160 }}>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
@@ -447,7 +447,7 @@ const BudgetsManager = ({ selectedCompany }) => {
                       </button>
                       <button
                         className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-                        style={{ color: 'var(--danger)' }}
+                        style={{ color: 'var(--semantic-red)' }}
                         onClick={() => { if (window.confirm('Supprimer ce budget?')) deleteMutation.mutate(budget.id) }}
                         title="Supprimer"
                         disabled={deleteMutation.isPending}

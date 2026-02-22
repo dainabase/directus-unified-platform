@@ -72,24 +72,24 @@ const formatDate = (d) => {
   })
 }
 
-const CURRENCY_SYMBOLS = { CHF: 'CHF', EUR: 'EUR', USD: 'USD', GBP: 'GBP' }
-
 // ── Component ──
 
 const RevolutHub = ({ selectedCompany }) => {
+  const companyId = selectedCompany?.id || selectedCompany || 'all'
+
   const {
     data: health = { online: false },
     isLoading: healthLoading,
     refetch: refetchHealth
   } = useQuery({
-    queryKey: ['revolut-health'],
+    queryKey: ['revolut-health', companyId],
     queryFn: fetchRevolutHealth,
     staleTime: 30_000,
     refetchInterval: 60_000
   })
 
   const { data: balances = [] } = useQuery({
-    queryKey: ['revolut-balances'],
+    queryKey: ['revolut-balances', companyId],
     queryFn: fetchRevolutBalances,
     staleTime: 60_000,
     refetchInterval: 60_000,
@@ -97,7 +97,7 @@ const RevolutHub = ({ selectedCompany }) => {
   })
 
   const { data: transactions = [] } = useQuery({
-    queryKey: ['revolut-transactions'],
+    queryKey: ['revolut-transactions', companyId],
     queryFn: fetchRevolutTransactions,
     staleTime: 60_000,
     enabled: health.online
@@ -197,7 +197,7 @@ const RevolutHub = ({ selectedCompany }) => {
                 const currency = acc.currency || 'CHF'
                 const bal = parseFloat(acc.balance || acc.amount) || 0
                 return (
-                  <div key={acc.id || idx} className="ds-card p-5">
+                  <div key={acc.id || acc.currency} className="ds-card p-5">
                     <div className="flex items-center gap-2 mb-2">
                       <div
                         className="p-2 rounded-lg"
@@ -207,7 +207,7 @@ const RevolutHub = ({ selectedCompany }) => {
                       </div>
                       <div>
                         <p className="text-xs font-medium" style={{ color: 'var(--label-2)' }}>
-                          {acc.name || `Compte ${CURRENCY_SYMBOLS[currency] || currency}`}
+                          {acc.name || `Compte ${currency}`}
                         </p>
                       </div>
                     </div>
@@ -256,13 +256,11 @@ const RevolutHub = ({ selectedCompany }) => {
 
               return (
                 <div
-                  key={tx.id || idx}
-                  className="flex items-center justify-between px-5 py-3 transition-colors"
+                  key={tx.id}
+                  className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-zinc-50"
                   style={{
                     borderBottom: idx < transactions.length - 1 ? '1px solid var(--sep)' : undefined
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--fill-5)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '' }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div

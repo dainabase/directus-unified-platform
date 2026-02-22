@@ -34,15 +34,23 @@ const fetchHealth = async () => {
 }
 
 const fetchRecentInvoices = async () => {
-  const res = await api.get('/api/invoice-ninja/invoices', {
-    params: { per_page: 5, sort: '-date' }
-  })
-  return res.data?.data || []
+  try {
+    const res = await api.get('/api/invoice-ninja/invoices', {
+      params: { per_page: 5, sort: '-date' }
+    })
+    return res.data?.data || []
+  } catch {
+    return []
+  }
 }
 
 const fetchDashboard = async () => {
-  const res = await api.get('/api/invoice-ninja/dashboard')
-  return res.data?.data || {}
+  try {
+    const res = await api.get('/api/invoice-ninja/dashboard')
+    return res.data?.data || {}
+  } catch {
+    return {}
+  }
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -90,12 +98,14 @@ function getStatusInfo(status) {
 
 export function InvoiceNinjaHub({ selectedCompany }) {
   // ── Queries ──
+  const companyId = selectedCompany?.id || selectedCompany || 'all'
+
   const {
     data: health = { online: false },
     isLoading: healthLoading,
     refetch: refetchHealth
   } = useQuery({
-    queryKey: ['invoice-ninja-health'],
+    queryKey: ['invoice-ninja-health', companyId],
     queryFn: fetchHealth,
     staleTime: 30_000,
     refetchInterval: 60_000
@@ -105,7 +115,7 @@ export function InvoiceNinjaHub({ selectedCompany }) {
     data: invoices = [],
     isLoading: invoicesLoading
   } = useQuery({
-    queryKey: ['invoice-ninja-recent'],
+    queryKey: ['invoice-ninja-recent', companyId],
     queryFn: fetchRecentInvoices,
     staleTime: 60_000,
     enabled: health.online
@@ -115,7 +125,7 @@ export function InvoiceNinjaHub({ selectedCompany }) {
     data: dashboard = {},
     isLoading: dashboardLoading
   } = useQuery({
-    queryKey: ['invoice-ninja-dashboard'],
+    queryKey: ['invoice-ninja-dashboard', companyId],
     queryFn: fetchDashboard,
     staleTime: 120_000,
     enabled: health.online
@@ -334,13 +344,11 @@ export function InvoiceNinjaHub({ selectedCompany }) {
               return (
                 <div
                   key={inv.id}
-                  className="flex items-center justify-between px-5 py-3 transition-colors"
+                  className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-zinc-50"
                   style={{
                     borderBottom: idx < invoices.length - 1 ? '1px solid var(--sep)' : undefined,
                     cursor: 'default'
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--fill-5)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '' }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div

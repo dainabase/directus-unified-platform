@@ -8,6 +8,7 @@ import queryClient from './lib/queryClient'
 import { useAuthStore } from './stores/authStore'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import ErrorBoundary from './components/ErrorBoundary'
+import HubErrorBoundary from './components/HubErrorBoundary'
 import LoginPage from './pages/LoginPage'
 
 // Layout components (kept eager — always needed)
@@ -242,7 +243,7 @@ function App() {
                   <Route path="finance/expenses" element={<ExpensesPage selectedCompany={selectedCompany} />} />
                   <Route path="finance/qr-invoice" element={<QRInvoiceGenerator selectedCompany={selectedCompany} />} />
                   <Route path="finance/milestones" element={<MilestoneInvoicingPage selectedCompany={selectedCompany} />} />
-                  <Route path="finance/invoice-ninja" element={<InvoiceNinjaHub selectedCompany={selectedCompany} />} />
+                  <Route path="finance/invoice-ninja" element={<HubErrorBoundary><InvoiceNinjaHub selectedCompany={selectedCompany} /></HubErrorBoundary>} />
 
                   {/* Projets */}
                   <Route path="projects" element={<ProjectsModule selectedCompany={selectedCompany} />} />
@@ -312,10 +313,10 @@ function App() {
                   <Route path="automation/notifications" element={<NotificationHub selectedCompany={selectedCompany} />} />
 
                   {/* Phase C — Integrations Hub */}
-                  <Route path="integrations/invoice-ninja" element={<InvoiceNinjaHub selectedCompany={selectedCompany} />} />
-                  <Route path="integrations/mautic" element={<MauticHub selectedCompany={selectedCompany} />} />
-                  <Route path="integrations/revolut" element={<RevolutHub selectedCompany={selectedCompany} />} />
-                  <Route path="integrations/erpnext" element={<ERPNextHub selectedCompany={selectedCompany} />} />
+                  <Route path="integrations/invoice-ninja" element={<HubErrorBoundary><InvoiceNinjaHub selectedCompany={selectedCompany} /></HubErrorBoundary>} />
+                  <Route path="integrations/mautic" element={<HubErrorBoundary><MauticHub selectedCompany={selectedCompany} /></HubErrorBoundary>} />
+                  <Route path="integrations/revolut" element={<HubErrorBoundary><RevolutHub selectedCompany={selectedCompany} /></HubErrorBoundary>} />
+                  <Route path="integrations/erpnext" element={<HubErrorBoundary><ERPNextHub selectedCompany={selectedCompany} /></HubErrorBoundary>} />
 
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />

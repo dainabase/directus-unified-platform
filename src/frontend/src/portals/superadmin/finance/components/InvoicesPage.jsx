@@ -153,10 +153,11 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [sendingId, setSendingId] = useState(null)
   const [relanceId, setRelanceId] = useState(null)
+  const [confirmRelance, setConfirmRelance] = useState(null)
 
   const handleSendInvoiceNinja = async (e, inv) => {
     e.stopPropagation()
-    if (!inv.id) return
+    if (!inv.id || sendingId) return
     setSendingId(inv.id)
     try {
       await api.post(`/api/invoice-ninja/invoices/${inv.id}/send`)
@@ -168,10 +169,16 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
     }
   }
 
-  const handleRelanceMautic = async (e, inv) => {
+  const handleRelanceMauticClick = (e, inv) => {
     e.stopPropagation()
-    if (!inv.id) return
-    if (!window.confirm(`Envoyer une relance Mautic pour la facture ${inv.invoice_number || inv.id} ?`)) return
+    if (!inv.id || relanceId) return
+    setConfirmRelance(inv)
+  }
+
+  const handleRelanceMauticConfirm = async () => {
+    const inv = confirmRelance
+    if (!inv) return
+    setConfirmRelance(null)
     setRelanceId(inv.id)
     try {
       await api.post(`/api/integrations/mautic/trigger/payment-reminder/${inv.id}`)
@@ -400,7 +407,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
                         )}
                         {isOverdue && (
                           <button
-                            onClick={(e) => handleRelanceMautic(e, inv)}
+                            onClick={(e) => handleRelanceMauticClick(e, inv)}
                             disabled={relanceId === inv.id}
                             className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs"
                             style={{ color: 'var(--semantic-orange)' }}
@@ -453,6 +460,35 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
           </div>
         )}
       </div>
+
+      {/* Confirm Relance Mautic Modal */}
+      {confirmRelance && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6">
+            <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--label-1)' }}>
+              Confirmer la relance
+            </h3>
+            <p className="text-sm mb-5" style={{ color: 'var(--label-2)' }}>
+              Envoyer une relance Mautic pour la facture{' '}
+              <strong>{confirmRelance.invoice_number || confirmRelance.id}</strong> ?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmRelance(null)}
+                className="ds-btn ds-btn-ghost flex-1"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleRelanceMauticConfirm}
+                className="ds-btn ds-btn-primary flex-1"
+              >
+                Envoyer la relance
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

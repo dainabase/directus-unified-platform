@@ -18,6 +18,7 @@ import {
   RefreshCw, Loader2, TrendingUp, TrendingDown,
   Package, Users, FileText, BarChart3, AlertCircle
 } from 'lucide-react'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import api from '../../../lib/axios'
 
 const ERPNEXT_URL = import.meta.env.VITE_ERPNEXT_URL || 'https://erp.hypervisual.ch'
@@ -83,33 +84,35 @@ const formatDate = (d) => {
 // ── Component ──
 
 const ERPNextHub = ({ selectedCompany }) => {
+  const companyId = selectedCompany?.id || selectedCompany || 'all'
+
   const {
     data: health = { online: false },
     isLoading: healthLoading,
     refetch: refetchHealth
   } = useQuery({
-    queryKey: ['erpnext-health'],
+    queryKey: ['erpnext-health', companyId],
     queryFn: fetchERPNextHealth,
     staleTime: 30_000,
     refetchInterval: 60_000
   })
 
   const { data: kpis = {} } = useQuery({
-    queryKey: ['erpnext-kpis'],
+    queryKey: ['erpnext-kpis', companyId],
     queryFn: fetchERPNextKPIs,
     staleTime: 60_000,
     enabled: health.online
   })
 
   const { data: revenueData = [] } = useQuery({
-    queryKey: ['erpnext-revenue'],
+    queryKey: ['erpnext-revenue', companyId],
     queryFn: fetchERPNextRevenue,
     staleTime: 120_000,
     enabled: health.online
   })
 
   const { data: activities = [] } = useQuery({
-    queryKey: ['erpnext-activities'],
+    queryKey: ['erpnext-activities', companyId],
     queryFn: fetchERPNextActivities,
     staleTime: 60_000,
     enabled: health.online
@@ -288,37 +291,42 @@ const ERPNextHub = ({ selectedCompany }) => {
         </div>
       )}
 
-      {/* Revenue chart placeholder — simple bar display */}
+      {/* Revenue chart — Recharts BarChart */}
       {health.online && revenueData.length > 0 && (
         <div className="ds-card overflow-hidden">
           <div className="p-5" style={{ borderBottom: '1px solid var(--sep)' }}>
             <h3 className="ds-card-title">Revenus mensuels</h3>
           </div>
           <div className="p-5">
-            <div className="flex items-end gap-2" style={{ height: 120 }}>
-              {revenueData.slice(-12).map((item, idx) => {
-                const maxVal = Math.max(...revenueData.slice(-12).map(d => parseFloat(d.value || d.amount) || 0), 1)
-                const val = parseFloat(item.value || item.amount) || 0
-                const pct = (val / maxVal) * 100
-                return (
-                  <div key={idx} className="flex-1 flex flex-col items-center gap-1">
-                    <div
-                      className="w-full rounded-t transition-all"
-                      style={{
-                        height: `${Math.max(pct, 4)}%`,
-                        background: 'var(--accent)',
-                        opacity: 0.7 + (idx / revenueData.slice(-12).length) * 0.3,
-                        minHeight: 4
-                      }}
-                      title={`${item.label || item.month || ''}: ${formatCHF(val)}`}
-                    />
-                    <span className="ds-meta" style={{ fontSize: 9 }}>
-                      {item.label || item.month || ''}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={revenueData.slice(-12).map(d => ({
+                month: d.label || d.month || '',
+                amount: parseFloat(d.value || d.amount) || 0
+              }))}>
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 11, fill: 'var(--label-3)' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11, fill: 'var(--label-3)' }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}
+                />
+                <Tooltip
+                  formatter={(value) => [formatCHF(value), 'Revenus']}
+                  contentStyle={{
+                    background: 'var(--bg-2, #fff)',
+                    border: '1px solid var(--sep)',
+                    borderRadius: 8,
+                    fontSize: 13
+                  }}
+                />
+                <Bar dataKey="amount" fill="var(--accent)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       )}
@@ -332,13 +340,11 @@ const ERPNextHub = ({ selectedCompany }) => {
           <div>
             {activities.slice(0, 8).map((act, idx) => (
               <div
-                key={act.id || idx}
-                className="flex items-center justify-between px-5 py-3 transition-colors"
+                key={act.id || act.subject || act.title}
+                className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-zinc-50"
                 style={{
                   borderBottom: idx < activities.length - 1 ? '1px solid var(--sep)' : undefined
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--fill-5)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '' }}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div

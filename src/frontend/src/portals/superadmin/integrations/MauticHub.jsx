@@ -30,38 +30,48 @@ const fetchMauticHealth = async () => {
 }
 
 const fetchMauticStats = async () => {
-  const res = await api.get('/api/mautic/stats')
-  return res.data?.data || res.data || {}
+  try {
+    const res = await api.get('/api/mautic/stats')
+    return res.data?.data || res.data || {}
+  } catch {
+    return {}
+  }
 }
 
 const fetchMauticCampaigns = async () => {
-  const res = await api.get('/api/mautic/campaigns')
-  return res.data?.data || res.data?.campaigns || []
+  try {
+    const res = await api.get('/api/mautic/campaigns')
+    return res.data?.data || res.data?.campaigns || []
+  } catch {
+    return []
+  }
 }
 
 // ── Component ──
 
 const MauticHub = ({ selectedCompany }) => {
+  const companyId = selectedCompany?.id || selectedCompany || 'all'
+
   const {
     data: health = { online: false },
     isLoading: healthLoading,
     refetch: refetchHealth
   } = useQuery({
-    queryKey: ['mautic-health'],
+    queryKey: ['mautic-health', companyId],
     queryFn: fetchMauticHealth,
     staleTime: 30_000,
     refetchInterval: 60_000
   })
 
   const { data: stats = {} } = useQuery({
-    queryKey: ['mautic-stats'],
+    queryKey: ['mautic-stats', companyId],
     queryFn: fetchMauticStats,
     staleTime: 60_000,
     enabled: health.online
   })
 
   const { data: campaigns = [] } = useQuery({
-    queryKey: ['mautic-campaigns'],
+    queryKey: ['mautic-campaigns', companyId],
     queryFn: fetchMauticCampaigns,
     staleTime: 120_000,
     enabled: health.online
@@ -179,13 +189,11 @@ const MauticHub = ({ selectedCompany }) => {
           <div>
             {campaigns.slice(0, 8).map((c, idx) => (
               <div
-                key={c.id || idx}
-                className="flex items-center justify-between px-5 py-3 transition-colors"
+                key={c.id}
+                className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-zinc-50"
                 style={{
                   borderBottom: idx < campaigns.length - 1 ? '1px solid var(--sep)' : undefined
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--fill-5)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '' }}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div

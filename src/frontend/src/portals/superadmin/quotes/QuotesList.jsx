@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { FileText, Plus, Search, Filter, Copy, Archive, Eye, Edit3, Send, PenTool, CheckCircle, Receipt } from 'lucide-react'
+import { FileText, Plus, Search, Filter, Copy, Archive, Eye, Edit3, Send, PenTool, CheckCircle, Receipt, ArrowRight } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import api from '../../../lib/axios'
@@ -77,7 +77,7 @@ const fetchQuotes = async ({ status, ownerCompany, page, limit }) => {
   }
 }
 
-const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, onSendQuote, onDuplicateQuote, onMarkSigned, onSendDocuSeal, onGenerateInvoice }) => {
+const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, onSendQuote, onDuplicateQuote, onMarkSigned, onSendDocuSeal, onGenerateInvoice, onConvertInvoiceNinja }) => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -286,6 +286,16 @@ const QuotesList = ({ selectedCompany, onCreateQuote, onEditQuote, onViewQuote, 
                             title="Générer facture"
                           >
                             <Receipt size={14} />
+                          </button>
+                        )}
+                        {(q.status === 'signed' || q.status === 'sent') && (
+                          <button
+                            onClick={() => onConvertInvoiceNinja?.(q)}
+                            className="p-1.5 rounded hover:bg-gray-100"
+                            style={{ color: 'var(--accent)' }}
+                            title="Envoyer via Invoice Ninja"
+                          >
+                            <ArrowRight size={14} />
                           </button>
                         )}
                         <button

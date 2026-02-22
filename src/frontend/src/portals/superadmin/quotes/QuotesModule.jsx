@@ -15,6 +15,7 @@ import React, { lazy, Suspense, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import { Loader2 } from 'lucide-react'
 import api from '../../../lib/axios'
 import QuotesList from './QuotesList'
 import QuoteDetail from './QuoteDetail'
@@ -156,6 +157,22 @@ const QuotesModule = ({ selectedCompany }) => {
     setInvoiceQuote(quote)
   }
 
+  // D.1.3 — Convert quote to invoice via Invoice Ninja
+  const convertINMutation = useMutation({
+    mutationFn: (quote) => api.post(`/api/invoice-ninja/quotes/${quote.id}/convert`),
+    onSuccess: () => {
+      toast.success('Devis converti en facture dans Invoice Ninja')
+      queryClient.invalidateQueries({ queryKey: ['admin-quotes'] })
+    },
+    onError: (err) => toast.error(err.response?.data?.error || 'Erreur conversion Invoice Ninja')
+  })
+
+  const handleConvertInvoiceNinja = (quote) => {
+    if (window.confirm(`Convertir le devis ${quote.quote_number || ''} en facture Invoice Ninja ?`)) {
+      convertINMutation.mutate(quote)
+    }
+  }
+
   // --- Render ---------------------------------------------------------------
 
   return (
@@ -179,6 +196,7 @@ const QuotesModule = ({ selectedCompany }) => {
         onMarkSigned={handleMarkSigned}
         onSendDocuSeal={handleSendDocuSeal}
         onGenerateInvoice={handleGenerateInvoice}
+        onConvertInvoiceNinja={handleConvertInvoiceNinja}
       />
 
       {/* Detail modal */}

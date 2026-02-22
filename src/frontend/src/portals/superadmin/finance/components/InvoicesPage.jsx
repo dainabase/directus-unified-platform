@@ -10,8 +10,9 @@ import React, { useState, useMemo, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   FileText, Search, Plus, Download, Receipt,
-  ChevronLeft, ChevronRight, Loader2, ArrowUpDown
+  ChevronLeft, ChevronRight, Loader2, ArrowUpDown, Send
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import api from '../../../../lib/axios'
 
 // ── Constants ──
@@ -150,6 +151,21 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
   const [page, setPage] = useState(0)
   const [statusFilter, setStatusFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [sendingId, setSendingId] = useState(null)
+
+  const handleSendInvoiceNinja = async (e, inv) => {
+    e.stopPropagation()
+    if (!inv.id) return
+    setSendingId(inv.id)
+    try {
+      await api.post(`/api/invoice-ninja/invoices/${inv.id}/send`)
+      toast.success(`Facture ${inv.invoice_number || inv.id} envoyee via Invoice Ninja`)
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Erreur lors de l\'envoi via Invoice Ninja')
+    } finally {
+      setSendingId(null)
+    }
+  }
 
   const company = selectedCompany === 'all' ? '' : selectedCompany
 
@@ -275,6 +291,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
                 <th className="px-4 py-3 text-right">TVA</th>
                 <th className="px-4 py-3 text-right">Montant TTC</th>
                 <th className="px-4 py-3 text-center">Statut</th>
+                <th className="px-4 py-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -303,6 +320,7 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
                 <th className="px-4 py-3 text-right">TVA</th>
                 <th className="px-4 py-3 text-right">Montant TTC</th>
                 <th className="px-4 py-3 text-center">Statut</th>
+                <th className="px-4 py-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -346,6 +364,23 @@ const InvoicesPage = ({ selectedCompany, onSelectInvoice, onNewInvoice }) => {
                     </td>
                     <td className="px-4 py-3 text-center">
                       <StatusBadge status={displayStatus} />
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      {inv.status === 'sent' || inv.status === 'draft' ? (
+                        <button
+                          onClick={(e) => handleSendInvoiceNinja(e, inv)}
+                          disabled={sendingId === inv.id}
+                          className="ds-btn ds-btn-ghost !py-1 !px-2 text-xs"
+                          title="Envoyer via Invoice Ninja"
+                        >
+                          {sendingId === inv.id ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            <Send size={12} />
+                          )}
+                          Envoyer IN
+                        </button>
+                      ) : null}
                     </td>
                   </tr>
                 )

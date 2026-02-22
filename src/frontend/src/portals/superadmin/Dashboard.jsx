@@ -18,6 +18,7 @@ import PipelineWidget from './widgets/PipelineWidget'
 import TreasuryWidget from './widgets/TreasuryWidget'
 import ActiveProjectsWidget from './widgets/ActiveProjectsWidget'
 import IntegrationStatusBar from './widgets/IntegrationStatusBar'
+import OverdueInvoicesWidget from './widgets/OverdueInvoicesWidget'
 
 const Dashboard = ({ selectedCompany }) => {
   const isFetching = useIsFetching()
@@ -61,6 +62,9 @@ const Dashboard = ({ selectedCompany }) => {
 
       {/* 2. Actions urgentes — full width */}
       <AlertsWidget selectedCompany={selectedCompany} maxItems={5} />
+
+      {/* 2b. Factures impayées Invoice Ninja */}
+      <OverdueInvoicesWidget />
 
       {/* 3. KPIs compacts */}
       <KPIWidget selectedCompany={selectedCompany} />

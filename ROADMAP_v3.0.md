@@ -106,7 +106,7 @@
 | C.6 | Dashboard CEO — refactoring workflow-first | 🔥 | 🟢 Fait (2026-02-22) | Layout: Header → Alerts → KPIs → Pipeline+Treasury → ActiveProjects → IntegrationStatusBar |
 | C.7 | Barre statut intégrations bas du Dashboard CEO | ⚡ | 🟢 Fait (2026-02-22) | 5 pastilles : IN, Mautic, Revolut, ERPNext, DocuSeal — hook useIntegrationStatus + polling 60s |
 
-**Critère de sortie Phase C** : Sidebar ≤7 entrées. Dashboard affiche 5 workflows.
+**Critère de sortie Phase C** : ✅ 100% (2026-02-22) — Sidebar ≤7 entrées. Dashboard affiche 5 workflows. IntegrationStatusBar 5 pastilles.
 
 ---
 
@@ -117,34 +117,34 @@
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.1.1 | Créer `InvoiceNinjaHub.jsx` | 🔥 | 🔴 | Statut + dernières factures + raccourcis |
-| D.1.2 | Bouton "Envoyer via Invoice Ninja" dans Factures clients | 🔥 | 🔴 | Action contextuelle |
-| D.1.3 | Bouton "Envoyer via Invoice Ninja" dans Devis | 🔥 | 🔴 | Action contextuelle + statut |
-| D.1.4 | Widget "Impayés Invoice Ninja" dans Dashboard CEO | ⚡ | 🔴 | Nombre + montant total |
+| D.1.1 | Créer `InvoiceNinjaHub.jsx` | 🔥 | 🟢 Fait (2026-02-22) | Statut + dernières factures + raccourcis — DS v2.0, TanStack Query |
+| D.1.2 | Bouton "Envoyer via Invoice Ninja" dans Factures clients | 🔥 | 🟢 Fait (2026-02-22) | Action contextuelle — InvoicesPage connecté |
+| D.1.3 | Bouton "Envoyer via Invoice Ninja" dans Devis | 🔥 | 🟢 Fait (2026-02-22) | Action contextuelle + statut |
+| D.1.4 | Widget "Impayés Invoice Ninja" dans Dashboard CEO | ⚡ | 🟢 Fait (2026-02-22) | OverdueInvoicesWidget — nombre + montant total |
 
 ### D.2 — Hub Mautic
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.2.1 | Créer `MauticHub.jsx` | ⚡ | 🔴 | Statut + campagnes + stats |
-| D.2.2 | Bouton "Envoyer relance (Mautic)" sur factures en retard | 🔥 | 🔴 | Action contextuelle avec confirmation |
-| D.2.3 | Stat "Emails envoyés ce mois" dans Dashboard CEO | 📌 | 🔴 | KPI depuis API Mautic |
+| D.2.1 | Créer `MauticHub.jsx` | ⚡ | 🟢 Fait (2026-02-22) | Statut + campagnes + stats — DS v2.0, TanStack Query |
+| D.2.2 | Bouton "Envoyer relance (Mautic)" sur factures en retard | 🔥 | 🟢 Fait (2026-02-22) | Action contextuelle avec confirmation — modal DS |
+| D.2.3 | Stat "Emails envoyés ce mois" dans Dashboard CEO | 📌 | 🟢 Fait (2026-02-22) | MauticEmailsWidget — KPI depuis API Mautic |
 
 ### D.3 — Hub Revolut
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.3.1 | Compléter `RevolutHub.jsx` — balances + transactions + statut token | 🔥 | 🔴 | CHF + EUR + USD + expiration |
-| D.3.2 | Bouton "Payer via Revolut" sur facture fournisseur validée | 🔥 | 🔴 | Flow : validation → montant → confirmation → paiement |
-| D.3.3 | Balances Revolut live dans Dashboard CEO | 🔥 | 🔴 | Refresh 60s |
+| D.3.1 | Compléter `RevolutHub.jsx` — balances + transactions + statut token | 🔥 | 🟢 Fait (2026-02-22) | CHF + EUR + USD + expiration — DS v2.0 |
+| D.3.2 | Bouton "Payer via Revolut" sur facture fournisseur validée | 🔥 | 🟢 Fait (2026-02-22) | RevolutPaymentModal extrait — idempotency UUID + retry:0 + timeout 15s + HubErrorBoundary |
+| D.3.3 | Balances Revolut live dans Dashboard CEO | 🔥 | 🟢 Fait (2026-02-22) | RevolutBalancesWidget — refresh 60s |
 
 ### D.4 — Hub ERPNext
 
 | # | Story | Prio | Statut | Description |
 |---|-------|------|--------|-------------|
-| D.4.1 | Créer `ERPNextHub.jsx` — lecture seule | 📌 | 🔴 | Statut + stock critique + RH |
+| D.4.1 | Créer `ERPNextHub.jsx` — lecture seule | 📌 | 🟢 Fait (2026-02-22) | Statut + KPIs + Recharts BarChart revenus — DS v2.0 |
 
-**Critère de sortie Phase D** : 4 Hubs accessibles. Actions contextuelles IN et Mautic. Revolut paiement fournisseur fonctionnel.
+**Critère de sortie Phase D** : ✅ 100% (2026-02-22) — 4 Hubs accessibles (IN, Mautic, Revolut, ERPNext). Actions contextuelles IN et Mautic. Revolut paiement fournisseur avec idempotency. Patch audit: HubErrorBoundary sur 5 routes, queryKeys corrigés, hover CSS, stable keys.
 
 ---
 
@@ -196,8 +196,8 @@
 |-------|---------|---------|----------|
 | A — Fondation Données | 7 | S1 | ✅ 100% (2026-02-21) — 4 collections, audit mock, TVA OK |
 | B — Connecter | 15 | S1-S2 | ✅ 100% (2026-02-21) — Zéro mock, 46 tests workflows, DS migré |
-| C — Simplifier UX | 7 | S2-S3 | Sidebar ≤7, Dashboard workflow-first |
-| D — Rendre Visible | 11 | S3-S4 | 4 Hubs + actions contextuelles |
+| C — Simplifier UX | 7 | S2-S3 | ✅ 100% (2026-02-22) — Sidebar 7 entrées, Dashboard workflow-first |
+| D — Rendre Visible | 11 | S3-S4 | ✅ 100% (2026-02-22) — 4 Hubs + actions contextuelles + patch audit |
 | E — Tests E2E | 6 | S5 | 5 workflows CEO validés |
 | F — Production | 6 | S6 | Déployé, SSL, monitoring |
 | G — Multi-entreprises | 7 | Post-prod | DAINAMICS, LEXAIA, ENKI REALTY, TAKEOUT |
@@ -237,5 +237,5 @@
 
 *ROADMAP v3.0 — Février 2026*  
 *Remplace ROADMAP v2.0*  
-*52 stories identifiées — 42% complété (22/52) — Phases A+B terminées*  
+*52 stories identifiées — 60% complété (31/52) — Phases A+B+C+D terminées*  
 *Cible production : 6 semaines — fin mars 2026*

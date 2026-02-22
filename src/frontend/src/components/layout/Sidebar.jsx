@@ -1,34 +1,39 @@
-import React, { useState } from 'react'
+/**
+ * Sidebar — Phase C (C.1-C.5)
+ * 7 collapsible sections with auto-expand based on current route.
+ * Apple DS v2.0 tokens — zero hex colors in JSX.
+ */
+
+import React, { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
-  Target,
-  Kanban,
-  FileText,
-  FolderOpen,
-  CheckSquare,
-  UserCheck,
+  TrendingUp,
   Receipt,
   ShoppingCart,
   CreditCard,
   BookOpen,
-  Megaphone,
-  Zap,
-  Shield,
-  RefreshCw,
-  Headphones,
-  Clock,
-  Settings,
-  TrendingUp,
   Wallet,
   BarChart3,
   FileCheck,
   QrCode,
   Milestone,
-  ChevronDown,
-  ChevronRight,
+  Shield,
+  FolderOpen,
+  CheckSquare,
+  UserCheck,
+  Clock,
+  Kanban,
+  Target,
+  Megaphone,
+  Users,
+  FileText,
+  Zap,
   Mail,
   Bell,
+  Plug,
+  Settings,
+  ChevronDown,
 } from 'lucide-react'
 
 const companies = [
@@ -41,53 +46,42 @@ const companies = [
 
 const navSections = [
   {
-    label: 'OVERVIEW',
-    items: [
-      { label: 'Dashboard', icon: LayoutDashboard, path: '/superadmin' },
-      { label: 'KPIs', icon: Target, path: '/superadmin/kpis' },
-      { label: 'Pipeline', icon: Kanban, path: '/superadmin/crm/pipeline' },
-      { label: 'Devis', icon: FileText, path: '/superadmin/quotes' },
-    ],
-  },
-  {
-    label: 'OPERATIONS',
-    items: [
-      { label: 'Projets', icon: FolderOpen, path: '/superadmin/projects' },
-      { label: 'Livrables', icon: CheckSquare, path: '/superadmin/deliverables' },
-      { label: 'Prestataires', icon: UserCheck, path: '/superadmin/providers' },
-    ],
-  },
-  {
+    id: 'finance',
     label: 'FINANCE',
     items: [
-      { label: 'Vue d\'ensemble', icon: TrendingUp, path: '/superadmin/finance' },
+      { label: "Vue d'ensemble", icon: TrendingUp, path: '/superadmin/finance' },
       { label: 'Factures clients', icon: Receipt, path: '/superadmin/finance/invoices' },
       { label: 'Factures fournisseurs', icon: ShoppingCart, path: '/superadmin/finance/suppliers' },
       { label: 'Banking', icon: CreditCard, path: '/superadmin/finance/banking' },
       { label: 'Comptabilite', icon: BookOpen, path: '/superadmin/finance/accounting' },
       { label: 'Depenses', icon: Wallet, path: '/superadmin/finance/expenses' },
-      { label: 'Rapport mensuel', icon: BarChart3, path: '/superadmin/finance/reports/monthly' },
       { label: 'TVA / AFC', icon: FileCheck, path: '/superadmin/finance/reports/vat' },
-      { label: 'QR-Invoice', icon: QrCode, path: '/superadmin/finance/qr-invoice' },
-      { label: 'Jalons', icon: Milestone, path: '/superadmin/finance/milestones' },
       { label: 'Recouvrement', icon: Shield, path: '/superadmin/collection' },
     ],
   },
   {
-    label: 'MARKETING',
+    id: 'projets',
+    label: 'PROJETS',
     items: [
-      { label: 'Campagnes', icon: Megaphone, path: '/superadmin/marketing/campaigns' },
-      { label: 'Automation', icon: Zap, path: '/superadmin/marketing/analytics' },
+      { label: 'Projets', icon: FolderOpen, path: '/superadmin/projects' },
+      { label: 'Livrables', icon: CheckSquare, path: '/superadmin/deliverables' },
+      { label: 'Jalons', icon: Milestone, path: '/superadmin/finance/milestones' },
+      { label: 'Prestataires', icon: UserCheck, path: '/superadmin/providers' },
+      { label: 'Time tracking', icon: Clock, path: '/superadmin/time-tracking' },
     ],
   },
   {
-    label: 'LEGAL',
+    id: 'crm',
+    label: 'CRM',
     items: [
-      { label: 'Contrats', icon: Shield, path: '/superadmin/legal/contracts' },
-      { label: 'Abonnements', icon: RefreshCw, path: '/superadmin/subscriptions' },
+      { label: 'Pipeline', icon: Kanban, path: '/superadmin/crm/pipeline' },
+      { label: 'Leads', icon: Target, path: '/superadmin/leads' },
+      { label: 'Devis', icon: FileText, path: '/superadmin/quotes' },
+      { label: 'Contacts', icon: Users, path: '/superadmin/crm/contacts' },
     ],
   },
   {
+    id: 'automation',
     label: 'AUTOMATION',
     items: [
       { label: 'Email Templates', icon: Mail, path: '/superadmin/automation/emails' },
@@ -96,11 +90,13 @@ const navSections = [
     ],
   },
   {
-    label: 'SYSTEME',
+    id: 'integrations',
+    label: 'INTEGRATIONS',
     items: [
-      { label: 'Support', icon: Headphones, path: '/superadmin/support/tickets' },
-      { label: 'Time tracking', icon: Clock, path: '/superadmin/time-tracking' },
-      { label: 'Parametres', icon: Settings, path: '/superadmin/settings/companies' },
+      { label: 'Invoice Ninja', icon: Receipt, path: '/superadmin/integrations/invoice-ninja' },
+      { label: 'Mautic', icon: Megaphone, path: '/superadmin/integrations/mautic' },
+      { label: 'Revolut', icon: CreditCard, path: '/superadmin/integrations/revolut' },
+      { label: 'ERPNext', icon: BookOpen, path: '/superadmin/integrations/erpnext' },
     ],
   },
 ]
@@ -109,6 +105,35 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
   const location = useLocation()
   const [activeCompany, setActiveCompany] = useState(selectedCompany)
 
+  // Auto-expand section whose items match the current path
+  const getAutoExpanded = () => {
+    const expanded = {}
+    navSections.forEach((section) => {
+      const isActive = section.items.some((item) =>
+        location.pathname.startsWith(item.path)
+      )
+      if (isActive) expanded[section.id] = true
+    })
+    return expanded
+  }
+
+  const [expandedSections, setExpandedSections] = useState(getAutoExpanded)
+
+  // Re-evaluate auto-expand when route changes
+  useEffect(() => {
+    setExpandedSections((prev) => {
+      const auto = getAutoExpanded()
+      return { ...prev, ...auto }
+    })
+  }, [location.pathname])
+
+  const toggleSection = (sectionId) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionId]: !prev[sectionId],
+    }))
+  }
+
   const handleCompany = (id) => {
     setActiveCompany(id)
     onCompanyChange?.(id)
@@ -116,16 +141,17 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
 
   return (
     <aside
-      className="ds-glass fixed left-0 top-0 h-full z-[300] flex flex-col"
+      className="ds-glass fixed left-0 top-0 h-full flex flex-col"
       style={{
         width: 240,
-        borderRight: '1px solid rgba(0,0,0,0.08)',
+        zIndex: 'var(--z-sidebar)',
+        borderRight: '1px solid var(--glass-border)',
       }}
     >
       {/* Logo zone */}
       <div
         className="flex items-center gap-3 px-5 shrink-0"
-        style={{ height: 52, borderBottom: '1px solid rgba(0,0,0,0.06)' }}
+        style={{ height: 52, borderBottom: '1px solid var(--sep)' }}
       >
         <div
           className="flex items-center justify-center shrink-0"
@@ -134,7 +160,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
             height: 32,
             borderRadius: 'var(--radius-logo)',
             background: 'var(--label-1)',
-            color: '#FFFFFF',
+            color: 'var(--bg-2)',
             fontSize: 12,
             fontWeight: 700,
             letterSpacing: '0.5px',
@@ -142,7 +168,7 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
         >
           HV
         </div>
-        <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--label-1)' }}>
+        <span style={{ fontSize: 'var(--size-13)', fontWeight: 600, color: 'var(--label-1)' }}>
           HYPERVISUAL
         </span>
       </div>
@@ -150,24 +176,26 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
       {/* Company switcher */}
       <div
         className="flex items-center gap-1.5 px-4 shrink-0"
-        style={{ height: 44, borderBottom: '1px solid rgba(0,0,0,0.06)' }}
+        style={{ height: 44, borderBottom: '1px solid var(--sep)' }}
       >
         {companies.map((c) => (
           <button
             key={c.id}
             onClick={() => handleCompany(c.id)}
             title={c.full}
-            className="transition-all duration-150"
             style={{
               padding: '3px 7px',
-              fontSize: 11,
+              fontSize: 'var(--size-11)',
               fontWeight: 600,
               borderRadius: 'var(--radius-badge)',
               background: activeCompany === c.id ? 'var(--accent)' : 'transparent',
-              color: activeCompany === c.id ? '#FFFFFF' : 'var(--label-2)',
+              color: activeCompany === c.id ? 'var(--bg-2)' : 'var(--label-2)',
+              transition: 'all var(--t-fast) var(--ease-out)',
+              border: 'none',
+              cursor: 'pointer',
             }}
             onMouseEnter={(e) => {
-              if (activeCompany !== c.id) e.currentTarget.style.background = 'rgba(0,0,0,0.04)'
+              if (activeCompany !== c.id) e.currentTarget.style.background = 'var(--fill-1)'
             }}
             onMouseLeave={(e) => {
               if (activeCompany !== c.id) e.currentTarget.style.background = 'transparent'
@@ -180,50 +208,154 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-2 px-2">
-        {navSections.map((section) => (
-          <div key={section.label} className="mb-3">
-            <div className="ds-nav-section px-3 mb-1.5">{section.label}</div>
-            {section.items.map((item) => {
-              const Icon = item.icon
-              const isActive =
-                item.path === '/superadmin'
-                  ? location.pathname === '/superadmin'
-                  : location.pathname.startsWith(item.path)
+        {/* Dashboard — standalone item */}
+        <div className="mb-1">
+          <NavLink
+            to="/superadmin"
+            end
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
+            style={{
+              background: location.pathname === '/superadmin' ? 'var(--accent-light)' : 'transparent',
+              color: location.pathname === '/superadmin' ? 'var(--accent)' : 'var(--label-1)',
+              fontSize: 'var(--size-13)',
+              fontWeight: location.pathname === '/superadmin' ? 500 : 450,
+              transition: 'all var(--t-fast) var(--ease-out)',
+            }}
+            onMouseEnter={(e) => {
+              if (location.pathname !== '/superadmin') e.currentTarget.style.background = 'var(--fill-1)'
+            }}
+            onMouseLeave={(e) => {
+              if (location.pathname !== '/superadmin') e.currentTarget.style.background = 'transparent'
+            }}
+          >
+            <LayoutDashboard
+              size={16}
+              style={{ color: location.pathname === '/superadmin' ? 'var(--accent)' : 'var(--label-2)' }}
+            />
+            <span>Dashboard</span>
+          </NavLink>
+        </div>
 
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150"
+        {/* Collapsible sections */}
+        {navSections.map((section) => {
+          const isExpanded = !!expandedSections[section.id]
+          const sectionHasActive = section.items.some((item) =>
+            item.path === '/superadmin'
+              ? location.pathname === '/superadmin'
+              : location.pathname.startsWith(item.path)
+          )
+
+          return (
+            <div key={section.id} className="mb-1">
+              {/* Section header */}
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="flex items-center justify-between w-full px-3 py-1.5 rounded-lg"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background var(--t-fast) var(--ease-out)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--fill-1)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
+              >
+                <span
+                  className="ds-nav-section"
                   style={{
-                    background: isActive ? 'var(--accent-light)' : 'transparent',
-                    color: isActive ? 'var(--accent)' : 'var(--label-1)',
-                    fontSize: '13.5px',
-                    fontWeight: isActive ? 500 : 450,
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'rgba(0,0,0,0.04)'
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'transparent'
+                    color: sectionHasActive ? 'var(--accent)' : 'var(--label-3)',
                   }}
                 >
-                  <Icon
-                    size={16}
-                    style={{ color: isActive ? 'var(--accent)' : 'var(--label-2)' }}
-                  />
-                  <span>{item.label}</span>
-                </NavLink>
-              )
-            })}
-          </div>
-        ))}
+                  {section.label}
+                </span>
+                <ChevronDown
+                  size={12}
+                  style={{
+                    color: 'var(--label-3)',
+                    transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                    transition: 'transform var(--t-fast) var(--ease-out)',
+                  }}
+                />
+              </button>
+
+              {/* Section items */}
+              {isExpanded && (
+                <div className="mt-0.5">
+                  {section.items.map((item) => {
+                    const Icon = item.icon
+                    const isActive = location.pathname.startsWith(item.path)
+
+                    return (
+                      <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
+                        style={{
+                          background: isActive ? 'var(--accent-light)' : 'transparent',
+                          color: isActive ? 'var(--accent)' : 'var(--label-1)',
+                          fontSize: 'var(--size-13)',
+                          fontWeight: isActive ? 500 : 450,
+                          transition: 'all var(--t-fast) var(--ease-out)',
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive) e.currentTarget.style.background = 'var(--fill-1)'
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive) e.currentTarget.style.background = 'transparent'
+                        }}
+                      >
+                        <Icon
+                          size={16}
+                          style={{ color: isActive ? 'var(--accent)' : 'var(--label-2)' }}
+                        />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })}
+
+        {/* Parametres — standalone item */}
+        <div className="mt-1">
+          <NavLink
+            to="/superadmin/settings"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
+            style={{
+              background: location.pathname.startsWith('/superadmin/settings') ? 'var(--accent-light)' : 'transparent',
+              color: location.pathname.startsWith('/superadmin/settings') ? 'var(--accent)' : 'var(--label-1)',
+              fontSize: 'var(--size-13)',
+              fontWeight: location.pathname.startsWith('/superadmin/settings') ? 500 : 450,
+              transition: 'all var(--t-fast) var(--ease-out)',
+            }}
+            onMouseEnter={(e) => {
+              if (!location.pathname.startsWith('/superadmin/settings'))
+                e.currentTarget.style.background = 'var(--fill-1)'
+            }}
+            onMouseLeave={(e) => {
+              if (!location.pathname.startsWith('/superadmin/settings'))
+                e.currentTarget.style.background = 'transparent'
+            }}
+          >
+            <Settings
+              size={16}
+              style={{
+                color: location.pathname.startsWith('/superadmin/settings')
+                  ? 'var(--accent)'
+                  : 'var(--label-2)',
+              }}
+            />
+            <span>Parametres</span>
+          </NavLink>
+        </div>
       </nav>
 
       {/* Footer user */}
       <div
         className="flex items-center gap-3 px-4 shrink-0"
-        style={{ height: 52, borderTop: '1px solid rgba(0,0,0,0.06)' }}
+        style={{ height: 52, borderTop: '1px solid var(--sep)' }}
       >
         <div
           className="flex items-center justify-center shrink-0"
@@ -231,8 +363,8 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
             width: 28,
             height: 28,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--label-1), var(--label-2))',
-            color: '#FFFFFF',
+            background: 'var(--label-1)',
+            color: 'var(--bg-2)',
             fontSize: 11,
             fontWeight: 600,
           }}
@@ -240,14 +372,22 @@ const Sidebar = ({ selectedCompany = 'all', onCompanyChange }) => {
           JM
         </div>
         <div className="flex-1 min-w-0">
-          <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--label-1)' }} className="truncate">
+          <div
+            className="truncate"
+            style={{ fontSize: 'var(--size-13)', fontWeight: 500, color: 'var(--label-1)' }}
+          >
             Jean-Marie D.
           </div>
-          <div style={{ fontSize: 11, color: 'var(--label-2)' }}>CEO</div>
+          <div style={{ fontSize: 'var(--size-11)', color: 'var(--label-2)' }}>CEO</div>
         </div>
         <button
-          className="transition-colors duration-150"
-          style={{ color: 'var(--label-3)' }}
+          style={{
+            color: 'var(--label-3)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'color var(--t-fast) var(--ease-out)',
+          }}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--label-2)')}
           onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--label-3)')}
         >

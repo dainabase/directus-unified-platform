@@ -106,6 +106,11 @@ const QRInvoiceGenerator = lazy(() => import('./portals/superadmin/finance/QRInv
 const MilestoneInvoicingPage = lazy(() => import('./portals/superadmin/finance/MilestoneInvoicingPage'))
 const InvoiceNinjaHub = lazy(() => import('./portals/superadmin/finance/InvoiceNinjaHub'))
 
+// Phase C — Integration Hubs
+const MauticHub = lazy(() => import('./portals/superadmin/integrations/MauticHub'))
+const RevolutHub = lazy(() => import('./portals/superadmin/integrations/RevolutHub'))
+const ERPNextHub = lazy(() => import('./portals/superadmin/integrations/ERPNextHub'))
+
 // CRM Module
 const CRMDashboard = lazy(() => import('./portals/superadmin/crm/CRMDashboard'))
 const PipelineView = lazy(() => import('./portals/superadmin/crm/components/PipelineView'))
@@ -305,6 +310,12 @@ function App() {
                   <Route path="automation/emails" element={<EmailTemplates selectedCompany={selectedCompany} />} />
                   <Route path="automation/workflows" element={<Workflows selectedCompany={selectedCompany} />} />
                   <Route path="automation/notifications" element={<NotificationHub selectedCompany={selectedCompany} />} />
+
+                  {/* Phase C — Integrations Hub */}
+                  <Route path="integrations/invoice-ninja" element={<InvoiceNinjaHub selectedCompany={selectedCompany} />} />
+                  <Route path="integrations/mautic" element={<MauticHub selectedCompany={selectedCompany} />} />
+                  <Route path="integrations/revolut" element={<RevolutHub selectedCompany={selectedCompany} />} />
+                  <Route path="integrations/erpnext" element={<ERPNextHub selectedCompany={selectedCompany} />} />
 
                   {/* Parametres */}
                   <Route path="settings" element={<SettingsDashboard selectedCompany={selectedCompany} />} />

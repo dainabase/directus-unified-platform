@@ -52,7 +52,7 @@ export const useIntegrationStatus = () => {
         name: 'Invoice Ninja',
         status: resolveStatus(integrations.invoiceNinja),
         isLoading,
-        path: '/superadmin/settings',
+        path: '/superadmin/integrations/invoice-ninja',
         warningText: integrations.invoiceNinja?.warning || null,
         errorText: integrations.invoiceNinja?.error || null
       },
@@ -61,7 +61,7 @@ export const useIntegrationStatus = () => {
         name: 'Mautic',
         status: resolveStatus(integrations.mautic),
         isLoading,
-        path: '/superadmin/settings',
+        path: '/superadmin/integrations/mautic',
         warningText: integrations.mautic?.warning || null,
         errorText: integrations.mautic?.error || null
       },
@@ -70,7 +70,7 @@ export const useIntegrationStatus = () => {
         name: 'Revolut',
         status: resolveStatus(integrations.revolut),
         isLoading,
-        path: '/superadmin/finance/banking',
+        path: '/superadmin/integrations/revolut',
         warningText: integrations.revolut?.warning || null,
         errorText: integrations.revolut?.error || null
       },
@@ -79,7 +79,7 @@ export const useIntegrationStatus = () => {
         name: 'ERPNext',
         status: resolveStatus(integrations.erpnext),
         isLoading,
-        path: '/superadmin/settings',
+        path: '/superadmin/integrations/erpnext',
         warningText: integrations.erpnext?.warning || null,
         errorText: integrations.erpnext?.error || null
       },
